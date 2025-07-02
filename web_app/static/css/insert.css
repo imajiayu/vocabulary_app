@@ -1,0 +1,288 @@
+/* ===========================
+   全局样式
+=========================== */
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f4f6f8;
+    color: #333;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #222;
+}
+
+/* ===========================
+   导航栏
+=========================== */
+.navbar {
+    background: #ffffff;
+    padding: 12px 20px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.navbar .nav-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.navbar .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* ===========================
+   表单
+=========================== */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+form label {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+form input[type="text"] {
+    padding: 10px 12px;
+    font-size: 16px;
+    width: 220px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border 0.2s;
+}
+
+form input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+form button:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+}
+
+.flash-messages {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.flash.error {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+
+/* ===========================
+   搜索 + 筛选按钮
+=========================== */
+/* 搜索容器：搜索框 + 按钮在同一行 */
+.search-container {
+    display: flex;            /* 开启 flex 布局 */
+    align-items: center;       /* 垂直居中 */
+    justify-content: center;   /* 水平居中 */
+    gap: 8px;                  /* 搜索框和按钮之间的间距 */
+    margin-bottom: 25px;
+}
+
+/* 搜索框自适应 */
+.search-container input {
+    width: 240px;              /* 固定宽度，或改成 flex:1 自适应 */
+    padding: 10px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border 0.2s;
+}
+
+.filter-btn-container {
+    display: flex;
+    gap: 8px;                /* 按钮间距 */
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
+}
+
+.filter-btn {
+    white-space: nowrap;     /* 文本不换行 */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #ddd;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.filter-btn.active {
+    background: #007bff;
+    color: white;
+}
+
+.filter-btn:hover {
+    background: #bbb;
+    transform: translateY(-1px);
+}
+
+/* ===========================
+   单词网格
+=========================== */
+.word-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 5px;
+}
+
+/* ===========================
+   单词卡片
+=========================== */
+.word-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;       /* 高度变窄 */
+    padding: 6px 12px;      /* 上下 padding 缩小，左右保持 */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    word-break: break-word;
+    transition: background 0.2s, color 0.2s, transform 0.1s, box-shadow 0.2s;
+    position: relative;
+}
+
+
+.word-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 隐藏真实复选框 */
+.word-item input[type="checkbox"] {
+    display: none;
+}
+
+/* 选中状态：卡片背景变色 */
+.word-item input[type="checkbox"]:checked + span {
+    background: #007bff;
+    color: white;
+    padding: 6px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ===========================
+   移动端适配 (max-width: 768px)
+=========================== */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    /* 表单自适应 */
+    form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    form label {
+        margin-bottom: 4px;
+    }
+
+    form input[type="text"] {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    form button {
+        width: 100%;
+    }
+    
+    #insert-form,
+    .search-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+        padding: 0 50px;
+    }
+
+    .search-container input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .filter-btn-container {
+        display: flex;
+        flex-direction: row; /* 强制水平排列 */
+        gap: 8px;
+    }
+
+    .filter-btn {
+        flex: 1; /* 平分父容器宽度 */
+        min-width: 0; 
+        text-align: center;
+    }
+
+    /* 容器：像换行标签一样排布 */
+    .word-grid {
+        display: flex;
+        flex-wrap: wrap;   /* 允许换行 */
+        gap: 8px;          /* 间距 */
+        padding: 0;
+        justify-content: flex-start;
+    }
+
+    /* 单词卡片：根据内容自动撑开 */
+    .word-item {
+        padding: 6px 10px;
+        font-size: 14px;
+        white-space: nowrap;   /* 不换行 */
+        display: inline-flex;  /* 根据内容宽度撑开 */
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #ccc; /* 如果你有样式可以保留 */
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .word-item span {
+        white-space: nowrap;  /* 确保单词完整显示 */
+    }
+}

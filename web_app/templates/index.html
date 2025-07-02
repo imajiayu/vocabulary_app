@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IELTS 首页</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+
+</head>
+
+<body>
+  <div class="container">
+    <h1>IELTS 单词复习工具</h1>
+
+    <a href="/insert" class="add-word-button">添加新单词</a>
+
+    <p class="choose-mode-text">请选择复习模式：</p>
+
+    <form action="{{ url_for('set_filters') }}" method="post">
+
+      <!-- 记忆新词 -->
+      <label class="mode-option">
+        <input type="radio" name="mode" value="mode_new" checked />
+        <span>背诵当日新添加单词 ({{ count_new }})</span>
+      </label>
+
+      <!-- 复习旧词 -->
+      <label class="mode-option">
+        <input type="radio" name="mode" value="mode_review" />
+        <span>复习已有单词 ({{ count_review }})</span>
+      </label>
+
+      <!-- 复习错题 -->
+      <label class="mode-option">
+        <input type="radio" name="mode" value="mode_lapse" />
+        <span>复习错题 ({{ count_lapse }})</span>
+      </label>
+
+      <!-- 拼写熟词 -->
+      <label class="mode-option">
+        <input type="radio" name="mode" value="mode_spelling" />
+        <span>拼写熟练单词(50)</span>
+      </label>
+
+      <!-- 是否打乱 -->
+      <div style="margin-top: 1.5em;">
+        <label for="shuffle">打乱顺序：</label>
+        <select name="shuffle" id="shuffle">
+          <option value="true">是</option>
+          <option value="false">否</option>
+        </select>
+      </div>
+
+      <button type="submit">开始复习</button>
+    </form>
+  </div>
+</body>
+
+</html>
