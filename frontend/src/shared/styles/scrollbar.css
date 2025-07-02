@@ -1,0 +1,127 @@
+/* shared/styles/scrollbar.css - 滚动条公共样式 */
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   基础滚动条 (灰色主题)
+   用于通用内容区域
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-scrollbar-thumb) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   紫色主题滚动条
+   用于 Speaking 模块侧边栏
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.scrollbar-purple {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-purple-border) transparent;
+}
+
+.scrollbar-purple::-webkit-scrollbar {
+  width: 4px;
+  display: block;
+}
+
+.scrollbar-purple::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-purple::-webkit-scrollbar-thumb {
+  background: var(--color-purple-border);
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-purple::-webkit-scrollbar-thumb:hover {
+  background: var(--color-purple);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   渐变主题滚动条
+   用于彩色内容区域
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.scrollbar-gradient {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-purple) transparent;
+}
+
+.scrollbar-gradient::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-gradient::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.scrollbar-gradient::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 3px;
+}
+
+.scrollbar-gradient::-webkit-scrollbar-thumb:hover {
+  background: var(--color-purple-dark);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   浅色/透明主题滚动条
+   用于深色背景上的侧边栏
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.scrollbar-light {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.scrollbar-light::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-light::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.scrollbar-light::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.scrollbar-light::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   隐藏滚动条
+   用于需要隐藏滚动条但保持滚动功能的场景
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}

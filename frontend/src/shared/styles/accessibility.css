@@ -1,0 +1,176 @@
+/* shared/styles/accessibility.css - 可访问性增强样式 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   基于 FRONTEND_DESIGN_OPTIMIZATION.md 7.1-7.3 节实现
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   焦点管理
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 键盘焦点样式（仅键盘导航时显示） */
+:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+/* 鼠标点击时不显示焦点环 */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* 按钮和交互元素的焦点样式 */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--color-brand-primary-light);
+}
+
+/* 暗色背景上的焦点样式 */
+.dark-bg :focus-visible,
+[data-theme="dark"] :focus-visible {
+  outline-color: var(--color-text-inverse);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   高对比度模式支持
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (forced-colors: active) {
+  /* 确保按钮边框可见 */
+  button,
+  .btn {
+    border: 2px solid ButtonText;
+  }
+
+  /* 确保禁用状态可辨识 */
+  button:disabled,
+  .btn:disabled {
+    border-style: dashed;
+    opacity: 0.7;
+  }
+
+  /* 确保焦点可见 */
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  /* 确保链接可辨识 */
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   禁用状态可访问性
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 禁用状态应有足够的视觉差异 */
+[disabled],
+[aria-disabled="true"],
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 确保禁用状态不可交互 */
+[disabled] *,
+[aria-disabled="true"] * {
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   触摸目标大小（移动端可访问性）
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 确保触摸目标至少 44x44 像素 */
+@media (pointer: coarse) {
+  button,
+  a,
+  [role="button"],
+  [role="link"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   表单可访问性
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 必填字段指示器 */
+.required::after,
+[aria-required="true"] label::after {
+  content: " *";
+  color: var(--color-state-error);
+}
+
+/* 错误状态 */
+[aria-invalid="true"],
+.input-error {
+  border-color: var(--color-state-error);
+}
+
+[aria-invalid="true"]:focus-visible {
+  box-shadow: 0 0 0 4px var(--color-state-error-light);
+}
+
+/* 错误消息样式 */
+[role="alert"],
+.error-message {
+  color: var(--color-state-error);
+  font-size: var(--font-size-sm);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   实时区域
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 实时区域样式（用于屏幕阅读器通知） */
+[aria-live] {
+  /* 默认隐藏但仍可被屏幕阅读器读取 */
+}
+
+[aria-live="assertive"] {
+  /* 紧急通知可以添加视觉样式 */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   加载状态
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[aria-busy="true"] {
+  cursor: wait;
+}
+
+/* 骨架屏加载指示 */
+[aria-busy="true"][role="status"] {
+  /* 默认使用 BaseSkeleton 组件的样式 */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   键盘导航提示
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 显示键盘快捷键提示 */
+.kbd,
+kbd {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-xs);
+  box-shadow: 0 1px 0 var(--color-border-medium);
+}

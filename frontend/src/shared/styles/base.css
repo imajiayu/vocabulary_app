@@ -1,0 +1,191 @@
+/* shared/styles/base.css - 基础样式入口 */
+
+/* ── 导入样式模块 ── */
+@import './tokens.css';
+@import './breakpoints.css';
+@import './animations.css';
+@import './utilities.css';
+@import './buttons.css';
+@import './scrollbar.css';
+@import './accessibility.css';
+@import './container-queries.css';
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   基础重置
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Crimson Pro', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  height: 100%;
+  /* 细微纸质纹理 */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-blend-mode: soft-light;
+  background-size: 200px 200px;
+}
+
+/* 移动端防止过度弹性滚动 */
+@media (max-width: 768px) {
+  html, body {
+    overscroll-behavior-y: contain; /* 防止过度滚动，但允许正常滚动 */
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   布局容器
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--gradient-background);
+}
+
+/* 桌面端背景优化 */
+@media (min-width: 481px) {
+  .app-container {
+    min-height: 100vh;
+  }
+}
+
+/* 带 TopBar 的页面上间距 */
+.app-container.with-topbar {
+  padding-top: var(--topbar-height);
+  /* 确保 min-height 包含 padding，不超出视口 */
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+}
+
+/* Flex 布局变体 - 用于需要 TopBar 的页面（如 ReviewPage） */
+.app-container.flex-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: 0;
+}
+
+.app-container.flex-layout .main-content {
+  margin-top: var(--topbar-height);
+  flex: 1;
+  /* 不设置 overflow，让页面自然滚动 */
+}
+
+/* 移动端 TopBar 高度适配 */
+@media (max-width: 768px) {
+  .app-container.with-topbar {
+    padding-top: var(--topbar-height-mobile);
+  }
+
+  .app-container.flex-layout .main-content {
+    margin-top: var(--topbar-height-mobile);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   组件样式
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* 纸质卡片效果（替代玻璃态） */
+.glass-card {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(45, 55, 72, 0.06), 0 1px 2px rgba(45, 55, 72, 0.04);
+}
+
+/* 加载旋转器 */
+.loading-spinner {
+  border: 4px solid var(--color-primary);
+  border-top: 4px solid transparent;
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+}
+
+/* 基础按钮 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  text-decoration: none;
+}
+
+.btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   滚动条样式 (WebKit)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-tertiary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}

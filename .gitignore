@@ -1,0 +1,46 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# SSL certificates (local development)
+*.pem
+*.key
+*.crt
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# log and tmp files
+*_pid
+*.log
+
+# Audio files
+*.webm
+*.wav
+
+# Model files (large)
+*.bin
+*.ggml
+*.pcm
+
+# Database (should not be in git)
+vocabulary.db
+
+# Environment variables (contains secrets)
+.env
+
+# Supabase local temp files
+supabase/.temp/

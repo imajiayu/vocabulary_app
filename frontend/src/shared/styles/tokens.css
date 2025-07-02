@@ -1,0 +1,440 @@
+/* shared/styles/tokens.css - 设计变量 (三层架构) */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Editorial Study 风格 - 温暖纸质感、墨水色调、铜褐强调
+   灵感：高端教科书、学术期刊、古典图书馆
+
+   架构：Primitives → Semantic Tokens → Component Tokens
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════════════
+     第一层：原始值（Primitives）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 色板 - 铜褐色系 ── */
+  --primitive-copper-50: #FDF8F3;
+  --primitive-copper-100: #F5E6D3;
+  --primitive-copper-200: #E8CBA8;
+  --primitive-copper-300: #D4A574;
+  --primitive-copper-400: #B8834A;
+  --primitive-copper-500: #996B3D;
+  --primitive-copper-600: #7A5631;
+  --primitive-copper-700: #5C4125;
+  --primitive-copper-800: #3D2B19;
+  --primitive-copper-900: #1F160D;
+
+  /* ── 色板 - 橄榄绿色系 ── */
+  --primitive-olive-50: #F5F7F5;
+  --primitive-olive-100: #E8EDE8;
+  --primitive-olive-200: #C8D4C8;
+  --primitive-olive-300: #9BB89B;
+  --primitive-olive-400: #6B8C6B;
+  --primitive-olive-500: #5D7A5D;
+  --primitive-olive-600: #4A6B4A;
+  --primitive-olive-700: #3A5A3A;
+  --primitive-olive-800: #2A4A2A;
+  --primitive-olive-900: #1A3A1A;
+
+  /* ── 色板 - 砖红色系 ── */
+  --primitive-brick-50: #FDF5F5;
+  --primitive-brick-100: #F5E0E0;
+  --primitive-brick-200: #E8B8B8;
+  --primitive-brick-300: #D48888;
+  --primitive-brick-400: #B85858;
+  --primitive-brick-500: #9B3B3B;
+  --primitive-brick-600: #7A2E2E;
+  --primitive-brick-700: #5C2222;
+  --primitive-brick-800: #3D1616;
+  --primitive-brick-900: #1F0B0B;
+
+  /* ── 色板 - 金色系 ── */
+  --primitive-gold-50: #FFFBF0;
+  --primitive-gold-100: #FFF3D4;
+  --primitive-gold-200: #FFE8A8;
+  --primitive-gold-300: #FFD874;
+  --primitive-gold-400: #DDA520;
+  --primitive-gold-500: #B8860B;
+  --primitive-gold-600: #8B6914;
+  --primitive-gold-700: #6B4F0F;
+  --primitive-gold-800: #4A370A;
+  --primitive-gold-900: #2A1F06;
+
+  /* ── 色板 - 天蓝色系（Writing模块） ── */
+  --primitive-azure-50: #F0F9FF;
+  --primitive-azure-100: #E0F2FE;
+  --primitive-azure-200: #BAE6FD;
+  --primitive-azure-300: #7DD3FC;
+  --primitive-azure-400: #38BDF8;
+  --primitive-azure-500: #3B82F6;
+  --primitive-azure-600: #2563EB;
+  --primitive-azure-700: #1D4ED8;
+  --primitive-azure-800: #1E40AF;
+  --primitive-azure-900: #1E3A8A;
+
+  /* ── 色板 - 墨水灰色系 ── */
+  --primitive-ink-50: #F7F8FA;
+  --primitive-ink-100: #E8EBF0;
+  --primitive-ink-200: #C8CED8;
+  --primitive-ink-300: #A0A8B8;
+  --primitive-ink-400: #8A94A6;
+  --primitive-ink-500: #5A6578;
+  --primitive-ink-600: #4A5568;
+  --primitive-ink-700: #3A4555;
+  --primitive-ink-800: #2D3748;
+  --primitive-ink-900: #1A202C;
+
+  /* ── 色板 - 纸张色系 ── */
+  --primitive-paper-50: #FFFFFF;
+  --primitive-paper-100: #FFFDF7;
+  --primitive-paper-200: #FAF7F2;
+  --primitive-paper-300: #F0EBE3;
+  --primitive-paper-400: #E8E0D5;
+  --primitive-paper-500: #D4C9B8;
+  --primitive-paper-600: #C4B8A8;
+  --primitive-paper-700: #A69888;
+  --primitive-paper-800: #8A7A68;
+  --primitive-paper-900: #6A5A48;
+
+  /* ── 间距基数 ── */
+  --primitive-space-unit: 4px;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     第二层：语义化令牌（Semantic Tokens）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 品牌色 ── */
+  --color-brand-primary: var(--primitive-copper-500);
+  --color-brand-primary-hover: var(--primitive-gold-500);
+  --color-brand-primary-light: rgba(153, 107, 61, 0.12);
+  --color-brand-secondary: var(--primitive-olive-500);
+  --color-brand-secondary-light: rgba(93, 122, 93, 0.12);
+
+  /* ── 状态色 ── */
+  --color-state-success: var(--primitive-olive-500);
+  --color-state-success-hover: var(--primitive-olive-600);
+  --color-state-success-light: rgba(93, 122, 93, 0.12);
+  --color-state-warning: var(--primitive-gold-500);
+  --color-state-warning-light: rgba(184, 134, 11, 0.12);
+  --color-state-error: var(--primitive-brick-500);
+  --color-state-error-light: rgba(155, 59, 59, 0.1);
+
+  /* ── 表面色 ── */
+  --color-surface-page: var(--primitive-paper-200);
+  --color-surface-card: var(--primitive-paper-100);
+  --color-surface-elevated: var(--primitive-paper-50);
+
+  /* ── 交互色 ── */
+  --color-interactive-default: var(--color-brand-primary);
+  --color-interactive-hover: var(--color-brand-primary-hover);
+  --color-interactive-active: var(--primitive-copper-600);
+  --color-interactive-disabled: var(--primitive-copper-200);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     第三层：组件令牌（Component Tokens）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 按钮令牌 ── */
+  --button-primary-bg: var(--color-interactive-default);
+  --button-primary-bg-hover: var(--color-interactive-hover);
+  --button-primary-text: var(--primitive-paper-100);
+  --button-secondary-bg: transparent;
+  --button-secondary-border: var(--color-brand-primary);
+  --button-secondary-text: var(--color-brand-primary);
+  --button-ghost-bg: transparent;
+  --button-ghost-text: var(--primitive-ink-500);
+  --button-ghost-text-hover: var(--primitive-ink-800);
+  --button-ghost-bg-hover: var(--primitive-paper-300);
+
+  /* ── 卡片令牌 ── */
+  --card-bg: var(--color-surface-card);
+  --card-border: var(--primitive-paper-400);
+  --card-shadow: var(--shadow-sm);
+
+  /* ── 输入框令牌 ── */
+  --input-bg: var(--color-surface-card);
+  --input-border: var(--primitive-paper-400);
+  --input-border-focus: var(--color-brand-primary);
+  --input-text: var(--primitive-ink-800);
+  --input-placeholder: var(--primitive-ink-400);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     兼容层：保留原有变量名（向后兼容）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 颜色 - 主色（铜褐/暗金 - 学术感强调色） ── */
+  --color-primary: var(--color-brand-primary);
+  --color-primary-hover: var(--color-brand-primary-hover);
+  --color-primary-light: var(--color-brand-primary-light);
+  --color-secondary: var(--color-brand-secondary);
+  --color-secondary-light: var(--color-brand-secondary-light);
+  --color-danger: var(--color-state-error);
+  --color-danger-light: var(--color-state-error-light);
+  --color-warning: var(--color-state-warning);
+  --color-warning-light: var(--color-state-warning-light);
+
+  /* ── 颜色 - 语义化操作色（内敛学术风） ── */
+  --color-success: var(--color-state-success);
+  --color-success-hover: var(--color-state-success-hover);
+  --color-success-light: var(--color-state-success-light);
+  --color-success-gradient: linear-gradient(135deg, rgba(93, 122, 93, 0.12), rgba(93, 122, 93, 0.06));
+  --color-edit: var(--primitive-copper-500);
+  --color-edit-light: rgba(153, 107, 61, 0.12);
+  --color-edit-gradient: linear-gradient(135deg, rgba(153, 107, 61, 0.12), rgba(153, 107, 61, 0.06));
+  --color-delete: var(--primitive-brick-500);
+  --color-delete-light: rgba(155, 59, 59, 0.1);
+  --color-delete-gradient: linear-gradient(135deg, rgba(155, 59, 59, 0.1), rgba(155, 59, 59, 0.05));
+
+  /* ── 颜色 - 纸质感背景（替代玻璃态） ── */
+  --color-bg-glass: rgba(250, 247, 242, 0.95);
+  --color-bg-glass-light: rgba(250, 247, 242, 0.85);
+  --color-bg-glass-strong: rgba(255, 253, 250, 0.98);
+  --color-bg-glass-hover: rgba(245, 240, 230, 0.95);
+
+  /* ── 颜色 - 滚动条 ── */
+  --color-scrollbar-thumb: var(--primitive-paper-600);
+  --color-scrollbar-thumb-hover: var(--primitive-paper-700);
+
+  /* ── 颜色 - 刻度/评分可视化 ── */
+  --color-scale-excellent: rgba(93, 122, 93, 0.45);
+  --color-scale-good: rgba(184, 134, 11, 0.4);
+  --color-scale-fair: rgba(155, 59, 59, 0.35);
+  --color-scale-negative: rgba(155, 59, 59, 0.25);
+
+  /* ── 颜色 - 赭石主题（Speaking模块 - 替代紫色） ── */
+  --color-purple: var(--primitive-gold-600);
+  --color-purple-dark: var(--primitive-gold-700);
+  --color-purple-light: rgba(139, 105, 20, 0.1);
+  --color-purple-border: rgba(139, 105, 20, 0.2);
+  --color-purple-vivid: var(--primitive-gold-500);
+  --color-purple-vivid-dark: var(--primitive-gold-600);
+  --color-purple-vivid-light: rgba(184, 134, 11, 0.15);
+  --color-purple-vivid-bg: rgba(184, 134, 11, 0.08);
+
+  /* ── 颜色 - 赭石主题（用户内容区域 - 替代蓝色） ── */
+  --color-blue-light: rgba(139, 105, 20, 0.12);
+  --color-blue-bg: rgba(139, 105, 20, 0.06);
+
+  /* ── 颜色 - 状态指示 ── */
+  --color-recording: var(--primitive-brick-500);
+  --color-recording-dark: var(--primitive-brick-600);
+  --color-recording-light: rgba(155, 59, 59, 0.2);
+  --color-processing: var(--primitive-gold-500);
+  --color-processing-dark: var(--primitive-gold-600);
+  --color-processing-light: rgba(184, 134, 11, 0.2);
+
+  /* ── 颜色 - 文本（墨水色调） ── */
+  --color-text-primary: var(--primitive-ink-800);
+  --color-text-secondary: var(--primitive-ink-500);
+  --color-text-tertiary: var(--primitive-ink-400);
+  --color-text-muted: var(--primitive-ink-300);
+  --color-text-inverse: var(--primitive-paper-100);
+
+  /* ── 颜色 - 背景（温暖纸质感） ── */
+  --color-bg-primary: var(--primitive-paper-100);
+  --color-bg-secondary: var(--primitive-paper-200);
+  --color-bg-tertiary: var(--primitive-paper-300);
+  --color-bg-overlay: rgba(255, 253, 247, 0.97);
+  --color-bg-tooltip: rgba(45, 55, 72, 0.92);
+  --color-bg-page: var(--primitive-paper-200);
+
+  /* ── 颜色 - 边框（温暖灰调） ── */
+  --color-border-light: rgba(139, 105, 20, 0.1);
+  --color-border-medium: var(--primitive-paper-400);
+  --color-border-strong: var(--primitive-paper-500);
+
+  /* ── 渐变（温暖纸质渐变） ── */
+  --gradient-primary: linear-gradient(135deg, var(--primitive-copper-500), var(--primitive-gold-500));
+  --gradient-primary-dark: linear-gradient(135deg, var(--primitive-gold-600), var(--primitive-gold-700));
+  --gradient-primary-active: linear-gradient(135deg, var(--primitive-copper-500), var(--primitive-gold-600));
+  --gradient-background: var(--primitive-paper-200);
+  --gradient-success: linear-gradient(90deg, var(--primitive-olive-500), var(--primitive-olive-400));
+  --gradient-primary-bar: linear-gradient(90deg, var(--primitive-copper-500), var(--primitive-gold-500));
+  --gradient-purple-subtle: linear-gradient(135deg, rgba(139, 105, 20, 0.06), rgba(184, 134, 11, 0.04));
+  --gradient-purple-hover: linear-gradient(135deg, rgba(139, 105, 20, 0.1), rgba(184, 134, 11, 0.08));
+  --gradient-axis-spell: linear-gradient(to right,
+    rgba(155, 59, 59, 0.25) 0%,
+    rgba(155, 59, 59, 0.25) 41.2%,
+    rgba(250, 247, 242, 0.15) 41.2%,
+    rgba(250, 247, 242, 0.15) 100%
+  );
+
+  /* ── 图表颜色（学术感配色） ── */
+  --chart-color-primary: var(--primitive-copper-500);
+  --chart-color-success: var(--primitive-olive-500);
+  --chart-color-warning: var(--primitive-gold-500);
+  --chart-color-danger: var(--primitive-brick-500);
+  --chart-color-purple: var(--primitive-gold-700);
+  --chart-color-cyan: var(--primitive-olive-600);
+
+  /* ── 提示框/Alert 令牌 ── */
+  --alert-success-bg: var(--primitive-olive-50);
+  --alert-success-border: var(--primitive-olive-200);
+  --alert-success-text: var(--primitive-olive-700);
+  --alert-warning-bg: var(--primitive-gold-100);
+  --alert-warning-border: var(--primitive-gold-300);
+  --alert-warning-text: var(--primitive-gold-700);
+  --alert-error-bg: var(--primitive-brick-50);
+  --alert-error-border: var(--primitive-brick-200);
+  --alert-error-text: var(--primitive-brick-600);
+  --alert-info-bg: var(--primitive-ink-50);
+  --alert-info-border: var(--primitive-ink-200);
+  --alert-info-text: var(--primitive-ink-600);
+
+  /* ── 键盘组件令牌 ── */
+  --key-bg: var(--primitive-paper-50);
+  --key-text: var(--primitive-ink-900);
+  --key-special-bg: var(--primitive-ink-300);
+  --key-confirm-bg: var(--primitive-olive-400);
+  --key-confirm-disabled-bg: var(--primitive-olive-300);
+
+  /* ── 图表/数据可视化令牌 ── */
+  --chart-text-muted: var(--primitive-ink-200);
+  --chart-grid-line: var(--primitive-paper-400);
+  --chart-node-default: var(--primitive-olive-400);
+  --chart-placeholder: var(--primitive-ink-200);
+
+  /* ── 通用控件令牌 ── */
+  --control-bg-neutral: var(--primitive-paper-300);
+  --control-bg-hover: var(--primitive-paper-400);
+  --control-border-light: var(--primitive-paper-50);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     间距系统（8px 网格）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 基础间距 ── */
+  --space-0: 0;
+  --space-1: 4px;    /* 0.5 单位 */
+  --space-2: 8px;    /* 1 单位 */
+  --space-3: 12px;   /* 1.5 单位 */
+  --space-4: 16px;   /* 2 单位 */
+  --space-5: 20px;   /* 2.5 单位 */
+  --space-6: 24px;   /* 3 单位 */
+  --space-8: 32px;   /* 4 单位 */
+  --space-10: 40px;  /* 5 单位 */
+  --space-12: 48px;  /* 6 单位 */
+  --space-16: 64px;  /* 8 单位 */
+
+  /* ── 语义化间距 ── */
+  --gap-inline-xs: var(--space-1);
+  --gap-inline-sm: var(--space-2);
+  --gap-inline-md: var(--space-3);
+  --gap-inline-lg: var(--space-4);
+  --gap-stack-xs: var(--space-2);
+  --gap-stack-sm: var(--space-3);
+  --gap-stack-md: var(--space-4);
+  --gap-stack-lg: var(--space-6);
+  --gap-stack-xl: var(--space-8);
+
+  /* ── 兼容：旧间距变量 ── */
+  --spacing-xs: var(--space-1);
+  --spacing-sm: var(--space-2);
+  --spacing-md: var(--space-4);
+  --spacing-lg: var(--space-6);
+  --spacing-xl: var(--space-8);
+  --spacing-2xl: var(--space-12);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     字体系统
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 字体栈 ── */
+  --font-serif: 'Crimson Pro', 'Noto Serif SC', Georgia, serif;
+  --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── 语义化字体 ── */
+  --font-body: var(--font-serif);
+  --font-heading: var(--font-serif);
+  --font-ui: var(--font-sans);
+  --font-data: var(--font-mono);
+
+  /* ── 字体大小 ── */
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+
+  /* ── 流体字体大小 ── */
+  --font-size-fluid-sm: clamp(12px, 1vw + 10px, 14px);
+  --font-size-fluid-base: clamp(14px, 1.2vw + 10px, 16px);
+  --font-size-fluid-lg: clamp(16px, 1.5vw + 10px, 20px);
+  --font-size-fluid-xl: clamp(20px, 2vw + 12px, 28px);
+  --font-size-fluid-2xl: clamp(28px, 3vw + 14px, 40px);
+
+  /* ── 字体粗细 ── */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     圆角系统
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-default: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     阴影系统
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 10px 28px rgba(15, 23, 42, 0.12);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     过渡系统
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     布局尺寸
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  --topbar-height: 48px;
+  --topbar-height-mobile: 44px;
+  --topbar-height-small: 40px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 64px;
+
+  /* ── 导航栏尺寸 ── */
+  --nav-width: 48px;
+  --nav-width-expanded: 280px;
+  --nav-width-mobile: 44px;
+  --nav-width-expanded-mobile: 240px;
+  --nav-width-small-mobile: 40px;
+  --nav-width-expanded-small-mobile: 220px;
+
+  /* ── Speaking 侧边栏尺寸 ── */
+  --speaking-sidebar-width: 320px;
+  --speaking-sidebar-width-tablet: 280px;
+  --speaking-sidebar-width-mobile: 260px;
+
+  /* ── 按钮栏高度 ── */
+  --button-bar-height: 120px;
+  --button-bar-height-mobile: 140px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   数字展示工具类
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.stat-number {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}

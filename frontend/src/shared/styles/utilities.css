@@ -1,0 +1,153 @@
+/* shared/styles/utilities.css - 组件级别可复用样式 */
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   过渡动画
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all var(--transition-slow);
+}
+
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-normal);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   状态颜色
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.text-success {
+  color: var(--color-secondary);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.bg-success {
+  background-color: var(--color-secondary);
+}
+
+.bg-danger {
+  background-color: var(--color-danger);
+}
+
+.bg-warning {
+  background-color: var(--color-warning);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   Speaking 模块输入框
+   用于 PartItem / TopicItem / QuestionItem 的编辑和添加输入框
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.speaking-input-container {
+  padding: var(--spacing-sm) var(--spacing-md);
+  animation: speakingSlideIn 0.2s ease-out;
+  overflow: hidden;
+}
+
+.speaking-input-container--compact {
+  padding: 6px 14px;
+  margin: 0 -1px;
+}
+
+.speaking-input-container--bordered {
+  border-top: 1px solid var(--color-purple-light);
+  background: var(--color-bg-glass-strong);
+}
+
+.speaking-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-sm) 10px;
+  border: 2px solid var(--color-purple);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  background: var(--color-bg-primary);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px var(--color-purple-light);
+}
+
+.speaking-input--lg {
+  padding: 10px 12px;
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-default);
+}
+
+.speaking-input:focus {
+  outline: none;
+  border-color: var(--color-purple-dark);
+  box-shadow: 0 0 0 3px var(--color-purple-light);
+}
+
+.speaking-input:focus.speaking-input--scale {
+  transform: scale(1.01);
+}
+
+/* textarea 特定样式 */
+textarea.speaking-input {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.4;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   Speaking 模块动画
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes speakingSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes speakingSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes speakingSlideInStaggered {
+  from {
+    opacity: 0;
+    transform: translateX(-12px) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}

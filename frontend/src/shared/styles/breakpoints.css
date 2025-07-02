@@ -1,0 +1,33 @@
+/* shared/styles/breakpoints.css - 响应式断点 */
+
+/*
+ * 断点约定（两端式设计）：
+ * - 移动端: 768px 及以下
+ * - 桌面端: 769px 及以上
+ *
+ * 使用方式 (Desktop First)：
+ * .element { 桌面端样式 }
+ * @media (max-width: 768px) { 移动端样式 }
+ *
+ * 注意：不使用 480px、360px 等额外断点
+ */
+
+:root {
+  --breakpoint-mobile: 768px;
+}
+
+/* ── 响应式显示/隐藏工具类 ── */
+
+/* 移动端隐藏 */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* 桌面端隐藏 */
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}

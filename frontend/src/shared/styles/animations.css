@@ -1,0 +1,492 @@
+/* shared/styles/animations.css - 动效系统 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Editorial Study 风格 - 优雅、克制的动效
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════════════
+     时间曲线（Easing）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* 标准缓动 */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 弹性缓动 */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* 强调缓动 */
+  --ease-emphasis: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     持续时间（Duration）
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  --duration-instant: 100ms;   /* 即时反馈 */
+  --duration-fast: 150ms;      /* 快速交互 */
+  --duration-normal: 250ms;    /* 标准过渡 */
+  --duration-slow: 400ms;      /* 复杂动画 */
+  --duration-slower: 600ms;    /* 页面过渡 */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   基础关键帧
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 旋转 ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── 淡入/淡出 ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ── 滑入动画（带淡入） ── */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── 滑出动画 ── */
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* ── 缩放动画 ── */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* ── 强调动画 ── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+/* ── 骨架屏加载动画 ── */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── 脉冲边框 ── */
+@keyframes pulseBorder {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(153, 107, 61, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(153, 107, 61, 0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   兼容旧动画名称
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   动画工具类
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 基础动画类 ── */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s var(--ease-in-out) infinite;
+}
+
+.animate-shake {
+  animation: shake 0.4s var(--ease-default);
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s var(--ease-default);
+}
+
+/* ── 入场动画类 ── */
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-up {
+  animation: slideInUp var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-down {
+  animation: slideInDown var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-normal) var(--ease-out);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--ease-bounce);
+}
+
+/* ── 兼容旧动画类名 ── */
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.fade-in-up {
+  animation: fadeInUp var(--transition-normal);
+}
+
+.fade-in-down {
+  animation: fadeInDown var(--transition-normal);
+}
+
+.slide-up {
+  animation: slideUp 0.4s var(--ease-default);
+}
+
+.slide-down {
+  animation: slideDown 0.4s var(--ease-default);
+}
+
+.scale-in {
+  animation: scaleIn var(--transition-normal);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   交错动画（Stagger）
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.stagger-children > * {
+  animation: slideInUp var(--duration-normal) var(--ease-out) both;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+/* 淡入交错 */
+.stagger-fade > * {
+  animation: fadeIn var(--duration-normal) var(--ease-out) both;
+}
+
+.stagger-fade > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-fade > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-fade > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-fade > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-fade > *:nth-child(5) { animation-delay: 200ms; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   页面过渡动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 向左滑动（进入更深层级） */
+.page-slide-left-enter-active,
+.page-slide-left-leave-active {
+  transition: all var(--duration-slow) var(--ease-default);
+}
+
+.page-slide-left-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.page-slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* 向右滑动（返回上一层级） */
+.page-slide-right-enter-active,
+.page-slide-right-leave-active {
+  transition: all var(--duration-slow) var(--ease-default);
+}
+
+.page-slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.page-slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* 淡入淡出过渡 */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity var(--duration-normal) var(--ease-default);
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   模态框过渡动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity var(--duration-normal) var(--ease-default);
+}
+
+.modal-enter-active .modal,
+.modal-leave-active .modal {
+  transition: transform var(--duration-normal) var(--ease-default);
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from .modal {
+  transform: scale(0.95) translateY(10px);
+}
+
+.modal-leave-to .modal {
+  transform: scale(0.95) translateY(-10px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Toast 过渡动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.toast-enter-active {
+  transition: all var(--duration-normal) var(--ease-bounce);
+}
+
+.toast-leave-active {
+  transition: all var(--duration-fast) var(--ease-in);
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   列表过渡动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.list-enter-active,
+.list-leave-active {
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.list-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.list-move {
+  transition: transform var(--duration-normal) var(--ease-default);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   减少动效支持（无障碍）
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* 保留必要的过渡提示 */
+  .animate-pulse,
+  .animate-bounce,
+  .animate-spin {
+    animation: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   性能优化提示
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.will-animate {
+  will-change: transform, opacity;
+}
+
+.animation-done {
+  will-change: auto;
+}

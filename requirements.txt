@@ -1,0 +1,7 @@
+# 阿里云部署 Python 依赖（后端仅关系图查询）
+Flask==3.1.2
+Flask-CORS==4.0.1
+SQLAlchemy==2.0.43
+psycopg2-binary
+python-dotenv>=1.0.0
+PyJWT>=2.8.0
