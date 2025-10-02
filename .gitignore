@@ -42,3 +42,6 @@ web_app/static/audios/
 *.bin
 *.ggml
 *.pcm
+
+# Database (should not be in git)
+vocabulary.db
