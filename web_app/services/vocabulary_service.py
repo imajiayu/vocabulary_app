@@ -1,0 +1,80 @@
+# -*- coding: utf-8 -*-
+from flask import json
+import re, requests
+from bs4 import BeautifulSoup
+
+from web_app.extensions import get_session
+from web_app.models.word import Word
+
+
+def get_bold_definition(word, jsonStr):
+    data = json.loads(jsonStr)
+
+    # 处理例句，将英文单词加粗
+    if "examples" in data:
+        for example in data["examples"]:
+            if "en" in example:
+                example["en"] = bold_word_in_sentence(example["en"], word)
+
+    # 返回 JSON 字符串
+    return json.dumps(data, ensure_ascii=False, indent=2)
+
+
+def bold_word_in_sentence(sentence, word):
+    # 忽略大小写，单词边界匹配，且单词前后不在 <strong> 标签中
+    pattern = re.compile(
+        rf"(?<!<strong>)\b({re.escape(word)})\b(?!</strong>)", re.IGNORECASE
+    )
+    return pattern.sub(r"<strong>\1</strong>", sentence)
+
+
+def fetch_definition_from_web(word):
+    url = f"https://dict.youdao.com/w/eng/{word}/"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.encoding = response.apparent_encoding
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # 音标
+        phonetic_us = ""
+        phonetic_uk = ""
+        pronounces = soup.select("h2.wordbook-js .baav .pronounce")
+        for p in pronounces:
+            phon = p.select_one("span.phonetic")
+            if phon:
+                text = phon.text.strip()
+                if "英" in p.text:
+                    phonetic_uk = text
+                elif "美" in p.text:
+                    phonetic_us = text
+
+        # 释义
+        explain_lis = soup.select("#phrsListTab div.trans-container ul li")
+        definitions = [li.get_text(strip=True) for li in explain_lis]
+        if not definitions:
+            definitions.append("暂无释义")
+
+        # 例句
+        examples = []
+        example_items = soup.select("#bilingual ul.ol li")
+        for li in example_items[:3]:
+            ps = li.find_all("p")
+            if len(ps) >= 2:
+                eng = ps[0].get_text().rstrip("\n")
+                zh = ps[1].get_text().rstrip("\n")
+                if eng and zh:
+                    examples.append({"en": bold_word_in_sentence(eng, word), "zh": zh})
+
+        # 返回 JSON 格式
+        result = {
+            "phonetic": {"us": phonetic_us, "uk": phonetic_uk},
+            "definitions": definitions,
+            "examples": examples,
+        }
+
+        return result
+
+    except Exception:
+        return None

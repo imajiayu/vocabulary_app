@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Debug web_app.relations_build.main",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "web_app.app",
+            "justMyCode": true
+        }
+    ]
+}

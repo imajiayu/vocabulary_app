@@ -1,0 +1,844 @@
+<template>
+  <div class="form-container">
+    <div class="form-header">
+      <h2 class="form-title">添加新单词</h2>
+
+      <!-- 右侧切换 IELTS/GRE -->
+      <SwitchTab
+        v-model="source"
+        :tabs="sourceTabs"
+        container-class="secondary-theme small"
+        :show-indicator="true"
+        @change="handleSourceChange"
+      />
+    </div>
+
+    <div class="form-content">
+      <!-- 第一行：添加单词输入框 -->
+      <div class="input-group">
+        <div class="input-with-clear">
+          <input v-model="word" @keydown.enter="handleSubmit" type="text" placeholder="请输入要添加的单词..." class="word-input"
+            :disabled="isLoading" ref="inputRef" />
+          <button v-if="word.trim()" @click="word = ''" class="clear-button" type="button">
+            ×
+          </button>
+        </div>
+        <button @click="handleSubmit" :disabled="isLoading || !word.trim()" class="submit-button">
+          <div v-if="isLoading" class="loading-spinner"></div>
+          <PlusIcon v-else class="plus-icon" />
+          {{ isLoading ? '添加中...' : '添加' }}
+        </button>
+
+        <!-- 消息提示紧贴输入框 -->
+        <div class="message-area-wrapper" v-if="message.text">
+          <div :class="['message-area', `message-${message.type}`]">
+            <div class="message-content">
+              <div :class="['status-dot', `status-dot-${message.type}`]"></div>
+              <span>{{ message.text }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二行：单词查询输入框（对应搜索框） -->
+      <div class="lookup-input-row">
+        <div class="lookup-input-group">
+          <div class="input-with-clear">
+            <input
+              v-model="lookupWord"
+              @input="handleLookupInput"
+              @keydown.enter="lookupDefinition"
+              type="text"
+              placeholder="在线搜索释义..."
+              class="lookup-input"
+            />
+            <button v-if="lookupWord.trim()" @click="clearLookup" class="clear-button" type="button">
+              ×
+            </button>
+          </div>
+          <button
+            @click="lookupDefinition"
+            :disabled="isLookupLoading || !lookupWord.trim()"
+            class="lookup-button"
+          >
+            <div v-if="isLookupLoading" class="loading-spinner"></div>
+            <SearchIcon v-else class="search-icon" />
+          </button>
+        </div>
+
+        <!-- 查询结果紧贴输入框 -->
+        <Transition name="lookup-fade" appear>
+          <div class="lookup-result-wrapper" v-if="lookupResult" key="lookup-result">
+            <div class="lookup-result">
+              <div class="word-header">
+                <span class="word-text">{{ lookupResult.word }}</span>
+                <button @click="closeLookupResult" class="close-button">×</button>
+              </div>
+
+              <div v-if="lookupResult.phonetic" class="phonetic">
+                <span v-if="lookupResult.phonetic.us" class="phonetic-item">
+                  US: {{ lookupResult.phonetic.us }}
+                </span>
+                <span v-if="lookupResult.phonetic.uk" class="phonetic-item">
+                  UK: {{ lookupResult.phonetic.uk }}
+                </span>
+              </div>
+
+              <div v-if="lookupResult.definitions" class="definitions">
+                <div
+                  v-for="(definition, index) in lookupResult.definitions"
+                  :key="index"
+                  class="definition-item"
+                >
+                  {{ index + 1 }}. {{ definition }}
+                </div>
+              </div>
+
+              <div v-if="lookupResult.error" class="error-message">
+                {{ lookupResult.error }}
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </div>
+
+
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue';
+import { Plus as PlusIcon, Search as SearchIcon } from 'lucide-vue-next';
+import { type Word } from '@/shared/types';
+import { api } from '@/shared/api';
+import { handleWordInsertError } from '@/shared/utils/errorHandler';
+import SwitchTab from '@/shared/components/ui/SwitchTab.vue';
+import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
+
+const word = ref('');
+const isLoading = ref(false);
+const message = ref({ type: '', text: '' });
+const inputRef = ref<HTMLInputElement>();
+
+// 单词查询相关
+const lookupWord = ref('');
+const isLookupLoading = ref(false);
+const lookupResult = ref<any>(null);
+let lookupTimeout: NodeJS.Timeout | null = null;
+
+// Local source state for WordInsertForm only - starts with WordIndex selection but can be changed locally
+const source = ref<'IELTS' | 'GRE'>('IELTS');
+
+// Use read-only composable to get WordIndex selection
+const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
+
+// 选项卡数据
+const sourceTabs = computed(() => [
+  { value: 'IELTS', label: 'IELTS' },
+  { value: 'GRE', label: 'GRE' }
+]);
+
+// 处理来源切换 - only changes local state, doesn't affect WordIndex
+const handleSourceChange = (value: string) => {
+  source.value = value as 'IELTS' | 'GRE';
+};
+
+onMounted(async () => {
+  try {
+    // Initialize local source from backend to sync with WordIndex selection
+    await initializeFromData();
+
+    // Set local source to match WordIndex selection
+    if (currentSource.value) {
+      source.value = currentSource.value;
+    }
+  } catch (error) {
+    console.error('Failed to initialize source:', error);
+  }
+
+  setTimeout(() => {
+    inputRef.value?.focus()
+  }, 50)
+});
+
+const emit = defineEmits<{
+  wordInserted: [word: Word];
+}>();
+
+// 单词查询函数
+const lookupDefinition = async () => {
+  if (!lookupWord.value.trim()) return;
+
+  isLookupLoading.value = true;
+  try {
+    // 模拟 API 调用 - 这里需要替换为实际的 API
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${lookupWord.value.trim()}`);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data[0]) {
+        const entry = data[0];
+        lookupResult.value = {
+          word: entry.word,
+          phonetic: {
+            us: entry.phonetic || (entry.phonetics && entry.phonetics[0]?.text),
+            uk: entry.phonetic || (entry.phonetics && entry.phonetics[1]?.text)
+          },
+          definitions: entry.meanings?.[0]?.definitions?.slice(0, 3)?.map((def: any) => def.definition) || []
+        };
+      }
+    } else {
+      lookupResult.value = {
+        word: lookupWord.value,
+        error: '未找到该单词的释义'
+      };
+    }
+  } catch (error) {
+    lookupResult.value = {
+      word: lookupWord.value,
+      error: '查询失败，请检查网络连接'
+    };
+  } finally {
+    isLookupLoading.value = false;
+  }
+};
+
+// 输入防抖处理
+const handleLookupInput = () => {
+  if (lookupTimeout) {
+    clearTimeout(lookupTimeout);
+  }
+
+  // 立即清除结果，避免残留显示
+  lookupResult.value = null;
+
+  if (!lookupWord.value.trim()) {
+    return;
+  }
+
+  lookupTimeout = setTimeout(() => {
+    lookupDefinition();
+  }, 800); // 800ms 防抖
+};
+
+// 关闭查询结果
+const closeLookupResult = async () => {
+  lookupResult.value = null;
+  // 确保DOM更新完成
+  await nextTick();
+};
+
+// 清除查询输入
+const clearLookup = () => {
+  lookupWord.value = '';
+  lookupResult.value = null;
+  // 清除防抖定时器
+  if (lookupTimeout) {
+    clearTimeout(lookupTimeout);
+    lookupTimeout = null;
+  }
+};
+
+const handleSubmit = async () => {
+  if (!word.value.trim()) return;
+
+  isLoading.value = true;
+  message.value = { type: '', text: '' };
+
+  try {
+    const newWord = await api.words.createWord({
+      word: word.value.trim(),
+      definition: {}, // 空定义，后续可以编辑
+      source: source.value as 'IELTS' | 'GRE'
+    });
+
+    emit('wordInserted', newWord);
+    word.value = '';
+    message.value = { type: 'success', text: `单词添加成功（${source.value}）` };
+  } catch (error) {
+    // 使用统一的错误处理函数，插入单词失败时会显示message
+    const errorMessage = handleWordInsertError(error);
+    message.value = {
+      type: 'error',
+      text: errorMessage,
+    };
+  } finally {
+    isLoading.value = false;
+  }
+
+  setTimeout(() => {
+    message.value = { type: '', text: '' };
+  }, 3000);
+
+  setTimeout(() => {
+    inputRef.value?.focus()
+  }, 50);
+};
+
+onUnmounted(() => {
+  // 清理定时器避免内存泄漏
+  if (lookupTimeout) {
+    clearTimeout(lookupTimeout);
+  }
+});
+</script>
+
+<style scoped>
+.form-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+/* 标题 + tab 排版 */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.5rem; /* 固定高度确保对齐 */
+}
+
+.form-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  flex: 1;
+}
+
+.message-area-wrapper {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 100%;
+  z-index: 15;
+}
+
+.message-area {
+  display: inline-flex;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  color: #6b7280;
+}
+
+.message-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #6b7280;
+}
+
+.message-success {
+  color: #16a34a;
+}
+
+.status-dot-success {
+  background-color: #16a34a;
+}
+
+.message-error {
+  color: #ef4444;
+}
+
+.status-dot-error {
+  background-color: #ef4444;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.75rem;
+  height: 2.75rem;
+  position: relative;
+}
+
+.input-with-clear {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.word-input {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  height: 100%;
+  font-size: 16px; /* 防止移动端自动缩放 */
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.word-input:focus {
+  outline: none;
+  /* 关键改动：将 'ring' 替换为 'box-shadow' */
+  box-shadow: 0 0 0 2px #3b82f6;
+  border-color: transparent;
+}
+
+.word-input:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
+
+.submit-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+  box-sizing: border-box;
+  /* 移动端触摸优化 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 80px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.submit-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* 单词查询样式 - 仿照 SearchAndFilter 布局 */
+.lookup-input-row {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.lookup-input-group {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  height: 2.75rem;
+}
+
+.lookup-input {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  height: 100%;
+  font-size: 16px; /* 防止移动端自动缩放 */
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lookup-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #10b981;
+  border-color: transparent;
+}
+
+.lookup-button {
+  background-color: #10b981;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 100%;
+  box-sizing: border-box;
+  /* 移动端触摸优化 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+}
+
+.lookup-button:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.lookup-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.clear-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.clear-button:hover {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.lookup-result-wrapper {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  /* 确保完全隐藏时不占用空间 */
+  pointer-events: auto;
+}
+
+/* 查询结果动画 */
+.lookup-fade-enter-active, .lookup-fade-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.lookup-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.lookup-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.lookup-fade-enter-to, .lookup-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.lookup-result {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.25rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  /* 移动端触摸优化 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.close-button:hover {
+  color: #6b7280;
+  background-color: #f3f4f6;
+}
+
+.close-button:active {
+  background-color: #e5e7eb;
+  transform: scale(0.95);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.word-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.word-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.phonetic {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.phonetic-item {
+  font-family: 'Courier New', monospace;
+}
+
+.definitions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.definition-item {
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.loading-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 移动端响应式适配 */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    gap: 0.875rem;
+  }
+
+  .form-header {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    gap: 0.75rem;
+  }
+
+  .form-title {
+    font-size: 1.125rem;
+    text-align: center;
+  }
+
+  .form-content {
+    gap: 0.875rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+    height: auto;
+    gap: 0.75rem;
+  }
+
+  .word-input {
+    height: 48px;
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+  }
+
+  .submit-button {
+    height: 48px;
+    padding: 0.875rem 1.25rem;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  .lookup-input-group {
+    height: 48px;
+  }
+
+  .lookup-input {
+    height: 48px;
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+  }
+
+  .lookup-button {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+  }
+
+  .clear-button {
+    width: 2rem;
+    height: 2rem;
+    min-width: 44px;
+    min-height: 44px;
+    right: 0.25rem;
+  }
+
+  .lookup-result {
+    padding: 0.875rem;
+    max-height: 240px;
+  }
+
+  .word-text {
+    font-size: 1rem;
+  }
+}
+
+/* 小屏手机进一步优化 */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 0.875rem;
+    border-radius: 0.375rem;
+  }
+
+  .form-title {
+    font-size: 1rem;
+  }
+
+  .input-group {
+    gap: 0.625rem;
+  }
+
+  .word-input {
+    height: 50px;
+    padding: 1rem 2.5rem 1rem 0.875rem;
+  }
+
+  .submit-button {
+    height: 50px;
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .lookup-input-group {
+    height: 50px;
+  }
+
+  .lookup-input {
+    height: 50px;
+    padding: 1rem 2.5rem 1rem 0.875rem;
+  }
+
+  .lookup-button {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+  }
+
+  .lookup-result {
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+  }
+
+  .phonetic {
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .definition-item {
+    font-size: 0.8125rem;
+  }
+}
+
+/* 横屏适配 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .form-container {
+    padding: 0.75rem;
+    gap: 0.625rem;
+  }
+
+  .form-header {
+    gap: 0.5rem;
+  }
+
+  .form-title {
+    font-size: 1rem;
+  }
+
+  .input-group {
+    gap: 0.5rem;
+  }
+
+  .word-input,
+  .lookup-input {
+    height: 36px;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+  }
+
+  .submit-button {
+    height: 36px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .lookup-input-group {
+    height: 36px;
+  }
+
+  .lookup-button {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+  }
+
+  .lookup-result {
+    padding: 0.5rem;
+    max-height: 160px;
+  }
+}
+</style>

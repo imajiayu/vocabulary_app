@@ -1,0 +1,30 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# log and tmp files
+*_pid
+*.log
+
+# Audio files
+*.webm
+*.wav
+web_app/static/audios/
+
+# Model files (large)
+*.bin
+*.ggml
+*.pcm

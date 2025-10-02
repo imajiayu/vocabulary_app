@@ -1,0 +1,671 @@
+# -*- coding: utf-8 -*-
+import threading
+import datetime, time
+from datetime import date
+import json
+from flask import session
+from sqlalchemy import func, text, update
+from web_app.extensions import get_session
+from web_app.models.word import SourceType, Word
+from web_app.services.websocket_events import ws_events
+from web_app.services.vocabulary_service import (
+    fetch_definition_from_web,
+)
+
+
+def get_current_source():
+    """Get current source filter from session, default to IELTS"""
+    return session.get("current_source", "IELTS")
+
+
+def db_get_source_statistics():
+    """Get statistics for each source (IELTS and GRE)"""
+    with get_session() as db:
+        stats = {}
+
+        for source in ["IELTS", "GRE"]:
+            total = db.query(Word).filter(Word.source == source).count()
+            remembered = (
+                db.query(Word)
+                .filter(
+                    Word.source == source,
+                    (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
+                )
+                .count()
+            )
+            unremembered = total - remembered
+
+            stats[source] = {
+                "total": total,
+                "remembered": remembered,
+                "unremembered": unremembered,
+            }
+
+        return stats
+
+
+def db_get_comprehensive_stats(source=None):
+    """Single query to get all statistics data for a specific source"""
+    source = source or get_current_source()
+
+    with get_session() as db:
+        # Single query to get all needed fields
+        rows = (
+            db.query(
+                Word.id,
+                Word.word,
+                Word.ease_factor,
+                Word.avg_elapsed_time,
+                Word.next_review,
+                Word.remember_count,
+                Word.forget_count,
+                Word.spell_strength,
+                Word.spell_next_review,
+                Word.repetition,
+                Word.date_added,
+                Word.lapse,
+            )
+            .filter(Word.source == source, Word.stop_review == 0)
+            .all()
+        )
+
+        # Process data in memory
+        stats = {
+            "ef_data": [],
+            "elapse_times": [],
+            "next_reviews": [],
+            "spell_next_reviews": [],
+            "review_counts": [],
+            "spell_strengths": [],
+            "added_dates": {},
+            "total_lapse": 0,
+            "spell_heatmap_cells": [],
+            "ef_heatmap_cells": [],
+        }
+
+        date_counter = {}
+        spell_strengths_for_max = []
+
+        for row in rows:
+            # EF data
+            if row.ease_factor is not None:
+                stats["ef_data"].append({"word": row.word, "ef": round(row.ease_factor, 2)})
+
+            # Elapse times
+            if row.avg_elapsed_time is not None:
+                stats["elapse_times"].append(round(row.avg_elapsed_time))
+
+            # Next reviews
+            if row.next_review is not None:
+                stats["next_reviews"].append(row.next_review)
+
+            # Spell next reviews
+            if row.spell_next_review is not None and row.repetition >= 3:
+                stats["spell_next_reviews"].append(row.spell_next_review)
+
+            # Review counts
+            review_count = (row.remember_count or 0) + (row.forget_count or 0)
+            stats["review_counts"].append(review_count)
+
+            # Spell strengths
+            available = (row.repetition or 0) >= 3
+            stats["spell_strengths"].append(
+                {
+                    "word": row.word,
+                    "strength": round(row.spell_strength, 2) if row.spell_strength is not None else None,
+                    "available": available,
+                }
+            )
+
+            # Collect valid spell strengths for max calculation
+            if row.spell_strength is not None and available:
+                spell_strengths_for_max.append(row.spell_strength)
+
+            # Added dates
+            if row.date_added is not None:
+                date_str = row.date_added.isoformat()
+                date_counter[date_str] = date_counter.get(date_str, 0) + 1
+
+            # Total lapse
+            if row.lapse is not None:
+                stats["total_lapse"] += row.lapse
+
+        # Calculate max spell strength for color normalization
+        max_spell_strength = (
+            max(spell_strengths_for_max) if spell_strengths_for_max else 1
+        )
+
+        # Pre-compute heatmap cells with colors and tooltips
+        for row in rows:
+            # Spell heatmap cell
+            available = (row.repetition or 0) >= 3
+            spell_value = row.spell_strength
+
+            # Calculate spell color
+            if not available:
+                spell_color = "#cbcbcb"
+                spell_tooltip = f"{row.word}\n不可拼写"
+            elif spell_value is None:
+                spell_color = "#4da6ff"
+                spell_tooltip = f"{row.word}\n未拼写过"
+            else:
+                # Green color with alpha based on score
+                clamped = max(0, min(1, spell_value / max_spell_strength))
+                alpha = 0.15 + 0.85 * clamped
+                spell_color = f"rgba(46,125,50,{alpha:.3f})"
+                spell_tooltip = f"{row.word}\n分数: {spell_value:.1f}"
+
+            stats["spell_heatmap_cells"].append(
+                {
+                    "word": row.word,
+                    "value": spell_value,
+                    "available": available,
+                    "color": spell_color,
+                    "tooltip": spell_tooltip,
+                }
+            )
+
+            # EF heatmap cell
+            ef_value = row.ease_factor
+
+            # Calculate EF color
+            if ef_value is None:
+                ef_color = "#ffffff"
+            elif ef_value <= 1.3:
+                ef_color = "#ff4d4f"
+            elif ef_value >= 3.0:
+                ef_color = "#1890ff"
+            elif ef_value == 2.5:
+                ef_color = "#ffffff"
+            elif ef_value < 2.5:
+                # Red to white gradient
+                t = (ef_value - 1.3) / (2.5 - 1.3)
+                r = 255
+                g = round(77 + (255 - 77) * t)
+                b = round(77 + (255 - 77) * t)
+                ef_color = f"rgb({r},{g},{b})"
+            else:
+                # White to blue gradient
+                t = (ef_value - 2.5) / (3.0 - 2.5)
+                r = round(255 - (255 - 24) * t)
+                g = round(255 - (255 - 144) * t)
+                b = round(255 - (255 - 255) * t)
+                ef_color = f"rgb({r},{g},{b})"
+
+            ef_tooltip = (
+                f"{row.word}: {ef_value:.2f}"
+                if ef_value is not None
+                else f"{row.word}: 0.00"
+            )
+
+            stats["ef_heatmap_cells"].append(
+                {
+                    "word": row.word,
+                    "value": ef_value,
+                    "available": True,
+                    "color": ef_color,
+                    "tooltip": ef_tooltip,
+                }
+            )
+
+        # Sort added dates
+        stats["added_dates"] = dict(sorted(date_counter.items()))
+
+        return stats
+
+
+def update_word_definition(word_id, word):
+    """查询单词释义并更新数据库，失败则重试"""
+    while True:
+        definition = fetch_definition_from_web(word)
+        if definition:
+            definition_str = json.dumps(definition, ensure_ascii=False)
+            with get_session() as db:
+                db.execute(
+                    update(Word)
+                    .values(definition=definition_str)
+                    .where(Word.id == word_id)
+                )
+                db.commit()
+
+            ws_events.emit_word_updated(word_id, definition)
+            break
+        else:
+            print(f"{word} 查询失败，0.2秒后重试...")
+            time.sleep(0.2)
+
+
+def db_get_word_review_info(id):
+    with get_session() as db:
+        w = db.query(Word).filter(Word.id == id).first()
+        if not w:
+            return None
+
+        res = w.to_dict()
+        res["related_words"] = w.get_all_related_words(db)
+
+        return res
+
+
+def db_get_words_review_info_batch(word_ids):
+    """Batch query to get word review info - solves N+1 query problem"""
+    if not word_ids:
+        return []
+
+    with get_session() as db:
+        # Single query to get all words
+        words = db.query(Word).filter(Word.id.in_(word_ids)).all()
+
+        # Create a mapping for quick lookup
+        word_dict = {word.id: word for word in words}
+        result = []
+
+        # Maintain the original order of word_ids
+        for word_id in word_ids:
+            if word_id in word_dict:
+                word = word_dict[word_id]
+                res = word.to_dict()
+                res["related_words"] = word.get_all_related_words(db)
+                result.append(res)
+
+        return result
+
+
+def db_insert_word(word_text, source):
+    try:
+        with get_session() as db:
+            existing = db.query(Word).filter(Word.word == word_text).first()
+            if existing:
+                return None
+            # 设置next_review为当天
+            today = date.today()
+            new_word = Word(
+                word=word_text, source=SourceType(source), next_review=today
+            )
+            db.add(new_word)
+            db.commit()
+
+            new_word = db.query(Word).filter(Word.word == word_text).first()
+            return new_word.to_dict()
+    except Exception:
+        db.rollback()
+        return None
+
+
+def db_fetch_word_info(word_id):
+    with get_session() as db:
+        w = db.query(Word).filter_by(id=word_id).first()
+        return w.to_dict()
+
+
+def db_fetch_word_info_for_insert_page():
+    with get_session() as db:
+        words = db.query(Word).order_by(Word.word.asc()).all()
+
+    return [w.to_dict() for w in words]
+
+
+def db_fetch_word_info_paginated(limit=50, offset=0):
+    """Fetch words with pagination support"""
+    with get_session() as db:
+        # Get total count
+        total_count = db.query(Word).count()
+
+        # Get paginated words
+        words = (
+            db.query(Word).order_by(Word.word.asc()).offset(offset).limit(limit).all()
+        )
+
+        has_more = (offset + limit) < total_count
+
+        # Calculate counts for first request only
+        counts = None
+        if offset == 0:
+            # Source counts
+            ielts_total = db.query(Word).filter(Word.source == "IELTS").count()
+            gre_total = db.query(Word).filter(Word.source == "GRE").count()
+
+            # Status counts for all words
+            remembered_total = (
+                db.query(Word)
+                .filter((Word.stop_review == 1) | (Word.ease_factor >= 3.0))
+                .count()
+            )
+            unremembered_total = total_count - remembered_total
+
+            # Status counts for IELTS
+            ielts_remembered = (
+                db.query(Word)
+                .filter(
+                    Word.source == "IELTS",
+                    (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
+                )
+                .count()
+            )
+            ielts_unremembered = ielts_total - ielts_remembered
+
+            # Status counts for GRE
+            gre_remembered = (
+                db.query(Word)
+                .filter(
+                    Word.source == "GRE",
+                    (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
+                )
+                .count()
+            )
+            gre_unremembered = gre_total - gre_remembered
+
+            counts = {
+                "source_counts": {
+                    "all": {
+                        "total": total_count,
+                        "remembered": remembered_total,
+                        "unremembered": unremembered_total,
+                    },
+                    "IELTS": {
+                        "total": ielts_total,
+                        "remembered": ielts_remembered,
+                        "unremembered": ielts_unremembered,
+                    },
+                    "GRE": {
+                        "total": gre_total,
+                        "remembered": gre_remembered,
+                        "unremembered": gre_unremembered,
+                    },
+                }
+            }
+
+        return {
+            "words": [w.to_dict() for w in words],
+            "total": total_count,
+            "has_more": has_more,
+            "counts": counts,
+        }
+
+
+def db_fetch_review_word_ids(limit=None):
+    current_source = get_current_source()
+    with get_session() as db:
+        rows = db.query(Word.id).filter(
+            Word.stop_review == 0,
+            Word.next_review != None,
+            Word.next_review <= datetime.date.today().isoformat(),
+            Word.source == current_source,
+        )
+        if limit:
+            rows = rows.limit(limit).all()
+        else:
+            rows = rows.all()
+        return [row[0] for row in rows]
+
+
+def db_fetch_lapse_word_ids(limit=None):
+    current_source = get_current_source()
+    with get_session() as db:
+        rows = (
+            db.query(Word.id)
+            .filter(
+                Word.stop_review == 0, Word.lapse > 0, Word.source == current_source
+            )
+            .order_by(Word.lapse.asc())
+        )
+        if limit:
+            rows = rows.limit(limit).all()
+        else:
+            rows = rows.all()
+        return [row[0] for row in rows]
+
+
+def db_fetch_spelled_word_ids(limit=None):
+    from datetime import date
+
+    current_source = get_current_source()
+    today = date.today()
+
+    with get_session() as db:
+        rows = (
+            db.query(Word.id)
+            .filter(
+                Word.stop_review == 0,
+                Word.repetition >= 3,
+                Word.source == current_source,
+                # 包含需要复习的单词：从未练习过拼写或已到复习时间的单词
+            )
+            .order_by(
+                Word.spell_next_review.asc(),  # 按复习时间升序（过期时间越长的越优先）
+                (Word.spell_next_review == None).desc(),  # 没有设定复习时间的排在前面
+                (Word.spell_strength == None).desc(),  # 从未练习拼写的排在前面
+                Word.spell_strength.asc(),  # 最后按强度升序（弱的优先）
+            )
+        )
+        if limit:
+            rows = rows.limit(limit).all()
+        else:
+            rows = rows.all()
+        return [row[0] for row in rows]
+
+
+def db_fetch_today_spell():
+    from datetime import date
+
+    current_source = get_current_source()
+    today = date.today()
+
+    with get_session() as db:
+        rows = (
+            db.query(Word.id)
+            .filter(
+                Word.stop_review == 0,
+                Word.repetition >= 3,
+                Word.source == current_source,
+                # 包含需要复习的单词：从未练习过拼写或已到复习时间的单词
+                (Word.spell_next_review.is_(None)) | (Word.spell_next_review <= today),
+            )
+            .order_by(
+                (Word.spell_next_review == None).asc(),  # NULL值排在后面
+                Word.spell_next_review.asc(),
+            )
+        )
+        return [row[0] for row in rows]
+
+
+def db_update_word_for_review(
+    id,
+    last_remembered,
+    last_forgot,
+    remember_inc,
+    forget_inc,
+    repetition,
+    interval,
+    ease_factor,
+    last_score,
+    next_review,
+    lapse,
+    avg_elapsed_time,
+):
+    with get_session() as db:
+        db.execute(
+            update(Word)
+            .where(Word.id == id)
+            .values(
+                last_remembered=last_remembered,
+                last_forgot=last_forgot,
+                remember_count=Word.remember_count + remember_inc,
+                forget_count=Word.forget_count + forget_inc,
+                repetition=repetition,
+                interval=interval,
+                ease_factor=ease_factor,
+                last_score=last_score,
+                next_review=next_review,
+                lapse=lapse,
+                avg_elapsed_time=avg_elapsed_time,
+            )
+        )
+        db.commit()
+
+
+def db_update_word_for_lapse(id, lapse):
+    with get_session() as db:
+        db.execute(update(Word).where(Word.id == id).values(lapse=lapse))
+        db.commit()
+
+
+def db_update_word_for_spelling(id, newStrength, nextReview=None):
+    with get_session() as db:
+        values = {"spell_strength": newStrength}
+        if nextReview is not None:
+            values["spell_next_review"] = nextReview
+        db.execute(update(Word).where(Word.id == id).values(**values))
+        db.commit()
+
+
+def db_get_word_elapse_info(id):
+    with get_session() as db:
+        row = (
+            db.query(Word.avg_elapsed_time, Word.remember_count, Word.forget_count)
+            .filter(Word.id == id)
+            .first()
+        )
+        if not row:
+            return None
+        return row.avg_elapsed_time, row.remember_count, row.forget_count
+
+
+# 返回所有lapse的sum
+def db_get_total_lapse_count():
+    current_source = get_current_source()
+    with get_session() as db:
+        total_lapse = (
+            db.query(Word)
+            .filter(Word.source == current_source)
+            .with_entities(func.sum(Word.lapse))
+            .scalar()
+        )
+        return total_lapse if total_lapse is not None else 0
+
+
+def db_delete_word(word_id: int):
+    with get_session() as db:
+        rows = db.query(Word).filter(Word.id == word_id).delete()
+        db.commit()
+        return rows > 0
+
+
+def get_daily_review_loads_by_source(source, days_ahead=45):
+    """
+    获取指定source未来每日的复习负荷
+    返回: [day1_count, day2_count, ..., day45_count]
+    """
+    from datetime import date, timedelta
+
+    today = date.today()
+    future_dates = [
+        (today + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
+    ]
+
+    with get_session() as db:
+        # 查询每个日期的复习单词数量
+        loads = []
+        for date_str in future_dates:
+            count = (
+                db.query(Word.id)
+                .filter(
+                    Word.source == source,
+                    Word.stop_review == 0,
+                    Word.next_review == date_str,
+                )
+                .count()
+            )
+            loads.append(count)
+
+    return loads
+
+
+def get_daily_spell_loads_by_source(source, days_ahead=45):
+    """
+    获取指定source未来每日的拼写负荷
+    返回: [day1_count, day2_count, ..., day45_count]
+    """
+    from datetime import date, timedelta
+
+    today = date.today()
+    future_dates = [
+        (today + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
+    ]
+
+    with get_session() as db:
+        loads = []
+        for date_str in future_dates:
+            count = (
+                db.query(Word.id)
+                .filter(
+                    Word.source == source,
+                    Word.stop_review == 0,
+                    Word.repetition >= 3,
+                    Word.spell_next_review == date_str,
+                )
+                .count()
+            )
+            loads.append(count)
+
+    return loads
+
+
+def db_update_word(word_id: int, update_data: dict):
+    if not update_data:
+        # 1. 如果没有提供更新字段，返回错误信息和状态码
+        return "没有提供更新字段。", 400, None
+
+    # 构建 SET 子句，使用命名参数
+    set_clause = ", ".join([f'"{key}" = :{key}' for key in update_data.keys()])
+    sql_query = f'UPDATE "words" SET {set_clause} WHERE id = :id'
+
+    # 构建参数字典
+    params = update_data.copy()
+    params["id"] = word_id
+
+    try:
+        with get_session() as db:
+            # 如果更新数据包含word字段，先查询原始的word文本
+            original_word = None
+            if "word" in update_data:
+                original_word_result = (
+                    db.query(Word.word).filter(Word.id == word_id).first()
+                )
+                if original_word_result:
+                    original_word = original_word_result[0]
+
+            # 执行 UPDATE
+            result = db.execute(text(sql_query), params)
+            db.commit()
+            if result.rowcount == 0:
+                return f"未找到ID为 {word_id} 的单词。", 404, None
+
+            # 关键改动：更新成功后，查询并返回完整的单词对象
+            updated_word_result = db.query(Word).filter(Word.id == word_id).first()
+
+            # 将查询结果（通常是 Row 对象）转换为字典，以便 jsonify 转换
+            if updated_word_result:
+                updated_word = updated_word_result.to_dict()
+
+                # 只有当word文本真正发生变化时才重新查询释义
+                if "word" in update_data and original_word != updated_word["word"]:
+
+                    def background_task(word_id, word):
+                        update_word_definition(word_id, word)  # 你已有的函数
+
+                    t = threading.Thread(
+                        target=background_task, args=(word_id, updated_word["word"])
+                    )
+                    t.daemon = True
+                    t.start()
+
+                return "更新成功", 200, updated_word
+            else:
+                # 理论上不会执行到这里，但作为安全措施
+                return "更新成功，但无法查询到更新后的单词。", 500, None
+
+    except Exception as e:
+        db.rollback()
+        # 3. 发生异常时，回滚事务并返回错误信息
+        return f"发生错误: {str(e)}", 500, None
