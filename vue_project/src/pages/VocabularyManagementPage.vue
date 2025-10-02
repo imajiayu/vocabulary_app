@@ -43,14 +43,6 @@
                 </div>
                 <!-- 单词网格 -->
                 <div class="words-section">
-                    <WordGrid
-                        :words="words"
-                        :search-query="searchQuery"
-                        :filter-status="filterStatus"
-                        :source-filter="sourceFilter"
-                        :source-counts="sourceCounts"
-                        @show-detail="handleShowDetail" />
-
                     <!-- 批量加载进度指示器 -->
                     <div v-if="hasMoreWords || isLoadingMore" class="loading-progress">
                         <div class="progress-info">
@@ -66,6 +58,13 @@
                             ></div>
                         </div>
                     </div>
+                    <WordGrid
+                        :words="words"
+                        :search-query="searchQuery"
+                        :filter-status="filterStatus"
+                        :source-filter="sourceFilter"
+                        :source-counts="sourceCounts"
+                        @show-detail="handleShowDetail" />
                 </div>
             </main>
 
