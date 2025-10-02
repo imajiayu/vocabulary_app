@@ -23,8 +23,11 @@ venv/
 # TypeScript build cache
 *.tsbuildinfo
 
-# External dependencies (should use submodule or download separately)
-whisper.cpp/
+# Whisper.cpp models (use download scripts to get them)
+whisper.cpp/models/*.bin
+whisper.cpp/models/*.mlmodelc/
+whisper.cpp/models/*.mlpackage/
+whisper.cpp/build/
 
 # log and tmp files
 *_pid
