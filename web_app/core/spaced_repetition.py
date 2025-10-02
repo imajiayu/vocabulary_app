@@ -493,35 +493,98 @@ def find_optimal_review_day(
     best_day = base_interval
     best_score = float("inf")
 
-    # 优先选择未满额度的日期
+    # 改为"填谷策略"：优先选择负荷较低的日期，实现均匀分布
     for day in range(1, search_range + 1):
         if day <= len(current_loads):
             current_load = current_loads[day - 1]
 
-            # 如果找到未满额度的日期
-            if current_load < daily_limit:
-                # 计算综合评分
-                time_penalty = abs(day - base_interval) * priority_weight * 0.1
-                # 额度利用率奖励：越接近满额度越好，但不要超过
-                utilization_bonus = min(0.5, (current_load / daily_limit) * 0.5)
-                total_score = time_penalty - utilization_bonus
+            # 计算综合评分
+            # 🔧 大幅降低推迟惩罚权重，优先考虑负荷均衡
+            time_penalty = abs(day - base_interval) * priority_weight * 0.02
 
-                if total_score < best_score:
-                    best_score = total_score
-                    best_day = day
+            # 🆕 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
+            # 使用三次方惩罚 + 更大系数，让负荷均衡成为主导因素
+            load_ratio = current_load / daily_limit
+            load_penalty = (load_ratio ** 3) * 2.0
+
+            # 综合评分：两种惩罚相加，越小越好
+            total_score = time_penalty + load_penalty
+
+            if total_score < best_score:
+                best_score = total_score
+                best_day = day
 
     return best_day
 
 
-def find_optimal_spell_day(base_interval, priority_weight, daily_limit, current_loads):
+def find_optimal_review_day_for_strong_words(base_interval, daily_limit, current_loads):
     """
-    为拼写找到最优日期，类似逻辑但针对拼写优化
+    为高强度复习找到最优日期，只允许向后推迟，避免峰值堆积
+
+    对于高强度单词（EF > 2.5, repetition > 3, score > 3）：
+    - 从base_interval开始向后搜索
+    - 找到负荷小于限制的最早一天
+    - 不允许提前，只允许推迟
+    - 目标：避免某天出现高低强度单词同时堆积的峰值
+
+    Args:
+        base_interval: 基础间隔天数
+        daily_limit: 每日限制
+        current_loads: 当前负荷分布
+
+    Returns:
+        最优复习日期（天数）
     """
     if not current_loads:
         return base_interval
 
-    # 拼写通常允许更大的灵活性
-    search_range = min(10, base_interval + 7, len(current_loads))
+    # 从base_interval开始向后搜索，范围较大（高强度单词可以推迟更多）
+    search_range = min(len(current_loads), base_interval + 15)
+
+    # 首先检查base_interval当天是否可用
+    if base_interval <= len(current_loads):
+        if current_loads[base_interval - 1] < daily_limit:
+            return base_interval
+
+    # 向后搜索负荷最小的一天
+    best_day = base_interval
+    best_load = float("inf")
+
+    for day in range(base_interval, search_range + 1):
+        if day <= len(current_loads):
+            current_load = current_loads[day - 1]
+
+            # 如果找到未满额度的日期，立即返回（最早的一天）
+            if current_load < daily_limit * 0.7:  # 70%阈值，避免过度填充
+                return day
+
+            # 记录负荷最小的一天作为备选
+            if current_load < best_load:
+                best_load = current_load
+                best_day = day
+
+    return best_day
+
+
+def find_optimal_spell_day(base_interval, priority_weight, daily_limit, current_loads, max_delay=None):
+    """
+    为低强度拼写找到最优日期，使用指数惩罚避免过度推迟
+
+    Args:
+        base_interval: 基础间隔天数
+        priority_weight: 优先级权重（越高越重要）
+        daily_limit: 每日限制
+        current_loads: 当前负荷分布
+        max_delay: 最大允许推迟天数（None表示不限制）
+    """
+    if not current_loads:
+        return base_interval
+
+    # 确定搜索范围
+    if max_delay is not None:
+        search_range = min(base_interval + max_delay, len(current_loads))
+    else:
+        search_range = min(10, base_interval + 7, len(current_loads))
 
     best_day = base_interval
     best_score = float("inf")
@@ -530,14 +593,71 @@ def find_optimal_spell_day(base_interval, priority_weight, daily_limit, current_
         if day <= len(current_loads):
             current_load = current_loads[day - 1]
 
-            if current_load < daily_limit:
-                time_penalty = abs(day - base_interval) * priority_weight * 0.05
-                utilization_bonus = min(0.3, (current_load / daily_limit) * 0.3)
-                total_score = time_penalty - utilization_bonus
+            # 改为"填谷策略"：不限制daily_limit，允许超额，但惩罚拥挤日期
+            # 使用指数惩罚：推迟天数越多，惩罚越重
+            delay_days = abs(day - base_interval)
+            time_penalty = (delay_days ** 1.5) * (priority_weight ** 2) * 0.05
 
-                if total_score < best_score:
-                    best_score = total_score
-                    best_day = day
+            # 🆕 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
+            # 使用三次方惩罚 + 更大系数，让负荷均衡成为主导因素
+            load_ratio = current_load / daily_limit
+            load_penalty = (load_ratio ** 3) * 2.0
+
+            # 综合评分：两种惩罚相加，越小越好
+            total_score = time_penalty + load_penalty
+
+            if total_score < best_score:
+                best_score = total_score
+                best_day = day
+
+    return best_day
+
+
+def find_optimal_spell_day_for_strong_words(base_interval, daily_limit, current_loads):
+    """
+    为高强度拼写找到最优日期，只允许向后推迟，避免峰值堆积
+
+    对于高强度单词（spell_strength > 2.5）：
+    - 从base_interval开始向后搜索
+    - 找到负荷小于限制的最早一天
+    - 不允许提前，只允许推迟
+    - 目标：避免某天出现高低强度单词同时堆积的峰值
+
+    Args:
+        base_interval: 基础间隔天数
+        daily_limit: 每日限制
+        current_loads: 当前负荷分布
+
+    Returns:
+        最优复习日期（天数）
+    """
+    if not current_loads:
+        return base_interval
+
+    # 从base_interval开始向后搜索，范围较大（高强度单词可以推迟更多）
+    search_range = min(len(current_loads), base_interval + 15)
+
+    # 首先检查base_interval当天是否可用
+    if base_interval <= len(current_loads):
+        if current_loads[base_interval - 1] < daily_limit:
+            return base_interval
+
+    # 向后搜索负荷最小的一天
+    best_day = base_interval
+    best_load = float("inf")
+
+    for day in range(base_interval, search_range + 1):
+        if day <= len(current_loads):
+            current_load = current_loads[day - 1]
+
+            # 如果找到未满额度的日期，立即返回（最早的一天）
+            if current_load < daily_limit * 0.7:  # 70%阈值，避免过度填充
+                return day
+
+            # 记录负荷最小的一天作为备选
+            if current_load < best_load:
+                best_load = current_load
+                best_day = day
 
     return best_day
 
@@ -558,13 +678,13 @@ def calculate_srs_parameters_with_load_balancing(
     if interval_new > max_prep_days:
         interval_new = max_prep_days
 
-    # 3. 对需要频繁复习的单词应用负荷均衡
+    # 3. 对低强度单词应用负荷均衡（填谷策略）
     if should_apply_load_balancing(ease_factor_new, repetition_new, score):
         try:
             # 获取当前负荷分布
             daily_loads = get_daily_review_loads_by_source(word_source, max_prep_days)
 
-            # 应用负荷均衡
+            # 应用负荷均衡（填谷策略）
             interval_new = find_optimal_review_day(
                 interval_new,
                 ease_factor_new,
@@ -574,7 +694,24 @@ def calculate_srs_parameters_with_load_balancing(
             )
         except Exception as e:
             # 如果负荷均衡失败，使用原始间隔
-            print(f"负荷均衡失败，使用原始间隔: {e}")
+            print(f"低强度单词负荷均衡失败，使用原始间隔: {e}")
+            pass
+
+    # 4. 对高强度单词应用向后搜索策略，避免峰值堆积
+    else:
+        try:
+            # 获取当前负荷分布
+            daily_loads = get_daily_review_loads_by_source(word_source, max_prep_days)
+
+            # 应用向后搜索策略
+            interval_new = find_optimal_review_day_for_strong_words(
+                interval_new,
+                ReviewLoadLimits.DAILY_REVIEW_LIMIT,
+                daily_loads,
+            )
+        except Exception as e:
+            # 如果负荷均衡失败，使用原始间隔
+            print(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
             pass
 
     return (repetition_new, interval_new, ease_factor_new) + basic_result[3:]
@@ -591,7 +728,13 @@ def calculate_spell_strength_with_load_balancing(
     max_prep_days: int = 45,
 ) -> tuple:
     """
-    计算拼写记忆强度变化和优化间隔
+    计算拼写记忆强度变化和优化间隔（方案5：组合优化）
+
+    策略：
+    1. 极低强度单词（< 0.8）或未记住：不参与负荷均衡，优先快速复习
+    2. 低强度单词（0.8-2.5）：使用指数惩罚 + 严格推迟上限
+    3. 高强度单词（> 2.5）：向后寻找负荷较小的日期，避免峰值堆积
+
     返回: (strength_change, optimized_interval)
     """
     # 1. 计算强度变化
@@ -613,22 +756,49 @@ def calculate_spell_strength_with_load_balancing(
 
     new_strength = current_strength + strength_change
 
-    # 4. 对低强度单词应用负荷均衡
-    if new_strength <= 2.5 and remembered:
+    # 4. 极低强度或未记住的单词：不参与负荷均衡，优先快速复习
+    if new_strength < 0.8 or not remembered:
+        return strength_change, basic_interval
+
+    # 5. 低强度单词（0.8-2.5）：应用负荷均衡 + 严格推迟上限
+    if new_strength <= 2.5:
         try:
             spell_loads = get_daily_spell_loads_by_source(word_source, max_prep_days)
             priority_weight = max(0.5, 3.0 - new_strength)
+
+            # 根据强度设置最大推迟天数
+            if new_strength < 1.0:
+                max_delay = 1
+            elif new_strength < 1.5:
+                max_delay = 2
+            elif new_strength < 2.0:
+                max_delay = 3
+            else:  # 2.0-2.5
+                max_delay = 5
 
             optimized_interval = find_optimal_spell_day(
                 basic_interval,
                 priority_weight,
                 ReviewLoadLimits.DAILY_SPELL_LIMIT,
                 spell_loads,
+                max_delay=max_delay,
             )
         except Exception as e:
             print(f"拼写负荷均衡失败，使用原始间隔: {e}")
             optimized_interval = basic_interval
+
+    # 6. 高强度单词（> 2.5）：向后寻找负荷较小的日期
     else:
-        optimized_interval = basic_interval
+        try:
+            spell_loads = get_daily_spell_loads_by_source(word_source, max_prep_days)
+
+            optimized_interval = find_optimal_spell_day_for_strong_words(
+                basic_interval,
+                ReviewLoadLimits.DAILY_SPELL_LIMIT,
+                spell_loads,
+            )
+        except Exception as e:
+            print(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
+            optimized_interval = basic_interval
 
     return strength_change, optimized_interval

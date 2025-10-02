@@ -141,7 +141,6 @@ const hasExamples = computed(() => {
 
   .content-wrapper.horizontal .main-content {
     width: 50%;
-    min-width: 600px;
     align-items: flex-start;
   }
 

@@ -15,6 +15,17 @@ venv/
 # OS files
 .DS_Store
 
+# SSL certificates (local development)
+*.pem
+*.key
+*.crt
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# External dependencies (should use submodule or download separately)
+whisper.cpp/
+
 # log and tmp files
 *_pid
 *.log
