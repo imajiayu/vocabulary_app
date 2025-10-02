@@ -274,35 +274,37 @@ const elapseTimeBar = computed(() => {
 
 
 
-// Spell strength histogram (按小数点后两位分桶)
-// Spell strength cumulative distribution (按小数点后两位分桶)
+// Spell strength cumulative distribution (均匀分桶 0.0-5.0，间隔 0.1)
 const spellBuckets = computed(() => {
-  const buckets: Record<string, number> = {}
+  // 创建固定的桶：0.0, 0.1, 0.2, ..., 5.0
+  const bucketSize = 0.1
+  const maxStrength = 5.0
+  const numBuckets = Math.round(maxStrength / bucketSize) + 1
+  const buckets = Array(numBuckets).fill(0)
+  const labels = Array.from({ length: numBuckets }, (_, i) => (i * bucketSize).toFixed(1))
 
+  // 把数据分配到对应的桶
   spellStrengthDict.value.forEach(({ strength, available }) => {
     if (!available) return  // 不计算不可拼写的
     if (strength === null || strength === undefined) return
 
-    const rounded = Math.round(Number(strength) * 100) / 100
-    buckets[String(rounded)] = (buckets[String(rounded)] || 0) + 1
+    const s = Number(strength)
+    if (s < 0 || s > maxStrength) return
+
+    // 计算应该放入哪个桶（向下取整）
+    const bucketIndex = Math.min(Math.floor(s / bucketSize), numBuckets - 1)
+    buckets[bucketIndex]++
   })
 
-  // 排序
-  const sortedLabels = Object.keys(buckets)
-    .map(Number)
-    .sort((a, b) => a - b)
-    .map(n => n.toFixed(2))
-
   // 计算累积值
-  const values = sortedLabels.map(l => buckets[Number(l)] || 0)
   const cumulativeValues: number[] = []
-  values.reduce((sum, v) => {
+  buckets.reduce((sum, v) => {
     const newSum = sum + v
     cumulativeValues.push(newSum)
     return newSum
   }, 0)
 
-  return { keys: sortedLabels, values: cumulativeValues }
+  return { keys: labels, values: cumulativeValues }
 })
 
 const addedReviewSeries = computed(() => [

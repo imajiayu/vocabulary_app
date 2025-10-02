@@ -373,9 +373,7 @@ class SemanticTopicGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
-            logger.info(
-                f"基于语义的主题关系生成完成，共生成 {len(related_pairs)} 条关系"
-            )
+            logger.info(f"基于语义的主题关系生成完成，共生成 {len(related_pairs)} 条关系")
 
 
 def generate_topic_relations():

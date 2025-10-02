@@ -57,14 +57,20 @@ class Word(Base):
             "word": self.word,
             "definition": JSONdefinition,
             "stop_review": self.stop_review,
-            "ease_factor": round(self.ease_factor, 2) if self.ease_factor is not None else None,
+            "ease_factor": round(self.ease_factor, 2)
+            if self.ease_factor is not None
+            else None,
             "date_added": self.date_added.isoformat(),
             "repetition": self.repetition,
             "interval": self.interval,
             "next_review": self.next_review.isoformat() if self.next_review else None,
             "lapse": self.lapse,
-            "spell_strength": round(self.spell_strength, 2) if self.spell_strength is not None else None,
-            "spell_next_review": self.spell_next_review.isoformat() if self.spell_next_review else None,
+            "spell_strength": round(self.spell_strength, 2)
+            if self.spell_strength is not None
+            else None,
+            "spell_next_review": self.spell_next_review.isoformat()
+            if self.spell_next_review
+            else None,
             "source": self.source.value,
         }
 
@@ -157,9 +163,7 @@ class Progress(Base):
     word_ids_snapshot = Column(Text, nullable=False)  # JSON数组存储
     current_index = Column(Integer, default=0)
 
-    __table_args__ = (
-        CheckConstraint('id = 1', name='single_row_constraint'),
-    )
+    __table_args__ = (CheckConstraint("id = 1", name="single_row_constraint"),)
 
     def to_dict(self):
         return {
@@ -167,7 +171,9 @@ class Progress(Base):
             "mode": self.mode,
             "source": self.source,
             "shuffle": self.shuffle,
-            "word_ids_snapshot": json.loads(self.word_ids_snapshot) if self.word_ids_snapshot else [],
+            "word_ids_snapshot": json.loads(self.word_ids_snapshot)
+            if self.word_ids_snapshot
+            else [],
             "current_index": self.current_index,
         }
 
@@ -176,9 +182,9 @@ class Progress(Base):
         """从字典创建Progress对象"""
         return Progress(
             id=1,  # 固定为1
-            mode=data.get('mode'),
-            source=data.get('source'),
-            shuffle=data.get('shuffle', False),
-            word_ids_snapshot=json.dumps(data.get('word_ids_snapshot', [])),
-            current_index=data.get('current_index', 0)
+            mode=data.get("mode"),
+            source=data.get("source"),
+            shuffle=data.get("shuffle", False),
+            word_ids_snapshot=json.dumps(data.get("word_ids_snapshot", [])),
+            current_index=data.get("current_index", 0),
         )

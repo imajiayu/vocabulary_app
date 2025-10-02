@@ -39,7 +39,7 @@ def db_save_progress(mode, source, shuffle, word_ids):
                     source=source,
                     shuffle=shuffle,
                     word_ids_snapshot=json.dumps(word_ids),
-                    current_index=0
+                    current_index=0,
                 )
                 db.add(new_progress)
 
@@ -115,10 +115,10 @@ def db_clear_progress():
             progress = db.query(Progress).filter(Progress.id == 1).first()
 
             if progress:
-                progress.mode = 'mode_review'
-                progress.source = 'IELTS'
+                progress.mode = "mode_review"
+                progress.source = "IELTS"
                 progress.shuffle = False
-                progress.word_ids_snapshot = '[]'
+                progress.word_ids_snapshot = "[]"
                 progress.current_index = 0
                 db.commit()
                 return True
@@ -126,11 +126,11 @@ def db_clear_progress():
                 # 如果没有记录，创建一个初始记录
                 initial_progress = Progress(
                     id=1,
-                    mode='mode_review',
-                    source='IELTS',
+                    mode="mode_review",
+                    source="IELTS",
                     shuffle=False,
-                    word_ids_snapshot='[]',
-                    current_index=0
+                    word_ids_snapshot="[]",
+                    current_index=0,
                 )
                 db.add(initial_progress)
                 db.commit()
@@ -156,12 +156,12 @@ def db_has_valid_progress():
         return False
 
     # 检查是否有单词队列
-    word_ids = progress.get('word_ids_snapshot', [])
+    word_ids = progress.get("word_ids_snapshot", [])
     if not word_ids or len(word_ids) == 0:
         return False
 
     # 检查进度是否合理
-    current_index = progress.get('current_index', 0)
+    current_index = progress.get("current_index", 0)
     if current_index < 0 or current_index >= len(word_ids):
         return False
 
@@ -179,25 +179,25 @@ def db_get_progress_summary():
 
     if not progress:
         return {
-            'has_progress': False,
-            'total_words': 0,
-            'current_index': 0,
-            'remaining_words': 0
+            "has_progress": False,
+            "total_words": 0,
+            "current_index": 0,
+            "remaining_words": 0,
         }
 
-    word_ids = progress.get('word_ids_snapshot', [])
-    current_index = progress.get('current_index', 0)
+    word_ids = progress.get("word_ids_snapshot", [])
+    current_index = progress.get("current_index", 0)
     total_words = len(word_ids)
     remaining_words = max(0, total_words - current_index)
 
     return {
-        'has_progress': True,
-        'mode': progress.get('mode'),
-        'source': progress.get('source'),
-        'shuffle': progress.get('shuffle'),
-        'total_words': total_words,
-        'current_index': current_index,
-        'remaining_words': remaining_words
+        "has_progress": True,
+        "mode": progress.get("mode"),
+        "source": progress.get("source"),
+        "shuffle": progress.get("shuffle"),
+        "total_words": total_words,
+        "current_index": current_index,
+        "remaining_words": remaining_words,
     }
 
 
@@ -214,10 +214,10 @@ def db_get_active_lapse_words(word_ids):
     try:
         with get_session() as db:
             from web_app.models.word import Word
-            active_words = db.query(Word).filter(
-                Word.id.in_(word_ids),
-                Word.lapse > 0
-            ).all()
+
+            active_words = (
+                db.query(Word).filter(Word.id.in_(word_ids), Word.lapse > 0).all()
+            )
             return [word.to_dict() for word in active_words]
     except Exception as e:
         print(f"Error getting active lapse words: {e}")
@@ -236,21 +236,21 @@ def db_get_progress_restore_data():
         if not progress:
             return False, {}
 
-        word_ids = progress.get('word_ids_snapshot', [])
-        mode = progress.get('mode')
+        word_ids = progress.get("word_ids_snapshot", [])
+        mode = progress.get("mode")
 
         # 对于lapse模式，需要过滤已完成的单词
-        if mode == 'mode_lapse' and word_ids:
+        if mode == "mode_lapse" and word_ids:
             active_words = db_get_active_lapse_words(word_ids)
-            active_word_ids = [w['id'] for w in active_words]
+            active_word_ids = [w["id"] for w in active_words]
 
             # 如果有单词被过滤掉，更新快照
             if len(active_word_ids) != len(word_ids):
                 success = db_save_progress(
-                    progress['mode'],
-                    progress['source'],
-                    progress['shuffle'],
-                    active_word_ids
+                    progress["mode"],
+                    progress["source"],
+                    progress["shuffle"],
+                    active_word_ids,
                 )
                 if not success:
                     return False, {}
@@ -258,11 +258,11 @@ def db_get_progress_restore_data():
                 word_ids = active_word_ids
 
         return True, {
-            'mode': progress.get('mode'),
-            'source': progress.get('source'),
-            'shuffle': progress.get('shuffle'),
-            'current_index': progress.get('current_index', 0),
-            'word_ids': word_ids
+            "mode": progress.get("mode"),
+            "source": progress.get("source"),
+            "shuffle": progress.get("shuffle"),
+            "current_index": progress.get("current_index", 0),
+            "word_ids": word_ids,
         }
 
     except Exception as e:

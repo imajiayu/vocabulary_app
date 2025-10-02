@@ -37,7 +37,7 @@ def db_get_all_topics() -> List[Dict[str, Any]]:
                                 "id": q.id,
                                 "question_text": q.question_text,
                                 "topic_id": topic.id,
-                                "topic_title": topic.title
+                                "topic_title": topic.title,
                             }
                             for q in topic.questions
                         ],

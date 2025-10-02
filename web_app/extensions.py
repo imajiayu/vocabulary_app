@@ -22,13 +22,13 @@ from flask_socketio import SocketIO
 
 socketio = SocketIO(
     cors_allowed_origins="*",
-    async_mode='threading',
-    logger=False,        # 禁用详细日志
+    async_mode="threading",
+    logger=False,  # 禁用详细日志
     engineio_logger=False,  # 禁用引擎日志
     ping_timeout=60,
     ping_interval=25,
-    transports=['websocket', 'polling'],  # 允许 polling 作为后备
+    transports=["websocket", "polling"],  # 允许 polling 作为后备
     upgrade=True,
     always_connect=False,
-    max_http_buffer_size=1000000  # 1MB buffer
+    max_http_buffer_size=1000000,  # 1MB buffer
 )

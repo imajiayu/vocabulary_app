@@ -8,7 +8,10 @@ from web_app.scripts.word_relations.confused import generate_confused_relations
 from web_app.scripts.word_relations.root import generate_root_relations
 from web_app.scripts.word_relations.synonym import generate_synonym_relations
 from web_app.scripts.word_relations.topic import generate_topic_relations
-from web_app.scripts.word_relations.utils import clear_relations, export_relations_to_file
+from web_app.scripts.word_relations.utils import (
+    clear_relations,
+    export_relations_to_file,
+)
 
 logging.basicConfig(level=logging.INFO)
 

@@ -53,28 +53,29 @@ def convert_m4a_to_wav(input_file_path: str, output_file_path: str = None) -> st
     # 如果没有指定输出路径，则生成一个
     if output_file_path is None:
         input_path = Path(input_file_path)
-        output_file_path = str(input_path.with_suffix('.wav'))
+        output_file_path = str(input_path.with_suffix(".wav"))
 
     try:
         # 使用ffmpeg进行转换
         cmd = [
-            'ffmpeg',
-            '-i', input_file_path,
-            '-acodec', 'pcm_s16le',  # 16-bit PCM
-            '-ar', '16000',          # 16kHz采样率
-            '-ac', '1',              # 单声道
-            '-y',                    # 覆盖输出文件
-            output_file_path
+            "ffmpeg",
+            "-i",
+            input_file_path,
+            "-acodec",
+            "pcm_s16le",  # 16-bit PCM
+            "-ar",
+            "16000",  # 16kHz采样率
+            "-ac",
+            "1",  # 单声道
+            "-y",  # 覆盖输出文件
+            output_file_path,
         ]
 
         print(f"转换音频格式: {input_file_path} -> {output_file_path}")
 
         # 执行转换命令
         result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=30  # 30秒超时
+            cmd, capture_output=True, text=True, timeout=30  # 30秒超时
         )
 
         if result.returncode != 0:
@@ -131,6 +132,7 @@ def convert_audio_file_to_wav(file_obj, original_filename: str) -> str:
         # 清理临时文件
         try:
             import shutil
+
             shutil.rmtree(temp_dir)
         except:
             pass

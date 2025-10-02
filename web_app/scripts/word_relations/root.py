@@ -17,55 +17,163 @@ stemmer = PorterStemmer()
 # 拉丁/希腊词根数据库（针对GRE词汇）
 LATIN_GREEK_ROOTS = {
     # 说话/声音相关
-    "dict": {"meaning": "say, speak", "examples": ["indict", "vindicate", "valediction", "dictate", "predict", "contradict"], "variants": ["dicat", "dic"]},
-    "loqu": {"meaning": "speak", "examples": ["loquacious", "grandiloquent", "obloquy", "soliloquy", "eloquent"], "variants": ["locut"]},
-    "log": {"meaning": "speak, word", "examples": ["monologue", "prologue", "dialogue", "eulogy", "apology"], "variants": ["logu"]},
-    "voc": {"meaning": "call, voice", "examples": ["advocate", "vocation", "vociferous", "equivocate", "provocative"], "variants": ["vocat", "vok"]},
-    "vok": {"meaning": "call", "examples": ["provoke", "revoke", "convoke", "invoke", "evoke"], "variants": ["vocat", "voc"]},
-    "claim": {"meaning": "shout, call", "examples": ["claim", "disclaim", "declaim", "exclaim", "proclaim"], "variants": ["clam"]},
-    "clam": {"meaning": "shout", "examples": ["clamor", "clamorous", "acclamation"], "variants": ["claim"]},
-    "verb": {"meaning": "word", "examples": ["verbose", "verbatim", "reverberate", "verbal", "proverb"], "variants": ["verber"]},
-    "son": {"meaning": "sound", "examples": ["consonant", "dissonance", "resonant", "sonorous", "unison"], "variants": ["sonan"]},
-    "phon": {"meaning": "sound", "examples": ["cacophony", "euphonious", "symphony", "telephone"], "variants": ["phonic"]},
-
+    "dict": {
+        "meaning": "say, speak",
+        "examples": [
+            "indict",
+            "vindicate",
+            "valediction",
+            "dictate",
+            "predict",
+            "contradict",
+        ],
+        "variants": ["dicat", "dic"],
+    },
+    "loqu": {
+        "meaning": "speak",
+        "examples": ["loquacious", "grandiloquent", "obloquy", "soliloquy", "eloquent"],
+        "variants": ["locut"],
+    },
+    "log": {
+        "meaning": "speak, word",
+        "examples": ["monologue", "prologue", "dialogue", "eulogy", "apology"],
+        "variants": ["logu"],
+    },
+    "voc": {
+        "meaning": "call, voice",
+        "examples": ["advocate", "vocation", "vociferous", "equivocate", "provocative"],
+        "variants": ["vocat", "vok"],
+    },
+    "vok": {
+        "meaning": "call",
+        "examples": ["provoke", "revoke", "convoke", "invoke", "evoke"],
+        "variants": ["vocat", "voc"],
+    },
+    "claim": {
+        "meaning": "shout, call",
+        "examples": ["claim", "disclaim", "declaim", "exclaim", "proclaim"],
+        "variants": ["clam"],
+    },
+    "clam": {
+        "meaning": "shout",
+        "examples": ["clamor", "clamorous", "acclamation"],
+        "variants": ["claim"],
+    },
+    "verb": {
+        "meaning": "word",
+        "examples": ["verbose", "verbatim", "reverberate", "verbal", "proverb"],
+        "variants": ["verber"],
+    },
+    "son": {
+        "meaning": "sound",
+        "examples": ["consonant", "dissonance", "resonant", "sonorous", "unison"],
+        "variants": ["sonan"],
+    },
+    "phon": {
+        "meaning": "sound",
+        "examples": ["cacophony", "euphonious", "symphony", "telephone"],
+        "variants": ["phonic"],
+    },
     # 行动相关
-    "gat": {"meaning": "ask, gather", "examples": ["interrogate", "abrogate", "surrogate", "derogatory"], "variants": ["grog", "rog"]},
-    "rog": {"meaning": "ask", "examples": ["prerogative", "interrogate", "arrogant", "derogate"], "variants": ["gat", "grog"]},
-    "nunc": {"meaning": "announce", "examples": ["denounce", "renounce", "enunciate", "announce", "pronunciation"], "variants": ["nounc", "nounce"]},
-    "nount": {"meaning": "announce", "examples": ["pronouncement"], "variants": ["nounc"]},
-
+    "gat": {
+        "meaning": "ask, gather",
+        "examples": ["interrogate", "abrogate", "surrogate", "derogatory"],
+        "variants": ["grog", "rog"],
+    },
+    "rog": {
+        "meaning": "ask",
+        "examples": ["prerogative", "interrogate", "arrogant", "derogate"],
+        "variants": ["gat", "grog"],
+    },
+    "nunc": {
+        "meaning": "announce",
+        "examples": ["denounce", "renounce", "enunciate", "announce", "pronunciation"],
+        "variants": ["nounc", "nounce"],
+    },
+    "nount": {
+        "meaning": "announce",
+        "examples": ["pronouncement"],
+        "variants": ["nounc"],
+    },
     # 知识/感知相关
-    "gno": {"meaning": "know", "examples": ["agnostic", "diagnostic", "prognosis", "cognition"]},
-    "sci": {"meaning": "know", "examples": ["science", "conscience", "omniscient", "prescient"]},
+    "gno": {
+        "meaning": "know",
+        "examples": ["agnostic", "diagnostic", "prognosis", "cognition"],
+    },
+    "sci": {
+        "meaning": "know",
+        "examples": ["science", "conscience", "omniscient", "prescient"],
+    },
     "vid": {"meaning": "see", "examples": ["video", "evident", "provide", "divide"]},
-    "vis": {"meaning": "see", "examples": ["visible", "vision", "supervise", "revision"]},
-    "spec": {"meaning": "look, see", "examples": ["inspect", "respect", "prospect", "retrospect"]},
-    "spect": {"meaning": "look", "examples": ["spectacle", "perspective", "circumspect"]},
-
+    "vis": {
+        "meaning": "see",
+        "examples": ["visible", "vision", "supervise", "revision"],
+    },
+    "spec": {
+        "meaning": "look, see",
+        "examples": ["inspect", "respect", "prospect", "retrospect"],
+    },
+    "spect": {
+        "meaning": "look",
+        "examples": ["spectacle", "perspective", "circumspect"],
+    },
     # 感情/品质相关
-    "fam": {"meaning": "fame, reputation", "examples": ["famous", "infamous", "defamation"]},
-    "fab": {"meaning": "speak", "examples": ["fable", "affable", "ineffable", "fabulous"]},
+    "fam": {
+        "meaning": "fame, reputation",
+        "examples": ["famous", "infamous", "defamation"],
+    },
+    "fab": {
+        "meaning": "speak",
+        "examples": ["fable", "affable", "ineffable", "fabulous"],
+    },
     "am": {"meaning": "love", "examples": ["amiable", "amorous", "amateur", "amity"]},
-    "phil": {"meaning": "love", "examples": ["philosophy", "philanthropist", "bibliophile"]},
-
+    "phil": {
+        "meaning": "love",
+        "examples": ["philosophy", "philanthropist", "bibliophile"],
+    },
     # 力量/统治相关
-    "pot": {"meaning": "power", "examples": ["potential", "potent", "impotent", "omnipotent"]},
-    "puls": {"meaning": "drive, push", "examples": ["compulsive", "repulsive", "impulse", "expulsion"]},
-    "pel": {"meaning": "drive, push", "examples": ["compel", "repel", "expel", "impel"]},
-
+    "pot": {
+        "meaning": "power",
+        "examples": ["potential", "potent", "impotent", "omnipotent"],
+    },
+    "puls": {
+        "meaning": "drive, push",
+        "examples": ["compulsive", "repulsive", "impulse", "expulsion"],
+    },
+    "pel": {
+        "meaning": "drive, push",
+        "examples": ["compel", "repel", "expel", "impel"],
+    },
     # 时间/变化相关
-    "mut": {"meaning": "change", "examples": ["mutable", "immutable", "mutation", "commute"]},
-    "vers": {"meaning": "turn", "examples": ["diverse", "reverse", "adverse", "versatile"]},
+    "mut": {
+        "meaning": "change",
+        "examples": ["mutable", "immutable", "mutation", "commute"],
+    },
+    "vers": {
+        "meaning": "turn",
+        "examples": ["diverse", "reverse", "adverse", "versatile"],
+    },
     "vert": {"meaning": "turn", "examples": ["convert", "divert", "revert", "subvert"]},
-    "flu": {"meaning": "flow", "examples": ["fluid", "fluent", "influence", "affluent"]},
+    "flu": {
+        "meaning": "flow",
+        "examples": ["fluid", "fluent", "influence", "affluent"],
+    },
     "flux": {"meaning": "flow", "examples": ["flux", "influx", "reflux"]},
-
     # 位置/移动相关
-    "loc": {"meaning": "place", "examples": ["locate", "allocate", "dislocate", "locale"]},
-    "pos": {"meaning": "place, put", "examples": ["position", "dispose", "compose", "impose"]},
+    "loc": {
+        "meaning": "place",
+        "examples": ["locate", "allocate", "dislocate", "locale"],
+    },
+    "pos": {
+        "meaning": "place, put",
+        "examples": ["position", "dispose", "compose", "impose"],
+    },
     "pon": {"meaning": "put, place", "examples": ["component", "exponent", "postpone"]},
     "mit": {"meaning": "send", "examples": ["transmit", "admit", "emit", "permit"]},
-    "miss": {"meaning": "send", "examples": ["missile", "mission", "dismiss", "remiss"]},
+    "miss": {
+        "meaning": "send",
+        "examples": ["missile", "mission", "dismiss", "remiss"],
+    },
 }
 
 # 常见前缀
@@ -111,7 +219,6 @@ DERIVATIONAL_SUFFIXES = {
     "ship": ("state", "skill"),
     "hood": ("state", "condition"),
     "dom": ("state", "condition"),
-
     # 形容词后缀
     "able": ("capable", "worthy"),
     "ible": ("capable", "worthy"),
@@ -129,14 +236,12 @@ DERIVATIONAL_SUFFIXES = {
     "ory": ("relating to", "characterized by"),
     "ent": ("characterized by", "tending to"),
     "ant": ("characterized by", "tending to"),
-
     # 动词后缀
     "ize": ("make", "cause to become"),
     "ise": ("make", "cause to become"),
     "ify": ("make", "cause to become"),
     "ate": ("make", "cause to become"),
     "en": ("make", "cause to become"),
-
     # 副词后缀
     "ly": ("in manner of", "to degree"),
     "ward": ("in direction of"),
@@ -152,7 +257,12 @@ model = None  # 如果没有模型，可先不启用向量验证
 class RootRelationGenerator:
     """基于WordNet的词根关系生成器 - 优化版"""
 
-    def __init__(self, min_confidence: float = 0.8, vector_threshold: float = 0.65, use_multiprocessing: bool = True):
+    def __init__(
+        self,
+        min_confidence: float = 0.8,
+        vector_threshold: float = 0.65,
+        use_multiprocessing: bool = True,
+    ):
         self.min_confidence = min_confidence
         self.vector_threshold = vector_threshold
         self.processed_pairs: Set[Tuple[int, int]] = set()
@@ -188,16 +298,22 @@ class RootRelationGenerator:
                 for lemma in synset.lemmas():
                     try:
                         for related_lemma in lemma.derivationally_related_forms():
-                            related_word = related_lemma.name().lower().replace("_", " ")
+                            related_word = (
+                                related_lemma.name().lower().replace("_", " ")
+                            )
                             if related_word != word_lower and len(related_word) > 2:
                                 # 严格的词根验证
-                                if self._is_true_derivational_pair(word_lower, related_word):
+                                if self._is_true_derivational_pair(
+                                    word_lower, related_word
+                                ):
                                     confidence = 0.95
                                     if synset.pos() != related_lemma.synset().pos():
                                         confidence = 1.0  # 跨词性派生更可靠
 
                                     if related_word in derivations:
-                                        derivations[related_word] = max(derivations[related_word], confidence)
+                                        derivations[related_word] = max(
+                                            derivations[related_word], confidence
+                                        )
                                     else:
                                         derivations[related_word] = confidence
                     except:
@@ -210,10 +326,14 @@ class RootRelationGenerator:
                             related_word = pertainym.name().lower().replace("_", " ")
                             if related_word != word_lower and len(related_word) > 2:
                                 # 验证是否真正相关
-                                if self._is_true_derivational_pair(word_lower, related_word):
+                                if self._is_true_derivational_pair(
+                                    word_lower, related_word
+                                ):
                                     confidence = 0.9
                                     if related_word in derivations:
-                                        derivations[related_word] = max(derivations[related_word], confidence)
+                                        derivations[related_word] = max(
+                                            derivations[related_word], confidence
+                                        )
                                     else:
                                         derivations[related_word] = confidence
                     except:
@@ -256,15 +376,48 @@ class RootRelationGenerator:
         """提取词根"""
         # 常见后缀及其优先级（越靠前优先级越高）
         suffixes = [
-            "ation", "ition", "tion", "sion", "ment", "ness", "ity", "ism",
-            "able", "ible", "ful", "less", "ous", "ious", "eous", "ive", "ative",
-            "al", "ical", "ic", "ary", "ory", "ent", "ant", "ate", "ize", "ise",
-            "ify", "en", "ly", "er", "or", "ist", "age", "ship", "hood", "dom"
+            "ation",
+            "ition",
+            "tion",
+            "sion",
+            "ment",
+            "ness",
+            "ity",
+            "ism",
+            "able",
+            "ible",
+            "ful",
+            "less",
+            "ous",
+            "ious",
+            "eous",
+            "ive",
+            "ative",
+            "al",
+            "ical",
+            "ic",
+            "ary",
+            "ory",
+            "ent",
+            "ant",
+            "ate",
+            "ize",
+            "ise",
+            "ify",
+            "en",
+            "ly",
+            "er",
+            "or",
+            "ist",
+            "age",
+            "ship",
+            "hood",
+            "dom",
         ]
 
         for suffix in suffixes:
             if word.endswith(suffix) and len(word) > len(suffix) + 2:
-                return word[:-len(suffix)]
+                return word[: -len(suffix)]
 
         return word
 
@@ -282,7 +435,11 @@ class RootRelationGenerator:
                 return True
 
             # 允许双字母结尾的变化 (如permit/permission中的t变化)
-            if len(root1) == len(root2) and root1[:-2] == root2[:-2] and len(root1) >= 5:
+            if (
+                len(root1) == len(root2)
+                and root1[:-2] == root2[:-2]
+                and len(root1) >= 5
+            ):
                 return True
 
         return False
@@ -346,17 +503,16 @@ class RootRelationGenerator:
         self._stem_cache[word_lower] = stem
         return stem
 
-
     def _has_morphological_similarity(self, word1: str, word2: str) -> bool:
         """检查两个词是否有形态相似性"""
         # 检查是否有共同词根（通过删除已知后缀）
         for suffix in DERIVATIONAL_SUFFIXES:
             if word1.endswith(suffix) and len(word1) > len(suffix) + 2:
-                root1 = word1[:-len(suffix)]
+                root1 = word1[: -len(suffix)]
                 if word2.startswith(root1) or word2 == root1:
                     return True
             if word2.endswith(suffix) and len(word2) > len(suffix) + 2:
-                root2 = word2[:-len(suffix)]
+                root2 = word2[: -len(suffix)]
                 if word1.startswith(root2) or word1 == root2:
                     return True
         return False
@@ -372,11 +528,28 @@ class RootRelationGenerator:
         derivations = {}
 
         # 快速后缀检查 - 只检查最常见的后缀
-        common_suffixes = ["tion", "sion", "ment", "ness", "ity", "able", "ible", "ful", "less", "ous", "ive", "al", "ly", "er", "or", "ist"]
+        common_suffixes = [
+            "tion",
+            "sion",
+            "ment",
+            "ness",
+            "ity",
+            "able",
+            "ible",
+            "ful",
+            "less",
+            "ous",
+            "ive",
+            "al",
+            "ly",
+            "er",
+            "or",
+            "ist",
+        ]
 
         for suffix in common_suffixes:
             if word_lower.endswith(suffix) and len(word_lower) > len(suffix) + 2:
-                root = word_lower[:-len(suffix)]
+                root = word_lower[: -len(suffix)]
                 # 只生成最可能的派生形式
                 if len(root) > 2:
                     derivations[root] = 0.8
@@ -429,7 +602,7 @@ class RootRelationGenerator:
         """移除常见前缀"""
         for prefix in sorted(COMMON_PREFIXES.keys(), key=len, reverse=True):
             if word.startswith(prefix) and len(word) > len(prefix) + 2:
-                return word[len(prefix):]
+                return word[len(prefix) :]
         return word
 
     def _validate_root_match(self, word: str, root: str, root_info: dict) -> bool:
@@ -515,39 +688,54 @@ class RootRelationGenerator:
         """检查是否是已知的良好拉丁词根配对"""
         known_pairs = {
             # dict词根组
-            ("indict", "vindicate"), ("vindicate", "indict"),
-            ("indict", "valediction"), ("valediction", "indict"),
-            ("interdict", "vindicate"), ("vindicate", "interdict"),
-
+            ("indict", "vindicate"),
+            ("vindicate", "indict"),
+            ("indict", "valediction"),
+            ("valediction", "indict"),
+            ("interdict", "vindicate"),
+            ("vindicate", "interdict"),
             # loqu/log词根组
-            ("monologue", "prologue"), ("prologue", "monologue"),
-            ("loquacious", "grandiloquent"), ("grandiloquent", "loquacious"),
-            ("soliloquy", "obloquy"), ("obloquy", "soliloquy"),
-
+            ("monologue", "prologue"),
+            ("prologue", "monologue"),
+            ("loquacious", "grandiloquent"),
+            ("grandiloquent", "loquacious"),
+            ("soliloquy", "obloquy"),
+            ("obloquy", "soliloquy"),
             # voc/vok词根组
-            ("advocate", "vocation"), ("vocation", "advocate"),
-            ("provoke", "revoke"), ("revoke", "provoke"),
-            ("convoke", "revoke"), ("revoke", "convoke"),
-            ("vociferous", "vocation"), ("vocation", "vociferous"),
-
+            ("advocate", "vocation"),
+            ("vocation", "advocate"),
+            ("provoke", "revoke"),
+            ("revoke", "provoke"),
+            ("convoke", "revoke"),
+            ("revoke", "convoke"),
+            ("vociferous", "vocation"),
+            ("vocation", "vociferous"),
             # verb词根组
-            ("verbose", "verbatim"), ("verbatim", "verbose"),
-            ("reverberate", "verbose"), ("verbose", "reverberate"),
-
+            ("verbose", "verbatim"),
+            ("verbatim", "verbose"),
+            ("reverberate", "verbose"),
+            ("verbose", "reverberate"),
             # claim/clam词根组
-            ("claim", "disclaim"), ("disclaim", "claim"),
-            ("claim", "declaim"), ("declaim", "claim"),
-            ("clamor", "disclaim"), ("disclaim", "clamor"),
-
+            ("claim", "disclaim"),
+            ("disclaim", "claim"),
+            ("claim", "declaim"),
+            ("declaim", "claim"),
+            ("clamor", "disclaim"),
+            ("disclaim", "clamor"),
             # son词根组
-            ("consonant", "dissonance"), ("dissonance", "consonant"),
-            ("consonant", "resonant"), ("resonant", "consonant"),
-            ("dissonance", "resonant"), ("resonant", "dissonance"),
-
+            ("consonant", "dissonance"),
+            ("dissonance", "consonant"),
+            ("consonant", "resonant"),
+            ("resonant", "consonant"),
+            ("dissonance", "resonant"),
+            ("resonant", "dissonance"),
             # nunc词根组
-            ("denounce", "renounce"), ("renounce", "denounce"),
-            ("denounce", "enunciate"), ("enunciate", "denounce"),
-            ("renounce", "enunciate"), ("enunciate", "renounce"),
+            ("denounce", "renounce"),
+            ("renounce", "denounce"),
+            ("denounce", "enunciate"),
+            ("enunciate", "denounce"),
+            ("renounce", "enunciate"),
+            ("enunciate", "renounce"),
         }
 
         pair = (word1.lower(), word2.lower())
@@ -581,7 +769,9 @@ class RootRelationGenerator:
             return False, 0.0
 
         # 1. 拉丁/希腊词根关系检查（针对GRE词汇）
-        is_latin_related, latin_confidence = self.are_latin_greek_related(w1_lower, w2_lower)
+        is_latin_related, latin_confidence = self.are_latin_greek_related(
+            w1_lower, w2_lower
+        )
         if is_latin_related:
             return True, latin_confidence
 
@@ -605,26 +795,26 @@ class RootRelationGenerator:
         # 明确的派生模式（基于常见英语构词法）
         clear_patterns = [
             # 形容词 + ly = 副词
-            (lambda w: w.endswith('ly') and len(w) > 4, lambda w: w[:-2]),
+            (lambda w: w.endswith("ly") and len(w) > 4, lambda w: w[:-2]),
             # 动词/名词 + ness = 名词
-            (lambda w: w.endswith('ness') and len(w) > 6, lambda w: w[:-4]),
+            (lambda w: w.endswith("ness") and len(w) > 6, lambda w: w[:-4]),
             # 动词 + ment = 名词
-            (lambda w: w.endswith('ment') and len(w) > 6, lambda w: w[:-4]),
+            (lambda w: w.endswith("ment") and len(w) > 6, lambda w: w[:-4]),
             # 动词 + tion = 名词
-            (lambda w: w.endswith('tion') and len(w) > 6, lambda w: w[:-4]),
+            (lambda w: w.endswith("tion") and len(w) > 6, lambda w: w[:-4]),
             # 动词 + able/ible = 形容词
-            (lambda w: w.endswith('able') and len(w) > 6, lambda w: w[:-4]),
-            (lambda w: w.endswith('ible') and len(w) > 6, lambda w: w[:-4]),
+            (lambda w: w.endswith("able") and len(w) > 6, lambda w: w[:-4]),
+            (lambda w: w.endswith("ible") and len(w) > 6, lambda w: w[:-4]),
             # 名词 + ful = 形容词
-            (lambda w: w.endswith('ful') and len(w) > 5, lambda w: w[:-3]),
+            (lambda w: w.endswith("ful") and len(w) > 5, lambda w: w[:-3]),
             # 形容词 + ity = 名词
-            (lambda w: w.endswith('ity') and len(w) > 5, lambda w: w[:-3]),
+            (lambda w: w.endswith("ity") and len(w) > 5, lambda w: w[:-3]),
             # 动词 + ive = 形容词
-            (lambda w: w.endswith('ive') and len(w) > 5, lambda w: w[:-3]),
+            (lambda w: w.endswith("ive") and len(w) > 5, lambda w: w[:-3]),
             # 动词 + ing = 动名词/现在分词
-            (lambda w: w.endswith('ing') and len(w) > 5, lambda w: w[:-3]),
+            (lambda w: w.endswith("ing") and len(w) > 5, lambda w: w[:-3]),
             # 动词 + ed = 过去式/过去分词
-            (lambda w: w.endswith('ed') and len(w) > 4, lambda w: w[:-2]),
+            (lambda w: w.endswith("ed") and len(w) > 4, lambda w: w[:-2]),
         ]
 
         for check_func, extract_func in clear_patterns:
@@ -645,11 +835,11 @@ class RootRelationGenerator:
     def _handle_spelling_changes(self, root: str) -> str:
         """处理派生时的拼写变化"""
         # 常见的拼写变化规则
-        if root.endswith('e'):
+        if root.endswith("e"):
             return root[:-1]  # create -> creat (for creation)
-        if root.endswith('y'):
-            return root[:-1] + 'i'  # happy -> happi (for happiness)
-        if len(root) >= 3 and root[-1] == root[-2] and root[-1] in 'bdfglmnprt':
+        if root.endswith("y"):
+            return root[:-1] + "i"  # happy -> happi (for happiness)
+        if len(root) >= 3 and root[-1] == root[-2] and root[-1] in "bdfglmnprt":
             return root[:-1]  # run -> run (for running, but runnn -> runn)
         return root
 
@@ -660,13 +850,25 @@ class RootRelationGenerator:
             return False
 
         # 检查两个词是否都是通过添加合理的后缀形成的
-        suffix1 = word1[len(stem):] if word1.startswith(stem) else ""
-        suffix2 = word2[len(stem):] if word2.startswith(stem) else ""
+        suffix1 = word1[len(stem) :] if word1.startswith(stem) else ""
+        suffix2 = word2[len(stem) :] if word2.startswith(stem) else ""
 
         # 非常严格的后缀组合（只允许最常见的）
         strict_suffixes = {
-            "", "s", "ed", "ing", "er", "ly", "ness", "ment",
-            "tion", "able", "ful", "ive", "al", "ity"
+            "",
+            "s",
+            "ed",
+            "ing",
+            "er",
+            "ly",
+            "ness",
+            "ment",
+            "tion",
+            "able",
+            "ful",
+            "ive",
+            "al",
+            "ity",
         }
 
         # 两个后缀都必须是严格有效的
@@ -684,34 +886,58 @@ class RootRelationGenerator:
         """检查是否是已知的好例子"""
         # 已知的好例子
         good_pairs = {
-            ("virtual", "virtually"), ("virtually", "virtual"),
-            ("attain", "attainable"), ("attainable", "attain"),
-            ("ambiguous", "ambiguity"), ("ambiguity", "ambiguous"),
-            ("remark", "remarkable"), ("remarkable", "remark"),
-            ("disrupt", "disruptive"), ("disruptive", "disrupt"),
-            ("distinct", "distinctive"), ("distinctive", "distinct"),
-            ("conduct", "conductive"), ("conductive", "conduct"),
-            ("exhaust", "exhaustive"), ("exhaustive", "exhaust"),
-            ("exhaust", "exhaustible"), ("exhaustible", "exhaust"),
-            ("exhaustive", "exhaustible"), ("exhaustible", "exhaustive"),
-            ("excess", "excessive"), ("excessive", "excess"),
-            ("refresh", "refreshment"), ("refreshment", "refresh"),
-            ("renew", "renewable"), ("renewable", "renew"),
-            ("captivate", "captivity"), ("captivity", "captivate"),
-            ("legitimate", "legitimize"), ("legitimize", "legitimate"),
-            ("accustom", "accustomed"), ("accustomed", "accustom"),
-            ("perception", "perceptive"), ("perceptive", "perception"),
-            ("retain", "retainer"), ("retainer", "retain"),
-            ("retain", "retention"), ("retention", "retain"),
-            ("dizzy", "dizziness"), ("dizziness", "dizzy"),
-            ("maternal", "maternity"), ("maternity", "maternal"),
-            ("bully", "bullying"), ("bullying", "bully"),
+            ("virtual", "virtually"),
+            ("virtually", "virtual"),
+            ("attain", "attainable"),
+            ("attainable", "attain"),
+            ("ambiguous", "ambiguity"),
+            ("ambiguity", "ambiguous"),
+            ("remark", "remarkable"),
+            ("remarkable", "remark"),
+            ("disrupt", "disruptive"),
+            ("disruptive", "disrupt"),
+            ("distinct", "distinctive"),
+            ("distinctive", "distinct"),
+            ("conduct", "conductive"),
+            ("conductive", "conduct"),
+            ("exhaust", "exhaustive"),
+            ("exhaustive", "exhaust"),
+            ("exhaust", "exhaustible"),
+            ("exhaustible", "exhaust"),
+            ("exhaustive", "exhaustible"),
+            ("exhaustible", "exhaustive"),
+            ("excess", "excessive"),
+            ("excessive", "excess"),
+            ("refresh", "refreshment"),
+            ("refreshment", "refresh"),
+            ("renew", "renewable"),
+            ("renewable", "renew"),
+            ("captivate", "captivity"),
+            ("captivity", "captivate"),
+            ("legitimate", "legitimize"),
+            ("legitimize", "legitimate"),
+            ("accustom", "accustomed"),
+            ("accustomed", "accustom"),
+            ("perception", "perceptive"),
+            ("perceptive", "perception"),
+            ("retain", "retainer"),
+            ("retainer", "retain"),
+            ("retain", "retention"),
+            ("retention", "retain"),
+            ("dizzy", "dizziness"),
+            ("dizziness", "dizzy"),
+            ("maternal", "maternity"),
+            ("maternity", "maternal"),
+            ("bully", "bullying"),
+            ("bullying", "bully"),
         }
 
         pair = (word1, word2)
         return pair in good_pairs
 
-    def _process_word_batch(self, word_pairs: List[Tuple[Word, Word]]) -> List[WordRelation]:
+    def _process_word_batch(
+        self, word_pairs: List[Tuple[Word, Word]]
+    ) -> List[WordRelation]:
         """处理词对批次的辅助方法"""
         relations = []
         for w1, w2 in word_pairs:
@@ -787,7 +1013,9 @@ class RootRelationGenerator:
                 batch_insert_relations(session, relations_to_add)
 
             logger.info(f"基于WordNet的词根关系生成完成，共生成 {total_found} 条关系")
-            logger.info(f"缓存统计 - WordNet: {len(self._wordnet_cache)}, 词干: {len(self._stem_cache)}, 形态学: {len(self._morphological_cache)}, 负缓存: {len(self._negative_cache)}")
+            logger.info(
+                f"缓存统计 - WordNet: {len(self._wordnet_cache)}, 词干: {len(self._stem_cache)}, 形态学: {len(self._morphological_cache)}, 负缓存: {len(self._negative_cache)}"
+            )
 
 
 def generate_root_relations():

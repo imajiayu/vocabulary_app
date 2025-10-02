@@ -41,7 +41,7 @@ class AudioTranscriptionSession:
                     self.session_id,
                     text.strip(),
                     self.transcribed_text.strip(),
-                    self.audio_chunks_count
+                    self.audio_chunks_count,
                 )
 
         try:
@@ -163,7 +163,9 @@ def handle_stop_transcription(data=None):
         del active_sessions[session_id]
 
         print(f"停止转录会话: {session_id}, 最终文本: {final_text}")
-        ws_events.emit_transcription_stopped(session_id, final_text, session.audio_chunks_count)
+        ws_events.emit_transcription_stopped(
+            session_id, final_text, session.audio_chunks_count
+        )
     else:
         ws_events.emit_error("没有找到活跃的转录会话", session_id)
 
@@ -188,7 +190,9 @@ def handle_audio_chunk(data):
 
         # 处理音频数据
         if session.process_audio_chunk(audio_data):
-            ws_events.emit_chunk_processed(session_id, session.audio_chunks_count, time.time())
+            ws_events.emit_chunk_processed(
+                session_id, session.audio_chunks_count, time.time()
+            )
         else:
             ws_events.emit_error("处理音频数据失败", session_id)
 
@@ -210,7 +214,7 @@ def handle_get_session_status():
             session.audio_chunks_count,
             session.transcribed_text.strip(),
             time.time() - session.start_time,
-            session.whisper_processor is not None
+            session.whisper_processor is not None,
         )
     else:
         ws_events.emit_session_status(session_id, False)

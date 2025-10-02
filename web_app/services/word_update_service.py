@@ -17,8 +17,6 @@ from web_app.database.vocabulary_dao import (
 )
 
 
-
-
 def update_word_info_review(word_id, remembered, elapsed_time):
     """
     更新已有单词的复习信息（MODE_REVIEW）
@@ -36,7 +34,9 @@ def update_word_info_review(word_id, remembered, elapsed_time):
     next_review_str = word_info.get("next_review")
     if not next_review_str:
         return
-    original_next_review = datetime.datetime.strptime(next_review_str, '%Y-%m-%d').date()
+    original_next_review = datetime.datetime.strptime(
+        next_review_str, "%Y-%m-%d"
+    ).date()
 
     avg_elapsed_time = calculate_avg_elapsed_time(word_id, elapsed_time)
 
@@ -54,7 +54,9 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         remember_inc,
         forget_inc,
         lapse,
-    ) = calculate_srs_parameters_with_load_balancing(score, interval, repetition, ease_factor, lapse, word_source)
+    ) = calculate_srs_parameters_with_load_balancing(
+        score, interval, repetition, ease_factor, lapse, word_source
+    )
 
     # 4️⃣ 计算下次复习日期
     next_review = original_next_review + datetime.timedelta(days=interval)
@@ -108,15 +110,19 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
     current_strength = word_info.get("spell_strength") or 0
     # word_info['spell_next_review'] is a string from to_dict().isoformat()
     spell_next_review_str = word_info.get("spell_next_review")
-    current_next_review = datetime.datetime.strptime(spell_next_review_str, '%Y-%m-%d').date() if spell_next_review_str else None
+    current_next_review = (
+        datetime.datetime.strptime(spell_next_review_str, "%Y-%m-%d").date()
+        if spell_next_review_str
+        else None
+    )
 
     # 使用负荷均衡的拼写算法
     strength_change, interval_days = calculate_spell_strength_with_load_balancing(
         spelling_data, remembered, word, word_source, current_strength
     )
 
-    # 计算新的强度 (ensure current_strength is not None)
-    new_strength = max(0, (current_strength or 0) + strength_change)
+    # 计算新的强度 (ensure current_strength is not None, and cap at 5.0)
+    new_strength = max(0, min(5.0, (current_strength or 0) + strength_change))
 
     # 计算下次拼写复习时间
     base_date = current_next_review if current_next_review else datetime.date.today()

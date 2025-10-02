@@ -123,9 +123,7 @@ def load_part2_topics_from_file(filepath: str):
             topic = lines[0]
             # 将所有后续行合并为一个问题
             question_content = "\n".join(lines[1:])
-            topics.append(
-                (topic, [topic + "\n" + question_content])
-            )  # 作为单个问题放入列表
+            topics.append((topic, [topic + "\n" + question_content]))  # 作为单个问题放入列表
 
     return topics
 

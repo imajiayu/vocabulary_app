@@ -247,9 +247,7 @@ class ConfusedWordsGenerator:
 
             for i, w1 in enumerate(words):
                 if i % 100 == 0:
-                    logger.info(
-                        f"已处理 {i}/{len(words)} 个单词，找到 {total_found} 个关系"
-                    )
+                    logger.info(f"已处理 {i}/{len(words)} 个单词，找到 {total_found} 个关系")
 
                 for j in range(i + 1, len(words)):
                     w2 = words[j]
@@ -284,8 +282,7 @@ class ConfusedWordsGenerator:
                 batch_insert_relations(session, relations_to_add)
 
             logger.info(
-                f"精确易混淆关系生成完成！处理了 {total_processed} 个词对，"
-                f"生成了 {total_found} 个高质量关系"
+                f"精确易混淆关系生成完成！处理了 {total_processed} 个词对，" f"生成了 {total_found} 个高质量关系"
             )
 
 

@@ -89,7 +89,9 @@ def db_get_comprehensive_stats(source=None):
         for row in rows:
             # EF data
             if row.ease_factor is not None:
-                stats["ef_data"].append({"word": row.word, "ef": round(row.ease_factor, 2)})
+                stats["ef_data"].append(
+                    {"word": row.word, "ef": round(row.ease_factor, 2)}
+                )
 
             # Elapse times
             if row.avg_elapsed_time is not None:
@@ -112,7 +114,9 @@ def db_get_comprehensive_stats(source=None):
             stats["spell_strengths"].append(
                 {
                     "word": row.word,
-                    "strength": round(row.spell_strength, 2) if row.spell_strength is not None else None,
+                    "strength": round(row.spell_strength, 2)
+                    if row.spell_strength is not None
+                    else None,
                     "available": available,
                 }
             )
@@ -130,10 +134,8 @@ def db_get_comprehensive_stats(source=None):
             if row.lapse is not None:
                 stats["total_lapse"] += row.lapse
 
-        # Calculate max spell strength for color normalization
-        max_spell_strength = (
-            max(spell_strengths_for_max) if spell_strengths_for_max else 1
-        )
+        # Use fixed max spell strength of 5.0 (not normalized to current data)
+        max_spell_strength = 5.0
 
         # Pre-compute heatmap cells with colors and tooltips
         for row in rows:
@@ -149,7 +151,7 @@ def db_get_comprehensive_stats(source=None):
                 spell_color = "#4da6ff"
                 spell_tooltip = f"{row.word}\n未拼写过"
             else:
-                # Green color with alpha based on score
+                # Green color with alpha based on score (out of 5.0)
                 clamped = max(0, min(1, spell_value / max_spell_strength))
                 alpha = 0.15 + 0.85 * clamped
                 spell_color = f"rgba(46,125,50,{alpha:.3f})"

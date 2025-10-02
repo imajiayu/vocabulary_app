@@ -389,9 +389,7 @@ def update_word(word_id):
                     try:
                         all_ids = session.get(SESSION_KEY_SNAPSHOT, [])
                         if word_id in all_ids:
-                            current_index = (
-                                all_ids.index(word_id) + 1
-                            )  # +1 因为已完成当前单词
+                            current_index = all_ids.index(word_id) + 1  # +1 因为已完成当前单词
                             update_current_progress_index(current_index)
                     except Exception as e:
                         print(f"Failed to update progress index: {e}")

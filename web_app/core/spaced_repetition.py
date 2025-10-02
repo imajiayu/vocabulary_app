@@ -8,6 +8,10 @@ from web_app.database.vocabulary_dao import (
 import math
 
 
+# --- 常量定义 ---
+LOW_EF_THRESHOLD = 2.5  # 低 EF 阈值，用于判断需要加速复习的单词
+
+
 # --- 平均停留时间计算（修正版） ---
 def calculate_avg_elapsed_time(word_id, elapsed_time):
     """
@@ -108,7 +112,7 @@ def sm2_update_ease_factor(ease_factor, score, min_ef=1.3, max_ef=3.0):
 
     # 应用自适应调整：EF越低，正向调整幅度越大
     delta = delta_map.get(score, 0)
-    if score >= 4 and ease_factor < 2.0:
+    if score >= 4 and ease_factor < LOW_EF_THRESHOLD:
         # 低EF单词答对时给予额外奖励，促进恢复
         delta *= 1.3
 
@@ -139,7 +143,7 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
             growth_factor = 1.0  # score >= 4，正常增长
 
         # 对低 EF 单词加速复习（缩短间隔）
-        if ease_factor <= 2.0:
+        if ease_factor <= LOW_EF_THRESHOLD:
             shrink_factor = 0.5  # 下次间隔更短
         else:
             shrink_factor = 1.0  # 普通单词
@@ -505,7 +509,7 @@ def find_optimal_review_day(
             # 🆕 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
             # 使用三次方惩罚 + 更大系数，让负荷均衡成为主导因素
             load_ratio = current_load / daily_limit
-            load_penalty = (load_ratio ** 3) * 2.0
+            load_penalty = (load_ratio**3) * 2.0
 
             # 综合评分：两种惩罚相加，越小越好
             total_score = time_penalty + load_penalty
@@ -566,7 +570,9 @@ def find_optimal_review_day_for_strong_words(base_interval, daily_limit, current
     return best_day
 
 
-def find_optimal_spell_day(base_interval, priority_weight, daily_limit, current_loads, max_delay=None):
+def find_optimal_spell_day(
+    base_interval, priority_weight, daily_limit, current_loads, max_delay=None
+):
     """
     为低强度拼写找到最优日期，使用指数惩罚避免过度推迟
 
@@ -596,12 +602,12 @@ def find_optimal_spell_day(base_interval, priority_weight, daily_limit, current_
             # 改为"填谷策略"：不限制daily_limit，允许超额，但惩罚拥挤日期
             # 使用指数惩罚：推迟天数越多，惩罚越重
             delay_days = abs(day - base_interval)
-            time_penalty = (delay_days ** 1.5) * (priority_weight ** 2) * 0.05
+            time_penalty = (delay_days**1.5) * (priority_weight**2) * 0.05
 
             # 🆕 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
             # 使用三次方惩罚 + 更大系数，让负荷均衡成为主导因素
             load_ratio = current_load / daily_limit
-            load_penalty = (load_ratio ** 3) * 2.0
+            load_penalty = (load_ratio**3) * 2.0
 
             # 综合评分：两种惩罚相加，越小越好
             total_score = time_penalty + load_penalty
