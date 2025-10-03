@@ -7,6 +7,8 @@ from web_app.core.spaced_repetition import (
     calculate_avg_elapsed_time,
     calculate_score,
     calculate_srs_parameters_with_load_balancing,
+)
+from web_app.core.spell_repetition import (
     calculate_spell_strength_with_load_balancing,
 )
 from web_app.database.vocabulary_dao import (

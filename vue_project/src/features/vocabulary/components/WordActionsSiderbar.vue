@@ -32,7 +32,7 @@
         <span class="status-value">{{ word?.spell_strength !== null && word?.spell_strength !== undefined ? word.spell_strength.toFixed(2) : '-' }}</span>
       </div>
       <div class="status-row">
-        <span class="status-label">拼写复习</span>
+        <span class="status-label">下次拼写</span>
         <span class="status-value">{{ word?.spell_next_review }}</span>
       </div>
       <div class="status-row">

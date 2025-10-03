@@ -131,6 +131,7 @@ const hasExamples = computed(() => {
   flex-direction: row;
   align-items: flex-start;
   gap: 2rem;
+  min-width: 600px;
 }
 
 /* 桌面端横向布局的特殊样式 */
