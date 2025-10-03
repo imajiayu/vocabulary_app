@@ -128,7 +128,8 @@ automation
 automobile
 autonomous
 auxiliary
-aweawkwardly
+awe
+awkwardly
 axis
 axle
 backbone
@@ -164,7 +165,8 @@ beneficiary
 bestow
 beverage
 bias
-bidbillion
+bid
+billion
 biographer
 biologist
 bite

@@ -56,6 +56,21 @@ export interface WordActionResult {
   is_spelling?: boolean
 }
 
+// 批量导入参数接口
+export interface BatchImportPayload {
+  words: string[]
+  source: 'IELTS' | 'GRE'
+}
+
+// 批量导入结果接口
+export interface BatchImportResult {
+  success_count: number
+  failed_count: number
+  failed_words: string[]
+  total: number
+  inserted_words: Word[]
+}
+
 /**
  * 单词API类
  */
@@ -107,6 +122,13 @@ export class WordsApi {
    */
   static async createWord(wordData: CreateWordPayload): Promise<Word> {
     return post<Word>('/api/word', wordData)
+  }
+
+  /**
+   * 批量导入单词
+   */
+  static async batchImportWords(payload: BatchImportPayload): Promise<BatchImportResult> {
+    return post<BatchImportResult>('/api/words/batch', payload)
   }
 
   /**

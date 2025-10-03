@@ -28,6 +28,18 @@
           <PlusIcon v-else class="plus-icon" />
           {{ isLoading ? '添加中...' : '添加' }}
         </button>
+        <button @click="triggerFileInput" :disabled="isBatchLoading" class="batch-button">
+          <div v-if="isBatchLoading" class="loading-spinner"></div>
+          <UploadIcon v-else class="upload-icon" />
+          {{ isBatchLoading ? '导入中...' : '批量导入' }}
+        </button>
+        <input
+          ref="fileInputRef"
+          type="file"
+          accept=".txt"
+          @change="handleFileSelect"
+          style="display: none"
+        />
 
         <!-- 消息提示紧贴输入框 -->
         <div class="message-area-wrapper" v-if="message.text">
@@ -109,7 +121,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue';
-import { Plus as PlusIcon, Search as SearchIcon } from 'lucide-vue-next';
+import { Plus as PlusIcon, Search as SearchIcon, Upload as UploadIcon } from 'lucide-vue-next';
 import { type Word } from '@/shared/types';
 import { api } from '@/shared/api';
 import { handleWordInsertError } from '@/shared/utils/errorHandler';
@@ -118,8 +130,10 @@ import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelect
 
 const word = ref('');
 const isLoading = ref(false);
+const isBatchLoading = ref(false);
 const message = ref({ type: '', text: '' });
 const inputRef = ref<HTMLInputElement>();
+const fileInputRef = ref<HTMLInputElement>();
 
 // 单词查询相关
 const lookupWord = ref('');
@@ -274,6 +288,83 @@ const handleSubmit = async () => {
   setTimeout(() => {
     inputRef.value?.focus()
   }, 50);
+};
+
+// 批量导入相关函数
+const triggerFileInput = () => {
+  fileInputRef.value?.click();
+};
+
+const handleFileSelect = async (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+
+  if (!file) return;
+
+  // 检查文件类型
+  if (!file.name.endsWith('.txt')) {
+    message.value = { type: 'error', text: '请选择.txt文件' };
+    setTimeout(() => {
+      message.value = { type: '', text: '' };
+    }, 3000);
+    return;
+  }
+
+  isBatchLoading.value = true;
+  message.value = { type: '', text: '' };
+
+  try {
+    // 读取文件内容
+    const text = await file.text();
+    const words = text
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    if (words.length === 0) {
+      message.value = { type: 'error', text: '文件为空或格式不正确' };
+      return;
+    }
+
+    // 调用批量导入API
+    const result = await api.words.batchImportWords({
+      words,
+      source: source.value
+    });
+
+    // 显示结果
+    const successMsg = `批量导入完成：成功 ${result.success_count}，失败 ${result.failed_count}`;
+    message.value = {
+      type: result.failed_count === 0 ? 'success' : 'error',
+      text: successMsg
+    };
+
+    // 如果有失败的单词，在控制台输出
+    if (result.failed_words.length > 0) {
+      console.log('Failed words:', result.failed_words);
+    }
+
+    // 将每个成功导入的单词添加到列表中
+    if (result.inserted_words && result.inserted_words.length > 0) {
+      result.inserted_words.forEach(word => {
+        emit('wordInserted', word);
+      });
+    }
+  } catch (error) {
+    const errorMessage = handleWordInsertError(error);
+    message.value = {
+      type: 'error',
+      text: `批量导入失败：${errorMessage}`
+    };
+  } finally {
+    isBatchLoading.value = false;
+    // 重置文件输入，以便可以再次选择同一个文件
+    target.value = '';
+
+    setTimeout(() => {
+      message.value = { type: '', text: '' };
+    }, 5000); // 批量导入消息显示时间稍长
+  }
 };
 
 onUnmounted(() => {
@@ -439,6 +530,41 @@ onUnmounted(() => {
 .submit-button:disabled {
   background-color: #d1d5db;
   cursor: not-allowed;
+}
+
+.batch-button {
+  background-color: #8b5cf6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+  box-sizing: border-box;
+  /* 移动端触摸优化 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 110px;
+}
+
+.batch-button:hover:not(:disabled) {
+  background-color: #7c3aed;
+}
+
+.batch-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.upload-icon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 /* 单词查询样式 - 仿照 SearchAndFilter 布局 */
@@ -706,6 +832,13 @@ onUnmounted(() => {
     justify-content: center;
   }
 
+  .batch-button {
+    height: 48px;
+    padding: 0.875rem 1.25rem;
+    min-width: 130px;
+    justify-content: center;
+  }
+
   .lookup-input-group {
     height: 48px;
   }
@@ -763,6 +896,13 @@ onUnmounted(() => {
     height: 50px;
     padding: 1rem;
     font-size: 0.875rem;
+  }
+
+  .batch-button {
+    height: 50px;
+    padding: 1rem;
+    font-size: 0.875rem;
+    min-width: 120px;
   }
 
   .lookup-input-group {
@@ -824,6 +964,13 @@ onUnmounted(() => {
     height: 36px;
     padding: 0.5rem 1rem;
     font-size: 0.8125rem;
+  }
+
+  .batch-button {
+    height: 36px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    min-width: 100px;
   }
 
   .lookup-input-group {

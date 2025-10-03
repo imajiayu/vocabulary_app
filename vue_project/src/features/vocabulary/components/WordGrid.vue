@@ -6,19 +6,17 @@
             <!-- 排序控件和单词数量 -->
             <div class="sort-controls-group">
                 <div class="sort-controls-integrated">
-                    <button 
-                        class="sort-field-btn" 
-                        :class="{ 'active': sortFieldIndex !== -1 }"
+                    <button
+                        class="sort-field-btn active"
                         @click="toggleSortField">
-                        <span>{{ sortFieldIndex === -1 ? '默认' : getSortFieldName(sortFields[sortFieldIndex]) }}</span>
+                        <span>{{ getSortFieldName(sortFields[sortFieldIndex]) }}</span>
                     </button>
-                    <button 
-                        class="sort-order-btn" 
-                        :class="{ 'active': sortOrderIndex !== -1 && sortFieldIndex !== -1 }"
-                        :disabled="sortFieldIndex === -1"
+                    <button
+                        class="sort-order-btn"
+                        :class="{ 'ascending': sortOrderIndex === 0, 'descending': sortOrderIndex === 1 }"
                         @click="toggleSortOrder">
                         <ChevronUp v-if="sortOrderIndex === 0" class="sort-icon" />
-                        <ChevronDown v-else-if="sortOrderIndex === 1" class="sort-icon" />
+                        <ChevronDown v-else class="sort-icon" />
                     </button>
                 </div>
                 <div class="word-count">
@@ -66,8 +64,10 @@ const sortOrders = ['asc', 'desc'];
 
 // 循环排序相关的响应式数据
 const sortFields = ['word', 'ease_factor', 'date_added'];
-const sortFieldIndex = ref(-1); // -1 表示无排序，0/1/2 分别对应 sortFields 数组的索引
-const sortOrderIndex = ref(-1); // -1 表示默认（无状态），0 升序，1 降序
+const sortFieldIndex = ref(0); // 0/1/2 分别对应 sortFields 数组的索引
+const sortOrderIndex = ref(0); // 0 升序，1 降序
+const hasUserSorted = ref(false); // 用户是否主动切换过排序
+const newWordIds = ref(new Set<number>()); // 新增单词的 ID 集合
 
 // 首先根据来源筛选
 const filteredBySourceWords = computed(() => {
@@ -119,18 +119,41 @@ const sortedWords = computed(() => {
         return wordsToSort; // Return immediately after applying search-specific sorting
     }
 
+    // 分离新增单词和其他单词
+    const newWords: Word[] = [];
+    const existingWords: Word[] = [];
+
+    wordsToSort.forEach(word => {
+        if (newWordIds.value.has(word.id)) {
+            newWords.push(word);
+        } else {
+            existingWords.push(word);
+        }
+    });
+
     // Sort based on the circular buttons' state
+    // Note: 保持原始顺序（新添加的单词在前），排序仅在用户主动切换时生效
+    if (!hasUserSorted.value) {
+        return wordsToSort; // 用户未主动排序时，保持原始顺序（新添加的在前）
+    }
+
     const sortField = sortFields[sortFieldIndex.value];
     if (sortField) {
-        let sorted = wordsToSort.sort((a, b) => {
+        // 只对非新增单词排序
+        let sorted = existingWords.sort((a, b) => {
             switch (sortField) {
                 case 'word':
                     return a.word.localeCompare(b.word);
                 case 'ease_factor':
                     // 修正熟练度排序逻辑：升序应该先展示高熟练度的单词
                     return b.ease_factor - a.ease_factor;
-                case 'date_added':
-                    return new Date(a.date_added).getTime() - new Date(b.date_added).getTime();
+                case 'date_added': {
+                    // 先按日期排序
+                    const dateCompare = new Date(a.date_added).getTime() - new Date(b.date_added).getTime();
+                    // 日期相同时按 id 排序
+                    if (dateCompare !== 0) return dateCompare;
+                    return a.id - b.id;
+                }
                 default:
                     return 0;
             }
@@ -138,32 +161,41 @@ const sortedWords = computed(() => {
 
         const sortOrder = sortOrders[sortOrderIndex.value];
         if (sortOrder === 'desc') {
-            return sorted.reverse();
+            sorted = sorted.reverse();
         }
-        return sorted;
+
+        // 新增单词始终在最前面
+        return [...newWords, ...sorted];
     }
 
     return wordsToSort;
 });
 
 const toggleSortField = () => {
-    if (sortFieldIndex.value === -1) {
-        sortFieldIndex.value = 0; // 从默认到第一个排序字段
-        sortOrderIndex.value = 0; // 默认升序
-    } else if (sortFieldIndex.value < sortFields.length - 1) {
+    hasUserSorted.value = true; // 标记用户已主动排序
+    newWordIds.value.clear(); // 清空新增单词标记
+    if (sortFieldIndex.value < sortFields.length - 1) {
         sortFieldIndex.value += 1;
-        sortOrderIndex.value = 0; // 切换字段时，重置为升序
     } else {
-        sortFieldIndex.value = -1; // 循环回默认
-        sortOrderIndex.value = -1; // 重置升降序
+        sortFieldIndex.value = 0; // 循环回第一个字段
     }
 };
 
 const toggleSortOrder = () => {
-    if (sortFieldIndex.value === -1) return; // 没有字段时不可切换
-
+    hasUserSorted.value = true; // 标记用户已主动排序
+    newWordIds.value.clear(); // 清空新增单词标记
     sortOrderIndex.value = sortOrderIndex.value === 0 ? 1 : 0;
 };
+
+// 添加新单词ID（供父组件调用）
+const addNewWordId = (wordId: number) => {
+    newWordIds.value.add(wordId);
+};
+
+// 暴露方法给父组件
+defineExpose({
+    addNewWordId
+});
 
 const handleToggleReview = async (id: number, status: boolean) => {
     animatingIds.value.add(id);
@@ -329,17 +361,34 @@ const getDisplayCount = () => {
     transition: background-color 0.2s ease;
 }
 
-.sort-order-btn:hover:not(:disabled):not(.active) {
+.sort-order-btn:hover:not(:disabled):not(.ascending):not(.descending) {
     background: #e2e8f0;
     color: #475569;
 }
 
-.sort-order-btn.active {
-    background: #1e40af;
+.sort-order-btn.ascending {
+    background: #10b981;
     color: white;
 }
 
-.sort-order-btn.active::before {
+.sort-order-btn.ascending:hover {
+    background: #059669;
+}
+
+.sort-order-btn.ascending::before {
+    background: transparent;
+}
+
+.sort-order-btn.descending {
+    background: #f59e0b;
+    color: white;
+}
+
+.sort-order-btn.descending:hover {
+    background: #d97706;
+}
+
+.sort-order-btn.descending::before {
     background: transparent;
 }
 
@@ -361,7 +410,8 @@ const getDisplayCount = () => {
 }
 
 .sort-field-btn.active .sort-icon,
-.sort-order-btn.active .sort-icon {
+.sort-order-btn.ascending .sort-icon,
+.sort-order-btn.descending .sort-icon {
     transform: scale(1.05);
 }
 

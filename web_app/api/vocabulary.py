@@ -320,6 +320,63 @@ def insert_words():
     return create_response(True, new_word, "Word inserted successfully")
 
 
+@api_bp.route("/words/batch", methods=["POST"])
+def batch_insert_words():
+    """批量导入单词"""
+    data = request.get_json()
+    if not data or "words" not in data or "source" not in data:
+        return create_response(False, None, "缺少参数 words 或 source"), 400
+
+    words_list = data["words"]
+    source = data["source"]
+
+    if not isinstance(words_list, list) or not words_list:
+        return create_response(False, None, "words 必须是非空数组"), 400
+
+    if source not in ["IELTS", "GRE"]:
+        return create_response(False, None, "source 必须是 IELTS 或 GRE"), 400
+
+    success_count = 0
+    failed_count = 0
+    failed_words = []
+    inserted_words = []
+
+    for word_text in words_list:
+        word_text = word_text.strip().lower()
+        if not word_text:
+            continue
+
+        new_word = db_insert_word(word_text, source)
+        if new_word:
+            success_count += 1
+            inserted_words.append(new_word)
+
+            # 后台获取定义
+            def background_task(word_id, word):
+                update_word_definition(word_id, word)
+
+            t = threading.Thread(
+                target=background_task, args=(new_word["id"], new_word["word"])
+            )
+            t.daemon = True
+            t.start()
+        else:
+            failed_count += 1
+            failed_words.append(word_text)
+
+    return create_response(
+        True,
+        {
+            "success_count": success_count,
+            "failed_count": failed_count,
+            "failed_words": failed_words[:10],  # 只返回前10个失败的单词
+            "total": len(words_list),
+            "inserted_words": inserted_words,  # 返回插入的单词列表
+        },
+        f"批量导入完成：成功 {success_count}，失败 {failed_count}",
+    )
+
+
 @api_bp.route("/word/<int:word_id>", methods=["DELETE"])
 def delete_word(word_id):
     try:

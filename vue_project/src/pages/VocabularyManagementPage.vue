@@ -59,6 +59,7 @@
                         </div>
                     </div>
                     <WordGrid
+                        ref="wordGridRef"
                         :words="words"
                         :search-query="searchQuery"
                         :filter-status="filterStatus"
@@ -97,6 +98,7 @@ const selectedWord = ref<Word | undefined>();
 const isModalOpen = ref(false);
 const isLoading = ref(true);
 const sourceCounts = ref<SourceCounts | null>(null); // 存储源计数
+const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引用
 
 // 分批加载相关状态
 const batchSize = 200; // 每批加载50个单词
@@ -301,6 +303,8 @@ const handleWordInserted = (word: Word) => {
     words.value.unshift(word);
     // 更新计数
     updateSourceCounts();
+    // 标记为新增单词，使其显示在最前面
+    wordGridRef.value?.addNewWordId(word.id);
 };
 
 // 使用统一的WebSocket服务
@@ -405,7 +409,6 @@ onUnmounted(() => {
 
 /* 批量加载进度指示器 */
 .loading-progress {
-    margin-top: 1.5rem;
     padding: 1rem;
     background: rgba(59, 130, 246, 0.05);
     border-radius: 0.5rem;
