@@ -70,8 +70,8 @@
             </main>
 
             <!-- 详情弹窗 -->
-            <WordDetailModal v-model:word="selectedWord" :is-open="isModalOpen" @close="handleCloseModal"
-                @word-deleted="handleWordDeleted" @check-pending-updates="handleCheckPendingUpdates" />
+            <WordDetailModal :word="selectedWord" :is-open="isModalOpen" @close="handleCloseModal"
+                @word-deleted="handleWordDeleted" />
         </template>
     </div>
 </template>
@@ -229,6 +229,16 @@ onMounted(async () => {
             // 不等待这个函数完成，让它在后台运行
             loadRemainingBatches();
         }
+
+        // 建立WebSocket连接并监听单词更新
+        try {
+            await connect()
+            // 监听单词更新事件（用于更新列表，特别是新增单词的definition）
+            onWordUpdated(wordUpdatedCallback)
+            console.log('[WordManagement] WebSocket connected')
+        } catch (error) {
+            console.error('[WordManagement] WebSocket connection failed:', error)
+        }
     } catch (error) {
         console.error('Failed to load initial words batch:', error);
     } finally {
@@ -242,24 +252,15 @@ const handleShowDetail = (word: Word) => {
     isModalOpen.value = true;
 };
 
-const handleCloseModal = () => {
+const handleCloseModal = (finalWord: Word | undefined) => {
     isModalOpen.value = false;
 
-    // 如果 selectedWord 被更新了，就更新 words 数组
-    if (selectedWord.value) {
-        const wordId = selectedWord.value.id;
-
-        // 检查是否有待处理的definition更新，如果有则应用
-        if (pendingDefinitionUpdates.value.has(wordId)) {
-            const latestDefinition = pendingDefinitionUpdates.value.get(wordId);
-            selectedWord.value = { ...selectedWord.value, definition: latestDefinition };
-            pendingDefinitionUpdates.value.delete(wordId); // 清除记录
-        }
-
-        const index = words.value.findIndex(w => w.id === wordId);
+    // Modal关闭时返回最终的完整数据，直接更新列表
+    if (finalWord) {
+        const index = words.value.findIndex(w => w.id === finalWord.id);
         if (index !== -1) {
             const oldWord = words.value[index];
-            const newWord = selectedWord.value;
+            const newWord = finalWord;
 
             // 检查是否状态发生了变化（掌握状态）
             const oldRemembered = isWordRemembered(oldWord);
@@ -273,7 +274,6 @@ const handleCloseModal = () => {
             }
         }
     }
-    // 删除了则无需处理，因为 wordDeleted 事件会处理
 };
 
 const handleWordDeleted = (wordId: number) => {
@@ -289,16 +289,6 @@ const handleWordDeleted = (wordId: number) => {
     }
 };
 
-const handleCheckPendingUpdates = (wordId: number) => {
-    if (pendingDefinitionUpdates.value.has(wordId)) {
-        const latestDefinition = pendingDefinitionUpdates.value.get(wordId);
-        if (selectedWord.value?.id === wordId) {
-            selectedWord.value = { ...selectedWord.value, definition: latestDefinition };
-        }
-        // 不删除记录，因为关闭时还需要确保最终状态正确
-    }
-};
-
 const handleWordInserted = (word: Word) => {
     words.value.unshift(word);
     // 更新计数
@@ -308,31 +298,12 @@ const handleWordInserted = (word: Word) => {
 };
 
 // 使用统一的WebSocket服务
-const { connect, onWordUpdated, off, isConnected } = useWordManagementWebSocket()
+const { connect, isConnected, onWordUpdated, off } = useWordManagementWebSocket()
 
-// 记录收到的WebSocket定义更新
-const pendingDefinitionUpdates = ref<Map<number, any>>(new Map());
-
-// 存储WebSocket事件回调，用于清理
+// WebSocket事件回调 - 用于更新列表中的单词（特别是新增单词收到的definition）
 const wordUpdatedCallback = (data: { id: number; definition: any }) => {
     const wordId = data.id;
     const definition = data.definition;
-
-    // 记录收到的definition更新
-    pendingDefinitionUpdates.value.set(wordId, definition);
-
-    // 立即更新
-    applyDefinitionUpdate(wordId, definition);
-}
-
-// 应用definition更新的函数
-const applyDefinitionUpdate = (wordId: number, definition: any) => {
-    // 更新模态框中的单词
-    if (selectedWord.value?.id === wordId && isModalOpen.value === true) {
-        if (selectedWord.value) {
-            selectedWord.value = { ...selectedWord.value, definition };
-        }
-    }
 
     // 更新列表中的单词
     const index = words.value.findIndex(w => w.id === wordId);
@@ -340,19 +311,6 @@ const applyDefinitionUpdate = (wordId: number, definition: any) => {
         words.value[index] = { ...words.value[index], definition };
     }
 }
-
-onMounted(async () => {
-    // 监听单词更新事件
-    onWordUpdated(wordUpdatedCallback)
-
-    // 建立WebSocket连接
-    try {
-        await connect()
-        console.log('[WordManagement] WebSocket connected')
-    } catch (error) {
-        console.error('[WordManagement] WebSocket connection failed:', error)
-    }
-})
 
 onUnmounted(() => {
     // 停止后台加载

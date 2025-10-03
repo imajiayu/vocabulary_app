@@ -162,6 +162,7 @@ class Progress(Base):
     shuffle = Column(Boolean, default=False)
     word_ids_snapshot = Column(Text, nullable=False)  # JSON数组存储
     current_index = Column(Integer, default=0)
+    initial_lapse_count = Column(Integer, default=0)  # lapse模式的初始总lapse数
 
     __table_args__ = (CheckConstraint("id = 1", name="single_row_constraint"),)
 
@@ -175,6 +176,7 @@ class Progress(Base):
             if self.word_ids_snapshot
             else [],
             "current_index": self.current_index,
+            "initial_lapse_count": self.initial_lapse_count,
         }
 
     @staticmethod
@@ -187,4 +189,5 @@ class Progress(Base):
             shuffle=data.get("shuffle", False),
             word_ids_snapshot=json.dumps(data.get("word_ids_snapshot", [])),
             current_index=data.get("current_index", 0),
+            initial_lapse_count=data.get("initial_lapse_count", 0),
         )

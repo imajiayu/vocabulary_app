@@ -44,11 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { X as XIcon } from 'lucide-vue-next';
 import WordInfoSection from './WordInfoSection.vue';
 import WordActionsSidebar from './WordActionsSiderbar.vue';
 import type { Word } from '@/shared/types';
+import { useWordManagementWebSocket, WebSocketEvents } from '@/shared/services/websocket';
 
 interface Props {
   word?: Word;
@@ -62,15 +63,38 @@ const editData = ref<Word | undefined>(props.word);
 const isEditing = ref(false);
 
 const emit = defineEmits<{
-  close: [wordId: number];
-  'update:word': [word: Word];
+  close: [finalWord: Word | undefined];
   wordDeleted: [wordId: number];
-  checkPendingUpdates: [wordId: number];
 }>();
+
+// WebSocket连接
+const { onWordUpdated, off, isConnected } = useWordManagementWebSocket();
+
+// 记录收到的WebSocket definition更新
+const pendingDefinitionUpdates = ref<Map<number, any>>(new Map());
+
+// WebSocket事件回调
+const wordUpdatedCallback = (data: { id: number; definition: any }) => {
+  const wordId = data.id;
+  const definition = data.definition;
+
+  // 只处理当前单词的更新
+  if (editData.value?.id === wordId) {
+    // 记录pending update
+    pendingDefinitionUpdates.value.set(wordId, definition);
+
+    // 立即更新本地数据
+    if (editData.value) {
+      editData.value = { ...editData.value, definition };
+    }
+  }
+};
 
 // 监听 props.word 的变化，同步更新本地的 editData
 watch(() => props.word, (newWord) => {
   editData.value = newWord;
+  // 清空之前的pending updates
+  pendingDefinitionUpdates.value.clear();
 }, { immediate: true, deep: true });
 
 // 阻止键盘事件传播到父组件
@@ -97,6 +121,18 @@ watch(() => props.isOpen, (isOpen) => {
     // 添加全局键盘事件拦截
     document.addEventListener('keydown', handleKeydown, { capture: true });
   } else {
+    // 关闭时：应用所有pending updates并返回最终数据
+    if (editData.value && pendingDefinitionUpdates.value.has(editData.value.id)) {
+      const latestDefinition = pendingDefinitionUpdates.value.get(editData.value.id);
+      editData.value = { ...editData.value, definition: latestDefinition };
+    }
+
+    // 返回最终的完整数据给父组件
+    emit('close', editData.value);
+
+    // 清空pending updates
+    pendingDefinitionUpdates.value.clear();
+
     // 恢复背景滚动
     const scrollY = parseInt(document.body.getAttribute('data-scroll-y') || '0');
 
@@ -126,19 +162,22 @@ const handleWordDeleted = (wordId: number) => {
   emit('wordDeleted', wordId);
 };
 
-const handleWordUpdated = (updatedWord:Word) => {
+const handleWordUpdated = (updatedWord: Word) => {
   // 将从子组件接收到的新值，赋值给本地的 editData
   editData.value = updatedWord;
-
-  emit('update:word', updatedWord);
-
-  // 立即检查是否已经有WebSocket更新，如果有则覆盖definition
-  emit('checkPendingUpdates', updatedWord.id);
 };
+
+// 组件挂载时设置WebSocket监听
+onMounted(() => {
+  onWordUpdated(wordUpdatedCallback);
+});
 
 // 组件卸载时清理事件监听器
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown, { capture: true });
+
+  // 清理WebSocket监听
+  off(WebSocketEvents.WORD_UPDATED, wordUpdatedCallback);
 });
 </script>
 

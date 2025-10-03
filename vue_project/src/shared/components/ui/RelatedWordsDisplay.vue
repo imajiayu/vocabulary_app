@@ -19,11 +19,12 @@
     <!-- modal -->
     <teleport to="body">
       <div v-if="isModalOpen" class="modal-wrapper">
-        <div class="modal-overlay" @click="handleCloseModal"></div>
+        <div class="modal-overlay" @click="() => handleCloseModal(undefined)"></div>
         <WordDetailModal
-          v-model:word="selectedWord"
+          :word="selectedWord"
           :is-open="isModalOpen"
           @close="handleCloseModal"
+          @word-deleted="handleWordDeleted"
         />
       </div>
     </teleport>
@@ -77,9 +78,17 @@ const handleClickWord = async (wordId: number) => {
   }
 }
 
-const handleCloseModal = () => {
+const handleCloseModal = (finalWord: Word | undefined) => {
   isModalOpen.value = false
   selectedWord.value = undefined
+  // finalWord包含最新数据，但这个组件不需要更新列表
+}
+
+const handleWordDeleted = (wordId: number) => {
+  // 关闭modal
+  isModalOpen.value = false
+  selectedWord.value = undefined
+  // RelatedWordsDisplay不需要更新列表，因为相关词由后端管理
 }
 </script>
 

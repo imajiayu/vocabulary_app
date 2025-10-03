@@ -18,11 +18,12 @@
 
     <teleport to="body">
       <div v-if="isModalOpen" class="modal-wrapper">
-        <div class="modal-overlay" @click="() => handleCloseModal(selectedWord?.id ?? 0)"></div>
+        <div class="modal-overlay" @click="() => handleCloseModal(undefined)"></div>
         <WordDetailModal
-          v-model:word="selectedWord"
+          :word="selectedWord"
           :is-open="isModalOpen"
           @close="handleCloseModal"
+          @word-deleted="handleWordDeleted"
         />
       </div>
     </teleport>
@@ -43,6 +44,7 @@ interface Props {
 
 const emit = defineEmits<{
   sidebarWordChange: [wordId: number];
+  wordDeleted: [wordId: number];
 }>();
 
 const props = defineProps<Props>()
@@ -55,10 +57,20 @@ const openModal = (word: Word) => {
   isModalOpen.value = true
 }
 
-const handleCloseModal = (wordId: number) => {
+const handleCloseModal = (finalWord: Word | undefined) => {
   isModalOpen.value = false
   selectedWord.value = undefined
-  emit('sidebarWordChange', wordId)
+  if (finalWord) {
+    emit('sidebarWordChange', finalWord.id)
+  }
+}
+
+const handleWordDeleted = (wordId: number) => {
+  // 关闭modal
+  isModalOpen.value = false
+  selectedWord.value = undefined
+  // 通知父组件单词已被删除
+  emit('wordDeleted', wordId)
 }
 
 const wordHeight = 40

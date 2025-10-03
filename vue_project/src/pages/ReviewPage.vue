@@ -1,7 +1,7 @@
 <template>
   <div class="app-container with-topbar">
     <WordSideBar v-if="displayIndex <= displayTotal" :words="reviewStore.wordQueue.slice(0, currentIndex)"
-      :remember-history="wordResults" @sidebar-word-change="sidebarWordChange" />
+      :remember-history="wordResults" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted" />
 
     <!-- 顶部栏 -->
     <TopBar show-home-button>
@@ -77,6 +77,20 @@ const sidebarWordChange = async (wordId: number) => {
     }
   } catch (err) {
     console.error(err)
+  }
+};
+
+const handleSidebarWordDeleted = (wordId: number) => {
+  // 从wordQueue中移除被删除的单词
+  const index = reviewStore.wordQueue.findIndex(w => w.id === wordId);
+  if (index !== -1) {
+    reviewStore.wordQueue.splice(index, 1);
+    // 从wordResults中移除记录
+    wordResults.value.delete(wordId);
+    // 如果删除的是当前索引之前的单词，需要调整currentIndex
+    if (index < currentIndex.value) {
+      reviewStore.currentIndex = Math.max(0, currentIndex.value - 1);
+    }
   }
 };
 

@@ -51,12 +51,13 @@ const newWord = await api.words.createWord({
   source: 'IELTS'
 })
 
-// 提交复习结果
-await api.words.submitWordResult(wordId, {
+// 提交复习结果（返回更新后的完整单词数据，包含related_words）
+const updatedWord = await api.words.submitWordResult(wordId, {
   remembered: true,
   elapsed_time: 1500,
   is_spelling: false
 })
+// updatedWord 包含最新的学习数据和关联词
 ```
 
 ### 口语练习API使用示例

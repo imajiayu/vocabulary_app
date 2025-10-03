@@ -154,9 +154,10 @@ export class WordsApi {
 
   /**
    * 提交单词复习结果
+   * @returns 返回更新后的完整单词数据（包含related_words）
    */
-  static async submitWordResult(wordId: number, result: WordActionResult): Promise<void> {
-    return patch<void>(`/api/words/${wordId}/result`, result)
+  static async submitWordResult(wordId: number, result: WordActionResult): Promise<Word> {
+    return patch<Word>(`/api/words/${wordId}/result`, result)
   }
 
   /**

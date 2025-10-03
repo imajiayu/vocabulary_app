@@ -39,12 +39,19 @@ def save_word_ids_snapshot(mode, all_ids, shuffle_enabled, limit):
         # 获取当前源设置
         current_source = session.get("current_source", "IELTS")
 
+        # 计算initial_lapse_count（仅lapse模式需要）
+        initial_lapse_count = 0
+        if mode == "mode_lapse":
+            from web_app.database.vocabulary_dao import db_get_words_review_info_batch
+            words = db_get_words_review_info_batch(all_ids)
+            initial_lapse_count = sum(word.get("lapse", 0) for word in words)
+
         # 保存进度快照
-        success = db_save_progress(mode, current_source, shuffle_enabled, all_ids)
+        success = db_save_progress(mode, current_source, shuffle_enabled, all_ids, initial_lapse_count)
 
         if success:
             print(
-                f"Progress snapshot saved: {len(all_ids)} words, mode={mode}, source={current_source}"
+                f"Progress snapshot saved: {len(all_ids)} words, mode={mode}, source={current_source}, initial_lapse_count={initial_lapse_count}"
             )
 
         return success
@@ -185,8 +192,13 @@ def update_lapse_progress_after_word_update(word_id, updated_word):
         if updated_word.get("lapse", 0) == 0:
             # lapse归0，从快照中移除
             new_word_ids = [wid for wid in word_ids if wid != word_id]
+            # 保持initial_lapse_count不变
             success = db_save_progress(
-                progress["mode"], progress["source"], progress["shuffle"], new_word_ids
+                progress["mode"],
+                progress["source"],
+                progress["shuffle"],
+                new_word_ids,
+                progress.get("initial_lapse_count", 0)
             )
 
             if success:

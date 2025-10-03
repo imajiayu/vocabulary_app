@@ -206,16 +206,15 @@ export const useReviewStore = defineStore('review', () => {
       }
     }
 
-    // 异步提交并更新最新word
+    // 异步提交并更新最新word（直接使用返回的数据，包含related_words）
     api.words.submitWordResult(wordId, result)
-      .then(async () => {
-        const updatedWord = await api.words.getWord(wordId)
+      .then((updatedWord) => {
         // 替换queue中的word
         const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
         if (index !== -1) {
           wordQueue.value[index] = updatedWord
         }
-        // 再更新wordResults，确保与最新数据同步
+        // 更新wordResults，确保与最新数据同步
         wordResults.value.set(updatedWord.id, result.remembered)
       })
       .catch(console.error)
@@ -297,7 +296,8 @@ export const useReviewStore = defineStore('review', () => {
         // 重新排序单词并恢复队列
         const sortedWords = sortByLapse(words as Word[], progress.shuffle)
         wordQueue.value = sortedWords
-        initialLapseCount.value = totalLapseSum.value
+        // 恢复initial_lapse_count（关键修复：使用保存的初始值，而不是当前总和）
+        initialLapseCount.value = progress.initial_lapse_count || 0
         hasMore.value = false
 
         // lapse模式索引始终为0（循环队列）
