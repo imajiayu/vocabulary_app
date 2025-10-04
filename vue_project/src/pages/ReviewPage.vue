@@ -1,7 +1,8 @@
 <template>
   <div class="app-container with-topbar">
-    <WordSideBar v-if="displayIndex <= displayTotal" :words="reviewStore.wordQueue.slice(0, currentIndex)"
-      :remember-history="wordResults" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted" />
+    <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
+      :remember-history="wordResults" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
+      @word-forgot="handleWordForgot" />
 
     <!-- 顶部栏 -->
     <TopBar show-home-button>
@@ -44,12 +45,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
+import type { Word } from '@/shared/types'
 import { api } from '@/shared/api'
+import { useWordManagementWebSocket, WebSocketEvents } from '@/shared/services/websocket'
 import WordReview from '@/features/vocabulary/components/WordReview.vue'
 import WordSpelling from '@/features/vocabulary/components/WordSpelling.vue'
 import TopBar from '@/shared/components/layout/TopBar.vue'
@@ -68,16 +71,18 @@ const props = withDefaults(defineProps<RouteProps>(), {
   limit: 50
 })
 
-const sidebarWordChange = async (wordId: number) => {
-  try {
-    const data = await api.words.getWord(wordId)
-    const index = reviewStore.wordQueue.findIndex(w => w.id === data?.id);
-    if (index !== -1) {
-      reviewStore.wordQueue[index] = data;
-    }
-  } catch (err) {
-    console.error(err)
+const sidebarWordChange = (finalWord: Word) => {
+  // 直接使用modal返回的最终数据更新队列
+  // 使用splice方法触发Vue的响应式更新
+  const index = reviewStore.wordQueue.findIndex(w => w.id === finalWord.id);
+  if (index !== -1) {
+    reviewStore.wordQueue.splice(index, 1, finalWord);
   }
+};
+
+const handleWordForgot = (wordId: number) => {
+  // 单词被设为忘记，更新wordResults为未记住（红色）
+  wordResults.value.set(wordId, false);
 };
 
 const handleSidebarWordDeleted = (wordId: number) => {
@@ -132,6 +137,11 @@ const displayTotal = computed(() => {
 
 const currentComponent = computed(() => {
   return mode.value === 'mode_spelling' ? WordSpelling : WordReview
+})
+
+// 为WordSidebar准备的单词列表（确保响应式更新）
+const sidebarWords = computed(() => {
+  return reviewStore.wordQueue.slice(0, currentIndex.value)
 })
 
 // 方法
@@ -213,6 +223,21 @@ const handleSkip = async () => {
   }
 }
 
+// WebSocket 连接和事件处理
+const { connect, isConnected, onWordUpdated, off } = useWordManagementWebSocket()
+
+// WebSocket事件回调 - 用于更新队列中的单词（特别是编辑单词后收到的definition）
+const wordUpdatedCallback = (data: { id: number; definition: any }) => {
+  const wordId = data.id;
+  const definition = data.definition;
+
+  // 更新队列中的单词
+  const index = reviewStore.wordQueue.findIndex(w => w.id === wordId);
+  if (index !== -1) {
+    reviewStore.wordQueue.splice(index, 1, { ...reviewStore.wordQueue[index], definition });
+  }
+}
+
 // 监听路由变化
 watch(() => route.query, async () => {
   if (route.name === 'review') {
@@ -223,6 +248,24 @@ watch(() => route.query, async () => {
 // 生命周期
 onMounted(async () => {
   await initializeFromRoute()
+
+  // 建立WebSocket连接并监听单词更新
+  try {
+    await connect()
+    // 监听单词更新事件（用于更新队列，特别是编辑单词后的definition）
+    onWordUpdated(wordUpdatedCallback)
+  } catch (error) {
+    console.error('[ReviewPage] WebSocket connection failed:', error)
+  }
+})
+
+onUnmounted(() => {
+  // 清理WebSocket事件监听器
+  try {
+    off(WebSocketEvents.WORD_UPDATED, wordUpdatedCallback)
+  } catch (error) {
+    console.error('[ReviewPage] Error removing WebSocket listeners:', error)
+  }
 })
 </script>
 

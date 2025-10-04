@@ -163,8 +163,8 @@ export class WordsApi {
   /**
    * 停止复习单词
    */
-  static async stopReview(wordId: number): Promise<void> {
-    return patch<void>(`/api/word/${wordId}`, { stop_review: true })
+  static async stopReview(wordId: number, mode?: string): Promise<void> {
+    return patch<void>(`/api/word/${wordId}`, { stop_review: true, mode })
   }
 
   /**

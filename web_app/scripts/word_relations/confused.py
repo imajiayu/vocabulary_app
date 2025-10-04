@@ -10,6 +10,27 @@ from web_app.scripts.word_relations.utils import batch_insert_relations
 logger = logging.getLogger(__name__)
 
 
+def levenshtein_distance(s1: str, s2: str) -> int:
+    """计算编辑距离（Levenshtein距离）"""
+    if len(s1) < len(s2):
+        return levenshtein_distance(s2, s1)
+
+    if len(s2) == 0:
+        return len(s1)
+
+    previous_row = range(len(s2) + 1)
+    for i, c1 in enumerate(s1):
+        current_row = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
+            substitutions = previous_row[j] + (c1 != c2)
+            current_row.append(min(insertions, deletions, substitutions))
+        previous_row = current_row
+
+    return previous_row[-1]
+
+
 class ConfusedWordsGenerator:
     """易混淆词生成器 - 专注于形似义不同的词对"""
 
@@ -138,21 +159,30 @@ class ConfusedWordsGenerator:
         return max_similarity < 0.3
 
     def calculate_confusion_score(self, word1: str, word2: str) -> Tuple[bool, float]:
-        """计算易混淆分数"""
+        """计算易混淆分数（基于编辑距离和相似度）"""
         w1, w2 = word1.lower(), word2.lower()
 
-        # 长度差异太大，不太可能混淆
-        if abs(len(w1) - len(w2)) > 3:
+        # 限定长度必须完全相同
+        if len(w1) != len(w2):
+            return False, 0.0
+
+        # 计算编辑距离
+        edit_dist = levenshtein_distance(w1, w2)
+
+        # 编辑距离必须 <= 2（1-2个字符差异）
+        if edit_dist > 2:
             return False, 0.0
 
         # 计算字符串相似度
         similarity = SequenceMatcher(None, w1, w2).ratio()
 
-        # 基础相似度要求
-        if similarity < 0.6:
+        # 相似度要求：编辑距离越小，相似度要求可以稍低
+        min_similarity = 0.70 if edit_dist == 1 else 0.65
+
+        if similarity < min_similarity:
             return False, 0.0
 
-        # 检查是否是经典易混淆对
+        # 检查是否是经典易混淆对（直接通过）
         if (w1, w2) in self.classic_confused_pairs:
             return True, 0.95
 
@@ -160,29 +190,25 @@ class ConfusedWordsGenerator:
         if not self.are_semantically_different(w1, w2):
             return False, 0.0
 
+        # 根据编辑距离计算基础分数
+        # 编辑距离 1 = 0.9, 编辑距离 2 = 0.8
+        base_score = 1.0 - (edit_dist * 0.1)
+
         # 特殊模式加分
         bonus_score = 0
 
         # 1. 单字母差异（最容易混淆）
-        if self._is_single_letter_difference(w1, w2):
-            bonus_score += 0.2
+        if edit_dist == 1:
+            bonus_score += 0.05
 
-        # 2. 字母顺序差异
+        # 2. 字母顺序差异（如 angel/angle）
         if self._is_letter_order_difference(w1, w2):
-            bonus_score += 0.15
+            bonus_score += 0.05
 
-        # 3. 双字母差异（如 affect/effect）
-        if self._is_double_letter_difference(w1, w2):
-            bonus_score += 0.1
+        final_score = min(1.0, base_score + bonus_score)
 
-        # 4. 前缀后缀混淆
-        if self._has_prefix_suffix_confusion(w1, w2):
-            bonus_score += 0.1
-
-        final_score = min(1.0, similarity + bonus_score)
-
-        # 只保留高质量的易混淆词对
-        return final_score >= 0.75, final_score
+        # 返回结果
+        return True, final_score
 
     def _is_single_letter_difference(self, w1: str, w2: str) -> bool:
         """检查是否只有一个字母不同"""

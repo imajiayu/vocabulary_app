@@ -10,6 +10,7 @@ export interface WordResult {
   remembered: boolean
   elapsed_time?: number
   spelling_data?: SpellingMetrics
+  mode?: ReviewMode
 }
 
 export type ReviewMode = 'mode_review' | 'mode_lapse' | 'mode_spelling'
@@ -207,7 +208,9 @@ export const useReviewStore = defineStore('review', () => {
     }
 
     // 异步提交并更新最新word（直接使用返回的数据，包含related_words）
-    api.words.submitWordResult(wordId, result)
+    // 添加mode参数到result中
+    const resultWithMode = { ...result, mode: mode.value }
+    api.words.submitWordResult(wordId, resultWithMode)
       .then((updatedWord) => {
         // 替换queue中的word
         const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
@@ -239,7 +242,7 @@ export const useReviewStore = defineStore('review', () => {
       }
     }
 
-    api.words.stopReview(wordId)
+    api.words.stopReview(wordId, mode.value)
       .then(async () => {
         const updatedWord = await api.words.getWord(wordId)
         const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)

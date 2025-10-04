@@ -71,7 +71,7 @@
 
             <!-- 详情弹窗 -->
             <WordDetailModal :word="selectedWord" :is-open="isModalOpen" @close="handleCloseModal"
-                @word-deleted="handleWordDeleted" />
+                @request-close="() => isModalOpen = false" @word-deleted="handleWordDeleted" />
         </template>
     </div>
 </template>

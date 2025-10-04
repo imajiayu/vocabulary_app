@@ -5,4 +5,3 @@ MODE_LAPSE = "mode_lapse"
 MODE_SPELLING = "mode_spelling"
 
 SESSION_KEY_SNAPSHOT = "review_word_ids_snapshot"
-SESSION_KEY_MODE = "mode"

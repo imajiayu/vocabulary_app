@@ -25,7 +25,6 @@ from web_app.const import (
     MODE_REVIEW,
     MODE_LAPSE,
     MODE_SPELLING,
-    SESSION_KEY_MODE,
     SESSION_KEY_SNAPSHOT,
 )
 from web_app.services.word_update_service import (
@@ -432,7 +431,8 @@ def update_word(word_id):
         if code == 200:
             # 如果设置了stop_review，也需要更新进度索引
             if update_data.get("stop_review"):
-                mode = session.get(SESSION_KEY_MODE, MODE_REVIEW)
+                # 从请求数据中获取mode
+                mode = update_data.get("mode", MODE_REVIEW)
                 if mode == MODE_LAPSE:
                     try:
                         update_lapse_progress_after_word_update(word_id, updated_word)
@@ -507,7 +507,6 @@ def get_review_words():
             save_word_ids_snapshot(mode, all_ids, shuffle_enabled, limit)
 
             session[SESSION_KEY_SNAPSHOT] = all_ids  # 存到 session (保持兼容)
-            session[SESSION_KEY_MODE] = mode
         else:
             # 从 session 获取快照
             all_ids = session.get(SESSION_KEY_SNAPSHOT, [])
@@ -544,7 +543,8 @@ def update_review_word(word_id):
         elapsed_time = data.get("elapsed_time")
         is_spelling = bool(data.get("is_spelling", False))
         spelling_data = data.get("spelling_data")
-        mode = session.get(SESSION_KEY_MODE, MODE_REVIEW)
+        # 从请求中获取mode，默认为MODE_REVIEW
+        mode = data.get("mode", MODE_REVIEW)
 
         if not is_spelling:
             # 根据模式更新

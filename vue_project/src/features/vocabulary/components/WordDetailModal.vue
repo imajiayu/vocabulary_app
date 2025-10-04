@@ -21,7 +21,7 @@
     >
       <div class="modal-header">
         <h2 class="modal-title">单词详情</h2>
-        <button v-if="!isEditing" @click="$emit('close', word?.id ?? 0)" class="close-button">
+        <button v-if="!isEditing" @click="requestClose" class="close-button">
           <XIcon class="close-icon" />
         </button>
       </div>
@@ -30,12 +30,13 @@
         <div class="content-grid">
           <WordInfoSection v-model:edit-data="editData" :is-editing="isEditing" />
 
-          <WordActionsSidebar 
-            :word="editData" 
-            v-model:is-editing="isEditing" 
+          <WordActionsSidebar
+            :word="editData"
+            v-model:is-editing="isEditing"
             @cancel-edit="cancelEdit"
             @word-deleted="handleWordDeleted"
             @word-updated="handleWordUpdated"
+            @word-forgot="handleWordForgot"
           />
         </div>
       </div>
@@ -65,7 +66,14 @@ const isEditing = ref(false);
 const emit = defineEmits<{
   close: [finalWord: Word | undefined];
   wordDeleted: [wordId: number];
+  requestClose: [];
+  wordForgot: [wordId: number];
 }>();
+
+// 关闭按钮点击处理
+const requestClose = () => {
+  emit('requestClose')
+}
 
 // WebSocket连接
 const { onWordUpdated, off, isConnected } = useWordManagementWebSocket();
@@ -91,10 +99,14 @@ const wordUpdatedCallback = (data: { id: number; definition: any }) => {
 };
 
 // 监听 props.word 的变化，同步更新本地的 editData
-watch(() => props.word, (newWord) => {
-  editData.value = newWord;
-  // 清空之前的pending updates
-  pendingDefinitionUpdates.value.clear();
+watch(() => props.word, (newWord, oldWord) => {
+  // 只在Modal首次打开或切换到不同单词时更新editData
+  // 如果是同一个单词（id相同），不覆盖editData（避免丢失用户的编辑）
+  if (!oldWord || !newWord || oldWord.id !== newWord.id) {
+    editData.value = newWord;
+    // 清空之前的pending updates
+    pendingDefinitionUpdates.value.clear();
+  }
 }, { immediate: true, deep: true });
 
 // 阻止键盘事件传播到父组件
@@ -165,6 +177,11 @@ const handleWordDeleted = (wordId: number) => {
 const handleWordUpdated = (updatedWord: Word) => {
   // 将从子组件接收到的新值，赋值给本地的 editData
   editData.value = updatedWord;
+};
+
+const handleWordForgot = (wordId: number) => {
+  // 转发 wordForgot 事件给父组件
+  emit('wordForgot', wordId);
 };
 
 // 组件挂载时设置WebSocket监听

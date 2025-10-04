@@ -78,6 +78,7 @@ const emit = defineEmits<{
   wordDeleted: [wordId: number];
   'update:isEditing': [value: boolean];
   wordUpdated: [updatedWord: Word];
+  wordForgot: [wordId: number];
 }>();
 
 // Single state for forget button - gets disabled after one click
@@ -139,6 +140,8 @@ const resetProgress = async () => {
     });
     // 直接将更新后的数据发送给父组件
     emit('wordUpdated', updatedWord);
+    // 通知父组件单词被设为忘记
+    emit('wordForgot', updatedWord.id);
   } catch (error) {
     console.error('Error resetting progress:', error);
   }

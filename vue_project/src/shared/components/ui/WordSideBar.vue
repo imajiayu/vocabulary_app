@@ -17,15 +17,15 @@
     </div>
 
     <teleport to="body">
-      <div v-if="isModalOpen" class="modal-wrapper">
-        <div class="modal-overlay" @click="() => handleCloseModal(undefined)"></div>
-        <WordDetailModal
-          :word="selectedWord"
-          :is-open="isModalOpen"
-          @close="handleCloseModal"
-          @word-deleted="handleWordDeleted"
-        />
-      </div>
+      <WordDetailModal
+        :word="selectedWord"
+        :is-open="isModalOpen"
+        @close="handleCloseModal"
+        @request-close="closeModal"
+        @word-deleted="handleWordDeleted"
+        @word-forgot="handleWordForgot"
+      />
+      <div v-if="isModalOpen" class="modal-overlay" @click="closeModal"></div>
     </teleport>
   </div>
 </template>
@@ -43,34 +43,53 @@ interface Props {
 }
 
 const emit = defineEmits<{
-  sidebarWordChange: [wordId: number];
+  sidebarWordChange: [finalWord: Word];
   wordDeleted: [wordId: number];
+  wordForgot: [wordId: number];
 }>();
 
 const props = defineProps<Props>()
 
-const selectedWord = ref<Word | undefined>(undefined)
+const selectedWordId = ref<number | undefined>(undefined)
 const isModalOpen = ref(false)
 
+// 计算属性：始终从最新的 props.words 中获取当前选中的单词
+const selectedWord = computed(() => {
+  if (selectedWordId.value === undefined) return undefined
+  return props.words.find(w => w.id === selectedWordId.value)
+})
+
 const openModal = (word: Word) => {
-  selectedWord.value = word
+  selectedWordId.value = word.id
   isModalOpen.value = true
 }
 
-const handleCloseModal = (finalWord: Word | undefined) => {
+// 关闭modal的方法（由按钮/遮罩层调用）
+const closeModal = () => {
   isModalOpen.value = false
-  selectedWord.value = undefined
+}
+
+// WordDetailModal的@close事件处理（由watch触发）
+const handleCloseModal = (finalWord: Word | undefined) => {
+  selectedWordId.value = undefined
+  // 仿照VocabularyManagementPage的handleCloseModal方法
+  // 将完整的finalWord对象传递给父组件，而不是只传递id
   if (finalWord) {
-    emit('sidebarWordChange', finalWord.id)
+    emit('sidebarWordChange', finalWord)
   }
 }
 
 const handleWordDeleted = (wordId: number) => {
   // 关闭modal
   isModalOpen.value = false
-  selectedWord.value = undefined
+  selectedWordId.value = undefined
   // 通知父组件单词已被删除
   emit('wordDeleted', wordId)
+}
+
+const handleWordForgot = (wordId: number) => {
+  // 转发 wordForgot 事件给父组件
+  emit('wordForgot', wordId)
 }
 
 const wordHeight = 40
