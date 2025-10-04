@@ -109,10 +109,16 @@ export interface LearningSettings {
   maxPrepDays: number;
 }
 
+export interface AudioSettings {
+  accent: 'us' | 'uk';
+}
+
 export interface UserSettings {
   learning: LearningSettings;
+  audio: AudioSettings;
 }
 
 export interface SettingsApiResponse {
   learning: LearningSettings;
+  audio: AudioSettings;
 }

@@ -48,6 +48,7 @@ import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import RelatedWordsDisplay from '@/shared/components/ui/RelatedWordsDisplay.vue'
+import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 
 
 interface Props {
@@ -75,6 +76,9 @@ const startTime = ref(Date.now())
 const endTime = ref(Date.now());
 const isSubmitting = ref(false)
 
+// 使用全局音频设置
+const { audioAccent, loadAudioAccent } = useAudioAccent()
+
 const handleChoice = async (choice: string) => {
     if (isSubmitting.value) return
 
@@ -85,8 +89,8 @@ const handleChoice = async (choice: string) => {
     // 显示释义和后续按钮
     showDefinition.value = true
 
-    // 播放音频
-    await playWordAudio(props.word.word)
+    // 播放音频（使用设置中的口音）
+    await playWordAudio(props.word.word, audioAccent.value)
 }
 
 const handleCorrection = async () => {
@@ -158,10 +162,6 @@ const handleKeydown = async (event: KeyboardEvent) => {
                 event.preventDefault()
                 await handleChoice('stop')
                 break
-            case ' ':
-                event.preventDefault()
-                await playWordAudio(props.word.word)
-                break
         }
     } else {
         // 显示释义状态
@@ -175,10 +175,6 @@ const handleKeydown = async (event: KeyboardEvent) => {
                 event.preventDefault()
                 await handleNext()
                 break
-            case ' ':
-                event.preventDefault()
-                await playWordAudio(props.word.word)
-                break
         }
     }
 }
@@ -191,18 +187,21 @@ watch(() => props.word, (newWord) => {
         pendingChoice.value = null
         startTime.value = Date.now()
 
-        // 播放新单词音频
-        playWordAudio(newWord.word)
+        // 播放新单词音频（使用设置中的口音）
+        playWordAudio(newWord.word, audioAccent.value)
     }
 }, { immediate: true })
 
-onMounted(() => {
+onMounted(async () => {
+    // 加载音频设置
+    await loadAudioAccent()
+
     // 注册快捷键
     document.addEventListener('keydown', handleKeydown)
 
-    // 初始播放音频（作为fallback）
+    // 初始播放音频（作为fallback，使用设置中的口音）
     if (props.word) {
-        playWordAudio(props.word.word)
+        playWordAudio(props.word.word, audioAccent.value)
     }
 })
 

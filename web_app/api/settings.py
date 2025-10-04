@@ -63,6 +63,15 @@ def update_settings():
                 content,
             )
 
+        # 更新音频设置
+        audio = data.get("audio", {})
+        if "accent" in audio:
+            content = re.sub(
+                r'AUDIO_ACCENT\s*=\s*["\'](?:us|uk)["\']',
+                f'AUDIO_ACCENT = "{audio["accent"]}"',
+                content,
+            )
+
         # 写回config.py
         with open(config_path, "w", encoding="utf-8") as f:
             f.write(content)

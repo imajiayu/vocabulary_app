@@ -19,6 +19,9 @@ class UserConfig:
     DAILY_SPELL_LIMIT = 200  # 每日拼写上限
     MAX_PREP_DAYS = 45  # 最大准备天数
 
+    # 音频设置
+    AUDIO_ACCENT = "uk"  # 音频口音：us (美音) 或 uk (英音)
+
     @classmethod
     def to_dict(cls):
         """转换为字典用于API传输"""
@@ -27,6 +30,9 @@ class UserConfig:
                 "dailyReviewLimit": cls.DAILY_REVIEW_LIMIT,
                 "dailySpellLimit": cls.DAILY_SPELL_LIMIT,
                 "maxPrepDays": cls.MAX_PREP_DAYS,
+            },
+            "audio": {
+                "accent": cls.AUDIO_ACCENT,
             }
         }
 
@@ -40,3 +46,7 @@ class UserConfig:
             cls.DAILY_SPELL_LIMIT = learning["dailySpellLimit"]
         if "maxPrepDays" in learning:
             cls.MAX_PREP_DAYS = learning["maxPrepDays"]
+
+        audio = data.get("audio", {})
+        if "accent" in audio:
+            cls.AUDIO_ACCENT = audio["accent"]

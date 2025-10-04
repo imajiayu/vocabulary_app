@@ -29,6 +29,9 @@ export class SettingsApi {
         dailyReviewLimit: 300,
         dailySpellLimit: 200,
         maxPrepDays: 45
+      },
+      audio: {
+        accent: 'us'
       }
     }
     return this.updateSettings(defaults)

@@ -89,23 +89,52 @@
             </div>
           </div>
 
-          <!-- 保存按钮 -->
+          <!-- 学习设置保存按钮 -->
           <div class="settings-actions">
-            <button class="btn-save" @click="saveSettings" :disabled="isSaving">
-              <span v-if="!isSaving">💾 保存设置</span>
+            <button class="btn-save" @click="saveLearningSettings" :disabled="isSaving">
+              <span v-if="!isSaving">💾 保存学习设置</span>
               <span v-else>⏳ 保存中...</span>
             </button>
-            <button class="btn-reset" @click="resetSettings">
+            <button class="btn-reset" @click="resetLearningSettings">
               🔄 恢复默认
             </button>
           </div>
 
           <!-- 保存成功提示 -->
           <transition name="fade">
-            <div v-if="saveSuccess" class="save-success">
-              ✅ 设置已保存
+            <div v-if="saveSuccess === 'learning'" class="save-success">
+              ✅ 学习设置已保存
             </div>
           </transition>
+        </section>
+
+        <!-- 音频设置 -->
+        <section id="audio" class="settings-section">
+          <h1 class="section-title">音频设置</h1>
+          <p class="section-description">自定义单词发音口音</p>
+
+          <div class="settings-group">
+            <div class="group-header">
+              <h2 class="group-title">音频设置</h2>
+              <p class="group-description">选择单词发音口音</p>
+            </div>
+
+            <div class="audio-settings">
+              <div class="audio-accent-selector">
+                <label class="audio-label">单词发音</label>
+                <SwitchTab
+                  v-model="settings.audio.accent"
+                  :tabs="[
+                    { value: 'us', label: '美音', icon: '🇺🇸' },
+                    { value: 'uk', label: '英音', icon: '🇬🇧' }
+                  ]"
+                  :show-indicator="true"
+                  container-class="accent-switch"
+                />
+                <p class="audio-hint">该设置将应用于所有单词的自动播放</p>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>
@@ -113,8 +142,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 import WheelSelector from '@/shared/components/ui/WheelSelector.vue'
+import SwitchTab from '@/shared/components/ui/SwitchTab.vue'
 import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
 
@@ -135,42 +165,118 @@ const props = withDefaults(defineProps<Props>(), {
 
 const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
+  { id: 'audio', title: '音频设置', subtitle: '发音口音选择', icon: '🔊' },
 ]
 
 const activeSection = ref('learning')
 const isSaving = ref(false)
-const saveSuccess = ref(false)
+const saveSuccess = ref<string | false>(false) // 改为字符串类型，记录哪个设置区域保存成功
+const isScrollingProgrammatically = ref(false) // 标记是否正在程序化滚动
+let scrollTimeout: ReturnType<typeof setTimeout> | null = null
+let saveSuccessTimeout: ReturnType<typeof setTimeout> | null = null
 
 const settings = ref<UserSettings>({
   learning: {
     dailyReviewLimit: 300,
     dailySpellLimit: 200,
     maxPrepDays: 45
+  },
+  audio: {
+    accent: 'us'
   }
 })
 
 const scrollToSection = (sectionId: string) => {
   const element = document.getElementById(sectionId)
   if (element) {
+    console.log('[ScrollToSection] 开始滚动到:', sectionId)
+
+    // 清除之前的超时
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
+    }
+
+    // 立即标记开始程序化滚动（在设置 activeSection 之前）
+    isScrollingProgrammatically.value = true
+    console.log('[ScrollToSection] isScrollingProgrammatically 设置为 true')
+
+    // 立即更新 activeSection
+    activeSection.value = sectionId
+    console.log('[ScrollToSection] activeSection 已设置为:', sectionId)
+
+    // 触发滚动
     element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+    // 滚动结束后清除标记
+    scrollTimeout = setTimeout(() => {
+      isScrollingProgrammatically.value = false
+      console.log('[ScrollToSection] 程序化滚动标记已清除')
+      scrollTimeout = null
+    }, 2000) // 增加到 2 秒
   }
-  activeSection.value = sectionId
 }
 
 const handleScroll = (event: Event) => {
-  const target = event.target as HTMLElement
-  const scrollTop = target.scrollTop
+  console.log('[HandleScroll] 滚动事件触发, isScrollingProgrammatically =', isScrollingProgrammatically.value)
 
-  // 简单的滚动检测，更新活动section
+  // 如果正在程序化滚动，忽略滚动事件
+  if (isScrollingProgrammatically.value) {
+    console.log('[HandleScroll] 忽略滚动事件（程序化滚动中）')
+    return
+  }
+
+  const target = event.target as HTMLElement
+  const containerRect = target.getBoundingClientRect()
+
+  // 检查是否滚动到顶部
+  const isAtTop = target.scrollTop < 10 // 10px 的容差
+
+  if (isAtTop) {
+    // 滚动到顶部时，选中第一个 section
+    const firstSection = sections[0].id
+    if (activeSection.value !== firstSection) {
+      console.log('[HandleScroll] 滚动到顶部，切换到第一个 section:', firstSection)
+      activeSection.value = firstSection
+    }
+    return
+  }
+
+  // 检查是否滚动到底部
+  const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 10 // 10px 的容差
+
+  if (isAtBottom) {
+    // 滚动到底部时，选中最后一个 section
+    const lastSection = sections[sections.length - 1].id
+    if (activeSection.value !== lastSection) {
+      console.log('[HandleScroll] 滚动到底部，切换到最后一个 section:', lastSection)
+      activeSection.value = lastSection
+    }
+    return
+  }
+
+  // 找到当前视口中最靠近顶部的 section
+  let closestSection = null
+  let closestDistance = Infinity
+
   sections.forEach((section) => {
     const element = document.getElementById(section.id)
     if (element) {
       const rect = element.getBoundingClientRect()
-      if (rect.top <= 100 && rect.bottom >= 100) {
-        activeSection.value = section.id
+      // 计算 section 顶部距离容器顶部的距离
+      const distance = Math.abs(rect.top - containerRect.top)
+
+      // 如果 section 在视口内，且距离更近
+      if (rect.top <= containerRect.top + 150 && rect.bottom >= containerRect.top && distance < closestDistance) {
+        closestDistance = distance
+        closestSection = section.id
       }
     }
   })
+
+  if (closestSection && closestSection !== activeSection.value) {
+    console.log('[HandleScroll] 自动切换 activeSection 从', activeSection.value, '到', closestSection)
+    activeSection.value = closestSection
+  }
 }
 
 const loadSettings = async () => {
@@ -182,38 +288,99 @@ const loadSettings = async () => {
   }
 }
 
-const saveSettings = async () => {
+// 显示保存成功提示的辅助函数
+const showSaveSuccess = (section: string) => {
+  if (saveSuccessTimeout) {
+    clearTimeout(saveSuccessTimeout)
+  }
+  saveSuccess.value = section
+  saveSuccessTimeout = setTimeout(() => {
+    saveSuccess.value = false
+  }, 3000)
+}
+
+// 保存学习设置
+const saveLearningSettings = async () => {
   isSaving.value = true
   saveSuccess.value = false
   try {
-    await api.settings.updateSettings(settings.value)
-    saveSuccess.value = true
-    setTimeout(() => {
-      saveSuccess.value = false
-    }, 3000)
+    // 只更新学习设置部分
+    await api.settings.updateSettings({
+      learning: settings.value.learning
+    })
+    // 重新获取最新的所有设置
+    const latestSettings = await api.settings.getSettings()
+    settings.value = latestSettings
+    showSaveSuccess('learning')
   } catch (error) {
-    console.error('保存设置失败:', error)
+    console.error('保存学习设置失败:', error)
     alert('保存失败，请重试')
   } finally {
     isSaving.value = false
   }
 }
 
-const resetSettings = async () => {
-  if (confirm('确定要恢复默认设置吗？')) {
+// 重置学习设置
+const resetLearningSettings = async () => {
+  if (confirm('确定要恢复学习设置的默认值吗？')) {
     try {
-      const defaults = await api.settings.resetToDefaults()
-      settings.value = defaults
-      saveSuccess.value = true
-      setTimeout(() => {
-        saveSuccess.value = false
-      }, 3000)
+      settings.value.learning = {
+        dailyReviewLimit: 300,
+        dailySpellLimit: 200,
+        maxPrepDays: 45
+      }
+      await saveLearningSettings()
     } catch (error) {
-      console.error('恢复默认设置失败:', error)
+      console.error('恢复学习设置失败:', error)
       alert('恢复失败，请重试')
     }
   }
 }
+
+// 保存音频设置
+const saveAudioSettings = async () => {
+  isSaving.value = true
+  saveSuccess.value = false
+  try {
+    // 只更新音频设置部分
+    await api.settings.updateSettings({
+      audio: settings.value.audio
+    })
+    // 重新获取最新的所有设置
+    const latestSettings = await api.settings.getSettings()
+    settings.value = latestSettings
+    showSaveSuccess('audio')
+  } catch (error) {
+    console.error('保存音频设置失败:', error)
+    alert('保存失败，请重试')
+  } finally {
+    isSaving.value = false
+  }
+}
+
+// 重置音频设置
+const resetAudioSettings = async () => {
+  if (confirm('确定要恢复音频设置的默认值吗？')) {
+    try {
+      settings.value.audio = {
+        accent: 'us'
+      }
+      await saveAudioSettings()
+    } catch (error) {
+      console.error('恢复音频设置失败:', error)
+      alert('恢复失败，请重试')
+    }
+  }
+}
+
+// 监听音频设置变化，自动保存
+watch(() => settings.value.audio.accent, async (newAccent, oldAccent) => {
+  // 只在设置加载完成后才自动保存（避免初始加载时触发）
+  if (oldAccent && newAccent !== oldAccent) {
+    console.log('[AudioSettings] 音频口音变化，自动保存:', oldAccent, '->', newAccent)
+    await saveAudioSettings()
+  }
+})
 
 onMounted(() => {
   loadSettings()
@@ -224,7 +391,7 @@ onMounted(() => {
 .settings-page {
   display: flex;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh; /* 改用 min-height 允许内容超出视口高度 */
   position: relative;
 }
 
@@ -328,15 +495,20 @@ onMounted(() => {
 .settings-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* 改为 flex-start，让内容从顶部开始 */
+  align-items: flex-start; /* 确保内容对齐到顶部 */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 100vh; /* 使用 max-height 而不是 height */
+  box-sizing: border-box;
 }
 
 .content-inner {
   max-width: 900px;
   width: 100%;
-  padding: 48px 32px;
+  padding: 48px 32px; /* 恢复原来的内边距 */
+  padding-bottom: 120px; /* 增加底部内边距，确保最后一个元素可以滚动到视图中 */
 }
 
 .settings-section {
@@ -517,6 +689,35 @@ onMounted(() => {
   opacity: 0;
 }
 
+/* 音频设置样式 */
+.audio-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.audio-accent-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.audio-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.accent-switch {
+  max-width: 300px;
+}
+
+.audio-hint {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .settings-sidebar {
@@ -541,6 +742,10 @@ onMounted(() => {
 
   .setting-value {
     font-size: 28px;
+  }
+
+  .accent-switch {
+    max-width: 100%;
   }
 }
 </style>
