@@ -8,3 +8,35 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, "vocabulary.db")
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+
+
+# ========== 用户设置 ==========
+class UserConfig:
+    """用户自定义配置（持久化在此文件中）"""
+
+    # 学习设置
+    DAILY_REVIEW_LIMIT = 300  # 每日复习上限
+    DAILY_SPELL_LIMIT = 200  # 每日拼写上限
+    MAX_PREP_DAYS = 45  # 最大准备天数
+
+    @classmethod
+    def to_dict(cls):
+        """转换为字典用于API传输"""
+        return {
+            "learning": {
+                "dailyReviewLimit": cls.DAILY_REVIEW_LIMIT,
+                "dailySpellLimit": cls.DAILY_SPELL_LIMIT,
+                "maxPrepDays": cls.MAX_PREP_DAYS,
+            }
+        }
+
+    @classmethod
+    def update_from_dict(cls, data):
+        """从字典更新配置"""
+        learning = data.get("learning", {})
+        if "dailyReviewLimit" in learning:
+            cls.DAILY_REVIEW_LIMIT = learning["dailyReviewLimit"]
+        if "dailySpellLimit" in learning:
+            cls.DAILY_SPELL_LIMIT = learning["dailySpellLimit"]
+        if "maxPrepDays" in learning:
+            cls.MAX_PREP_DAYS = learning["maxPrepDays"]

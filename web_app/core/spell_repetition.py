@@ -430,7 +430,7 @@ def calculate_spell_strength_with_load_balancing(
             optimized_interval = find_optimal_spell_day(
                 basic_interval,
                 priority_weight,
-                ReviewLoadLimits.DAILY_SPELL_LIMIT,
+                ReviewLoadLimits.get_daily_spell_limit(),
                 spell_loads,
                 max_delay=max_delay,
             )
@@ -445,7 +445,7 @@ def calculate_spell_strength_with_load_balancing(
 
             optimized_interval = find_optimal_spell_day_for_strong_words(
                 basic_interval,
-                ReviewLoadLimits.DAILY_SPELL_LIMIT,
+                ReviewLoadLimits.get_daily_spell_limit(),
                 spell_loads,
             )
         except Exception as e:

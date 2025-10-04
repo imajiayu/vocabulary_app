@@ -1,0 +1,80 @@
+# -*- coding: utf-8 -*-
+"""
+用户设置API
+提供设置的读取和更新接口
+"""
+from flask import Blueprint, jsonify, request
+import os
+import re
+
+settings_bp = Blueprint("settings", __name__)
+
+
+@settings_bp.route("/settings", methods=["GET"])
+def get_settings():
+    """
+    获取用户设置
+    返回: {learning: {dailyReviewLimit, dailySpellLimit, maxPrepDays}}
+    """
+    from web_app.config import UserConfig
+
+    return jsonify(UserConfig.to_dict()), 200
+
+
+@settings_bp.route("/settings", methods=["POST"])
+def update_settings():
+    """
+    更新用户设置并持久化到config.py文件
+    请求体: {learning: {dailyReviewLimit?, dailySpellLimit?, maxPrepDays?}}
+    返回: 更新后的完整设置
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "请求体为空"}), 400
+
+        # 获取config.py文件路径
+        config_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "..", "config.py"
+        )
+
+        # 读取config.py内容
+        with open(config_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # 更新配置值
+        learning = data.get("learning", {})
+        if "dailyReviewLimit" in learning:
+            content = re.sub(
+                r"DAILY_REVIEW_LIMIT\s*=\s*\d+",
+                f"DAILY_REVIEW_LIMIT = {learning['dailyReviewLimit']}",
+                content,
+            )
+        if "dailySpellLimit" in learning:
+            content = re.sub(
+                r"DAILY_SPELL_LIMIT\s*=\s*\d+",
+                f"DAILY_SPELL_LIMIT = {learning['dailySpellLimit']}",
+                content,
+            )
+        if "maxPrepDays" in learning:
+            content = re.sub(
+                r"MAX_PREP_DAYS\s*=\s*\d+",
+                f"MAX_PREP_DAYS = {learning['maxPrepDays']}",
+                content,
+            )
+
+        # 写回config.py
+        with open(config_path, "w", encoding="utf-8") as f:
+            f.write(content)
+
+        # 重新加载config模块（更新内存中的值）
+        import importlib
+        import web_app.config
+
+        importlib.reload(web_app.config)
+        from web_app.config import UserConfig
+
+        return jsonify(UserConfig.to_dict()), 200
+
+    except Exception as e:
+        return jsonify({"error": f"更新失败: {str(e)}"}), 400

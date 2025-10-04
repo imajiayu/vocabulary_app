@@ -52,6 +52,12 @@
           :select-question="selectedQuestion"
           @sidebar-toggle="handleSidebarToggle"
         />
+        <SettingsPage
+          v-else-if="activeTab === 'settings'"
+          key="settings"
+          class="settings-page"
+          :nav-expanded="navExpanded"
+        />
       </transition>
     </main>
   </div>
@@ -61,6 +67,7 @@
 import { ref, computed, watch, onMounted, nextTick, onUnmounted } from 'vue'
 import WordIndex from '@/features/vocabulary/components/WordIndex.vue'
 import SpeakingIndex from '@/pages/SpeakingPage.vue'
+import SettingsPage from '@/pages/SettingsPage.vue'
 import SpeakingSidebar from '@/features/speaking/components/SpeakingSidebar.vue'
 import MainNavigation from '@/shared/components/layout/MainNavigation.vue'
 import SwitchTab from '@/shared/components/ui/SwitchTab.vue'
@@ -76,7 +83,8 @@ const isMobile = ref(false)
 // Tab 数据
 const tabs = [
   { value: 'words', label: '单词', icon: '📚' },
-  { value: 'speaking', label: '口语', icon: '🎤' }
+  { value: 'speaking', label: '口语', icon: '🎤' },
+  { value: 'settings', label: '设置', icon: '⚙️' }
 ]
 
 // localStorage键名

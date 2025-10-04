@@ -4,6 +4,7 @@ from web_app.database.vocabulary_dao import (
     db_get_word_elapse_info,
     get_daily_review_loads_by_source,
 )
+from web_app.config import UserConfig
 import math
 
 
@@ -189,11 +190,22 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
 
 
 class ReviewLoadLimits:
-    """每日复习负荷限制配置"""
+    """每日复习负荷限制配置 - 从config读取用户设置"""
 
-    DAILY_REVIEW_LIMIT = 300  # 每个source每日复习限制
-    DAILY_SPELL_LIMIT = 200  # 每个source每日拼写限制
-    MAX_PREP_DAYS = 45  # 最大备考天数
+    @staticmethod
+    def get_daily_review_limit():
+        """获取每日复习限制"""
+        return UserConfig.DAILY_REVIEW_LIMIT
+
+    @staticmethod
+    def get_daily_spell_limit():
+        """获取每日拼写限制"""
+        return UserConfig.DAILY_SPELL_LIMIT
+
+    @staticmethod
+    def get_max_prep_days():
+        """获取最大备考天数"""
+        return UserConfig.MAX_PREP_DAYS
 
 
 def calculate_priority_weight(ease_factor, score):
@@ -337,7 +349,7 @@ def calculate_srs_parameters_with_load_balancing(
                 interval_new,
                 ease_factor_new,
                 score,
-                ReviewLoadLimits.DAILY_REVIEW_LIMIT,
+                ReviewLoadLimits.get_daily_review_limit(),
                 daily_loads,
             )
         except Exception as e:
@@ -354,7 +366,7 @@ def calculate_srs_parameters_with_load_balancing(
             # 应用向后搜索策略
             interval_new = find_optimal_review_day_for_strong_words(
                 interval_new,
-                ReviewLoadLimits.DAILY_REVIEW_LIMIT,
+                ReviewLoadLimits.get_daily_review_limit(),
                 daily_loads,
             )
         except Exception as e:

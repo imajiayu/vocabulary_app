@@ -5,6 +5,7 @@ from flask_cors import CORS
 
 from web_app.api.speaking import speaking_api_bp
 from web_app.api.vocabulary import api_bp
+from web_app.api.settings import settings_bp
 from web_app.extensions import socketio
 
 # 导入websocket服务以注册事件处理器
@@ -17,6 +18,7 @@ app.secret_key = "your-secret-key"
 
 app.register_blueprint(api_bp)
 app.register_blueprint(speaking_api_bp)
+app.register_blueprint(settings_bp, url_prefix="/api")
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 

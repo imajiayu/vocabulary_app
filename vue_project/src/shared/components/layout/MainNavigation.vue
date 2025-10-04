@@ -29,6 +29,18 @@
         </div>
       </button>
     </div>
+
+    <!-- 底部设置按钮 -->
+    <div class="nav-footer">
+      <button :class="['nav-tab', { active: activeTab === 'settings' }]" @click="switchTab('settings')">
+        <span class="tab-icon">⚙️</span>
+        <div class="label-container">
+          <transition name="label-fade">
+            <span v-show="expanded" class="tab-label">设置</span>
+          </transition>
+        </div>
+      </button>
+    </div>
   </nav>
 </template>
 
@@ -165,6 +177,15 @@ const switchTab = (tabId: string) => {
   flex-direction: column;
   gap: 8px;
   padding: 20px 0;
+}
+
+.nav-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: auto;
 }
 
 .nav-tab {

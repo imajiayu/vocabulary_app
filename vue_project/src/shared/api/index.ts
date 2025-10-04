@@ -11,6 +11,7 @@ import { WordsApi } from './words'
 import { SpeakingApi } from './speaking'
 import { StatsApi } from './stats'
 import { ConfigApi } from './config'
+import { SettingsApi } from './settings'
 import { get } from './client'
 import type { Word } from '@/shared/types'
 
@@ -50,6 +51,8 @@ export type {
   BackupData
 } from './config'
 
+export { SettingsApi } from './settings'
+
 // 进度恢复API
 export class ProgressApi {
   /**
@@ -77,6 +80,7 @@ export const api = {
   speaking: SpeakingApi,
   stats: StatsApi,
   config: ConfigApi,
+  settings: SettingsApi,
   progress: ProgressApi
 } as const
 

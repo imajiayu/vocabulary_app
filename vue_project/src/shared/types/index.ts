@@ -100,3 +100,19 @@ export interface SourceCounts {
     GRE: SourceStats;
   };
 }
+
+// ========== 用户设置相关类型 ==========
+
+export interface LearningSettings {
+  dailyReviewLimit: number;
+  dailySpellLimit: number;
+  maxPrepDays: number;
+}
+
+export interface UserSettings {
+  learning: LearningSettings;
+}
+
+export interface SettingsApiResponse {
+  learning: LearningSettings;
+}
