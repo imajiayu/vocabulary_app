@@ -111,6 +111,8 @@ export interface LearningSettings {
 
 export interface AudioSettings {
   accent: 'us' | 'uk';
+  autoPlayOnWordChange: boolean;  // 新单词出现时自动播放
+  autoPlayAfterAnswer: boolean;    // 选择答案后自动播放
 }
 
 // 快捷键配置

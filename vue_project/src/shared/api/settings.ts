@@ -31,7 +31,25 @@ export class SettingsApi {
         maxPrepDays: 45
       },
       audio: {
-        accent: 'us'
+        accent: 'us',
+        autoPlayOnWordChange: true,
+        autoPlayAfterAnswer: true
+      },
+      hotkeys: {
+        reviewInitial: {
+          remembered: 'ArrowLeft',
+          notRemembered: 'ArrowRight',
+          stopReview: 'ArrowDown'
+        },
+        reviewAfter: {
+          wrong: 'ArrowLeft',
+          next: 'ArrowRight'
+        },
+        spelling: {
+          playAudio: 'ArrowLeft',
+          forgot: 'ArrowRight',
+          next: 'Enter'
+        }
       }
     }
     return this.updateSettings(defaults)

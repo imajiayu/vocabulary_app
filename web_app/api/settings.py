@@ -71,6 +71,18 @@ def update_settings():
                 f'AUDIO_ACCENT = "{audio["accent"]}"',
                 content,
             )
+        if "autoPlayOnWordChange" in audio:
+            content = re.sub(
+                r'AUDIO_AUTO_PLAY_ON_WORD_CHANGE\s*=\s*(?:True|False)',
+                f'AUDIO_AUTO_PLAY_ON_WORD_CHANGE = {audio["autoPlayOnWordChange"]}',
+                content,
+            )
+        if "autoPlayAfterAnswer" in audio:
+            content = re.sub(
+                r'AUDIO_AUTO_PLAY_AFTER_ANSWER\s*=\s*(?:True|False)',
+                f'AUDIO_AUTO_PLAY_AFTER_ANSWER = {audio["autoPlayAfterAnswer"]}',
+                content,
+            )
 
         # 更新快捷键设置
         hotkeys = data.get("hotkeys", {})

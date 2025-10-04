@@ -76,9 +76,11 @@ const pendingChoice = ref<string | null>(null)
 const startTime = ref(Date.now())
 const endTime = ref(Date.now());
 const isSubmitting = ref(false)
+const isHandlingKeypress = ref(false) // 防止按键重复触发
+const pressedKeys = ref(new Set<string>()) // 记录当前按下的键
 
 // 使用全局音频设置
-const { audioAccent, loadAudioAccent } = useAudioAccent()
+const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
 
 // 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
@@ -93,8 +95,10 @@ const handleChoice = async (choice: string) => {
     // 显示释义和后续按钮
     showDefinition.value = true
 
-    // 播放音频（使用设置中的口音）
-    await playWordAudio(props.word.word, audioAccent.value)
+    // 播放音频（根据设置决定是否自动播放）
+    if (autoPlayAfterAnswer.value) {
+        await playWordAudio(props.word.word, audioAccent.value)
+    }
 }
 
 const handleCorrection = async () => {
@@ -149,48 +153,92 @@ const submitResult = async (remembered: boolean, forceResult: boolean = false) =
 
 // 快捷键处理
 const handleKeydown = async (event: KeyboardEvent) => {
-    if (isSubmitting.value) return
+    // 如果这个键已经被按下（按住不放导致的重复触发），忽略
+    if (pressedKeys.value.has(event.key)) {
+        event.preventDefault()
+        return
+    }
+
+    // 防止重复触发：如果正在处理按键或正在提交，直接返回
+    if (isHandlingKeypress.value || isSubmitting.value) {
+        event.preventDefault()
+        return
+    }
+
+    let shouldHandle = false
 
     if (!showDefinition.value) {
         // 初始选择状态 - 使用自定义快捷键
         const initialKeys = hotkeys.value.reviewInitial
-
-        if (event.key === initialKeys.remembered) {
-            event.preventDefault()
-            await handleChoice('yes')
-        } else if (event.key === initialKeys.notRemembered) {
-            event.preventDefault()
-            await handleChoice('no')
-        } else if (event.key === initialKeys.stopReview) {
-            event.preventDefault()
-            await handleChoice('stop')
+        if (event.key === initialKeys.remembered ||
+            event.key === initialKeys.notRemembered ||
+            event.key === initialKeys.stopReview) {
+            shouldHandle = true
         }
     } else {
         // 显示释义状态 - 使用自定义快捷键
         const afterKeys = hotkeys.value.reviewAfter
-
-        if (event.key === afterKeys.wrong) {
-            event.preventDefault()
-            await handleCorrection()
-        } else if (event.key === afterKeys.next) {
-            event.preventDefault()
-            await handleNext()
+        if (event.key === afterKeys.wrong || event.key === afterKeys.next) {
+            shouldHandle = true
         }
+    }
+
+    if (!shouldHandle) {
+        return // 不是我们关心的快捷键，不处理
+    }
+
+    // 标记这个键为已按下（在处理之前标记，防止重复）
+    event.preventDefault()
+    pressedKeys.value.add(event.key)
+    isHandlingKeypress.value = true
+
+    try {
+        if (!showDefinition.value) {
+            // 初始选择状态
+            const initialKeys = hotkeys.value.reviewInitial
+            if (event.key === initialKeys.remembered) {
+                await handleChoice('yes')
+            } else if (event.key === initialKeys.notRemembered) {
+                await handleChoice('no')
+            } else if (event.key === initialKeys.stopReview) {
+                await handleChoice('stop')
+            }
+        } else {
+            // 显示释义状态
+            const afterKeys = hotkeys.value.reviewAfter
+            if (event.key === afterKeys.wrong) {
+                await handleCorrection()
+            } else if (event.key === afterKeys.next) {
+                await handleNext()
+            }
+        }
+    } finally {
+        isHandlingKeypress.value = false
     }
 }
 
+// 处理按键释放
+const handleKeyup = (event: KeyboardEvent) => {
+    // 移除已释放的键
+    pressedKeys.value.delete(event.key)
+}
+
 // 监听单词变化，自动播放新单词的音频
-watch(() => props.word, (newWord) => {
-    if (newWord) {
+watch(() => props.word, (newWord, oldWord) => {
+    if (newWord && newWord !== oldWord) {
         // 重置状态
         showDefinition.value = false
         pendingChoice.value = null
         startTime.value = Date.now()
+        isHandlingKeypress.value = false // 重置按键处理标志
+        pressedKeys.value.clear() // 清空按键记录
 
-        // 播放新单词音频（使用设置中的口音）
-        playWordAudio(newWord.word, audioAccent.value)
+        // 播放新单词音频（根据设置决定是否自动播放）
+        if (autoPlayOnWordChange.value) {
+            playWordAudio(newWord.word, audioAccent.value)
+        }
     }
-}, { immediate: true })
+})
 
 onMounted(async () => {
     // 加载音频设置和快捷键设置
@@ -199,17 +247,19 @@ onMounted(async () => {
         loadHotkeys()
     ])
 
-    // 注册快捷键
+    // 注册快捷键（包括 keydown 和 keyup）
     document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('keyup', handleKeyup)
 
-    // 初始播放音频（作为fallback，使用设置中的口音）
-    if (props.word) {
+    // 初始播放音频（作为fallback，根据设置决定是否自动播放）
+    if (props.word && autoPlayOnWordChange.value) {
         playWordAudio(props.word.word, audioAccent.value)
     }
 })
 
 onUnmounted(() => {
     document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('keyup', handleKeyup)
 })
 </script>
 

@@ -1,6 +1,6 @@
 /**
- * 音频口音全局状态管理
- * 用于在应用中共享音频口音设置
+ * 音频设置全局状态管理
+ * 用于在应用中共享音频设置（口音、自动播放）
  */
 import { ref, watch } from 'vue'
 import { api } from '@/shared/api'
@@ -9,6 +9,8 @@ type AudioAccent = 'us' | 'uk'
 
 // 全局状态
 const audioAccent = ref<AudioAccent>('us')
+const autoPlayOnWordChange = ref<boolean>(true)
+const autoPlayAfterAnswer = ref<boolean>(true)
 const isLoaded = ref(false)
 
 export function useAudioAccent() {
@@ -18,12 +20,16 @@ export function useAudioAccent() {
   const loadAudioAccent = async () => {
     try {
       const settings = await api.settings.getSettings()
-      audioAccent.value = settings.audio.accent
+      audioAccent.value = settings.audio.accent ?? 'us'
+      autoPlayOnWordChange.value = settings.audio.autoPlayOnWordChange ?? true
+      autoPlayAfterAnswer.value = settings.audio.autoPlayAfterAnswer ?? true
       isLoaded.value = true
     } catch (error) {
       console.error('加载音频设置失败:', error)
       // 使用默认值
       audioAccent.value = 'us'
+      autoPlayOnWordChange.value = true
+      autoPlayAfterAnswer.value = true
       isLoaded.value = true
     }
   }
@@ -50,6 +56,8 @@ export function useAudioAccent() {
 
   return {
     audioAccent,
+    autoPlayOnWordChange,
+    autoPlayAfterAnswer,
     isLoaded,
     loadAudioAccent,
     updateAudioAccent,

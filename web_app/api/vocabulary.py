@@ -556,7 +556,6 @@ def update_review_word(word_id):
                 update_word_info_lapse(word_id, remembered)
         else:
             if mode == MODE_SPELLING:
-                print(spelling_data)
                 update_word_info_spelling(word_id, remembered, spelling_data)
 
         updated_word = db_get_word_review_info(word_id)

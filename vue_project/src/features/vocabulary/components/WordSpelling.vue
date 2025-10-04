@@ -150,6 +150,7 @@ const inputRef = ref<HTMLInputElement>()
 const userInput = ref('')
 const forgotClicked = ref(false)
 const isSubmitting = ref(false)
+const pressedKeys = ref(new Set<string>()) // 记录当前按下的键
 
 // 详细输入数据记录
 const startTime = ref<number>(0)
@@ -230,15 +231,41 @@ const handleKeydown = (event: KeyboardEvent) => {
   // 获取自定义快捷键
   const spellingKeys = hotkeys.value.spelling
 
+  // 检查是否是快捷键（不是普通输入）
+  const isHotkey = event.key === spellingKeys.playAudio ||
+                   event.key === spellingKeys.forgot ||
+                   event.key === spellingKeys.next
+
+  // 如果是快捷键，检查是否已按下（防止重复触发）
+  if (isHotkey && pressedKeys.value.has(event.key)) {
+    event.preventDefault()
+    return
+  }
+
   // 处理自定义的下一个快捷键（不记录事件）
   if (event.key === spellingKeys.next) {
     if (canProceed.value) {
       event.preventDefault()
+      pressedKeys.value.add(event.key) // 标记为已按下
       handleNext()
     }
     return // 直接返回，不记录此快捷键事件
   }
 
+  // 使用自定义快捷键
+  if (event.key === spellingKeys.playAudio) {
+    event.preventDefault()
+    pressedKeys.value.add(event.key) // 标记为已按下
+    handlePlayAudio()
+    return // 不记录快捷键事件
+  } else if (event.key === spellingKeys.forgot) {
+    event.preventDefault()
+    pressedKeys.value.add(event.key) // 标记为已按下
+    handleForgot()
+    return // 不记录快捷键事件
+  }
+
+  // 下面是普通输入键的处理（非快捷键）
   recordKeyEvent(event)
 
   // 统计普通按键
@@ -252,15 +279,12 @@ const handleKeydown = (event: KeyboardEvent) => {
   } else {
     finishBackspaceSequence() // 非退格键时结束退格序列
   }
+}
 
-  // 使用自定义快捷键
-  if (event.key === spellingKeys.playAudio) {
-    event.preventDefault()
-    handlePlayAudio()
-  } else if (event.key === spellingKeys.forgot) {
-    event.preventDefault()
-    handleForgot()
-  }
+// 处理按键释放
+const handleKeyup = (event: KeyboardEvent) => {
+  // 移除已释放的键
+  pressedKeys.value.delete(event.key)
 }
 
 // 阻止移动端输入框聚焦时弹出键盘
@@ -409,6 +433,9 @@ onMounted(async () => {
   // 加载快捷键设置
   await loadHotkeys()
 
+  // 注册按键监听
+  document.addEventListener('keyup', handleKeyup)
+
   resetState()
   await nextTick()
   playWordAudio(props.word.word)
@@ -419,6 +446,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
+  document.removeEventListener('keyup', handleKeyup)
 })
 </script>
 

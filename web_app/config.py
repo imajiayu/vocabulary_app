@@ -20,11 +20,13 @@ class UserConfig:
     MAX_PREP_DAYS = 45  # 最大准备天数
 
     # 音频设置
-    AUDIO_ACCENT = "uk"  # 音频口音：us (美音) 或 uk (英音)
+    AUDIO_ACCENT = "us"  # 音频口音：us (美音) 或 uk (英音)
+    AUDIO_AUTO_PLAY_ON_WORD_CHANGE = True  # 新单词出现时自动播放
+    AUDIO_AUTO_PLAY_AFTER_ANSWER = True  # 选择答案后自动播放
 
     # 快捷键设置
     # 复习页面 - 初始状态
-    HOTKEY_REVIEW_INITIAL_REMEMBERED = "ArrowUp"
+    HOTKEY_REVIEW_INITIAL_REMEMBERED = "ArrowLeft"
     HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED = "ArrowRight"
     HOTKEY_REVIEW_INITIAL_STOP_REVIEW = "ArrowDown"
     # 复习页面 - 显示释义后
@@ -46,6 +48,8 @@ class UserConfig:
             },
             "audio": {
                 "accent": cls.AUDIO_ACCENT,
+                "autoPlayOnWordChange": cls.AUDIO_AUTO_PLAY_ON_WORD_CHANGE,
+                "autoPlayAfterAnswer": cls.AUDIO_AUTO_PLAY_AFTER_ANSWER,
             },
             "hotkeys": {
                 "reviewInitial": {
@@ -79,6 +83,10 @@ class UserConfig:
         audio = data.get("audio", {})
         if "accent" in audio:
             cls.AUDIO_ACCENT = audio["accent"]
+        if "autoPlayOnWordChange" in audio:
+            cls.AUDIO_AUTO_PLAY_ON_WORD_CHANGE = audio["autoPlayOnWordChange"]
+        if "autoPlayAfterAnswer" in audio:
+            cls.AUDIO_AUTO_PLAY_AFTER_ANSWER = audio["autoPlayAfterAnswer"]
 
         hotkeys = data.get("hotkeys", {})
         review_initial = hotkeys.get("reviewInitial", {})
