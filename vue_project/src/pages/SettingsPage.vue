@@ -50,7 +50,7 @@
                     :max="1000"
                   />
                 </div>
-                <p class="setting-hint">建议根据备考时间调整，50-500 适合大多数学习者</p>
+                <p class="setting-hint">建议根据备考时间调整<br></br>50-500 适合大多数学习者</p>
               </div>
 
               <!-- 每日拼写上限 -->
@@ -84,7 +84,7 @@
                     :max="180"
                   />
                 </div>
-                <p class="setting-hint">系统将优化复习间隔，确保考前完成</p>
+                <p class="setting-hint">系统将优化复习间隔<br></br>确保考前完成</p>
               </div>
             </div>
           </div>

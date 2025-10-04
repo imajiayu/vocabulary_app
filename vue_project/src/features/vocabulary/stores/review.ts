@@ -181,7 +181,10 @@ export const useReviewStore = defineStore('review', () => {
       const word = wordQueue.value[currentWordIndex]
 
       if (word && word.id === wordId) {
-        word.lapse = result.remembered ? word.lapse - 1 : word.lapse + 1
+        // 更新 lapse，记住时减1，没记住时加1，最大值为5（与后端一致）
+        word.lapse = result.remembered
+          ? Math.max(0, word.lapse - 1)  // 记住时减1，最小为0
+          : Math.min(word.lapse + 1, 5)  // 没记住时加1，最大为5
 
         if (word.lapse === 0) {
           wordQueue.value.splice(currentWordIndex, 1)

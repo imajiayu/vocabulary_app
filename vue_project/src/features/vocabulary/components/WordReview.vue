@@ -90,12 +90,14 @@ const handleChoice = async (choice: string) => {
 }
 
 const handleCorrection = async () => {
-    await submitResult(false)
+    // "记错了"按钮应该覆盖之前的选择，强制设置为"没记住"
+    // 即使之前选了"不再复习"，也要改为提交学习结果
+    await submitResult(false, true) // 第二个参数表示强制提交结果
 }
 
 const handleNext = async () => {
     const unRemembered = pendingChoice.value === 'no'
-    await submitResult(!unRemembered)
+    await submitResult(!unRemembered, false)
 }
 
 const handleSkip = async () => {
@@ -107,19 +109,22 @@ const handleSkip = async () => {
     }
 }
 
-const submitResult = async (remembered: boolean) => {
+const submitResult = async (remembered: boolean, forceResult: boolean = false) => {
     if (isSubmitting.value) return
 
     isSubmitting.value = true
     try {
         const elapsedTime = Math.min(10.0, (endTime.value - startTime.value) / 1000)
-        if (pendingChoice.value === 'stop') {
-            await handleSkip()
-        } else {
+
+        // 如果强制提交结果（来自"记错了"按钮），或者不是"不再复习"，则提交学习结果
+        if (forceResult || pendingChoice.value !== 'stop') {
             await props.onResult({
                 remembered,
                 elapsedTime
             })
+        } else {
+            // 只有在非强制且选择了"不再复习"时才跳过
+            await handleSkip()
         }
 
         // 👉 提交成功后，重置状态

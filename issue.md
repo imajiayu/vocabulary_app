@@ -4,6 +4,8 @@
 SpeakingSidebar拖拽手柄出现消失动画
 # 共同问题
 wheelselector步长
+设置里切换英美读音
+单词关系可视化
 
 
 

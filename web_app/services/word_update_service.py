@@ -92,7 +92,7 @@ def update_word_info_lapse(word_id, remembered):
     lapse = word_info.get("lapse", 0)
 
     if not remembered:
-        lapse = min(lapse + 1, 10)
+        lapse = min(lapse + 1, 5)
     else:
         lapse = max(0, lapse - 1)
 
