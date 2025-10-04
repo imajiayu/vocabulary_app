@@ -66,7 +66,7 @@ if __name__ == "__main__":
     ensure_nltk_data()
     generate_relations(
         [
-            RelationType.root,
+            RelationType.confused,
         ]
     )
-    export_relations_to_file(relation_type=RelationType.root)
+    export_relations_to_file(relation_type=RelationType.confused)

@@ -28,11 +28,16 @@
           <PlusIcon v-else class="plus-icon" />
           {{ isLoading ? '添加中...' : '添加' }}
         </button>
-        <button @click="triggerFileInput" :disabled="isBatchLoading" class="batch-button">
-          <div v-if="isBatchLoading" class="loading-spinner"></div>
-          <UploadIcon v-else class="upload-icon" />
-          {{ isBatchLoading ? '导入中...' : '批量导入' }}
-        </button>
+        <div class="batch-button-wrapper">
+          <button @click="triggerFileInput" :disabled="isBatchLoading" class="batch-button">
+            <div v-if="isBatchLoading" class="loading-spinner"></div>
+            <UploadIcon v-else class="upload-icon" />
+            {{ isBatchLoading ? '导入中...' : '批量导入' }}
+          </button>
+          <div class="batch-tooltip">
+            文件格式为txt<br>每行一个单词
+          </div>
+        </div>
         <input
           ref="fileInputRef"
           type="file"
@@ -532,6 +537,12 @@ onUnmounted(() => {
   cursor: not-allowed;
 }
 
+.batch-button-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .batch-button {
   background-color: #8b5cf6;
   color: white;
@@ -560,6 +571,39 @@ onUnmounted(() => {
 .batch-button:disabled {
   background-color: #d1d5db;
   cursor: not-allowed;
+}
+
+.batch-tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1f2937;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.batch-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 0.25rem solid transparent;
+  border-top-color: #1f2937;
+}
+
+.batch-button-wrapper:hover .batch-tooltip {
+  opacity: 1;
 }
 
 .upload-icon {
@@ -832,11 +876,16 @@ onUnmounted(() => {
     justify-content: center;
   }
 
+  .batch-button-wrapper {
+    width: 100%;
+  }
+
   .batch-button {
     height: 48px;
     padding: 0.875rem 1.25rem;
     min-width: 130px;
     justify-content: center;
+    width: 100%;
   }
 
   .lookup-input-group {
@@ -898,11 +947,16 @@ onUnmounted(() => {
     font-size: 0.875rem;
   }
 
+  .batch-button-wrapper {
+    width: 100%;
+  }
+
   .batch-button {
     height: 50px;
     padding: 1rem;
     font-size: 0.875rem;
     min-width: 120px;
+    width: 100%;
   }
 
   .lookup-input-group {
@@ -966,11 +1020,16 @@ onUnmounted(() => {
     font-size: 0.8125rem;
   }
 
+  .batch-button-wrapper {
+    width: 100%;
+  }
+
   .batch-button {
     height: 36px;
     padding: 0.5rem 1rem;
     font-size: 0.8125rem;
     min-width: 100px;
+    width: 100%;
   }
 
   .lookup-input-group {
