@@ -1,7 +1,7 @@
 <template>
-  <div class="settings-page" :class="{ 'lock-position': lockPosition }">
+  <div class="settings-page" :class="{ 'nav-expanded': navExpanded }">
     <!-- 侧边栏 -->
-    <aside class="settings-sidebar" :class="{ 'nav-expanded': navExpanded }">
+    <aside class="settings-sidebar">
       <div class="sidebar-header">
         <h2>设置</h2>
       </div>
@@ -22,7 +22,7 @@
     </aside>
 
     <!-- 主内容区 -->
-    <main class="settings-content" :class="{ 'nav-expanded': navExpanded }" @scroll="handleScroll">
+    <main class="settings-content" @scroll="handleScroll">
       <div class="content-inner">
         <!-- 学习设置 -->
         <section id="learning" class="settings-section">
@@ -133,9 +133,6 @@ const props = withDefaults(defineProps<Props>(), {
   navExpanded: false
 })
 
-// 控制是否锁定位置（防止侧边栏跳动）
-const lockPosition = ref(false)
-
 const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
 ]
@@ -220,10 +217,6 @@ const resetSettings = async () => {
 
 onMounted(() => {
   loadSettings()
-  // 等待进入动画完成后锁定位置
-  setTimeout(() => {
-    lockPosition.value = true
-  }, 350) // fade-slide transition 是 300ms，加 50ms 缓冲
 })
 </script>
 
@@ -235,27 +228,18 @@ onMounted(() => {
   position: relative;
 }
 
-/* 进入动画完成后锁定位置，防止侧边栏跳动 */
-.settings-page.lock-position {
-  transform: none !important;
-}
-
 /* ===== 侧边栏 ===== */
 .settings-sidebar {
-  position: fixed;
-  left: 48px;
+  position: sticky;
+  left: 0;
   top: 0;
   width: 280px;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  z-index: 10;
+  flex-shrink: 0;
   border-right: 1px solid rgba(0, 0, 0, 0.08);
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.settings-sidebar.nav-expanded {
-  left: 280px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-header {
@@ -342,19 +326,11 @@ onMounted(() => {
 
 /* ===== 主内容区 ===== */
 .settings-content {
-  position: fixed;
-  left: 328px; /* 48px (MainNavigation) + 280px (sidebar) */
-  right: 0;
-  top: 0;
-  bottom: 0;
+  flex: 1;
   overflow-y: auto;
   display: flex;
   justify-content: center;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.settings-content.nav-expanded {
-  left: 560px; /* 280px (MainNavigation expanded) + 280px (sidebar) */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .content-inner {
@@ -544,12 +520,7 @@ onMounted(() => {
 /* 响应式设计 */
 @media (max-width: 768px) {
   .settings-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
     width: 260px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   }
 
   .content-inner {

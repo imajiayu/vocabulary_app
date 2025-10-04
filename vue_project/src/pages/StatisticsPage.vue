@@ -52,7 +52,12 @@
 
         <!-- 大图表 - 占用2x2空间 -->
         <section class="chart-card" data-size="large">
-          <h2>EF 阶段占比</h2>
+          <h2 class="chart-title">
+            EF 阶段占比
+            <button @click="openEFSettings" class="settings-btn" title="配置区间">
+              ⚙️
+            </button>
+          </h2>
           <PieChart :labels="efPie.labels" :values="efPie.values"
             :colors="[palette.orange, palette.green, palette.blue]" />
         </section>
@@ -94,11 +99,73 @@
 
       </ChartGrid>
     </main>
+
+    <!-- EF Range Settings Modal -->
+    <div v-if="showEFSettings" class="modal-overlay" @click.self="cancelEFSettings">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>EF 区间配置</h3>
+          <button @click="cancelEFSettings" class="close-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-row">
+            <label>低 EF 上限（不含）:</label>
+            <input
+              type="number"
+              step="0.1"
+              min="1.3"
+              :max="tempEFRangeConfig.mediumMax"
+              v-model.number="tempEFRangeConfig.lowMax"
+              class="number-input"
+              :class="{ 'input-error': tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax }"
+            />
+          </div>
+          <div class="setting-row">
+            <label>中 EF 上限（不含）:</label>
+            <input
+              type="number"
+              step="0.1"
+              :min="tempEFRangeConfig.lowMax"
+              max="3.0"
+              v-model.number="tempEFRangeConfig.mediumMax"
+              class="number-input"
+              :class="{ 'input-error': tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax }"
+            />
+          </div>
+          <div v-if="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax" class="error-message">
+            ⚠️ 低 EF 上限必须小于等于中 EF 上限
+          </div>
+          <div class="preview">
+            <p>预览:</p>
+            <ul v-if="tempEFRangeConfig.lowMax === tempEFRangeConfig.mediumMax">
+              <li>低 EF: &lt;{{ tempEFRangeConfig.lowMax }}</li>
+              <li>中 EF: ={{ tempEFRangeConfig.lowMax }}</li>
+              <li>高 EF: &gt;{{ tempEFRangeConfig.lowMax }}</li>
+            </ul>
+            <ul v-else>
+              <li>低 EF: &lt;{{ tempEFRangeConfig.lowMax }}</li>
+              <li>中 EF: [{{ tempEFRangeConfig.lowMax }}, {{ tempEFRangeConfig.mediumMax }})</li>
+              <li>高 EF: ≥{{ tempEFRangeConfig.mediumMax }}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button @click="resetEFRange" class="reset-btn">重置默认</button>
+          <button
+            @click="confirmEFSettings"
+            class="confirm-btn"
+            :disabled="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax"
+          >
+            确定
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import TopBar from '@/shared/components/layout/TopBar.vue'
 import ChartGrid from '@/features/statistics/components/ChartGrid.vue'
 import BarChart from '@/shared/components/charts/BarChart.vue'
@@ -113,8 +180,25 @@ import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelect
 type EfItem = { word: string; ef: number }
 type StrengthItem = { word: string; strength: number | null; available: boolean }
 
+interface EFRangeConfig {
+  lowMax: number      // 低EF上限（不含），默认 2.3
+  mediumMax: number   // 中EF上限（不含），默认 2.5
+}
+
 const isLoading = ref(true)
 const error = ref<string | null>(null)
+
+// EF Range Configuration with localStorage persistence
+const defaultEFRange: EFRangeConfig = { lowMax: 2.3, mediumMax: 2.5 }
+const efRangeConfig = ref<EFRangeConfig>(
+  JSON.parse(localStorage.getItem('efRangeConfig') || JSON.stringify(defaultEFRange))
+)
+
+// Settings modal state
+const showEFSettings = ref(false)
+
+// Temporary config for editing (only applied on confirm)
+const tempEFRangeConfig = ref<EFRangeConfig>({ ...efRangeConfig.value })
 
 // Use read-only source selection for initial sync from WordIndex
 const { currentSource: initialSource, initializeFromData } = useSourceSelectionReadOnly()
@@ -249,15 +333,37 @@ const efBuckets = computed(() => {
   return { labels, values }
 })
 
-// EF pie (low, medium, high)
+// EF pie (low, medium, high) - uses dynamic configuration
 const efPie = computed(() => {
   let low = 0, medium = 0, high = 0
+  const { lowMax, mediumMax } = efRangeConfig.value
+
+  // Check if it's single-value mode (lowMax == mediumMax)
+  const isSingleValueMode = lowMax === mediumMax
+
   efDict.value.forEach(({ ef }) => {
-    if (ef < 2.3) low++
-    else if (ef >= 2.3 && ef <=2.5) medium++
-    else high++
+    if (ef < lowMax) {
+      low++
+    } else if (isSingleValueMode) {
+      // Single value mode: separate exact match from higher values
+      if (ef === lowMax) medium++
+      else high++
+    } else {
+      // Range mode: [lowMax, mediumMax)
+      if (ef >= lowMax && ef < mediumMax) medium++
+      else high++
+    }
   })
-  return { labels: ['低EF <2.3', '中EF [2.3,2.5]', '高EF >2.5'], values: [low, medium, high] }
+
+  // Generate labels based on mode
+  const labels = isSingleValueMode
+    ? [`低EF <${lowMax}`, `中EF =${lowMax}`, `高EF >${lowMax}`]
+    : [`低EF <${lowMax}`, `中EF [${lowMax},${mediumMax})`, `高EF ≥${mediumMax}`]
+
+  return {
+    labels,
+    values: [low, medium, high]
+  }
 })
 
 // Elapse time histogram (1..10 seconds buckets)
@@ -338,6 +444,33 @@ const spellingPintSeries = computed(() => [{
   lineColor: palette.green,
   areaColor: palette.green
 }])
+
+// Watch for configuration changes and save to localStorage
+watch(efRangeConfig, (newVal) => {
+  localStorage.setItem('efRangeConfig', JSON.stringify(newVal))
+}, { deep: true })
+
+// Open settings modal - initialize temp config
+const openEFSettings = () => {
+  tempEFRangeConfig.value = { ...efRangeConfig.value }
+  showEFSettings.value = true
+}
+
+// Confirm settings - apply temp config to actual config
+const confirmEFSettings = () => {
+  efRangeConfig.value = { ...tempEFRangeConfig.value }
+  showEFSettings.value = false
+}
+
+// Cancel settings - discard temp config
+const cancelEFSettings = () => {
+  showEFSettings.value = false
+}
+
+// Reset EF range to default (in temp config)
+const resetEFRange = () => {
+  tempEFRangeConfig.value = { ...defaultEFRange }
+}
 
 </script>
 
@@ -436,5 +569,219 @@ const spellingPintSeries = computed(() => [{
     align-items: flex-start;
     gap: 8px;
   }
+}
+
+/* Settings button */
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  line-height: 1;
+}
+
+.settings-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2em 1.5em;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #8c8c8c;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.modal-body {
+  padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.setting-row label {
+  font-size: 0.95em;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.number-input {
+  width: 100px;
+  padding: 0.5em 0.75em;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.number-input:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+.number-input.input-error {
+  border-color: #ff4d4f;
+}
+
+.number-input.input-error:focus {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+}
+
+.error-message {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #cf1322;
+  padding: 0.6em 0.8em;
+  border-radius: 6px;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.preview {
+  background: #f5f5f5;
+  padding: 1em;
+  border-radius: 8px;
+  margin-top: 0.5em;
+}
+
+.preview p {
+  margin: 0 0 0.5em 0;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #595959;
+}
+
+.preview ul {
+  margin: 0;
+  padding-left: 1.5em;
+  list-style: disc;
+}
+
+.preview li {
+  font-size: 0.9em;
+  color: #595959;
+  margin: 0.3em 0;
+}
+
+.modal-footer {
+  padding: 1em 1.5em;
+  border-top: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8em;
+}
+
+.reset-btn, .confirm-btn {
+  padding: 0.6em 1.2em;
+  border-radius: 6px;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-weight: 500;
+}
+
+.reset-btn {
+  background: #f5f5f5;
+  color: #595959;
+}
+
+.reset-btn:hover {
+  background: #e8e8e8;
+}
+
+.confirm-btn {
+  background: #1890ff;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #40a9ff;
+}
+
+.confirm-btn:disabled {
+  background: #d9d9d9;
+  color: #8c8c8c;
+  cursor: not-allowed;
+}
+
+.confirm-btn:disabled:hover {
+  background: #d9d9d9;
 }
 </style>

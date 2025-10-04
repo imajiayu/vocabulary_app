@@ -49,7 +49,7 @@
                             <span class="progress-text">
                                 已加载 {{ loadedWords }}/{{ totalWords }} 个单词
                             </span>
-                            <div v-if="isLoadingMore" class="loading-spinner-small"></div>
+                            <div class="loading-spinner-small"></div>
                         </div>
                         <div class="progress-bar">
                             <div
