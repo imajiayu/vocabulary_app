@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-page">
+  <div class="settings-page" :class="{ 'lock-position': lockPosition }">
     <!-- 侧边栏 -->
     <aside class="settings-sidebar" :class="{ 'nav-expanded': navExpanded }">
       <div class="sidebar-header">
@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import WheelSelector from '@/shared/components/ui/WheelSelector.vue'
 import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
@@ -132,6 +132,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   navExpanded: false
 })
+
+// 控制是否锁定位置（防止侧边栏跳动）
+const lockPosition = ref(false)
 
 const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
@@ -217,6 +220,10 @@ const resetSettings = async () => {
 
 onMounted(() => {
   loadSettings()
+  // 等待进入动画完成后锁定位置
+  setTimeout(() => {
+    lockPosition.value = true
+  }, 350) // fade-slide transition 是 300ms，加 50ms 缓冲
 })
 </script>
 
@@ -226,6 +233,11 @@ onMounted(() => {
   width: 100%;
   height: 100vh;
   position: relative;
+}
+
+/* 进入动画完成后锁定位置，防止侧边栏跳动 */
+.settings-page.lock-position {
+  transform: none !important;
 }
 
 /* ===== 侧边栏 ===== */
@@ -238,8 +250,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   z-index: 10;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-right: 1px solid rgba(0, 0, 0, 0.08);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .settings-sidebar.nav-expanded {
@@ -330,19 +342,24 @@ onMounted(() => {
 
 /* ===== 主内容区 ===== */
 .settings-content {
-  flex: 1;
-  margin-left: 328px; /* 48px (MainNavigation) + 280px (sidebar) */
+  position: fixed;
+  left: 328px; /* 48px (MainNavigation) + 280px (sidebar) */
+  right: 0;
+  top: 0;
+  bottom: 0;
   overflow-y: auto;
-  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  justify-content: center;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .settings-content.nav-expanded {
-  margin-left: 560px; /* 280px (MainNavigation expanded) + 280px (sidebar) */
+  left: 560px; /* 280px (MainNavigation expanded) + 280px (sidebar) */
 }
 
 .content-inner {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
   padding: 48px 32px;
 }
 

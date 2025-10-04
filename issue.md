@@ -3,9 +3,7 @@
 # 移动端
 SpeakingSidebar拖拽手柄出现消失动画
 # 共同问题
-不再复习参数传递逻辑 统一到submit result，而不是
-@api_bp.route("/word/<int:word_id>", methods=["PATCH"])
-def update_word(word_id):
+wheelselector步长
 
 
 
