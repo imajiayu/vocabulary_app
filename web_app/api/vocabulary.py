@@ -446,7 +446,9 @@ def update_word(word_id):
                     try:
                         all_ids = session.get(SESSION_KEY_SNAPSHOT, [])
                         if word_id in all_ids:
-                            current_index = all_ids.index(word_id) + 1  # +1 因为已完成当前单词
+                            current_index = (
+                                all_ids.index(word_id) + 1
+                            )  # +1 因为已完成当前单词
                             update_current_progress_index(current_index)
                     except Exception as e:
                         print(f"Failed to update progress index: {e}")
@@ -554,6 +556,7 @@ def update_review_word(word_id):
                 update_word_info_lapse(word_id, remembered)
         else:
             if mode == MODE_SPELLING:
+                print(spelling_data)
                 update_word_info_spelling(word_id, remembered, spelling_data)
 
         updated_word = db_get_word_review_info(word_id)

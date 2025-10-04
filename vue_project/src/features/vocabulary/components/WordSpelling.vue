@@ -8,11 +8,65 @@
     <!-- 输入框固定在按钮栏上方 -->
     <div class="spelling-input-container">
       <input ref="inputRef" v-model="userInput" type="text" class="spelling-input" :class="inputClass"
-        placeholder="输入单词拼写..." autocomplete="off" @keydown="handleKeydown" :disabled="isSubmitting" />
+        placeholder="输入单词拼写..." autocomplete="off" @keydown="handleKeydown" :disabled="isSubmitting"
+        :readonly="isMobile" @focus="handleInputFocus" />
     </div>
 
-    <!-- 按钮栏固定在底部 -->
-    <div class="button-bar">
+    <!-- 移动端自定义键盘 -->
+    <div v-if="isMobile" class="custom-keyboard">
+      <div class="keyboard-row">
+        <button v-for="letter in ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']"
+          :key="letter"
+          class="key-btn letter-key"
+          @click="handleVirtualKey(letter.toLowerCase())"
+          :disabled="isSubmitting">
+          {{ letter }}
+        </button>
+      </div>
+      <div class="keyboard-row">
+        <button v-for="letter in ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L']"
+          :key="letter"
+          class="key-btn letter-key"
+          @click="handleVirtualKey(letter.toLowerCase())"
+          :disabled="isSubmitting">
+          {{ letter }}
+        </button>
+      </div>
+      <div class="keyboard-row third-row">
+        <div class="letters-centered">
+          <button v-for="letter in ['Z', 'X', 'C', 'V', 'B', 'N', 'M']"
+            :key="letter"
+            class="key-btn letter-key third-row-letter"
+            @click="handleVirtualKey(letter.toLowerCase())"
+            :disabled="isSubmitting">
+            {{ letter }}
+          </button>
+        </div>
+        <button class="key-btn backspace-key backspace-absolute" @click="handleVirtualBackspace" :disabled="isSubmitting">
+          ⌫
+        </button>
+      </div>
+      <div class="keyboard-row bottom-row">
+        <button class="key-btn special-key" @click="handleVirtualKey('-')" :disabled="isSubmitting">
+          -
+        </button>
+        <button class="key-btn play-key" @click="handlePlayAudio" :disabled="isSubmitting">
+          🔊
+        </button>
+        <button class="key-btn space-key" @click="handleVirtualKey(' ')" :disabled="isSubmitting">
+          空格
+        </button>
+        <button class="key-btn forgot-key" @click="handleForgot" :disabled="isCorrect || isSubmitting">
+          😵
+        </button>
+        <button class="key-btn enter-key" @click="handleVirtualEnter" :disabled="!canProceed || isSubmitting">
+          ✓
+        </button>
+      </div>
+    </div>
+
+    <!-- 按钮栏固定在底部 - 仅桌面端显示 -->
+    <div v-if="!isMobile" class="button-bar">
       <div class="button-group">
         <div class="row-buttons">
           <button class="button play-btn" @click="handlePlayAudio" :disabled="isSubmitting">
@@ -35,11 +89,17 @@
 
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
+
+// 检测是否为移动端
+const isMobile = ref(false)
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768 || ('ontouchstart' in window)
+}
 
 interface KeyEvent {
   timestamp: number
@@ -157,6 +217,12 @@ const finishBackspaceSequence = () => {
 const handleKeydown = (event: KeyboardEvent) => {
   if (isSubmitting.value) return
 
+  // 移动端阻止物理键盘输入
+  if (isMobile.value) {
+    event.preventDefault()
+    return
+  }
+
   // 处理Enter键（不记录事件）
   if (event.key === 'Enter') {
     if (canProceed.value) {
@@ -181,7 +247,6 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 
   switch (event.key) {
-    case ' ':
     case 'ArrowLeft':
       event.preventDefault()
       handlePlayAudio()
@@ -190,6 +255,75 @@ const handleKeydown = (event: KeyboardEvent) => {
       event.preventDefault()
       handleForgot()
       break
+  }
+}
+
+// 阻止移动端输入框聚焦时弹出键盘
+const handleInputFocus = (event: FocusEvent) => {
+  if (isMobile.value) {
+    (event.target as HTMLInputElement).blur()
+  }
+}
+
+// 虚拟键盘按键处理
+const handleVirtualKey = (key: string) => {
+  if (isSubmitting.value) return
+
+  // 模拟KeyEvent结构记录虚拟按键
+  const virtualKeyEvent: KeyEvent = {
+    timestamp: Date.now() - startTime.value,
+    key: key,
+    code: `Key${key.toUpperCase()}`,
+    metaKey: false,
+    altKey: false,
+    shiftKey: false,
+    inputValue: userInput.value + key
+  }
+  keyEvents.value.push(virtualKeyEvent)
+
+  // 结束退格序列（开始正常输入）
+  finishBackspaceSequence()
+
+  // 更新输入值
+  userInput.value += key
+}
+
+// 虚拟键盘退格键处理
+const handleVirtualBackspace = () => {
+  if (isSubmitting.value || userInput.value.length === 0) return
+
+  const cursorPos = userInput.value.length
+
+  // 记录退格事件
+  const virtualKeyEvent: KeyEvent = {
+    timestamp: Date.now() - startTime.value,
+    key: 'Backspace',
+    code: 'Backspace',
+    metaKey: false,
+    altKey: false,
+    shiftKey: false,
+    inputValue: userInput.value.slice(0, -1)
+  }
+  keyEvents.value.push(virtualKeyEvent)
+
+  // 处理退格序列
+  if (!currentBackspaceSequence.value) {
+    currentBackspaceSequence.value = {
+      startPos: cursorPos,
+      deletedChars: 0,
+      timestamp: Date.now() - startTime.value
+    }
+  }
+  currentBackspaceSequence.value.deletedChars++
+
+  // 更新输入值
+  userInput.value = userInput.value.slice(0, -1)
+}
+
+// 虚拟键盘回车键处理
+const handleVirtualEnter = () => {
+  if (canProceed.value && !isSubmitting.value) {
+    handleNext()
   }
 }
 
@@ -264,32 +398,37 @@ const resetState = () => {
 }
 
 onMounted(async () => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
   resetState()
   await nextTick()
   playWordAudio(props.word.word)
-  setTimeout(() => inputRef.value?.focus(), 50)
+  if (!isMobile.value) {
+    setTimeout(() => inputRef.value?.focus(), 50)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 </script>
 
 <style scoped>
 .definition-container {
   position: fixed;
-  top: 30%;
-  /* 垂直居中 */
+  top: calc(48px + 1.5rem); /* TopBar 高度 + 间距 */
   left: 50%;
-  /* 水平居中 */
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   width: calc(100% - 2rem);
-  /* 左右都有1rem间距 */
   max-width: 600px;
-  min-height: 120px;
+  min-height: auto;
+  max-height: calc(100vh - 48px - 2 * 3.5rem - 0.75rem - 2rem - 1rem - 4rem - 3rem); /* 屏幕高度 - TopBar - 按钮栏 - 输入框 - 间距 */
+  overflow-y: auto;
   font-weight: 600;
   font-size: 1.3em;
   display: flex;
   align-items: flex-start;
-  /* 上对齐 */
   justify-content: flex-start;
-  /* 左对齐 */
   text-align: left;
   padding: 1em;
   box-sizing: border-box;
@@ -493,22 +632,172 @@ onMounted(async () => {
   background-color: #059669;
 }
 
+/* 自定义键盘样式 */
+.custom-keyboard {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #d1d5db;
+  padding: 0.5rem 0.25rem;
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.keyboard-row:last-child {
+  margin-bottom: 0;
+}
+
+.keyboard-row.third-row {
+  position: relative;
+  justify-content: center;
+}
+
+.letters-centered {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.third-row-letter {
+  width: 2.5rem;
+  flex: 0 0 2.5rem;
+}
+
+.backspace-absolute {
+  position: absolute;
+  right: 0.25rem;
+}
+
+.key-btn {
+  min-width: 2rem;
+  height: 3rem;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  border-radius: 5px;
+  background: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.key-btn:active:not(:disabled) {
+  background: #d1d5db;
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+.key-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.letter-key {
+  flex: 1;
+  max-width: 2.5rem;
+}
+
+.special-key {
+  flex: 1.5;
+  background: #adb5bd;
+  color: #000000;
+}
+
+.special-key:active:not(:disabled) {
+  background: #9ca3af;
+}
+
+.backspace-key {
+  width: 3rem;
+  background: #adb5bd;
+  color: #000000;
+  font-size: 1.2rem;
+}
+
+.backspace-key:active:not(:disabled) {
+  background: #9ca3af;
+}
+
+.space-key {
+  flex: 3;
+  background: #ffffff;
+  color: #000000;
+  font-size: 0.9rem;
+}
+
+.space-key:active:not(:disabled) {
+  background: #d1d5db;
+}
+
+.play-key {
+  flex: 1.5;
+  background: #3b82f6;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.play-key:active:not(:disabled) {
+  background: #2563eb;
+}
+
+.forgot-key {
+  flex: 1.5;
+  background: #a855f7;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.forgot-key:active:not(:disabled) {
+  background: #9333ea;
+}
+
+.enter-key {
+  flex: 1.5;
+  background: #10b981;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.enter-key:active:not(:disabled) {
+  background: #059669;
+}
+
+.enter-key:disabled {
+  background: #94d3a2;
+  opacity: 0.5;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .word-spelling-container {
-    padding-bottom: 10em;
+    padding-bottom: 2em;
     margin: 1em auto;
   }
 
   .definition-container {
     position: fixed;
-    top: auto;
-    bottom: calc(2 * 3.5rem + 0.75rem + 2rem + 1rem + 4rem); /* 在输入框上方4rem */
+    top: calc(44px + 1rem); /* TopBar 高度 + 间距 */
+    bottom: auto;
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 2rem);
     max-width: 600px;
-    min-height: 120px;
+    min-height: auto;
+    max-height: calc(100vh - 44px - 14rem - 3rem - 2rem); /* 屏幕高度 - TopBar - 键盘高度(4行*3rem+间距) - 输入框 - 间距 */
+    overflow-y: auto;
     font-weight: 600;
     font-size: 1.1em;
     padding: 1em;
@@ -516,41 +805,41 @@ onMounted(async () => {
   }
 
   .spelling-input-container {
-    bottom: calc(2 * 3.5rem + 0.75rem + 2rem + 1rem); /* 移动端按钮栏高度计算 */
+    bottom: calc(14rem + 1rem); /* 键盘高度(4行*3rem+间距+padding) + 间距 */
   }
 
   .spelling-input {
     font-size: 1.4em;
     padding: 0.6em;
   }
-
-  .button-bar {
-    /* 移动端最小高度 */
-    min-height: calc(2 * 3.5rem + 0.75rem + 2rem + env(safe-area-inset-bottom));
-  }
-
-  .row-buttons {
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .button {
-    min-height: 3.5rem;
-    padding: 0.875rem;
-    font-size: 1rem;
-  }
 }
 
 @media (max-width: 480px) {
+  .custom-keyboard {
+    padding: 0.4rem 0.2rem;
+    padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
+  }
+
+  .key-btn {
+    min-width: 1.8rem;
+    height: 2.8rem;
+    font-size: 1rem;
+  }
+
+  .keyboard-row {
+    gap: 0.2rem;
+    margin-bottom: 0.35rem;
+  }
+
   .definition-container {
-    bottom: calc(2 * 3.25rem + 0.625rem + 2rem + 1rem + 3.5rem); /* 在输入框上方3.5rem */
+    top: calc(48px + 0.75rem); /* TopBar 高度 + 间距 */
+    max-height: calc(100vh - 48px - 13rem - 3rem - 1.5rem); /* 屏幕高度 - TopBar - 键盘(4行*2.8rem+间距) - 输入框 - 间距 */
     font-size: 1em;
-    min-height: 100px;
     padding: 0.75em;
   }
 
   .spelling-input-container {
-    bottom: calc(2 * 3.25rem + 0.625rem + 2rem + 1rem); /* 小屏手机按钮栏高度计算 */
+    bottom: calc(13rem + 0.75rem); /* 键盘高度(4行*2.8rem+间距+padding) + 间距 */
   }
 
   .spelling-input {
@@ -558,24 +847,8 @@ onMounted(async () => {
     padding: 0.5em;
   }
 
-  .button-bar {
-    /* 小屏手机最小高度 */
-    min-height: calc(2 * 3.25rem + 0.625rem + 1.75rem + env(safe-area-inset-bottom));
-  }
-
-  .button {
-    min-height: 3.25rem;
-    padding: 0.75rem;
-    font-size: 0.95rem;
-  }
-
-  .row-buttons {
-    gap: 0.375rem;
-    margin-bottom: 0.625rem;
-  }
-
   .word-spelling-container {
-    padding-bottom: 11em;
+    padding-bottom: 2em;
   }
 }
 </style>

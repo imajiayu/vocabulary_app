@@ -214,7 +214,7 @@ const getWordColor = (index: number) => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  z-index: 100;
+  z-index: 999;
 }
 
 .word-list {
