@@ -1,7 +1,7 @@
 <template>
   <div class="settings-page" :class="{ 'nav-expanded': navExpanded }">
-    <!-- 侧边栏 -->
-    <aside class="settings-sidebar">
+    <!-- 侧边栏 - 移动端隐藏 -->
+    <aside class="settings-sidebar desktop-only">
       <div class="sidebar-header">
         <h2>设置</h2>
       </div>
@@ -136,6 +136,124 @@
             </div>
           </div>
         </section>
+
+        <!-- 快捷键设置 - 移动端隐藏 -->
+        <section id="hotkeys" class="settings-section desktop-only">
+          <h1 class="section-title">快捷键设置</h1>
+          <p class="section-description">自定义键盘快捷键，提升学习效率</p>
+
+          <!-- 复习页面 - 初始状态 -->
+          <div class="settings-group">
+            <div class="group-header">
+              <h2 class="group-title">复习页面 - 初始状态</h2>
+              <p class="group-description">在看到单词释义之前的快捷键</p>
+            </div>
+
+            <div class="hotkey-grid">
+              <div class="hotkey-item">
+                <label class="hotkey-label">记住 ✅</label>
+                <KeySelector
+                  v-model="settings.hotkeys.reviewInitial.remembered"
+                  :used-keys="[settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.stopReview]"
+                />
+              </div>
+
+              <div class="hotkey-item">
+                <label class="hotkey-label">没记住 ❌</label>
+                <KeySelector
+                  v-model="settings.hotkeys.reviewInitial.notRemembered"
+                  :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.stopReview]"
+                />
+              </div>
+
+              <div class="hotkey-item">
+                <label class="hotkey-label">不再复习 🚫</label>
+                <KeySelector
+                  v-model="settings.hotkeys.reviewInitial.stopReview"
+                  :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.notRemembered]"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 复习页面 - 显示释义后 -->
+          <div class="settings-group">
+            <div class="group-header">
+              <h2 class="group-title">复习页面 - 显示释义后</h2>
+              <p class="group-description">在看到单词释义之后的快捷键</p>
+            </div>
+
+            <div class="hotkey-grid">
+              <div class="hotkey-item">
+                <label class="hotkey-label">记错了 ❌</label>
+                <KeySelector
+                  v-model="settings.hotkeys.reviewAfter.wrong"
+                  :used-keys="[settings.hotkeys.reviewAfter.next]"
+                />
+              </div>
+
+              <div class="hotkey-item">
+                <label class="hotkey-label">下一个 ➡️</label>
+                <KeySelector
+                  v-model="settings.hotkeys.reviewAfter.next"
+                  :used-keys="[settings.hotkeys.reviewAfter.wrong]"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 拼写页面 -->
+          <div class="settings-group">
+            <div class="group-header">
+              <h2 class="group-title">拼写页面</h2>
+              <p class="group-description">在拼写练习时的快捷键</p>
+            </div>
+
+            <div class="hotkey-grid">
+              <div class="hotkey-item">
+                <label class="hotkey-label">播放发音 🔊</label>
+                <KeySelector
+                  v-model="settings.hotkeys.spelling.playAudio"
+                  :used-keys="[settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next]"
+                />
+              </div>
+
+              <div class="hotkey-item">
+                <label class="hotkey-label">忘记了 ❓</label>
+                <KeySelector
+                  v-model="settings.hotkeys.spelling.forgot"
+                  :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next]"
+                />
+              </div>
+
+              <div class="hotkey-item">
+                <label class="hotkey-label">下一个 ➡️</label>
+                <KeySelector
+                  v-model="settings.hotkeys.spelling.next"
+                  :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot]"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 快捷键设置保存按钮 -->
+          <div class="settings-actions">
+            <button class="btn-save" @click="saveHotkeySettings" :disabled="isSaving">
+              <span v-if="!isSaving">💾 保存快捷键设置</span>
+              <span v-else>⏳ 保存中...</span>
+            </button>
+            <button class="btn-reset" @click="resetHotkeySettings">
+              🔄 恢复默认
+            </button>
+          </div>
+
+          <!-- 保存成功提示 -->
+          <transition name="fade">
+            <div v-if="saveSuccess === 'hotkeys'" class="save-success">
+              ✅ 快捷键设置已保存
+            </div>
+          </transition>
+        </section>
       </div>
     </main>
   </div>
@@ -145,6 +263,7 @@
 import { ref, onMounted, nextTick, watch } from 'vue'
 import WheelSelector from '@/shared/components/ui/WheelSelector.vue'
 import SwitchTab from '@/shared/components/ui/SwitchTab.vue'
+import KeySelector from '@/shared/components/ui/KeySelector.vue'
 import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
 
@@ -166,6 +285,7 @@ const props = withDefaults(defineProps<Props>(), {
 const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
   { id: 'audio', title: '音频设置', subtitle: '发音口音选择', icon: '🔊' },
+  { id: 'hotkeys', title: '快捷键设置', subtitle: '自定义键盘快捷键', icon: '⌨️' },
 ]
 
 const activeSection = ref('learning')
@@ -183,6 +303,22 @@ const settings = ref<UserSettings>({
   },
   audio: {
     accent: 'us'
+  },
+  hotkeys: {
+    reviewInitial: {
+      remembered: 'ArrowLeft',
+      notRemembered: 'ArrowRight',
+      stopReview: 'ArrowDown'
+    },
+    reviewAfter: {
+      wrong: 'ArrowLeft',
+      next: 'ArrowRight'
+    },
+    spelling: {
+      playAudio: 'ArrowLeft',
+      forgot: 'ArrowRight',
+      next: 'Enter'
+    }
   }
 })
 
@@ -381,6 +517,55 @@ watch(() => settings.value.audio.accent, async (newAccent, oldAccent) => {
     await saveAudioSettings()
   }
 })
+
+// 保存快捷键设置
+const saveHotkeySettings = async () => {
+  isSaving.value = true
+  saveSuccess.value = false
+  try {
+    // 只更新快捷键设置部分
+    await api.settings.updateSettings({
+      hotkeys: settings.value.hotkeys
+    })
+    // 重新获取最新的所有设置
+    const latestSettings = await api.settings.getSettings()
+    settings.value = latestSettings
+    showSaveSuccess('hotkeys')
+  } catch (error) {
+    console.error('保存快捷键设置失败:', error)
+    alert('保存失败，请重试')
+  } finally {
+    isSaving.value = false
+  }
+}
+
+// 重置快捷键设置
+const resetHotkeySettings = async () => {
+  if (confirm('确定要恢复快捷键设置的默认值吗？')) {
+    try {
+      settings.value.hotkeys = {
+        reviewInitial: {
+          remembered: 'ArrowLeft',
+          notRemembered: 'ArrowRight',
+          stopReview: 'ArrowDown'
+        },
+        reviewAfter: {
+          wrong: 'ArrowLeft',
+          next: 'ArrowRight'
+        },
+        spelling: {
+          playAudio: 'ArrowLeft',
+          forgot: 'ArrowRight',
+          next: 'Enter'
+        }
+      }
+      await saveHotkeySettings()
+    } catch (error) {
+      console.error('恢复快捷键设置失败:', error)
+      alert('恢复失败，请重试')
+    }
+  }
+}
 
 onMounted(() => {
   loadSettings()
@@ -718,10 +903,26 @@ onMounted(() => {
   margin: 0;
 }
 
-/* 响应式设计 */
+/* 移动端隐藏侧边栏和快捷键设置 */
+.desktop-only {
+  display: block;
+}
+
 @media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .settings-page {
+    display: block; /* 移动端不使用 flex，让内容占满宽度 */
+  }
+
   .settings-sidebar {
     width: 260px;
+  }
+
+  .settings-content {
+    max-height: none; /* 移动端移除最大高度限制 */
   }
 
   .content-inner {
@@ -747,5 +948,28 @@ onMounted(() => {
   .accent-switch {
     max-width: 100%;
   }
+}
+
+/* 快捷键设置样式 */
+.hotkey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+}
+
+.hotkey-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hotkey-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 </style>

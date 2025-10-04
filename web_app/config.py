@@ -22,6 +22,19 @@ class UserConfig:
     # 音频设置
     AUDIO_ACCENT = "uk"  # 音频口音：us (美音) 或 uk (英音)
 
+    # 快捷键设置
+    # 复习页面 - 初始状态
+    HOTKEY_REVIEW_INITIAL_REMEMBERED = "ArrowUp"
+    HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED = "ArrowRight"
+    HOTKEY_REVIEW_INITIAL_STOP_REVIEW = "ArrowDown"
+    # 复习页面 - 显示释义后
+    HOTKEY_REVIEW_AFTER_WRONG = "ArrowLeft"
+    HOTKEY_REVIEW_AFTER_NEXT = "ArrowRight"
+    # 拼写页面
+    HOTKEY_SPELLING_PLAY_AUDIO = "ArrowLeft"
+    HOTKEY_SPELLING_FORGOT = "ArrowRight"
+    HOTKEY_SPELLING_NEXT = "Enter"
+
     @classmethod
     def to_dict(cls):
         """转换为字典用于API传输"""
@@ -33,6 +46,22 @@ class UserConfig:
             },
             "audio": {
                 "accent": cls.AUDIO_ACCENT,
+            },
+            "hotkeys": {
+                "reviewInitial": {
+                    "remembered": cls.HOTKEY_REVIEW_INITIAL_REMEMBERED,
+                    "notRemembered": cls.HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED,
+                    "stopReview": cls.HOTKEY_REVIEW_INITIAL_STOP_REVIEW,
+                },
+                "reviewAfter": {
+                    "wrong": cls.HOTKEY_REVIEW_AFTER_WRONG,
+                    "next": cls.HOTKEY_REVIEW_AFTER_NEXT,
+                },
+                "spelling": {
+                    "playAudio": cls.HOTKEY_SPELLING_PLAY_AUDIO,
+                    "forgot": cls.HOTKEY_SPELLING_FORGOT,
+                    "next": cls.HOTKEY_SPELLING_NEXT,
+                }
             }
         }
 
@@ -50,3 +79,26 @@ class UserConfig:
         audio = data.get("audio", {})
         if "accent" in audio:
             cls.AUDIO_ACCENT = audio["accent"]
+
+        hotkeys = data.get("hotkeys", {})
+        review_initial = hotkeys.get("reviewInitial", {})
+        if "remembered" in review_initial:
+            cls.HOTKEY_REVIEW_INITIAL_REMEMBERED = review_initial["remembered"]
+        if "notRemembered" in review_initial:
+            cls.HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED = review_initial["notRemembered"]
+        if "stopReview" in review_initial:
+            cls.HOTKEY_REVIEW_INITIAL_STOP_REVIEW = review_initial["stopReview"]
+
+        review_after = hotkeys.get("reviewAfter", {})
+        if "wrong" in review_after:
+            cls.HOTKEY_REVIEW_AFTER_WRONG = review_after["wrong"]
+        if "next" in review_after:
+            cls.HOTKEY_REVIEW_AFTER_NEXT = review_after["next"]
+
+        spelling = hotkeys.get("spelling", {})
+        if "playAudio" in spelling:
+            cls.HOTKEY_SPELLING_PLAY_AUDIO = spelling["playAudio"]
+        if "forgot" in spelling:
+            cls.HOTKEY_SPELLING_FORGOT = spelling["forgot"]
+        if "next" in spelling:
+            cls.HOTKEY_SPELLING_NEXT = spelling["next"]

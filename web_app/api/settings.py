@@ -72,6 +72,62 @@ def update_settings():
                 content,
             )
 
+        # 更新快捷键设置
+        hotkeys = data.get("hotkeys", {})
+        review_initial = hotkeys.get("reviewInitial", {})
+        if "remembered" in review_initial:
+            content = re.sub(
+                r'HOTKEY_REVIEW_INITIAL_REMEMBERED\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_REVIEW_INITIAL_REMEMBERED = "{review_initial["remembered"]}"',
+                content,
+            )
+        if "notRemembered" in review_initial:
+            content = re.sub(
+                r'HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED = "{review_initial["notRemembered"]}"',
+                content,
+            )
+        if "stopReview" in review_initial:
+            content = re.sub(
+                r'HOTKEY_REVIEW_INITIAL_STOP_REVIEW\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_REVIEW_INITIAL_STOP_REVIEW = "{review_initial["stopReview"]}"',
+                content,
+            )
+
+        review_after = hotkeys.get("reviewAfter", {})
+        if "wrong" in review_after:
+            content = re.sub(
+                r'HOTKEY_REVIEW_AFTER_WRONG\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_REVIEW_AFTER_WRONG = "{review_after["wrong"]}"',
+                content,
+            )
+        if "next" in review_after:
+            content = re.sub(
+                r'HOTKEY_REVIEW_AFTER_NEXT\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_REVIEW_AFTER_NEXT = "{review_after["next"]}"',
+                content,
+            )
+
+        spelling = hotkeys.get("spelling", {})
+        if "playAudio" in spelling:
+            content = re.sub(
+                r'HOTKEY_SPELLING_PLAY_AUDIO\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_SPELLING_PLAY_AUDIO = "{spelling["playAudio"]}"',
+                content,
+            )
+        if "forgot" in spelling:
+            content = re.sub(
+                r'HOTKEY_SPELLING_FORGOT\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_SPELLING_FORGOT = "{spelling["forgot"]}"',
+                content,
+            )
+        if "next" in spelling:
+            content = re.sub(
+                r'HOTKEY_SPELLING_NEXT\s*=\s*["\'][^"\']*["\']',
+                f'HOTKEY_SPELLING_NEXT = "{spelling["next"]}"',
+                content,
+            )
+
         # 写回config.py
         with open(config_path, "w", encoding="utf-8") as f:
             f.write(content)

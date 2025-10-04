@@ -94,6 +94,7 @@ import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
+import { useHotkeys } from '@/shared/composables/useHotkeys'
 
 // 检测是否为移动端
 const isMobile = ref(false)
@@ -141,6 +142,9 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+// 使用全局快捷键设置
+const { hotkeys, loadHotkeys } = useHotkeys()
 
 const inputRef = ref<HTMLInputElement>()
 const userInput = ref('')
@@ -223,13 +227,16 @@ const handleKeydown = (event: KeyboardEvent) => {
     return
   }
 
-  // 处理Enter键（不记录事件）
-  if (event.key === 'Enter') {
+  // 获取自定义快捷键
+  const spellingKeys = hotkeys.value.spelling
+
+  // 处理自定义的下一个快捷键（不记录事件）
+  if (event.key === spellingKeys.next) {
     if (canProceed.value) {
       event.preventDefault()
       handleNext()
     }
-    return // 直接返回，不记录Enter键事件
+    return // 直接返回，不记录此快捷键事件
   }
 
   recordKeyEvent(event)
@@ -246,15 +253,13 @@ const handleKeydown = (event: KeyboardEvent) => {
     finishBackspaceSequence() // 非退格键时结束退格序列
   }
 
-  switch (event.key) {
-    case 'ArrowLeft':
-      event.preventDefault()
-      handlePlayAudio()
-      break
-    case 'ArrowRight':
-      event.preventDefault()
-      handleForgot()
-      break
+  // 使用自定义快捷键
+  if (event.key === spellingKeys.playAudio) {
+    event.preventDefault()
+    handlePlayAudio()
+  } else if (event.key === spellingKeys.forgot) {
+    event.preventDefault()
+    handleForgot()
   }
 }
 
@@ -400,6 +405,10 @@ const resetState = () => {
 onMounted(async () => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
+
+  // 加载快捷键设置
+  await loadHotkeys()
+
   resetState()
   await nextTick()
   playWordAudio(props.word.word)

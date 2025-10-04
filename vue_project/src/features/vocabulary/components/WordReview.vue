@@ -49,6 +49,7 @@ import WordDetailsReview from './WordDetailsReview.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import RelatedWordsDisplay from '@/shared/components/ui/RelatedWordsDisplay.vue'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
+import { useHotkeys } from '@/shared/composables/useHotkeys'
 
 
 interface Props {
@@ -78,6 +79,9 @@ const isSubmitting = ref(false)
 
 // 使用全局音频设置
 const { audioAccent, loadAudioAccent } = useAudioAccent()
+
+// 使用全局快捷键设置
+const { hotkeys, loadHotkeys } = useHotkeys()
 
 const handleChoice = async (choice: string) => {
     if (isSubmitting.value) return
@@ -148,33 +152,29 @@ const handleKeydown = async (event: KeyboardEvent) => {
     if (isSubmitting.value) return
 
     if (!showDefinition.value) {
-        // 初始选择状态
-        switch (event.key) {
-            case 'ArrowLeft':
-                event.preventDefault()
-                await handleChoice('yes')
-                break
-            case 'ArrowRight':
-                event.preventDefault()
-                await handleChoice('no')
-                break
-            case 'ArrowDown':
-                event.preventDefault()
-                await handleChoice('stop')
-                break
+        // 初始选择状态 - 使用自定义快捷键
+        const initialKeys = hotkeys.value.reviewInitial
+
+        if (event.key === initialKeys.remembered) {
+            event.preventDefault()
+            await handleChoice('yes')
+        } else if (event.key === initialKeys.notRemembered) {
+            event.preventDefault()
+            await handleChoice('no')
+        } else if (event.key === initialKeys.stopReview) {
+            event.preventDefault()
+            await handleChoice('stop')
         }
     } else {
-        // 显示释义状态
-        switch (event.key) {
-            case 'ArrowLeft':
-                event.preventDefault()
-                await handleCorrection()
-                break
-            case 'ArrowRight':
-            case 'Enter':
-                event.preventDefault()
-                await handleNext()
-                break
+        // 显示释义状态 - 使用自定义快捷键
+        const afterKeys = hotkeys.value.reviewAfter
+
+        if (event.key === afterKeys.wrong) {
+            event.preventDefault()
+            await handleCorrection()
+        } else if (event.key === afterKeys.next) {
+            event.preventDefault()
+            await handleNext()
         }
     }
 }
@@ -193,8 +193,11 @@ watch(() => props.word, (newWord) => {
 }, { immediate: true })
 
 onMounted(async () => {
-    // 加载音频设置
-    await loadAudioAccent()
+    // 加载音频设置和快捷键设置
+    await Promise.all([
+        loadAudioAccent(),
+        loadHotkeys()
+    ])
 
     // 注册快捷键
     document.addEventListener('keydown', handleKeydown)

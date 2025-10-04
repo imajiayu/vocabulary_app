@@ -113,12 +113,35 @@ export interface AudioSettings {
   accent: 'us' | 'uk';
 }
 
+// 快捷键配置
+export interface HotkeySettings {
+  // 复习页面 - 初始状态
+  reviewInitial: {
+    remembered: string;      // 记住
+    notRemembered: string;   // 没记住
+    stopReview: string;      // 不再复习
+  };
+  // 复习页面 - 显示释义后
+  reviewAfter: {
+    wrong: string;           // 记错了
+    next: string;            // 下一个
+  };
+  // 拼写页面
+  spelling: {
+    playAudio: string;       // 播放发音
+    forgot: string;          // 忘记了
+    next: string;            // 下一个
+  };
+}
+
 export interface UserSettings {
   learning: LearningSettings;
   audio: AudioSettings;
+  hotkeys: HotkeySettings;
 }
 
 export interface SettingsApiResponse {
   learning: LearningSettings;
   audio: AudioSettings;
+  hotkeys: HotkeySettings;
 }
