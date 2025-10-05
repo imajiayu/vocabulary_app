@@ -333,3 +333,57 @@ def get_generation_status(relation_type):
             create_response(False, None, f"Failed to get status: {str(e)}"),
             500,
         )
+
+
+@relations_bp.route("/generate/stop", methods=["POST"])
+def stop_generation():
+    """
+    停止指定类型的关系生成任务
+
+    请求体:
+    {
+      "relation_type": "synonym"
+    }
+    """
+    try:
+        from web_app.services.relation_generation_manager import get_manager
+
+        data = request.get_json() or {}
+        relation_type = data.get("relation_type")
+
+        if not relation_type or not isinstance(relation_type, str):
+            return create_response(
+                False,
+                None,
+                "Missing or invalid relation_type field"
+            ), 400
+
+        valid_types = ["synonym", "antonym", "root", "confused", "topic"]
+        if relation_type not in valid_types:
+            return create_response(
+                False,
+                None,
+                f"Invalid relation_type: {relation_type}. Must be one of: {', '.join(valid_types)}"
+            ), 400
+
+        manager = get_manager()
+        success = manager.stop_generation(relation_type)
+
+        if success:
+            return create_response(
+                True,
+                {"relation_type": relation_type, "status": "stopped"},
+                f"{relation_type} generation stopped successfully"
+            )
+        else:
+            return create_response(
+                False,
+                None,
+                f"No running {relation_type} generation task found"
+            ), 404
+
+    except Exception as e:
+        return (
+            create_response(False, None, f"Failed to stop generation: {str(e)}"),
+            500,
+        )

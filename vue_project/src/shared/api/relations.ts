@@ -112,6 +112,14 @@ export class RelationsApi {
   }
 
   /**
+   * 停止生成任务
+   * @param relationType 关系类型
+   */
+  static async stopGeneration(relationType: string): Promise<{ relation_type: string; status: string }> {
+    return post<{ relation_type: string; status: string }>('/api/relations/generate/stop', { relation_type: relationType })
+  }
+
+  /**
    * 清空指定类型的关系
    * @param payload 请求体
    */

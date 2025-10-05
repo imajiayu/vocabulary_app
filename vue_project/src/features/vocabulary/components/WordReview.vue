@@ -78,6 +78,7 @@ const endTime = ref(Date.now());
 const isSubmitting = ref(false)
 const isHandlingKeypress = ref(false) // 防止按键重复触发
 const pressedKeys = ref(new Set<string>()) // 记录当前按下的键
+const lastWordChangeTime = ref(0) // 记录上次单词切换时间
 
 // 使用全局音频设置
 const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
@@ -85,7 +86,7 @@ const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent 
 // 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
 
-const handleChoice = async (choice: string) => {
+const handleChoice = (choice: string) => {
     if (isSubmitting.value) return
 
     endTime.value = Date.now()
@@ -95,9 +96,9 @@ const handleChoice = async (choice: string) => {
     // 显示释义和后续按钮
     showDefinition.value = true
 
-    // 播放音频（根据设置决定是否自动播放）
+    // 播放音频（根据设置决定是否自动播放）- 非阻塞
     if (autoPlayAfterAnswer.value) {
-        await playWordAudio(props.word.word, audioAccent.value)
+        playWordAudio(props.word.word, audioAccent.value)
     }
 }
 
@@ -165,6 +166,13 @@ const handleKeydown = async (event: KeyboardEvent) => {
         return
     }
 
+    // 防止单词切换后立即触发快捷键（200ms保护期）
+    const timeSinceWordChange = Date.now() - lastWordChangeTime.value
+    if (timeSinceWordChange < 200) {
+        event.preventDefault()
+        return
+    }
+
     let shouldHandle = false
 
     if (!showDefinition.value) {
@@ -197,11 +205,11 @@ const handleKeydown = async (event: KeyboardEvent) => {
             // 初始选择状态
             const initialKeys = hotkeys.value.reviewInitial
             if (event.key === initialKeys.remembered) {
-                await handleChoice('yes')
+                handleChoice('yes')
             } else if (event.key === initialKeys.notRemembered) {
-                await handleChoice('no')
+                handleChoice('no')
             } else if (event.key === initialKeys.stopReview) {
-                await handleChoice('stop')
+                handleChoice('stop')
             }
         } else {
             // 显示释义状态
@@ -213,7 +221,10 @@ const handleKeydown = async (event: KeyboardEvent) => {
             }
         }
     } finally {
-        isHandlingKeypress.value = false
+        // 延迟重置防重复标志，确保单词切换完成
+        setTimeout(() => {
+            isHandlingKeypress.value = false
+        }, 100)
     }
 }
 
@@ -226,14 +237,18 @@ const handleKeyup = (event: KeyboardEvent) => {
 // 监听单词变化，自动播放新单词的音频
 watch(() => props.word, (newWord, oldWord) => {
     if (newWord && newWord !== oldWord) {
+        // 记录单词切换时间，用于防止快捷键误触
+        lastWordChangeTime.value = Date.now()
+
         // 重置状态
         showDefinition.value = false
         pendingChoice.value = null
         startTime.value = Date.now()
-        isHandlingKeypress.value = false // 重置按键处理标志
-        pressedKeys.value.clear() // 清空按键记录
+        // ❌ 不要在这里重置防重复标志，避免快捷键重复触发
+        // isHandlingKeypress.value = false
+        // pressedKeys.value.clear()
 
-        // 播放新单词音频（根据设置决定是否自动播放）
+        // 播放新单词音频（根据设置决定是否自动播放）- 非阻塞
         if (autoPlayOnWordChange.value) {
             playWordAudio(newWord.word, audioAccent.value)
         }

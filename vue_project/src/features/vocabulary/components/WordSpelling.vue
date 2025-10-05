@@ -89,7 +89,7 @@
 
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
@@ -151,6 +151,8 @@ const userInput = ref('')
 const forgotClicked = ref(false)
 const isSubmitting = ref(false)
 const pressedKeys = ref(new Set<string>()) // 记录当前按下的键
+const isHandlingKeypress = ref(false) // 防止按键重复触发
+const lastWordChangeTime = ref(0) // 记录上次单词切换时间
 
 // 详细输入数据记录
 const startTime = ref<number>(0)
@@ -242,11 +244,27 @@ const handleKeydown = (event: KeyboardEvent) => {
     return
   }
 
+  // 防止重复触发：如果正在处理按键，直接返回
+  if (isHotkey && isHandlingKeypress.value) {
+    event.preventDefault()
+    return
+  }
+
+  // 防止单词切换后立即触发快捷键（200ms保护期）
+  if (isHotkey) {
+    const timeSinceWordChange = Date.now() - lastWordChangeTime.value
+    if (timeSinceWordChange < 200) {
+      event.preventDefault()
+      return
+    }
+  }
+
   // 处理自定义的下一个快捷键（不记录事件）
   if (event.key === spellingKeys.next) {
     if (canProceed.value) {
       event.preventDefault()
       pressedKeys.value.add(event.key) // 标记为已按下
+      isHandlingKeypress.value = true // 标记正在处理
       handleNext()
     }
     return // 直接返回，不记录此快捷键事件
@@ -256,12 +274,22 @@ const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === spellingKeys.playAudio) {
     event.preventDefault()
     pressedKeys.value.add(event.key) // 标记为已按下
+    isHandlingKeypress.value = true // 标记正在处理
     handlePlayAudio()
+    // 延迟重置处理标志
+    setTimeout(() => {
+      isHandlingKeypress.value = false
+    }, 100)
     return // 不记录快捷键事件
   } else if (event.key === spellingKeys.forgot) {
     event.preventDefault()
     pressedKeys.value.add(event.key) // 标记为已按下
+    isHandlingKeypress.value = true // 标记正在处理
     handleForgot()
+    // 延迟重置处理标志
+    setTimeout(() => {
+      isHandlingKeypress.value = false
+    }, 100)
     return // 不记录快捷键事件
   }
 
@@ -399,14 +427,16 @@ const handleNext = async () => {
 
     await props.onResult({ remembered, spellingData })
 
-    resetState()
-    await nextTick()
-    playWordAudio(props.word.word)
-    setTimeout(() => inputRef.value?.focus(), 50)
+    // 不需要手动 resetState()，watch 会在单词变化时自动调用
+    // 不需要手动播放音频，watch 会在单词变化时自动播放
   } catch (error) {
     console.error('Submit spelling result failed:', error)
   } finally {
     isSubmitting.value = false
+    // 延迟重置处理标志，确保单词切换完成
+    setTimeout(() => {
+      isHandlingKeypress.value = false
+    }, 100)
   }
 }
 
@@ -424,7 +454,28 @@ const resetState = () => {
   backspaceSequences.value = []
   currentBackspaceSequence.value = null
 
+  // 清空按键记录，防止快捷键重复触发
+  pressedKeys.value.clear()
 }
+
+// 监听单词变化，自动重置状态和播放音频
+watch(() => props.word, (newWord, oldWord) => {
+  if (newWord && newWord !== oldWord) {
+    // 记录单词切换时间，用于防止快捷键误触
+    lastWordChangeTime.value = Date.now()
+
+    // 重置状态
+    resetState()
+
+    // 播放新单词音频（非阻塞）
+    playWordAudio(newWord.word)
+
+    // 聚焦输入框
+    if (!isMobile.value) {
+      setTimeout(() => inputRef.value?.focus(), 50)
+    }
+  }
+})
 
 onMounted(async () => {
   checkMobile()
