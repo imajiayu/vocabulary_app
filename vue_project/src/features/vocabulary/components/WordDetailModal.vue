@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 import { X as XIcon } from 'lucide-vue-next';
 import WordInfoSection from './WordInfoSection.vue';
 import WordActionsSidebar from './WordActionsSiderbar.vue';
@@ -189,8 +189,8 @@ onMounted(() => {
   onWordUpdated(wordUpdatedCallback);
 });
 
-// 组件卸载时清理事件监听器
-onUnmounted(() => {
+// 组件卸载前清理事件监听器（比 onUnmounted 更早执行）
+onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleKeydown, { capture: true });
 
   // 清理WebSocket监听

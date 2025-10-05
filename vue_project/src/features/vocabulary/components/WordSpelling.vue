@@ -89,7 +89,7 @@
 
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
@@ -495,7 +495,8 @@ onMounted(async () => {
   }
 })
 
-onUnmounted(() => {
+// 在组件卸载前移除监听器（比 onUnmounted 更早执行）
+onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile)
   document.removeEventListener('keyup', handleKeyup)
 })

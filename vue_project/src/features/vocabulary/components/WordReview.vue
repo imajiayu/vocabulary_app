@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
@@ -272,7 +272,8 @@ onMounted(async () => {
     }
 })
 
-onUnmounted(() => {
+// 在组件卸载前移除监听器（比 onUnmounted 更早执行）
+onBeforeUnmount(() => {
     document.removeEventListener('keydown', handleKeydown)
     document.removeEventListener('keyup', handleKeyup)
 })
