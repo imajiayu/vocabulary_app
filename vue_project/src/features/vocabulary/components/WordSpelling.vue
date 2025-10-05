@@ -484,7 +484,7 @@ onMounted(async () => {
   // 加载快捷键设置
   await loadHotkeys()
 
-  // 注册按键监听
+  // 注册按键监听（keydown 通过input的@keydown绑定，这里只注册keyup）
   document.addEventListener('keyup', handleKeyup)
 
   resetState()
@@ -499,6 +499,9 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile)
   document.removeEventListener('keyup', handleKeyup)
+  // 清空所有状态，防止事件残留
+  pressedKeys.value.clear()
+  isHandlingKeypress.value = false
 })
 </script>
 

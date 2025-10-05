@@ -79,6 +79,7 @@ const emit = defineEmits<{
   'update:isEditing': [value: boolean];
   wordUpdated: [updatedWord: Word];
   wordForgot: [wordId: number];
+  wordMastered: [wordId: number];
 }>();
 
 // Single state for forget button - gets disabled after one click
@@ -110,6 +111,10 @@ const toggleReview = async () => {
     });
     // 直接将更新后的数据发送给父组件
     emit('wordUpdated', updatedWord);
+    // 如果是标记为掌握，触发wordMastered事件
+    if (newStatus) {
+      emit('wordMastered', props.word.id);
+    }
   } catch (error) {
     console.error('Error toggling review:', error);
   }

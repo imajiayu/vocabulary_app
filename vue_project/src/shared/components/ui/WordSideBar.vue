@@ -24,6 +24,7 @@
         @request-close="closeModal"
         @word-deleted="handleWordDeleted"
         @word-forgot="handleWordForgot"
+        @word-mastered="handleWordMastered"
       />
       <div v-if="isModalOpen" class="modal-overlay" @click="closeModal"></div>
     </teleport>
@@ -46,6 +47,7 @@ const emit = defineEmits<{
   sidebarWordChange: [finalWord: Word];
   wordDeleted: [wordId: number];
   wordForgot: [wordId: number];
+  wordMastered: [wordId: number];
 }>();
 
 const props = defineProps<Props>()
@@ -90,6 +92,11 @@ const handleWordDeleted = (wordId: number) => {
 const handleWordForgot = (wordId: number) => {
   // 转发 wordForgot 事件给父组件
   emit('wordForgot', wordId)
+}
+
+const handleWordMastered = (wordId: number) => {
+  // 转发 wordMastered 事件给父组件
+  emit('wordMastered', wordId)
 }
 
 const wordHeight = 40

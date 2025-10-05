@@ -360,5 +360,6 @@ export const useReviewStore = defineStore('review', () => {
     reset,
     initializeShuffle, // 暴露初始化方法
     restoreFromProgress, // 恢复进度方法
+    sortByLapse, // 暴露排序方法
   }
 })

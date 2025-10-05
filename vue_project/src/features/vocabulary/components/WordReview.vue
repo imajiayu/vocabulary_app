@@ -276,6 +276,9 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     document.removeEventListener('keydown', handleKeydown)
     document.removeEventListener('keyup', handleKeyup)
+    // 清空所有状态，防止事件残留
+    pressedKeys.value.clear()
+    isHandlingKeypress.value = false
 })
 </script>
 

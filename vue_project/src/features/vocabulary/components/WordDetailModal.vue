@@ -37,6 +37,7 @@
             @word-deleted="handleWordDeleted"
             @word-updated="handleWordUpdated"
             @word-forgot="handleWordForgot"
+            @word-mastered="handleWordMastered"
           />
         </div>
       </div>
@@ -68,6 +69,7 @@ const emit = defineEmits<{
   wordDeleted: [wordId: number];
   requestClose: [];
   wordForgot: [wordId: number];
+  wordMastered: [wordId: number];
 }>();
 
 // 关闭按钮点击处理
@@ -182,6 +184,11 @@ const handleWordUpdated = (updatedWord: Word) => {
 const handleWordForgot = (wordId: number) => {
   // 转发 wordForgot 事件给父组件
   emit('wordForgot', wordId);
+};
+
+const handleWordMastered = (wordId: number) => {
+  // 转发 wordMastered 事件给父组件
+  emit('wordMastered', wordId);
 };
 
 // 组件挂载时设置WebSocket监听

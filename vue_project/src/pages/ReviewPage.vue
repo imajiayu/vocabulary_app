@@ -2,7 +2,7 @@
   <div class="app-container with-topbar">
     <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
       :remember-history="wordResults" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
-      @word-forgot="handleWordForgot" />
+      @word-forgot="handleWordForgot" @word-mastered="handleWordMastered" />
 
     <!-- 顶部栏 -->
     <TopBar show-home-button>
@@ -99,6 +99,33 @@ const handleSidebarWordDeleted = (wordId: number) => {
   }
 };
 
+const handleWordMastered = (wordId: number) => {
+  // 如果是lapse模式，从队列中移除单词
+  if (mode.value === 'mode_lapse') {
+    if (reviewStore.wordQueue.length === 0) return;
+
+    const currentWordIndex = currentIndex.value % reviewStore.wordQueue.length;
+    const wordIndex = reviewStore.wordQueue.findIndex(w => w.id === wordId);
+
+    if (wordIndex !== -1) {
+      reviewStore.wordQueue.splice(wordIndex, 1);
+
+      // 如果队列还有单词且当前索引超出范围，重置索引并重新排序
+      if (reviewStore.wordQueue.length > 0 && currentIndex.value >= reviewStore.wordQueue.length) {
+        reviewStore.currentIndex = 0;
+        // 重新排序队列（根据shuffle状态）
+        reviewStore.wordQueue = reviewStore.sortByLapse(reviewStore.wordQueue, shuffle.value);
+      }
+
+      // 标记单词为已记住（绿色）
+      wordResults.value.set(wordId, true);
+    }
+  } else {
+    // 非lapse模式，只标记为已记住
+    wordResults.value.set(wordId, true);
+  }
+};
+
 // 路由和存储
 const route = useRoute()
 const reviewStore = useReviewStore()
@@ -112,7 +139,8 @@ const {
   totalWords,
   currentIndex,
   progress,
-  wordResults
+  wordResults,
+  shuffle
 } = storeToRefs(reviewStore)
 
 // 本地状态
