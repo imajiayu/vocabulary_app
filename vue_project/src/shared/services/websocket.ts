@@ -15,6 +15,11 @@ export const WebSocketEvents = {
   TRANSCRIPTION_STOPPED: 'transcription_stopped',
   CHUNK_PROCESSED: 'chunk_processed',
 
+  // 关系生成进度事件
+  RELATION_GENERATION_PROGRESS: 'relation_generation_progress',
+  RELATION_GENERATION_COMPLETE: 'relation_generation_complete',
+  RELATION_GENERATION_ERROR: 'relation_generation_error',
+
   // 通用事件
   ERROR: 'error',
   CONNECTED: 'connected',
@@ -402,5 +407,48 @@ export function useWordManagementWebSocket() {
     onWordUpdated,
     onWordCreated,
     onWordDeleted,
+  }
+}
+
+/**
+ * Vue组合函数：关系生成进度WebSocket
+ */
+export function useRelationGenerationWebSocket() {
+  const ws = useWebSocket() // 使用全局实例
+
+  // 关系生成进度事件监听器
+  const onProgress = (callback: (data: {
+    relation_type: string
+    current: number
+    total: number
+    percent: number
+    message: string
+  }) => void) => {
+    ws.on(WebSocketEvents.RELATION_GENERATION_PROGRESS, callback)
+  }
+
+  const onComplete = (callback: (data: {
+    relation_type: string
+    total_count: number
+    message: string
+  }) => void) => {
+    ws.on(WebSocketEvents.RELATION_GENERATION_COMPLETE, callback)
+  }
+
+  const onError = (callback: (data: {
+    relation_type: string
+    message: string
+  }) => void) => {
+    ws.on(WebSocketEvents.RELATION_GENERATION_ERROR, callback)
+  }
+
+  return {
+    // 基础WebSocket功能
+    ...ws,
+
+    // 关系生成特定事件监听
+    onProgress,
+    onComplete,
+    onError,
   }
 }

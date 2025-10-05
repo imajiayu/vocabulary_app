@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import logging
 from difflib import SequenceMatcher
 from typing import Dict, Set, Tuple, List
 from nltk.corpus import wordnet
 from web_app.models.word import Word, WordRelation, RelationType
 from web_app.extensions import get_session
-from web_app.scripts.word_relations.utils import batch_insert_relations
-
-logger = logging.getLogger(__name__)
+from sqlalchemy import insert
+from web_app.services.relations.utils import batch_insert_relations
 
 
 def levenshtein_distance(s1: str, s2: str) -> int:
@@ -257,27 +255,26 @@ class ConfusedWordsGenerator:
 
         return False
 
-    def generate_relations(self) -> None:
+    def generate_relations(self, emitter=None) -> int:
         """生成易混淆词关系"""
-        logger.info("开始生成精确易混淆关系...")
-
         with get_session() as session:
             words = session.query(Word).all()
             # 过滤掉太短的词
             words = [w for w in words if len(w.word) >= self.min_length]
-            logger.info(f"过滤后单词数: {len(words)}")
 
             relations_to_add = []
             total_found = 0
-            total_processed = 0
+            total = len(words)
+
+            if emitter:
+                emitter.emit_progress(0, total, "Starting confused words generation...")
 
             for i, w1 in enumerate(words):
-                if i % 100 == 0:
-                    logger.info(f"已处理 {i}/{len(words)} 个单词，找到 {total_found} 个关系")
+                if emitter and i % 100 == 0:
+                    emitter.emit_progress(i, total, f"Processing confused words: {i}/{total} words, {total_found} found")
 
                 for j in range(i + 1, len(words)):
                     w2 = words[j]
-                    total_processed += 1
 
                     is_confused, score = self.calculate_confusion_score(
                         w1.word, w2.word
@@ -307,9 +304,7 @@ class ConfusedWordsGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
-            logger.info(
-                f"精确易混淆关系生成完成！处理了 {total_processed} 个词对，" f"生成了 {total_found} 个高质量关系"
-            )
+            return total_found
 
 
 def generate_confused_relations(
@@ -317,4 +312,4 @@ def generate_confused_relations(
 ):
     """生成易混淆关系的入口函数"""
     generator = ConfusedWordsGenerator(min_length=min_length)
-    generator.generate_relations()
+    return generator.generate_relations()

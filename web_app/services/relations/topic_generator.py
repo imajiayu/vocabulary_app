@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import logging
 from collections import defaultdict
 from typing import Dict, List, Set, Tuple
 from nltk.corpus import wordnet
 from web_app.models.word import Word, WordRelation, RelationType
 from web_app.extensions import get_session
-from web_app.scripts.word_relations.utils import batch_insert_relations
-
-logger = logging.getLogger(__name__)
+from sqlalchemy import insert
+from web_app.services.relations.utils import batch_insert_relations
 
 
 class SemanticTopicGenerator:
@@ -277,28 +275,29 @@ class SemanticTopicGenerator:
         return topic_scores
 
     def find_topically_related_words(
-        self, words: List[Word]
+        self, words: List[Word], emitter=None
     ) -> List[Tuple[Word, Word, float]]:
         """找到主题相关的词对"""
         word_topics = {}
+        total = len(words)
 
         # 为每个词计算主题得分
-        logger.info("计算词汇主题得分...")
-        for word in words:
+        for i, word in enumerate(words):
+            if emitter and i % 100 == 0:
+                emitter.emit_progress(i, total, f"Computing topic scores: {i}/{total} words")
+
             topic_scores = self.get_word_topic_scores(word.word)
             if topic_scores:  # 只保留有主题关联的词
                 word_topics[word] = topic_scores
 
-        logger.info(f"有主题关联的词汇数量: {len(word_topics)}")
-
         # 找到主题相关的词对
         related_pairs = []
         words_with_topics = list(word_topics.keys())
+        total_with_topics = len(words_with_topics)
 
-        logger.info("计算词对主题相似度...")
         for i, w1 in enumerate(words_with_topics):
-            if i % 100 == 0:
-                logger.info(f"已处理 {i}/{len(words_with_topics)} 个词")
+            if emitter and i % 100 == 0:
+                emitter.emit_progress(i, total_with_topics, f"Computing topic pairs: {i}/{total_with_topics} words")
 
             for j in range(i + 1, len(words_with_topics)):
                 w2 = words_with_topics[j]
@@ -329,28 +328,26 @@ class SemanticTopicGenerator:
 
         return related_pairs
 
-    def generate_relations(self) -> None:
+    def generate_relations(self, emitter=None) -> int:
         """生成主题关系"""
-        logger.info("开始生成基于语义的主题关系...")
-
         with get_session() as session:
             words = session.query(Word).all()
-            logger.info(f"总单词数: {len(words)}")
+            total = len(words)
+
+            if emitter:
+                emitter.emit_progress(0, total, "Starting topic relation generation...")
 
             # 扩展主题词汇
-            logger.info("扩展主题词汇...")
-            for topic in self.topic_seeds:
-                original_size = len(self.topic_seeds[topic])
+            num_topics = len(self.topic_seeds)
+            for i, topic in enumerate(self.topic_seeds):
+                if emitter:
+                    emitter.emit_progress(i, num_topics, f"Expanding topic: {topic}")
                 self.topic_seeds[topic] = self.expand_topic_words(
                     self.topic_seeds[topic]
                 )
-                logger.info(
-                    f"主题 '{topic}': {original_size} -> {len(self.topic_seeds[topic])} 个词"
-                )
 
             # 找到主题相关的词对
-            related_pairs = self.find_topically_related_words(words)
-            logger.info(f"找到 {len(related_pairs)} 个主题相关词对")
+            related_pairs = self.find_topically_related_words(words, emitter)
 
             # 创建关系
             relations_to_add = []
@@ -373,10 +370,10 @@ class SemanticTopicGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
-            logger.info(f"基于语义的主题关系生成完成，共生成 {len(related_pairs)} 条关系")
+            return len(related_pairs)
 
 
 def generate_topic_relations():
     """生成主题关系的入口函数"""
     generator = SemanticTopicGenerator(min_confidence=0.7)
-    generator.generate_relations()
+    return generator.generate_relations()

@@ -40,7 +40,11 @@ export function useAudioAccent() {
   const updateAudioAccent = async (accent: AudioAccent) => {
     try {
       await api.settings.updateSettings({
-        audio: { accent }
+        audio: {
+          accent,
+          autoPlayOnWordChange: autoPlayOnWordChange.value,
+          autoPlayAfterAnswer: autoPlayAfterAnswer.value
+        }
       })
       audioAccent.value = accent
     } catch (error) {

@@ -30,11 +30,6 @@
           <p class="section-description">自定义您的学习节奏和复习策略</p>
 
           <div class="settings-group">
-            <div class="group-header">
-              <h2 class="group-title">学习配置</h2>
-              <p class="group-description">配置每日学习量和备考周期</p>
-            </div>
-
             <div class="settings-grid">
               <!-- 每日复习上限 -->
               <div class="setting-card">
@@ -111,14 +106,9 @@
         <!-- 音频设置 -->
         <section id="audio" class="settings-section">
           <h1 class="section-title">音频设置</h1>
-          <p class="section-description">自定义单词发音口音</p>
+          <p class="section-description">选择单词发音口音和自动播放</p>
 
           <div class="settings-group">
-            <div class="group-header">
-              <h2 class="group-title">音频设置</h2>
-              <p class="group-description">选择单词发音口音</p>
-            </div>
-
             <div class="audio-settings">
               <div class="audio-accent-selector">
                 <label class="audio-label">单词发音</label>
@@ -279,6 +269,200 @@
             </div>
           </transition>
         </section>
+
+        <!-- 单词关联设置 -->
+        <section id="relations" class="settings-section">
+          <h1 class="section-title">单词关联</h1>
+          <p class="section-description">生成和管理单词间的关系网络</p>
+
+          <div class="settings-group">
+            <div class="relation-list">
+              <!-- 同义词 -->
+              <div class="relation-row">
+                <div class="relation-info">
+                  <span class="relation-name">同义词</span>
+                  <span class="relation-count">{{ relationStats.synonym || 0 }} 条</span>
+                </div>
+                <div class="relation-actions">
+                  <button class="btn-relation-action btn-generate-small" @click="generateSingleRelation('synonym')" :disabled="progressMap.synonym.isGenerating || progressMap.synonym.isClearing">
+                    {{ progressMap.synonym.isGenerating ? '生成中...' : '🔄 生成' }}
+                  </button>
+                  <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('synonym')" :disabled="progressMap.synonym.isGenerating || progressMap.synonym.isClearing">
+                    {{ progressMap.synonym.isClearing ? '清空中...' : '🗑️ 清空' }}
+                  </button>
+                </div>
+                <!-- Progress Bar -->
+                <div v-if="progressMap.synonym.isGenerating" class="progress-container">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      :style="{
+                        width: progressMap.synonym.percent + '%',
+                        backgroundColor: relationColors.synonym
+                      }"
+                    ></div>
+                  </div>
+                  <div class="progress-text">
+                    {{ progressMap.synonym.percent.toFixed(0) }}% -
+                    {{ progressMap.synonym.current }}/{{ progressMap.synonym.total }} -
+                    {{ progressMap.synonym.message }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 反义词 -->
+              <div class="relation-row">
+                <div class="relation-info">
+                  <span class="relation-name">反义词</span>
+                  <span class="relation-count">{{ relationStats.antonym || 0 }} 条</span>
+                </div>
+                <div class="relation-actions">
+                  <button class="btn-relation-action btn-generate-small" @click="generateSingleRelation('antonym')" :disabled="progressMap.antonym.isGenerating || progressMap.antonym.isClearing">
+                    {{ progressMap.antonym.isGenerating ? '生成中...' : '🔄 生成' }}
+                  </button>
+                  <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('antonym')" :disabled="progressMap.antonym.isGenerating || progressMap.antonym.isClearing">
+                    {{ progressMap.antonym.isClearing ? '清空中...' : '🗑️ 清空' }}
+                  </button>
+                </div>
+                <!-- Progress Bar -->
+                <div v-if="progressMap.antonym.isGenerating" class="progress-container">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      :style="{
+                        width: progressMap.antonym.percent + '%',
+                        backgroundColor: relationColors.antonym
+                      }"
+                    ></div>
+                  </div>
+                  <div class="progress-text">
+                    {{ progressMap.antonym.percent.toFixed(0) }}% -
+                    {{ progressMap.antonym.current }}/{{ progressMap.antonym.total }} -
+                    {{ progressMap.antonym.message }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 词根 -->
+              <div class="relation-row">
+                <div class="relation-info">
+                  <span class="relation-name">词根</span>
+                  <span class="relation-count">{{ relationStats.root || 0 }} 条</span>
+                </div>
+                <div class="relation-actions">
+                  <button class="btn-relation-action btn-generate-small" @click="generateSingleRelation('root')" :disabled="progressMap.root.isGenerating || progressMap.root.isClearing">
+                    {{ progressMap.root.isGenerating ? '生成中...' : '🔄 生成' }}
+                  </button>
+                  <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('root')" :disabled="progressMap.root.isGenerating || progressMap.root.isClearing">
+                    {{ progressMap.root.isClearing ? '清空中...' : '🗑️ 清空' }}
+                  </button>
+                </div>
+                <!-- Progress Bar -->
+                <div v-if="progressMap.root.isGenerating" class="progress-container">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      :style="{
+                        width: progressMap.root.percent + '%',
+                        backgroundColor: relationColors.root
+                      }"
+                    ></div>
+                  </div>
+                  <div class="progress-text">
+                    {{ progressMap.root.percent.toFixed(0) }}% -
+                    {{ progressMap.root.current }}/{{ progressMap.root.total }} -
+                    {{ progressMap.root.message }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 易混淆 -->
+              <div class="relation-row">
+                <div class="relation-info">
+                  <span class="relation-name">易混淆</span>
+                  <span class="relation-count">{{ relationStats.confused || 0 }} 条</span>
+                </div>
+                <div class="relation-actions">
+                  <button class="btn-relation-action btn-generate-small" @click="generateSingleRelation('confused')" :disabled="progressMap.confused.isGenerating || progressMap.confused.isClearing">
+                    {{ progressMap.confused.isGenerating ? '生成中...' : '🔄 生成' }}
+                  </button>
+                  <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('confused')" :disabled="progressMap.confused.isGenerating || progressMap.confused.isClearing">
+                    {{ progressMap.confused.isClearing ? '清空中...' : '🗑️ 清空' }}
+                  </button>
+                </div>
+                <!-- Progress Bar -->
+                <div v-if="progressMap.confused.isGenerating" class="progress-container">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      :style="{
+                        width: progressMap.confused.percent + '%',
+                        backgroundColor: relationColors.confused
+                      }"
+                    ></div>
+                  </div>
+                  <div class="progress-text">
+                    {{ progressMap.confused.percent.toFixed(0) }}% -
+                    {{ progressMap.confused.current }}/{{ progressMap.confused.total }} -
+                    {{ progressMap.confused.message }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 主题 -->
+              <div class="relation-row">
+                <div class="relation-info">
+                  <span class="relation-name">主题</span>
+                  <span class="relation-count">{{ relationStats.topic || 0 }} 条</span>
+                </div>
+                <div class="relation-actions">
+                  <button class="btn-relation-action btn-generate-small" @click="generateSingleRelation('topic')" :disabled="progressMap.topic.isGenerating || progressMap.topic.isClearing">
+                    {{ progressMap.topic.isGenerating ? '生成中...' : '🔄 生成' }}
+                  </button>
+                  <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('topic')" :disabled="progressMap.topic.isGenerating || progressMap.topic.isClearing">
+                    {{ progressMap.topic.isClearing ? '清空中...' : '🗑️ 清空' }}
+                  </button>
+                </div>
+                <!-- Progress Bar -->
+                <div v-if="progressMap.topic.isGenerating" class="progress-container">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      :style="{
+                        width: progressMap.topic.percent + '%',
+                        backgroundColor: relationColors.topic
+                      }"
+                    ></div>
+                  </div>
+                  <div class="progress-text">
+                    {{ progressMap.topic.percent.toFixed(0) }}% -
+                    {{ progressMap.topic.current }}/{{ progressMap.topic.total }} -
+                    {{ progressMap.topic.message }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 总计 -->
+              <div class="relation-row relation-row-total">
+                <div class="relation-info">
+                  <span class="relation-name">总计</span>
+                  <span class="relation-count">{{ relationStats.total || 0 }} 条</span>
+                </div>
+                <div class="relation-actions">
+                  <button class="btn-relation-action btn-view-graph" @click="viewRelationGraph">
+                    🕸️ 查看关系图
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <transition name="fade">
+              <div v-if="relationMessage" class="message" :class="relationMessageType">
+                {{ relationMessage }}
+              </div>
+            </transition>
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -286,12 +470,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import WheelSelector from '@/shared/components/ui/WheelSelector.vue'
 import SwitchTab from '@/shared/components/ui/SwitchTab.vue'
 import KeySelector from '@/shared/components/ui/KeySelector.vue'
 import IOSSwitch from '@/shared/components/ui/IOSSwitch.vue'
 import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
+import { useRelationGenerationWebSocket } from '@/shared/services/websocket'
 
 interface SettingsSection {
   id: string
@@ -312,7 +498,10 @@ const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
   { id: 'audio', title: '音频设置', subtitle: '发音口音选择', icon: '🔊' },
   { id: 'hotkeys', title: '快捷键设置', subtitle: '自定义键盘快捷键', icon: '⌨️' },
+  { id: 'relations', title: '单词关联', subtitle: '管理单词关系网络', icon: '🕸️' },
 ]
+
+const router = useRouter()
 
 const activeSection = ref('learning')
 const isSaving = ref(false)
@@ -320,6 +509,49 @@ const saveSuccess = ref<string | false>(false) // 改为字符串类型，记录
 const isScrollingProgrammatically = ref(false) // 标记是否正在程序化滚动
 let scrollTimeout: ReturnType<typeof setTimeout> | null = null
 let saveSuccessTimeout: ReturnType<typeof setTimeout> | null = null
+
+// 关系管理相关状态
+const relationStats = ref({
+  synonym: 0,
+  antonym: 0,
+  root: 0,
+  confused: 0,
+  topic: 0,
+  total: 0
+})
+const isGenerating = ref(false)
+const relationMessage = ref('')
+const relationMessageType = ref<'success' | 'error' | 'info'>('info')
+
+// WebSocket for relation generation progress
+const ws = useRelationGenerationWebSocket()
+
+// Progress tracking for each relation type
+interface ProgressState {
+  current: number
+  total: number
+  percent: number
+  message: string
+  isGenerating: boolean
+  isClearing: boolean
+}
+
+const progressMap = ref<Record<string, ProgressState>>({
+  synonym: { current: 0, total: 0, percent: 0, message: '', isGenerating: false, isClearing: false },
+  antonym: { current: 0, total: 0, percent: 0, message: '', isGenerating: false, isClearing: false },
+  root: { current: 0, total: 0, percent: 0, message: '', isGenerating: false, isClearing: false },
+  confused: { current: 0, total: 0, percent: 0, message: '', isGenerating: false, isClearing: false },
+  topic: { current: 0, total: 0, percent: 0, message: '', isGenerating: false, isClearing: false }
+})
+
+// 关系类型配色
+const relationColors: Record<string, string> = {
+  synonym: '#52c41a',    // 绿色
+  antonym: '#ff4d4f',    // 红色
+  root: '#722ed1',       // 紫色
+  confused: '#fa8c16',   // 橙色
+  topic: '#1677ff'       // 蓝色
+}
 
 const settings = ref<UserSettings>({
   learning: {
@@ -527,7 +759,9 @@ const resetAudioSettings = async () => {
   if (confirm('确定要恢复音频设置的默认值吗？')) {
     try {
       settings.value.audio = {
-        accent: 'us'
+        accent: 'us',
+        autoPlayOnWordChange: true,
+        autoPlayAfterAnswer: true
       }
       await saveAudioSettings()
     } catch (error) {
@@ -609,8 +843,152 @@ const resetHotkeySettings = async () => {
   }
 }
 
-onMounted(() => {
+// 关系管理函数
+const loadRelationStats = async () => {
+  try {
+    const data = await api.relations.getStats()
+    relationStats.value = data
+  } catch (e: any) {
+    console.error('Failed to load relation stats:', e)
+  }
+}
+
+const generateSingleRelation = async (relationType: string) => {
+  relationMessage.value = ''
+
+  try {
+    progressMap.value[relationType].isGenerating = true
+    progressMap.value[relationType].current = 0
+    progressMap.value[relationType].total = 0
+    progressMap.value[relationType].percent = 0
+    progressMap.value[relationType].message = '启动生成任务...'
+
+    await api.relations.generate(relationType)
+
+    relationMessageType.value = 'info'
+    const typeNames: Record<string, string> = {
+      synonym: '同义词',
+      antonym: '反义词',
+      root: '词根',
+      confused: '易混淆',
+      topic: '主题'
+    }
+    relationMessage.value = `正在生成${typeNames[relationType] || relationType}关系...`
+  } catch (e: any) {
+    relationMessageType.value = 'error'
+    relationMessage.value = e.message || '生成失败'
+    progressMap.value[relationType].isGenerating = false
+  }
+}
+
+const clearSingleRelation = async (relationType: string) => {
+  const typeNames: Record<string, string> = {
+    synonym: '同义词',
+    antonym: '反义词',
+    root: '词根',
+    confused: '易混淆',
+    topic: '主题'
+  }
+
+  if (!confirm(`确定要清空所有${typeNames[relationType] || relationType}关系吗？此操作不可撤销。`)) {
+    return
+  }
+
+  progressMap.value[relationType].isClearing = true
+  relationMessage.value = ''
+
+  try {
+    const data = await api.relations.clear({
+      relation_types: [relationType]
+    })
+
+    relationMessageType.value = 'success'
+    relationMessage.value = `已清空 ${data.count} 条${typeNames[relationType] || relationType}关系`
+
+    // 重新加载统计
+    await loadRelationStats()
+
+    // 3秒后清除消息
+    setTimeout(() => {
+      relationMessage.value = ''
+    }, 3000)
+  } catch (e: any) {
+    relationMessageType.value = 'error'
+    relationMessage.value = e.message || '清空失败'
+  } finally {
+    progressMap.value[relationType].isClearing = false
+  }
+}
+
+const viewRelationGraph = () => {
+  router.push('/relations')
+}
+
+// Get relation type display name
+const getRelationTypeName = (type: string): string => {
+  const names: Record<string, string> = {
+    synonym: '同义词',
+    antonym: '反义词',
+    root: '词根',
+    confused: '易混淆',
+    topic: '主题'
+  }
+  return names[type] || type
+}
+
+// Setup WebSocket listeners
+const setupWebSocketListeners = () => {
+  ws.onProgress((data) => {
+    const { relation_type, current, total, percent, message } = data
+    if (progressMap.value[relation_type]) {
+      progressMap.value[relation_type].current = current
+      progressMap.value[relation_type].total = total
+      progressMap.value[relation_type].percent = percent
+      progressMap.value[relation_type].message = message
+    }
+  })
+
+  ws.onComplete((data) => {
+    const { relation_type, message } = data
+    if (progressMap.value[relation_type]) {
+      progressMap.value[relation_type].isGenerating = false
+      progressMap.value[relation_type].message = message
+    }
+
+    // Refresh stats
+    loadRelationStats()
+
+    relationMessageType.value = 'success'
+    relationMessage.value = `${getRelationTypeName(relation_type)} 生成完成！`
+
+    // 3秒后清除消息
+    setTimeout(() => {
+      relationMessage.value = ''
+    }, 3000)
+  })
+
+  ws.onError((data) => {
+    const { relation_type, message } = data
+    if (progressMap.value[relation_type]) {
+      progressMap.value[relation_type].isGenerating = false
+    }
+    relationMessageType.value = 'error'
+    relationMessage.value = `${getRelationTypeName(relation_type)}: ${message}`
+  })
+}
+
+onMounted(async () => {
+  // Connect to WebSocket
+  if (!ws.connected) {
+    await ws.connect()
+  }
+
+  // Setup listeners
+  setupWebSocketListeners()
+
+  // Load initial data
   loadSettings()
+  loadRelationStats()
 })
 </script>
 
@@ -918,15 +1296,17 @@ onMounted(() => {
 
 /* 音频设置样式 */
 .audio-settings {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
 }
 
 .audio-accent-selector {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
 
 .audio-label {
@@ -947,10 +1327,10 @@ onMounted(() => {
 
 /* 音频自动播放设置 */
 .audio-autoplay-settings {
-  margin-top: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
 
 .autoplay-options {
@@ -1039,6 +1419,10 @@ onMounted(() => {
   .accent-switch {
     max-width: 100%;
   }
+
+  .audio-settings {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* 快捷键设置样式 */
@@ -1062,5 +1446,181 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+/* 关系管理样式 */
+.relation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.relation-row {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  gap: 12px;
+}
+
+.relation-row > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.relation-row:hover {
+  background: #f1f5f9;
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.relation-row-total {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+}
+
+.relation-row-total:hover {
+  background: linear-gradient(135deg, #5a6dd8, #6a4190);
+}
+
+.relation-row-total .relation-name,
+.relation-row-total .relation-count {
+  color: white;
+}
+
+.relation-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.relation-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  min-width: 80px;
+}
+
+.relation-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  padding: 4px 12px;
+  background: white;
+  border-radius: 6px;
+}
+
+.relation-row-total .relation-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.relation-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-relation-action {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-relation-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-generate-small {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.btn-generate-small:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-clear-small {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-clear-small:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.btn-view-graph {
+  background: white;
+  color: #667eea;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-view-graph:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.message {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.message.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.message.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.message.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+/* 进度条样式 */
+.progress-container {
+  width: 100%;
+  padding-top: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 10px;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #666;
+  text-align: left;
 }
 </style>

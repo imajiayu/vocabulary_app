@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 from typing import Tuple, Set, Dict, List
 from functools import lru_cache
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -9,9 +8,9 @@ from nltk.stem import PorterStemmer
 from gensim.models import KeyedVectors
 from web_app.models.word import Word, WordRelation, RelationType
 from web_app.extensions import get_session
-from web_app.scripts.word_relations.utils import batch_insert_relations
+from sqlalchemy import insert
+from web_app.services.relations.utils import batch_insert_relations
 
-logger = logging.getLogger(__name__)
 stemmer = PorterStemmer()
 
 # 拉丁/希腊词根数据库（针对GRE词汇）
@@ -340,7 +339,7 @@ class RootRelationGenerator:
                         continue
 
         except Exception as e:
-            logger.warning(f"Error getting WordNet derivations for '{word}': {e}")
+            pass
 
         # 缓存结果
         self._wordnet_cache[word_lower] = derivations
@@ -958,23 +957,21 @@ class RootRelationGenerator:
                 )
         return relations
 
-    def generate_relations(self) -> None:
-        logger.info("开始生成基于WordNet的词根关系...")
-
+    def generate_relations(self, emitter=None) -> int:
         with get_session() as session:
             words = session.query(Word).all()
             total_words = len(words)
-            logger.info(f"总单词数: {total_words}")
+
+            if emitter:
+                emitter.emit_progress(0, total_words, "Starting root relation generation...")
 
             # 预计算所有词的缓存以提高速度
-            logger.info("预计算词干和WordNet派生...")
             for i, word in enumerate(words):
-                if i % 500 == 0:
-                    logger.info(f"预计算进度: {i}/{total_words}")
+                if emitter and i % 500 == 0:
+                    emitter.emit_progress(i, total_words, f"Pre-computing word stems: {i}/{total_words}")
                 self.get_stem(word.word)
                 self.get_wordnet_derivations(word.word)
 
-            logger.info("开始生成词对关系...")
             relations_to_add = []
             total_found = 0
 
@@ -983,8 +980,8 @@ class RootRelationGenerator:
             word_pairs = []
 
             for i, w1 in enumerate(words):
-                if i % 100 == 0:
-                    logger.info(f"已处理 {i}/{total_words} 个单词，找到 {total_found} 个关系")
+                if emitter and i % 100 == 0:
+                    emitter.emit_progress(i, total_words, f"Processing root pairs: {i}/{total_words} words, {total_found} found")
 
                 for j in range(i + 1, total_words):
                     w2 = words[j]
@@ -1012,12 +1009,9 @@ class RootRelationGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
-            logger.info(f"基于WordNet的词根关系生成完成，共生成 {total_found} 条关系")
-            logger.info(
-                f"缓存统计 - WordNet: {len(self._wordnet_cache)}, 词干: {len(self._stem_cache)}, 形态学: {len(self._morphological_cache)}, 负缓存: {len(self._negative_cache)}"
-            )
+            return total_found
 
 
 def generate_root_relations():
     generator = RootRelationGenerator(min_confidence=0.8, vector_threshold=0.65)
-    generator.generate_relations()
+    return generator.generate_relations()

@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import logging
 from typing import Dict, Set, List, Tuple
 from nltk.corpus import wordnet
 from web_app.models.word import Word, WordRelation, RelationType
 from web_app.extensions import get_session
-from web_app.scripts.word_relations.utils import batch_insert_relations
-
-logger = logging.getLogger(__name__)
+from sqlalchemy import insert
+from web_app.services.relations.utils import batch_insert_relations
 
 
 class AntonymGenerator:
@@ -198,18 +196,23 @@ class AntonymGenerator:
         else:
             return 0.7
 
-    def generate_relations(self) -> None:
+    def generate_relations(self, emitter=None) -> int:
         """生成反义词关系"""
-        logger.info("开始生成增强反义词关系...")
-
         with get_session() as session:
             words = session.query(Word).all()
             word_map = {w.word.lower(): w for w in words}
 
             relations_to_add = []
             total_found = 0
+            total = len(words)
 
-            for word in words:
+            if emitter:
+                emitter.emit_progress(0, total, "Starting antonym generation...")
+
+            for i, word in enumerate(words):
+                if emitter and i % 100 == 0:
+                    emitter.emit_progress(i, total, f"Processing antonyms: {i}/{total} words")
+
                 all_antonyms = {}
 
                 # 1. WordNet反义词
@@ -258,10 +261,10 @@ class AntonymGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
-            logger.info(f"增强反义词关系生成完成，共生成 {total_found} 条关系")
+            return total_found
 
 
 def generate_antonym_relations():
     """生成反义词关系的入口函数"""
     generator = AntonymGenerator()
-    generator.generate_relations()
+    return generator.generate_relations()

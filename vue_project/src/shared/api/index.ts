@@ -12,6 +12,7 @@ import { SpeakingApi } from './speaking'
 import { StatsApi } from './stats'
 import { ConfigApi } from './config'
 import { SettingsApi } from './settings'
+import { RelationsApi } from './relations'
 import { get } from './client'
 import type { Word } from '@/shared/types'
 
@@ -53,6 +54,20 @@ export type {
 
 export { SettingsApi } from './settings'
 
+export { RelationsApi } from './relations'
+export type {
+  GraphNode,
+  GraphEdge,
+  GraphData,
+  RelationStats,
+  GenerateRelationsPayload,
+  GenerateRelationsResponse,
+  ClearRelationsPayload,
+  ClearRelationsResponse,
+  AddRelationPayload,
+  DeleteRelationPayload
+} from './relations'
+
 // 进度恢复API
 export class ProgressApi {
   /**
@@ -81,6 +96,7 @@ export const api = {
   stats: StatsApi,
   config: ConfigApi,
   settings: SettingsApi,
+  relations: RelationsApi,
   progress: ProgressApi
 } as const
 

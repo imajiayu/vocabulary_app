@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-import logging
 from typing import Dict, List, Tuple
 from nltk.corpus import wordnet
+from sqlalchemy import insert
 from web_app.models.word import Word, WordRelation, RelationType
 from web_app.extensions import get_session
-from web_app.scripts.word_relations.utils import batch_insert_relations
-from tqdm import tqdm
-
-logging.basicConfig(level=logging.INFO)
+from web_app.services.relations.utils import batch_insert_relations
 
 
 class SynonymGenerator:
@@ -57,7 +54,7 @@ class SynonymGenerator:
         return min(1.0, base_confidence)
 
     def get_semantic_similarity_synonyms(
-        self, words: List[Word]
+        self, words: List[Word], emitter=None
     ) -> Dict[Tuple[int, int], float]:
         """基于语义相似性找同义词（使用WordNet路径相似性）"""
         similar_pairs = {}
@@ -70,11 +67,12 @@ class SynonymGenerator:
                 word_synsets[word.id] = synsets[:3]  # 只取前3个最相关的
 
         # 计算词对之间的相似性
-        total_pairs = len(words) * (len(words) - 1) // 2
-        processed_pairs = 0
+        total = len(words)
 
-        # 用 tqdm 包装最外层循环
-        for i, w1 in enumerate(tqdm(words, desc="Processing words")):
+        for i, w1 in enumerate(words):
+            if emitter and i % 100 == 0:
+                emitter.emit_progress(i, total, f"Computing semantic similarity: {i}/{total} words")
+
             if w1.id not in word_synsets:
                 continue
 
@@ -95,20 +93,24 @@ class SynonymGenerator:
 
         return similar_pairs
 
-    def generate_relations(self) -> None:
+    def generate_relations(self, emitter=None) -> int:
         """生成同义词关系"""
-        logging.info("开始生成增强同义词关系...")
-
         with get_session() as session:
             words = session.query(Word).all()
             word_map = {w.word.lower(): w for w in words}
 
             relations_to_add = []
             total_found = 0
+            total = len(words)
+
+            if emitter:
+                emitter.emit_progress(0, total, "Starting synonym generation...")
 
             # 方法1: WordNet直接同义词
-            logging.info("处理WordNet直接同义词...")
-            for word in words:
+            for i, word in enumerate(words):
+                if emitter and i % 100 == 0:
+                    emitter.emit_progress(i, total, f"Processing WordNet synonyms: {i}/{total} words")
+
                 synonyms = self.get_wordnet_synonyms(word.word)
 
                 for syn_word, confidence in synonyms.items():
@@ -132,8 +134,10 @@ class SynonymGenerator:
                     relations_to_add = []
 
             # 方法2: 语义相似性同义词
-            logging.info("处理语义相似性同义词...")
-            semantic_pairs = self.get_semantic_similarity_synonyms(words)
+            if emitter:
+                emitter.emit_progress(total, total, "Processing semantic similarity...")
+
+            semantic_pairs = self.get_semantic_similarity_synonyms(words, emitter)
 
             for (w1_id, w2_id), confidence in semantic_pairs.items():
                 pair_key = (w1_id, w2_id)
@@ -153,10 +157,10 @@ class SynonymGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
-            logging.info(f"增强同义词关系生成完成，共生成 {total_found} 条关系")
+            return total_found
 
 
 def generate_synonym_relations():
     """生成同义词关系的入口函数"""
     generator = SynonymGenerator(min_confidence=0.6)
-    generator.generate_relations()
+    return generator.generate_relations()
