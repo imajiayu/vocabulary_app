@@ -70,6 +70,54 @@
           <div v-if="error" class="error-message">
             {{ error }}
           </div>
+
+          <!-- 右键菜单 -->
+          <div v-if="contextMenu.show" class="context-menu" :style="{ left: contextMenu.x + 'px', top: contextMenu.y + 'px' }" @click.stop>
+            <div v-if="contextMenu.type === 'edge'" class="menu-item" @click="deleteRelation">
+              <span>🗑️</span>
+              <span>删除关系</span>
+            </div>
+            <div v-if="contextMenu.type === 'node'" class="menu-item" @click="showAddRelationDialog">
+              <span>➕</span>
+              <span>添加关系</span>
+            </div>
+          </div>
+
+          <!-- 点击任意位置关闭右键菜单 -->
+          <div v-if="contextMenu.show" class="context-menu-backdrop" @click="closeContextMenu"></div>
+        </div>
+
+        <!-- 添加关系对话框 -->
+        <div v-if="addRelationDialog.show" class="dialog-overlay" @click="cancelAddRelation">
+          <div class="add-relation-dialog" @click.stop>
+            <h3>为「{{ addRelationDialog.sourceNode?.word }}」添加关系</h3>
+
+            <div class="dialog-field">
+              <label>目标单词：</label>
+              <input
+                v-model="addRelationDialog.targetWord"
+                type="text"
+                placeholder="输入单词名称"
+                @keyup.enter="addRelation"
+              />
+            </div>
+
+            <div class="dialog-field">
+              <label>关系类型：</label>
+              <select v-model="addRelationDialog.relationType">
+                <option value="synonym">同义词</option>
+                <option value="antonym">反义词</option>
+                <option value="root">词根</option>
+                <option value="confused">易混淆</option>
+                <option value="topic">主题</option>
+              </select>
+            </div>
+
+            <div class="dialog-actions">
+              <button class="btn-confirm" @click="addRelation">确认</button>
+              <button class="btn-cancel" @click="cancelAddRelation">取消</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -108,6 +156,23 @@ const centerWordId = ref<number | null>(null)
 const graphData = ref<GraphData>({ nodes: [], edges: [] })
 const loading = ref(false)
 const error = ref('')
+
+// 右键菜单
+const contextMenu = ref({
+  show: false,
+  type: '' as 'node' | 'edge' | '',
+  x: 0,
+  y: 0,
+  data: null as any
+})
+
+// 添加关系对话框
+const addRelationDialog = ref({
+  show: false,
+  sourceNode: null as GraphNode | null,
+  targetWord: '',
+  relationType: 'synonym' as string
+})
 
 // 关系类型配色
 const relationColors: Record<string, string> = {
@@ -314,10 +379,118 @@ const renderGraph = () => {
       }
     }
   })
+
+  // 监听右键点击
+  chartInstance.off('contextmenu')
+  chartInstance.on('contextmenu', (params: any) => {
+    params.event.event.preventDefault()
+
+    if (params.dataType === 'edge') {
+      contextMenu.value = {
+        show: true,
+        type: 'edge',
+        x: params.event.event.clientX,
+        y: params.event.event.clientY,
+        data: params.data
+      }
+    } else if (params.dataType === 'node') {
+      const nodeId = parseInt(params.data.id)
+      const node = graphData.value.nodes.find(n => n.id === nodeId)
+      contextMenu.value = {
+        show: true,
+        type: 'node',
+        x: params.event.event.clientX,
+        y: params.event.event.clientY,
+        data: node
+      }
+    }
+  })
 }
 
 const handleResize = () => {
   chartInstance?.resize()
+}
+
+// 关闭右键菜单
+const closeContextMenu = () => {
+  contextMenu.value.show = false
+}
+
+// 显示添加关系对话框
+const showAddRelationDialog = () => {
+  addRelationDialog.value = {
+    show: true,
+    sourceNode: contextMenu.value.data,
+    targetWord: '',
+    relationType: 'synonym'
+  }
+  closeContextMenu()
+}
+
+// 删除关系
+const deleteRelation = async () => {
+  try {
+    const edge = contextMenu.value.data
+    await api.relations.delete({
+      word_id: parseInt(edge.source),
+      related_word_id: parseInt(edge.target),
+      relation_type: edge.label.formatter
+    })
+    closeContextMenu()
+    await fetchGraphData()
+  } catch (e: any) {
+    error.value = `删除关系失败: ${e.message}`
+    setTimeout(() => {
+      error.value = ''
+    }, 3000)
+  }
+}
+
+// 添加关系
+const addRelation = async () => {
+  try {
+    const targetWord = addRelationDialog.value.targetWord.trim().toLowerCase()
+    if (!targetWord) {
+      error.value = '请输入目标单词'
+      setTimeout(() => { error.value = '' }, 3000)
+      return
+    }
+
+    // 在已有节点中搜索目标单词
+    const targetNode = graphData.value.nodes.find(n => n.word.toLowerCase() === targetWord)
+    if (!targetNode) {
+      error.value = `未找到单词: ${targetWord}`
+      setTimeout(() => { error.value = '' }, 3000)
+      return
+    }
+
+    // 检查是否与自己建立关系
+    if (targetNode.id === addRelationDialog.value.sourceNode?.id) {
+      error.value = '不能与自己建立关系'
+      setTimeout(() => { error.value = '' }, 3000)
+      return
+    }
+
+    await api.relations.add({
+      word_id: addRelationDialog.value.sourceNode!.id,
+      related_word_id: targetNode.id,
+      relation_type: addRelationDialog.value.relationType,
+      confidence: 1.0
+    })
+
+    addRelationDialog.value.show = false
+    await fetchGraphData()
+  } catch (e: any) {
+    error.value = `添加关系失败: ${e.message}`
+    setTimeout(() => {
+      error.value = ''
+    }, 3000)
+  }
+}
+
+// 取消添加关系
+const cancelAddRelation = () => {
+  addRelationDialog.value.show = false
 }
 
 // 监听 show 变化
@@ -623,6 +796,149 @@ onUnmounted(() => {
   z-index: 101;
 }
 
+/* ===== 右键菜单 ===== */
+.context-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+}
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  min-width: 150px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.menu-item:hover {
+  background: #f1f5f9;
+}
+
+.menu-item span:first-child {
+  font-size: 16px;
+}
+
+/* ===== 添加关系对话框 ===== */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.add-relation-dialog {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.add-relation-dialog h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.dialog-field {
+  margin-bottom: 16px;
+}
+
+.dialog-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.dialog-field input,
+.dialog-field select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+  transition: all 0.2s;
+  background: white;
+  box-sizing: border-box;
+}
+
+.dialog-field input:focus,
+.dialog-field select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-confirm,
+.btn-cancel {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.btn-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-cancel {
+  background: white;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-cancel:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     width: 100vw;
@@ -651,6 +967,11 @@ onUnmounted(() => {
   .search-input {
     min-width: auto;
     width: 100%;
+  }
+
+  .add-relation-dialog {
+    width: 95%;
+    padding: 20px;
   }
 }
 </style>

@@ -274,7 +274,7 @@ def find_optimal_spell_day(
     base_interval, priority_weight, daily_limit, current_loads, max_delay=None
 ):
     """
-    为低强度拼写找到最优日期，使用指数惩罚避免过度推迟
+    为低强度拼写找到最优日期，从base_interval向后搜索
 
     Args:
         base_interval: 基础间隔天数
@@ -286,26 +286,38 @@ def find_optimal_spell_day(
     if not current_loads:
         return base_interval
 
-    # 确定搜索范围
+    # 确定搜索范围（从base_interval开始向后搜索）
     if max_delay is not None:
         search_range = min(base_interval + max_delay, len(current_loads))
     else:
-        search_range = min(10, base_interval + 7, len(current_loads))
+        search_range = min(base_interval + 7, len(current_loads))
 
+    # 两阶段策略：
+    # 阶段1：优先填充未满额的天数（硬限制）
+    # 阶段2：全部满额后才均衡分配（软限制）
+
+    # 先检查是否有未满额的天数
+    for day in range(base_interval, search_range + 1):
+        if day <= len(current_loads):
+            current_load = current_loads[day - 1]
+            if current_load < daily_limit:
+                # 找到第一个未满额的天数，直接返回
+                return day
+
+    # 所有天数都已满额，进入均衡分配阶段
     best_day = base_interval
     best_score = float("inf")
 
-    for day in range(1, search_range + 1):
+    for day in range(base_interval, search_range + 1):
         if day <= len(current_loads):
             current_load = current_loads[day - 1]
 
-            # 改为"填谷策略"：不限制daily_limit，允许超额，但惩罚拥挤日期
-            # 使用指数惩罚：推迟天数越多，惩罚越重
+            # 计算综合评分
+            # 时间惩罚：推迟天数越多，惩罚越重
             delay_days = abs(day - base_interval)
             time_penalty = (delay_days**1.5) * (priority_weight**2) * 0.05
 
-            # 🆕 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
-            # 使用三次方惩罚 + 更大系数，让负荷均衡成为主导因素
+            # 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
             load_ratio = current_load / daily_limit
             load_penalty = (load_ratio**3) * 2.0
 
@@ -417,15 +429,13 @@ def calculate_spell_strength_with_load_balancing(
             spell_loads = get_daily_spell_loads_by_source(word_source, max_prep_days)
             priority_weight = max(0.5, 3.0 - new_strength)
 
-            # 根据强度设置最大推迟天数
-            if new_strength < 1.0:
-                max_delay = 1
-            elif new_strength < 1.5:
-                max_delay = 2
+            # 根据强度设置最大推迟天数（缩短为1-3天）
+            if new_strength < 1.5:
+                max_delay = 1  # 低强度：向后最多1天
             elif new_strength < 2.0:
-                max_delay = 3
+                max_delay = 2  # 中强度：向后最多2天
             else:  # 2.0-2.5
-                max_delay = 5
+                max_delay = 3  # 较高强度：向后最多3天
 
             optimized_interval = find_optimal_spell_day(
                 basic_interval,

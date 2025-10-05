@@ -235,31 +235,43 @@ def find_optimal_review_day(
 
     priority_weight = calculate_priority_weight(ease_factor, score)
 
-    # 高优先级单词的搜索范围更小
+    # 高优先级单词的搜索范围更小（从base_interval向后搜索）
     if priority_weight > 2.0:  # 高优先级
-        search_range = min(3, base_interval + 2)
+        offset_range = 1  # 向后最多1天
     elif priority_weight > 1.0:  # 中优先级
-        search_range = min(5, base_interval + 3)
+        offset_range = 2  # 向后最多2天
     else:  # 低优先级
-        search_range = min(7, base_interval + 5)
+        offset_range = 3  # 向后最多3天
 
-    # 确保搜索范围不超过current_loads长度
-    search_range = min(search_range, len(current_loads))
+    # 计算实际搜索范围：从base_interval开始向后搜索
+    search_start = base_interval
+    search_end = min(len(current_loads), base_interval + offset_range)
 
+    # 两阶段策略：
+    # 阶段1：优先填充未满额的天数（硬限制）
+    # 阶段2：全部满额后才均衡分配（软限制）
+
+    # 先检查是否有未满额的天数
+    for day in range(search_start, search_end + 1):
+        if day <= len(current_loads):
+            current_load = current_loads[day - 1]
+            if current_load < daily_limit:
+                # 找到第一个未满额的天数，直接返回
+                return day
+
+    # 所有天数都已满额，进入均衡分配阶段
     best_day = base_interval
     best_score = float("inf")
 
-    # 改为"填谷策略"：优先选择负荷较低的日期，实现均匀分布
-    for day in range(1, search_range + 1):
+    for day in range(search_start, search_end + 1):
         if day <= len(current_loads):
             current_load = current_loads[day - 1]
 
             # 计算综合评分
-            # 🔧 大幅降低推迟惩罚权重，优先考虑负荷均衡
+            # 时间惩罚：推迟越多惩罚越大
             time_penalty = abs(day - base_interval) * priority_weight * 0.02
 
-            # 🆕 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
-            # 使用三次方惩罚 + 更大系数，让负荷均衡成为主导因素
+            # 负荷惩罚：负荷越高，惩罚越大（实现均匀分布）
             load_ratio = current_load / daily_limit
             load_penalty = (load_ratio**3) * 2.0
 
