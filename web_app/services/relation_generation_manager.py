@@ -40,7 +40,7 @@ def _generate_worker(relation_type: str, queue: multiprocessing.Queue):
             count = generator.generate_relations(emitter)
         elif relation_type == "confused":
             from web_app.services.relations.confused_generator import ConfusedWordsGenerator
-            generator = ConfusedWordsGenerator(min_length=4)
+            generator = ConfusedWordsGenerator(min_length=5)
             count = generator.generate_relations(emitter)
         elif relation_type == "topic":
             from web_app.services.relations.topic_generator import SemanticTopicGenerator

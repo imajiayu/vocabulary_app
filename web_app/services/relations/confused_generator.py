@@ -32,7 +32,13 @@ def levenshtein_distance(s1: str, s2: str) -> int:
 class ConfusedWordsGenerator:
     """易混淆词生成器 - 专注于形似义不同的词对"""
 
-    def __init__(self, min_length: int = 4):
+    def __init__(self, min_length: int = 5):
+        """
+        初始化易混淆词生成器
+
+        参数:
+        - min_length: 最小单词长度（默认5，避免短词产生太多噪音）
+        """
         self.min_length = min_length
         self.processed_pairs = set()
         # 经典易混淆词对
@@ -134,18 +140,26 @@ class ConfusedWordsGenerator:
         return pair_set
 
     def are_semantically_different(self, word1: str, word2: str) -> bool:
-        """检查两个词在语义上是否不同（避免同义词被标记为易混淆）"""
+        """
+        检查两个词在语义上是否不同（避免同义词被标记为易混淆）
+
+        更严格的语义检查：
+        1. 两个词都必须在WordNet中有定义
+        2. 不能有共同的synset
+        3. 语义相似度必须很低（< 0.25）
+        """
         synsets1 = set(wordnet.synsets(word1.lower()))
         synsets2 = set(wordnet.synsets(word2.lower()))
 
+        # 更严格：两个词都必须在WordNet中，否则拒绝
         if not synsets1 or not synsets2:
-            return True  # 如果任一词没有WordNet条目，认为不同
+            return False  # 如果任一词没有WordNet条目，拒绝（更安全）
 
         # 检查是否有共同的synset（同义词）
         if synsets1 & synsets2:
             return False
 
-        # 检查语义相似度
+        # 检查语义相似度（更严格的阈值）
         max_similarity = 0
         for s1 in synsets1:
             for s2 in synsets2:
@@ -153,16 +167,24 @@ class ConfusedWordsGenerator:
                 if sim and sim > max_similarity:
                     max_similarity = sim
 
-        # 如果语义相似度太高，不算易混淆
-        return max_similarity < 0.3
+        # 更严格：语义相似度必须 < 0.25（之前是0.3）
+        return max_similarity < 0.25
 
     def calculate_confusion_score(self, word1: str, word2: str) -> Tuple[bool, float]:
-        """计算易混淆分数（基于编辑距离和相似度）"""
+        """
+        计算易混淆分数（基于编辑距离和相似度）
+
+        更严格的筛选条件（2024优化版）：
+        1. 编辑距离 ≤ 2
+        2. 字符串相似度更高的阈值（75%/70%）
+        3. 必须通过严格的语义检查
+        4. 经典易混淆对优先通过
+        """
         w1, w2 = word1.lower(), word2.lower()
 
-        # 限定长度必须完全相同
-        if len(w1) != len(w2):
-            return False, 0.0
+        # 检查是否是经典易混淆对（优先级最高，直接通过）
+        if (w1, w2) in self.classic_confused_pairs:
+            return True, 0.95
 
         # 计算编辑距离
         edit_dist = levenshtein_distance(w1, w2)
@@ -174,17 +196,18 @@ class ConfusedWordsGenerator:
         # 计算字符串相似度
         similarity = SequenceMatcher(None, w1, w2).ratio()
 
-        # 相似度要求：编辑距离越小，相似度要求可以稍低
-        min_similarity = 0.70 if edit_dist == 1 else 0.65
+        # 更严格的相似度要求（提高5%）
+        if edit_dist == 1:
+            min_similarity = 0.75  # 距离1：相似度 >= 75%（之前是70%）
+        elif edit_dist == 2:
+            min_similarity = 0.70  # 距离2：相似度 >= 70%（之前是65%）
+        else:
+            min_similarity = 0.65  # 理论上不会到这里
 
         if similarity < min_similarity:
             return False, 0.0
 
-        # 检查是否是经典易混淆对（直接通过）
-        if (w1, w2) in self.classic_confused_pairs:
-            return True, 0.95
-
-        # 语义检查：必须语义不同才算易混淆
+        # 语义检查：必须语义不同才算易混淆（更严格）
         if not self.are_semantically_different(w1, w2):
             return False, 0.0
 
@@ -308,8 +331,14 @@ class ConfusedWordsGenerator:
 
 
 def generate_confused_relations(
-    min_length: int = 4, similarity_threshold: float = 0.75
+    min_length: int = 5, similarity_threshold: float = 0.75
 ):
-    """生成易混淆关系的入口函数"""
+    """
+    生成易混淆关系的入口函数
+
+    参数:
+    - min_length: 最小单词长度（默认5，更严格）
+    - similarity_threshold: 相似度阈值（已弃用，保留用于向后兼容）
+    """
     generator = ConfusedWordsGenerator(min_length=min_length)
     return generator.generate_relations()

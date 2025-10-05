@@ -8,13 +8,13 @@
       <div class="modal-content">
         <!-- 图表页面内容 -->
         <div class="graph-wrapper">
+          <!-- 关闭按钮 -->
+          <button class="close-btn" @click="handleClose">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
           <div class="controls-bar">
-            <!-- 关闭按钮 -->
-            <button class="close-btn" @click="handleClose">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
             <div class="control-group">
               <label>关系类型:</label>
               <div class="relation-filters">
@@ -43,15 +43,38 @@
 
             <div class="control-group">
               <label>搜索单词:</label>
-              <input
-                v-model="searchWord"
-                type="text"
-                placeholder="输入单词查看其关系网络..."
-                @keyup.enter="handleSearch"
-                class="search-input"
-              />
-              <button @click="handleSearch" class="search-btn">搜索</button>
-              <button v-if="centerWordId" @click="resetView" class="reset-btn">重置</button>
+              <div class="search-autocomplete-wrapper">
+                <input
+                  v-model="searchWord"
+                  type="text"
+                  placeholder="输入单词查看其关系网络..."
+                  @input="updateSearchCandidates"
+                  @keydown="handleSearchKeydown"
+                  class="search-input"
+                  autocomplete="off"
+                />
+                <div v-if="searchCandidates.length > 0" class="search-candidates-list">
+                  <div
+                    v-for="(candidate, index) in searchCandidates"
+                    :key="candidate.id"
+                    class="search-candidate-item"
+                    :class="{ selected: index === searchSelectedIndex }"
+                    @click="selectSearchCandidate(candidate)"
+                    @mouseenter="searchSelectedIndex = index"
+                  >
+                    <span class="candidate-word">{{ candidate.word }}</span>
+                    <span v-if="candidate.definition" class="candidate-definition">
+                      {{ candidate.definition.split('; ')[0] }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <button @click="toggleShowAllNodes" class="show-all-btn" :class="{ active: showAllNodes }">
+                {{ showAllNodes ? '隐藏全部节点' : '展示所有节点' }}
+              </button>
             </div>
 
             <div class="stats">
@@ -94,23 +117,71 @@
 
             <div class="dialog-field">
               <label>目标单词：</label>
-              <input
-                v-model="addRelationDialog.targetWord"
-                type="text"
-                placeholder="输入单词名称"
-                @keyup.enter="addRelation"
-              />
+              <div class="autocomplete-wrapper">
+                <input
+                  v-model="addRelationDialog.targetWord"
+                  type="text"
+                  placeholder="输入单词名称"
+                  @input="updateCandidates"
+                  @keydown="handleKeydown"
+                  autocomplete="off"
+                />
+                <div v-if="candidateWords.length > 0" class="candidates-list">
+                  <div
+                    v-for="(candidate, index) in candidateWords"
+                    :key="candidate.id"
+                    class="candidate-item"
+                    :class="{ selected: index === selectedCandidateIndex }"
+                    @click="selectCandidate(candidate)"
+                    @mouseenter="selectedCandidateIndex = index"
+                  >
+                    <span class="candidate-word">{{ candidate.word }}</span>
+                    <span v-if="candidate.definition" class="candidate-definition">
+                      {{ candidate.definition.split('; ')[0] }}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="dialog-field">
               <label>关系类型：</label>
-              <select v-model="addRelationDialog.relationType">
-                <option value="synonym">同义词</option>
-                <option value="antonym">反义词</option>
-                <option value="root">词根</option>
-                <option value="confused">易混淆</option>
-                <option value="topic">主题</option>
-              </select>
+              <div class="custom-select-wrapper">
+                <div
+                  class="custom-select-trigger"
+                  @click="relationTypeDropdown = !relationTypeDropdown"
+                >
+                  <span class="selected-type">
+                    <span
+                      class="type-indicator"
+                      :style="{ backgroundColor: relationTypeOptions.find(opt => opt.value === addRelationDialog.relationType)?.color }"
+                    ></span>
+                    {{ getRelationTypeLabel(addRelationDialog.relationType) }}
+                  </span>
+                  <svg
+                    class="dropdown-arrow"
+                    :class="{ open: relationTypeDropdown }"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                  >
+                    <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div v-if="relationTypeDropdown" class="custom-select-dropdown">
+                  <div
+                    v-for="option in relationTypeOptions"
+                    :key="option.value"
+                    class="select-option"
+                    :class="{ selected: option.value === addRelationDialog.relationType }"
+                    @click="selectRelationType(option.value)"
+                  >
+                    <span class="type-indicator" :style="{ backgroundColor: option.color }"></span>
+                    <span>{{ option.label }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="dialog-actions">
@@ -153,9 +224,13 @@ const filters = ref({
 })
 const searchWord = ref('')
 const centerWordId = ref<number | null>(null)
+const searchCandidates = ref<GraphNode[]>([])
+const searchSelectedIndex = ref(-1)
 const graphData = ref<GraphData>({ nodes: [], edges: [] })
+const fullGraphData = ref<GraphData>({ nodes: [], edges: [] }) // 保存完整的图数据用于搜索
 const loading = ref(false)
 const error = ref('')
+const showAllNodes = ref(false) // 是否显示所有节点
 
 // 右键菜单
 const contextMenu = ref({
@@ -173,6 +248,20 @@ const addRelationDialog = ref({
   targetWord: '',
   relationType: 'synonym' as string
 })
+
+// 候选单词列表
+const candidateWords = ref<GraphNode[]>([])
+const selectedCandidateIndex = ref(-1)
+
+// 关系类型下拉菜单
+const relationTypeDropdown = ref(false)
+const relationTypeOptions = [
+  { value: 'synonym', label: '同义词', color: '#52c41a' },
+  { value: 'antonym', label: '反义词', color: '#ff4d4f' },
+  { value: 'root', label: '词根', color: '#722ed1' },
+  { value: 'confused', label: '易混淆', color: '#fa8c16' },
+  { value: 'topic', label: '主题', color: '#1677ff' }
+]
 
 // 关系类型配色
 const relationColors: Record<string, string> = {
@@ -208,12 +297,52 @@ const fetchGraphData = async () => {
 
     if (centerWordId.value) {
       params.word_id = centerWordId.value
-      params.max_depth = 2
+      params.max_depth = 1
     }
 
     const data = await api.relations.getGraph(params)
 
-    graphData.value = data
+    // 只在没有选中中心词时更新 fullGraphData（保存真正的全量数据）
+    if (!centerWordId.value) {
+      fullGraphData.value = data
+    }
+
+    // 如果有中心词，只显示直连节点
+    if (centerWordId.value) {
+      const directNodeIds = new Set<number>()
+      directNodeIds.add(centerWordId.value)
+
+      // 找出所有直连的节点
+      data.edges.forEach(edge => {
+        if (edge.source === centerWordId.value) {
+          directNodeIds.add(edge.target)
+        } else if (edge.target === centerWordId.value) {
+          directNodeIds.add(edge.source)
+        }
+      })
+
+      // 过滤节点，只保留中心节点和直连节点
+      const filteredNodes = data.nodes.filter(node => directNodeIds.has(node.id))
+
+      // 过滤边，只保留与中心节点直接相连的边
+      const filteredEdges = data.edges.filter(edge =>
+        (edge.source === centerWordId.value || edge.target === centerWordId.value) &&
+        directNodeIds.has(edge.source) &&
+        directNodeIds.has(edge.target)
+      )
+
+      graphData.value = {
+        nodes: filteredNodes,
+        edges: filteredEdges
+      }
+    } else if (showAllNodes.value) {
+      // 显示所有节点
+      graphData.value = data
+    } else {
+      // 默认不显示任何节点
+      graphData.value = { nodes: [], edges: [] }
+    }
+
     renderGraph()
   } catch (e: any) {
     error.value = e.message || '网络错误'
@@ -223,40 +352,106 @@ const fetchGraphData = async () => {
   }
 }
 
-const handleSearch = async () => {
-  const word = searchWord.value.trim().toLowerCase()
-  if (!word) {
-    resetView()
+
+// 更新搜索候选词
+const updateSearchCandidates = () => {
+  const input = searchWord.value.trim().toLowerCase()
+  if (!input) {
+    searchCandidates.value = []
+    searchSelectedIndex.value = -1
     return
   }
 
-  // 在已有的节点中搜索
-  const foundNode = graphData.value.nodes.find(n => n.word.toLowerCase() === word)
+  const allWords = fullGraphData.value.nodes
 
-  if (foundNode) {
-    centerWordId.value = foundNode.id
-    searchWord.value = foundNode.word
-    await fetchGraphData()
-  } else {
-    error.value = `未找到单词: ${word}`
-    // 3秒后自动清除错误提示
-    setTimeout(() => {
-      error.value = ''
-    }, 3000)
+  // 前缀匹配
+  const prefixMatches: GraphNode[] = []
+  // 子序列匹配
+  const subsequenceMatches: GraphNode[] = []
+
+  allWords.forEach(node => {
+    const word = node.word.toLowerCase()
+    if (word.startsWith(input)) {
+      prefixMatches.push(node)
+    } else if (isSubsequenceMatch(input, word)) {
+      subsequenceMatches.push(node)
+    }
+  })
+
+  // 按字母顺序排序
+  prefixMatches.sort((a, b) => a.word.localeCompare(b.word))
+  subsequenceMatches.sort((a, b) => a.word.localeCompare(b.word))
+
+  // 合并结果，最多显示10个
+  searchCandidates.value = [...prefixMatches, ...subsequenceMatches].slice(0, 10)
+  searchSelectedIndex.value = -1
+}
+
+// 处理搜索框键盘导航
+const handleSearchKeydown = (event: KeyboardEvent) => {
+  if (searchCandidates.value.length === 0) {
+    return
+  }
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    searchSelectedIndex.value = Math.min(
+      searchSelectedIndex.value + 1,
+      searchCandidates.value.length - 1
+    )
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    searchSelectedIndex.value = Math.max(searchSelectedIndex.value - 1, -1)
+  } else if (event.key === 'Enter') {
+    event.preventDefault()
+    if (searchSelectedIndex.value >= 0) {
+      selectSearchCandidate(searchCandidates.value[searchSelectedIndex.value])
+    }
   }
 }
 
-const resetView = () => {
+// 选择搜索候选词
+const selectSearchCandidate = async (node: GraphNode) => {
+  searchWord.value = node.word
+  centerWordId.value = node.id
+  searchCandidates.value = []
+  searchSelectedIndex.value = -1
+  showAllNodes.value = false
+  await fetchGraphData()
+}
+
+// 展示所有节点
+const toggleShowAllNodes = async () => {
+  showAllNodes.value = !showAllNodes.value
   centerWordId.value = null
   searchWord.value = ''
-  fetchGraphData()
+  searchCandidates.value = []
+  await fetchGraphData()
 }
 
 const renderGraph = () => {
-  if (!chartContainer.value || graphData.value.nodes.length === 0) return
+  if (!chartContainer.value) return
 
   if (!chartInstance) {
     chartInstance = echarts.init(chartContainer.value)
+  }
+
+  // 如果没有节点，显示提示信息
+  if (graphData.value.nodes.length === 0) {
+    const emptyOption: echarts.EChartsOption = {
+      title: {
+        text: '请搜索单词或展示所有节点',
+        left: 'center',
+        top: 'center',
+        textStyle: {
+          fontSize: 18,
+          color: '#94a3b8',
+          fontWeight: 'normal'
+        }
+      }
+    }
+    chartInstance.setOption(emptyOption, true)
+    return
   }
 
   const nodes = graphData.value.nodes.map(node => {
@@ -282,16 +477,7 @@ const renderGraph = () => {
         color: '#fff'
       },
       emphasis: {
-        itemStyle: {
-          color: isCenterNode ? '#5470c6' : '#91cc75',
-          borderRadius: 4
-        },
-        label: {
-          show: true,
-          fontSize: isCenterNode ? 14 : 12,
-          fontWeight: (isCenterNode ? 'bold' : 'normal') as 'bold' | 'normal',
-          color: '#fff'
-        }
+        disabled: true
       }
     }
   })
@@ -323,6 +509,7 @@ const renderGraph = () => {
     tooltip: {
       trigger: 'item',
       confine: true,
+      extraCssText: 'max-width: 400px; white-space: normal; word-wrap: break-word;',
       formatter: (params: any) => {
         if (params.dataType === 'node') {
           const node = graphData.value.nodes.find(n => n.id.toString() === params.data.id)
@@ -356,9 +543,6 @@ const renderGraph = () => {
           focus: 'adjacency',
           lineStyle: {
             width: 4
-          },
-          label: {
-            show: true
           }
         }
       }
@@ -375,6 +559,7 @@ const renderGraph = () => {
       if (node) {
         searchWord.value = node.word
         centerWordId.value = nodeId
+        showAllNodes.value = false
         fetchGraphData()
       }
     }
@@ -414,6 +599,19 @@ const handleResize = () => {
 // 关闭右键菜单
 const closeContextMenu = () => {
   contextMenu.value.show = false
+  // 清除 ECharts 的高亮状态和拖拽状态
+  if (chartInstance) {
+    chartInstance.dispatchAction({
+      type: 'downplay'
+    })
+    // 强制重置拖拽状态
+    chartInstance.setOption({
+      series: [{
+        type: 'graph',
+        draggable: true
+      }]
+    })
+  }
 }
 
 // 显示添加关系对话框
@@ -491,6 +689,106 @@ const addRelation = async () => {
 // 取消添加关系
 const cancelAddRelation = () => {
   addRelationDialog.value.show = false
+  candidateWords.value = []
+  selectedCandidateIndex.value = -1
+  relationTypeDropdown.value = false
+  // 清除 ECharts 的拖拽状态
+  if (chartInstance) {
+    chartInstance.dispatchAction({
+      type: 'downplay'
+    })
+    // 强制重置拖拽状态
+    chartInstance.setOption({
+      series: [{
+        type: 'graph',
+        draggable: true
+      }]
+    })
+  }
+}
+
+// 更新候选单词列表
+const updateCandidates = () => {
+  const input = addRelationDialog.value.targetWord.trim().toLowerCase()
+  if (!input) {
+    candidateWords.value = []
+    selectedCandidateIndex.value = -1
+    return
+  }
+
+  // 从完整的图数据中搜索候选单词（排除源节点自身）
+  const sourceId = addRelationDialog.value.sourceNode?.id
+  const allWords = fullGraphData.value.nodes.filter(node => node.id !== sourceId)
+
+  // 前缀匹配
+  const prefixMatches: GraphNode[] = []
+  // 子序列匹配
+  const subsequenceMatches: GraphNode[] = []
+
+  allWords.forEach(node => {
+    const word = node.word.toLowerCase()
+    if (word.startsWith(input)) {
+      prefixMatches.push(node)
+    } else if (isSubsequenceMatch(input, word)) {
+      subsequenceMatches.push(node)
+    }
+  })
+
+  // 按字母顺序排序
+  prefixMatches.sort((a, b) => a.word.localeCompare(b.word))
+  subsequenceMatches.sort((a, b) => a.word.localeCompare(b.word))
+
+  // 合并结果，最多显示10个
+  candidateWords.value = [...prefixMatches, ...subsequenceMatches].slice(0, 10)
+  selectedCandidateIndex.value = -1
+}
+
+// 子序列匹配算法
+const isSubsequenceMatch = (pattern: string, text: string): boolean => {
+  let patternIndex = 0
+  for (let i = 0; i < text.length && patternIndex < pattern.length; i++) {
+    if (text[i] === pattern[patternIndex]) {
+      patternIndex++
+    }
+  }
+  return patternIndex === pattern.length
+}
+
+// 处理键盘导航
+const handleKeydown = (event: KeyboardEvent) => {
+  if (candidateWords.value.length === 0) return
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    selectedCandidateIndex.value = Math.min(
+      selectedCandidateIndex.value + 1,
+      candidateWords.value.length - 1
+    )
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    selectedCandidateIndex.value = Math.max(selectedCandidateIndex.value - 1, -1)
+  } else if (event.key === 'Enter' && selectedCandidateIndex.value >= 0) {
+    event.preventDefault()
+    selectCandidate(candidateWords.value[selectedCandidateIndex.value])
+  }
+}
+
+// 选择候选单词
+const selectCandidate = (node: GraphNode) => {
+  addRelationDialog.value.targetWord = node.word
+  candidateWords.value = []
+  selectedCandidateIndex.value = -1
+}
+
+// 选择关系类型
+const selectRelationType = (type: string) => {
+  addRelationDialog.value.relationType = type
+  relationTypeDropdown.value = false
+}
+
+// 获取当前选中的关系类型标签
+const getRelationTypeLabel = (type: string) => {
+  return relationTypeOptions.find(opt => opt.value === type)?.label || type
 }
 
 // 监听 show 变化
@@ -559,9 +857,8 @@ onUnmounted(() => {
 
 .close-btn {
   position: absolute;
-  top: 50%;
-  right: 16px;
-  transform: translateY(-50%);
+  top: 20px;
+  right: 20px;
   width: 40px;
   height: 40px;
   border: none;
@@ -572,14 +869,13 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
+  z-index: 1000;
 }
 
 .close-btn:hover {
   background: #f1f5f9;
-  transform: translateY(-50%) scale(1.05);
+  transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -662,6 +958,11 @@ onUnmounted(() => {
   accent-color: #667eea;
 }
 
+.search-autocomplete-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .search-input {
   padding: 8px 14px;
   border: 1px solid #e2e8f0;
@@ -683,8 +984,57 @@ onUnmounted(() => {
   color: #94a3b8;
 }
 
-.search-btn,
-.reset-btn {
+.search-candidates-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: -1px;
+  min-width: 240px;
+}
+
+.search-candidate-item {
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.search-candidate-item:last-child {
+  border-bottom: none;
+}
+
+.search-candidate-item:hover,
+.search-candidate-item.selected {
+  background: #f8fafc;
+}
+
+.search-autocomplete-wrapper .candidate-word {
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.search-autocomplete-wrapper .candidate-definition {
+  font-size: 11px;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.show-all-btn {
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
@@ -693,42 +1043,33 @@ onUnmounted(() => {
   font-weight: 500;
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: white;
+  color: #667eea;
+  border: 1px solid #e0e7ff;
 }
 
-.search-btn {
+.show-all-btn:hover {
+  background: #f5f7ff;
+  border-color: #c7d2fe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+}
+
+.show-all-btn:active {
+  transform: translateY(0);
+}
+
+.show-all-btn.active {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
+  border-color: transparent;
 }
 
-.search-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-}
-
-.search-btn:active {
-  transform: translateY(0);
-}
-
-.reset-btn {
-  background: white;
-  color: #ef4444;
-  border: 1px solid #fee2e2;
-}
-
-.reset-btn:hover {
-  background: #fef2f2;
-  border-color: #fecaca;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
-}
-
-.reset-btn:active {
-  transform: translateY(0);
+.show-all-btn.active:hover {
+  background: linear-gradient(135deg, #5568d3, #6a3f8f);
 }
 
 .stats {
-  margin-left: auto;
-  margin-right: 80px;
   display: flex;
   gap: 20px;
   font-size: 13px;
@@ -880,8 +1221,14 @@ onUnmounted(() => {
 }
 
 .dialog-field input,
-.dialog-field select {
+.dialog-field select,
+.dialog-field .custom-select-wrapper {
   width: 100%;
+  box-sizing: border-box;
+}
+
+.dialog-field input,
+.dialog-field select {
   padding: 10px 14px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -937,6 +1284,150 @@ onUnmounted(() => {
 .btn-cancel:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
+}
+
+/* ===== 自动完成候选列表 ===== */
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.candidates-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: -1px;
+}
+
+.candidate-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.candidate-item:last-child {
+  border-bottom: none;
+}
+
+.candidate-item:hover,
+.candidate-item.selected {
+  background: #f8fafc;
+}
+
+.candidate-word {
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.candidate-definition {
+  font-size: 12px;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.autocomplete-wrapper input:focus {
+  border-radius: 8px 8px 0 0;
+}
+
+/* ===== 自定义关系类型选择器 ===== */
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.custom-select-trigger {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.custom-select-trigger:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.selected-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.type-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dropdown-arrow {
+  color: #64748b;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.custom-select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.select-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.select-option:hover {
+  background: #f8fafc;
+}
+
+.select-option.selected {
+  background: #f1f5f9;
+  font-weight: 500;
 }
 
 

@@ -83,42 +83,27 @@ class Word(Base):
 
     def get_all_related_words(self, session: Session):
         """
-        返回当前单词的所有关联词（正向 + 反向），去重
+        返回当前单词的所有关联词（简化版 - 双向存储实现）
+
+        由于关系已双向存储，只需查询 word_id == self.id 的关系即可
+        不再需要额外查询反向关系
+
         :param session: SQLAlchemy session
-        :param include_definition: 是否返回 definition
         :return: List[Dict]，格式：
-        {"id": int, "word": str, "relation_type": str, "confidence": float, "definition": str}
+        {"id": int, "word": str, "relation_type": str, "confidence": float}
         """
-        results_dict = {}
+        results = []
 
-        # 正向关联
+        # 只查询正向关联（双向存储下已包含所有关系）
         for rel in self.related_words:
-            word_id = rel.related_word.id
-            word_text = rel.related_word.word
-            if word_id not in results_dict:
-                results_dict[word_id] = {
-                    "id": word_id,
-                    "word": word_text,
-                    "relation_type": rel.relation_type.value,
-                    "confidence": rel.confidence,
-                }
+            results.append({
+                "id": rel.related_word.id,
+                "word": rel.related_word.word,
+                "relation_type": rel.relation_type.value,
+                "confidence": rel.confidence,
+            })
 
-        # 反向关联
-        reverse_rels = (
-            session.query(WordRelation).filter_by(related_word_id=self.id).all()
-        )
-        for rel in reverse_rels:
-            word_id = rel.word.id
-            word_text = rel.word.word
-            if word_id not in results_dict:
-                results_dict[word_id] = {
-                    "id": word_id,
-                    "word": word_text,
-                    "relation_type": rel.relation_type.value,
-                    "confidence": rel.confidence,
-                }
-
-        return list(results_dict.values())
+        return results
 
 
 class RelationType(enum.Enum):

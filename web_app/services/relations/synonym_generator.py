@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import Dict, List, Tuple
+from functools import lru_cache
 from nltk.corpus import wordnet
 from sqlalchemy import insert
 from web_app.models.word import Word, WordRelation, RelationType
@@ -11,6 +12,13 @@ class SynonymGenerator:
     def __init__(self, min_confidence: float = 0.6):
         self.min_confidence = min_confidence
         self.processed_pairs = set()
+        self.similarity_cache = {}
+
+    @staticmethod
+    @lru_cache(maxsize=10000)
+    def _get_synsets(word: str):
+        """缓存WordNet synsets查询"""
+        return wordnet.synsets(word.lower())
 
     def get_wordnet_synonyms(self, word: str) -> Dict[str, float]:
         """获取WordNet同义词，返回 {synonym: confidence} 字典"""
@@ -18,7 +26,7 @@ class SynonymGenerator:
         word_lower = word.lower()
 
         # 获取所有同义词集合
-        synsets = wordnet.synsets(word_lower)
+        synsets = self._get_synsets(word_lower)
         if not synsets:
             return synonyms
 
@@ -62,30 +70,42 @@ class SynonymGenerator:
 
         # 预计算每个词的synsets
         for word in words:
-            synsets = wordnet.synsets(word.word.lower())
+            synsets = self._get_synsets(word.word)
             if synsets:
                 word_synsets[word.id] = synsets[:3]  # 只取前3个最相关的
 
-        # 计算词对之间的相似性
-        total = len(words)
+        # 过滤出有synsets的词，减少无效迭代
+        words_with_synsets = [w for w in words if w.id in word_synsets]
+        total = len(words_with_synsets)
 
-        for i, w1 in enumerate(words):
+        for i, w1 in enumerate(words_with_synsets):
             if emitter and i % 100 == 0:
-                emitter.emit_progress(i, total, f"Computing semantic similarity: {i}/{total} words")
+                emitter.emit_progress(
+                    i, total, f"Computing semantic similarity: {i}/{total} words"
+                )
 
-            if w1.id not in word_synsets:
-                continue
-
-            for j, w2 in enumerate(words[i + 1 :], i + 1):
-                if w2.id not in word_synsets:
-                    continue
-
+            for w2 in words_with_synsets[i + 1 :]:
                 max_similarity = 0
+                found_high_sim = False
+
                 for s1 in word_synsets[w1.id]:
                     for s2 in word_synsets[w2.id]:
-                        sim = s1.path_similarity(s2)
-                        if sim and sim > max_similarity:
+                        # 使用缓存避免重复计算
+                        cache_key = (id(s1), id(s2))
+                        if cache_key in self.similarity_cache:
+                            sim = self.similarity_cache[cache_key]
+                        else:
+                            sim = s1.path_similarity(s2)
+                            if sim is not None:
+                                self.similarity_cache[cache_key] = sim
+
+                        if sim and sim >= 0.8:
                             max_similarity = sim
+                            found_high_sim = True
+                            break  # 找到高相似性，提前终止内层循环
+
+                    if found_high_sim:
+                        break  # 提前终止外层循环
 
                 # 只保留高相似性的词对
                 if max_similarity >= 0.8:
