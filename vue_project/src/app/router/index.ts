@@ -4,7 +4,6 @@ import StatisticsPage from '@/pages/StatisticsPage.vue'
 import VocabularyManagementPage from '@/pages/VocabularyManagementPage.vue'
 import ReviewPage from '@/pages/ReviewPage.vue'
 import HomePage from '@/pages/HomePage.vue'
-import RelationGraphPage from '@/pages/RelationGraphPage.vue'
 
 const routes = [
   {
@@ -35,11 +34,6 @@ const routes = [
       shuffle: route.query.shuffle === 'true',
       limit: parseInt(route.query.limit) || 50
     })
-  }, {
-    path: '/relations',
-    name: 'relations',
-    component: RelationGraphPage,
-    meta: { title: 'IELTS 单词关系图' }
   }]
 
 const router = createRouter({

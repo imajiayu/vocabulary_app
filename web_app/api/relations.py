@@ -387,3 +387,5 @@ def stop_generation():
             create_response(False, None, f"Failed to stop generation: {str(e)}"),
             500,
         )
+
+

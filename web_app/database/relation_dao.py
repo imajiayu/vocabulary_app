@@ -2,10 +2,32 @@
 """
 单词关系数据访问层
 """
-from typing import List, Optional
+import json
+from typing import List, Optional, Dict
 from sqlalchemy import and_, or_
 from web_app.extensions import get_session
 from web_app.models.word import Word, WordRelation, RelationType
+
+
+def _extract_definitions(definition_json: str) -> str:
+    """
+    从JSON字符串中提取释义数组并连接成字符串
+
+    参数:
+    - definition_json: JSON格式的定义字符串
+
+    返回:
+    - 释义字符串，多个释义用分号分隔
+    """
+    if not definition_json:
+        return ""
+
+    try:
+        data = json.loads(definition_json)
+        definitions = data.get("definitions", [])
+        return "; ".join(definitions) if definitions else ""
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return ""
 
 
 def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: Optional[int] = None, max_depth: int = 2):
@@ -44,7 +66,8 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
 
                 nodes.append({
                     "id": word.id,
-                    "word": word.word
+                    "word": word.word,
+                    "definition": _extract_definitions(word.definition)
                 })
 
                 # 如果还没达到最大深度，继续探索
@@ -100,7 +123,8 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
             for word in words:
                 nodes.append({
                     "id": word.id,
-                    "word": word.word
+                    "word": word.word,
+                    "definition": _extract_definitions(word.definition)
                 })
                 visited_words.add(word.id)
 
@@ -223,3 +247,5 @@ def db_get_relation_stats():
         stats['total'] = total
 
         return stats
+
+

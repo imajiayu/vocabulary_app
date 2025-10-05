@@ -193,16 +193,19 @@
         </div>
       </div>
     </div>
+
+    <!-- 关系图浮窗 -->
+    <RelationGraphModal v-model:show="showGraphModal" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { api } from '@/shared/api'
 import { useRelationGenerationWebSocket } from '@/shared/services/websocket'
+import RelationGraphModal from '@/shared/components/RelationGraphModal.vue'
 
-const router = useRouter()
+const showGraphModal = ref(false)
 
 // 关系管理相关状态
 const relationStats = ref({
@@ -332,7 +335,7 @@ const clearSingleRelation = async (relationType: string) => {
 }
 
 const viewRelationGraph = () => {
-  router.push('/relations')
+  showGraphModal.value = true
 }
 
 // Get relation type display name

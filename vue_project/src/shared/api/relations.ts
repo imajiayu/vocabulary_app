@@ -6,7 +6,7 @@ import { get, post, del } from './client'
 export interface GraphNode {
   id: number
   word: string
-  source: string
+  definition: string
 }
 
 export interface GraphEdge {
@@ -147,4 +147,5 @@ export class RelationsApi {
       body: JSON.stringify(payload)
     } as RequestInit)
   }
+
 }
