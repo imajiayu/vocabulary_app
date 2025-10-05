@@ -963,12 +963,16 @@ class RootRelationGenerator:
             total_words = len(words)
 
             if emitter:
-                emitter.emit_progress(0, total_words, "Starting root relation generation...")
+                emitter.emit_progress(
+                    0, total_words, "Starting root relation generation..."
+                )
 
             # 预计算所有词的缓存以提高速度
             for i, word in enumerate(words):
                 if emitter and i % 500 == 0:
-                    emitter.emit_progress(i, total_words, f"Pre-computing word stems: {i}/{total_words}")
+                    emitter.emit_progress(
+                        i, total_words, f"Pre-computing word stems: {i}/{total_words}"
+                    )
                 self.get_stem(word.word)
                 self.get_wordnet_derivations(word.word)
 
@@ -981,7 +985,11 @@ class RootRelationGenerator:
 
             for i, w1 in enumerate(words):
                 if emitter and i % 100 == 0:
-                    emitter.emit_progress(i, total_words, f"Processing root pairs: {i}/{total_words} words, {total_found} found")
+                    emitter.emit_progress(
+                        i,
+                        total_words,
+                        f"Processing root pairs: {i}/{total_words} words, {total_found} found",
+                    )
 
                 for j in range(i + 1, total_words):
                     w2 = words[j]

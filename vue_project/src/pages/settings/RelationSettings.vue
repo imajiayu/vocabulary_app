@@ -15,10 +15,7 @@
             <div v-if="progressMap.synonym.isGenerating" class="progress-bar">
               <div
                 class="progress-fill"
-                :style="{
-                  width: progressMap.synonym.percent + '%',
-                  backgroundColor: relationColors.synonym
-                }"
+                :style="{ width: progressMap.synonym.percent + '%' }"
               ></div>
             </div>
             <div v-if="progressMap.synonym.isGenerating" class="progress-text">
@@ -53,10 +50,7 @@
             <div v-if="progressMap.antonym.isGenerating" class="progress-bar">
               <div
                 class="progress-fill"
-                :style="{
-                  width: progressMap.antonym.percent + '%',
-                  backgroundColor: relationColors.antonym
-                }"
+                :style="{ width: progressMap.antonym.percent + '%' }"
               ></div>
             </div>
             <div v-if="progressMap.antonym.isGenerating" class="progress-text">
@@ -91,10 +85,7 @@
             <div v-if="progressMap.root.isGenerating" class="progress-bar">
               <div
                 class="progress-fill"
-                :style="{
-                  width: progressMap.root.percent + '%',
-                  backgroundColor: relationColors.root
-                }"
+                :style="{ width: progressMap.root.percent + '%' }"
               ></div>
             </div>
             <div v-if="progressMap.root.isGenerating" class="progress-text">
@@ -129,10 +120,7 @@
             <div v-if="progressMap.confused.isGenerating" class="progress-bar">
               <div
                 class="progress-fill"
-                :style="{
-                  width: progressMap.confused.percent + '%',
-                  backgroundColor: relationColors.confused
-                }"
+                :style="{ width: progressMap.confused.percent + '%' }"
               ></div>
             </div>
             <div v-if="progressMap.confused.isGenerating" class="progress-text">
@@ -167,10 +155,7 @@
             <div v-if="progressMap.topic.isGenerating" class="progress-bar">
               <div
                 class="progress-fill"
-                :style="{
-                  width: progressMap.topic.percent + '%',
-                  backgroundColor: relationColors.topic
-                }"
+                :style="{ width: progressMap.topic.percent + '%' }"
               ></div>
             </div>
             <div v-if="progressMap.topic.isGenerating" class="progress-text">
@@ -207,12 +192,6 @@
           </div>
         </div>
       </div>
-
-      <transition name="fade">
-        <div v-if="relationMessage" class="message" :class="relationMessageType">
-          {{ relationMessage }}
-        </div>
-      </transition>
     </div>
   </section>
 </template>
@@ -234,8 +213,6 @@ const relationStats = ref({
   topic: 0,
   total: 0
 })
-const relationMessage = ref('')
-const relationMessageType = ref<'success' | 'error' | 'info'>('info')
 
 // WebSocket for relation generation progress
 const ws = useRelationGenerationWebSocket()
@@ -296,8 +273,6 @@ const checkAllGenerationStatus = async () => {
 }
 
 const generateSingleRelation = async (relationType: string) => {
-  relationMessage.value = ''
-
   try {
     progressMap.value[relationType].isGenerating = true
     progressMap.value[relationType].current = 0
@@ -306,34 +281,13 @@ const generateSingleRelation = async (relationType: string) => {
     progressMap.value[relationType].message = '启动生成任务...'
 
     await api.relations.generate(relationType)
-
-    relationMessageType.value = 'info'
-    const typeNames: Record<string, string> = {
-      synonym: '同义词',
-      antonym: '反义词',
-      root: '词根',
-      confused: '易混淆',
-      topic: '主题'
-    }
-    relationMessage.value = `正在生成${typeNames[relationType] || relationType}关系...`
   } catch (e: any) {
-    relationMessageType.value = 'error'
-    relationMessage.value = e.message || '生成失败'
+    console.error('生成失败:', e.message)
     progressMap.value[relationType].isGenerating = false
   }
 }
 
 const stopSingleRelation = async (relationType: string) => {
-  const typeNames: Record<string, string> = {
-    synonym: '同义词',
-    antonym: '反义词',
-    root: '词根',
-    confused: '易混淆',
-    topic: '主题'
-  }
-
-  relationMessage.value = ''
-
   try {
     await api.relations.stopGeneration(relationType)
 
@@ -341,19 +295,10 @@ const stopSingleRelation = async (relationType: string) => {
     progressMap.value[relationType].isGenerating = false
     progressMap.value[relationType].message = '已停止'
 
-    relationMessageType.value = 'info'
-    relationMessage.value = `${typeNames[relationType] || relationType}生成已停止`
-
     // 重新加载统计以获取最新的关系数量
     await loadRelationStats()
-
-    // 3秒后清除消息
-    setTimeout(() => {
-      relationMessage.value = ''
-    }, 3000)
   } catch (e: any) {
-    relationMessageType.value = 'error'
-    relationMessage.value = e.message || '停止失败'
+    console.error('停止失败:', e.message)
   }
 }
 
@@ -371,26 +316,16 @@ const clearSingleRelation = async (relationType: string) => {
   }
 
   progressMap.value[relationType].isClearing = true
-  relationMessage.value = ''
 
   try {
-    const data = await api.relations.clear({
+    await api.relations.clear({
       relation_types: [relationType]
     })
 
-    relationMessageType.value = 'success'
-    relationMessage.value = `已清空 ${data.count} 条${typeNames[relationType] || relationType}关系`
-
     // 重新加载统计
     await loadRelationStats()
-
-    // 3秒后清除消息
-    setTimeout(() => {
-      relationMessage.value = ''
-    }, 3000)
   } catch (e: any) {
-    relationMessageType.value = 'error'
-    relationMessage.value = e.message || '清空失败'
+    console.error('清空失败:', e.message)
   } finally {
     progressMap.value[relationType].isClearing = false
   }
@@ -433,14 +368,6 @@ const setupWebSocketListeners = () => {
 
     // Refresh stats
     loadRelationStats()
-
-    relationMessageType.value = 'success'
-    relationMessage.value = `${getRelationTypeName(relation_type)} 生成完成！`
-
-    // 3秒后清除消息
-    setTimeout(() => {
-      relationMessage.value = ''
-    }, 3000)
   })
 
   ws.onError((data) => {
@@ -448,8 +375,7 @@ const setupWebSocketListeners = () => {
     if (progressMap.value[relation_type]) {
       progressMap.value[relation_type].isGenerating = false
     }
-    relationMessageType.value = 'error'
-    relationMessage.value = `${getRelationTypeName(relation_type)}: ${message}`
+    console.error(`${getRelationTypeName(relation_type)}: ${message}`)
   })
 }
 
@@ -632,32 +558,6 @@ onUnmounted(() => {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.message {
-  padding: 12px 20px;
-  border-radius: 8px;
-  margin-top: 16px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.message.success {
-  background: #dcfce7;
-  color: #166534;
-  border: 1px solid #86efac;
-}
-
-.message.error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
-}
-
-.message.info {
-  background: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #93c5fd;
-}
-
 /* 进度条样式 */
 .progress-container {
   flex: 1;
@@ -682,6 +582,7 @@ onUnmounted(() => {
 
 .progress-fill {
   height: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   transition: width 0.3s ease;
   border-radius: 8px;
 }
@@ -693,16 +594,6 @@ onUnmounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 
 @media (max-width: 768px) {

@@ -146,11 +146,8 @@ const scrollToSection = (sectionId: string) => {
 }
 
 const handleScroll = (event: Event) => {
-  console.log('[HandleScroll] 滚动事件触发, isScrollingProgrammatically =', isScrollingProgrammatically.value)
-
   // 如果正在程序化滚动，忽略滚动事件
   if (isScrollingProgrammatically.value) {
-    console.log('[HandleScroll] 忽略滚动事件（程序化滚动中）')
     return
   }
 
@@ -163,7 +160,6 @@ const handleScroll = (event: Event) => {
   if (isAtTop) {
     const firstSection = sections[0].id
     if (activeSection.value !== firstSection) {
-      console.log('[HandleScroll] 滚动到顶部，切换到第一个 section:', firstSection)
       activeSection.value = firstSection
     }
     return
@@ -175,7 +171,6 @@ const handleScroll = (event: Event) => {
   if (isAtBottom) {
     const lastSection = sections[sections.length - 1].id
     if (activeSection.value !== lastSection) {
-      console.log('[HandleScroll] 滚动到底部，切换到最后一个 section:', lastSection)
       activeSection.value = lastSection
     }
     return
@@ -199,7 +194,6 @@ const handleScroll = (event: Event) => {
   })
 
   if (closestSection && closestSection !== activeSection.value) {
-    console.log('[HandleScroll] 自动切换 activeSection 从', activeSection.value, '到', closestSection)
     activeSection.value = closestSection
   }
 }
