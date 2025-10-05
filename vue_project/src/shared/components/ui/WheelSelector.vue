@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, computed } from 'vue'
 
 const props = defineProps<{
   max: number
   modelValue: number
   itemHeight?: number
   min?: number
+  step?: number
 }>()
 
 const emit = defineEmits<{
@@ -16,6 +17,17 @@ const emit = defineEmits<{
 const itemHeight = props.itemHeight ?? 28
 // 最小值
 const minValue = () => props.min ?? 1
+// 步长
+const stepValue = () => props.step ?? 1
+
+// 生成所有有效值的数组
+const validValues = computed(() => {
+  const result: number[] = []
+  for (let v = minValue(); v <= props.max; v += stepValue()) {
+    result.push(v)
+  }
+  return result
+})
 
 const wheelRef = ref<HTMLDivElement | null>(null)
 const isScrolling = ref(false)
@@ -33,7 +45,9 @@ const onWheelScroll = () => {
     const containerCenter = container.clientHeight / 2
     const centerPosition = scrollTop + containerCenter
     const index = Math.round(centerPosition / itemHeight)
-    const newValue = Math.max(minValue(), Math.min(index + minValue() - 1, props.max))
+    const itemIndex = index - 1
+    const rawValue = minValue() + itemIndex * stepValue()
+    const newValue = Math.max(minValue(), Math.min(rawValue, props.max))
 
     if (newValue !== props.modelValue) {
       emit('update:modelValue', newValue)
@@ -52,9 +66,10 @@ const setScrollPosition = (value: number) => {
   const containerCenter = container.clientHeight / 2
   const spacerHeight = 26 // calc(40px - 14px) = 26px
 
+  // 计算目标值对应的 item index（从 0 开始）
+  const itemIndex = Math.round((targetValue - minValue()) / stepValue())
   // 计算目标元素的中心位置
-  // 元素在实际列表中的位置 = (值 - 1) * 高度 + 高度/2
-  const elementCenterInItems = (targetValue - minValue()) * itemHeight + itemHeight / 2
+  const elementCenterInItems = itemIndex * itemHeight + itemHeight / 2
   // 加上顶部占位空间，得到在整个滚动容器中的位置
   const elementCenter = spacerHeight + elementCenterInItems
   // 滚动位置 = 元素中心位置 - 容器中心位置
@@ -111,8 +126,8 @@ onMounted(() => {
     <div class="wheel-list" ref="wheelRef" @scroll="onWheelScroll">
       <!-- 添加顶部和底部的占位空间，确保第一个和最后一个元素能滚动到中心 -->
       <div class="wheel-spacer"></div>
-      <div class="wheel-item" v-for="n in Math.max(1, max - (min ?? 1) + 1)" :key="n + (min ?? 1) - 1" :class="{ active: n + (min ?? 1) - 1 === modelValue }">
-        {{ n + (min ?? 1) - 1 }}
+      <div class="wheel-item" v-for="value in validValues" :key="value" :class="{ active: value === modelValue }">
+        {{ value }}
       </div>
       <div class="wheel-spacer"></div>
     </div>

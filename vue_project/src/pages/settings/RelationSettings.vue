@@ -186,7 +186,7 @@
           <span class="relation-count">{{ relationStats.total || 0 }} 条</span>
           <div class="progress-container"></div>
           <div class="relation-actions">
-            <button class="btn-relation-action btn-view-graph" @click="viewRelationGraph">
+            <button class="btn-relation-action btn-view-graph desktop-only" @click="viewRelationGraph">
               🕸️ 查看关系图
             </button>
           </div>
@@ -600,6 +600,42 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+  .settings-group {
+    padding: 20px 16px;
+  }
+
+  .relation-row {
+    padding: 12px;
+    flex-wrap: wrap;
+  }
+
+  .relation-name {
+    min-width: 60px;
+  }
+
+  .progress-container {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    order: 3;
+  }
+
+  .progress-text {
+    white-space: normal;
+    word-break: break-all;
+    font-size: 10px;
+  }
+
+  .relation-actions {
+    order: 4;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
   .section-title {
     font-size: 28px;
   }

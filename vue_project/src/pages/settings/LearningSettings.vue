@@ -17,6 +17,7 @@
               v-model="settings.learning.dailyReviewLimit"
               :min="50"
               :max="1000"
+              :step="50"
             />
           </div>
           <p class="setting-hint">建议根据备考时间调整<br></br>50-500 适合大多数学习者</p>
@@ -34,6 +35,7 @@
               v-model="settings.learning.dailySpellLimit"
               :min="50"
               :max="800"
+              :step="50"
             />
           </div>
           <p class="setting-hint">建议设置为复习量的 60-80%</p>
@@ -51,6 +53,7 @@
               v-model="settings.learning.maxPrepDays"
               :min="15"
               :max="180"
+              :step="15"
             />
           </div>
           <p class="setting-hint">系统将优化复习间隔<br></br>确保考前完成</p>
@@ -330,8 +333,16 @@ const resetSettings = async () => {
 }
 
 @media (max-width: 768px) {
+  .settings-group {
+    padding: 20px 16px;
+  }
+
   .settings-grid {
     grid-template-columns: 1fr;
+  }
+
+  .setting-card {
+    padding: 16px;
   }
 
   .settings-actions {

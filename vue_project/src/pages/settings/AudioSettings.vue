@@ -236,6 +236,10 @@ watch(() => settings.value.audio.autoPlayAfterAnswer, async (newValue, oldValue)
 }
 
 @media (max-width: 768px) {
+  .settings-group {
+    padding: 20px 16px;
+  }
+
   .audio-settings {
     grid-template-columns: 1fr;
   }

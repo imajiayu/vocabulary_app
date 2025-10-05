@@ -939,39 +939,5 @@ onUnmounted(() => {
   border-color: #cbd5e1;
 }
 
-@media (max-width: 768px) {
-  .modal-content {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-  }
 
-  .controls-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .control-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .relation-filters {
-    flex-direction: column;
-  }
-
-  .stats {
-    margin-left: 0;
-  }
-
-  .search-input {
-    min-width: auto;
-    width: 100%;
-  }
-
-  .add-relation-dialog {
-    width: 95%;
-    padding: 20px;
-  }
-}
 </style>
