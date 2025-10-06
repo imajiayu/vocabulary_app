@@ -19,11 +19,12 @@
     <!-- modal -->
     <teleport to="body">
       <div v-if="isModalOpen" class="modal-wrapper">
-        <div class="modal-overlay" @click="() => handleCloseModal(undefined)"></div>
+        <div class="modal-overlay" @click="closeModal"></div>
         <WordDetailModal
           :word="selectedWord"
           :is-open="isModalOpen"
           @close="handleCloseModal"
+          @request-close="closeModal"
           @word-deleted="handleWordDeleted"
         />
       </div>
@@ -76,6 +77,11 @@ const handleClickWord = async (wordId: number) => {
   } catch (err) {
     console.error(err)
   }
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+  selectedWord.value = undefined
 }
 
 const handleCloseModal = (finalWord: Word | undefined) => {

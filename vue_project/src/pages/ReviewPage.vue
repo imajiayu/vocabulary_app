@@ -37,8 +37,8 @@
         </div>
       </div>
 
-      <!-- 复习/拼写组件 -->
-      <component v-else-if="currentWord" :is="currentComponent" :word="currentWord" :audio-type="audioType"
+      <!-- 复习/拼写组件 - 使用componentInstanceKey确保每次进入页面都重新创建 -->
+      <component v-else-if="currentWord" :is="currentComponent" :key="`${mode}-${componentInstanceKey}`" :word="currentWord" :audio-type="audioType"
         @result="handleResult" @skip="handleSkip" />
     </main>
   </div>
@@ -145,6 +145,8 @@ const {
 
 // 本地状态
 const loadingText = ref('加载中...')
+// 组件实例计数器，确保每次进入页面都重新创建组件
+const componentInstanceKey = ref(0)
 
 // 计算属性
 const displayIndex = computed(() => {
@@ -275,6 +277,9 @@ watch(() => route.query, async () => {
 
 // 生命周期
 onMounted(async () => {
+  // 递增组件实例计数器，强制重新创建子组件
+  componentInstanceKey.value++
+
   await initializeFromRoute()
 
   // 建立WebSocket连接并监听单词更新

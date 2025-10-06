@@ -262,6 +262,10 @@ onMounted(async () => {
         loadHotkeys()
     ])
 
+    // 确保旧的监听器已被移除（防御性编程）
+    document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('keyup', handleKeyup)
+
     // 注册快捷键（包括 keydown 和 keyup）
     document.addEventListener('keydown', handleKeydown)
     document.addEventListener('keyup', handleKeyup)
@@ -279,6 +283,12 @@ onBeforeUnmount(() => {
     // 清空所有状态，防止事件残留
     pressedKeys.value.clear()
     isHandlingKeypress.value = false
+})
+
+// 双重保险：onUnmounted 也执行一次清理
+onUnmounted(() => {
+    document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('keyup', handleKeyup)
 })
 </script>
 
