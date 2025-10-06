@@ -94,24 +94,24 @@ def _calculate_detailed_spell_strength(
     )
 
     # 转换为强度增量，允许负增长
-    if total_score >= 0.9:
-        strength_gain = 1.8  # 卓越表现
-    elif total_score >= 0.8:
-        strength_gain = 1.5  # 优秀表现
-    elif total_score >= 0.7:
-        strength_gain = 1.2  # 良好表现
-    elif total_score >= 0.6:
-        strength_gain = 1.0  # 及格表现
-    elif total_score >= 0.5:
-        strength_gain = 0.8  # 勉强通过
-    elif total_score >= 0.4:
-        strength_gain = 0.5  # 表现较差
-    elif total_score >= 0.3:
-        strength_gain = 0.2  # 表现很差
-    elif total_score >= 0.2:
+    if total_score >= 0.95:
+        strength_gain = 1.0  # 近乎完美
+    elif total_score >= 0.85:
+        strength_gain = 0.6  # 优秀
+    elif total_score >= 0.75:
+        strength_gain = 0.4  # 良好
+    elif total_score >= 0.65:
+        strength_gain = 0.2  # 及格
+    elif total_score >= 0.55:
+        strength_gain = 0.1  # 勉强通过
+    elif total_score >= 0.45:
         strength_gain = 0.0  # 无进步
+    elif total_score >= 0.35:
+        strength_gain = -0.2  # 表现较差
+    elif total_score >= 0.25:
+        strength_gain = -0.4  # 表现很差
     else:
-        strength_gain = -0.2  # 表现极差，实际上是猜出来的，轻微扣分
+        strength_gain = -0.6  # 表现极差（猜对的）
 
     new_strength = current_strength + strength_gain
     return max(0.0, min(5.0, new_strength))
