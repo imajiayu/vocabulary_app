@@ -89,7 +89,7 @@
 
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
@@ -150,9 +150,6 @@ const inputRef = ref<HTMLInputElement>()
 const userInput = ref('')
 const forgotClicked = ref(false)
 const isSubmitting = ref(false)
-const pressedKeys = ref(new Set<string>()) // 记录当前按下的键
-const isHandlingKeypress = ref(false) // 防止按键重复触发
-const lastWordChangeTime = ref(0) // 记录上次单词切换时间
 
 // 详细输入数据记录
 const startTime = ref<number>(0)
@@ -233,38 +230,10 @@ const handleKeydown = (event: KeyboardEvent) => {
   // 获取自定义快捷键
   const spellingKeys = hotkeys.value.spelling
 
-  // 检查是否是快捷键（不是普通输入）
-  const isHotkey = event.key === spellingKeys.playAudio ||
-                   event.key === spellingKeys.forgot ||
-                   event.key === spellingKeys.next
-
-  // 如果是快捷键，检查是否已按下（防止重复触发）
-  if (isHotkey && pressedKeys.value.has(event.key)) {
-    event.preventDefault()
-    return
-  }
-
-  // 防止重复触发：如果正在处理按键，直接返回
-  if (isHotkey && isHandlingKeypress.value) {
-    event.preventDefault()
-    return
-  }
-
-  // 防止单词切换后立即触发快捷键（200ms保护期）
-  if (isHotkey) {
-    const timeSinceWordChange = Date.now() - lastWordChangeTime.value
-    if (timeSinceWordChange < 200) {
-      event.preventDefault()
-      return
-    }
-  }
-
   // 处理自定义的下一个快捷键（不记录事件）
   if (event.key === spellingKeys.next) {
     if (canProceed.value) {
       event.preventDefault()
-      pressedKeys.value.add(event.key) // 标记为已按下
-      isHandlingKeypress.value = true // 标记正在处理
       handleNext()
     }
     return // 直接返回，不记录此快捷键事件
@@ -273,23 +242,11 @@ const handleKeydown = (event: KeyboardEvent) => {
   // 使用自定义快捷键
   if (event.key === spellingKeys.playAudio) {
     event.preventDefault()
-    pressedKeys.value.add(event.key) // 标记为已按下
-    isHandlingKeypress.value = true // 标记正在处理
     handlePlayAudio()
-    // 延迟重置处理标志
-    setTimeout(() => {
-      isHandlingKeypress.value = false
-    }, 100)
     return // 不记录快捷键事件
   } else if (event.key === spellingKeys.forgot) {
     event.preventDefault()
-    pressedKeys.value.add(event.key) // 标记为已按下
-    isHandlingKeypress.value = true // 标记正在处理
     handleForgot()
-    // 延迟重置处理标志
-    setTimeout(() => {
-      isHandlingKeypress.value = false
-    }, 100)
     return // 不记录快捷键事件
   }
 
@@ -307,12 +264,6 @@ const handleKeydown = (event: KeyboardEvent) => {
   } else {
     finishBackspaceSequence() // 非退格键时结束退格序列
   }
-}
-
-// 处理按键释放
-const handleKeyup = (event: KeyboardEvent) => {
-  // 移除已释放的键
-  pressedKeys.value.delete(event.key)
 }
 
 // 阻止移动端输入框聚焦时弹出键盘
@@ -433,10 +384,6 @@ const handleNext = async () => {
     console.error('Submit spelling result failed:', error)
   } finally {
     isSubmitting.value = false
-    // 延迟重置处理标志，确保单词切换完成
-    setTimeout(() => {
-      isHandlingKeypress.value = false
-    }, 100)
   }
 }
 
@@ -453,17 +400,11 @@ const resetState = () => {
   }
   backspaceSequences.value = []
   currentBackspaceSequence.value = null
-
-  // 清空按键记录，防止快捷键重复触发
-  pressedKeys.value.clear()
 }
 
 // 监听单词变化，自动重置状态和播放音频
 watch(() => props.word, (newWord, oldWord) => {
   if (newWord && newWord !== oldWord) {
-    // 记录单词切换时间，用于防止快捷键误触
-    lastWordChangeTime.value = Date.now()
-
     // 重置状态
     resetState()
 
@@ -484,12 +425,6 @@ onMounted(async () => {
   // 加载快捷键设置
   await loadHotkeys()
 
-  // 确保旧的监听器已被移除（防御性编程）
-  document.removeEventListener('keyup', handleKeyup)
-
-  // 注册按键监听（keydown 通过input的@keydown绑定，这里只注册keyup）
-  document.addEventListener('keyup', handleKeyup)
-
   resetState()
   await nextTick()
   playWordAudio(props.word.word)
@@ -498,20 +433,10 @@ onMounted(async () => {
   }
 })
 
-// 在组件卸载前移除监听器（比 onUnmounted 更早执行）
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile)
-  document.removeEventListener('keyup', handleKeyup)
-  // 清空所有状态，防止事件残留
-  pressedKeys.value.clear()
-  isHandlingKeypress.value = false
 })
 
-// 双重保险：onUnmounted 也执行一次清理
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-  document.removeEventListener('keyup', handleKeyup)
-})
 </script>
 
 <style scoped>

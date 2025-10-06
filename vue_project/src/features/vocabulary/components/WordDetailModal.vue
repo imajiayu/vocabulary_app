@@ -63,6 +63,7 @@ const props = defineProps<Props>();
 // 使用一个 ref 来管理本地数据，避免数据不同步
 const editData = ref<Word | undefined>(props.word);
 const isEditing = ref(false);
+const abortController = ref<AbortController | null>(null); // 用于清理事件监听器
 
 const emit = defineEmits<{
   close: [finalWord: Word | undefined];
@@ -132,8 +133,12 @@ watch(() => props.isOpen, (isOpen) => {
     // 存储滚动位置
     document.body.setAttribute('data-scroll-y', scrollY.toString());
 
-    // 添加全局键盘事件拦截
-    document.addEventListener('keydown', handleKeydown, { capture: true });
+    // 创建新的 AbortController 并添加全局键盘事件拦截
+    abortController.value = new AbortController();
+    document.addEventListener('keydown', handleKeydown, {
+      capture: true,
+      signal: abortController.value.signal
+    });
   } else {
     // 关闭时：应用所有pending updates并返回最终数据
     if (editData.value && pendingDefinitionUpdates.value.has(editData.value.id)) {
@@ -160,8 +165,11 @@ watch(() => props.isOpen, (isOpen) => {
     window.scrollTo(0, scrollY);
     document.body.removeAttribute('data-scroll-y');
 
-    // 移除全局键盘事件拦截
-    document.removeEventListener('keydown', handleKeydown, { capture: true });
+    // 使用 AbortController 移除全局键盘事件拦截
+    if (abortController.value) {
+      abortController.value.abort();
+      abortController.value = null;
+    }
   }
 });
 
@@ -198,7 +206,11 @@ onMounted(() => {
 
 // 组件卸载前清理事件监听器（比 onUnmounted 更早执行）
 onBeforeUnmount(() => {
-  document.removeEventListener('keydown', handleKeydown, { capture: true });
+  // 使用 AbortController 移除键盘事件监听器（双重保险）
+  if (abortController.value) {
+    abortController.value.abort();
+    abortController.value = null;
+  }
 
   // 清理WebSocket监听
   off(WebSocketEvents.WORD_UPDATED, wordUpdatedCallback);

@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
@@ -50,6 +50,7 @@ import { playWordAudio } from '@/shared/utils/playWordAudio'
 import RelatedWordsDisplay from '@/shared/components/ui/RelatedWordsDisplay.vue'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
+import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
 
 
 interface Props {
@@ -71,14 +72,12 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+// 状态
 const showDefinition = ref(false)
 const pendingChoice = ref<string | null>(null)
 const startTime = ref(Date.now())
 const endTime = ref(Date.now());
 const isSubmitting = ref(false)
-const isHandlingKeypress = ref(false) // 防止按键重复触发
-const pressedKeys = ref(new Set<string>()) // 记录当前按下的键
-const lastWordChangeTime = ref(0) // 记录上次单词切换时间
 
 // 使用全局音频设置
 const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
@@ -86,29 +85,38 @@ const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent 
 // 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
 
+// 🔧 使用全局键盘管理器
+const { setContext, registerKeys, cleanup } = useKeyboardManager()
+
 const handleChoice = (choice: string) => {
+    console.log('[WordReview] handleChoice called with:', choice, 'Stack trace:', new Error().stack)
     if (isSubmitting.value) return
 
     endTime.value = Date.now()
 
     pendingChoice.value = choice
 
-    // 显示释义和后续按钮
+    // 立即显示释义和后续按钮，触发快捷键重新注册
     showDefinition.value = true
 
-    // 播放音频（根据设置决定是否自动播放）- 非阻塞
+    // 在上下文切换后播放音频（非阻塞，不影响快捷键）
     if (autoPlayAfterAnswer.value) {
-        playWordAudio(props.word.word, audioAccent.value)
+        // 使用 setTimeout 确保完全不阻塞
+        setTimeout(() => {
+            playWordAudio(props.word.word, audioAccent.value)
+        }, 0)
     }
 }
 
 const handleCorrection = async () => {
+    console.log('[WordReview] handleCorrection called');
     // "记错了"按钮应该覆盖之前的选择，强制设置为"没记住"
     // 即使之前选了"不再复习"，也要改为提交学习结果
     await submitResult(false, true) // 第二个参数表示强制提交结果
 }
 
 const handleNext = async () => {
+    console.log('[WordReview] handleNext called, pendingChoice:', pendingChoice.value);
     const unRemembered = pendingChoice.value === 'no'
     await submitResult(!unRemembered, false)
 }
@@ -123,7 +131,17 @@ const handleSkip = async () => {
 }
 
 const submitResult = async (remembered: boolean, forceResult: boolean = false) => {
-    if (isSubmitting.value) return
+    console.log('[WordReview] submitResult called:', {
+        remembered,
+        forceResult,
+        isSubmitting: isSubmitting.value,
+        currentWord: props.word.word
+    });
+
+    if (isSubmitting.value) {
+        console.log('[WordReview] Already submitting, returning');
+        return
+    }
 
     isSubmitting.value = true
     try {
@@ -131,16 +149,19 @@ const submitResult = async (remembered: boolean, forceResult: boolean = false) =
 
         // 如果强制提交结果（来自"记错了"按钮），或者不是"不再复习"，则提交学习结果
         if (forceResult || pendingChoice.value !== 'stop') {
+            console.log('[WordReview] Calling props.onResult');
             await props.onResult({
                 remembered,
                 elapsedTime
             })
         } else {
             // 只有在非强制且选择了"不再复习"时才跳过
+            console.log('[WordReview] Calling handleSkip');
             await handleSkip()
         }
 
         // 👉 提交成功后，重置状态
+        console.log('[WordReview] Resetting state after submit');
         showDefinition.value = false
         pendingChoice.value = null
         startTime.value = Date.now()
@@ -152,108 +173,53 @@ const submitResult = async (remembered: boolean, forceResult: boolean = false) =
     }
 }
 
-// 快捷键处理
-const handleKeydown = async (event: KeyboardEvent) => {
-    // 如果这个键已经被按下（按住不放导致的重复触发），忽略
-    if (pressedKeys.value.has(event.key)) {
-        event.preventDefault()
-        return
-    }
-
-    // 防止重复触发：如果正在处理按键或正在提交，直接返回
-    if (isHandlingKeypress.value || isSubmitting.value) {
-        event.preventDefault()
-        return
-    }
-
-    // 防止单词切换后立即触发快捷键（200ms保护期）
-    const timeSinceWordChange = Date.now() - lastWordChangeTime.value
-    if (timeSinceWordChange < 200) {
-        event.preventDefault()
-        return
-    }
-
-    let shouldHandle = false
+// 🔧 使用全局键盘管理器注册快捷键
+const setupKeyboardShortcuts = () => {
+    // 先清理旧的快捷键，避免重复注册
+    cleanup()
 
     if (!showDefinition.value) {
-        // 初始选择状态 - 使用自定义快捷键
+        // 初始选择状态 - 注册初始快捷键
+        setContext('review-initial')
         const initialKeys = hotkeys.value.reviewInitial
-        if (event.key === initialKeys.remembered ||
-            event.key === initialKeys.notRemembered ||
-            event.key === initialKeys.stopReview) {
-            shouldHandle = true
-        }
+        console.log('[WordReview] Registering initial shortcuts:', initialKeys)
+        registerKeys({
+            [initialKeys.remembered]: () => handleChoice('yes'),
+            [initialKeys.notRemembered]: () => handleChoice('no'),
+            [initialKeys.stopReview]: () => handleChoice('stop')
+        })
     } else {
-        // 显示释义状态 - 使用自定义快捷键
+        // 显示释义状态 - 注册显示释义后的快捷键
+        setContext('review-after')
         const afterKeys = hotkeys.value.reviewAfter
-        if (event.key === afterKeys.wrong || event.key === afterKeys.next) {
-            shouldHandle = true
-        }
-    }
-
-    if (!shouldHandle) {
-        return // 不是我们关心的快捷键，不处理
-    }
-
-    // 标记这个键为已按下（在处理之前标记，防止重复）
-    event.preventDefault()
-    pressedKeys.value.add(event.key)
-    isHandlingKeypress.value = true
-
-    try {
-        if (!showDefinition.value) {
-            // 初始选择状态
-            const initialKeys = hotkeys.value.reviewInitial
-            if (event.key === initialKeys.remembered) {
-                handleChoice('yes')
-            } else if (event.key === initialKeys.notRemembered) {
-                handleChoice('no')
-            } else if (event.key === initialKeys.stopReview) {
-                handleChoice('stop')
-            }
-        } else {
-            // 显示释义状态
-            const afterKeys = hotkeys.value.reviewAfter
-            if (event.key === afterKeys.wrong) {
-                await handleCorrection()
-            } else if (event.key === afterKeys.next) {
-                await handleNext()
-            }
-        }
-    } finally {
-        // 延迟重置防重复标志，确保单词切换完成
-        setTimeout(() => {
-            isHandlingKeypress.value = false
-        }, 100)
+        console.log('[WordReview] Registering after shortcuts:', afterKeys)
+        registerKeys({
+            [afterKeys.wrong]: async () => await handleCorrection(),
+            [afterKeys.next]: async () => await handleNext()
+        })
     }
 }
 
-// 处理按键释放
-const handleKeyup = (event: KeyboardEvent) => {
-    // 移除已释放的键
-    pressedKeys.value.delete(event.key)
-}
+// 监听showDefinition变化，更新快捷键注册
+// 注意：不使用 immediate，避免与 onMounted 中的调用冲突
+watch(showDefinition, () => {
+    setupKeyboardShortcuts()
+}, { flush: 'post' })
 
 // 监听单词变化，自动播放新单词的音频
-watch(() => props.word, (newWord, oldWord) => {
-    if (newWord && newWord !== oldWord) {
-        // 记录单词切换时间，用于防止快捷键误触
-        lastWordChangeTime.value = Date.now()
-
+watch(() => props.word?.id, (newWordId, oldWordId) => {
+    if (newWordId && newWordId !== oldWordId) {
         // 重置状态
         showDefinition.value = false
         pendingChoice.value = null
         startTime.value = Date.now()
-        // ❌ 不要在这里重置防重复标志，避免快捷键重复触发
-        // isHandlingKeypress.value = false
-        // pressedKeys.value.clear()
 
-        // 播放新单词音频（根据设置决定是否自动播放）- 非阻塞
-        if (autoPlayOnWordChange.value) {
-            playWordAudio(newWord.word, audioAccent.value)
+        // 播放新单词音频（根据设置决定是否自动播放）
+        if (autoPlayOnWordChange.value && props.word) {
+            playWordAudio(props.word.word, audioAccent.value)
         }
     }
-})
+}, { immediate: false })
 
 onMounted(async () => {
     // 加载音频设置和快捷键设置
@@ -262,33 +228,13 @@ onMounted(async () => {
         loadHotkeys()
     ])
 
-    // 确保旧的监听器已被移除（防御性编程）
-    document.removeEventListener('keydown', handleKeydown)
-    document.removeEventListener('keyup', handleKeyup)
+    // 🔧 注册快捷键到全局键盘管理器
+    setupKeyboardShortcuts()
 
-    // 注册快捷键（包括 keydown 和 keyup）
-    document.addEventListener('keydown', handleKeydown)
-    document.addEventListener('keyup', handleKeyup)
-
-    // 初始播放音频（作为fallback，根据设置决定是否自动播放）
+    // 初始播放音频（根据设置决定是否自动播放）
     if (props.word && autoPlayOnWordChange.value) {
         playWordAudio(props.word.word, audioAccent.value)
     }
-})
-
-// 在组件卸载前移除监听器（比 onUnmounted 更早执行）
-onBeforeUnmount(() => {
-    document.removeEventListener('keydown', handleKeydown)
-    document.removeEventListener('keyup', handleKeyup)
-    // 清空所有状态，防止事件残留
-    pressedKeys.value.clear()
-    isHandlingKeypress.value = false
-})
-
-// 双重保险：onUnmounted 也执行一次清理
-onUnmounted(() => {
-    document.removeEventListener('keydown', handleKeydown)
-    document.removeEventListener('keyup', handleKeyup)
 })
 </script>
 
