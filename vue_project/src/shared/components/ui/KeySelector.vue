@@ -1,26 +1,19 @@
 <template>
   <div class="key-selector">
-    <select
-      :value="modelValue"
-      @change="handleChange"
+    <CustomSelect
+      :model-value="modelValue"
+      @update:model-value="(value) => emit('update:modelValue', value as string)"
+      :options="selectableKeys"
       class="key-select"
       :class="{ 'has-error': hasError }"
-    >
-      <option
-        v-for="key in availableKeys"
-        :key="key.value"
-        :value="key.value"
-        :disabled="isDisabled(key.value)"
-      >
-        {{ key.label }}
-      </option>
-    </select>
+    />
     <span v-if="hasError" class="error-hint">此快捷键已被使用</span>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import CustomSelect from '../CustomSelect.vue'
 
 interface KeyOption {
   value: string
@@ -95,15 +88,13 @@ const hasError = computed(() => {
   return props.usedKeys.includes(props.modelValue)
 })
 
-const isDisabled = (key: string) => {
-  // 如果这个键已被使用且不是当前选中的键，则禁用
-  return props.usedKeys.includes(key) && key !== props.modelValue
-}
-
-const handleChange = (event: Event) => {
-  const value = (event.target as HTMLSelectElement).value
-  emit('update:modelValue', value)
-}
+// 过滤出可选择的快捷键（排除已被使用的键，但保留当前选中的键）
+const selectableKeys = computed(() => {
+  return availableKeys.filter(key => {
+    // 如果这个键已被使用且不是当前选中的键，则过滤掉
+    return !(props.usedKeys.includes(key.value) && key.value !== props.modelValue)
+  })
+})
 </script>
 
 <style scoped>
@@ -114,39 +105,30 @@ const handleChange = (event: Event) => {
 }
 
 .key-select {
-  padding: 8px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s;
   min-width: 180px;
 }
 
-.key-select:hover {
-  border-color: #667eea;
-}
-
-.key-select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.key-select.has-error {
+.key-select.has-error :deep(.custom-select-trigger) {
   border-color: #ef4444;
-}
-
-.key-select option:disabled {
-  color: #9ca3af;
-  font-style: italic;
 }
 
 .error-hint {
   font-size: 12px;
   color: #ef4444;
   margin-left: 4px;
+}
+
+/* 自定义 CustomSelect 样式以匹配原始设计 */
+.key-select :deep(.custom-select-trigger) {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  border: 1px solid #e5e7eb;
+}
+
+.key-select :deep(.custom-select-trigger:hover) {
+  border-color: #667eea;
+}
+
+.key-select :deep(.select-option) {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
 }
 </style>

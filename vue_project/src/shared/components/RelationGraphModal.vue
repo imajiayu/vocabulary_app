@@ -146,42 +146,10 @@
 
             <div class="dialog-field">
               <label>关系类型：</label>
-              <div class="custom-select-wrapper">
-                <div
-                  class="custom-select-trigger"
-                  @click="relationTypeDropdown = !relationTypeDropdown"
-                >
-                  <span class="selected-type">
-                    <span
-                      class="type-indicator"
-                      :style="{ backgroundColor: relationTypeOptions.find(opt => opt.value === addRelationDialog.relationType)?.color }"
-                    ></span>
-                    {{ getRelationTypeLabel(addRelationDialog.relationType) }}
-                  </span>
-                  <svg
-                    class="dropdown-arrow"
-                    :class="{ open: relationTypeDropdown }"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                  >
-                    <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <div v-if="relationTypeDropdown" class="custom-select-dropdown">
-                  <div
-                    v-for="option in relationTypeOptions"
-                    :key="option.value"
-                    class="select-option"
-                    :class="{ selected: option.value === addRelationDialog.relationType }"
-                    @click="selectRelationType(option.value)"
-                  >
-                    <span class="type-indicator" :style="{ backgroundColor: option.color }"></span>
-                    <span>{{ option.label }}</span>
-                  </div>
-                </div>
-              </div>
+              <CustomSelect
+                v-model="addRelationDialog.relationType"
+                :options="relationTypeOptions"
+              />
             </div>
 
             <div class="dialog-actions">
@@ -200,6 +168,8 @@ import { ref, watch, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import { api } from '@/shared/api'
 import type { GraphNode, GraphEdge, GraphData } from '@/shared/api'
+import CustomSelect from './CustomSelect.vue'
+import type { SelectOption } from './CustomSelect.vue'
 
 interface Props {
   show: boolean
@@ -253,9 +223,8 @@ const addRelationDialog = ref({
 const candidateWords = ref<GraphNode[]>([])
 const selectedCandidateIndex = ref(-1)
 
-// 关系类型下拉菜单
-const relationTypeDropdown = ref(false)
-const relationTypeOptions = [
+// 关系类型选项
+const relationTypeOptions: SelectOption[] = [
   { value: 'synonym', label: '同义词', color: '#52c41a' },
   { value: 'antonym', label: '反义词', color: '#ff4d4f' },
   { value: 'root', label: '词根', color: '#722ed1' },
@@ -691,7 +660,6 @@ const cancelAddRelation = () => {
   addRelationDialog.value.show = false
   candidateWords.value = []
   selectedCandidateIndex.value = -1
-  relationTypeDropdown.value = false
   // 清除 ECharts 的拖拽状态
   if (chartInstance) {
     chartInstance.dispatchAction({
@@ -778,17 +746,6 @@ const selectCandidate = (node: GraphNode) => {
   addRelationDialog.value.targetWord = node.word
   candidateWords.value = []
   selectedCandidateIndex.value = -1
-}
-
-// 选择关系类型
-const selectRelationType = (type: string) => {
-  addRelationDialog.value.relationType = type
-  relationTypeDropdown.value = false
-}
-
-// 获取当前选中的关系类型标签
-const getRelationTypeLabel = (type: string) => {
-  return relationTypeOptions.find(opt => opt.value === type)?.label || type
 }
 
 // 监听 show 变化
@@ -1220,15 +1177,9 @@ onUnmounted(() => {
   color: #475569;
 }
 
-.dialog-field input,
-.dialog-field select,
-.dialog-field .custom-select-wrapper {
+.dialog-field input {
   width: 100%;
   box-sizing: border-box;
-}
-
-.dialog-field input,
-.dialog-field select {
   padding: 10px 14px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -1236,11 +1187,9 @@ onUnmounted(() => {
   color: #0f172a;
   transition: all 0.2s;
   background: white;
-  box-sizing: border-box;
 }
 
-.dialog-field input:focus,
-.dialog-field select:focus {
+.dialog-field input:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -1345,90 +1294,5 @@ onUnmounted(() => {
 .autocomplete-wrapper input:focus {
   border-radius: 8px 8px 0 0;
 }
-
-/* ===== 自定义关系类型选择器 ===== */
-.custom-select-wrapper {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.custom-select-trigger {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #0f172a;
-  background: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.2s;
-  box-sizing: border-box;
-}
-
-.custom-select-trigger:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
-}
-
-.selected-type {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.type-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.dropdown-arrow {
-  color: #64748b;
-  transition: transform 0.2s;
-  flex-shrink: 0;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.custom-select-dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1001;
-  overflow: hidden;
-}
-
-.select-option {
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: background-color 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #0f172a;
-}
-
-.select-option:hover {
-  background: #f8fafc;
-}
-
-.select-option.selected {
-  background: #f1f5f9;
-  font-weight: 500;
-}
-
 
 </style>
