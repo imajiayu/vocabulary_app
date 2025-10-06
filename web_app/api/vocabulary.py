@@ -575,12 +575,15 @@ def update_review_word(word_id):
             # 其他模式（包括拼写）：直接从数据库恢复快照，确保多设备同步
             try:
                 from web_app.services.progress_service import try_restore_from_progress
+
                 success, word_ids, progress_mode = try_restore_from_progress()
 
                 if success and progress_mode == mode and word_ids:
                     all_ids = word_ids
                     if word_id in all_ids:
-                        current_index = all_ids.index(word_id) + 1  # +1 因为已完成当前单词
+                        current_index = (
+                            all_ids.index(word_id) + 1
+                        )  # +1 因为已完成当前单词
                         update_current_progress_index(current_index)
             except Exception as e:
                 print(f"Failed to update progress index: {e}")

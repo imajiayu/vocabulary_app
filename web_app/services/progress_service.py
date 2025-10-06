@@ -43,11 +43,14 @@ def save_word_ids_snapshot(mode, all_ids, shuffle_enabled, limit):
         initial_lapse_count = 0
         if mode == "mode_lapse":
             from web_app.database.vocabulary_dao import db_get_words_review_info_batch
+
             words = db_get_words_review_info_batch(all_ids)
             initial_lapse_count = sum(word.get("lapse", 0) for word in words)
 
         # 保存进度快照
-        success = db_save_progress(mode, current_source, shuffle_enabled, all_ids, initial_lapse_count)
+        success = db_save_progress(
+            mode, current_source, shuffle_enabled, all_ids, initial_lapse_count
+        )
 
         if success:
             print(
@@ -102,10 +105,6 @@ def try_restore_from_progress():
         word_ids = progress.get("word_ids_snapshot", [])
         mode = progress.get("mode", "")
         current_index = progress.get("current_index", 0)
-
-        print(
-            f"Progress restored: {len(word_ids)} words, current_index={current_index}, mode={mode}"
-        )
 
         return True, word_ids, mode
     except Exception as e:
@@ -198,7 +197,7 @@ def update_lapse_progress_after_word_update(word_id, updated_word):
                 progress["source"],
                 progress["shuffle"],
                 new_word_ids,
-                progress.get("initial_lapse_count", 0)
+                progress.get("initial_lapse_count", 0),
             )
 
             if success:

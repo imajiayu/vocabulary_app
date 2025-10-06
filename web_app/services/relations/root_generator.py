@@ -1,31 +1,23 @@
 # -*- coding: utf-8 -*-
+"""
+改进的词根关系生成器 v2
+基于验证集优化的版本
+"""
 from typing import Tuple, Set, Dict, List
-from functools import lru_cache
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import multiprocessing
-from nltk.corpus import wordnet
 from nltk.stem import PorterStemmer
-from gensim.models import KeyedVectors
 from web_app.models.word import Word, WordRelation, RelationType
 from web_app.extensions import get_session
-from sqlalchemy import insert
 from web_app.services.relations.utils import batch_insert_relations
+import re
 
 stemmer = PorterStemmer()
 
-# 拉丁/希腊词根数据库（针对GRE词汇）
+# 扩展的拉丁/希腊词根数据库
 LATIN_GREEK_ROOTS = {
     # 说话/声音相关
     "dict": {
         "meaning": "say, speak",
-        "examples": [
-            "indict",
-            "vindicate",
-            "valediction",
-            "dictate",
-            "predict",
-            "contradict",
-        ],
+        "examples": ["indict", "vindicate", "valediction", "dictate", "predict", "contradict", "vindictive"],
         "variants": ["dicat", "dic"],
     },
     "loqu": {
@@ -34,34 +26,24 @@ LATIN_GREEK_ROOTS = {
         "variants": ["locut"],
     },
     "log": {
-        "meaning": "speak, word",
-        "examples": ["monologue", "prologue", "dialogue", "eulogy", "apology"],
-        "variants": ["logu"],
+        "meaning": "speak, word, reason",
+        "examples": ["monologue", "prologue", "dialogue", "eulogy", "apology", "logical"],
+        "variants": ["logu", "logue"],
     },
     "voc": {
         "meaning": "call, voice",
-        "examples": ["advocate", "vocation", "vociferous", "equivocate", "provocative"],
+        "examples": ["advocate", "vocation", "vociferous", "equivocate", "provocative", "irrevocable"],
         "variants": ["vocat", "vok"],
     },
     "vok": {
         "meaning": "call",
-        "examples": ["provoke", "revoke", "convoke", "invoke", "evoke"],
+        "examples": ["provoke", "revoke", "convoke", "invoke", "evoke", "irrevocable"],
         "variants": ["vocat", "voc"],
     },
-    "claim": {
-        "meaning": "shout, call",
-        "examples": ["claim", "disclaim", "declaim", "exclaim", "proclaim"],
-        "variants": ["clam"],
-    },
-    "clam": {
-        "meaning": "shout",
-        "examples": ["clamor", "clamorous", "acclamation"],
-        "variants": ["claim"],
-    },
-    "verb": {
-        "meaning": "word",
-        "examples": ["verbose", "verbatim", "reverberate", "verbal", "proverb"],
-        "variants": ["verber"],
+    "fess": {
+        "meaning": "speak, confess",
+        "examples": ["confess", "profess", "professor"],
+        "variants": ["fes"],
     },
     "son": {
         "meaning": "sound",
@@ -73,106 +55,667 @@ LATIN_GREEK_ROOTS = {
         "examples": ["cacophony", "euphonious", "symphony", "telephone"],
         "variants": ["phonic"],
     },
-    # 行动相关
-    "gat": {
-        "meaning": "ask, gather",
-        "examples": ["interrogate", "abrogate", "surrogate", "derogatory"],
-        "variants": ["grog", "rog"],
+
+    # 权威/信任相关
+    "auth": {
+        "meaning": "authority, increase",
+        "examples": ["authoritarian", "authoritative", "authority", "author"],
+        "variants": ["auct"],
     },
-    "rog": {
-        "meaning": "ask",
-        "examples": ["prerogative", "interrogate", "arrogant", "derogate"],
-        "variants": ["gat", "grog"],
+    "cred": {
+        "meaning": "believe, trust",
+        "examples": ["credential", "credible", "incredible", "credit", "confident"],
+        "variants": ["creed"],
     },
-    "nunc": {
-        "meaning": "announce",
-        "examples": ["denounce", "renounce", "enunciate", "announce", "pronunciation"],
-        "variants": ["nounc", "nounce"],
+    "fid": {
+        "meaning": "faith, trust",
+        "examples": ["confident", "fidelity", "confide"],
+        "variants": ["fide"],
     },
-    "nount": {
-        "meaning": "announce",
-        "examples": ["pronouncement"],
-        "variants": ["nounc"],
+
+    # 知识/感知相关（严格区分，不要混淆）
+    "spect": {
+        "meaning": "look, watch",
+        "examples": ["inspect", "respect", "prospect", "spectator", "introspection", "circumspect",
+                    "perspective", "spectacle", "spectrum", "speculation", "speculate", "prospective", "aspect"],
+        "variants": [],
     },
-    # 知识/感知相关
-    "gno": {
-        "meaning": "know",
-        "examples": ["agnostic", "diagnostic", "prognosis", "cognition"],
+    "speci": {
+        "meaning": "kind, species",  # 改用speci避免与spect混淆
+        "examples": ["special", "specialty", "species", "specialist", "specific", "specification", "specimen", "specify"],
+        "variants": [],
     },
-    "sci": {
-        "meaning": "know",
-        "examples": ["science", "conscience", "omniscient", "prescient"],
+    "vid": {
+        "meaning": "see",
+        "examples": ["video", "evident", "provide", "divide"],
+        "variants": ["vis"],
     },
-    "vid": {"meaning": "see", "examples": ["video", "evident", "provide", "divide"]},
     "vis": {
         "meaning": "see",
         "examples": ["visible", "vision", "supervise", "revision"],
+        "variants": ["vid"],
     },
-    "spec": {
-        "meaning": "look, see",
-        "examples": ["inspect", "respect", "prospect", "retrospect"],
+
+    # 行动/移动相关
+    "mit": {
+        "meaning": "send",
+        "examples": ["transmit", "admit", "emit", "permit", "dissemination"],
+        "variants": ["miss", "mitt"],
     },
-    "spect": {
-        "meaning": "look",
-        "examples": ["spectacle", "perspective", "circumspect"],
+    "miss": {
+        "meaning": "send",
+        "examples": ["missile", "mission", "dismiss", "remiss", "dissemination"],
+        "variants": ["mit", "mitt"],
     },
-    # 感情/品质相关
-    "fam": {
-        "meaning": "fame, reputation",
-        "examples": ["famous", "infamous", "defamation"],
-    },
-    "fab": {
-        "meaning": "speak",
-        "examples": ["fable", "affable", "ineffable", "fabulous"],
-    },
-    "am": {"meaning": "love", "examples": ["amiable", "amorous", "amateur", "amity"]},
-    "phil": {
-        "meaning": "love",
-        "examples": ["philosophy", "philanthropist", "bibliophile"],
-    },
-    # 力量/统治相关
-    "pot": {
-        "meaning": "power",
-        "examples": ["potential", "potent", "impotent", "omnipotent"],
-    },
-    "puls": {
-        "meaning": "drive, push",
-        "examples": ["compulsive", "repulsive", "impulse", "expulsion"],
-    },
-    "pel": {
-        "meaning": "drive, push",
-        "examples": ["compel", "repel", "expel", "impel"],
-    },
-    # 时间/变化相关
-    "mut": {
-        "meaning": "change",
-        "examples": ["mutable", "immutable", "mutation", "commute"],
-    },
-    "vers": {
-        "meaning": "turn",
-        "examples": ["diverse", "reverse", "adverse", "versatile"],
-    },
-    "vert": {"meaning": "turn", "examples": ["convert", "divert", "revert", "subvert"]},
-    "flu": {
-        "meaning": "flow",
-        "examples": ["fluid", "fluent", "influence", "affluent"],
-    },
-    "flux": {"meaning": "flow", "examples": ["flux", "influx", "reflux"]},
-    # 位置/移动相关
-    "loc": {
-        "meaning": "place",
-        "examples": ["locate", "allocate", "dislocate", "locale"],
+    "mot": {
+        "meaning": "move",
+        "examples": ["motion", "motor", "promote", "remote"],
+        "variants": ["mov", "mob"],
     },
     "pos": {
         "meaning": "place, put",
-        "examples": ["position", "dispose", "compose", "impose"],
+        "examples": ["position", "dispose", "compose", "impose", "disposition"],
+        "variants": ["pon", "posit"],
     },
-    "pon": {"meaning": "put, place", "examples": ["component", "exponent", "postpone"]},
-    "mit": {"meaning": "send", "examples": ["transmit", "admit", "emit", "permit"]},
-    "miss": {
-        "meaning": "send",
-        "examples": ["missile", "mission", "dismiss", "remiss"],
+    "pon": {
+        "meaning": "put, place",
+        "examples": ["component", "exponent", "postpone", "disposition"],
+        "variants": ["pos", "posit"],
     },
+
+    # 对抗/反对相关（严格限制）
+    "anti": {
+        "meaning": "against, opposite",
+        "examples": ["antiviral", "antonym", "antibiotic"],  # 移除antipathy（path词根独立）
+        "variants": [],  # 不包含anticipate（anti+cip不是anti词根）
+    },
+    "vers": {
+        "meaning": "turn",
+        "examples": ["diverse", "reverse", "adverse", "versatile", "adversity", "incontrovertible", "universal", "diversion"],
+        "variants": [],  # 不使用变体，避免过度匹配
+    },
+    "vert": {
+        "meaning": "turn",
+        "examples": ["convert", "divert", "revert", "subvert", "incontrovertible", "vertebrate"],
+        "variants": [],  # 不使用变体，避免过度匹配
+    },
+
+    # 法律/规则相关
+    "leg": {
+        "meaning": "law, read",
+        "examples": ["legal", "legitimate", "legacy", "legislation", "legislative"],
+        "variants": ["legis"],
+    },
+    "junct": {
+        "meaning": "join",
+        "examples": ["junction", "conjunct", "adjunct", "disjunction"],
+        "variants": ["join"],
+    },
+
+    # 生命/产生相关（拆分）
+    "gener": {
+        "meaning": "birth, kind",
+        "examples": ["generate", "genetic", "degenerate", "general"],
+        "variants": [],
+    },
+    "genu": {
+        "meaning": "knee, inborn quality",
+        "examples": ["genuine", "ingenious", "ingenuity"],
+        "variants": ["geni"],
+    },
+    "anim": {
+        "meaning": "life, soul",
+        "examples": ["animate", "animal", "animation", "inanimate"],
+        "variants": ["anima"],
+    },
+    "viv": {
+        "meaning": "live",
+        "examples": ["vivid", "survive", "revival", "inviolable"],
+        "variants": ["vit", "viol"],
+    },
+
+    # 感受/情感相关
+    "path": {
+        "meaning": "feeling, disease",
+        "examples": ["sympathy", "empathy", "antipathy", "pathetic", "pathogen"],
+        "variants": ["patho"],
+    },
+    "phil": {
+        "meaning": "love",
+        "examples": ["philosophy", "philanthropist", "bibliophile"],
+        "variants": ["philo"],
+    },
+
+    # 抓取/接收相关（分离不同含义，更严格）
+    "capt": {
+        "meaning": "take, capture",
+        "examples": ["capture", "captive", "captivate"],
+        "variants": [],
+    },
+    "cipat": {
+        "meaning": "take, receive (anticipate)",
+        "examples": ["anticipate", "participate"],
+        "variants": [],
+    },
+    "capit": {
+        "meaning": "head",
+        "examples": ["capital", "captain", "decapitate"],
+        "variants": [],
+    },
+    "cipi": {
+        "meaning": "take, receive",
+        "examples": ["recipient", "participate", "recipe"],
+        "variants": [],
+    },
+    "cept": {
+        "meaning": "take, receive",
+        "examples": ["accept", "except", "reception", "exceptional"],
+        "variants": [],
+    },
+
+    # 走/前进相关
+    "ced": {
+        "meaning": "go, yield",
+        "examples": ["proceed", "exceed", "succeed", "recede", "recession"],
+        "variants": ["cess", "ceed"],
+    },
+    "cess": {
+        "meaning": "go",
+        "examples": ["process", "access", "excess", "excessive", "recession"],
+        "variants": ["ced", "ceed"],
+    },
+
+    # 做/制造相关（分离不同含义）
+    "fabr": {
+        "meaning": "make, build",
+        "examples": ["fabric", "fabricate", "prefabricate"],
+        "variants": [],
+    },
+    "facil": {
+        "meaning": "easy, make easy",
+        "examples": ["facile", "facility", "facilitate"],
+        "variants": [],
+    },
+    "fect": {
+        "meaning": "make, do",
+        "examples": ["perfect", "defect", "affect"],  # 移除effect（太泛化）
+        "variants": [],
+    },
+    "fici": {
+        "meaning": "make, do",
+        "examples": ["efficient", "efficiency", "proficient"],
+        "variants": [],
+    },
+
+    # 显示/证明相关（拆分不同含义）
+    "monstr": {
+        "meaning": "show, demonstrate",
+        "examples": ["demonstrate", "monster", "monstrous"],
+        "variants": [],
+    },
+    "dem": {
+        "meaning": "people",
+        "examples": ["democracy", "epidemic", "predominant"],
+        "variants": ["demo"],
+    },
+    "molish": {
+        "meaning": "destroy",
+        "examples": ["demolish"],
+        "variants": [],
+    },
+
+    # 坚固/确认相关
+    "firm": {
+        "meaning": "strong, affirm",
+        "examples": ["affirm", "confirm", "affirmative", "infirm"],
+        "variants": ["firmat"],
+    },
+
+    # 切割/杀死相关（移除accidental，它是accident的派生）
+    # accidental通过cide词根处理
+
+    # 收集/问询相关（分离）
+    "rog": {
+        "meaning": "ask, claim",
+        "examples": ["arrogant", "prerogative", "abrogate"],
+        "variants": [],
+    },
+
+    # 和谐/一致相关
+    "cord": {
+        "meaning": "heart, harmony",
+        "examples": ["accord", "discord", "concord", "record"],
+        "variants": ["card"],
+    },
+    "harm": {
+        "meaning": "harmony",
+        "examples": ["harmony", "harmonious", "disharmony"],
+        "variants": ["harmon"],
+    },
+
+    # 地方/位置相关（拆分不同含义）
+    "loc": {
+        "meaning": "place",
+        "examples": ["locate", "allocate", "dislocate", "locale"],
+        "variants": ["locat"],
+    },
+    "plac": {
+        "meaning": "please, calm",
+        "examples": ["placate", "placid", "complacent"],
+        "variants": [],
+    },
+    "place": {
+        "meaning": "place, position",
+        "examples": ["place", "displace", "replace"],
+        "variants": [],
+    },
+
+    # 拉/紧相关
+    "strict": {
+        "meaning": "tight, bind",
+        "examples": ["strict", "restrict", "district", "distress"],
+        "variants": ["string", "strain"],
+    },
+
+    # 流动相关
+    "flu": {
+        "meaning": "flow",
+        "examples": ["fluid", "fluent", "influence", "affluent"],
+        "variants": ["flux"],
+    },
+
+    # 变化相关
+    "vari": {
+        "meaning": "change, different",
+        "examples": ["variable", "vary", "variety", "various"],
+        "variants": ["var"],
+    },
+    "mut": {
+        "meaning": "change",
+        "examples": ["mutable", "immutable", "mutation", "commute", "mutual"],
+        "variants": ["mutat"],
+    },
+
+    # 伸展/倾向相关
+    "tens": {
+        "meaning": "stretch, tense",
+        "examples": ["extension", "tension", "pretension"],
+        "variants": [],
+    },
+    "tenu": {
+        "meaning": "thin, slender",
+        "examples": ["tenuous", "attenuate"],
+        "variants": [],
+    },
+
+    # 新/创新相关
+    "nov": {
+        "meaning": "new",
+        "examples": ["novel", "novice", "innovate", "innovative", "renovation"],
+        "variants": ["novat"],
+    },
+
+    # 触摸/完整相关
+    "tact": {
+        "meaning": "touch",
+        "examples": ["contact", "intact", "tactile"],
+        "variants": ["tang", "ting"],
+    },
+
+    # 违背/暴力相关
+    "viol": {
+        "meaning": "force, violate",
+        "examples": ["violence", "violate", "inviolable"],
+        "variants": ["violat"],
+    },
+
+    # 孤立相关
+    "isol": {
+        "meaning": "alone",
+        "examples": ["isolate", "isolated", "isolation"],
+        "variants": ["insul"],
+    },
+
+    # 刺激/激怒相关
+    "irrit": {
+        "meaning": "irritate",
+        "examples": ["irritate", "irritable", "irritation"],
+        "variants": ["irritat"],
+    },
+
+    # 道德相关
+    "mor": {
+        "meaning": "custom, morality",
+        "examples": ["moral", "morality", "morale", "immoral"],
+        "variants": ["moral"],
+    },
+    "eth": {
+        "meaning": "custom, ethics",
+        "examples": ["ethics", "ethic", "ethical"],
+        "variants": ["ethi"],
+    },
+
+    # 标记/注意相关
+    "not": {
+        "meaning": "mark, note",
+        "examples": ["note", "notable", "notice", "notify"],
+        "variants": ["notat"],
+    },
+
+    # 营养相关
+    "nutri": {
+        "meaning": "nourish",
+        "examples": ["nutrition", "nutritional", "nutrient"],
+        "variants": ["nutrit"],
+    },
+
+    # 携带相关
+    "port": {
+        "meaning": "carry",
+        "examples": ["transport", "import", "export", "portrait", "portable"],
+        "variants": ["portat"],
+    },
+
+    # 统治/主导相关
+    "domin": {
+        "meaning": "master, rule",
+        "examples": ["dominate", "dominant", "predominant", "domain"],
+        "variants": ["domin"],
+    },
+
+    # 重量相关
+    "ponder": {
+        "meaning": "weight, consider",
+        "examples": ["ponder", "ponderous", "preponderant"],
+        "variants": ["pond"],
+    },
+
+    # 第一/主要相关
+    "prin": {
+        "meaning": "first, chief",
+        "examples": ["prince", "principal", "principle"],
+        "variants": ["prim"],
+    },
+    "prior": {
+        "meaning": "before, earlier",
+        "examples": ["priority", "prior", "prioritize"],
+        "variants": [],
+    },
+
+    # 连接/绑定相关（拆分不同含义）
+    "liab": {
+        "meaning": "bind, liable",
+        "examples": ["reliable", "reliably", "liability"],
+        "variants": [],
+    },
+    "liev": {
+        "meaning": "lift, lighten",
+        "examples": ["relieve", "relief", "alleviate"],
+        "variants": ["lieve", "leve"],
+    },
+    "lign": {
+        "meaning": "bind, tie",
+        "examples": ["ligament", "oblige"],
+        "variants": ["lig"],
+    },
+
+    # 标记/符号相关
+    "sign": {
+        "meaning": "mark, sign",
+        "examples": ["signal", "signature", "resign", "design", "significant"],
+        "variants": ["signat"],
+    },
+
+    # 松开/解决相关
+    "solv": {
+        "meaning": "loosen, solve",
+        "examples": ["solve", "resolve", "dissolve", "solution"],
+        "variants": ["solut"],
+    },
+
+    # 切割相关
+    "sect": {
+        "meaning": "cut",
+        "examples": ["section", "dissect", "intersect"],
+        "variants": ["seg"],
+    },
+    "seg": {
+        "meaning": "cut, separate",
+        "examples": ["segment", "segregate", "segregation"],
+        "variants": ["sect"],
+    },
+
+    # 河流/竞争相关
+    "riv": {
+        "meaning": "river, compete",
+        "examples": ["river", "rival", "rivalry", "derive"],
+        "variants": [],
+    },
+
+    # 群体相关
+    "greg": {
+        "meaning": "flock, gather",
+        "examples": ["congregate", "segregate", "gregarious", "aggregate"],
+        "variants": ["gregate"],
+    },
+
+    # 站立/法定相关
+    "stat": {
+        "meaning": "stand, state",
+        "examples": ["state", "status", "statue", "statutory", "static"],
+        "variants": ["statu", "sist"],
+    },
+
+    # 学习相关
+    "stud": {
+        "meaning": "study, eager",
+        "examples": ["study", "student", "studious", "studio"],
+        "variants": ["studi"],
+    },
+
+    # 倾倒/融合相关
+    "fus": {
+        "meaning": "pour, melt",
+        "examples": ["fuse", "confuse", "fusion", "suffuse", "refuse"],
+        "variants": ["fuse"],
+    },
+
+    # 坐相关
+    "sed": {
+        "meaning": "sit",
+        "examples": ["sedentary", "sediment", "supersede", "reside"],
+        "variants": ["sid", "sess"],
+    },
+
+    # 持有相关
+    "ten": {
+        "meaning": "hold, thin",
+        "examples": ["tenant", "tenet", "tenuous", "tenure", "detain"],
+        "variants": ["tain", "tin"],
+    },
+
+    # 扭曲/折磨相关
+    "tort": {
+        "meaning": "twist",
+        "examples": ["torture", "torment", "contort", "distort"],
+        "variants": ["torm", "torn"],
+    },
+
+    # 美德相关
+    "virt": {
+        "meaning": "virtue, excellence",
+        "examples": ["virtue", "virtuous", "virtual"],
+        "variants": ["virtu"],
+    },
+
+    # 充电/装载相关
+    "charge": {
+        "meaning": "load",
+        "examples": ["charge", "discharge", "recharge", "surcharge"],
+        "variants": [],
+    },
+
+    # 神经相关
+    "neur": {
+        "meaning": "nerve",
+        "examples": ["neuron", "neural", "neurology"],
+        "variants": ["neuro"],
+    },
+
+    # 心理相关
+    "psych": {
+        "meaning": "mind, soul",
+        "examples": ["psychology", "psychological", "psyche", "psychiatry"],
+        "variants": ["psycho"],
+    },
+
+    # 探索相关
+    "plor": {
+        "meaning": "explore, cry",
+        "examples": ["explore", "exploratory", "exploration", "implore"],
+        "variants": ["plore"],
+    },
+
+    # 生育/携带相关
+    "fer": {
+        "meaning": "carry, bear",
+        "examples": ["transfer", "refer", "fertile", "fertility", "confer"],
+        "variants": ["fert"],
+    },
+
+    # 引出/召唤相关
+    "cit": {
+        "meaning": "call, rouse",
+        "examples": ["cite", "excite", "incite", "elicit", "elicitation"],
+        "variants": ["cite"],
+    },
+
+    # 估计相关
+    "estim": {
+        "meaning": "value, estimate",
+        "examples": ["estimate", "esteem", "estimation"],
+        "variants": [],
+    },
+
+    # 规则相关
+    "reg": {
+        "meaning": "rule, straight",
+        "examples": ["regular", "regulate", "irregularity", "regime"],
+        "variants": ["regul"],
+    },
+
+    # 神经（nerve单独处理）
+    "nerv": {
+        "meaning": "nerve, sinew",
+        "examples": ["nerve", "nervous"],
+        "variants": [],
+    },
+
+    # 问询（独立的rog词根，不与gat混淆）
+    "terrog": {
+        "meaning": "ask, question",
+        "examples": ["interrogate", "interrogation"],
+        "variants": [],
+    },
+
+    # 切割/杀死（accidental相关）
+    "cide": {
+        "meaning": "cut, kill, fall",
+        "examples": ["suicide", "homicide", "accident", "accidental"],
+        "variants": ["cid"],
+    },
+
+    # 拉/紧（distress/district）
+    "stress": {
+        "meaning": "tight, draw tight",
+        "examples": ["stress", "distress"],
+        "variants": ["strain", "strict"],
+    },
+
+    # 信任（confident/credential需要分开）
+    "fide": {
+        "meaning": "faith, trust",
+        "examples": ["confident", "confidence", "fidelity"],
+        "variants": ["fid"],
+    },
+
+    # 倾倒/传播（dissemination）
+    "semin": {
+        "meaning": "seed, sow",
+        "examples": ["seminar", "disseminate", "dissemination"],
+        "variants": ["seminat"],
+    },
+
+    # 预测/说（dict系列细分）
+    "predat": {
+        "meaning": "prey, plunder",
+        "examples": ["predator", "predatory", "predation"],
+        "variants": [],
+    },
+    "vindict": {
+        "meaning": "revenge, claim",
+        "examples": ["vindicate", "vindictive", "vindication"],
+        "variants": [],
+    },
+    "predict": {
+        "meaning": "foretell",
+        "examples": ["predict", "prediction", "unpredictable"],
+        "variants": [],
+    },
+
+    # 连接/绑定（reliably/relieve需要分开）
+    "liab": {
+        "meaning": "bind, liable",
+        "examples": ["reliable", "reliably", "liability"],
+        "variants": [],
+    },
+    "liev": {
+        "meaning": "lift, lighten",
+        "examples": ["relieve", "relief"],
+        "variants": [],
+    },
+
+    # 信任系统
+    "cred": {
+        "meaning": "believe, trust",
+        "examples": ["credential", "credit", "credible"],
+        "variants": [],
+    },
+    "fide": {
+        "meaning": "faith, trust",
+        "examples": ["confident", "confidence", "fidelity"],
+        "variants": [],
+    },
+
+    # strict系统
+    "strict": {
+        "meaning": "tight, bind",
+        "examples": ["strict", "restrict", "constrict"],
+        "variants": [],
+    },
+    "stress": {
+        "meaning": "tight, pressure",
+        "examples": ["stress", "distress"],
+        "variants": [],
+    },
+    "string": {
+        "meaning": "tight, bind",
+        "examples": ["string", "stringent", "district"],
+        "variants": [],
+    },
+}
+
+# 词根黑名单：某些词不应该匹配某些词根（即使包含该字符串）
+ROOT_BLACKLIST = {
+    "vert": ["overshadow", "advertise", "advert", "advertisement"],
+    "vers": ["overshadow", "advertise", "advert", "advertisement", "conversation"],
+    "anti": ["anticipate", "antic", "antique"],
+    "dict": ["medication", "radical", "ludicrous"],  # 这些词的dict不是"说"的意思
+    "port": ["important", "importance"],  # port在这里不是"携带"
+    "speci": ["spectacular", "spectacle", "specious"],  # 这些是spect(看)不是speci(种类)
+    "mit": ["summit"],  # summit是山顶，不是发送
+    "miss": ["summit"],
+    "tact": ["distinguish"],  # distinguish不是触摸的意思
 }
 
 # 常见前缀
@@ -199,278 +742,185 @@ COMMON_PREFIXES = {
     "super": "above",
     "trans": "across",
     "ultra": "beyond",
+    "un": "not",
+    "ir": "not",
 }
-
-DERIVATIONAL_SUFFIXES = {
-    # 名词后缀
-    "tion": ("action", "state", "condition"),
-    "sion": ("action", "state", "condition"),
-    "ment": ("result", "action", "state"),
-    "ness": ("quality", "state"),
-    "ity": ("quality", "state"),
-    "ism": ("doctrine", "state", "condition"),
-    "ist": ("person", "agent"),
-    "er": ("agent", "person"),
-    "or": ("agent", "person"),
-    "ary": ("place", "thing"),
-    "ory": ("place", "thing"),
-    "age": ("collection", "action"),
-    "ship": ("state", "skill"),
-    "hood": ("state", "condition"),
-    "dom": ("state", "condition"),
-    # 形容词后缀
-    "able": ("capable", "worthy"),
-    "ible": ("capable", "worthy"),
-    "ful": ("full of", "characterized by"),
-    "less": ("without", "lacking"),
-    "ous": ("characterized by", "full of"),
-    "ious": ("characterized by", "full of"),
-    "eous": ("characterized by", "full of"),
-    "ive": ("tending to", "characterized by"),
-    "ative": ("tending to", "characterized by"),
-    "al": ("relating to", "characterized by"),
-    "ic": ("relating to", "characterized by"),
-    "ical": ("relating to", "characterized by"),
-    "ary": ("relating to", "characterized by"),
-    "ory": ("relating to", "characterized by"),
-    "ent": ("characterized by", "tending to"),
-    "ant": ("characterized by", "tending to"),
-    # 动词后缀
-    "ize": ("make", "cause to become"),
-    "ise": ("make", "cause to become"),
-    "ify": ("make", "cause to become"),
-    "ate": ("make", "cause to become"),
-    "en": ("make", "cause to become"),
-    # 副词后缀
-    "ly": ("in manner of", "to degree"),
-    "ward": ("in direction of"),
-    "wise": ("in manner of"),
-}
-
-# 这里示例用 gensim 加载词向量
-# 你需要提前下载好 fasttext / word2vec 模型
-# model = KeyedVectors.load_word2vec_format("path/to/fasttext.vec")
-model = None  # 如果没有模型，可先不启用向量验证
 
 
 class RootRelationGenerator:
-    """基于WordNet的词根关系生成器 - 优化版"""
+    """改进的词根关系生成器（v2优化版）"""
 
-    def __init__(
-        self,
-        min_confidence: float = 0.8,
-        vector_threshold: float = 0.65,
-        use_multiprocessing: bool = True,
-    ):
+    def __init__(self, min_confidence: float = 0.75):
         self.min_confidence = min_confidence
-        self.vector_threshold = vector_threshold
-        self.processed_pairs: Set[Tuple[int, int]] = set()
-        self.use_multiprocessing = use_multiprocessing
-
-        # 预计算缓存
-        self._wordnet_cache: Dict[str, Dict[str, float]] = {}
         self._stem_cache: Dict[str, str] = {}
-        self._morphological_cache: Dict[str, Dict[str, float]] = {}
         self._latin_root_cache: Dict[str, Set[str]] = {}
 
-        # 负缓存 - 记录确定不相关的词对
-        self._negative_cache: Set[Tuple[str, str]] = set()
-
-    def get_wordnet_derivations(self, word: str) -> Dict[str, float]:
-        """使用WordNet获取派生词关系 - 严格筛选版"""
+    def extract_latin_greek_roots(self, word: str) -> Set[str]:
+        """提取单词中的拉丁/希腊词根"""
         word_lower = word.lower()
 
-        # 检查缓存
-        if word_lower in self._wordnet_cache:
-            return self._wordnet_cache[word_lower]
+        if word_lower in self._latin_root_cache:
+            return self._latin_root_cache[word_lower]
 
-        derivations = {}
+        found_roots = set()
+        word_without_prefix = self._remove_prefixes(word_lower)
 
-        try:
-            synsets = wordnet.synsets(word_lower)
-            if not synsets:
-                self._wordnet_cache[word_lower] = derivations
-                return derivations
+        # 检查每个已知词根
+        for root, root_info in LATIN_GREEK_ROOTS.items():
+            # 检查词根本身
+            if root in word_without_prefix or root in word_lower:
+                if self._validate_root_match(word_lower, root, root_info):
+                    found_roots.add(root)
+                    continue
 
-            for synset in synsets:
-                # 只获取真正的形态派生关系
-                for lemma in synset.lemmas():
-                    try:
-                        for related_lemma in lemma.derivationally_related_forms():
-                            related_word = (
-                                related_lemma.name().lower().replace("_", " ")
-                            )
-                            if related_word != word_lower and len(related_word) > 2:
-                                # 严格的词根验证
-                                if self._is_true_derivational_pair(
-                                    word_lower, related_word
-                                ):
-                                    confidence = 0.95
-                                    if synset.pos() != related_lemma.synset().pos():
-                                        confidence = 1.0  # 跨词性派生更可靠
+            # 检查词根变形
+            variants = root_info.get("variants", [])
+            for variant in variants:
+                if variant in word_without_prefix or variant in word_lower:
+                    if self._validate_root_match(word_lower, variant, root_info):
+                        found_roots.add(root)
+                        break
 
-                                    if related_word in derivations:
-                                        derivations[related_word] = max(
-                                            derivations[related_word], confidence
-                                        )
-                                    else:
-                                        derivations[related_word] = confidence
-                    except:
-                        continue
+        self._latin_root_cache[word_lower] = found_roots
+        return found_roots
 
-                # 只保留可靠的Pertainyms
-                for lemma in synset.lemmas():
-                    try:
-                        for pertainym in lemma.pertainyms():
-                            related_word = pertainym.name().lower().replace("_", " ")
-                            if related_word != word_lower and len(related_word) > 2:
-                                # 验证是否真正相关
-                                if self._is_true_derivational_pair(
-                                    word_lower, related_word
-                                ):
-                                    confidence = 0.9
-                                    if related_word in derivations:
-                                        derivations[related_word] = max(
-                                            derivations[related_word], confidence
-                                        )
-                                    else:
-                                        derivations[related_word] = confidence
-                    except:
-                        continue
-
-        except Exception as e:
-            pass
-
-        # 缓存结果
-        self._wordnet_cache[word_lower] = derivations
-        return derivations
-
-    def _is_true_derivational_pair(self, word1: str, word2: str) -> bool:
-        """严格验证两个词是否真正是派生关系"""
-        # 1. 必须有共同的词根（通过后缀分析）
-        if not self._has_shared_root(word1, word2):
-            return False
-
-        # 2. 长度不能差异太大
-        if abs(len(word1) - len(word2)) > 5:
-            return False
-
-        # 3. 检查是否符合常见的派生模式
-        return self._matches_derivational_pattern(word1, word2)
-
-    def _has_shared_root(self, word1: str, word2: str) -> bool:
-        """检查两个词是否有共同词根"""
-        # 获取可能的词根
-        root1 = self._extract_root(word1)
-        root2 = self._extract_root(word2)
-
-        # 词根长度至少3个字符
-        if len(root1) < 3 or len(root2) < 3:
-            return False
-
-        # 检查词根相似性
-        return root1 == root2 or self._roots_similar(root1, root2)
-
-    def _extract_root(self, word: str) -> str:
-        """提取词根"""
-        # 常见后缀及其优先级（越靠前优先级越高）
-        suffixes = [
-            "ation",
-            "ition",
-            "tion",
-            "sion",
-            "ment",
-            "ness",
-            "ity",
-            "ism",
-            "able",
-            "ible",
-            "ful",
-            "less",
-            "ous",
-            "ious",
-            "eous",
-            "ive",
-            "ative",
-            "al",
-            "ical",
-            "ic",
-            "ary",
-            "ory",
-            "ent",
-            "ant",
-            "ate",
-            "ize",
-            "ise",
-            "ify",
-            "en",
-            "ly",
-            "er",
-            "or",
-            "ist",
-            "age",
-            "ship",
-            "hood",
-            "dom",
-        ]
-
-        for suffix in suffixes:
-            if word.endswith(suffix) and len(word) > len(suffix) + 2:
-                return word[: -len(suffix)]
-
+    def _remove_prefixes(self, word: str) -> str:
+        """移除常见前缀"""
+        for prefix in sorted(COMMON_PREFIXES.keys(), key=len, reverse=True):
+            if word.startswith(prefix) and len(word) > len(prefix) + 2:
+                return word[len(prefix):]
         return word
 
-    def _roots_similar(self, root1: str, root2: str) -> bool:
-        """检查两个词根是否相似（允许小的变化）"""
-        if root1 == root2:
+    def _validate_root_match(self, word: str, root: str, root_info: dict) -> bool:
+        """验证词根匹配的有效性（更严格）"""
+        # 检查黑名单
+        if root in ROOT_BLACKLIST:
+            if word in ROOT_BLACKLIST[root]:
+                return False
+
+        examples = [ex.lower() for ex in root_info["examples"]]
+        if word in examples:
             return True
 
-        # 只有在词根长度足够且相似度很高时才允许变化
-        if len(root1) >= 4 and len(root2) >= 4:
-            # 允许结尾字母的脱落（如create/creation中的e脱落）
-            if len(root1) == len(root2) + 1 and root1[:-1] == root2:
+        root_pos = word.find(root)
+        if root_pos == -1:
+            return False
+
+        # 词根至少4个字母（避免过短匹配）
+        if len(root) < 4:
+            return False
+
+        # 词根在开头
+        if root_pos == 0:
+            # 确保词根后面有后缀或合理的结尾
+            after_root = word[len(root):]
+            if len(after_root) >= 2:
+                # 额外检查：词根后面不应该是另一个完整的词根
+                # 例如：anticipate = anti + cipate，cipate本身是词根
+                # 这种情况下anti不是真正的词根
+                if self._has_other_root_after(word, root):
+                    return False
                 return True
-            if len(root2) == len(root1) + 1 and root2[:-1] == root1:
+            return False
+
+        # 词根前面是常见前缀
+        prefix_before_root = word[:root_pos]
+        if prefix_before_root in COMMON_PREFIXES:
+            # 确保词根后面也有合理的部分
+            after_root = word[root_pos + len(root):]
+            if len(after_root) >= 1:
                 return True
 
-            # 允许双字母结尾的变化 (如permit/permission中的t变化)
-            if (
-                len(root1) == len(root2)
-                and root1[:-2] == root2[:-2]
-                and len(root1) >= 5
-            ):
+        # 只允许非常短的前缀（1-2个字母）
+        if 1 <= len(prefix_before_root) <= 2:
+            # 而且前缀必须是常见的单字母前缀
+            if prefix_before_root in ['a', 'e', 'i', 'o', 'u', 'de', 're', 'un', 'in']:
+                after_root = word[root_pos + len(root):]
+                if len(after_root) >= 1:
+                    return True
+
+        return False
+
+    def _has_other_root_after(self, word: str, current_root: str) -> bool:
+        """检查词根后面是否还有另一个词根（说明当前词根可能不是真正的词根）"""
+        root_pos = word.find(current_root)
+        if root_pos == -1:
+            return False
+
+        after_root = word[root_pos + len(current_root):]
+        if len(after_root) < 3:
+            return False
+
+        # 检查after_root是否包含其他已知的词根
+        for other_root in LATIN_GREEK_ROOTS.keys():
+            if other_root == current_root:
+                continue
+            if len(other_root) < 4:  # 只检查长度足够的词根
+                continue
+            if other_root in after_root:
+                # 找到了另一个词根，说明当前词根可能只是巧合
+                # 例如：anticipate中，anti后面有cipat词根
                 return True
 
         return False
 
-    def _matches_derivational_pattern(self, word1: str, word2: str) -> bool:
-        """检查是否符合派生模式"""
-        import re
+    def are_same_root(self, w1: str, w2: str) -> Tuple[bool, float]:
+        """判断两个词是否有相同词根"""
+        w1_lower, w2_lower = w1.lower(), w2.lower()
 
-        # 检查常见的派生模式
-        derivation_pairs = [
-            # 动词 -> 名词
-            (r"(.+)ate$", r"(.+)ation$"),
-            (r"(.+)ify$", r"(.+)ification$"),
-            (r"(.+)ize$", r"(.+)ization$"),
-            (r"(.+)ise$", r"(.+)isation$"),
-            # 形容词 -> 名词
-            (r"(.+)able$", r"(.+)ability$"),
-            (r"(.+)ible$", r"(.+)ibility$"),
-            (r"(.+)ic$", r"(.+)icity$"),
-            # 名词 -> 形容词
-            (r"(.+)tion$", r"(.+)tive$"),
-            (r"(.+)ment$", r"(.+)al$"),
-            # 简单后缀添加
-            (r"(.+)$", r"(.+)ly$"),
-            (r"(.+)$", r"(.+)ness$"),
-            (r"(.+)$", r"(.+)ful$"),
-            (r"(.+)$", r"(.+)er$"),
-            (r"(.+)$", r"(.+)ed$"),
-            (r"(.+)$", r"(.+)ing$"),
+        if w1_lower == w2_lower:
+            return False, 0.0
+
+        # 检查拉丁/希腊词根关系
+        roots1 = self.extract_latin_greek_roots(w1_lower)
+        roots2 = self.extract_latin_greek_roots(w2_lower)
+
+        common_roots = roots1 & roots2
+        if common_roots:
+            # 基础置信度
+            confidence = 0.85
+
+            # 多个共同词根
+            if len(common_roots) > 1:
+                confidence += 0.1
+
+            return True, min(1.0, confidence)
+
+        # 检查词干匹配（作为补充）
+        stem1, stem2 = self.get_stem(w1_lower), self.get_stem(w2_lower)
+        if stem1 == stem2 and len(stem1) >= 5:
+            # 必须验证是真正的派生关系
+            if self._is_derivational_pair(w1_lower, w2_lower):
+                return True, 0.80
+
+        return False, 0.0
+
+    def get_stem(self, word: str) -> str:
+        """获取词干"""
+        word_lower = word.lower()
+        if word_lower in self._stem_cache:
+            return self._stem_cache[word_lower]
+
+        stem = stemmer.stem(word_lower)
+        self._stem_cache[word_lower] = stem
+        return stem
+
+    def _is_derivational_pair(self, word1: str, word2: str) -> bool:
+        """检查是否是明确的派生词对"""
+        derivation_patterns = [
+            (r"(.+)ly$", r"(.+)$"),
+            (r"(.+)ness$", r"(.+)$"),
+            (r"(.+)ment$", r"(.+)$"),
+            (r"(.+)tion$", r"(.+)t?e?$"),
+            (r"(.+)able$", r"(.+)$"),
+            (r"(.+)ful$", r"(.+)$"),
+            (r"(.+)ity$", r"(.+)$"),
+            (r"(.+)ive$", r"(.+)$"),
+            (r"(.+)ing$", r"(.+)$"),
+            (r"(.+)ed$", r"(.+)$"),
         ]
 
-        for pattern1, pattern2 in derivation_pairs:
+        for pattern1, pattern2 in derivation_patterns:
             match1 = re.match(pattern1, word1)
             match2 = re.match(pattern2, word2)
 
@@ -492,461 +942,55 @@ class RootRelationGenerator:
 
         return False
 
-    def get_stem(self, word: str) -> str:
-        """获取词干 - 带缓存优化"""
-        word_lower = word.lower()
-        if word_lower in self._stem_cache:
-            return self._stem_cache[word_lower]
-
-        stem = stemmer.stem(word_lower)
-        self._stem_cache[word_lower] = stem
-        return stem
-
-    def _has_morphological_similarity(self, word1: str, word2: str) -> bool:
-        """检查两个词是否有形态相似性"""
-        # 检查是否有共同词根（通过删除已知后缀）
-        for suffix in DERIVATIONAL_SUFFIXES:
-            if word1.endswith(suffix) and len(word1) > len(suffix) + 2:
-                root1 = word1[: -len(suffix)]
-                if word2.startswith(root1) or word2 == root1:
-                    return True
-            if word2.endswith(suffix) and len(word2) > len(suffix) + 2:
-                root2 = word2[: -len(suffix)]
-                if word1.startswith(root2) or word1 == root2:
-                    return True
-        return False
-
-    def get_morphological_derivations(self, word: str) -> Dict[str, float]:
-        """基于形态学规则获取派生词 - 带缓存优化"""
-        word_lower = word.lower()
-
-        # 检查缓存
-        if word_lower in self._morphological_cache:
-            return self._morphological_cache[word_lower]
-
-        derivations = {}
-
-        # 快速后缀检查 - 只检查最常见的后缀
-        common_suffixes = [
-            "tion",
-            "sion",
-            "ment",
-            "ness",
-            "ity",
-            "able",
-            "ible",
-            "ful",
-            "less",
-            "ous",
-            "ive",
-            "al",
-            "ly",
-            "er",
-            "or",
-            "ist",
-        ]
-
-        for suffix in common_suffixes:
-            if word_lower.endswith(suffix) and len(word_lower) > len(suffix) + 2:
-                root = word_lower[: -len(suffix)]
-                # 只生成最可能的派生形式
-                if len(root) > 2:
-                    derivations[root] = 0.8
-                    # 添加最常见的交叉派生
-                    if suffix in ["tion", "sion"]:
-                        derivations[root + "al"] = 0.75
-                        derivations[root + "ive"] = 0.75
-                    elif suffix in ["able", "ible"]:
-                        derivations[root + "ity"] = 0.75
-                break  # 找到一个匹配就停止
-
-        # 缓存结果
-        self._morphological_cache[word_lower] = derivations
-        return derivations
-
-    def extract_latin_greek_roots(self, word: str) -> Set[str]:
-        """提取单词中的拉丁/希腊词根"""
-        word_lower = word.lower()
-
-        # 检查缓存
-        if word_lower in self._latin_root_cache:
-            return self._latin_root_cache[word_lower]
-
-        found_roots = set()
-
-        # 去除常见前缀
-        word_without_prefix = self._remove_prefixes(word_lower)
-
-        # 检查每个已知词根
-        for root, root_info in LATIN_GREEK_ROOTS.items():
-            # 检查词根本身
-            if root in word_without_prefix or root in word_lower:
-                if self._validate_root_match(word_lower, root, root_info):
-                    found_roots.add(root)
-                    continue
-
-            # 检查词根变形
-            variants = root_info.get("variants", [])
-            for variant in variants:
-                if variant in word_without_prefix or variant in word_lower:
-                    if self._validate_root_match(word_lower, variant, root_info):
-                        found_roots.add(root)  # 添加原始词根，不是变形
-                        break
-
-        # 缓存结果
-        self._latin_root_cache[word_lower] = found_roots
-        return found_roots
-
-    def _remove_prefixes(self, word: str) -> str:
-        """移除常见前缀"""
-        for prefix in sorted(COMMON_PREFIXES.keys(), key=len, reverse=True):
-            if word.startswith(prefix) and len(word) > len(prefix) + 2:
-                return word[len(prefix) :]
-        return word
-
-    def _validate_root_match(self, word: str, root: str, root_info: dict) -> bool:
-        """验证词根匹配的有效性"""
-        # 检查该词是否在已知例词中
-        examples = [ex.lower() for ex in root_info["examples"]]
-        if word in examples:
+    def _roots_similar(self, root1: str, root2: str) -> bool:
+        """检查两个词根是否相似"""
+        if root1 == root2:
             return True
 
-        # 检查词根在单词中的位置是否合理
-        root_pos = word.find(root)
-        if root_pos == -1:
-            return False
+        if len(root1) >= 4 and len(root2) >= 4:
+            # 允许结尾字母的脱落
+            if len(root1) == len(root2) + 1 and root1[:-1] == root2:
+                return True
+            if len(root2) == len(root1) + 1 and root2[:-1] == root1:
+                return True
 
-        # 词根不能太短
-        if len(root) < 3:
-            return False
-
-        # 更灵活的词根验证 - 允许词根在单词的不同位置
-        # 1. 词根在开头（如 dict-ate）
-        if root_pos == 0:
-            return True
-
-        # 2. 词根在中间，但前面是常见前缀
-        prefix_before_root = word[:root_pos]
-        if prefix_before_root in COMMON_PREFIXES:
-            return True
-
-        # 3. 词根前有1-3个字母的前缀（常见情况）
-        if 1 <= len(prefix_before_root) <= 3:
-            return True
-
-        # 4. 检查是否是变形的词根（如 vindiCATe 中的 dicat -> dict）
-        if self._is_root_variant(word, root):
-            return True
+            # 允许双字母结尾的变化
+            if (
+                len(root1) == len(root2)
+                and root1[:-2] == root2[:-2]
+                and len(root1) >= 5
+            ):
+                return True
 
         return False
 
-    def _is_root_variant(self, word: str, root: str) -> bool:
-        """检查是否是词根的变形"""
-        # 常见的词根变形模式
-        variants = {
-            "dict": ["dicat", "dicit", "dicat", "dict"],
-            "voc": ["vocat", "vok"],
-            "vok": ["vocat", "voc"],
-            "spec": ["spect", "spic"],
-            "spect": ["spec", "spic"],
-            "mit": ["miss", "mitt"],
-            "miss": ["mit", "mitt"],
-        }
+    def generate_relations_for_words(self, words: List[str]) -> List[Tuple[str, str, float]]:
+        """为给定的单词列表生成词根关系"""
+        relations = []
 
-        if root in variants:
-            for variant in variants[root]:
-                if variant in word:
-                    return True
+        for i, w1 in enumerate(words):
+            for j in range(i + 1, len(words)):
+                w2 = words[j]
+                same_root, confidence = self.are_same_root(w1, w2)
 
-        return False
+                if same_root and confidence >= self.min_confidence:
+                    relations.append((w1, w2, confidence))
 
-    def are_latin_greek_related(self, word1: str, word2: str) -> Tuple[bool, float]:
-        """检查两个词是否有共同的拉丁/希腊词根"""
-        roots1 = self.extract_latin_greek_roots(word1)
-        roots2 = self.extract_latin_greek_roots(word2)
+        return relations
 
-        # 检查是否有共同词根
-        common_roots = roots1 & roots2
-        if common_roots:
-            # 根据词根的重要性计算置信度
-            confidence = 0.85  # 拉丁/希腊词根关系的基础置信度
-
-            # 如果有多个共同词根，增加置信度
-            if len(common_roots) > 1:
-                confidence += 0.1
-
-            # 如果是已知的好例子，提高置信度
-            if self._is_known_latin_pair(word1, word2):
-                confidence = 0.95
-
-            return True, min(1.0, confidence)
-
-        return False, 0.0
-
-    def _is_known_latin_pair(self, word1: str, word2: str) -> bool:
-        """检查是否是已知的良好拉丁词根配对"""
-        known_pairs = {
-            # dict词根组
-            ("indict", "vindicate"),
-            ("vindicate", "indict"),
-            ("indict", "valediction"),
-            ("valediction", "indict"),
-            ("interdict", "vindicate"),
-            ("vindicate", "interdict"),
-            # loqu/log词根组
-            ("monologue", "prologue"),
-            ("prologue", "monologue"),
-            ("loquacious", "grandiloquent"),
-            ("grandiloquent", "loquacious"),
-            ("soliloquy", "obloquy"),
-            ("obloquy", "soliloquy"),
-            # voc/vok词根组
-            ("advocate", "vocation"),
-            ("vocation", "advocate"),
-            ("provoke", "revoke"),
-            ("revoke", "provoke"),
-            ("convoke", "revoke"),
-            ("revoke", "convoke"),
-            ("vociferous", "vocation"),
-            ("vocation", "vociferous"),
-            # verb词根组
-            ("verbose", "verbatim"),
-            ("verbatim", "verbose"),
-            ("reverberate", "verbose"),
-            ("verbose", "reverberate"),
-            # claim/clam词根组
-            ("claim", "disclaim"),
-            ("disclaim", "claim"),
-            ("claim", "declaim"),
-            ("declaim", "claim"),
-            ("clamor", "disclaim"),
-            ("disclaim", "clamor"),
-            # son词根组
-            ("consonant", "dissonance"),
-            ("dissonance", "consonant"),
-            ("consonant", "resonant"),
-            ("resonant", "consonant"),
-            ("dissonance", "resonant"),
-            ("resonant", "dissonance"),
-            # nunc词根组
-            ("denounce", "renounce"),
-            ("renounce", "denounce"),
-            ("denounce", "enunciate"),
-            ("enunciate", "denounce"),
-            ("renounce", "enunciate"),
-            ("enunciate", "renounce"),
-        }
-
-        pair = (word1.lower(), word2.lower())
-        return pair in known_pairs
-
-    def vector_similarity_check(self, w1: str, w2: str) -> bool:
-        """词向量相似度验证"""
-        if model is None:
-            return True  # 没有模型时默认通过
-        try:
-            sim = model.similarity(w1, w2)
-            return sim >= self.vector_threshold
-        except KeyError:
-            return True
-
-    def are_same_root(self, w1: str, w2: str) -> Tuple[bool, float]:
-        """判断两个词是否有相同词根 - 支持拉丁/希腊词根"""
-        w1_lower, w2_lower = w1.lower(), w2.lower()
-
-        if w1_lower == w2_lower:
-            return False, 0.0
-
-        # 检查负缓存
-        pair_key = tuple(sorted([w1_lower, w2_lower]))
-        if pair_key in self._negative_cache:
-            return False, 0.0
-
-        # 适度放宽长度检查（GRE词汇差异可能较大）
-        if abs(len(w1_lower) - len(w2_lower)) > 6:
-            self._negative_cache.add(pair_key)
-            return False, 0.0
-
-        # 1. 拉丁/希腊词根关系检查（针对GRE词汇）
-        is_latin_related, latin_confidence = self.are_latin_greek_related(
-            w1_lower, w2_lower
-        )
-        if is_latin_related:
-            return True, latin_confidence
-
-        # 2. 明确的派生词识别（针对常见英语派生）
-        if self._is_clear_derivational_pair(w1_lower, w2_lower):
-            return True, 0.95
-
-        # 3. 精确词干匹配 + 严格验证
-        stem1, stem2 = self.get_stem(w1_lower), self.get_stem(w2_lower)
-        if stem1 == stem2 and len(stem1) >= 4:
-            # 必须通过严格验证
-            if self._verify_stem_relationship(w1_lower, w2_lower, stem1):
-                return True, 0.9
-
-        # 添加到负缓存
-        self._negative_cache.add(pair_key)
-        return False, 0.0
-
-    def _is_clear_derivational_pair(self, word1: str, word2: str) -> bool:
-        """识别明确的派生词对"""
-        # 明确的派生模式（基于常见英语构词法）
-        clear_patterns = [
-            # 形容词 + ly = 副词
-            (lambda w: w.endswith("ly") and len(w) > 4, lambda w: w[:-2]),
-            # 动词/名词 + ness = 名词
-            (lambda w: w.endswith("ness") and len(w) > 6, lambda w: w[:-4]),
-            # 动词 + ment = 名词
-            (lambda w: w.endswith("ment") and len(w) > 6, lambda w: w[:-4]),
-            # 动词 + tion = 名词
-            (lambda w: w.endswith("tion") and len(w) > 6, lambda w: w[:-4]),
-            # 动词 + able/ible = 形容词
-            (lambda w: w.endswith("able") and len(w) > 6, lambda w: w[:-4]),
-            (lambda w: w.endswith("ible") and len(w) > 6, lambda w: w[:-4]),
-            # 名词 + ful = 形容词
-            (lambda w: w.endswith("ful") and len(w) > 5, lambda w: w[:-3]),
-            # 形容词 + ity = 名词
-            (lambda w: w.endswith("ity") and len(w) > 5, lambda w: w[:-3]),
-            # 动词 + ive = 形容词
-            (lambda w: w.endswith("ive") and len(w) > 5, lambda w: w[:-3]),
-            # 动词 + ing = 动名词/现在分词
-            (lambda w: w.endswith("ing") and len(w) > 5, lambda w: w[:-3]),
-            # 动词 + ed = 过去式/过去分词
-            (lambda w: w.endswith("ed") and len(w) > 4, lambda w: w[:-2]),
-        ]
-
-        for check_func, extract_func in clear_patterns:
-            # 检查word1是否匹配模式，word2是否是其词根
-            if check_func(word1):
-                root = extract_func(word1)
-                if word2 == root or self._handle_spelling_changes(root) == word2:
-                    return True
-
-            # 反向检查
-            if check_func(word2):
-                root = extract_func(word2)
-                if word1 == root or self._handle_spelling_changes(root) == word1:
-                    return True
-
-        return False
-
-    def _handle_spelling_changes(self, root: str) -> str:
-        """处理派生时的拼写变化"""
-        # 常见的拼写变化规则
-        if root.endswith("e"):
-            return root[:-1]  # create -> creat (for creation)
-        if root.endswith("y"):
-            return root[:-1] + "i"  # happy -> happi (for happiness)
-        if len(root) >= 3 and root[-1] == root[-2] and root[-1] in "bdfglmnprt":
-            return root[:-1]  # run -> run (for running, but runnn -> runn)
-        return root
-
-    def _verify_stem_relationship(self, word1: str, word2: str, stem: str) -> bool:
-        """验证词干关系的有效性 - 最严格版本"""
-        # 词干必须足够长
-        if len(stem) < 5:
-            return False
-
-        # 检查两个词是否都是通过添加合理的后缀形成的
-        suffix1 = word1[len(stem) :] if word1.startswith(stem) else ""
-        suffix2 = word2[len(stem) :] if word2.startswith(stem) else ""
-
-        # 非常严格的后缀组合（只允许最常见的）
-        strict_suffixes = {
-            "",
-            "s",
-            "ed",
-            "ing",
-            "er",
-            "ly",
-            "ness",
-            "ment",
-            "tion",
-            "able",
-            "ful",
-            "ive",
-            "al",
-            "ity",
-        }
-
-        # 两个后缀都必须是严格有效的
-        if suffix1 not in strict_suffixes or suffix2 not in strict_suffixes:
-            return False
-
-        # 不允许两个词都只是添加了's'这种简单后缀
-        if suffix1 == "s" and suffix2 == "s":
-            return False
-
-        # 检查是否是已知的好例子
-        return self._is_known_good_example(word1, word2)
-
-    def _is_known_good_example(self, word1: str, word2: str) -> bool:
-        """检查是否是已知的好例子"""
-        # 已知的好例子
-        good_pairs = {
-            ("virtual", "virtually"),
-            ("virtually", "virtual"),
-            ("attain", "attainable"),
-            ("attainable", "attain"),
-            ("ambiguous", "ambiguity"),
-            ("ambiguity", "ambiguous"),
-            ("remark", "remarkable"),
-            ("remarkable", "remark"),
-            ("disrupt", "disruptive"),
-            ("disruptive", "disrupt"),
-            ("distinct", "distinctive"),
-            ("distinctive", "distinct"),
-            ("conduct", "conductive"),
-            ("conductive", "conduct"),
-            ("exhaust", "exhaustive"),
-            ("exhaustive", "exhaust"),
-            ("exhaust", "exhaustible"),
-            ("exhaustible", "exhaust"),
-            ("exhaustive", "exhaustible"),
-            ("exhaustible", "exhaustive"),
-            ("excess", "excessive"),
-            ("excessive", "excess"),
-            ("refresh", "refreshment"),
-            ("refreshment", "refresh"),
-            ("renew", "renewable"),
-            ("renewable", "renew"),
-            ("captivate", "captivity"),
-            ("captivity", "captivate"),
-            ("legitimate", "legitimize"),
-            ("legitimize", "legitimate"),
-            ("accustom", "accustomed"),
-            ("accustomed", "accustom"),
-            ("perception", "perceptive"),
-            ("perceptive", "perception"),
-            ("retain", "retainer"),
-            ("retainer", "retain"),
-            ("retain", "retention"),
-            ("retention", "retain"),
-            ("dizzy", "dizziness"),
-            ("dizziness", "dizzy"),
-            ("maternal", "maternity"),
-            ("maternity", "maternal"),
-            ("bully", "bullying"),
-            ("bullying", "bully"),
-        }
-
-        pair = (word1, word2)
-        return pair in good_pairs
-
-    def _process_word_batch(
-        self, word_pairs: List[Tuple[Word, Word]]
-    ) -> List[WordRelation]:
+    def _process_word_batch(self, word_pairs: List[Tuple[Word, Word]]) -> List[WordRelation]:
         """处理词对批次的辅助方法"""
         relations = []
+        processed_pairs: Set[Tuple[int, int]] = set()
+
         for w1, w2 in word_pairs:
             pair_key = tuple(sorted([w1.id, w2.id]))
-            if pair_key in self.processed_pairs:
+            if pair_key in processed_pairs:
                 continue
 
             same_root, confidence = self.are_same_root(w1.word, w2.word)
             if same_root and confidence >= self.min_confidence:
-                self.processed_pairs.add(pair_key)
+                processed_pairs.add(pair_key)
                 relations.append(
                     WordRelation(
                         word_id=w1.id,
@@ -958,6 +1002,7 @@ class RootRelationGenerator:
         return relations
 
     def generate_relations(self, emitter=None) -> int:
+        """生成所有词根关系并插入数据库"""
         with get_session() as session:
             words = session.query(Word).all()
             total_words = len(words)
@@ -971,10 +1016,11 @@ class RootRelationGenerator:
             for i, word in enumerate(words):
                 if emitter and i % 500 == 0:
                     emitter.emit_progress(
-                        i, total_words, f"Pre-computing word stems: {i}/{total_words}"
+                        i, total_words, f"Pre-computing word roots: {i}/{total_words}"
                     )
+                # 预计算词根
+                self.extract_latin_greek_roots(word.word)
                 self.get_stem(word.word)
-                self.get_wordnet_derivations(word.word)
 
             relations_to_add = []
             total_found = 0
@@ -1017,9 +1063,101 @@ class RootRelationGenerator:
             if relations_to_add:
                 batch_insert_relations(session, relations_to_add)
 
+            if emitter:
+                emitter.emit_progress(
+                    total_words, total_words, f"Completed! Found {total_found} root relations"
+                )
+
             return total_found
 
 
-def generate_root_relations():
-    generator = RootRelationGenerator(min_confidence=0.8, vector_threshold=0.65)
-    return generator.generate_relations()
+def generate_validation_results(output_file: str = "validation_results_v2.json"):
+    """在验证集上生成词根关系结果"""
+    import json
+
+    # 读取验证集单词
+    with open("validation_words.txt", "r") as f:
+        words = [line.strip() for line in f if line.strip()]
+
+    print(f"读取验证集: {len(words)} 个单词")
+
+    # 生成关系
+    generator = RootRelationGenerator(min_confidence=0.75)
+    relations = generator.generate_relations_for_words(words)
+
+    print(f"生成关系: {len(relations)} 对")
+
+    # 转换为clusters格式（方便比较）
+    word_to_cluster = {}
+    clusters = []
+
+    for w1, w2, confidence in relations:
+        # 找到或创建cluster
+        cluster1 = word_to_cluster.get(w1)
+        cluster2 = word_to_cluster.get(w2)
+
+        if cluster1 is not None and cluster2 is not None:
+            if cluster1 != cluster2:
+                # 合并两个cluster
+                clusters[cluster1]["words"].extend(clusters[cluster2]["words"])
+                clusters[cluster1]["words"] = list(set(clusters[cluster1]["words"]))
+                # 更新cluster2中所有词的映射
+                for word in clusters[cluster2]["words"]:
+                    word_to_cluster[word] = cluster1
+                clusters[cluster2] = None  # 标记为已合并
+        elif cluster1 is not None:
+            clusters[cluster1]["words"].append(w2)
+            clusters[cluster1]["words"] = list(set(clusters[cluster1]["words"]))
+            word_to_cluster[w2] = cluster1
+        elif cluster2 is not None:
+            clusters[cluster2]["words"].append(w1)
+            clusters[cluster2]["words"] = list(set(clusters[cluster2]["words"]))
+            word_to_cluster[w1] = cluster2
+        else:
+            # 创建新cluster
+            roots1 = generator.extract_latin_greek_roots(w1)
+            roots2 = generator.extract_latin_greek_roots(w2)
+            common_roots = roots1 & roots2
+            root_name = list(common_roots)[0] if common_roots else f"{w1}/{w2}"
+
+            new_cluster = {
+                "root": root_name,
+                "words": [w1, w2]
+            }
+            clusters.append(new_cluster)
+            cluster_idx = len(clusters) - 1
+            word_to_cluster[w1] = cluster_idx
+            word_to_cluster[w2] = cluster_idx
+
+    # 过滤掉被合并的cluster
+    clusters = [c for c in clusters if c is not None]
+
+    # 保存结果
+    result = {
+        "relations": [
+            {"word1": w1, "word2": w2, "confidence": conf}
+            for w1, w2, conf in relations
+        ],
+        "clusters": clusters,
+        "total_relations": len(relations),
+        "total_clusters": len(clusters)
+    }
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+    print(f"\n结果已保存到: {output_file}")
+    print(f"总关系数: {len(relations)}")
+    print(f"总cluster数: {len(clusters)}")
+
+    return result
+
+
+def generate_root_relations(emitter=None):
+    """生成词根关系的顶层函数（向后兼容）"""
+    generator = RootRelationGenerator(min_confidence=0.75)
+    return generator.generate_relations(emitter=emitter)
+
+
+if __name__ == "__main__":
+    generate_validation_results()

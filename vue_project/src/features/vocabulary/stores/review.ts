@@ -322,7 +322,6 @@ export const useReviewStore = defineStore('review', () => {
         }
       }
 
-      console.log(`Progress restored: ${words.length} words, mode=${progress.mode}, current_index=${currentIndex.value}`)
       return true
 
     } catch (error) {
