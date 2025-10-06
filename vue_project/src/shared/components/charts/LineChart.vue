@@ -22,6 +22,7 @@ let ro: ResizeObserver | null = null
 
 // 对齐 labels 和 values
 const processedData = computed(() => {
+  console.log(props.series)
   if (!props.series || props.series.length === 0) return { mergedLabels: [], processedSeries: [] }
 
   const allLabelsSet = new Set<string>()
@@ -52,6 +53,8 @@ const render = () => {
       name: s.name,
       data: s.values.map(v => v !== null ? Number(v) : null),
       smooth: true,
+      showSymbol: true,
+      connectNulls: true,
       lineStyle: { color: s.lineColor ?? '#36cfc9', width: 3 },
       areaStyle: {
         color: {
