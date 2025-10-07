@@ -123,18 +123,21 @@ def _analyze_input_fluency(input_analysis, word_length: int) -> float:
     longest_pause = input_analysis.get("longestPause", 0)
     avg_interval = input_analysis.get("averageKeyInterval", 0)
 
-    # 时间效率：目标是150ms/字符的打字速度（更合理的标准）
-    target_time_per_char = 150  # ms
-    expected_time = word_length * target_time_per_char
+    # 时间效率：目标是180ms/字符的打字速度（更合理的标准）
+    target_time_per_char = 180  # ms
+    expected_time = 500 + word_length * target_time_per_char
     time_efficiency = min(1.0, expected_time / max(1, total_time))
 
     # 节奏一致性：平均间隔应该较短且一致
-    rhythm_score = max(0.0, 1.0 - avg_interval / 800)  # 800ms以上算慢
-
+    rhythm_score = (
+        1.0 if avg_interval <= 200 else max(0.0, 1.0 - (avg_interval - 200) / 600)
+    )
     # 停顿惩罚：长时间停顿表示犹豫
-    pause_penalty = min(0.3, longest_pause / 3000)  # 3秒以上的停顿开始显著扣分
+    pause_penalty = (
+        0.0 if longest_pause <= 800 else min(0.3, 0.3 * (longest_pause - 800) / 2200)
+    )
 
-    fluency = (time_efficiency * 0.4 + rhythm_score * 0.4) - pause_penalty
+    fluency = time_efficiency * 0.45 + rhythm_score * 0.45 + (1 - pause_penalty) * 0.10
     return max(0.0, min(1.0, fluency))
 
 

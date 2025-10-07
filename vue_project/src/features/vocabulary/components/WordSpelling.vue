@@ -340,8 +340,8 @@ const handleVirtualEnter = () => {
 
 
 const calculateInputAnalysis = (): DetailedSpellingData['inputAnalysis'] => {
-  const totalTime = keyEvents.value.length > 0
-    ? keyEvents.value[keyEvents.value.length - 1].timestamp
+  const totalTime = keyEvents.value.length > 1
+    ? keyEvents.value[keyEvents.value.length - 1].timestamp - keyEvents.value[0].timestamp
     : 0
 
   let longestPause = 0
