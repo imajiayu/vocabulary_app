@@ -95,6 +95,7 @@ import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
+import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 
 // 检测是否为移动端
 const isMobile = ref(false)
@@ -166,10 +167,12 @@ const isCorrect = computed(() => userInput.value.trim().toLowerCase() === props.
 const canProceed = computed(() => isCorrect.value)
 const inputClass = computed(() => (!userInput.value ? '' : isCorrect.value ? 'correct' : 'incorrect'))
 
+const { audioAccent, loadAudioAccent } = useAudioAccent()
+
 const handlePlayAudio = async () => {
   if (isSubmitting.value) return
   interactions.value.audioRequestCount++
-  playWordAudio(props.word.word)
+  playWordAudio(props.word.word, audioAccent.value)
   await nextTick()
   inputRef.value?.focus()
 }
@@ -409,7 +412,7 @@ watch(() => props.word, (newWord, oldWord) => {
     resetState()
 
     // 播放新单词音频（非阻塞）
-    playWordAudio(newWord.word)
+    playWordAudio(newWord.word, audioAccent.value)
 
     // 聚焦输入框
     if (!isMobile.value) {
@@ -421,13 +424,14 @@ watch(() => props.word, (newWord, oldWord) => {
 onMounted(async () => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
-
-  // 加载快捷键设置
-  await loadHotkeys()
+  await Promise.all([
+        loadAudioAccent(),
+        loadHotkeys()
+    ])
 
   resetState()
   await nextTick()
-  playWordAudio(props.word.word)
+  playWordAudio(props.word.word, audioAccent.value)
   if (!isMobile.value) {
     setTimeout(() => inputRef.value?.focus(), 50)
   }

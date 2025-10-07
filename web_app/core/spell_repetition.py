@@ -4,11 +4,8 @@
 
 包含拼写强度评估、间隔计算和负荷均衡优化算法
 """
+from web_app.core.review_repetition import ReviewLoadLimits
 from web_app.database.vocabulary_dao import get_daily_spell_loads_by_source
-
-
-# 导入共享常量和类
-from web_app.core.spaced_repetition import ReviewLoadLimits
 
 
 def calculate_spell_strength(
@@ -385,6 +382,7 @@ def calculate_spell_strength_with_load_balancing(
     remembered: bool,
     word: str,
     word_source,
+    base_date,
     current_strength: float = None,
     initial_strength: float = 0.0,
     base_interval: int = 1,
@@ -424,9 +422,9 @@ def calculate_spell_strength_with_load_balancing(
         return strength_change, basic_interval
 
     # 5. 低强度单词（0.8-2.5）：应用负荷均衡 + 严格推迟上限
+    spell_loads = get_daily_spell_loads_by_source(word_source, base_date, max_prep_days)
     if new_strength <= 2.5:
         try:
-            spell_loads = get_daily_spell_loads_by_source(word_source, max_prep_days)
             priority_weight = max(0.5, 3.0 - new_strength)
 
             # 根据强度设置最大推迟天数（缩短为1-3天）
@@ -451,8 +449,6 @@ def calculate_spell_strength_with_load_balancing(
     # 6. 高强度单词（> 2.5）：向后寻找负荷较小的日期
     else:
         try:
-            spell_loads = get_daily_spell_loads_by_source(word_source, max_prep_days)
-
             optimized_interval = find_optimal_spell_day_for_strong_words(
                 basic_interval,
                 ReviewLoadLimits.get_daily_spell_limit(),

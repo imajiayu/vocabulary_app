@@ -67,7 +67,7 @@ make
   - `api/vocabulary.py` - Vocabulary CRUD and review endpoints
   - `api/speaking.py` - Speaking practice and recording endpoints
 - **Core Logic**:
-  - `core/spaced_repetition.py` - Spaced repetition algorithm (SM-2 based)
+  - `core/review_repetition.py` - Spaced repetition algorithm (SM-2 based)
 - **Data Access**:
   - `database/vocabulary_dao.py` - Word database operations
   - `database/speaking_dao.py` - Speaking practice data operations

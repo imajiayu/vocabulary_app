@@ -3,7 +3,7 @@ import datetime
 from flask import session
 
 
-from web_app.core.spaced_repetition import (
+from web_app.core.review_repetition import (
     calculate_avg_elapsed_time,
     calculate_score,
     calculate_srs_parameters_with_load_balancing,
@@ -57,7 +57,13 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         forget_inc,
         lapse,
     ) = calculate_srs_parameters_with_load_balancing(
-        score, interval, repetition, ease_factor, lapse, word_source
+        score,
+        interval,
+        repetition,
+        ease_factor,
+        lapse,
+        word_source,
+        original_next_review,
     )
 
     # 4️⃣ 计算下次复习日期
@@ -117,17 +123,17 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
         if spell_next_review_str
         else None
     )
+    base_date = current_next_review if current_next_review else datetime.date.today()
 
     # 使用负荷均衡的拼写算法
     strength_change, interval_days = calculate_spell_strength_with_load_balancing(
-        spelling_data, remembered, word, word_source, current_strength
+        spelling_data, remembered, word, word_source, base_date, current_strength
     )
 
     # 计算新的强度 (ensure current_strength is not None, and cap at 5.0)
     new_strength = max(0, min(5.0, (current_strength or 0) + strength_change))
 
     # 计算下次拼写复习时间
-    base_date = current_next_review if current_next_review else datetime.date.today()
     next_review = base_date + datetime.timedelta(days=interval_days)
 
     db_update_word_for_spelling(word_id, round(new_strength, 2), next_review)

@@ -4,9 +4,9 @@ import datetime, time
 from datetime import date
 import json
 from flask import session
-from sqlalchemy import func, text, update
+from sqlalchemy import func, or_, text, update
 from web_app.extensions import get_session
-from web_app.models.word import SourceType, Word
+from web_app.models.word import SourceType, Word, WordRelation
 from web_app.services.websocket_events import ws_events
 from web_app.services.vocabulary_service import (
     fetch_definition_from_web,
@@ -102,7 +102,9 @@ def db_get_comprehensive_stats(source=None):
                 stats["next_reviews"].append(row.next_review)
 
             # Spell next reviews
-            if row.spell_next_review is not None and row.repetition >= 3:
+            if row.spell_next_review is not None and (
+                row.repetition >= 3 or row.spell_strength is not None
+            ):
                 stats["spell_next_reviews"].append(row.spell_next_review)
 
             # Review counts
@@ -114,9 +116,11 @@ def db_get_comprehensive_stats(source=None):
             stats["spell_strengths"].append(
                 {
                     "word": row.word,
-                    "strength": round(row.spell_strength, 2)
-                    if row.spell_strength is not None
-                    else None,
+                    "strength": (
+                        round(row.spell_strength, 2)
+                        if row.spell_strength is not None
+                        else None
+                    ),
                     "available": available,
                 }
             )
@@ -429,8 +433,11 @@ def db_fetch_spelled_word_ids(limit=None):
             db.query(Word.id)
             .filter(
                 Word.stop_review == 0,
-                Word.repetition >= 3,
                 Word.source == current_source,
+                or_(
+                    Word.repetition >= 3,
+                    Word.spell_strength.isnot(None),  # spell_strength 不为 NULL
+                ),
                 # 包含需要复习的单词：从未练习过拼写或已到复习时间的单词
             )
             .order_by(
@@ -458,7 +465,10 @@ def db_fetch_today_spell():
             db.query(Word.id)
             .filter(
                 Word.stop_review == 0,
-                Word.repetition >= 3,
+                or_(
+                    Word.repetition >= 3,
+                    Word.spell_strength.isnot(None),  # spell_strength 不为 NULL
+                ),
                 Word.source == current_source,
                 # 包含需要复习的单词：从未练习过拼写或已到复习时间的单词
                 (Word.spell_next_review.is_(None)) | (Word.spell_next_review <= today),
@@ -548,21 +558,27 @@ def db_get_total_lapse_count():
 
 def db_delete_word(word_id: int):
     with get_session() as db:
+        db.query(WordRelation).filter(
+            (WordRelation.word_id == word_id)
+            | (WordRelation.related_word_id == word_id)
+        ).delete(synchronize_session=False)
+
         rows = db.query(Word).filter(Word.id == word_id).delete()
         db.commit()
         return rows > 0
 
 
-def get_daily_review_loads_by_source(source, days_ahead=45):
+def get_daily_review_loads_by_source(source, original_next_review, days_ahead=45):
     """
     获取指定source未来每日的复习负荷
+    从original_next_review日期开始计算
     返回: [day1_count, day2_count, ..., day45_count]
     """
-    from datetime import date, timedelta
+    from datetime import timedelta
 
-    today = date.today()
     future_dates = [
-        (today + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
+        (original_next_review + timedelta(days=i)).isoformat()
+        for i in range(1, days_ahead + 1)
     ]
 
     with get_session() as db:
@@ -583,16 +599,15 @@ def get_daily_review_loads_by_source(source, days_ahead=45):
     return loads
 
 
-def get_daily_spell_loads_by_source(source, days_ahead=45):
+def get_daily_spell_loads_by_source(source, base_date, days_ahead=45):
     """
     获取指定source未来每日的拼写负荷
     返回: [day1_count, day2_count, ..., day45_count]
     """
     from datetime import date, timedelta
 
-    today = date.today()
     future_dates = [
-        (today + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
+        (base_date + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
     ]
 
     with get_session() as db:
@@ -603,7 +618,6 @@ def get_daily_spell_loads_by_source(source, days_ahead=45):
                 .filter(
                     Word.source == source,
                     Word.stop_review == 0,
-                    Word.repetition >= 3,
                     Word.spell_next_review == date_str,
                 )
                 .count()

@@ -219,7 +219,7 @@ def should_apply_load_balancing(ease_factor, repetition, score):
     """判断是否需要应用负荷均衡"""
     return (
         ease_factor <= LOW_EF_THRESHOLD  # 低EF单词
-        or repetition <= 3  # 新单词/复习次数少
+        or repetition < 3  # 新单词/复习次数少
         or score <= 3  # 表现不佳的单词
     )
 
@@ -335,7 +335,14 @@ def find_optimal_review_day_for_strong_words(base_interval, daily_limit, current
 
 
 def calculate_srs_parameters_with_load_balancing(
-    score, interval, repetition, ease_factor, lapse, word_source, max_prep_days=45
+    score,
+    interval,
+    repetition,
+    ease_factor,
+    lapse,
+    word_source,
+    original_next_review,
+    max_prep_days=45,
 ):
     """
     优化版的SRS参数计算，增加备考时间约束和负荷均衡
@@ -351,11 +358,13 @@ def calculate_srs_parameters_with_load_balancing(
         interval_new = max_prep_days
 
     # 3. 对低强度单词应用负荷均衡（填谷策略）
+    # 获取当前负荷分布
+    daily_loads = get_daily_review_loads_by_source(
+        word_source, original_next_review, max_prep_days
+    )
+
     if should_apply_load_balancing(ease_factor_new, repetition_new, score):
         try:
-            # 获取当前负荷分布
-            daily_loads = get_daily_review_loads_by_source(word_source, max_prep_days)
-
             # 应用负荷均衡（填谷策略）
             interval_new = find_optimal_review_day(
                 interval_new,
@@ -372,9 +381,6 @@ def calculate_srs_parameters_with_load_balancing(
     # 4. 对高强度单词应用向后搜索策略，避免峰值堆积
     else:
         try:
-            # 获取当前负荷分布
-            daily_loads = get_daily_review_loads_by_source(word_source, max_prep_days)
-
             # 应用向后搜索策略
             interval_new = find_optimal_review_day_for_strong_words(
                 interval_new,
