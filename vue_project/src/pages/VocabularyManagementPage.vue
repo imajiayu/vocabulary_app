@@ -6,7 +6,7 @@
         <!-- Main Content -->
         <template v-else>
             <!-- Header -->
-            <TopBar show-home-button>
+            <TopBar show-home-button show-stats-button>
                 <template #center>
                     <span class="title">单词管理</span>
                 </template>

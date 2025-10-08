@@ -12,6 +12,8 @@ interface Props {
   homeButtonText?: string
   homeButtonTo?: string
   showHomeLoading?: boolean
+  showManagementButton?: boolean
+  showStatsButton?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,7 +25,9 @@ const props = withDefaults(defineProps<Props>(), {
   showHomeButton: false,
   homeButtonText: '返回首页',
   homeButtonTo: '/',
-  showHomeLoading: true
+  showHomeLoading: true,
+  showManagementButton: false,
+  showStatsButton: false
 })
 
 const emit = defineEmits<{
@@ -59,6 +63,16 @@ const goHome = async () => {
     isNavigating.value = false
   }
 }
+
+// 导航到管理单词页面（新窗口）
+const goManagement = () => {
+  window.open('/management', '_blank')
+}
+
+// 导航到统计页面（新窗口）
+const goStats = () => {
+  window.open('/stats', '_blank')
+}
 </script>
 
 <template>
@@ -87,6 +101,27 @@ const goHome = async () => {
           返回中...
         </span>
       </button>
+
+      <!-- 管理单词按钮 -->
+      <button
+        v-if="props.showManagementButton"
+        @click="goManagement"
+        class="icon-button"
+        title="管理单词"
+      >
+        ➕
+      </button>
+
+      <!-- 查看统计按钮 -->
+      <button
+        v-if="props.showStatsButton"
+        @click="goStats"
+        class="icon-button"
+        title="查看统计"
+      >
+        📈
+      </button>
+
       <slot name="left" />
     </div>
 
@@ -177,6 +212,41 @@ const goHome = async () => {
   touch-action: manipulation; /* 防止双击缩放 */
   user-select: none; /* 防止文本选择 */
   -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
+}
+
+/* 图标按钮样式 */
+.icon-button {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #666;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 32px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* 触摸优化 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.icon-button:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .home-button:hover:not(:disabled) {
@@ -386,11 +456,22 @@ const goHome = async () => {
     min-height: 32px; /* 确保触摸目标足够大 */
   }
 
+  .icon-button {
+    padding: 6px 8px;
+    font-size: 15px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
   /* 移动端特定的触摸反馈 */
   .home-button:active {
     background: linear-gradient(135deg, #5a6fd8 0%, #694b94 100%);
     transform: scale(0.98);
     box-shadow: 0 1px 4px rgba(102, 126, 234, 0.2);
+  }
+
+  .icon-button:active {
+    transform: scale(0.95);
   }
 
   .top-bar-section.left,
@@ -417,6 +498,13 @@ const goHome = async () => {
     font-size: 11px;
     min-width: 64px;
     min-height: 32px;
+  }
+
+  .icon-button {
+    padding: 5px 7px;
+    font-size: 14px;
+    min-width: 30px;
+    min-height: 30px;
   }
 
   .top-bar-section.left,

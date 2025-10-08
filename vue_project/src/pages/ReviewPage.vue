@@ -5,7 +5,7 @@
       @word-forgot="handleWordForgot" @word-mastered="handleWordMastered" />
 
     <!-- 顶部栏 -->
-    <TopBar show-home-button>
+    <TopBar show-home-button show-management-button show-stats-button>
 
       <template #center>
         <!-- lapse模式进度条 -->

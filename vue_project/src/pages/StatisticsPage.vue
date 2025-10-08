@@ -1,6 +1,6 @@
 <template>
   <div class="app-container with-topbar">
-    <TopBar show-home-button>
+    <TopBar show-home-button show-management-button>
       <template #center>
         <span class="title">统计</span>
       </template>
