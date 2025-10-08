@@ -3,8 +3,24 @@ from typing import Dict, List, Tuple
 from functools import lru_cache
 from nltk.corpus import wordnet
 from web_app.models.word import WordRelation, RelationType
-from web_app.services.relations.utils import batch_insert_relations
-from web_app.database.relation_dao import db_get_all_words
+from web_app.database.relation_dao import db_get_all_words, db_batch_insert_relations
+
+
+def _save_relations(relations: List[WordRelation]):
+    """将 WordRelation 对象列表保存到数据库"""
+    if not relations:
+        return
+
+    relations_data = [
+        {
+            'word_id': rel.word_id,
+            'related_word_id': rel.related_word_id,
+            'relation_type': rel.relation_type,
+            'confidence': rel.confidence
+        }
+        for rel in relations
+    ]
+    db_batch_insert_relations(relations_data)
 
 
 class SynonymGenerator:
@@ -148,7 +164,7 @@ class SynonymGenerator:
 
             # 批量插入
             if len(relations_to_add) >= 1000:
-                batch_insert_relations(relations_to_add)
+                _save_relations(relations_to_add)
                 relations_to_add = []
 
         # 方法2: 语义相似性同义词
@@ -172,8 +188,7 @@ class SynonymGenerator:
                 )
 
         # 插入剩余关系
-        if relations_to_add:
-            batch_insert_relations(relations_to_add)
+        _save_relations(relations_to_add)
 
         return total_found
 

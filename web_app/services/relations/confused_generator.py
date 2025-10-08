@@ -2,10 +2,26 @@
 from difflib import SequenceMatcher
 from typing import Dict, Set, Tuple, List
 from nltk.corpus import wordnet
-from web_app.models.word import Word, WordRelation, RelationType
-from web_app.extensions import get_session
-from sqlalchemy import insert
-from web_app.services.relations.utils import batch_insert_relations
+from web_app.models.word import WordRelation, RelationType
+from web_app.database.relation_dao import db_get_all_words, db_batch_insert_relations
+from .data import confused_pairs
+
+
+def _save_relations(relations: List[WordRelation]):
+    """将 WordRelation 对象列表保存到数据库"""
+    if not relations:
+        return
+
+    relations_data = [
+        {
+            'word_id': rel.word_id,
+            'related_word_id': rel.related_word_id,
+            'relation_type': rel.relation_type,
+            'confidence': rel.confidence
+        }
+        for rel in relations
+    ]
+    db_batch_insert_relations(relations_data)
 
 
 def levenshtein_distance(s1: str, s2: str) -> int:
@@ -46,90 +62,7 @@ class ConfusedWordsGenerator:
 
     def _build_classic_pairs(self) -> Set[Tuple[str, str]]:
         """构建经典易混淆词对"""
-        pairs = [
-            # 经典易混淆对
-            ("affect", "effect"),
-            ("accept", "except"),
-            ("advice", "advise"),
-            ("desert", "dessert"),
-            ("lose", "loose"),
-            ("principal", "principle"),
-            ("stationary", "stationery"),
-            ("complement", "compliment"),
-            ("council", "counsel"),
-            ("discrete", "discreet"),
-            ("elicit", "illicit"),
-            ("emigrate", "immigrate"),
-            ("ensure", "insure"),
-            ("farther", "further"),
-            ("imply", "infer"),
-            ("its", "it's"),
-            ("lead", "led"),
-            ("passed", "past"),
-            ("personal", "personnel"),
-            ("than", "then"),
-            ("there", "their"),
-            ("to", "too"),
-            ("weather", "whether"),
-            ("who", "whom"),
-            # 学术词汇易混淆对
-            ("adapt", "adopt"),
-            ("adverse", "averse"),
-            ("alternate", "alternative"),
-            ("appraise", "apprise"),
-            ("assure", "ensure"),
-            ("capital", "capitol"),
-            ("cite", "sight"),
-            ("climatic", "climactic"),
-            ("compose", "comprise"),
-            ("continual", "continuous"),
-            ("credible", "credulous"),
-            ("definite", "definitive"),
-            ("economic", "economical"),
-            ("eminent", "imminent"),
-            ("explicit", "implicit"),
-            ("historic", "historical"),
-            ("judicial", "judicious"),
-            ("literal", "literary"),
-            ("moral", "morale"),
-            ("official", "officious"),
-            ("practical", "practicable"),
-            ("respectful", "respective"),
-            ("sensual", "sensuous"),
-            ("substantial", "substantive"),
-            ("temporal", "temporary"),
-            # 形似词对
-            ("angel", "angle"),
-            ("casual", "causal"),
-            ("dessert", "desert"),
-            ("martial", "martial"),
-            ("metal", "mental"),
-            ("moral", "mortal"),
-            ("statue", "statute"),
-            ("trail", "trial"),
-            ("unity", "utility"),
-            ("access", "excess"),
-            ("altar", "alter"),
-            ("breath", "breathe"),
-            ("cloth", "clothe"),
-            ("dairy", "diary"),
-            ("decent", "descent"),
-            ("device", "devise"),
-            ("human", "humane"),
-            ("later", "latter"),
-            ("lighting", "lightning"),
-            ("loose", "lose"),
-            ("quite", "quiet"),
-            # 容易拼写错误的对
-            ("separate", "desperate"),
-            ("definitely", "defiantly"),
-            ("conscious", "conscience"),
-            ("lightning", "lightening"),
-            ("exercise", "exorcise"),
-            ("perspective", "prospective"),
-            ("ridiculous", "rigorous"),
-            ("independence", "independents"),
-        ]
+        pairs = confused_pairs
 
         # 转换为集合，同时添加反向对
         pair_set = set()
@@ -280,54 +213,56 @@ class ConfusedWordsGenerator:
 
     def generate_relations(self, emitter=None) -> int:
         """生成易混淆词关系"""
-        with get_session() as session:
-            words = session.query(Word).all()
-            # 过滤掉太短的词
-            words = [w for w in words if len(w.word) >= self.min_length]
+        words_data = db_get_all_words()
+        # 过滤掉太短的词
+        words_data = [w for w in words_data if len(w["word"]) >= self.min_length]
 
-            relations_to_add = []
-            total_found = 0
-            total = len(words)
+        relations_to_add = []
+        total_found = 0
+        total = len(words_data)
 
-            if emitter:
-                emitter.emit_progress(0, total, "Starting confused words generation...")
+        if emitter:
+            emitter.emit_progress(0, total, "Starting confused words generation...")
 
-            for i, w1 in enumerate(words):
-                if emitter and i % 100 == 0:
-                    emitter.emit_progress(i, total, f"Processing confused words: {i}/{total} words, {total_found} found")
+        for i, w1 in enumerate(words_data):
+            if emitter and i % 100 == 0:
+                emitter.emit_progress(
+                    i,
+                    total,
+                    f"Processing confused words: {i}/{total} words, {total_found} found",
+                )
 
-                for j in range(i + 1, len(words)):
-                    w2 = words[j]
+            for j in range(i + 1, len(words_data)):
+                w2 = words_data[j]
 
-                    is_confused, score = self.calculate_confusion_score(
-                        w1.word, w2.word
-                    )
+                is_confused, score = self.calculate_confusion_score(
+                    w1["word"], w2["word"]
+                )
 
-                    if is_confused:
-                        pair_key = (w1.id, w2.id)
-                        if pair_key not in self.processed_pairs:
-                            self.processed_pairs.add(pair_key)
-                            total_found += 1
+                if is_confused:
+                    pair_key = (w1["id"], w2["id"])
+                    if pair_key not in self.processed_pairs:
+                        self.processed_pairs.add(pair_key)
+                        total_found += 1
 
-                            relations_to_add.append(
-                                WordRelation(
-                                    word_id=w1.id,
-                                    related_word_id=w2.id,
-                                    relation_type=RelationType.confused,
-                                    confidence=score,
-                                )
+                        relations_to_add.append(
+                            WordRelation(
+                                word_id=w1["id"],
+                                related_word_id=w2["id"],
+                                relation_type=RelationType.confused,
+                                confidence=score,
                             )
+                        )
 
-                    # 批量插入
-                    if len(relations_to_add) >= 1000:
-                        batch_insert_relations(session, relations_to_add)
-                        relations_to_add = []
+                # 批量插入
+                if len(relations_to_add) >= 1000:
+                    _save_relations(relations_to_add)
+                    relations_to_add = []
 
-            # 处理剩余关系
-            if relations_to_add:
-                batch_insert_relations(session, relations_to_add)
+        # 处理剩余关系
+        _save_relations(relations_to_add)
 
-            return total_found
+        return total_found
 
 
 def generate_confused_relations(

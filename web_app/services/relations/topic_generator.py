@@ -2,10 +2,26 @@
 from collections import defaultdict
 from typing import Dict, List, Set, Tuple
 from nltk.corpus import wordnet
-from web_app.models.word import Word, WordRelation, RelationType
-from web_app.extensions import get_session
-from sqlalchemy import insert
-from web_app.services.relations.utils import batch_insert_relations
+from web_app.models.word import WordRelation, RelationType
+from web_app.database.relation_dao import db_get_all_words, db_batch_insert_relations
+from .data import topic_seeds
+
+
+def _save_relations(relations: List[WordRelation]):
+    """将 WordRelation 对象列表保存到数据库"""
+    if not relations:
+        return
+
+    relations_data = [
+        {
+            'word_id': rel.word_id,
+            'related_word_id': rel.related_word_id,
+            'relation_type': rel.relation_type,
+            'confidence': rel.confidence
+        }
+        for rel in relations
+    ]
+    db_batch_insert_relations(relations_data)
 
 
 class SemanticTopicGenerator:
@@ -16,177 +32,7 @@ class SemanticTopicGenerator:
         self.processed_pairs = set()
 
         # 定义核心主题和它们的种子词
-        self.topic_seeds = {
-            "education": {
-                "study",
-                "learn",
-                "teach",
-                "school",
-                "university",
-                "student",
-                "teacher",
-                "education",
-                "knowledge",
-                "academic",
-                "curriculum",
-                "degree",
-                "diploma",
-                "lecture",
-                "professor",
-                "scholarship",
-                "research",
-                "library",
-                "classroom",
-            },
-            "business": {
-                "business",
-                "company",
-                "profit",
-                "market",
-                "economy",
-                "trade",
-                "commerce",
-                "finance",
-                "money",
-                "investment",
-                "management",
-                "corporate",
-                "industry",
-                "customer",
-                "service",
-                "product",
-                "sales",
-                "revenue",
-                "budget",
-                "strategy",
-            },
-            "health": {
-                "health",
-                "medical",
-                "doctor",
-                "hospital",
-                "disease",
-                "treatment",
-                "medicine",
-                "patient",
-                "therapy",
-                "surgery",
-                "diagnosis",
-                "symptom",
-                "cure",
-                "prevention",
-                "nutrition",
-                "exercise",
-                "wellness",
-                "clinic",
-                "nurse",
-                "pharmaceutical",
-            },
-            "technology": {
-                "technology",
-                "computer",
-                "software",
-                "digital",
-                "internet",
-                "data",
-                "system",
-                "innovation",
-                "development",
-                "programming",
-                "algorithm",
-                "network",
-                "device",
-                "artificial",
-                "intelligence",
-                "automation",
-                "electronic",
-                "cyber",
-                "virtual",
-            },
-            "environment": {
-                "environment",
-                "nature",
-                "climate",
-                "pollution",
-                "conservation",
-                "ecology",
-                "sustainability",
-                "renewable",
-                "carbon",
-                "emission",
-                "biodiversity",
-                "ecosystem",
-                "forest",
-                "wildlife",
-                "ocean",
-                "atmosphere",
-                "recycling",
-                "green",
-                "organic",
-            },
-            "social": {
-                "society",
-                "community",
-                "culture",
-                "social",
-                "relationship",
-                "family",
-                "friend",
-                "communication",
-                "language",
-                "tradition",
-                "custom",
-                "behavior",
-                "psychology",
-                "anthropology",
-                "sociology",
-                "demographics",
-                "civilization",
-                "heritage",
-            },
-            "science": {
-                "science",
-                "research",
-                "experiment",
-                "theory",
-                "hypothesis",
-                "laboratory",
-                "analysis",
-                "discovery",
-                "investigation",
-                "methodology",
-                "physics",
-                "chemistry",
-                "biology",
-                "mathematics",
-                "statistics",
-                "evidence",
-                "observation",
-                "data",
-            },
-            "art": {
-                "art",
-                "creative",
-                "design",
-                "aesthetic",
-                "beauty",
-                "artist",
-                "painting",
-                "sculpture",
-                "music",
-                "literature",
-                "poetry",
-                "drama",
-                "theater",
-                "gallery",
-                "museum",
-                "exhibition",
-                "performance",
-                "cultural",
-                "artistic",
-                "expression",
-            },
-        }
+        self.topic_seeds = topic_seeds
 
     def expand_topic_words(self, seed_words: Set[str]) -> Set[str]:
         """扩展主题词汇，通过WordNet找到相关词"""
@@ -275,8 +121,8 @@ class SemanticTopicGenerator:
         return topic_scores
 
     def find_topically_related_words(
-        self, words: List[Word], emitter=None
-    ) -> List[Tuple[Word, Word, float]]:
+        self, words: List[Dict], emitter=None
+    ) -> List[Tuple[Dict, Dict, float]]:
         """找到主题相关的词对"""
         word_topics = {}
         total = len(words)
@@ -284,27 +130,32 @@ class SemanticTopicGenerator:
         # 为每个词计算主题得分
         for i, word in enumerate(words):
             if emitter and i % 100 == 0:
-                emitter.emit_progress(i, total, f"Computing topic scores: {i}/{total} words")
+                emitter.emit_progress(
+                    i, total, f"Computing topic scores: {i}/{total} words"
+                )
 
-            topic_scores = self.get_word_topic_scores(word.word)
+            topic_scores = self.get_word_topic_scores(word["word"])
             if topic_scores:  # 只保留有主题关联的词
-                word_topics[word] = topic_scores
+                word_topics[i] = (word, topic_scores)
 
         # 找到主题相关的词对
         related_pairs = []
-        words_with_topics = list(word_topics.keys())
-        total_with_topics = len(words_with_topics)
+        word_indices = list(word_topics.keys())
+        total_with_topics = len(word_indices)
 
-        for i, w1 in enumerate(words_with_topics):
+        for i, idx1 in enumerate(word_indices):
             if emitter and i % 100 == 0:
-                emitter.emit_progress(i, total_with_topics, f"Computing topic pairs: {i}/{total_with_topics} words")
+                emitter.emit_progress(
+                    i,
+                    total_with_topics,
+                    f"Computing topic pairs: {i}/{total_with_topics} words",
+                )
 
-            for j in range(i + 1, len(words_with_topics)):
-                w2 = words_with_topics[j]
+            w1, topics1 = word_topics[idx1]
 
-                # 计算主题相似度
-                topics1 = word_topics[w1]
-                topics2 = word_topics[w2]
+            for j in range(i + 1, len(word_indices)):
+                idx2 = word_indices[j]
+                w2, topics2 = word_topics[idx2]
 
                 # 找到共同主题
                 common_topics = set(topics1.keys()) & set(topics2.keys())
@@ -318,7 +169,9 @@ class SemanticTopicGenerator:
                         max_topic_sim = max(max_topic_sim, topic_sim)
 
                     # 加入语义相似度作为额外验证
-                    semantic_sim = self.calculate_semantic_similarity(w1.word, w2.word)
+                    semantic_sim = self.calculate_semantic_similarity(
+                        w1["word"], w2["word"]
+                    )
 
                     # 综合评分
                     final_score = max_topic_sim * 0.7 + semantic_sim * 0.3
@@ -330,47 +183,43 @@ class SemanticTopicGenerator:
 
     def generate_relations(self, emitter=None) -> int:
         """生成主题关系"""
-        with get_session() as session:
-            words = session.query(Word).all()
-            total = len(words)
+        words_data = db_get_all_words()
+        total = len(words_data)
 
+        if emitter:
+            emitter.emit_progress(0, total, "Starting topic relation generation...")
+
+        # 扩展主题词汇
+        num_topics = len(self.topic_seeds)
+        for i, topic in enumerate(self.topic_seeds):
             if emitter:
-                emitter.emit_progress(0, total, "Starting topic relation generation...")
+                emitter.emit_progress(i, num_topics, f"Expanding topic: {topic}")
+            self.topic_seeds[topic] = self.expand_topic_words(self.topic_seeds[topic])
 
-            # 扩展主题词汇
-            num_topics = len(self.topic_seeds)
-            for i, topic in enumerate(self.topic_seeds):
-                if emitter:
-                    emitter.emit_progress(i, num_topics, f"Expanding topic: {topic}")
-                self.topic_seeds[topic] = self.expand_topic_words(
-                    self.topic_seeds[topic]
+        # 找到主题相关的词对
+        related_pairs = self.find_topically_related_words(words_data, emitter)
+
+        # 创建关系
+        relations_to_add = []
+        for w1, w2, confidence in related_pairs:
+            relations_to_add.append(
+                WordRelation(
+                    word_id=w1["id"],
+                    related_word_id=w2["id"],
+                    relation_type=RelationType.topic,
+                    confidence=confidence,
                 )
+            )
 
-            # 找到主题相关的词对
-            related_pairs = self.find_topically_related_words(words, emitter)
+            # 批量插入
+            if len(relations_to_add) >= 1000:
+                _save_relations(relations_to_add)
+                relations_to_add = []
 
-            # 创建关系
-            relations_to_add = []
-            for w1, w2, confidence in related_pairs:
-                relations_to_add.append(
-                    WordRelation(
-                        word_id=w1.id,
-                        related_word_id=w2.id,
-                        relation_type=RelationType.topic,
-                        confidence=confidence,
-                    )
-                )
+        # 处理剩余关系
+        _save_relations(relations_to_add)
 
-                # 批量插入
-                if len(relations_to_add) >= 1000:
-                    batch_insert_relations(session, relations_to_add)
-                    relations_to_add = []
-
-            # 处理剩余关系
-            if relations_to_add:
-                batch_insert_relations(session, relations_to_add)
-
-            return len(related_pairs)
+        return len(related_pairs)
 
 
 def generate_topic_relations():
