@@ -2,10 +2,9 @@
 from typing import Dict, List, Tuple
 from functools import lru_cache
 from nltk.corpus import wordnet
-from sqlalchemy import insert
-from web_app.models.word import Word, WordRelation, RelationType
-from web_app.extensions import get_session
+from web_app.models.word import WordRelation, RelationType
 from web_app.services.relations.utils import batch_insert_relations
+from web_app.database.relation_dao import db_get_all_words
 
 
 class SynonymGenerator:
@@ -62,7 +61,7 @@ class SynonymGenerator:
         return min(1.0, base_confidence)
 
     def get_semantic_similarity_synonyms(
-        self, words: List[Word], emitter=None
+        self, words: List[Dict], emitter=None
     ) -> Dict[Tuple[int, int], float]:
         """基于语义相似性找同义词（使用WordNet路径相似性）"""
         similar_pairs = {}
@@ -70,12 +69,12 @@ class SynonymGenerator:
 
         # 预计算每个词的synsets
         for word in words:
-            synsets = self._get_synsets(word.word)
+            synsets = self._get_synsets(word['word'])
             if synsets:
-                word_synsets[word.id] = synsets[:3]  # 只取前3个最相关的
+                word_synsets[word['id']] = synsets[:3]  # 只取前3个最相关的
 
         # 过滤出有synsets的词，减少无效迭代
-        words_with_synsets = [w for w in words if w.id in word_synsets]
+        words_with_synsets = [w for w in words if w['id'] in word_synsets]
         total = len(words_with_synsets)
 
         for i, w1 in enumerate(words_with_synsets):
@@ -88,8 +87,8 @@ class SynonymGenerator:
                 max_similarity = 0
                 found_high_sim = False
 
-                for s1 in word_synsets[w1.id]:
-                    for s2 in word_synsets[w2.id]:
+                for s1 in word_synsets[w1['id']]:
+                    for s2 in word_synsets[w2['id']]:
                         # 使用缓存避免重复计算
                         cache_key = (id(s1), id(s2))
                         if cache_key in self.similarity_cache:
@@ -109,75 +108,74 @@ class SynonymGenerator:
 
                 # 只保留高相似性的词对
                 if max_similarity >= 0.8:
-                    similar_pairs[(w1.id, w2.id)] = max_similarity
+                    similar_pairs[(w1['id'], w2['id'])] = max_similarity
 
         return similar_pairs
 
     def generate_relations(self, emitter=None) -> int:
         """生成同义词关系"""
-        with get_session() as session:
-            words = session.query(Word).all()
-            word_map = {w.word.lower(): w for w in words}
+        words_data = db_get_all_words()
+        word_map = {w['word'].lower(): w for w in words_data}
 
-            relations_to_add = []
-            total_found = 0
-            total = len(words)
+        relations_to_add = []
+        total_found = 0
+        total = len(words_data)
 
-            if emitter:
-                emitter.emit_progress(0, total, "Starting synonym generation...")
+        if emitter:
+            emitter.emit_progress(0, total, "Starting synonym generation...")
 
-            # 方法1: WordNet直接同义词
-            for i, word in enumerate(words):
-                if emitter and i % 100 == 0:
-                    emitter.emit_progress(i, total, f"Processing WordNet synonyms: {i}/{total} words")
+        # 方法1: WordNet直接同义词
+        for i, word in enumerate(words_data):
+            if emitter and i % 100 == 0:
+                emitter.emit_progress(i, total, f"Processing WordNet synonyms: {i}/{total} words")
 
-                synonyms = self.get_wordnet_synonyms(word.word)
+            synonyms = self.get_wordnet_synonyms(word['word'])
 
-                for syn_word, confidence in synonyms.items():
-                    if syn_word in word_map:
-                        pair_key = tuple(sorted([word.id, word_map[syn_word].id]))
-                        if pair_key not in self.processed_pairs:
-                            self.processed_pairs.add(pair_key)
-                            total_found += 1
-                            relations_to_add.append(
-                                WordRelation(
-                                    word_id=word.id,
-                                    related_word_id=word_map[syn_word].id,
-                                    relation_type=RelationType.synonym,
-                                    confidence=confidence,
-                                )
+            for syn_word, confidence in synonyms.items():
+                if syn_word in word_map:
+                    pair_key = tuple(sorted([word['id'], word_map[syn_word]['id']]))
+                    if pair_key not in self.processed_pairs:
+                        self.processed_pairs.add(pair_key)
+                        total_found += 1
+                        relations_to_add.append(
+                            WordRelation(
+                                word_id=word['id'],
+                                related_word_id=word_map[syn_word]['id'],
+                                relation_type=RelationType.synonym,
+                                confidence=confidence,
                             )
-
-                # 批量插入
-                if len(relations_to_add) >= 1000:
-                    batch_insert_relations(session, relations_to_add)
-                    relations_to_add = []
-
-            # 方法2: 语义相似性同义词
-            if emitter:
-                emitter.emit_progress(total, total, "Processing semantic similarity...")
-
-            semantic_pairs = self.get_semantic_similarity_synonyms(words, emitter)
-
-            for (w1_id, w2_id), confidence in semantic_pairs.items():
-                pair_key = (w1_id, w2_id)
-                if pair_key not in self.processed_pairs:
-                    self.processed_pairs.add(pair_key)
-                    total_found += 1
-                    relations_to_add.append(
-                        WordRelation(
-                            word_id=w1_id,
-                            related_word_id=w2_id,
-                            relation_type=RelationType.synonym,
-                            confidence=confidence,
                         )
+
+            # 批量插入
+            if len(relations_to_add) >= 1000:
+                batch_insert_relations(relations_to_add)
+                relations_to_add = []
+
+        # 方法2: 语义相似性同义词
+        if emitter:
+            emitter.emit_progress(total, total, "Processing semantic similarity...")
+
+        semantic_pairs = self.get_semantic_similarity_synonyms(words_data, emitter)
+
+        for (w1_id, w2_id), confidence in semantic_pairs.items():
+            pair_key = (w1_id, w2_id)
+            if pair_key not in self.processed_pairs:
+                self.processed_pairs.add(pair_key)
+                total_found += 1
+                relations_to_add.append(
+                    WordRelation(
+                        word_id=w1_id,
+                        related_word_id=w2_id,
+                        relation_type=RelationType.synonym,
+                        confidence=confidence,
                     )
+                )
 
-            # 插入剩余关系
-            if relations_to_add:
-                batch_insert_relations(session, relations_to_add)
+        # 插入剩余关系
+        if relations_to_add:
+            batch_insert_relations(relations_to_add)
 
-            return total_found
+        return total_found
 
 
 def generate_synonym_relations():

@@ -337,17 +337,19 @@ const handleFileSelect = async (event: Event) => {
       source: source.value
     });
 
-    // 显示结果
-    const successMsg = `批量导入完成：成功 ${result.success_count}，失败 ${result.failed_count}`;
-    message.value = {
-      type: result.failed_count === 0 ? 'success' : 'error',
-      text: successMsg
-    };
+    // 显示结果 - 包含失败详情
+    let displayMsg = `批量导入完成：成功 ${result.success_count}，失败 ${result.failed_count}`;
 
-    // 如果有失败的单词，在控制台输出
-    if (result.failed_words.length > 0) {
+    // 如果有失败的单词，添加详细信息
+    if (result.failed_details && result.failed_details.length > 0) {
+      displayMsg += '\n' + result.failed_details.join('\n');
       console.log('Failed words:', result.failed_words);
     }
+
+    message.value = {
+      type: result.failed_count === 0 ? 'success' : 'error',
+      text: displayMsg
+    };
 
     // 将每个成功导入的单词添加到列表中
     if (result.inserted_words && result.inserted_words.length > 0) {
@@ -436,12 +438,20 @@ onUnmounted(() => {
   background-color: rgb(255, 255, 255);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   color: #6b7280;
+  max-width: 100%;
 }
 
 .message-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
+}
+
+.message-content span {
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1.5;
+  font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 
 .status-dot {
@@ -449,6 +459,8 @@ onUnmounted(() => {
   height: 0.5rem;
   border-radius: 50%;
   background-color: #6b7280;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
 }
 
 .message-success {

@@ -3,9 +3,6 @@ from flask import json
 import re, requests
 from bs4 import BeautifulSoup
 
-from web_app.extensions import get_session
-from web_app.models.word import Word
-
 
 def get_bold_definition(word, jsonStr):
     data = json.loads(jsonStr)

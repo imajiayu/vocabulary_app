@@ -1,5 +1,4 @@
 from collections import Counter
-import threading
 import random
 from flask import Blueprint, jsonify, request, session
 from flask_cors import CORS
@@ -15,12 +14,12 @@ from web_app.database.vocabulary_dao import (
     db_get_words_review_info_batch,
     db_insert_word,
     db_update_word,
-    update_word_definition,
     db_fetch_review_word_ids,
     db_fetch_lapse_word_ids,
     db_fetch_spelled_word_ids,
 )
 from web_app.services.vocabulary_service import get_bold_definition
+from web_app.services.batch_definition_service import get_batch_definition_service
 from web_app.const import (
     MODE_REVIEW,
     MODE_LAPSE,
@@ -308,14 +307,9 @@ def insert_words():
     if not new_word:
         return create_response(False, None, f"单词 '{word}' 已存在或插入失败"), 400
 
-    def background_task(word_id, word):
-        update_word_definition(word_id, word)  # 你已有的函数
-
-    t = threading.Thread(
-        target=background_task, args=(new_word["id"], new_word["word"])
-    )
-    t.daemon = True
-    t.start()
+    # 使用队列服务获取定义
+    batch_service = get_batch_definition_service()
+    batch_service.add_task(new_word["id"], new_word["word"])
 
     return create_response(True, new_word, "Word inserted successfully")
 
@@ -339,7 +333,11 @@ def batch_insert_words():
     success_count = 0
     failed_count = 0
     failed_words = []
+    failed_details = []  # 存储失败详情
     inserted_words = []
+
+    # 获取批量释义服务
+    batch_service = get_batch_definition_service()
 
     for word_text in words_list:
         word_text = word_text.strip().lower()
@@ -351,29 +349,38 @@ def batch_insert_words():
             success_count += 1
             inserted_words.append(new_word)
 
-            # 后台获取定义
-            def background_task(word_id, word):
-                update_word_definition(word_id, word)
-
-            t = threading.Thread(
-                target=background_task, args=(new_word["id"], new_word["word"])
-            )
-            t.daemon = True
-            t.start()
+            # 使用队列服务获取定义，避免并发过多
+            batch_service.add_task(new_word["id"], new_word["word"])
         else:
             failed_count += 1
             failed_words.append(word_text)
+
+    # 构建对齐的失败详情消息
+    if failed_words:
+        # 找到最长的单词长度
+        max_word_length = max(len(word) for word in failed_words)
+        # 为每个失败的单词生成对齐的消息
+        for word_text in failed_words:
+            # 计算需要填充的空格数，空格在引号外
+            spaces = ' ' * (max_word_length - len(word_text))
+            failed_details.append(f"单词 '{word_text}'{spaces} 已存在或插入失败")
+
+    # 构建消息：包含成功/失败统计和所有失败详情
+    message_parts = [f"批量导入完成：成功 {success_count}，失败 {failed_count}"]
+    if failed_details:
+        message_parts.append("\n" + "\n".join(failed_details))
 
     return create_response(
         True,
         {
             "success_count": success_count,
             "failed_count": failed_count,
-            "failed_words": failed_words[:10],  # 只返回前10个失败的单词
+            "failed_words": failed_words,  # 返回所有失败的单词
+            "failed_details": failed_details,  # 返回所有失败详情
             "total": len(words_list),
             "inserted_words": inserted_words,  # 返回插入的单词列表
         },
-        f"批量导入完成：成功 {success_count}，失败 {failed_count}",
+        "\n".join(message_parts),
     )
 
 

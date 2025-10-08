@@ -31,6 +31,11 @@ socketio.init_app(app, cors_allowed_origins="*")
 from web_app.services.relation_generation_manager import init_manager
 init_manager(socketio)
 
+# 初始化批量释义服务，传入数据库更新回调函数
+from web_app.services.batch_definition_service import get_batch_definition_service
+from web_app.database.vocabulary_dao import db_update_word_definition_only
+get_batch_definition_service(db_update_callback=db_update_word_definition_only)
+
 if __name__ == "__main__":
     # 使用socketio.run而不是app.run来支持WebSocket
     socketio.run(

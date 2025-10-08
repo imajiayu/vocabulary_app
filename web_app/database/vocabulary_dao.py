@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import threading
 import datetime, time
 from datetime import date
 import json
@@ -8,14 +7,37 @@ from sqlalchemy import func, or_, text, update
 from web_app.extensions import get_session
 from web_app.models.word import SourceType, Word, WordRelation
 from web_app.services.websocket_events import ws_events
-from web_app.services.vocabulary_service import (
-    fetch_definition_from_web,
-)
 
 
 def get_current_source():
     """Get current source filter from session, default to IELTS"""
     return session.get("current_source", "IELTS")
+
+
+def db_update_word_definition_only(word_id, definition_dict):
+    """
+    仅更新单词的释义字段（数据库操作）
+
+    Args:
+        word_id: 单词ID
+        definition_dict: 释义字典对象
+
+    Returns:
+        bool: 是否成功
+    """
+    try:
+        definition_str = json.dumps(definition_dict, ensure_ascii=False)
+        with get_session() as db:
+            db.execute(
+                update(Word)
+                .values(definition=definition_str)
+                .where(Word.id == word_id)
+            )
+            db.commit()
+        return True
+    except Exception as e:
+        print(f"Failed to update definition for word_id={word_id}: {e}")
+        return False
 
 
 def db_get_source_statistics():
@@ -218,27 +240,6 @@ def db_get_comprehensive_stats(source=None):
         stats["added_dates"] = dict(sorted(date_counter.items()))
 
         return stats
-
-
-def update_word_definition(word_id, word):
-    """查询单词释义并更新数据库，失败则重试"""
-    while True:
-        definition = fetch_definition_from_web(word)
-        if definition:
-            definition_str = json.dumps(definition, ensure_ascii=False)
-            with get_session() as db:
-                db.execute(
-                    update(Word)
-                    .values(definition=definition_str)
-                    .where(Word.id == word_id)
-                )
-                db.commit()
-
-            ws_events.emit_word_updated(word_id, definition)
-            break
-        else:
-            print(f"{word} 查询失败，0.2秒后重试...")
-            time.sleep(0.2)
 
 
 def db_get_word_review_info(id):
@@ -666,15 +667,12 @@ def db_update_word(word_id: int, update_data: dict):
 
                 # 只有当word文本真正发生变化时才重新查询释义
                 if "word" in update_data and original_word != updated_word["word"]:
-
-                    def background_task(word_id, word):
-                        update_word_definition(word_id, word)  # 你已有的函数
-
-                    t = threading.Thread(
-                        target=background_task, args=(word_id, updated_word["word"])
+                    from web_app.services.batch_definition_service import (
+                        get_batch_definition_service,
                     )
-                    t.daemon = True
-                    t.start()
+
+                    batch_service = get_batch_definition_service()
+                    batch_service.add_task(word_id, updated_word["word"])
 
                 return "更新成功", 200, updated_word
             else:

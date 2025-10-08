@@ -307,3 +307,83 @@ def db_get_relation_stats():
         return stats
 
 
+def db_get_all_words():
+    """
+    获取所有单词列表（用于关系生成）
+
+    返回:
+    - List[Word]: 单词对象列表
+    """
+    with get_session() as db:
+        words = db.query(Word).all()
+        # 返回副本，避免session关闭后访问问题
+        return [
+            {
+                'id': w.id,
+                'word': w.word,
+                'definition': w.definition
+            }
+            for w in words
+        ]
+
+
+def db_batch_insert_relations(relations_data: List[Dict], batch_size: int = 1000):
+    """
+    批量插入关系，自动创建双向关系（无向图实现）
+
+    参数:
+    - relations_data: 关系数据列表，每个元素格式：
+      {
+          'word_id': int,
+          'related_word_id': int,
+          'relation_type': RelationType,
+          'confidence': float
+      }
+    - batch_size: 批量插入的大小
+
+    返回:
+    - int: 实际插入的关系数（注意：数据库记录数是这个的2倍）
+    """
+    from sqlalchemy import insert
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    if not relations_data:
+        return 0
+
+    total = len(relations_data)
+    logger.info(f"开始批量插入 {total} 条关系（将创建 {total * 2} 条数据库记录）...")
+
+    with get_session() as db:
+        for i in range(0, total, batch_size):
+            batch = relations_data[i : i + batch_size]
+
+            # 为每个关系创建双向记录
+            bidirectional_batch = []
+            for rel in batch:
+                # 正向关系
+                bidirectional_batch.append({
+                    'word_id': rel['word_id'],
+                    'related_word_id': rel['related_word_id'],
+                    'relation_type': rel['relation_type'],
+                    'confidence': rel['confidence']
+                })
+
+                # 反向关系
+                bidirectional_batch.append({
+                    'word_id': rel['related_word_id'],
+                    'related_word_id': rel['word_id'],
+                    'relation_type': rel['relation_type'],
+                    'confidence': rel['confidence']
+                })
+
+            # 批量插入（使用 INSERT OR IGNORE 避免重复）
+            stmt = insert(WordRelation.__table__).prefix_with("OR IGNORE")
+            db.execute(stmt, bidirectional_batch)
+            db.commit()
+            logger.info(f"已插入 {min(i+batch_size, total)}/{total} 条关系（{min((i+batch_size)*2, total*2)} 条数据库记录）")
+
+    return total
+
+
