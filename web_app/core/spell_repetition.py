@@ -70,48 +70,73 @@ def _calculate_detailed_spell_strength(
     )
     backspace_count = len([e for e in key_events if e["key"] == "Backspace"])
 
-    # 1. 基础输入效率（40%权重）
-    base_efficiency = word_length / max(1, typed_count)
-    efficiency_score = min(1.0, base_efficiency) * 0.4
+    # 1. 输入准确性（50%权重） - 合并了原来的基础效率和错误修正
+    accuracy_score = (
+        _calculate_input_accuracy(typed_count, backspace_count, word_length, key_events)
+        * 0.5
+    )
 
     # 2. 输入流畅度分析（25%权重）
     fluency_score = _analyze_input_fluency(input_analysis, word_length) * 0.25
 
-    # 3. 错误修正行为分析（20%权重）
-    error_correction_score = (
-        _analyze_error_correction(input_analysis, backspace_count, key_events) * 0.2
-    )
-
-    # 4. 独立性评估（15%权重）
-    independence_score = _analyze_independence(interactions) * 0.15
+    # 3. 独立性评估（25%权重）
+    independence_score = _analyze_independence(interactions) * 0.25
 
     # 综合评分
-    total_score = (
-        efficiency_score + fluency_score + error_correction_score + independence_score
-    )
+    total_score = accuracy_score + fluency_score + independence_score
 
-    # 转换为强度增量，允许负增长
-    if total_score >= 0.95:
-        strength_gain = 1.0  # 近乎完美
-    elif total_score >= 0.85:
-        strength_gain = 0.6  # 优秀
-    elif total_score >= 0.75:
-        strength_gain = 0.4  # 良好
-    elif total_score >= 0.65:
-        strength_gain = 0.2  # 及格
-    elif total_score >= 0.55:
-        strength_gain = 0.1  # 勉强通过
-    elif total_score >= 0.45:
-        strength_gain = 0.0  # 无进步
-    elif total_score >= 0.35:
-        strength_gain = -0.2  # 表现较差
-    elif total_score >= 0.25:
-        strength_gain = -0.4  # 表现很差
+    if total_score >= 0.45:
+        # 高于临界点：线性映射到 [0.0, 1.0]
+        # score: 0.45->1.0 映射到 gain: 0.0->1.0
+        strength_gain = (total_score - 0.45) / 0.55 * 1.0
     else:
-        strength_gain = -0.6  # 表现极差（猜对的）
+        # 低于临界点：线性映射到 [-0.6, 0.0]
+        # score: 0.0->0.45 映射到 gain: -0.6->0.0
+        strength_gain = (total_score / 0.45) * 0.6 - 0.6
 
     new_strength = current_strength + strength_gain
     return max(0.0, min(5.0, new_strength))
+
+
+def _calculate_input_accuracy(
+    typed_count: int, backspace_count: int, word_length: int, key_events: list
+) -> float:
+    """
+    综合评估输入准确性（合并了基础效率和错误修正）
+
+    :param typed_count: 实际输入的字符数（不含Backspace）
+    :param backspace_count: 退格次数
+    :param word_length: 目标单词长度
+    :param key_events: 键盘事件列表
+    :return: 准确性得分 (0.0-1.0)
+    """
+    # 基础准确率：理想情况下 typed_count == word_length
+    base_accuracy = word_length / max(1, typed_count)
+    base_accuracy = min(1.0, base_accuracy)
+
+    # 分析错误严重程度
+    has_modifier_backspace = False
+    if key_events:
+        has_modifier_backspace = any(
+            e.get("key") == "Backspace" and (e.get("metaKey") or e.get("ctrlKey"))
+            for e in key_events
+        )
+
+    # 根据退格模式应用惩罚
+    if has_modifier_backspace:
+        # Cmd+退格或Ctrl+退格：删除整个单词/行，表明犯了大错误
+        severity_penalty = 0.3
+    elif backspace_count >= 10:
+        severity_penalty = 0.25  # 大量退格
+    elif backspace_count >= 6:
+        severity_penalty = 0.15  # 较多退格
+    elif backspace_count >= 3:
+        severity_penalty = 0.08  # 中等退格
+    else:
+        severity_penalty = 0.0  # 少量或无退格
+
+    final_accuracy = base_accuracy - severity_penalty
+    return max(0.0, min(1.0, final_accuracy))
 
 
 def _analyze_input_fluency(input_analysis, word_length: int) -> float:
@@ -139,73 +164,6 @@ def _analyze_input_fluency(input_analysis, word_length: int) -> float:
 
     fluency = time_efficiency * 0.45 + rhythm_score * 0.45 + (1 - pause_penalty) * 0.10
     return max(0.0, min(1.0, fluency))
-
-
-def _analyze_error_correction(
-    input_analysis, backspace_count: int, key_events: list = None
-) -> float:
-    """分析错误修正行为的质量，考虑修饰键的影响"""
-    backspace_sequences = input_analysis.get("backspaceSequences", [])
-    total_backspaces = backspace_count
-
-    if total_backspaces == 0:
-        return 1.0  # 没有错误，完美分数
-
-    # 分析退格类型：普通退格 vs 修饰键退格（Cmd+退格等）
-    normal_backspaces = 0
-    modifier_backspaces = 0
-
-    # 从 key_events 中分析退格键的使用情况
-    if key_events:
-        for event in key_events:
-            if event.get("key") == "Backspace":
-                if event.get("metaKey") or event.get("ctrlKey"):
-                    # Cmd+退格或Ctrl+退格：删除整个单词/行，表明犯了大错误
-                    modifier_backspaces += 1
-                else:
-                    # 普通退格：逐字符删除，表明小错误
-                    normal_backspaces += 1
-    else:
-        # 如果没有详细的 key_events 数据，认为都是普通退格
-        normal_backspaces = total_backspaces
-
-    # 计算不同类型退格的惩罚
-    # 普通退格惩罚（小错误）
-    normal_penalty = normal_backspaces * 0.1
-
-    # 修饰键退格惩罚（大错误，删除了更多内容）
-    # 一次Cmd+退格相当于删除了多个字符，应该给予更重的惩罚
-    modifier_penalty = modifier_backspaces * 0.25
-
-    # 大量退格的额外惩罚
-    if total_backspaces >= 10:
-        extra_penalty = 0.6  # 严重惩罚
-    elif total_backspaces >= 6:
-        extra_penalty = 0.4  # 重度惩罚
-    elif total_backspaces >= 3:
-        extra_penalty = 0.2  # 中度惩罚
-    else:
-        extra_penalty = 0.0
-
-    # 分析退格序列的特征
-    if backspace_sequences:
-        sequence_count = len(backspace_sequences)
-        avg_correction_size = total_backspaces / max(1, sequence_count)
-
-        # 较少的修正序列 + 每次修正较少字符 = 更好的分数
-        sequence_efficiency = max(0.0, 1.0 - sequence_count * 0.15)
-        correction_efficiency = max(0.0, 1.0 - avg_correction_size * 0.1)
-
-        base_score = (sequence_efficiency + correction_efficiency) / 2
-    else:
-        # 没有详细序列数据时的简化评估
-        base_score = 0.8  # 给一个较高的基础分数
-
-    # 综合计算：基础分数 - 各种惩罚
-    total_penalty = normal_penalty + modifier_penalty + extra_penalty
-    final_score = base_score - total_penalty
-
-    return max(0.0, min(1.0, final_score))
 
 
 def _analyze_independence(interactions) -> float:

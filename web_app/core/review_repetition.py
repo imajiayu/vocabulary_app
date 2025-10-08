@@ -148,10 +148,8 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         else:
             shrink_factor = 1.0  # 普通单词
 
-        if repetition == 0:
+        if repetition < 3:
             interval_new = 1
-        elif repetition == 1:
-            interval_new = 6 if shrink_factor == 1.0 else 2
         else:
             interval_new = max(
                 1,

@@ -88,7 +88,38 @@ const render = () => {
       backgroundColor: 'rgba(50,50,50,0.9)',
       borderColor: 'rgba(50,50,50,0.9)',
       textStyle: { color: '#fff' },
-      axisPointer: { type: 'cross', lineStyle: { color: '#999' } }
+      axisPointer: { type: 'cross', lineStyle: { color: '#999' } },
+      // 关键：添加 confine 属性，将 tooltip 限制在图表区域内
+      confine: true,
+      // 自定义 position 函数，实现智能定位
+      position: function (point, params, dom, rect, size) {
+        // point: 鼠标位置 [x, y]
+        // size: {contentSize: [width, height], viewSize: [width, height]}
+        const [mouseX, mouseY] = point
+        const tooltipWidth = size.contentSize[0]
+        const tooltipHeight = size.contentSize[1]
+        const viewWidth = size.viewSize[0]
+        const viewHeight = size.viewSize[1]
+        
+        let x = mouseX + 10 // 默认在鼠标右侧
+        let y = mouseY + 10 // 默认在鼠标下方
+        
+        // 如果右侧空间不够，则显示在左侧
+        if (x + tooltipWidth > viewWidth) {
+          x = mouseX - tooltipWidth - 10
+        }
+        
+        // 如果下方空间不够，则显示在上方
+        if (y + tooltipHeight > viewHeight) {
+          y = mouseY - tooltipHeight - 10
+        }
+        
+        // 确保不会超出左边界和上边界
+        x = Math.max(10, x)
+        y = Math.max(10, y)
+        
+        return [x, y]
+      }
     },
     xAxis: {
       type: 'category',
@@ -113,13 +144,11 @@ const render = () => {
   chart.setOption(option, true)
 }
 
-// 完全模仿BarChart的处理方式
 onMounted(() => {
   render()
   ro = new ResizeObserver(() => {
     if (chart) {
       chart.resize()
-      // 重新渲染以重新计算布局
       render()
     }
   })
@@ -146,7 +175,6 @@ watch(() => props.series, render, { deep: true })
   height: 100%;
   min-height: 180px;
   flex: 1;
-  /* 确保图表容器能完全适应父元素 */
   box-sizing: border-box;
 }
 </style>
