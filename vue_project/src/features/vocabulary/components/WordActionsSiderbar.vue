@@ -175,9 +175,22 @@ const saveUpdate = async() => {
     const currentWordText = props.word.word;
     const currentDefinition = props.word.definition;
 
+    // 过滤和清理 definition 数据
+    const cleanedDefinition = {
+      ...currentDefinition,
+      // 过滤掉空的或只有空格的释义
+      definitions: (currentDefinition?.definitions || []).filter((def: string) =>
+        def && def.trim().length > 0
+      ),
+      // 过滤掉英文为空的例句
+      examples: (currentDefinition?.examples || []).filter((ex: { en: string; zh: string }) =>
+        ex.en && ex.en.trim().length > 0
+      )
+    };
+
     const updatedWord = await api.words.updateWord(props.word.id, {
       word: currentWordText,
-      definition: JSON.stringify(currentDefinition)
+      definition: JSON.stringify(cleanedDefinition)
     });
 
     // 检查单词文本是否变化了
@@ -186,8 +199,8 @@ const saveUpdate = async() => {
     emit('update:isEditing', false);
 
     if (isWordChanged) {
-      // 如果文本改变了，只更新word文本，保持当前definition，等待WebSocket更新definition
-      const wordWithCurrentDefinition = { ...updatedWord, definition: currentDefinition };
+      // 如果文本改变了，只更新word文本，保持清理后的definition，等待WebSocket更新definition
+      const wordWithCurrentDefinition = { ...updatedWord, definition: cleanedDefinition };
       emit('wordUpdated', wordWithCurrentDefinition);
     } else {
       emit('wordUpdated', updatedWord);
