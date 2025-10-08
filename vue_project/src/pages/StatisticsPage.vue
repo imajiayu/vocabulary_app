@@ -68,13 +68,13 @@
             单词拼写热力图
             <span class="legend">
               <span class="legend-item">
-                <span class="spell-cell" style="background:#2e7d32"></span>拼写强度
+                <span class="spell-cell" style="background:#2e7d32"></span>拼写强度 ({{ spellLegendCounts.hasStrength }})
               </span>
               <span class="legend-item">
-                <span class="spell-cell" style="background:#4da6ff"></span>未拼写过
+                <span class="spell-cell" style="background:#4da6ff"></span>未拼写过 ({{ spellLegendCounts.notSpelled }})
               </span>
               <span class="legend-item">
-                <span class="spell-cell" style="background:#cbcbcb"></span>不可拼写
+                <span class="spell-cell" style="background:#cbcbcb"></span>不可拼写 ({{ spellLegendCounts.notAvailable }})
               </span>
             </span>
           </h2>
@@ -86,10 +86,10 @@
             单词EF热力图
             <span class="legend">
               <span class="legend-item">
-                <span class="spell-cell" style="background:#1890ff"></span>熟练单词
+                <span class="spell-cell" style="background:#1890ff"></span>熟练单词 ({{ efLegendCounts.mastered }})
               </span>
               <span class="legend-item">
-                <span class="spell-cell" style="background:#ff4d4f"></span>困难单词
+                <span class="spell-cell" style="background:#ff4d4f"></span>困难单词 ({{ efLegendCounts.difficult }})
               </span>
             </span>
           </h2>
@@ -444,6 +444,43 @@ const spellingPintSeries = computed(() => [{
   lineColor: palette.green,
   areaColor: palette.green
 }])
+
+// 拼写热力图图例计数
+const spellLegendCounts = computed(() => {
+  let hasStrength = 0
+  let notSpelled = 0
+  let notAvailable = 0
+
+  spellHeatmapCells.value.forEach(cell => {
+    if (!cell.available) {
+      notAvailable++
+    } else if (cell.value === null) {
+      notSpelled++
+    } else {
+      hasStrength++
+    }
+  })
+
+  return { hasStrength, notSpelled, notAvailable }
+})
+
+// EF热力图图例计数
+const efLegendCounts = computed(() => {
+  let mastered = 0  // EF == 3.0 的单词
+  let difficult = 0  // EF < 3.0 的单词
+
+  efHeatmapCells.value.forEach(cell => {
+    if (cell.value === null) return
+
+    if (cell.value === 3.0) {
+      mastered++
+    } else {
+      difficult++
+    }
+  })
+
+  return { mastered, difficult }
+})
 
 // Watch for configuration changes and save to localStorage
 watch(efRangeConfig, (newVal) => {

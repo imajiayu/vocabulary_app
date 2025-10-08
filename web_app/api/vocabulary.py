@@ -38,6 +38,7 @@ from web_app.services.progress_service import (
     get_progress_info,
     update_lapse_progress_after_word_update,
     get_progress_restore_data,
+    clear_progress,
 )
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
@@ -651,5 +652,23 @@ def get_progress_restore():
     except Exception as e:
         return (
             create_response(False, None, f"Failed to get restore data: {str(e)}"),
+            500,
+        )
+
+
+@api_bp.route("/progress/clear", methods=["POST"])
+def clear_progress_route():
+    """清除当前保存的进度"""
+    try:
+        success = clear_progress()
+
+        if not success:
+            return create_response(False, None, "Failed to clear progress"), 500
+
+        return create_response(True, None, "Progress cleared successfully")
+
+    except Exception as e:
+        return (
+            create_response(False, None, f"Failed to clear progress: {str(e)}"),
             500,
         )

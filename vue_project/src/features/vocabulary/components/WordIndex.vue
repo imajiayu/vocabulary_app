@@ -288,8 +288,16 @@ const getModeDisplayName = (mode: string) => {
   return modeMap[mode] || mode
 }
 
-const dismissProgressNotification = () => {
-  showProgressNotification.value = false
+const dismissProgressNotification = async () => {
+  try {
+    // 调用 API 清除进度
+    await api.progress.clearProgress()
+    showProgressNotification.value = false
+  } catch (e) {
+    console.error('Failed to clear progress:', e)
+    // 即使 API 调用失败，也隐藏通知条
+    showProgressNotification.value = false
+  }
 }
 
 const resumeProgress = () => {

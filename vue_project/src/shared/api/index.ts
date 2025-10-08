@@ -13,7 +13,7 @@ import { StatsApi } from './stats'
 import { ConfigApi } from './config'
 import { SettingsApi } from './settings'
 import { RelationsApi } from './relations'
-import { get } from './client'
+import { get, post } from './client'
 import type { Word } from '@/shared/types'
 
 // 导出API类
@@ -86,6 +86,13 @@ export class ProgressApi {
     total: number
   }> {
     return get('/api/progress/restore')
+  }
+
+  /**
+   * 清除当前保存的进度
+   */
+  static async clearProgress(): Promise<void> {
+    return post('/api/progress/clear', {})
   }
 }
 

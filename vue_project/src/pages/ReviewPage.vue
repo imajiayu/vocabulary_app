@@ -213,6 +213,8 @@ const initializeFromRoute = async () => {
     if (mode.value !== reviewMode) {
       await reviewStore.switchMode(reviewMode)
     } else if (reviewStore.wordQueue.length === 0) {
+      // 即使是同一模式，也要确保 shuffle 状态是最新的（特别是 lapse 模式）
+      await reviewStore.initializeShuffle()
       await reviewStore.loadWords(true)
     }
 
