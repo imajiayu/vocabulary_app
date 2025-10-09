@@ -4,12 +4,8 @@ from web_app.database.vocabulary_dao import (
     db_get_word_elapse_info,
     get_daily_review_loads_by_source,
 )
-from web_app.config import UserConfig
+from web_app.config import LOW_EF_THRESHOLD, ReviewLoadLimits, UserConfig
 import math
-
-
-# --- 常量定义 ---
-LOW_EF_THRESHOLD = 2.5  # 低 EF 阈值，用于判断需要加速复习的单词
 
 
 # --- 平均停留时间计算（修正版） ---
@@ -182,28 +178,6 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         forget_inc,
         lapse,
     )
-
-
-# === 负荷均衡优化算法 ===
-
-
-class ReviewLoadLimits:
-    """每日复习负荷限制配置 - 从config读取用户设置"""
-
-    @staticmethod
-    def get_daily_review_limit():
-        """获取每日复习限制"""
-        return UserConfig.DAILY_REVIEW_LIMIT
-
-    @staticmethod
-    def get_daily_spell_limit():
-        """获取每日拼写限制"""
-        return UserConfig.DAILY_SPELL_LIMIT
-
-    @staticmethod
-    def get_max_prep_days():
-        """获取最大备考天数"""
-        return UserConfig.MAX_PREP_DAYS
 
 
 def calculate_priority_weight(ease_factor, score):

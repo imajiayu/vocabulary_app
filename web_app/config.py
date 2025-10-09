@@ -65,8 +65,8 @@ class UserConfig:
                     "playAudio": cls.HOTKEY_SPELLING_PLAY_AUDIO,
                     "forgot": cls.HOTKEY_SPELLING_FORGOT,
                     "next": cls.HOTKEY_SPELLING_NEXT,
-                }
-            }
+                },
+            },
         }
 
     @classmethod
@@ -110,3 +110,27 @@ class UserConfig:
             cls.HOTKEY_SPELLING_FORGOT = spelling["forgot"]
         if "next" in spelling:
             cls.HOTKEY_SPELLING_NEXT = spelling["next"]
+
+
+# --- 常量定义 ---
+LOW_EF_THRESHOLD = 2.5  # 低 EF 阈值，用于判断需要加速复习的单词
+
+
+# === 负荷均衡优化算法 ===
+class ReviewLoadLimits:
+    """每日复习负荷限制配置 - 从config读取用户设置"""
+
+    @staticmethod
+    def get_daily_review_limit():
+        """获取每日复习限制"""
+        return UserConfig.DAILY_REVIEW_LIMIT
+
+    @staticmethod
+    def get_daily_spell_limit():
+        """获取每日拼写限制"""
+        return UserConfig.DAILY_SPELL_LIMIT
+
+    @staticmethod
+    def get_max_prep_days():
+        """获取最大备考天数"""
+        return UserConfig.MAX_PREP_DAYS

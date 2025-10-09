@@ -54,15 +54,29 @@ const props = defineProps<Props>()
 
 const selectedWordId = ref<number | undefined>(undefined)
 const isModalOpen = ref(false)
+const cachedSelectedWord = ref<Word | undefined>(undefined)
 
-// 计算属性：始终从最新的 props.words 中获取当前选中的单词
+// 计算属性：优先使用缓存的单词，避免从队列删除后modal立即关闭
 const selectedWord = computed(() => {
   if (selectedWordId.value === undefined) return undefined
-  return props.words.find(w => w.id === selectedWordId.value)
+
+  // 先尝试从 props.words 中找到单词
+  const wordFromProps = props.words.find(w => w.id === selectedWordId.value)
+
+  // 如果找到了，更新缓存并返回
+  if (wordFromProps) {
+    cachedSelectedWord.value = wordFromProps
+    return wordFromProps
+  }
+
+  // 如果在 props.words 中找不到（比如从队列中删除了），返回缓存的单词
+  // 这样 modal 不会因为单词被删除而立即关闭
+  return cachedSelectedWord.value
 })
 
 const openModal = (word: Word) => {
   selectedWordId.value = word.id
+  cachedSelectedWord.value = word
   isModalOpen.value = true
 }
 
@@ -74,6 +88,7 @@ const closeModal = () => {
 // WordDetailModal的@close事件处理（由watch触发）
 const handleCloseModal = (finalWord: Word | undefined) => {
   selectedWordId.value = undefined
+  cachedSelectedWord.value = undefined // 清空缓存
   // 仿照VocabularyManagementPage的handleCloseModal方法
   // 将完整的finalWord对象传递给父组件，而不是只传递id
   if (finalWord) {

@@ -4,7 +4,7 @@
 
 包含拼写强度评估、间隔计算和负荷均衡优化算法
 """
-from web_app.core.review_repetition import ReviewLoadLimits
+from web_app.config import ReviewLoadLimits
 from web_app.database.vocabulary_dao import get_daily_spell_loads_by_source
 
 
