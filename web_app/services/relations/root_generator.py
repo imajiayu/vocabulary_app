@@ -11,7 +11,13 @@ from web_app.services.relations.data import (
     LATIN_GREEK_ROOTS,
     ROOT_BLACKLIST,
 )
-from web_app.database.relation_dao import db_get_all_words, db_batch_insert_relations
+from web_app.database.relation_dao import (
+    db_get_all_words,
+    db_batch_insert_relations,
+    db_batch_check_relations_exist,
+    db_get_unprocessed_word_ids,
+    db_mark_words_processed
+)
 import re
 
 stemmer = PorterStemmer()
@@ -293,14 +299,27 @@ class RootRelationGenerator:
         return relations
 
     def generate_relations(self, emitter=None) -> int:
-        """生成所有词根关系并插入数据库"""
-        words_data = db_get_all_words()
-        total_words = len(words_data)
+        """生成所有词根关系并插入数据库（自动增量模式）
+
+        只处理未在日志表中的单词，已处理的单词会自动跳过。
+        如需重新生成，请先调用 db_clear_relations(['root'])
+
+        参数:
+        - emitter: 进度发射器
+        """
+        all_words = db_get_all_words()
+
+        # 自动增量：只处理未处理的单词
+        unprocessed_ids = db_get_unprocessed_word_ids(RelationType.root)
+        words_data = [w for w in all_words if w['id'] in unprocessed_ids]
 
         if emitter:
             emitter.emit_progress(
-                0, total_words, "Starting root relation generation..."
+                0, len(words_data),
+                f"Processing {len(words_data)} unprocessed words"
             )
+
+        total_words = len(words_data)
 
         # 预计算所有词的缓存以提高速度
         for i, word in enumerate(words_data):
@@ -313,7 +332,9 @@ class RootRelationGenerator:
             self.get_stem(word["word"])
 
         relations_to_add = []
+        relations_to_check = []
         total_found = 0
+        skipped_count = 0
 
         # 分批处理词对
         batch_size = 1000
@@ -321,10 +342,13 @@ class RootRelationGenerator:
 
         for i, w1 in enumerate(words_data):
             if emitter and i % 100 == 0:
+                # 计算当前发现和插入的总数（包括待处理的）
+                current_found = total_found + len(relations_to_check)
+                current_inserted = total_found - skipped_count
                 emitter.emit_progress(
                     i,
                     total_words,
-                    f"Processing root pairs: {i}/{total_words} words, {total_found} found",
+                    f"Processing root relations: {i}/{total_words} words, found {current_found}, inserted {current_inserted}",
                 )
 
             for j in range(i + 1, total_words):
@@ -334,29 +358,91 @@ class RootRelationGenerator:
                 # 当收集够一批词对时处理
                 if len(word_pairs) >= batch_size:
                     batch_relations = self._process_word_batch(word_pairs)
-                    relations_to_add.extend(batch_relations)
-                    total_found += len(batch_relations)
+                    relations_to_check.extend([
+                        {
+                            'word_id': rel.word_id,
+                            'related_word_id': rel.related_word_id,
+                            'relation_type': rel.relation_type,
+                            'confidence': rel.confidence
+                        }
+                        for rel in batch_relations
+                    ])
                     word_pairs = []
 
-                    # 批量插入数据库
-                    if len(relations_to_add) >= 2000:
+                    # 批量检查和插入数据库
+                    if len(relations_to_check) >= 2000:
+                        exists_dict = db_batch_check_relations_exist(relations_to_check)
+                        batch_found = 0
+                        batch_skipped = 0
+                        for rel in relations_to_check:
+                            key = (
+                                min(rel['word_id'], rel['related_word_id']),
+                                max(rel['word_id'], rel['related_word_id']),
+                                rel['relation_type']
+                            )
+                            if not exists_dict.get(key, False):
+                                relations_to_add.append(WordRelation(**rel))
+                                batch_found += 1
+                            else:
+                                batch_skipped += 1
+
                         _save_relations(relations_to_add)
+                        total_found += batch_found
+                        skipped_count += batch_skipped
+
+                        # 批量插入后立即报告进度
+                        if emitter:
+                            current_inserted = total_found - skipped_count
+                            emitter.emit_progress(
+                                i,
+                                total_words,
+                                f"Processing root relations: {i}/{total_words} words, found {total_found}, inserted {current_inserted}",
+                            )
+
                         relations_to_add = []
+                        relations_to_check = []
 
         # 处理剩余的词对
         if word_pairs:
             batch_relations = self._process_word_batch(word_pairs)
-            relations_to_add.extend(batch_relations)
-            total_found += len(batch_relations)
+            relations_to_check.extend([
+                {
+                    'word_id': rel.word_id,
+                    'related_word_id': rel.related_word_id,
+                    'relation_type': rel.relation_type,
+                    'confidence': rel.confidence
+                }
+                for rel in batch_relations
+            ])
 
-        # 插入剩余关系
+        # 检查并插入剩余关系
+        if relations_to_check:
+            exists_dict = db_batch_check_relations_exist(relations_to_check)
+            for rel in relations_to_check:
+                key = (
+                    min(rel['word_id'], rel['related_word_id']),
+                    max(rel['word_id'], rel['related_word_id']),
+                    rel['relation_type']
+                )
+                if not exists_dict.get(key, False):
+                    relations_to_add.append(WordRelation(**rel))
+                    total_found += 1
+                else:
+                    skipped_count += 1
+
         _save_relations(relations_to_add)
+
+        # 标记所有处理过的单词
+        db_mark_words_processed(
+            [w['id'] for w in words_data],
+            RelationType.root
+        )
 
         if emitter:
             emitter.emit_progress(
                 total_words,
                 total_words,
-                f"Completed! Found {total_found} root relations",
+                f"Completed! Added {total_found}, skipped {skipped_count} existing",
             )
 
         return total_found

@@ -267,19 +267,34 @@ def db_delete_relation(word_id: int, related_word_id: int, relation_type: str):
 
 
 def db_clear_relations(relation_types: Optional[List[str]] = None):
-    """清空指定类型的关系"""
-    with get_session() as db:
-        query = db.query(WordRelation)
+    """清空指定类型的关系，同时清除对应的处理日志"""
+    from web_app.models.word import RelationGenerationLog
 
+    with get_session() as db:
+        # 删除关系记录
+        relation_query = db.query(WordRelation)
         if relation_types:
-            query = query.filter(
+            relation_query = relation_query.filter(
                 WordRelation.relation_type.in_([RelationType[rt] for rt in relation_types])
             )
+        relation_count = relation_query.delete(synchronize_session=False)
 
-        count = query.delete(synchronize_session=False)
+        # 删除对应的处理日志
+        log_query = db.query(RelationGenerationLog)
+        if relation_types:
+            log_query = log_query.filter(
+                RelationGenerationLog.relation_type.in_([RelationType[rt] for rt in relation_types])
+            )
+        log_count = log_query.delete(synchronize_session=False)
+
         db.commit()
 
-        return {"success": True, "count": count, "message": f"已删除 {count} 条关系"}
+        return {
+            "success": True,
+            "count": relation_count,
+            "log_count": log_count,
+            "message": f"已删除 {relation_count} 条关系，{log_count} 条处理日志"
+        }
 
 
 def db_get_relation_stats():
@@ -325,6 +340,173 @@ def db_get_all_words():
             }
             for w in words
         ]
+
+
+
+
+def db_get_unprocessed_word_ids(relation_type: RelationType) -> List[int]:
+    """
+    获取指定关系类型中尚未处理的单词ID列表
+
+    参数:
+    - relation_type: 关系类型
+
+    返回:
+    - List[int]: 未处理的word_id列表
+    """
+    from web_app.models.word import RelationGenerationLog
+    from sqlalchemy import select
+
+    with get_session() as db:
+        # 子查询：已处理的word_id
+        processed_subquery = select(RelationGenerationLog.word_id).filter(
+            RelationGenerationLog.relation_type == relation_type
+        ).scalar_subquery()
+
+        # 主查询：找出所有未在日志中的单词
+        unprocessed_words = db.query(Word.id).filter(
+            ~Word.id.in_(processed_subquery)
+        ).all()
+
+        return [w[0] for w in unprocessed_words]
+
+
+def db_mark_words_processed(word_ids: List[int], relation_type: RelationType, found_counts: Dict[int, int] = None):
+    """
+    标记单词为已处理状态
+
+    参数:
+    - word_ids: 单词ID列表
+    - relation_type: 关系类型
+    - found_counts: 每个单词找到的关系数 {word_id: count}
+    """
+    from web_app.models.word import RelationGenerationLog
+    from datetime import datetime
+    from sqlalchemy import insert
+
+    if not word_ids:
+        return
+
+    with get_session() as db:
+        logs = []
+        for word_id in word_ids:
+            logs.append({
+                'word_id': word_id,
+                'relation_type': relation_type,
+                'processed_at': datetime.now(),
+                'found_count': found_counts.get(word_id, 0) if found_counts else 0
+            })
+
+        # 批量插入（使用 INSERT OR REPLACE 更新已存在的记录）
+        stmt = insert(RelationGenerationLog.__table__).prefix_with("OR REPLACE")
+        db.execute(stmt, logs)
+        db.commit()
+
+
+def db_check_relation_exists(word_id: int, related_word_id: int, relation_type: RelationType) -> bool:
+    """
+    检查关系是否已存在（检查正向或反向任一方向）
+
+    参数:
+    - word_id: 单词ID
+    - related_word_id: 关联单词ID
+    - relation_type: 关系类型
+
+    返回:
+    - bool: 关系是否存在
+    """
+    with get_session() as db:
+        exists = db.query(WordRelation).filter(
+            or_(
+                and_(
+                    WordRelation.word_id == word_id,
+                    WordRelation.related_word_id == related_word_id,
+                    WordRelation.relation_type == relation_type
+                ),
+                and_(
+                    WordRelation.word_id == related_word_id,
+                    WordRelation.related_word_id == word_id,
+                    WordRelation.relation_type == relation_type
+                )
+            )
+        ).first()
+        return exists is not None
+
+
+def db_batch_check_relations_exist(relations_data: List[Dict]) -> Dict:
+    """
+    批量检查关系是否存在（分批处理以避免SQL表达式树过深）
+
+    参数:
+    - relations_data: 关系数据列表，每个元素格式：
+      {
+          'word_id': int,
+          'related_word_id': int,
+          'relation_type': RelationType
+      }
+
+    返回:
+    - Dict: 键为 (word_id, related_word_id, relation_type)，值为 bool
+    """
+    if not relations_data:
+        return {}
+
+    result = {}
+    CHUNK_SIZE = 200  # 每次查询最多200个关系（每个关系有2个OR条件，共400个条件，安全低于1000限制）
+
+    with get_session() as db:
+        # 分批处理
+        for i in range(0, len(relations_data), CHUNK_SIZE):
+            chunk = relations_data[i:i + CHUNK_SIZE]
+
+            # 构建查询条件
+            conditions = []
+            for rel in chunk:
+                # 检查正向或反向
+                conditions.append(
+                    or_(
+                        and_(
+                            WordRelation.word_id == rel['word_id'],
+                            WordRelation.related_word_id == rel['related_word_id'],
+                            WordRelation.relation_type == rel['relation_type']
+                        ),
+                        and_(
+                            WordRelation.word_id == rel['related_word_id'],
+                            WordRelation.related_word_id == rel['word_id'],
+                            WordRelation.relation_type == rel['relation_type']
+                        )
+                    )
+                )
+
+            # 执行查询
+            if conditions:
+                existing_relations = db.query(
+                    WordRelation.word_id,
+                    WordRelation.related_word_id,
+                    WordRelation.relation_type
+                ).filter(or_(*conditions)).all()
+
+                # 构建存在性字典
+                exists_dict = {}
+                for word_id, related_word_id, relation_type in existing_relations:
+                    # 标准化键（使用最小ID在前）
+                    key = (
+                        min(word_id, related_word_id),
+                        max(word_id, related_word_id),
+                        relation_type
+                    )
+                    exists_dict[key] = True
+
+                # 为这一批关系设置存在性
+                for rel in chunk:
+                    key = (
+                        min(rel['word_id'], rel['related_word_id']),
+                        max(rel['word_id'], rel['related_word_id']),
+                        rel['relation_type']
+                    )
+                    result[key] = key in exists_dict
+
+    return result
 
 
 def db_batch_insert_relations(relations_data: List[Dict], batch_size: int = 1000):

@@ -3,7 +3,13 @@ from collections import defaultdict
 from typing import Dict, List, Set, Tuple
 from nltk.corpus import wordnet
 from web_app.models.word import WordRelation, RelationType
-from web_app.database.relation_dao import db_get_all_words, db_batch_insert_relations
+from web_app.database.relation_dao import (
+    db_get_all_words,
+    db_batch_insert_relations,
+    db_batch_check_relations_exist,
+    db_get_unprocessed_word_ids,
+    db_mark_words_processed
+)
 from .data import topic_seeds
 
 
@@ -182,12 +188,27 @@ class SemanticTopicGenerator:
         return related_pairs
 
     def generate_relations(self, emitter=None) -> int:
-        """生成主题关系"""
-        words_data = db_get_all_words()
-        total = len(words_data)
+        """生成主题关系（自动增量模式）
+
+        只处理未在日志表中的单词，已处理的单词会自动跳过。
+        如需重新生成，请先调用 db_clear_relations(['topic'])
+
+        参数:
+        - emitter: 进度发射器
+        """
+        all_words = db_get_all_words()
+
+        # 自动增量：只处理未处理的单词
+        unprocessed_ids = db_get_unprocessed_word_ids(RelationType.topic)
+        words_data = [w for w in all_words if w['id'] in unprocessed_ids]
 
         if emitter:
-            emitter.emit_progress(0, total, "Starting topic relation generation...")
+            emitter.emit_progress(
+                0, len(words_data),
+                f"Processing {len(words_data)} unprocessed words"
+            )
+
+        total = len(words_data)
 
         # 扩展主题词汇
         num_topics = len(self.topic_seeds)
@@ -201,25 +222,78 @@ class SemanticTopicGenerator:
 
         # 创建关系
         relations_to_add = []
+        relations_to_check = []
+        total_found = 0
+        skipped_count = 0
+
         for w1, w2, confidence in related_pairs:
-            relations_to_add.append(
-                WordRelation(
-                    word_id=w1["id"],
-                    related_word_id=w2["id"],
-                    relation_type=RelationType.topic,
-                    confidence=confidence,
-                )
-            )
+            relations_to_check.append({
+                'word_id': w1["id"],
+                'related_word_id': w2["id"],
+                'relation_type': RelationType.topic,
+                'confidence': confidence,
+            })
 
-            # 批量插入
-            if len(relations_to_add) >= 1000:
+            # 批量检查和插入
+            if len(relations_to_check) >= 1000:
+                exists_dict = db_batch_check_relations_exist(relations_to_check)
+                batch_found = 0
+                batch_skipped = 0
+                for rel in relations_to_check:
+                    key = (
+                        min(rel['word_id'], rel['related_word_id']),
+                        max(rel['word_id'], rel['related_word_id']),
+                        rel['relation_type']
+                    )
+                    if not exists_dict.get(key, False):
+                        relations_to_add.append(WordRelation(**rel))
+                        batch_found += 1
+                    else:
+                        batch_skipped += 1
+
                 _save_relations(relations_to_add)
-                relations_to_add = []
+                total_found += batch_found
+                skipped_count += batch_skipped
 
-        # 处理剩余关系
+                # 批量插入后立即报告进度
+                if emitter:
+                    current_inserted = total_found - skipped_count
+                    emitter.emit_progress(
+                        len(words_data),
+                        len(words_data),
+                        f"Processing topic relations, found {total_found}, inserted {current_inserted}",
+                    )
+
+                relations_to_add = []
+                relations_to_check = []
+
+        # 检查并插入剩余关系
+        if relations_to_check:
+            exists_dict = db_batch_check_relations_exist(relations_to_check)
+            for rel in relations_to_check:
+                key = (
+                    min(rel['word_id'], rel['related_word_id']),
+                    max(rel['word_id'], rel['related_word_id']),
+                    rel['relation_type']
+                )
+                if not exists_dict.get(key, False):
+                    relations_to_add.append(WordRelation(**rel))
+                    total_found += 1
+                else:
+                    skipped_count += 1
+
         _save_relations(relations_to_add)
 
-        return len(related_pairs)
+        # 标记所有处理过的单词
+        db_mark_words_processed(
+            [w['id'] for w in words_data],
+            RelationType.topic
+        )
+
+        if emitter:
+            emitter.emit_progress(total, total, f"Completed! Added {total_found}, skipped {skipped_count} existing")
+
+        return total_found
 
 
 def generate_topic_relations():

@@ -3,7 +3,13 @@ from difflib import SequenceMatcher
 from typing import Dict, Set, Tuple, List
 from nltk.corpus import wordnet
 from web_app.models.word import WordRelation, RelationType
-from web_app.database.relation_dao import db_get_all_words, db_batch_insert_relations
+from web_app.database.relation_dao import (
+    db_get_all_words,
+    db_batch_insert_relations,
+    db_batch_check_relations_exist,
+    db_get_unprocessed_word_ids,
+    db_mark_words_processed
+)
 from .data import confused_pairs
 
 
@@ -212,13 +218,30 @@ class ConfusedWordsGenerator:
         return False
 
     def generate_relations(self, emitter=None) -> int:
-        """生成易混淆词关系"""
-        words_data = db_get_all_words()
-        # 过滤掉太短的词
-        words_data = [w for w in words_data if len(w["word"]) >= self.min_length]
+        """生成易混淆词关系（自动增量模式）
+
+        只处理未在日志表中的单词，已处理的单词会自动跳过。
+        如需重新生成，请先调用 db_clear_relations(['confused'])
+
+        参数:
+        - emitter: 进度发射器
+        """
+        all_words = db_get_all_words()
+
+        # 自动增量：只处理未处理的单词
+        unprocessed_ids = db_get_unprocessed_word_ids(RelationType.confused)
+        words_data = [w for w in all_words if w['id'] in unprocessed_ids and len(w["word"]) >= self.min_length]
+
+        if emitter:
+            emitter.emit_progress(
+                0, len(words_data),
+                f"Processing {len(words_data)} unprocessed words"
+            )
 
         relations_to_add = []
+        relations_to_check = []
         total_found = 0
+        skipped_count = 0
         total = len(words_data)
 
         if emitter:
@@ -226,10 +249,13 @@ class ConfusedWordsGenerator:
 
         for i, w1 in enumerate(words_data):
             if emitter and i % 100 == 0:
+                # 计算当前发现和插入的总数（包括待处理的）
+                current_found = total_found + len(relations_to_check)
+                current_inserted = total_found - skipped_count
                 emitter.emit_progress(
                     i,
                     total,
-                    f"Processing confused words: {i}/{total} words, {total_found} found",
+                    f"Processing confused words: {i}/{total} words, found {current_found}, inserted {current_inserted}",
                 )
 
             for j in range(i + 1, len(words_data)):
@@ -243,24 +269,71 @@ class ConfusedWordsGenerator:
                     pair_key = (w1["id"], w2["id"])
                     if pair_key not in self.processed_pairs:
                         self.processed_pairs.add(pair_key)
-                        total_found += 1
 
-                        relations_to_add.append(
-                            WordRelation(
-                                word_id=w1["id"],
-                                related_word_id=w2["id"],
-                                relation_type=RelationType.confused,
-                                confidence=score,
-                            )
+                        relations_to_check.append({
+                            'word_id': w1["id"],
+                            'related_word_id': w2["id"],
+                            'relation_type': RelationType.confused,
+                            'confidence': score,
+                        })
+
+                # 批量检查和插入
+                if len(relations_to_check) >= 1000:
+                    exists_dict = db_batch_check_relations_exist(relations_to_check)
+                    batch_found = 0
+                    batch_skipped = 0
+                    for rel in relations_to_check:
+                        key = (
+                            min(rel['word_id'], rel['related_word_id']),
+                            max(rel['word_id'], rel['related_word_id']),
+                            rel['relation_type']
+                        )
+                        if not exists_dict.get(key, False):
+                            relations_to_add.append(WordRelation(**rel))
+                            batch_found += 1
+                        else:
+                            batch_skipped += 1
+
+                    _save_relations(relations_to_add)
+                    total_found += batch_found
+                    skipped_count += batch_skipped
+
+                    # 批量插入后立即报告进度
+                    if emitter:
+                        emitter.emit_progress(
+                            i,
+                            total,
+                            f"Processing confused words: {i}/{total} words, found {total_found}, inserted {total_found - skipped_count}",
                         )
 
-                # 批量插入
-                if len(relations_to_add) >= 1000:
-                    _save_relations(relations_to_add)
                     relations_to_add = []
+                    relations_to_check = []
 
-        # 处理剩余关系
+        # 检查并插入剩余关系
+        if relations_to_check:
+            exists_dict = db_batch_check_relations_exist(relations_to_check)
+            for rel in relations_to_check:
+                key = (
+                    min(rel['word_id'], rel['related_word_id']),
+                    max(rel['word_id'], rel['related_word_id']),
+                    rel['relation_type']
+                )
+                if not exists_dict.get(key, False):
+                    relations_to_add.append(WordRelation(**rel))
+                    total_found += 1
+                else:
+                    skipped_count += 1
+
         _save_relations(relations_to_add)
+
+        # 标记所有处理过的单词
+        db_mark_words_processed(
+            [w['id'] for w in words_data],
+            RelationType.confused
+        )
+
+        if emitter:
+            emitter.emit_progress(total, total, f"Completed! Added {total_found}, skipped {skipped_count} existing")
 
         return total_found
 

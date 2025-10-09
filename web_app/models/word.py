@@ -10,6 +10,7 @@ from sqlalchemy import (
     String,
     Float,
     Date,
+    DateTime,
     Boolean,
     Text,
     CheckConstraint,
@@ -134,6 +135,25 @@ class WordRelation(Base):
             "related_word_id",
             "relation_type",
             name="uq_word_relation_type",
+        ),
+    )
+
+
+class RelationGenerationLog(Base):
+    """关系生成日志表 - 记录每个单词在各关系类型下的处理状态"""
+    __tablename__ = "relation_generation_log"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
+    relation_type = Column(Enum(RelationType), nullable=False)
+    processed_at = Column(DateTime, nullable=False)  # 处理时间
+    found_count = Column(Integer, default=0)  # 找到的关系数
+
+    __table_args__ = (
+        UniqueConstraint(
+            "word_id",
+            "relation_type",
+            name="uq_word_relation_log",
         ),
     )
 

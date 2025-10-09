@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-关系生成管理器 - 使用多进程 + WebSocket实时推送进度
+关系生成管理器 - 使用线程池 + WebSocket实时推送进度（改进版）
+
+为什么使用线程而不是多进程：
+1. SQLAlchemy session 在多进程间无法共享
+2. macOS 上 spawn 模式会导致导入失败
+3. 关系生成是 IO 密集型（数据库操作），线程足够
 """
-import multiprocessing
-from typing import List, Optional
+import threading
+import queue
+from typing import Optional
 from flask_socketio import SocketIO
 
 
@@ -11,21 +17,21 @@ from flask_socketio import SocketIO
 active_tasks = {}
 
 
-def _generate_worker(relation_type: str, queue: multiprocessing.Queue):
+def _generate_worker(relation_type: str, progress_queue: queue.Queue):
     """
-    子进程工作函数 - 执行关系生成
+    工作线程函数 - 执行关系生成
 
     参数:
     - relation_type: 关系类型
-    - queue: 进程间通信队列
+    - progress_queue: 线程间通信队列
     """
     try:
         from web_app.services.relations.progress_emitter import ProgressEmitter
 
         # 创建进度发射器
-        emitter = ProgressEmitter(queue, relation_type)
+        emitter = ProgressEmitter(progress_queue, relation_type)
 
-        # 根据类型导入对应的生成器并执行
+        # 根据类型导入对应的生成器并执行（使用自动增量模式）
         if relation_type == "synonym":
             from web_app.services.relations.synonym_generator import SynonymGenerator
             generator = SynonymGenerator(min_confidence=0.6)
@@ -54,17 +60,19 @@ def _generate_worker(relation_type: str, queue: multiprocessing.Queue):
 
     except Exception as e:
         # 发送错误信号
+        import traceback
+        error_msg = f"{str(e)}\n{traceback.format_exc()}"
         from web_app.services.relations.progress_emitter import ProgressEmitter
-        emitter = ProgressEmitter(queue, relation_type)
-        emitter.emit_error(str(e))
+        emitter = ProgressEmitter(progress_queue, relation_type)
+        emitter.emit_error(error_msg)
 
 
 class RelationGenerationManager:
-    """关系生成管理器 - 管理多个并发的生成任务"""
+    """关系生成管理器 - 管理多个并发的生成任务（线程版）"""
 
     def __init__(self, socketio: SocketIO):
         self.socketio = socketio
-        self.tasks = {}  # {relation_type: (process, queue)}
+        self.tasks = {}  # {relation_type: (thread, queue, stop_event)}
 
     def start_generation(self, relation_type: str) -> bool:
         """
@@ -76,40 +84,41 @@ class RelationGenerationManager:
         """
         # 检查是否已经在运行
         if relation_type in self.tasks:
-            process, _ = self.tasks[relation_type]
-            if process.is_alive():
+            thread, _, _ = self.tasks[relation_type]
+            if thread.is_alive():
                 return False
 
-        # 创建进程间通信队列
-        queue = multiprocessing.Queue()
+        # 创建线程间通信队列
+        progress_queue = queue.Queue()
+        stop_event = threading.Event()
 
-        # 创建并启动子进程
-        process = multiprocessing.Process(
+        # 创建并启动工作线程
+        worker_thread = threading.Thread(
             target=_generate_worker,
-            args=(relation_type, queue)
+            args=(relation_type, progress_queue),
+            daemon=True
         )
-        process.start()
+        worker_thread.start()
 
         # 保存任务信息
-        self.tasks[relation_type] = (process, queue)
+        self.tasks[relation_type] = (worker_thread, progress_queue, stop_event)
 
         # 启动队列监听器（在单独线程中）
-        import threading
         listener_thread = threading.Thread(
             target=self._listen_progress,
-            args=(relation_type, queue),
+            args=(relation_type, progress_queue),
             daemon=True
         )
         listener_thread.start()
 
         return True
 
-    def _listen_progress(self, relation_type: str, queue: multiprocessing.Queue):
-        """监听子进程发送的进度信息并通过WebSocket推送"""
+    def _listen_progress(self, relation_type: str, progress_queue: queue.Queue):
+        """监听工作线程发送的进度信息并通过WebSocket推送"""
         while True:
             try:
                 # 从队列获取消息（阻塞等待）
-                message = queue.get(timeout=1)
+                message = progress_queue.get(timeout=1)
 
                 if message["type"] == "progress":
                     # 发送进度更新事件
@@ -140,15 +149,18 @@ class RelationGenerationManager:
                     # 错误后退出监听
                     break
 
-            except Exception as e:
-                # 超时或其他错误，检查进程是否还在运行
+            except queue.Empty:
+                # 超时，检查线程是否还在运行
                 if relation_type in self.tasks:
-                    process, _ = self.tasks[relation_type]
-                    if not process.is_alive():
-                        # 进程已结束，退出监听
+                    thread, _, _ = self.tasks[relation_type]
+                    if not thread.is_alive():
+                        # 线程已结束，退出监听
                         break
                 else:
                     break
+            except Exception as e:
+                print(f"Error in progress listener for {relation_type}: {e}")
+                break
 
         # 清理任务
         if relation_type in self.tasks:
@@ -157,19 +169,15 @@ class RelationGenerationManager:
     def is_running(self, relation_type: str) -> bool:
         """检查指定类型的生成任务是否正在运行"""
         if relation_type in self.tasks:
-            process, _ = self.tasks[relation_type]
-            return process.is_alive()
+            thread, _, _ = self.tasks[relation_type]
+            return thread.is_alive()
         return False
 
     def stop_generation(self, relation_type: str) -> bool:
-        """停止一个生成任务"""
+        """停止一个生成任务（线程无法强制终止，只能设置停止标志）"""
         if relation_type in self.tasks:
-            process, queue = self.tasks[relation_type]
-            if process.is_alive():
-                process.terminate()
-                process.join(timeout=5)
-                if process.is_alive():
-                    process.kill()
+            thread, _, stop_event = self.tasks[relation_type]
+            stop_event.set()  # 设置停止标志
             del self.tasks[relation_type]
             return True
         return False
