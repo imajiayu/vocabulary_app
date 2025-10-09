@@ -178,11 +178,32 @@ export class SpeakingApi {
   }
 
   /**
-   * 批量导入问题
+   * 清除所有题目、主题和记录
    */
-  static async importQuestions(topicId: number, questions: string[]): Promise<Question[]> {
-    return post<Question[]>(`/api/speaking/topics/${topicId}/import-questions`, {
-      questions
+  static async clearAllQuestions(): Promise<void> {
+    return post<void>('/api/speaking/clear-all', {})
+  }
+
+  /**
+   * 导入题目（从服务器文件）
+   * @param part 1 或 2
+   */
+  static async importQuestions(part: 1 | 2): Promise<{ topics_count: number; questions_count: number }> {
+    return post<{ topics_count: number; questions_count: number }>('/api/speaking/import', { part })
+  }
+
+  /**
+   * 导入题目（从用户上传的数据）
+   * @param topicsData 解析后的题目数据
+   * @param part 1 或 2
+   */
+  static async importQuestionsFromData(
+    topicsData: Array<{ title: string; questions: string[] }>,
+    part: 1 | 2
+  ): Promise<{ topics_count: number; questions_count: number }> {
+    return post<{ topics_count: number; questions_count: number }>('/api/speaking/import-data', {
+      topics_data: topicsData,
+      part
     })
   }
 

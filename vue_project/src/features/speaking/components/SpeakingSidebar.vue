@@ -23,6 +23,52 @@
       <!-- 标题 -->
       <header class="sidebar-header">
         <h2>题目目录</h2>
+        <div class="header-actions">
+          <button
+            class="action-btn clear-btn"
+            @click="handleClearQuestions"
+            :disabled="loading">
+            <AppIcon name="trash" class="btn-icon" />
+            <span class="tooltip">清除全部</span>
+          </button>
+          <button
+            class="action-btn import-btn"
+            @click="toggleImportMenu"
+            :disabled="loading">
+            <AppIcon name="upload" class="btn-icon" />
+            <span class="tooltip">手动导入</span>
+          </button>
+          <!-- 导入菜单 -->
+          <div v-if="showImportMenu" class="import-menu">
+            <button @click="triggerFileInput(1)" class="menu-item">
+              <AppIcon name="file" class="menu-icon" />
+              <span>导入 Part 1</span>
+            </button>
+            <button @click="triggerFileInput(2)" class="menu-item">
+              <AppIcon name="file" class="menu-icon" />
+              <span>导入 Part 2&3</span>
+            </button>
+            <div class="menu-hint">
+              <div class="hint-title">文件格式说明：</div>
+              <div class="hint-item">• 文件类型：.txt (UTF-8编码)</div>
+              <div class="hint-item">• 第一行是主题名称</div>
+              <div class="hint-item">• 接下来几行是问题</div>
+              <div class="hint-item">• 主题之间用空行分隔</div>
+              <div class="hint-example">
+                <div class="example-title">示例：</div>
+                <div class="example-content">Work<br>Do you work or study?<br>What do you do?<br><br>Hometown<br>Where are you from?<br>Do you like your hometown?</div>
+              </div>
+            </div>
+          </div>
+          <!-- 隐藏的文件输入 -->
+          <input
+            ref="fileInputRef"
+            type="file"
+            accept=".txt"
+            style="display: none"
+            @change="handleFileSelected"
+          />
+        </div>
       </header>
 
       <!-- 内容 -->
@@ -73,6 +119,9 @@ const topics = ref<TopicGroup[]>([])
 const selectedQuestion = ref<Question | null>(null)
 const isMobile = ref(false)
 const isDragging = ref(false)
+const showImportMenu = ref(false)
+const fileInputRef = ref<HTMLInputElement | null>(null)
+const selectedPart = ref<1 | 2>(1)
 
 // 展开状态 - 默认全部折叠
 const expandedParts = ref(new Set<number>())
@@ -316,6 +365,112 @@ const handleDeleteQuestion = async (questionId: number) => {
   }
 }
 
+// 切换导入菜单
+const toggleImportMenu = () => {
+  showImportMenu.value = !showImportMenu.value
+}
+
+// 清除所有题目
+const handleClearQuestions = async () => {
+  if (!confirm('确定要清除所有题目、主题和记录吗？此操作不可恢复！')) return
+
+  loading.value = true
+  try {
+    await api.speaking.clearAllQuestions()
+    // 清空本地数据
+    clearData()
+    alert('所有题目已清除')
+  } catch (e) {
+    console.error('清除题目失败:', e)
+    alert('清除题目失败，请稍后重试')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 触发文件选择
+const triggerFileInput = (part: 1 | 2) => {
+  selectedPart.value = part
+  showImportMenu.value = false
+  fileInputRef.value?.click()
+}
+
+// 处理文件选择
+const handleFileSelected = async (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+
+  if (!file) return
+
+  // 验证文件类型
+  if (!file.name.endsWith('.txt')) {
+    alert('请选择 .txt 格式的文件')
+    input.value = ''
+    return
+  }
+
+  loading.value = true
+  try {
+    // 读取文件内容
+    const text = await file.text()
+
+    // 解析题目
+    const topicsData = parseQuestionsText(text, selectedPart.value)
+
+    if (topicsData.length === 0) {
+      alert('文件中没有找到有效的题目')
+      return
+    }
+
+    // 调用导入API
+    const result = await api.speaking.importQuestionsFromData(topicsData, selectedPart.value)
+
+    alert(`导入成功！\n新增主题数：${result.topics_count}\n新增问题数：${result.questions_count}`)
+
+    // 重新加载数据
+    await loadTopics()
+  } catch (e) {
+    console.error('导入题目失败:', e)
+    alert(`导入题目失败：${e instanceof Error ? e.message : '未知错误'}`)
+  } finally {
+    loading.value = false
+    // 清空文件选择
+    input.value = ''
+  }
+}
+
+// 解析题目文本
+const parseQuestionsText = (text: string, part: 1 | 2): Array<{ title: string; questions: string[] }> => {
+  const topics: Array<{ title: string; questions: string[] }> = []
+  const blocks = text.trim().split('\n\n')
+
+  for (const block of blocks) {
+    const lines = block.split('\n').map(line => line.trim()).filter(line => line)
+    if (lines.length === 0) continue
+
+    if (part === 1) {
+      // Part 1 格式：主题名称 + 问题列表
+      if (lines[0].includes('Part 1') || lines[0].startsWith('##')) continue
+
+      const title = lines[0]
+      const questions = lines.slice(1)
+
+      if (questions.length > 0) {
+        topics.push({ title, questions })
+      }
+    } else {
+      // Part 2&3 格式：Describe开头的描述 + 提示点
+      if (lines[0].startsWith('Describe')) {
+        const title = lines[0]
+        const questionContent = lines.slice(1).join('\n')
+        topics.push({ title, questions: [title + '\n' + questionContent] })
+      }
+    }
+  }
+
+  return topics
+}
+
 // 监听选中问题变化，自动展开
 watch(() => props.selectQuestionId, (newQuestionId) => {
   if (newQuestionId && topics.value.length > 0) {
@@ -351,12 +506,21 @@ const checkMobile = () => {
   isMobile.value = window.innerWidth <= 768
 }
 
+// 点击外部区域关闭导入菜单
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (showImportMenu.value && !target.closest('.header-actions')) {
+    showImportMenu.value = false
+  }
+}
+
 // 生命周期
 onMounted(async () => {
   await nextTick()
   // 检测移动端
   checkMobile()
   window.addEventListener('resize', checkMobile)
+  document.addEventListener('click', handleClickOutside)
 
   // 如果初始状态是展开的，则加载数据
   if (props.expanded) {
@@ -369,6 +533,7 @@ onMounted(async () => {
 // 清理资源
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
+  document.removeEventListener('click', handleClickOutside)
 })
 
 // 提供给外部调用的清空选择方法
@@ -472,6 +637,7 @@ defineExpose({
   height: 48px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 24px;
   border-bottom: 1px solid rgba(102, 126, 234, 0.1);
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
@@ -483,6 +649,155 @@ defineExpose({
   font-weight: 600;
   color: #667eea;
   letter-spacing: -0.025em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  position: relative;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.1);
+  transform: scale(1.05);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn .tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  margin-top: 0.25rem;
+  padding: 0.375rem 0.625rem;
+  background: rgba(30, 41, 59, 0.95);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:hover:not(:disabled) .tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.clear-btn .btn-icon {
+  color: #ef4444;
+}
+
+.import-btn .btn-icon {
+  color: #667eea;
+}
+
+.btn-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.import-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 280px;
+}
+
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.menu-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.menu-icon {
+  width: 1rem;
+  height: 1rem;
+  color: #667eea;
+}
+
+.menu-hint {
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.hint-title {
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.hint-item {
+  margin-bottom: 0.25rem;
+  padding-left: 0.5rem;
+}
+
+.hint-example {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.example-title {
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.example-content {
+  padding: 0.5rem;
+  background: white;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: monospace;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: #334155;
 }
 
 .sidebar-content {
@@ -681,6 +996,26 @@ defineExpose({
   .sidebar-header h2 {
     font-size: 16px;
     padding-top: 8px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .action-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .btn-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .import-menu {
+    right: 0;
+    left: auto;
   }
 
   .directory-tree {

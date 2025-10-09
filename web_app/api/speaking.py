@@ -14,6 +14,8 @@ from web_app.database.speaking_dao import (
     db_delete_question,
     db_update_question_text,
     db_update_topic_title,
+    db_clear_all_speaking_data,
+    db_import_topics,
 )
 from web_app.utils.speech_processing import create_speech_transcriber
 from web_app.utils.audio_processing import convert_audio_file_to_wav
@@ -445,6 +447,193 @@ class QuestionsManageAPI(MethodView):
             return create_response(False, None, str(e)), 404
         except Exception as e:
             return create_response(False, None, str(e)), 500
+
+
+# ========== 批量操作API ==========
+
+
+@speaking_api_bp.route("/clear-all", methods=["POST"])
+def clear_all_questions():
+    """POST /api/speaking/clear-all - 清除所有题目、主题和记录"""
+    try:
+        success = db_clear_all_speaking_data()
+        if success:
+            return create_response(True, None, "All speaking data cleared successfully")
+        else:
+            return create_response(False, None, "Failed to clear data"), 500
+    except Exception as e:
+        return create_response(False, None, f"Failed to clear data: {str(e)}"), 500
+
+
+@speaking_api_bp.route("/import", methods=["POST"])
+def import_questions():
+    """POST /api/speaking/import - 从服务器文件导入题目
+
+    Request Body:
+        {
+            "part": 1 or 2
+        }
+
+    Returns:
+        {
+            "success": true,
+            "data": {
+                "topics_count": int,
+                "questions_count": int
+            }
+        }
+    """
+    try:
+        from web_app.config import BASE_DIR
+
+        data = request.get_json()
+        if not data or "part" not in data:
+            return create_response(False, None, "Missing required field: part"), 400
+
+        part = data["part"]
+        if part not in [1, 2]:
+            return create_response(False, None, "Part must be 1 or 2"), 400
+
+        # 确定文件路径
+        if part == 1:
+            filepath = os.path.join(
+                BASE_DIR, "web_app/data/questions/speaking_questions_part1.txt"
+            )
+        else:
+            filepath = os.path.join(
+                BASE_DIR, "web_app/data/questions/speaking_questions_part2&3.txt"
+            )
+
+        # 检查文件是否存在
+        if not os.path.exists(filepath):
+            return (
+                create_response(False, None, f"Question file not found: {filepath}"),
+                404,
+            )
+
+        # 解析题目文件
+        topics_data = _parse_questions_file(filepath, part)
+
+        # 导入到数据库
+        result = db_import_topics(topics_data, part)
+
+        return create_response(
+            True,
+            result,
+            f"Successfully imported Part {part} questions",
+        )
+
+    except Exception as e:
+        return (
+            create_response(False, None, f"Failed to import questions: {str(e)}"),
+            500,
+        )
+
+
+@speaking_api_bp.route("/import-data", methods=["POST"])
+def import_questions_from_data():
+    """POST /api/speaking/import-data - 从用户上传的数据导入题目
+
+    Request Body:
+        {
+            "topics_data": [
+                {
+                    "title": "主题名称",
+                    "questions": ["问题1", "问题2"]
+                }
+            ],
+            "part": 1 or 2
+        }
+
+    Returns:
+        {
+            "success": true,
+            "data": {
+                "topics_count": int,
+                "questions_count": int
+            }
+        }
+    """
+    try:
+        data = request.get_json()
+        if not data or "topics_data" not in data or "part" not in data:
+            return (
+                create_response(
+                    False, None, "Missing required fields: topics_data, part"
+                ),
+                400,
+            )
+
+        topics_data_json = data["topics_data"]
+        part = data["part"]
+
+        if part not in [1, 2]:
+            return create_response(False, None, "Part must be 1 or 2"), 400
+
+        # 转换为元组格式 [(title, [q1, q2, ...]), ...]
+        topics_data = [
+            (topic["title"], topic["questions"]) for topic in topics_data_json
+        ]
+
+        # 导入到数据库
+        result = db_import_topics(topics_data, part)
+
+        return create_response(
+            True,
+            result,
+            f"Successfully imported {result['topics_count']} topics and {result['questions_count']} questions",
+        )
+
+    except Exception as e:
+        return (
+            create_response(False, None, f"Failed to import questions: {str(e)}"),
+            500,
+        )
+
+
+def _parse_questions_file(filepath: str, part: int) -> list:
+    """解析题目文件
+
+    Args:
+        filepath: 文件路径
+        part: 1 或 2
+
+    Returns:
+        [(topic_title, [question1, question2, ...]), ...]
+    """
+    topics = []
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read().strip()
+
+    blocks = content.split("\n\n")  # 用空行分隔不同主题
+
+    for block in blocks:
+        lines = [line.strip() for line in block.split("\n") if line.strip()]
+        if not lines:
+            continue
+
+        if part == 1:
+            # Part 1 格式：主题名称 + 问题列表
+            # 跳过包含"Part 1"和"##"的标题行
+            if "Part 1" in lines[0] or lines[0].startswith("##"):
+                continue
+
+            topic = lines[0]
+            questions = lines[1:]
+
+            if questions:  # 只有当有问题时才添加主题
+                topics.append((topic, questions))
+
+        else:
+            # Part 2&3 格式：Describe开头的描述 + 提示点
+            if lines[0].startswith("Describe"):
+                topic = lines[0]
+                # 将所有后续行合并为一个问题
+                question_content = "\n".join(lines[1:])
+                topics.append((topic, [topic + "\n" + question_content]))
+
+    return topics
 
 
 # ========== 注册路由 ==========
