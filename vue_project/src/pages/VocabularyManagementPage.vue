@@ -376,9 +376,7 @@ onUnmounted(() => {
 /* 批量加载进度指示器 */
 .loading-progress {
     padding: 1rem;
-    background: rgba(59, 130, 246, 0.05);
-    border-radius: 0.5rem;
-    border: 1px solid rgba(59, 130, 246, 0.1);
+    padding-bottom: 1.5rem;
 }
 
 .progress-info {

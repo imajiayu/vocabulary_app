@@ -49,8 +49,8 @@ def _generate_worker(relation_type: str, progress_queue: queue.Queue):
             generator = ConfusedWordsGenerator(min_length=5)
             count = generator.generate_relations(emitter)
         elif relation_type == "topic":
-            from web_app.services.relations.topic_generator import SemanticTopicGenerator
-            generator = SemanticTopicGenerator(min_confidence=0.7)
+            from web_app.services.relations.topic_generator import IELTSTopicGenerator
+            generator = IELTSTopicGenerator()
             count = generator.generate_relations(emitter)
         else:
             raise ValueError(f"Unknown relation type: {relation_type}")

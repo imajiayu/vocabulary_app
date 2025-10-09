@@ -1,10 +1,9 @@
 <template>
     <div class="section-header">
-        <h2 class="section-title">单词列表</h2>
+        <div class="header-row">
+            <h2 class="section-title">单词列表</h2>
 
-        <div class="right-controls">
-            <!-- 排序控件和单词数量 -->
-            <div class="sort-controls-group">
+            <div class="header-controls">
                 <!-- 批量删除按钮（仅在选择模式下且有选中时显示） -->
                 <button
                     v-if="isSelectionMode && selectedWordIds.size > 0"
@@ -12,7 +11,7 @@
                     @click="handleBatchDelete"
                     :disabled="isDeletingBatch">
                     <Trash2 class="btn-icon" />
-                    <span>删除 ({{ selectedWordIds.size }})</span>
+                    <span class="btn-text">删除 ({{ selectedWordIds.size }})</span>
                 </button>
 
                 <!-- 多选按钮 -->
@@ -22,7 +21,7 @@
                     @click="toggleSelectionMode">
                     <CheckSquare v-if="isSelectionMode" class="btn-icon" />
                     <Square v-else class="btn-icon" />
-                    <span>{{ isSelectionMode ? '取消多选' : '多选' }}</span>
+                    <span class="btn-text">{{ isSelectionMode ? '取消' : '多选' }}</span>
                 </button>
 
                 <div class="sort-controls-integrated">
@@ -39,8 +38,9 @@
                         <ChevronDown v-else class="sort-icon" />
                     </button>
                 </div>
+
                 <div class="word-count">
-                    共 {{ getDisplayCount() }} 个单词
+                    共 {{ getDisplayCount() }} 个
                 </div>
             </div>
         </div>
@@ -343,25 +343,28 @@ const handleBatchDelete = async () => {
 }
 
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 1rem;
 }
 
-.right-controls {
+.header-row {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-left: auto;
     flex-wrap: wrap;
 }
 
-.sort-controls-group {
+.section-title {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.header-controls {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    margin-left: auto;
 }
 
 /* 方案一：一体化排序控件 */
@@ -496,8 +499,92 @@ const handleBatchDelete = async () => {
     font-size: 0.875rem;
     color: #6b7280;
     flex-shrink: 0;
-    padding: 0.5rem 0;
-    min-width: 100px;
+    padding: 0.5rem 0.75rem;
+    white-space: nowrap;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .header-controls {
+        gap: 0.375rem;
+    }
+
+    .multi-select-btn,
+    .batch-delete-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .btn-text {
+        display: inline;
+    }
+
+    .sort-field-btn {
+        padding: 0.5rem 0.75rem;
+        min-width: 60px;
+        font-size: 0.8125rem;
+    }
+
+    .sort-order-btn {
+        padding: 0.5rem;
+        min-width: 40px;
+    }
+
+    .word-count {
+        padding: 0.5rem;
+        font-size: 0.8125rem;
+    }
+
+    .btn-icon {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    .sort-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+    .header-row {
+        gap: 0.5rem;
+    }
+
+    .header-controls {
+        gap: 0.25rem;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+    }
+
+    .multi-select-btn,
+    .batch-delete-btn {
+        padding: 0.5rem;
+        min-width: auto;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .sort-field-btn {
+        padding: 0.5rem;
+        min-width: 48px;
+        font-size: 0.75rem;
+    }
+
+    .sort-order-btn {
+        padding: 0.5rem;
+        min-width: 36px;
+    }
+
+    .word-count {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
 }
 
 .word-grid {
