@@ -153,6 +153,13 @@ export class WordsApi {
   }
 
   /**
+   * 批量删除单词
+   */
+  static async batchDelete(wordIds: number[]): Promise<{ deleted_count: number; requested_count: number }> {
+    return post<{ deleted_count: number; requested_count: number }>('/api/words/batch-delete', { word_ids: wordIds })
+  }
+
+  /**
    * 提交单词复习结果
    * @returns 返回更新后的完整单词数据（包含related_words）
    */

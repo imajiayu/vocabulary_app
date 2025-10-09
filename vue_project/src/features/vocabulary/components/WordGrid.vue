@@ -5,6 +5,26 @@
         <div class="right-controls">
             <!-- 排序控件和单词数量 -->
             <div class="sort-controls-group">
+                <!-- 批量删除按钮（仅在选择模式下且有选中时显示） -->
+                <button
+                    v-if="isSelectionMode && selectedWordIds.size > 0"
+                    class="batch-delete-btn"
+                    @click="handleBatchDelete"
+                    :disabled="isDeletingBatch">
+                    <Trash2 class="btn-icon" />
+                    <span>删除 ({{ selectedWordIds.size }})</span>
+                </button>
+
+                <!-- 多选按钮 -->
+                <button
+                    class="multi-select-btn"
+                    :class="{ 'active': isSelectionMode }"
+                    @click="toggleSelectionMode">
+                    <CheckSquare v-if="isSelectionMode" class="btn-icon" />
+                    <Square v-else class="btn-icon" />
+                    <span>{{ isSelectionMode ? '取消多选' : '多选' }}</span>
+                </button>
+
                 <div class="sort-controls-integrated">
                     <button
                         class="sort-field-btn active"
@@ -29,7 +49,13 @@
     <div class="word-grid">
         <div v-for="word in sortedWords" :key="word.id"
             :class="['word-item', { animating: animatingIds.has(word.id) }]">
-            <WordCard :word="word" @toggle-review="handleToggleReview" @reset="handleReset"
+            <WordCard
+                :word="word"
+                :is-selection-mode="isSelectionMode"
+                :is-selected="selectedWordIds.has(word.id)"
+                @toggle-review="handleToggleReview"
+                @reset="handleReset"
+                @toggle-selection="handleToggleSelection"
                 @show-detail="$emit('showDetail', $event)" />
         </div>
     </div>
@@ -38,8 +64,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import WordCard from './WordCard.vue';
-import { ChevronUp, ChevronDown } from 'lucide-vue-next';
+import { ChevronUp, ChevronDown, Square, CheckSquare, Trash2 } from 'lucide-vue-next';
 import type { Word } from '@/shared/types';
+import { api } from '@/shared/api';
 
 interface Props {
     words: Word[];
@@ -56,9 +83,15 @@ const emit = defineEmits<{
     toggleReview: [id: number, status: boolean];
     reset: [id: number];
     showDetail: [word: Word];
+    batchDelete: [ids: number[]];
 }>();
 
 const animatingIds = ref(new Set<number>());
+
+// 多选模式相关
+const isSelectionMode = ref(false);
+const selectedWordIds = ref(new Set<number>());
+const isDeletingBatch = ref(false);
 
 const sortOrders = ['asc', 'desc'];
 
@@ -255,6 +288,50 @@ const getDisplayCount = () => {
     // 后备方案：使用动态计算的结果
     return filteredWords.value.length;
 };
+
+// 多选模式切换
+const toggleSelectionMode = () => {
+    isSelectionMode.value = !isSelectionMode.value;
+    if (!isSelectionMode.value) {
+        // 退出多选模式时清空选择
+        selectedWordIds.value.clear();
+    }
+};
+
+// 切换单词选择状态
+const handleToggleSelection = (wordId: number) => {
+    if (selectedWordIds.value.has(wordId)) {
+        selectedWordIds.value.delete(wordId);
+    } else {
+        selectedWordIds.value.add(wordId);
+    }
+};
+
+// 批量删除处理
+const handleBatchDelete = async () => {
+    if (selectedWordIds.value.size === 0) return;
+
+    const confirmMessage = `确定要删除选中的 ${selectedWordIds.value.size} 个单词吗？此操作不可恢复。`;
+    if (!confirm(confirmMessage)) return;
+
+    isDeletingBatch.value = true;
+    try {
+        const idsToDelete = Array.from(selectedWordIds.value);
+        await api.words.batchDelete(idsToDelete);
+
+        // 通知父组件批量删除成功
+        emit('batchDelete', idsToDelete);
+
+        // 清空选择并退出多选模式
+        selectedWordIds.value.clear();
+        isSelectionMode.value = false;
+    } catch (error) {
+        console.error('Batch delete failed:', error);
+        alert('批量删除失败，请稍后重试');
+    } finally {
+        isDeletingBatch.value = false;
+    }
+};
 </script>
 
 <style scoped>
@@ -444,5 +521,73 @@ const getDisplayCount = () => {
     text-align: center;
     color: #9ca3af;
     padding: 1rem 0;
+}
+
+/* 多选按钮样式 */
+.multi-select-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.multi-select-btn:hover {
+    background: #e2e8f0;
+    color: #475569;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.multi-select-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.multi-select-btn.active:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+/* 批量删除按钮样式 */
+.batch-delete-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #ef4444;
+    border: 1px solid #dc2626;
+    border-radius: 0.75rem;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.batch-delete-btn:hover:not(:disabled) {
+    background: #dc2626;
+    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+}
+
+.batch-delete-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-icon {
+    width: 1rem;
+    height: 1rem;
 }
 </style>

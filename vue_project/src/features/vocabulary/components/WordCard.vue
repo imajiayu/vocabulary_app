@@ -4,20 +4,22 @@
       class="word-card"
       :class="{
         'remembered': isRemembered,
-        'hovered': isHovered
+        'hovered': isHovered,
+        'selection-mode': isSelectionMode,
+        'selected': isSelected
       }"
-      :style="{ 
+      :style="{
         backgroundColor: isRemembered ? '#10b981' : backgroundColor,
         color: '#374151'
       }"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
       @mousemove="handleMouseMove"
-      @click="$emit('showDetail', word)"
+      @click="handleClick"
     >
       <span class="word-text">{{ word.word }}</span>
     </div>
-    
+
     <WordTooltip
       v-if="!isMobile"
       :word="word"
@@ -34,14 +36,20 @@ import type { Word } from '@/shared/types';
 
 interface Props {
   word: Word;
+  isSelectionMode?: boolean;
+  isSelected?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  isSelectionMode: false,
+  isSelected: false
+});
 
 const emit = defineEmits<{
   toggleReview: [id: number, status: boolean];
   reset: [id: number];
   showDetail: [word: Word];
+  toggleSelection: [id: number];
 }>();
 
 const isHovered = ref(false);
@@ -96,6 +104,22 @@ const handleMouseMove = (e: MouseEvent) => {
   if (isMobile.value) return;
 
   tooltipPosition.value = { x: e.clientX, y: e.clientY };
+};
+
+// 处理点击事件
+const handleClick = () => {
+  if (props.isSelectionMode) {
+    // 在多选模式下，点击卡片也会切换选择状态
+    handleToggleSelection();
+  } else {
+    // 正常模式下显示详情
+    emit('showDetail', props.word);
+  }
+};
+
+// 切换选择状态
+const handleToggleSelection = () => {
+  emit('toggleSelection', props.word.id);
 };
 
 onMounted(() => {
@@ -163,5 +187,30 @@ onUnmounted(() => {
     transform: scale(1.05);
     box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
   }
+}
+
+/* 多选模式样式 */
+.word-card.selection-mode {
+  cursor: pointer;
+  position: relative;
+}
+
+.word-card.selection-mode:not(.selected) {
+  border-color: #cbd5e1;
+  border-width: 2px;
+  border-style: dashed;
+}
+
+.word-card.selected {
+  border-color: #ef4444;
+  border-width: 3px;
+  border-style: solid;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* 多选模式下hover效果 */
+.word-card.selection-mode:hover:not(.selected) {
+  border-color: #94a3b8;
+  border-width: 2px;
 }
 </style>

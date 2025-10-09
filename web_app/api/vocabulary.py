@@ -394,6 +394,35 @@ def delete_word(word_id):
         return create_response(False, None, f"Failed to delete word: {str(e)}"), 500
 
 
+@api_bp.route("/words/batch-delete", methods=["POST"])
+def batch_delete_words():
+    """批量删除单词，包括相关的关系和生成日志"""
+    try:
+        data = request.get_json()
+        if not data or "word_ids" not in data:
+            return create_response(False, None, "缺少参数 word_ids"), 400
+
+        word_ids = data["word_ids"]
+        if not isinstance(word_ids, list) or not word_ids:
+            return create_response(False, None, "word_ids 必须是非空数组"), 400
+
+        # 验证所有 word_ids 都是整数
+        if not all(isinstance(wid, int) for wid in word_ids):
+            return create_response(False, None, "所有 word_ids 必须是整数"), 400
+
+        from web_app.database.vocabulary_dao import db_batch_delete_words
+
+        deleted_count = db_batch_delete_words(word_ids)
+
+        return create_response(
+            True,
+            {"deleted_count": deleted_count, "requested_count": len(word_ids)},
+            f"成功删除 {deleted_count} 个单词及其相关数据",
+        )
+    except Exception as e:
+        return create_response(False, None, f"批量删除失败: {str(e)}"), 500
+
+
 @api_bp.route("/word/<int:word_id>", methods=["PATCH"])
 def update_word(word_id):
     try:

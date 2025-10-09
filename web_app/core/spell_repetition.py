@@ -30,7 +30,7 @@ def calculate_spell_strength(
 
     if not remembered:
         # 忘记时返回衰减变化量
-        new_strength = current_strength * 0.3
+        new_strength = round(current_strength * 0.3, 2)
         return new_strength - current_strength  # 负的变化量
 
     # 记住时计算新强度并返回变化量
@@ -93,9 +93,9 @@ def _calculate_detailed_spell_strength(
         # 低于临界点：线性映射到 [-0.6, 0.0]
         # score: 0.0->0.45 映射到 gain: -0.6->0.0
         strength_gain = (total_score / 0.45) * 0.6 - 0.6
-
+    print(word + str(strength_gain))
     new_strength = current_strength + strength_gain
-    return max(0.0, min(5.0, new_strength))
+    return round(max(0.0, min(5.0, new_strength)), 2)
 
 
 def _calculate_input_accuracy(

@@ -65,7 +65,8 @@
                         :filter-status="filterStatus"
                         :source-filter="sourceFilter"
                         :source-counts="sourceCounts"
-                        @show-detail="handleShowDetail" />
+                        @show-detail="handleShowDetail"
+                        @batch-delete="handleBatchDelete" />
                 </div>
             </main>
 
@@ -295,6 +296,13 @@ const handleWordInserted = (word: Word) => {
     updateSourceCounts();
     // 标记为新增单词，使其显示在最前面
     wordGridRef.value?.addNewWordId(word.id);
+};
+
+const handleBatchDelete = (wordIds: number[]) => {
+    // 从本地words数组中批量移除这些单词
+    words.value = words.value.filter(w => !wordIds.includes(w.id));
+    // 更新计数
+    updateSourceCounts();
 };
 
 // 使用统一的WebSocket服务

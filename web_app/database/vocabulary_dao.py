@@ -558,15 +558,57 @@ def db_get_total_lapse_count():
 
 
 def db_delete_word(word_id: int):
+    from web_app.models.word import RelationGenerationLog
+
     with get_session() as db:
+        # 1. 删除words_relations中相关的记录
         db.query(WordRelation).filter(
             (WordRelation.word_id == word_id)
             | (WordRelation.related_word_id == word_id)
         ).delete(synchronize_session=False)
 
+        # 2. 删除relation_generation_log中的记录
+        db.query(RelationGenerationLog).filter(
+            RelationGenerationLog.word_id == word_id
+        ).delete(synchronize_session=False)
+
+        # 3. 删除单词本身
         rows = db.query(Word).filter(Word.id == word_id).delete()
         db.commit()
         return rows > 0
+
+
+def db_batch_delete_words(word_ids: list[int]) -> int:
+    """
+    批量删除单词及其相关数据
+
+    Args:
+        word_ids: 要删除的单词ID列表
+
+    Returns:
+        int: 成功删除的单词数量
+    """
+    from web_app.models.word import RelationGenerationLog
+
+    with get_session() as db:
+        # 1. 删除words_relations中相关的记录
+        db.query(WordRelation).filter(
+            (WordRelation.word_id.in_(word_ids))
+            | (WordRelation.related_word_id.in_(word_ids))
+        ).delete(synchronize_session=False)
+
+        # 2. 删除relation_generation_log中的记录
+        db.query(RelationGenerationLog).filter(
+            RelationGenerationLog.word_id.in_(word_ids)
+        ).delete(synchronize_session=False)
+
+        # 3. 删除单词本身
+        deleted_count = db.query(Word).filter(Word.id.in_(word_ids)).delete(
+            synchronize_session=False
+        )
+
+        db.commit()
+        return deleted_count
 
 
 def get_daily_review_loads_by_source(source, original_next_review, days_ahead=45):
