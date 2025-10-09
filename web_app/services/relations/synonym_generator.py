@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from typing import Dict, List, Tuple
 from functools import lru_cache
+from concurrent.futures import ProcessPoolExecutor
+import os
 from nltk.corpus import wordnet
 from web_app.models.word import WordRelation, RelationType
 from web_app.database.relation_dao import (
@@ -82,61 +84,100 @@ class SynonymGenerator:
 
         return min(1.0, base_confidence)
 
-    def get_semantic_similarity_synonyms(
-        self, words: List[Dict], emitter=None, base_found=0, base_skipped=0
-    ) -> Dict[Tuple[int, int], float]:
-        """基于语义相似性找同义词（使用WordNet路径相似性）"""
-        similar_pairs = {}
-        word_synsets = {}
+    @staticmethod
+    def _compute_similarity_batch(args):
+        """计算一批词对的相似度（用于并行处理）
 
-        # 预计算每个词的synsets
-        for word in words:
-            synsets = self._get_synsets(word['word'])
-            if synsets:
-                word_synsets[word['id']] = synsets[:3]  # 只取前3个最相关的
+        为了支持多进程，不传递synset对象，而是传递word字符串，在子进程中重新获取synsets
+        """
+        batch_indices, words_with_synsets, batch_id = args
+        batch_results = {}
 
-        # 过滤出有synsets的词，减少无效迭代
-        words_with_synsets = [w for w in words if w['id'] in word_synsets]
-        total = len(words_with_synsets)
+        for idx, i in enumerate(batch_indices):
+            w1 = words_with_synsets[i]
+            # 在子进程中重新获取synsets
+            w1_synsets = wordnet.synsets(w1['word'].lower())[:2]
 
-        for i, w1 in enumerate(words_with_synsets):
-            if emitter and i % 10 == 0:  # 每10个单词报告一次（语义计算很慢）
-                # 语义相似性找到的关系数量（还未插入数据库）
-                semantic_found = len(similar_pairs)
-                current_found = base_found + semantic_found
-                current_inserted = base_found - base_skipped  # 只计算已插入的，语义相似性的还未插入
-                emitter.emit_progress(
-                    i,
-                    total,
-                    f"Computing semantic similarity: {i}/{total} words, total found {current_found}, total inserted {current_inserted}"
-                )
+            for w2 in words_with_synsets[i + 1:]:
+                w2_synsets = wordnet.synsets(w2['word'].lower())[:2]
 
-            for w2 in words_with_synsets[i + 1 :]:
                 max_similarity = 0
                 found_high_sim = False
 
-                for s1 in word_synsets[w1['id']]:
-                    for s2 in word_synsets[w2['id']]:
-                        # 使用缓存避免重复计算
-                        cache_key = (id(s1), id(s2))
-                        if cache_key in self.similarity_cache:
-                            sim = self.similarity_cache[cache_key]
-                        else:
-                            sim = s1.path_similarity(s2)
-                            if sim is not None:
-                                self.similarity_cache[cache_key] = sim
+                for s1 in w1_synsets:
+                    for s2 in w2_synsets:
+                        sim = s1.path_similarity(s2)
 
                         if sim and sim >= 0.8:
                             max_similarity = sim
                             found_high_sim = True
-                            break  # 找到高相似性，提前终止内层循环
+                            break
 
                     if found_high_sim:
-                        break  # 提前终止外层循环
+                        break
 
-                # 只保留高相似性的词对
                 if max_similarity >= 0.8:
-                    similar_pairs[(w1['id'], w2['id'])] = max_similarity
+                    batch_results[(w1['id'], w2['id'])] = max_similarity
+
+        return batch_id, batch_results
+
+    def get_semantic_similarity_synonyms(
+        self, words: List[Dict], emitter=None, base_found=0, base_skipped=0
+    ) -> Dict[Tuple[int, int], float]:
+        """基于语义相似性找同义词（使用WordNet路径相似性 + 并行计算）"""
+        similar_pairs = {}
+
+        # 过滤出有synsets的词，减少无效迭代
+        words_with_synsets = []
+        for word in words:
+            synsets = self._get_synsets(word['word'])
+            if synsets:
+                words_with_synsets.append(word)
+
+        total = len(words_with_synsets)
+
+        if total == 0:
+            return similar_pairs
+
+        # 准备并行计算: 将单词索引分批（每批较小以便频繁更新进度）
+        n_workers = min(os.cpu_count() or 4, 10)
+        # 每批处理50个单词，这样可以更频繁地更新进度
+        batch_size = 50
+        batches = []
+        batch_id = 0
+
+        for i in range(0, total, batch_size):
+            batch_indices = list(range(i, min(i + batch_size, total)))
+            batches.append((batch_indices, words_with_synsets, batch_id))
+            batch_id += 1
+
+        if emitter:
+            emitter.emit_progress(
+                0, total,
+                f"Computing semantic similarity with {n_workers} workers, {len(batches)} batches..."
+            )
+
+        # 并行计算相似度
+        completed_batches = 0
+        with ProcessPoolExecutor(max_workers=n_workers) as executor:
+            results = executor.map(self._compute_similarity_batch, batches)
+
+            # 合并结果并实时报告进度
+            for batch_id, batch_result in results:
+                similar_pairs.update(batch_result)
+                completed_batches += 1
+
+                if emitter:
+                    semantic_found = len(similar_pairs)
+                    current_found = base_found + semantic_found
+                    current_inserted = base_found - base_skipped
+                    # 用已完成的批次数来估算进度
+                    processed_words = min(completed_batches * batch_size, total)
+                    emitter.emit_progress(
+                        processed_words,
+                        total,
+                        f"Computing semantic similarity: {completed_batches}/{len(batches)} batches, found {semantic_found}, total found {current_found}, inserted {current_inserted}"
+                    )
 
         return similar_pairs
 
