@@ -8,6 +8,4 @@ SpeakingSidebar拖拽手柄出现消失动画
 
 6. lapse模式 不再复习 遮罩
 
-8. 验证拼写分数
-
 热力图切换tab时闪烁

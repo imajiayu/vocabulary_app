@@ -104,11 +104,16 @@ const handleWordMastered = (wordId: number) => {
   if (mode.value === 'mode_lapse') {
     if (reviewStore.wordQueue.length === 0) return;
 
-    const currentWordIndex = currentIndex.value % reviewStore.wordQueue.length;
     const wordIndex = reviewStore.wordQueue.findIndex(w => w.id === wordId);
 
     if (wordIndex !== -1) {
       reviewStore.wordQueue.splice(wordIndex, 1);
+
+      // 如果删除的单词在当前索引之前（即从sidebar标记已复习过的单词）
+      // 需要调整currentIndex，使其仍然指向相同的单词
+      if (wordIndex < currentIndex.value) {
+        reviewStore.currentIndex = Math.max(0, currentIndex.value - 1);
+      }
 
       // 如果队列还有单词且当前索引超出范围，重置索引并重新排序
       if (reviewStore.wordQueue.length > 0 && currentIndex.value >= reviewStore.wordQueue.length) {
