@@ -19,23 +19,23 @@
               <label>关系类型:</label>
               <div class="relation-filters">
                 <label class="checkbox-label">
-                  <input type="checkbox" v-model="filters.synonym" @change="fetchGraphData" />
+                  <input type="checkbox" v-model="filters.synonym" @change="applyFilters" />
                   同义词
                 </label>
                 <label class="checkbox-label">
-                  <input type="checkbox" v-model="filters.antonym" @change="fetchGraphData" />
+                  <input type="checkbox" v-model="filters.antonym" @change="applyFilters" />
                   反义词
                 </label>
                 <label class="checkbox-label">
-                  <input type="checkbox" v-model="filters.root" @change="fetchGraphData" />
+                  <input type="checkbox" v-model="filters.root" @change="applyFilters" />
                   词根
                 </label>
                 <label class="checkbox-label">
-                  <input type="checkbox" v-model="filters.confused" @change="fetchGraphData" />
+                  <input type="checkbox" v-model="filters.confused" @change="applyFilters" />
                   易混淆
                 </label>
                 <label class="checkbox-label">
-                  <input type="checkbox" v-model="filters.topic" @change="fetchGraphData" />
+                  <input type="checkbox" v-model="filters.topic" @change="applyFilters" />
                   主题
                 </label>
               </div>
@@ -250,75 +250,105 @@ const fetchGraphData = async () => {
   error.value = ''
 
   try {
-    const selectedTypes = Object.entries(filters.value)
-      .filter(([_, enabled]) => enabled)
-      .map(([type]) => type)
-
     const params: {
-      relation_types?: string[]
       word_id?: number
       max_depth?: number
     } = {}
 
-    if (selectedTypes.length > 0 && selectedTypes.length < 5) {
-      params.relation_types = selectedTypes
-    }
-
+    // 只在搜索特定单词时传递 word_id
     if (centerWordId.value) {
       params.word_id = centerWordId.value
       params.max_depth = 1
     }
 
+    // 获取全部数据（不传 relation_types，后端返回所有关系）
     const data = await api.relations.getGraph(params)
 
-    // 只在没有选中中心词时更新 fullGraphData（保存真正的全量数据）
-    if (!centerWordId.value) {
-      fullGraphData.value = data
-    }
+    // 更新 fullGraphData（保存真正的全量数据）
+    fullGraphData.value = data
 
-    // 如果有中心词，只显示直连节点
-    if (centerWordId.value) {
-      const directNodeIds = new Set<number>()
-      directNodeIds.add(centerWordId.value)
-
-      // 找出所有直连的节点
-      data.edges.forEach(edge => {
-        if (edge.source === centerWordId.value) {
-          directNodeIds.add(edge.target)
-        } else if (edge.target === centerWordId.value) {
-          directNodeIds.add(edge.source)
-        }
-      })
-
-      // 过滤节点，只保留中心节点和直连节点
-      const filteredNodes = data.nodes.filter(node => directNodeIds.has(node.id))
-
-      // 过滤边，只保留与中心节点直接相连的边
-      const filteredEdges = data.edges.filter(edge =>
-        (edge.source === centerWordId.value || edge.target === centerWordId.value) &&
-        directNodeIds.has(edge.source) &&
-        directNodeIds.has(edge.target)
-      )
-
-      graphData.value = {
-        nodes: filteredNodes,
-        edges: filteredEdges
-      }
-    } else if (showAllNodes.value) {
-      // 显示所有节点
-      graphData.value = data
-    } else {
-      // 默认不显示任何节点
-      graphData.value = { nodes: [], edges: [] }
-    }
-
-    renderGraph()
+    // 应用过滤
+    applyFilters()
   } catch (e: any) {
     error.value = e.message || '网络错误'
     console.error('Failed to fetch graph data:', e)
   } finally {
     loading.value = false
   }
+}
+
+// 前端过滤函数（不请求API）
+const applyFilters = () => {
+  const selectedTypes = Object.entries(filters.value)
+    .filter(([_, enabled]) => enabled)
+    .map(([type]) => type)
+
+  const data = fullGraphData.value
+
+  // 如果有中心词，只显示直连节点
+  if (centerWordId.value) {
+    const directNodeIds = new Set<number>()
+    directNodeIds.add(centerWordId.value)
+
+    // 找出所有直连的节点（根据选中的关系类型）
+    data.edges.forEach(edge => {
+      if (selectedTypes.includes(edge.relation_type)) {
+        if (edge.source === centerWordId.value) {
+          directNodeIds.add(edge.target)
+        } else if (edge.target === centerWordId.value) {
+          directNodeIds.add(edge.source)
+        }
+      }
+    })
+
+    // 过滤节点，只保留中心节点和直连节点
+    const filteredNodes = data.nodes.filter(node => directNodeIds.has(node.id))
+
+    // 过滤边，只保留选中类型且与中心节点直接相连的边
+    const filteredEdges = data.edges.filter(edge =>
+      selectedTypes.includes(edge.relation_type) &&
+      (edge.source === centerWordId.value || edge.target === centerWordId.value) &&
+      directNodeIds.has(edge.source) &&
+      directNodeIds.has(edge.target)
+    )
+
+    graphData.value = {
+      nodes: filteredNodes,
+      edges: filteredEdges
+    }
+  } else if (showAllNodes.value) {
+    // 显示所有节点，但只显示有选中关系类型的节点
+    // 如果没有选中任何关系类型，显示所有节点
+    if (selectedTypes.length === 0 || selectedTypes.length === 5) {
+      graphData.value = data
+    } else {
+      // 找出所有与选中关系类型相关的节点
+      const nodeIdsWithRelations = new Set<number>()
+
+      data.edges.forEach(edge => {
+        if (selectedTypes.includes(edge.relation_type)) {
+          nodeIdsWithRelations.add(edge.source)
+          nodeIdsWithRelations.add(edge.target)
+        }
+      })
+
+      // 过滤节点：只保留有选中关系的节点
+      const filteredNodes = data.nodes.filter(node => nodeIdsWithRelations.has(node.id))
+
+      // 过滤边：只保留选中类型的边
+      const filteredEdges = data.edges.filter(edge => selectedTypes.includes(edge.relation_type))
+
+      graphData.value = {
+        nodes: filteredNodes,
+        edges: filteredEdges
+      }
+    }
+  } else {
+    // 默认不显示任何节点
+    graphData.value = { nodes: [], edges: [] }
+  }
+
+  renderGraph()
 }
 
 
@@ -380,22 +410,31 @@ const handleSearchKeydown = (event: KeyboardEvent) => {
 }
 
 // 选择搜索候选词
-const selectSearchCandidate = async (node: GraphNode) => {
+const selectSearchCandidate = (node: GraphNode) => {
   searchWord.value = node.word
   centerWordId.value = node.id
   searchCandidates.value = []
   searchSelectedIndex.value = -1
   showAllNodes.value = false
-  await fetchGraphData()
+
+  // 直接使用缓存数据进行过滤，不需要重新请求API
+  applyFilters()
 }
 
 // 展示所有节点
-const toggleShowAllNodes = async () => {
+const toggleShowAllNodes = () => {
   showAllNodes.value = !showAllNodes.value
   centerWordId.value = null
   searchWord.value = ''
   searchCandidates.value = []
-  await fetchGraphData()
+
+  // 如果是首次打开且没有数据，才需要获取
+  if (showAllNodes.value && fullGraphData.value.nodes.length === 0) {
+    fetchGraphData()
+  } else {
+    // 否则只做前端过滤
+    applyFilters()
+  }
 }
 
 const renderGraph = () => {
@@ -451,21 +490,68 @@ const renderGraph = () => {
     }
   })
 
-  const links = graphData.value.edges.map(edge => ({
-    source: edge.source.toString(),
-    target: edge.target.toString(),
-    lineStyle: {
-      color: relationColors[edge.relation_type] || '#999',
-      width: Math.max(1, edge.confidence * 3),
-      curveness: 0.2
-    },
-    label: {
-      show: true,
-      formatter: edge.relation_type,
-      fontSize: 10,
-      color: relationColors[edge.relation_type] || '#999'
-    }
+  // 计算每对节点之间的边数量，用于调整曲率避免重叠
+  // 为每条边创建唯一标识符
+  const edgeWithIds = graphData.value.edges.map((edge, idx) => ({
+    ...edge,
+    _id: idx
   }))
+
+  // 按节点对分组（不考虑方向）
+  const edgeGroups = new Map<string, typeof edgeWithIds>()
+  edgeWithIds.forEach(edge => {
+    const pairKey = [edge.source, edge.target].sort((a, b) => a - b).join('-')
+    if (!edgeGroups.has(pairKey)) {
+      edgeGroups.set(pairKey, [])
+    }
+    edgeGroups.get(pairKey)!.push(edge)
+  })
+
+  const links = edgeWithIds.map(edge => {
+    const pairKey = [edge.source, edge.target].sort((a, b) => a - b).join('-')
+    const edgesInGroup = edgeGroups.get(pairKey) || []
+    const totalEdges = edgesInGroup.length
+
+    // 使用 _id 精确定位当前边的索引
+    const currentIndex = edgesInGroup.findIndex(e => e._id === edge._id)
+
+    // 根据边的数量计算曲率
+    let curveness = 0
+    if (totalEdges === 1) {
+      // 只有一条边，直线
+      curveness = 0
+    } else if (totalEdges === 2) {
+      // 两条边，分别向上和向下弯曲
+      curveness = currentIndex === 0 ? 0.25 : -0.25
+    } else if (totalEdges === 3) {
+      // 3条边：-0.3, 0, 0.3
+      curveness = (currentIndex - 1) * 0.3
+    } else if (totalEdges === 4) {
+      // 4条边：-0.3, -0.1, 0.1, 0.3
+      const positions = [-0.3, -0.1, 0.1, 0.3]
+      curveness = positions[currentIndex]
+    } else {
+      // 5条或更多，均匀分布在 -0.4 到 0.4 之间
+      const step = 0.8 / (totalEdges - 1)
+      curveness = -0.4 + currentIndex * step
+    }
+
+    return {
+      source: edge.source.toString(),
+      target: edge.target.toString(),
+      lineStyle: {
+        color: relationColors[edge.relation_type] || '#999',
+        width: Math.max(1, edge.confidence * 3),
+        curveness: curveness
+      },
+      label: {
+        show: true,
+        formatter: edge.relation_type,
+        fontSize: 10,
+        color: relationColors[edge.relation_type] || '#999'
+      }
+    }
+  })
 
   const option: echarts.EChartsOption = {
     title: {
@@ -529,7 +615,8 @@ const renderGraph = () => {
         searchWord.value = node.word
         centerWordId.value = nodeId
         showAllNodes.value = false
-        fetchGraphData()
+        // 直接使用缓存数据进行过滤，不需要重新请求API
+        applyFilters()
       }
     }
   })
@@ -537,14 +624,25 @@ const renderGraph = () => {
   // 监听右键点击
   chartInstance.off('contextmenu')
   chartInstance.on('contextmenu', (params: any) => {
-    params.event.event.preventDefault()
+    const originalEvent = params.event.event
+    originalEvent.preventDefault()
+
+    // 手动触发 mouseup 事件，结束 ECharts 的拖拽状态
+    const mouseUpEvent = new MouseEvent('mouseup', {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+      clientX: originalEvent.clientX,
+      clientY: originalEvent.clientY
+    })
+    originalEvent.target.dispatchEvent(mouseUpEvent)
 
     if (params.dataType === 'edge') {
       contextMenu.value = {
         show: true,
         type: 'edge',
-        x: params.event.event.clientX,
-        y: params.event.event.clientY,
+        x: originalEvent.clientX,
+        y: originalEvent.clientY,
         data: params.data
       }
     } else if (params.dataType === 'node') {
@@ -553,8 +651,8 @@ const renderGraph = () => {
       contextMenu.value = {
         show: true,
         type: 'node',
-        x: params.event.event.clientX,
-        y: params.event.event.clientY,
+        x: originalEvent.clientX,
+        y: originalEvent.clientY,
         data: node
       }
     }
@@ -598,13 +696,34 @@ const showAddRelationDialog = () => {
 const deleteRelation = async () => {
   try {
     const edge = contextMenu.value.data
-    await api.relations.delete({
-      word_id: parseInt(edge.source),
-      related_word_id: parseInt(edge.target),
-      relation_type: edge.label.formatter
-    })
+    const sourceId = parseInt(edge.source)
+    const targetId = parseInt(edge.target)
+    const relationType = edge.label.formatter
+
+    // 1. 立即从前端缓存中删除这条边
+    fullGraphData.value.edges = fullGraphData.value.edges.filter(e =>
+      !(
+        ((e.source === sourceId && e.target === targetId) ||
+         (e.source === targetId && e.target === sourceId)) &&
+        e.relation_type === relationType
+      )
+    )
+
+    // 2. 立即更新UI
     closeContextMenu()
-    await fetchGraphData()
+    applyFilters()
+
+    // 3. 异步调用后端API（后台同步）
+    api.relations.delete({
+      word_id: sourceId,
+      related_word_id: targetId,
+      relation_type: relationType
+    }).catch((e: any) => {
+      // 如果删除失败，重新获取数据恢复正确状态
+      error.value = `删除关系失败: ${e.message}`
+      setTimeout(() => { error.value = '' }, 3000)
+      fetchGraphData()
+    })
   } catch (e: any) {
     error.value = `删除关系失败: ${e.message}`
     setTimeout(() => {
@@ -624,7 +743,7 @@ const addRelation = async () => {
     }
 
     // 在已有节点中搜索目标单词
-    const targetNode = graphData.value.nodes.find(n => n.word.toLowerCase() === targetWord)
+    const targetNode = fullGraphData.value.nodes.find(n => n.word.toLowerCase() === targetWord)
     if (!targetNode) {
       error.value = `未找到单词: ${targetWord}`
       setTimeout(() => { error.value = '' }, 3000)
@@ -638,15 +757,34 @@ const addRelation = async () => {
       return
     }
 
-    await api.relations.add({
-      word_id: addRelationDialog.value.sourceNode!.id,
-      related_word_id: targetNode.id,
-      relation_type: addRelationDialog.value.relationType,
+    const sourceId = addRelationDialog.value.sourceNode!.id
+    const targetId = targetNode.id
+    const relationType = addRelationDialog.value.relationType
+
+    // 1. 立即在前端缓存中添加这条边
+    fullGraphData.value.edges.push({
+      source: sourceId,
+      target: targetId,
+      relation_type: relationType,
       confidence: 1.0
     })
 
+    // 2. 立即更新UI
     addRelationDialog.value.show = false
-    await fetchGraphData()
+    applyFilters()
+
+    // 3. 异步调用后端API（后台同步）
+    api.relations.add({
+      word_id: sourceId,
+      related_word_id: targetId,
+      relation_type: relationType,
+      confidence: 1.0
+    }).catch((e: any) => {
+      // 如果添加失败，重新获取数据恢复正确状态
+      error.value = `添加关系失败: ${e.message}`
+      setTimeout(() => { error.value = '' }, 3000)
+      fetchGraphData()
+    })
   } catch (e: any) {
     error.value = `添加关系失败: ${e.message}`
     setTimeout(() => {
@@ -751,7 +889,12 @@ const selectCandidate = (node: GraphNode) => {
 // 监听 show 变化
 watch(() => props.show, async (newShow) => {
   if (newShow) {
-    await fetchGraphData()
+    // 只在没有数据时才获取，否则使用缓存
+    if (fullGraphData.value.nodes.length === 0) {
+      await fetchGraphData()
+    } else {
+      applyFilters()
+    }
     // 等待 DOM 更新后初始化图表
     setTimeout(() => {
       window.addEventListener('resize', handleResize)
