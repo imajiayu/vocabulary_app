@@ -32,6 +32,7 @@
 
           <WordActionsSidebar
             :word="editData"
+            :mode="mode"
             v-model:is-editing="isEditing"
             @cancel-edit="cancelEdit"
             @word-deleted="handleWordDeleted"
@@ -56,6 +57,7 @@ import { useWordManagementWebSocket, WebSocketEvents } from '@/shared/services/w
 interface Props {
   word?: Word;
   isOpen: boolean;
+  mode?: string; // 复习模式，如 'mode_lapse', 'mode_review', 'mode_spelling'
 }
 
 const props = defineProps<Props>();

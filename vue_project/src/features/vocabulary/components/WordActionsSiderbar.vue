@@ -69,6 +69,7 @@ import { api } from '@/shared/api';
 interface Props {
   word?: Word;
   isEditing: boolean;
+  mode?: string; // 复习模式，如 'mode_lapse', 'mode_review', 'mode_spelling'
 }
 
 const props = defineProps<Props>();
@@ -106,9 +107,20 @@ const toggleReview = async () => {
   const newStatus = !isRemembered.value;
 
   try {
-    const updatedWord = await api.words.updateWord(props.word.id, {
-      stop_review: newStatus
-    });
+    // 如果存在 mode，使用 stopReview API（会更新进度索引）
+    // 如果不存在 mode，使用 updateWord API（仅更新字段）
+    let updatedWord: Word;
+    if (props.mode && newStatus) {
+      // 在复习模式下标记掌握，调用 stopReview
+      await api.words.stopReview(props.word.id, props.mode);
+      updatedWord = await api.words.getWord(props.word.id);
+    } else {
+      // 非复习模式或恢复复习，仅更新字段
+      updatedWord = await api.words.updateWord(props.word.id, {
+        stop_review: newStatus
+      });
+    }
+
     // 直接将更新后的数据发送给父组件
     emit('wordUpdated', updatedWord);
     // 如果是标记为掌握，触发wordMastered事件

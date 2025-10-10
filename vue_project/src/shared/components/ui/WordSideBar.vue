@@ -20,6 +20,7 @@
       <WordDetailModal
         :word="selectedWord"
         :is-open="isModalOpen"
+        :mode="mode"
         @close="handleCloseModal"
         @request-close="closeModal"
         @word-deleted="handleWordDeleted"
@@ -40,7 +41,8 @@ const wordListInnerRef = ref<HTMLDivElement | null>(null)
 
 interface Props {
   words: Word[],
-  rememberHistory: Map<number, boolean>
+  rememberHistory: Map<number, boolean>,
+  mode?: string // 复习模式，如 'mode_lapse', 'mode_review', 'mode_spelling'
 }
 
 const emit = defineEmits<{

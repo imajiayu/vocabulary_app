@@ -1,7 +1,7 @@
 <template>
   <div class="app-container with-topbar">
     <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
-      :remember-history="wordResults" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
+      :remember-history="wordResults" :mode="mode" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
       @word-forgot="handleWordForgot" @word-mastered="handleWordMastered" />
 
     <!-- 顶部栏 -->
