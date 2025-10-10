@@ -423,6 +423,69 @@ def batch_delete_words():
         return create_response(False, None, f"批量删除失败: {str(e)}"), 500
 
 
+@api_bp.route("/words/batch-update", methods=["PATCH"])
+def batch_update_words():
+    """批量更新单词字段（不传递mode，不影响进度）"""
+    try:
+        # 1. 检查有效的 JSON 内容类型
+        if not request.is_json:
+            return create_response(False, None, "Content-Type必须是 'application/json'"), 400
+
+        # 2. 解析 JSON 请求体
+        data = request.get_json()
+
+        # 3. 验证必需参数
+        if not data or "word_ids" not in data:
+            return create_response(False, None, "缺少参数 word_ids"), 400
+
+        word_ids = data["word_ids"]
+        if not isinstance(word_ids, list) or not word_ids:
+            return create_response(False, None, "word_ids 必须是非空数组"), 400
+
+        # 验证所有 word_ids 都是整数
+        if not all(isinstance(wid, int) for wid in word_ids):
+            return create_response(False, None, "所有 word_ids 必须是整数"), 400
+
+        # 4. 定义允许更新的字段
+        allowed_fields = [
+            "word",
+            "definition",
+            "stop_review",
+            "next_review",
+            "repetition",
+            "interval",
+            "ease_factor",
+            "lapse",
+        ]
+
+        # 过滤传入的数据，只包含允许的字段
+        update_data = {
+            key: value for key, value in data.items()
+            if key in allowed_fields and key != "word_ids"
+        }
+
+        # 5. 检查是否提供了任何有效字段
+        if not update_data:
+            return create_response(False, None, "未提供有效的更新字段"), 400
+
+        # 6. 调用批量更新函数
+        from web_app.database.vocabulary_dao import db_batch_update_words
+
+        updated_count, updated_words = db_batch_update_words(word_ids, update_data)
+
+        return create_response(
+            True,
+            {
+                "updated_count": updated_count,
+                "requested_count": len(word_ids),
+                "words": updated_words
+            },
+            f"成功更新 {updated_count} 个单词",
+        )
+    except Exception as e:
+        return create_response(False, None, f"批量更新失败: {str(e)}"), 500
+
+
 @api_bp.route("/word/<int:word_id>", methods=["PATCH"])
 def update_word(word_id):
     try:

@@ -611,6 +611,32 @@ def db_batch_delete_words(word_ids: list[int]) -> int:
         return deleted_count
 
 
+def db_batch_update_words(word_ids: list[int], update_data: dict) -> tuple[int, list[dict]]:
+    """
+    批量更新单词字段
+
+    Args:
+        word_ids: 要更新的单词ID列表
+        update_data: 要更新的字段字典
+
+    Returns:
+        tuple: (成功更新的单词数量, 更新后的单词列表)
+    """
+    with get_session() as db:
+        # 批量更新
+        updated_count = db.query(Word).filter(Word.id.in_(word_ids)).update(
+            update_data, synchronize_session=False
+        )
+
+        db.commit()
+
+        # 获取更新后的单词列表
+        updated_words = db.query(Word).filter(Word.id.in_(word_ids)).all()
+        words_list = [word.to_dict() for word in updated_words]
+
+        return updated_count, words_list
+
+
 def get_daily_review_loads_by_source(source, original_next_review, days_ahead=45):
     """
     获取指定source未来每日的复习负荷

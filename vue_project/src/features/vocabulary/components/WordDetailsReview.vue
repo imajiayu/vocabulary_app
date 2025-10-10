@@ -341,12 +341,6 @@ const hasExamples = computed(() => {
   background: #f9fafb;
   border-radius: 12px;
   border-left: 4px solid #10b981;
-  transition: all 0.2s ease;
-}
-
-.example-item:hover {
-  background: #f0fdf4;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
 }
 
 .example-en {

@@ -4,12 +4,21 @@
             <h2 class="section-title">单词列表</h2>
 
             <div class="header-controls">
-                <!-- 批量删除按钮（仅在选择模式下且有选中时显示） -->
+                <!-- 批量操作按钮（仅在选择模式下且有选中时显示） -->
+                <button
+                    v-if="isSelectionMode && selectedWordIds.size > 0"
+                    class="batch-toggle-btn"
+                    :class="batchToggleButtonClass"
+                    @click="handleBatchToggleReview"
+                    :disabled="isBatchOperating || !canBatchToggle">
+                    <span class="btn-text">{{ batchToggleButtonText }}</span>
+                </button>
+
                 <button
                     v-if="isSelectionMode && selectedWordIds.size > 0"
                     class="batch-delete-btn"
                     @click="handleBatchDelete"
-                    :disabled="isDeletingBatch">
+                    :disabled="isBatchOperating">
                     <Trash2 class="btn-icon" />
                     <span class="btn-text">删除 ({{ selectedWordIds.size }})</span>
                 </button>
@@ -91,7 +100,7 @@ const animatingIds = ref(new Set<number>());
 // 多选模式相关
 const isSelectionMode = ref(false);
 const selectedWordIds = ref(new Set<number>());
-const isDeletingBatch = ref(false);
+const isBatchOperating = ref(false);
 
 const sortOrders = ['asc', 'desc'];
 
@@ -307,6 +316,74 @@ const handleToggleSelection = (wordId: number) => {
     }
 };
 
+// 批量操作按钮状态
+const selectedWords = computed(() => {
+    return props.words.filter(word => selectedWordIds.value.has(word.id));
+});
+
+const allStopReviewTrue = computed(() => {
+    return selectedWords.value.length > 0 && selectedWords.value.every(word => word.stop_review === 1);
+});
+
+const allStopReviewFalse = computed(() => {
+    return selectedWords.value.length > 0 && selectedWords.value.every(word => word.stop_review === 0);
+});
+
+const canBatchToggle = computed(() => {
+    return allStopReviewTrue.value || allStopReviewFalse.value;
+});
+
+const batchToggleButtonText = computed(() => {
+    if (allStopReviewTrue.value) {
+        return `恢复复习 (${selectedWordIds.value.size})`;
+    } else if (allStopReviewFalse.value) {
+        return `标记掌握 (${selectedWordIds.value.size})`;
+    } else {
+        return `状态不一致 (${selectedWordIds.value.size})`;
+    }
+});
+
+const batchToggleButtonClass = computed(() => {
+    if (allStopReviewTrue.value) {
+        return 'restore';
+    } else if (allStopReviewFalse.value) {
+        return 'master';
+    } else {
+        return 'mixed';
+    }
+});
+
+// 批量切换复习状态处理
+const handleBatchToggleReview = async () => {
+    if (selectedWordIds.value.size === 0 || !canBatchToggle.value) return;
+
+    const newStatus = allStopReviewFalse.value ? 1 : 0;
+    const action = newStatus === 1 ? '标记掌握' : '恢复复习';
+
+    isBatchOperating.value = true;
+    try {
+        const idsToUpdate = Array.from(selectedWordIds.value);
+        const result = await api.words.batchUpdate(idsToUpdate, { stop_review: newStatus });
+
+        // 更新本地单词数据
+        result.words.forEach(updatedWord => {
+            const index = props.words.findIndex(w => w.id === updatedWord.id);
+            if (index !== -1) {
+                Object.assign(props.words[index], updatedWord);
+            }
+        });
+
+        // 清空选择并退出多选模式
+        selectedWordIds.value.clear();
+        isSelectionMode.value = false;
+    } catch (error) {
+        console.error('Batch toggle review failed:', error);
+        alert(`批量${action}失败，请稍后重试`);
+    } finally {
+        isBatchOperating.value = false;
+    }
+};
+
 // 批量删除处理
 const handleBatchDelete = async () => {
     if (selectedWordIds.value.size === 0) return;
@@ -314,7 +391,7 @@ const handleBatchDelete = async () => {
     const confirmMessage = `确定要删除选中的 ${selectedWordIds.value.size} 个单词吗？此操作不可恢复。`;
     if (!confirm(confirmMessage)) return;
 
-    isDeletingBatch.value = true;
+    isBatchOperating.value = true;
     try {
         const idsToDelete = Array.from(selectedWordIds.value);
         await api.words.batchDelete(idsToDelete);
@@ -329,7 +406,7 @@ const handleBatchDelete = async () => {
         console.error('Batch delete failed:', error);
         alert('批量删除失败，请稍后重试');
     } finally {
-        isDeletingBatch.value = false;
+        isBatchOperating.value = false;
     }
 };
 </script>
@@ -561,6 +638,7 @@ const handleBatchDelete = async () => {
     }
 
     .multi-select-btn,
+    .batch-toggle-btn,
     .batch-delete-btn {
         padding: 0.5rem;
         min-width: auto;
@@ -643,6 +721,55 @@ const handleBatchDelete = async () => {
 .multi-select-btn.active:hover {
     background: #2563eb;
     border-color: #2563eb;
+}
+
+/* 批量切换复习状态按钮样式 */
+.batch-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.batch-toggle-btn.master {
+    background: #10b981;
+    border-color: #059669;
+    color: white;
+}
+
+.batch-toggle-btn.master:hover:not(:disabled) {
+    background: #059669;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+}
+
+.batch-toggle-btn.restore {
+    background: #f59e0b;
+    border-color: #d97706;
+    color: white;
+}
+
+.batch-toggle-btn.restore:hover:not(:disabled) {
+    background: #d97706;
+    box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+}
+
+.batch-toggle-btn.mixed {
+    background: #94a3b8;
+    border-color: #64748b;
+    color: white;
+}
+
+.batch-toggle-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* 批量删除按钮样式 */

@@ -38,7 +38,7 @@ export interface UpdateWordPayload {
   word?: string
   definition?: any
   ease_factor?: number
-  stop_review?: boolean
+  stop_review?: boolean | number  // 支持 boolean 和 number (0/1)
   repetition?: number
   interval?: number
   next_review?: string
@@ -157,6 +157,13 @@ export class WordsApi {
    */
   static async batchDelete(wordIds: number[]): Promise<{ deleted_count: number; requested_count: number }> {
     return post<{ deleted_count: number; requested_count: number }>('/api/words/batch-delete', { word_ids: wordIds })
+  }
+
+  /**
+   * 批量更新单词
+   */
+  static async batchUpdate(wordIds: number[], updateData: Partial<UpdateWordPayload>): Promise<{ updated_count: number; requested_count: number; words: Word[] }> {
+    return patch<{ updated_count: number; requested_count: number; words: Word[] }>('/api/words/batch-update', { word_ids: wordIds, ...updateData })
   }
 
   /**

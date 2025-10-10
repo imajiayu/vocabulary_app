@@ -1,9 +1,11 @@
 // stores/review.ts - 优化后的代码
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import type { SpellingMetrics, Word, WordsApiResponse } from '@/shared/types'
 import { api } from '@/shared/api'
 import { useShuffleSelectionReadOnly } from '@/shared/composables/useShuffleSelection'
+import { preloadMultipleWordAudio, clearPreloadCache } from '@/shared/utils/playWordAudio'
+import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 
 export interface WordResult {
   is_spelling: boolean
@@ -20,6 +22,9 @@ export const useReviewStore = defineStore('review', () => {
   // Shuffle状态管理
   const { shuffle, initializeFromData: initializeShuffle } = useShuffleSelectionReadOnly()
 
+  // 音频口音状态管理 - 与全局设置同步
+  const { audioAccent } = useAudioAccent()
+
   // 状态
   const wordQueue = ref<Word[]>([])
   const currentIndex = ref(0)
@@ -31,6 +36,15 @@ export const useReviewStore = defineStore('review', () => {
   const initialLapseCount = ref(0)
   const currentBatchId = ref(0)
   const wordResults = ref<Map<number, boolean>>(new Map())
+
+  // 同步 audioType 与全局 audioAccent
+  watch(audioAccent, (newAccent) => {
+    if (audioType.value !== newAccent) {
+      audioType.value = newAccent
+      // 切换口音时清理旧缓存
+      clearPreloadCache(0) // 清除所有缓存
+    }
+  }, { immediate: true })
 
   // 设置
   const settings = ref({
@@ -332,6 +346,39 @@ export const useReviewStore = defineStore('review', () => {
     }
   }
 
+  // 预加载接下来的单词音频
+  const preloadUpcomingAudio = async (audioAccent: 'us' | 'uk' = 'us', preloadCount: number = 5): Promise<void> => {
+    if (wordQueue.value.length === 0) return
+
+    const startIndex = currentIndex.value
+    const endIndex = Math.min(startIndex + preloadCount, wordQueue.value.length)
+    const wordsToPreload = wordQueue.value.slice(startIndex, endIndex).map(w => w.word)
+
+    if (wordsToPreload.length > 0) {
+      // 异步预加载，不阻塞主流程
+      preloadMultipleWordAudio(wordsToPreload, audioAccent, 3).catch(err => {
+        console.warn('预加载音频失败:', err)
+      })
+    }
+  }
+
+  // 监听单词队列变化，自动预加载
+  watch([wordQueue, currentIndex, audioType], () => {
+    // 当队列、索引或音频类型变化时，预加载接下来的音频
+    // 使用 setTimeout 避免阻塞主流程
+    setTimeout(() => {
+      preloadUpcomingAudio(audioType.value, 5)
+    }, 100)
+  }, { deep: false })
+
+  // 监听索引变化，定期清理缓存
+  watch(currentIndex, (newIndex) => {
+    // 每复习10个单词，清理一次缓存，保留最近15个
+    if (newIndex > 0 && newIndex % 10 === 0) {
+      clearPreloadCache(15)
+    }
+  })
+
   return {
     // 状态
     wordQueue,
@@ -359,6 +406,7 @@ export const useReviewStore = defineStore('review', () => {
     reset,
     initializeShuffle, // 暴露初始化方法
     restoreFromProgress, // 恢复进度方法
+    preloadUpcomingAudio, // 预加载音频方法
     sortByLapse, // 暴露排序方法
   }
 })
