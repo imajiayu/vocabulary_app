@@ -468,54 +468,56 @@ def update_word(word_id):
         if code == 200:
             # 如果将stop_review设置为1，也需要更新进度索引
             if update_data.get("stop_review") == 1:
-                # 从请求数据中获取mode
-                mode = data.get("mode", MODE_REVIEW)
+                # 从请求数据中获取mode，只有在复习时才传递mode参数
+                mode = data.get("mode")
 
-                # lapse模式特殊处理：将stop_review设置为1时，无条件从快照中移出，同时从session中移出
-                if mode == MODE_LAPSE:
-                    try:
-                        from web_app.database.progress_dao import db_get_progress, db_save_progress
+                # 只在mode存在时才执行进度更新逻辑
+                if mode:
+                    # lapse模式特殊处理：将stop_review设置为1时，无条件从快照中移出，同时从session中移出
+                    if mode == MODE_LAPSE:
+                        try:
+                            from web_app.database.progress_dao import db_get_progress, db_save_progress
 
-                        # 从数据库快照中移除
-                        progress = db_get_progress()
-                        if progress and progress.get("mode") == "mode_lapse":
-                            word_ids = progress.get("word_ids_snapshot", [])
-                            if word_id in word_ids:
-                                new_word_ids = [wid for wid in word_ids if wid != word_id]
-                                db_save_progress(
-                                    progress["mode"],
-                                    progress["source"],
-                                    progress["shuffle"],
-                                    new_word_ids,
-                                    progress.get("initial_lapse_count", 0),
-                                )
-                                print(f"Removed word {word_id} from lapse progress snapshot (stop_review=1)")
+                            # 从数据库快照中移除
+                            progress = db_get_progress()
+                            if progress and progress.get("mode") == "mode_lapse":
+                                word_ids = progress.get("word_ids_snapshot", [])
+                                if word_id in word_ids:
+                                    new_word_ids = [wid for wid in word_ids if wid != word_id]
+                                    db_save_progress(
+                                        progress["mode"],
+                                        progress["source"],
+                                        progress["shuffle"],
+                                        new_word_ids,
+                                        progress.get("initial_lapse_count", 0),
+                                    )
+                                    print(f"Removed word {word_id} from lapse progress snapshot (stop_review=1)")
 
-                        # 从session快照中移除
-                        session_ids = session.get(SESSION_KEY_SNAPSHOT, [])
-                        if word_id in session_ids:
-                            session[SESSION_KEY_SNAPSHOT] = [wid for wid in session_ids if wid != word_id]
+                            # 从session快照中移除
+                            session_ids = session.get(SESSION_KEY_SNAPSHOT, [])
+                            if word_id in session_ids:
+                                session[SESSION_KEY_SNAPSHOT] = [wid for wid in session_ids if wid != word_id]
 
-                        # lapse模式索引始终为0（循环队列）
-                        update_current_progress_index(0)
-                    except Exception as e:
-                        print(f"Failed to update lapse progress snapshot: {e}")
-                else:
-                    # 非lapse模式：直接从数据库获取和更新快照，确保多设备同步
-                    try:
-                        from web_app.services.progress_service import try_restore_from_progress
+                            # lapse模式索引始终为0（循环队列）
+                            update_current_progress_index(0)
+                        except Exception as e:
+                            print(f"Failed to update lapse progress snapshot: {e}")
+                    else:
+                        # 非lapse模式：直接从数据库获取和更新快照，确保多设备同步
+                        try:
+                            from web_app.services.progress_service import try_restore_from_progress
 
-                        success, word_ids, progress_mode = try_restore_from_progress()
+                            success, word_ids, progress_mode = try_restore_from_progress()
 
-                        if success and progress_mode == mode and word_ids:
-                            all_ids = word_ids
-                            if word_id in all_ids:
-                                current_index = (
-                                    all_ids.index(word_id) + 1
-                                )  # +1 因为已完成当前单词
-                                update_current_progress_index(current_index)
-                    except Exception as e:
-                        print(f"Failed to update progress index: {e}")
+                            if success and progress_mode == mode and word_ids:
+                                all_ids = word_ids
+                                if word_id in all_ids:
+                                    current_index = (
+                                        all_ids.index(word_id) + 1
+                                    )  # +1 因为已完成当前单词
+                                    update_current_progress_index(current_index)
+                        except Exception as e:
+                            print(f"Failed to update progress index: {e}")
 
             # 6. 将完整的 updated_word 对象作为响应返回
             return create_response(True, updated_word, "Word updated successfully")

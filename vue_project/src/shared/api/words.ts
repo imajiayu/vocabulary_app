@@ -173,41 +173,6 @@ export class WordsApi {
   static async stopReview(wordId: number, mode?: string): Promise<void> {
     return patch<void>(`/api/word/${wordId}`, { stop_review: true, mode })
   }
-
-  /**
-   * 重置单词学习进度
-   */
-  static async resetWordProgress(wordId: number): Promise<Word> {
-    return patch<Word>(`/api/word/${wordId}`, {
-      ease_factor: 2.5,
-      repetition: 0,
-      interval: 1,
-      lapse: 0,
-      stop_review: false
-    })
-  }
-
-  /**
-   * 标记单词为已掌握
-   */
-  static async markAsMastered(wordId: number): Promise<Word> {
-    return patch<Word>(`/api/word/${wordId}`, {
-      ease_factor: 3.0,
-      repetition: 10,
-      interval: 365,
-      stop_review: true
-    })
-  }
-
-  /**
-   * 标记单词为困难
-   */
-  static async markAsDifficult(wordId: number): Promise<Word> {
-    return patch<Word>(`/api/word/${wordId}`, {
-      ease_factor: 1.3,
-      lapse: (await this.getWord(wordId)).lapse + 1
-    })
-  }
 }
 
 // 导出便捷方法
