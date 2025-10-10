@@ -203,7 +203,7 @@ const fetchSummary = async (isRetry = false) => {
 
     // 设置默认滚轮值
     reviewLimit.value = counts.review > 0 ? counts.review : 0
-    lapseLimit.value = counts.lapse > 0 ? counts.lapse : 0
+    lapseLimit.value = counts.lapse >= 30 ? 30 : counts.lapse > 0 ? counts.lapse : 0
     spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
 
     // 成功后清除错误
@@ -235,7 +235,7 @@ const switchSource = async (source: 'IELTS' | 'GRE') => {
 
     // 设置滚轮值
     reviewLimit.value = counts.review > 0 ? counts.review : 0
-    lapseLimit.value = counts.lapse > 0 ? counts.lapse : 0
+    lapseLimit.value = counts.lapse >= 30 ? 30 : counts.lapse > 0 ? counts.lapse : 0
     spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
 
   } catch (e: any) {
