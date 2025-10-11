@@ -24,11 +24,15 @@
 
     <!-- 主内容区域 -->
     <main class="main-content">
+      <!-- 复习/拼写组件 -->
+      <component v-if="currentWord" :is="currentComponent" :key="mode" :word="currentWord" :audio-type="audioType"
+        @result="handleResult" @skip="handleSkip" />
+
       <!-- 加载状态 -->
-      <LoadingComponent v-if="isLoading && !currentWord" :text="loadingText" />
+      <LoadingComponent v-else-if="isLoading || isInitializing" :text="loadingText" />
 
       <!-- 复习完成 -->
-      <div v-else-if="!currentWord && !isLoading" class="completion-message">
+      <div v-else class="completion-message">
         <div class="completion-content">
           <div class="icon">🎉</div>
           <h2>恭喜完成！</h2>
@@ -36,10 +40,6 @@
           <p v-else>当前批次复习完成</p>
         </div>
       </div>
-
-      <!-- 复习/拼写组件 -->
-      <component v-else-if="currentWord" :is="currentComponent" :key="mode" :word="currentWord" :audio-type="audioType"
-        @result="handleResult" @skip="handleSkip" />
     </main>
   </div>
 </template>
@@ -150,6 +150,7 @@ const {
 
 // 本地状态
 const loadingText = ref('加载中...')
+const isInitializing = ref(true) // 初始化加载状态
 
 // 计算属性
 const displayIndex = computed(() => {
@@ -193,6 +194,7 @@ const initializeFromRoute = async () => {
 
       if (restored) {
         console.log('Progress restored successfully')
+        isInitializing.value = false
         return // 恢复成功，直接返回
       } else {
         console.log('Failed to restore progress, falling back to normal initialization')
@@ -223,9 +225,13 @@ const initializeFromRoute = async () => {
       await reviewStore.loadWords(true)
     }
 
+    // 初始化完成
+    isInitializing.value = false
+
   } catch (error) {
     console.error('初始化失败:', error)
     loadingText.value = '加载失败，请重试'
+    isInitializing.value = false
   }
 }
 
@@ -276,6 +282,7 @@ const wordUpdatedCallback = (data: { id: number; definition: any }) => {
 // 监听路由变化
 watch(() => route.query, async () => {
   if (route.name === 'review') {
+    isInitializing.value = true
     await initializeFromRoute()
   }
 })
