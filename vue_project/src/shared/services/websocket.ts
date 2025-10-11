@@ -20,6 +20,9 @@ export const WebSocketEvents = {
   RELATION_GENERATION_COMPLETE: 'relation_generation_complete',
   RELATION_GENERATION_ERROR: 'relation_generation_error',
 
+  // 复习参数更新事件
+  REVIEW_PARAMS_UPDATED: 'review_params_updated',
+
   // 通用事件
   ERROR: 'error',
   CONNECTED: 'connected',

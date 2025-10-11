@@ -70,29 +70,29 @@ def _calculate_detailed_spell_strength(
     )
     backspace_count = len([e for e in key_events if e["key"] == "Backspace"])
 
-    # 1. 输入准确性（50%权重） - 合并了原来的基础效率和错误修正
+    # 1. 输入准确性（60%权重） - 合并了原来的基础效率和错误修正
     accuracy_score = (
         _calculate_input_accuracy(typed_count, backspace_count, word_length, key_events)
-        * 0.5
+        * 0.6
     )
 
-    # 2. 输入流畅度分析（25%权重）
-    fluency_score = _analyze_input_fluency(input_analysis, word_length) * 0.25
+    # 2. 输入流畅度分析（20%权重）
+    fluency_score = _analyze_input_fluency(input_analysis, word_length) * 0.2
 
-    # 3. 独立性评估（25%权重）
-    independence_score = _analyze_independence(interactions) * 0.25
+    # 3. 独立性评估（20%权重）
+    independence_score = _analyze_independence(interactions) * 0.2
 
     # 综合评分
     total_score = accuracy_score + fluency_score + independence_score
 
-    if total_score >= 0.45:
+    if total_score >= 0.55:
         # 高于临界点：线性映射到 [0.0, 1.0]
-        # score: 0.45->1.0 映射到 gain: 0.0->1.0
-        strength_gain = (total_score - 0.45) / 0.55 * 1.0
+        # score: 0.55->1.0 映射到 gain: 0.0->1.0
+        strength_gain = (total_score - 0.55) / 0.45 * 1.0
     else:
-        # 低于临界点：线性映射到 [-0.6, 0.0]
-        # score: 0.0->0.45 映射到 gain: -0.6->0.0
-        strength_gain = (total_score / 0.45) * 0.6 - 0.6
+        # 低于临界点：线性映射到 [-0.7, 0.0]
+        # score: 0.0->0.55 映射到 gain: -0.7->0.0
+        strength_gain = (total_score / 0.55) * 0.7 - 0.7
     print(word + str(strength_gain))
     new_strength = current_strength + strength_gain
     return round(max(0.0, min(5.0, new_strength)), 2)
@@ -125,15 +125,17 @@ def _calculate_input_accuracy(
     # 根据退格模式应用惩罚
     if has_modifier_backspace:
         # Cmd+退格或Ctrl+退格：删除整个单词/行，表明犯了大错误
-        severity_penalty = 0.3
+        severity_penalty = 0.50
     elif backspace_count >= 10:
-        severity_penalty = 0.25  # 大量退格
+        severity_penalty = 0.45  # 大量退格
     elif backspace_count >= 6:
-        severity_penalty = 0.15  # 较多退格
+        severity_penalty = 0.35  # 较多退格
     elif backspace_count >= 3:
-        severity_penalty = 0.08  # 中等退格
+        severity_penalty = 0.25  # 中等退格
+    elif backspace_count >= 1:
+        severity_penalty = 0.15  # 少量退格
     else:
-        severity_penalty = 0.0  # 少量或无退格
+        severity_penalty = 0.0  # 无退格
 
     final_accuracy = base_accuracy - severity_penalty
     return max(0.0, min(1.0, final_accuracy))

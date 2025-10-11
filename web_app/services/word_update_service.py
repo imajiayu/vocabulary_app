@@ -17,6 +17,7 @@ from web_app.database.vocabulary_dao import (
     db_update_word_for_review,
     db_update_word_for_spelling,
 )
+from web_app.services.websocket_events import ws_events
 
 
 def update_word_info_review(word_id, remembered, elapsed_time):
@@ -85,6 +86,17 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         avg_elapsed_time,
     )
 
+    # 6️⃣ 发送WebSocket通知
+    ease_factor_change = round(ease_factor - word_info.get("ease_factor", 2.5), 2)
+    word_text = word_info.get("word", "")
+    ws_events.emit_review_params_updated(
+        word=word_text,
+        param_type="ease_factor",
+        param_change=ease_factor_change,
+        new_param_value=round(ease_factor, 2),
+        next_review_date=next_review.isoformat()
+    )
+
 
 def update_word_info_lapse(word_id, remembered):
     """
@@ -133,7 +145,19 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
     # 计算新的强度 (ensure current_strength is not None, and cap at 5.0)
     new_strength = max(0, min(5.0, (current_strength or 0) + strength_change))
 
+    # 调试日志
+    print(f"[拼写更新] {word}: current={current_strength}, change={strength_change}, new={new_strength}, remembered={remembered}")
+
     # 计算下次拼写复习时间
     next_review = base_date + datetime.timedelta(days=interval_days)
 
     db_update_word_for_spelling(word_id, round(new_strength, 2), next_review)
+
+    # 发送WebSocket通知
+    ws_events.emit_review_params_updated(
+        word=word,
+        param_type="spell_strength",
+        param_change=round(strength_change, 2),
+        new_param_value=round(new_strength, 2),
+        next_review_date=next_review.isoformat()
+    )

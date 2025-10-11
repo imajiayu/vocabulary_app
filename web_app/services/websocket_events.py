@@ -24,6 +24,9 @@ class WebSocketEvents:
         TRANSCRIPTION_STOPPED = "transcription_stopped"
         CHUNK_PROCESSED = "chunk_processed"
 
+        # 复习参数更新事件
+        REVIEW_PARAMS_UPDATED = "review_params_updated"
+
         # 通用事件
         ERROR = "error"
         CONNECTED = "connected"
@@ -124,6 +127,35 @@ class WebSocketEvents:
             "whisper_active": whisper_active,
         }
         socketio.emit(WebSocketEvents.Events.SESSION_STATUS, data, to=session_id)
+
+    @staticmethod
+    def emit_review_params_updated(
+        word: str,
+        param_type: str,
+        param_change: float,
+        new_param_value: float,
+        next_review_date: str,
+        room: Optional[str] = None
+    ):
+        """发送复习参数更新事件
+
+        Args:
+            word: 单词本身
+            param_type: 参数类型 ('ease_factor' 或 'spell_strength')
+            param_change: 参数变化量（正数表示增加，负数表示减少）
+            new_param_value: 新的参数值
+            next_review_date: 下次复习日期（ISO格式字符串）
+            room: 房间ID（可选，用于广播）
+        """
+        data = {
+            "word": word,
+            "paramType": param_type,
+            "paramChange": param_change,
+            "newParamValue": new_param_value,
+            "nextReviewDate": next_review_date,
+            "timestamp": time.time()
+        }
+        socketio.emit(WebSocketEvents.Events.REVIEW_PARAMS_UPDATED, data, room=room)
 
 
 # 便捷的全局事件发送器实例

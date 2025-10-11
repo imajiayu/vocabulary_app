@@ -1,5 +1,15 @@
 <template>
   <div class="app-container with-topbar">
+    <!-- 复习参数更新通知 -->
+    <ReviewParamsNotification
+      :show="notification.show"
+      :word="notification.word"
+      :param-type="notification.paramType"
+      :param-change="notification.paramChange"
+      :new-param-value="notification.newParamValue"
+      :next-review-date="notification.nextReviewDate"
+    />
+
     <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
       :remember-history="wordResults" :mode="mode" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
       @word-forgot="handleWordForgot" @word-mastered="handleWordMastered" />
@@ -59,6 +69,7 @@ import TopBar from '@/shared/components/layout/TopBar.vue'
 import LoadingComponent from '@/shared/components/ui/Loading.vue'
 import ProgressBar from '@/shared/components/ui/ProgressBar.vue'
 import WordSideBar from '@/shared/components/ui/WordSideBar.vue'
+import ReviewParamsNotification from '@/features/vocabulary/components/ReviewParamsNotification.vue'
 
 // Props
 interface RouteProps {
@@ -151,6 +162,18 @@ const {
 // 本地状态
 const loadingText = ref('加载中...')
 const isInitializing = ref(true) // 初始化加载状态
+
+// 通知状态
+const notification = ref({
+  show: false,
+  word: '',
+  paramType: 'ease_factor',
+  paramChange: 0,
+  newParamValue: 0,
+  nextReviewDate: ''
+})
+
+let notificationTimer: number | null = null
 
 // 计算属性
 const displayIndex = computed(() => {
@@ -265,7 +288,7 @@ const handleSkip = async () => {
 }
 
 // WebSocket 连接和事件处理
-const { connect, onWordUpdated, off } = useWordManagementWebSocket()
+const { connect, onWordUpdated, on, off } = useWordManagementWebSocket()
 
 // WebSocket事件回调 - 用于更新队列中的单词（特别是编辑单词后收到的definition）
 const wordUpdatedCallback = (data: { id: number; definition: any }) => {
@@ -277,6 +300,37 @@ const wordUpdatedCallback = (data: { id: number; definition: any }) => {
   if (index !== -1) {
     reviewStore.wordQueue.splice(index, 1, { ...reviewStore.wordQueue[index], definition });
   }
+}
+
+// 复习参数更新回调
+const reviewParamsUpdatedCallback = (data: {
+  word: string
+  paramType: string
+  paramChange: number
+  newParamValue: number
+  nextReviewDate: string
+  timestamp: number
+}) => {
+  // 清除之前的定时器
+  if (notificationTimer !== null) {
+    window.clearTimeout(notificationTimer)
+  }
+
+  // 更新通知内容并显示
+  notification.value = {
+    show: true,
+    word: data.word,
+    paramType: data.paramType as 'ease_factor' | 'spell_strength',
+    paramChange: data.paramChange,
+    newParamValue: data.newParamValue,
+    nextReviewDate: data.nextReviewDate
+  }
+
+  // 设置3秒后自动隐藏
+  notificationTimer = window.setTimeout(() => {
+    notification.value.show = false
+    notificationTimer = null
+  }, 3000)
 }
 
 // 监听路由变化
@@ -296,6 +350,8 @@ onMounted(async () => {
     await connect()
     // 监听单词更新事件（用于更新队列，特别是编辑单词后的definition）
     onWordUpdated(wordUpdatedCallback)
+    // 监听复习参数更新事件
+    on(WebSocketEvents.REVIEW_PARAMS_UPDATED, reviewParamsUpdatedCallback)
   } catch (error) {
     console.error('[ReviewPage] WebSocket connection failed:', error)
   }
@@ -305,8 +361,14 @@ onUnmounted(() => {
   // 清理WebSocket事件监听器
   try {
     off(WebSocketEvents.WORD_UPDATED, wordUpdatedCallback)
+    off(WebSocketEvents.REVIEW_PARAMS_UPDATED, reviewParamsUpdatedCallback)
   } catch (error) {
     console.error('[ReviewPage] Error removing WebSocket listeners:', error)
+  }
+
+  // 清理通知定时器
+  if (notificationTimer !== null) {
+    window.clearTimeout(notificationTimer)
   }
 })
 </script>
