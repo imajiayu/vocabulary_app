@@ -1,7 +1,15 @@
 <template>
   <Transition name="slide-down">
-    <div v-if="show" class="notification-container">
+    <div
+      v-if="show"
+      ref="notificationRef"
+      class="notification-container"
+      :style="{ left: `${position.x}px`, top: `${position.y}px` }"
+      @mousedown="startDrag"
+      @touchstart="startDrag"
+    >
       <div class="notification-content">
+        <div class="drag-handle">⋮⋮</div>
         <div class="word-display">{{ word }}</div>
         <div class="param-info">
           <span class="param-label">{{ paramLabel }}</span>
@@ -21,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 
 interface Props {
   word: string
@@ -34,6 +42,143 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   show: true
+})
+
+// 位置存储key
+const POSITION_STORAGE_KEY = 'review-params-notification-position'
+
+// 通知元素引用
+const notificationRef = ref<HTMLElement | null>(null)
+
+// 位置状态
+const position = ref({ x: 0, y: 0 })
+
+// 拖拽状态
+const isDragging = ref(false)
+const dragStart = ref({ x: 0, y: 0 })
+const dragOffset = ref({ x: 0, y: 0 })
+
+// 从localStorage加载位置
+const loadPosition = () => {
+  try {
+    const saved = localStorage.getItem(POSITION_STORAGE_KEY)
+    if (saved) {
+      const savedPosition = JSON.parse(saved)
+      position.value = savedPosition
+      return true
+    }
+  } catch (e) {
+    console.error('Failed to load notification position:', e)
+  }
+  return false
+}
+
+// 保存位置到localStorage
+const savePosition = () => {
+  try {
+    localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify(position.value))
+  } catch (e) {
+    console.error('Failed to save notification position:', e)
+  }
+}
+
+// 初始化默认位置
+const initializePosition = () => {
+  if (!loadPosition()) {
+    // 默认位置：右上角
+    position.value = {
+      x: window.innerWidth - 240,
+      y: 60
+    }
+  }
+  // 确保位置在边界内
+  constrainPosition()
+}
+
+// 约束位置在边界内
+const constrainPosition = () => {
+  if (!notificationRef.value) return
+
+  const rect = notificationRef.value.getBoundingClientRect()
+  const maxX = window.innerWidth - rect.width
+  const maxY = window.innerHeight - rect.height
+
+  position.value.x = Math.max(0, Math.min(position.value.x, maxX))
+  position.value.y = Math.max(0, Math.min(position.value.y, maxY))
+}
+
+// 开始拖拽
+const startDrag = (e: MouseEvent | TouchEvent) => {
+  isDragging.value = true
+
+  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+  const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
+  dragStart.value = { x: clientX, y: clientY }
+  dragOffset.value = { x: position.value.x, y: position.value.y }
+
+  document.addEventListener('mousemove', onDrag)
+  document.addEventListener('mouseup', stopDrag)
+  document.addEventListener('touchmove', onDrag)
+  document.addEventListener('touchend', stopDrag)
+
+  e.preventDefault()
+}
+
+// 拖拽中
+const onDrag = (e: MouseEvent | TouchEvent) => {
+  if (!isDragging.value || !notificationRef.value) return
+
+  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+  const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
+  const deltaX = clientX - dragStart.value.x
+  const deltaY = clientY - dragStart.value.y
+
+  position.value.x = dragOffset.value.x + deltaX
+  position.value.y = dragOffset.value.y + deltaY
+
+  constrainPosition()
+}
+
+// 停止拖拽
+const stopDrag = () => {
+  if (isDragging.value) {
+    isDragging.value = false
+    savePosition()
+
+    document.removeEventListener('mousemove', onDrag)
+    document.removeEventListener('mouseup', stopDrag)
+    document.removeEventListener('touchmove', onDrag)
+    document.removeEventListener('touchend', stopDrag)
+  }
+}
+
+// 窗口大小变化时重新约束位置
+const handleResize = () => {
+  constrainPosition()
+  savePosition()
+}
+
+// 监听show变化，初始化位置
+watch(() => props.show, (newShow) => {
+  if (newShow) {
+    // 延迟到下一帧，确保DOM已渲染
+    requestAnimationFrame(() => {
+      if (!notificationRef.value) return
+      constrainPosition()
+    })
+  }
+})
+
+onMounted(() => {
+  initializePosition()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  stopDrag()
+  window.removeEventListener('resize', handleResize)
 })
 
 const paramLabel = computed(() => {
@@ -65,10 +210,11 @@ const formattedDate = computed(() => {
 <style scoped>
 .notification-container {
   position: fixed;
-  top: 60px;
-  right: 20px;
   z-index: 9999;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: move;
+  user-select: none;
+  touch-action: none;
 }
 
 .notification-content {
@@ -82,6 +228,21 @@ const formattedDate = computed(() => {
   align-items: center;
   gap: 6px;
   min-width: 200px;
+  position: relative;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 14px;
+  opacity: 0.6;
+  cursor: grab;
+  line-height: 1;
+}
+
+.notification-container:active .drag-handle {
+  cursor: grabbing;
 }
 
 .word-display {

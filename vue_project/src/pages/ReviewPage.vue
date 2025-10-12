@@ -34,12 +34,12 @@
 
     <!-- 主内容区域 -->
     <main class="main-content">
-      <!-- 复习/拼写组件 -->
-      <component v-if="currentWord" :is="currentComponent" :key="mode" :word="currentWord" :audio-type="audioType"
-        @result="handleResult" @skip="handleSkip" />
-
       <!-- 加载状态 -->
-      <LoadingComponent v-else-if="isLoading || isInitializing" :text="loadingText" />
+      <LoadingComponent v-if="isLoading || isInitializing" :text="loadingText" />
+
+      <!-- 复习/拼写组件 -->
+      <component v-else-if="currentWord" :is="currentComponent" :key="mode" :word="currentWord" :audio-type="audioType"
+        @result="handleResult" @skip="handleSkip" />
 
       <!-- 复习完成 -->
       <div v-else class="completion-message">
