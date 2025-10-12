@@ -130,7 +130,7 @@ cmake --build . --config Release
 ```
 
 The application will be available at:
-- **Frontend**: https://localhost:443 (HTTPS, or https://localhost:444 if port 443 is in use)
+- **Frontend**: http://localhost:80 (HTTP)
 - **Backend API**: http://localhost:5001 (HTTP)
 - **WebSocket**: ws://localhost:5001 (same as backend)
 
@@ -151,7 +151,7 @@ Backend will run on `http://localhost:5001`
 ```bash
 cd vue_project
 
-# Development mode with HTTPS
+# Development mode
 npm run dev
 
 # Production build
@@ -159,7 +159,7 @@ npm run build
 npm run preview
 ```
 
-Frontend will run on `https://localhost:443` (or `https://localhost:444` if port 443 is in use)
+Frontend will run on `http://localhost:80`
 
 ## Project Structure
 

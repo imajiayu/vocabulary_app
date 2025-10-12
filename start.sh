@@ -22,13 +22,14 @@ start_backend() {
 start_frontend() {
     echo "Starting Vue frontend in background..."
     cd vue_project || exit
-    nohup npm run dev &> "../$FRONTEND_LOG" &
+    # 使用 sudo 运行在 80 端口
+    nohup sudo npm run dev &> "../$FRONTEND_LOG" &
     echo $! > "../$FRONTEND_PID_FILE"
     cd ..
     echo "Frontend PID: $(cat $FRONTEND_PID_FILE)"
-    echo "Frontend (Vue):   https://0.0.0.0:443"
-    echo "                  https://localhost:443"
-    echo "                  https://$(hostname -f):443"
+    echo "Frontend (Vue):   http://0.0.0.0:80"
+    echo "                  http://localhost:80"
+    echo "                  http://$(hostname -f):80"
     echo "Frontend logs:    ../$FRONTEND_LOG"
 }
 
