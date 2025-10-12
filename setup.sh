@@ -108,12 +108,22 @@ echo ""
 # Step 1: Python Backend Setup
 print_info "Step 1/5: Setting up Python backend..."
 
-if [ ! -d ".venv" ]; then
+# Check if virtual environment exists and is valid
+if [ -d ".venv" ]; then
+    if [ ! -f ".venv/bin/activate" ]; then
+        print_warning "Virtual environment exists but is corrupted (missing activate script)"
+        print_info "Removing corrupted virtual environment..."
+        rm -rf .venv
+        print_info "Creating new Python virtual environment..."
+        python3 -m venv .venv
+        print_success "Virtual environment created"
+    else
+        print_warning "Virtual environment already exists, skipping creation"
+    fi
+else
     print_info "Creating Python virtual environment..."
     python3 -m venv .venv
     print_success "Virtual environment created"
-else
-    print_warning "Virtual environment already exists, skipping creation"
 fi
 
 print_info "Activating virtual environment and installing dependencies..."
@@ -243,8 +253,12 @@ echo ""
 
 # Check Python packages
 print_info "Python packages installed:"
-source .venv/bin/activate
-pip list | grep -E "(Flask|SQLAlchemy|beautifulsoup4|requests)" || true
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+    pip list | grep -E "(Flask|SQLAlchemy|beautifulsoup4|requests)" || true
+else
+    print_warning "Virtual environment not found, skipping Python package check"
+fi
 
 # Check Node packages
 print_info "Node.js packages installed:"
@@ -275,7 +289,7 @@ echo "  1. Start the application:"
 echo "     ./start.sh start"
 echo ""
 echo "  2. Access the application:"
-echo "     Frontend: https://localhost:443 (or https://localhost:444 if port 443 is in use)"
+echo "     Frontend: http://localhost:80 (requires sudo)"
 echo "     Backend:  http://localhost:5001"
 echo ""
 echo "  3. Stop the application:"
