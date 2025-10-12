@@ -180,7 +180,7 @@ if [ "$SKIP_WHISPER" = false ]; then
 
     if [ ! -f "models/ggml-small.bin" ]; then
         print_info "Downloading small model (~465MB, this may take a few minutes)..."
-        bash ./models/download-ggml-model.sh small
+        sh ./models/download-ggml-model.sh small
         print_success "Whisper small model downloaded"
     else
         print_warning "Whisper small model already exists, skipping download"
