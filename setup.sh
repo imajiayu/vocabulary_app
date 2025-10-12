@@ -185,7 +185,7 @@ if [ "$SKIP_WHISPER" = false ]; then
 
         # Try Hugging Face mirror first (faster in China)
         print_info "Attempting download from Hugging Face mirror (hf-mirror.com)..."
-        if wget --timeout=10 --tries=2 https://hf-mirror.com/ggerganov/whisper.cpp/resolve/main/ggml-small.bin 2>/dev/null; then
+        if wget --show-progress --progress=bar:force --timeout=30 --tries=3 https://hf-mirror.com/ggerganov/whisper.cpp/resolve/main/ggml-small.bin; then
             print_success "Downloaded from Hugging Face mirror"
         else
             print_warning "Mirror download failed, trying official source..."
