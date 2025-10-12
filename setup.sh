@@ -180,8 +180,29 @@ if [ "$SKIP_WHISPER" = false ]; then
 
     if [ ! -f "models/ggml-small.bin" ]; then
         print_info "Downloading small model (~465MB, this may take a few minutes)..."
-        sh ./models/download-ggml-model.sh small
-        print_success "Whisper small model downloaded"
+
+        cd models
+
+        # Try Hugging Face mirror first (faster in China)
+        print_info "Attempting download from Hugging Face mirror (hf-mirror.com)..."
+        if wget --timeout=10 --tries=2 https://hf-mirror.com/ggerganov/whisper.cpp/resolve/main/ggml-small.bin 2>/dev/null; then
+            print_success "Downloaded from Hugging Face mirror"
+        else
+            print_warning "Mirror download failed, trying official source..."
+            # Fallback to original script
+            sh ./download-ggml-model.sh small
+        fi
+
+        cd ..
+
+        if [ -f "models/ggml-small.bin" ]; then
+            print_success "Whisper small model downloaded"
+        else
+            print_error "Failed to download Whisper model"
+            print_info "You can manually download it later with:"
+            print_info "  cd whisper.cpp/models"
+            print_info "  wget https://hf-mirror.com/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+        fi
     else
         print_warning "Whisper small model already exists, skipping download"
     fi
