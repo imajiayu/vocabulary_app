@@ -89,7 +89,6 @@ const { hotkeys, loadHotkeys } = useHotkeys()
 const { setContext, registerKeys, cleanup } = useKeyboardManager()
 
 const handleChoice = (choice: string) => {
-    console.log('[WordReview] handleChoice called with:', choice, 'Stack trace:', new Error().stack)
     if (isSubmitting.value) return
 
     endTime.value = Date.now()
@@ -109,14 +108,12 @@ const handleChoice = (choice: string) => {
 }
 
 const handleCorrection = async () => {
-    console.log('[WordReview] handleCorrection called');
     // "记错了"按钮应该覆盖之前的选择，强制设置为"没记住"
     // 即使之前选了"不再复习"，也要改为提交学习结果
     await submitResult(false, true) // 第二个参数表示强制提交结果
 }
 
 const handleNext = async () => {
-    console.log('[WordReview] handleNext called, pendingChoice:', pendingChoice.value);
     const unRemembered = pendingChoice.value === 'no'
     await submitResult(!unRemembered, false)
 }
@@ -131,15 +128,7 @@ const handleSkip = async () => {
 }
 
 const submitResult = async (remembered: boolean, forceResult: boolean = false) => {
-    console.log('[WordReview] submitResult called:', {
-        remembered,
-        forceResult,
-        isSubmitting: isSubmitting.value,
-        currentWord: props.word.word
-    });
-
     if (isSubmitting.value) {
-        console.log('[WordReview] Already submitting, returning');
         return
     }
 
@@ -149,19 +138,16 @@ const submitResult = async (remembered: boolean, forceResult: boolean = false) =
 
         // 如果强制提交结果（来自"记错了"按钮），或者不是"不再复习"，则提交学习结果
         if (forceResult || pendingChoice.value !== 'stop') {
-            console.log('[WordReview] Calling props.onResult');
             await props.onResult({
                 remembered,
                 elapsedTime
             })
         } else {
             // 只有在非强制且选择了"不再复习"时才跳过
-            console.log('[WordReview] Calling handleSkip');
             await handleSkip()
         }
 
         // 👉 提交成功后，重置状态
-        console.log('[WordReview] Resetting state after submit');
         showDefinition.value = false
         pendingChoice.value = null
         startTime.value = Date.now()
@@ -182,7 +168,6 @@ const setupKeyboardShortcuts = () => {
         // 初始选择状态 - 注册初始快捷键
         setContext('review-initial')
         const initialKeys = hotkeys.value.reviewInitial
-        console.log('[WordReview] Registering initial shortcuts:', initialKeys)
         registerKeys({
             [initialKeys.remembered]: () => handleChoice('yes'),
             [initialKeys.notRemembered]: () => handleChoice('no'),
@@ -192,7 +177,6 @@ const setupKeyboardShortcuts = () => {
         // 显示释义状态 - 注册显示释义后的快捷键
         setContext('review-after')
         const afterKeys = hotkeys.value.reviewAfter
-        console.log('[WordReview] Registering after shortcuts:', afterKeys)
         registerKeys({
             [afterKeys.wrong]: async () => await handleCorrection(),
             [afterKeys.next]: async () => await handleNext()

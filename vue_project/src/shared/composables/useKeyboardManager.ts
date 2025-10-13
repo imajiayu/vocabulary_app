@@ -58,12 +58,10 @@ const handleGlobalKeydown = async (event: KeyboardEvent) => {
   // 4. 查找当前按键的处理器
   const handler = globalState.handlers.get(event.key)
   if (!handler) {
-    console.log('[KeyboardManager] No handler for key:', event.key, 'Current handlers:', Array.from(globalState.handlers.keys()))
     return // 不是注册的快捷键，允许默认行为
   }
 
   // 5. 标记并执行处理器
-  console.log('[KeyboardManager] Executing handler for key:', event.key)
   event.preventDefault()
   globalState.pressedKeys.add(event.key)
   globalState.isHandling = true
@@ -91,8 +89,6 @@ const registerGlobalListener = () => {
   document.addEventListener('keydown', handleGlobalKeydown)
   document.addEventListener('keyup', handleGlobalKeyup)
   globalListenerRegistered = true
-
-  console.log('[KeyboardManager] Global listener registered')
 }
 
 /**
@@ -105,10 +101,6 @@ export function useKeyboardManager() {
   // 设置当前键盘上下文
   const setContext = (context: KeyboardContext) => {
     if (globalState.currentContext !== context) {
-      console.log('[KeyboardManager] Context changed:', {
-        from: globalState.currentContext,
-        to: context
-      })
       globalState.currentContext = context
       globalState.lastContextChangeTime = Date.now()
     }
@@ -116,11 +108,6 @@ export function useKeyboardManager() {
 
   // 注册快捷键处理器
   const registerKey = (key: string, handler: KeyHandler) => {
-    console.log('[KeyboardManager] Registering key:', {
-      key,
-      context: globalState.currentContext
-    })
-
     globalState.handlers.set(key, handler)
     registeredKeys.value.push(key)
   }
@@ -134,8 +121,6 @@ export function useKeyboardManager() {
 
   // 清理当前组件注册的所有快捷键
   const cleanup = () => {
-    console.log('[KeyboardManager] Cleaning up keys:', registeredKeys.value)
-
     registeredKeys.value.forEach(key => {
       globalState.handlers.delete(key)
     })
