@@ -8,3 +8,5 @@ SpeakingSidebar拖拽手柄出现消失动画
 热力图切换tab时闪烁
 
 1. 标记掌握，普通模式也要移出队列
+
+编译stream

@@ -6,46 +6,6 @@ FRONTEND_PID_FILE=".frontend_pid"
 BACKEND_LOG=".backend.log"
 FRONTEND_LOG=".frontend.log"
 
-# 检查并安装 Node.js
-check_nodejs() {
-    if ! command -v node &> /dev/null; then
-        echo "Node.js not found. Installing Node.js..."
-
-        # 检测操作系统
-        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            # Linux 系统 - 使用 apt (Debian/Ubuntu)
-            echo "Detected Linux system. Installing Node.js 20.x..."
-            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-            sudo apt install -y nodejs
-        elif [[ "$OSTYPE" == "darwin"* ]]; then
-            # macOS 系统 - 使用 Homebrew
-            echo "Detected macOS system. Installing Node.js via Homebrew..."
-            if ! command -v brew &> /dev/null; then
-                echo "Homebrew not found. Please install Homebrew first:"
-                echo '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-                exit 1
-            fi
-            brew install node
-        else
-            echo "Unsupported operating system: $OSTYPE"
-            echo "Please install Node.js manually from https://nodejs.org/"
-            exit 1
-        fi
-
-        # 验证安装
-        if command -v node &> /dev/null; then
-            echo "Node.js $(node --version) installed successfully!"
-            echo "npm $(npm --version) installed successfully!"
-        else
-            echo "Node.js installation failed. Please install manually."
-            exit 1
-        fi
-    else
-        echo "Node.js $(node --version) is already installed."
-        echo "npm $(npm --version) is available."
-    fi
-}
-
 start_backend() {
     echo "Activating Python virtual environment..."
     source .venv/bin/activate
@@ -60,17 +20,8 @@ start_backend() {
 }
 
 start_frontend() {
-    # 检查 Node.js
-    check_nodejs
-
     echo "Starting Vue frontend in background..."
     cd vue_project || exit
-
-    # 检查是否需要安装依赖
-    if [ ! -d "node_modules" ]; then
-        echo "Installing npm dependencies..."
-        npm install
-    fi
 
     # 使用 sudo 运行在 80 端口
     nohup sudo npm run dev &> "../$FRONTEND_LOG" &
