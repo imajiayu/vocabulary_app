@@ -63,6 +63,7 @@ import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review
 import type { Word } from '@/shared/types'
 import { api } from '@/shared/api'
 import { useWordManagementWebSocket, WebSocketEvents } from '@/shared/services/websocket'
+import { clearPreloadCache } from '@/shared/utils/playWordAudio'
 import WordReview from '@/features/vocabulary/components/WordReview.vue'
 import WordSpelling from '@/features/vocabulary/components/WordSpelling.vue'
 import TopBar from '@/shared/components/layout/TopBar.vue'
@@ -369,6 +370,11 @@ onUnmounted(() => {
   // 清理通知定时器
   if (notificationTimer !== null) {
     window.clearTimeout(notificationTimer)
+  }
+
+  // 清理音频预加载缓存
+  if (mode.value === 'mode_lapse') {
+    clearPreloadCache(0) // lapse 模式下清空所有缓存
   }
 })
 </script>

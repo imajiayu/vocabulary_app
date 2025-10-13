@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import WordDetailsReview from './WordDetailsReview.vue'
@@ -51,6 +51,7 @@ import RelatedWordsDisplay from '@/shared/components/ui/RelatedWordsDisplay.vue'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
+import { useReviewStore } from '@/features/vocabulary/stores/review'
 
 
 interface Props {
@@ -88,6 +89,10 @@ const { hotkeys, loadHotkeys } = useHotkeys()
 // 🔧 使用全局键盘管理器
 const { setContext, registerKeys, cleanup } = useKeyboardManager()
 
+// 获取当前复习模式，用于判断是否需要缓存兜底音频
+const reviewStore = useReviewStore()
+const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
+
 const handleChoice = (choice: string) => {
     if (isSubmitting.value) return
 
@@ -102,7 +107,7 @@ const handleChoice = (choice: string) => {
     if (autoPlayAfterAnswer.value) {
         // 使用 setTimeout 确保完全不阻塞
         setTimeout(() => {
-            playWordAudio(props.word.word, audioAccent.value)
+            playWordAudio(props.word.word, audioAccent.value, 5, 300, isLapseMode.value)
         }, 0)
     }
 }
@@ -200,7 +205,7 @@ watch(() => props.word?.id, (newWordId, oldWordId) => {
 
         // 播放新单词音频（根据设置决定是否自动播放）
         if (autoPlayOnWordChange.value && props.word) {
-            playWordAudio(props.word.word, audioAccent.value)
+            playWordAudio(props.word.word, audioAccent.value, 5, 300, isLapseMode.value)
         }
     }
 }, { immediate: false })
@@ -217,7 +222,7 @@ onMounted(async () => {
 
     // 初始播放音频（根据设置决定是否自动播放）
     if (props.word && autoPlayOnWordChange.value) {
-        playWordAudio(props.word.word, audioAccent.value)
+        playWordAudio(props.word.word, audioAccent.value, 5, 300, isLapseMode.value)
     }
 })
 </script>

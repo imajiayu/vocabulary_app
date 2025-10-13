@@ -1,10 +1,10 @@
 // stores/review.ts - 优化后的代码
 import { defineStore } from 'pinia'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { SpellingMetrics, Word, WordsApiResponse } from '@/shared/types'
 import { api } from '@/shared/api'
 import { useShuffleSelectionReadOnly } from '@/shared/composables/useShuffleSelection'
-import { preloadMultipleWordAudio, clearPreloadCache } from '@/shared/utils/playWordAudio'
+import { preloadMultipleWordAudio, clearPreloadCache, clearCacheNotInWords } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 
 export interface WordResult {
@@ -347,11 +347,33 @@ export const useReviewStore = defineStore('review', () => {
   }
 
   // 预加载接下来的单词音频
-  const preloadUpcomingAudio = async (audioAccent: 'us' | 'uk' = 'us', preloadCount: number = 5): Promise<void> => {
+  const preloadUpcomingAudio = async (
+    audioAccent: 'us' | 'uk' = 'us',
+    preloadCount: number = 5,
+    includeCurrent: boolean = false  // 是否包含当前单词
+  ): Promise<void> => {
     if (wordQueue.value.length === 0) return
 
-    const startIndex = currentIndex.value
+    if (mode.value === 'mode_lapse') {
+      // lapse 模式：一次性预加载所有单词的音频
+      const allWords = wordQueue.value.map(w => w.word)
+      if (allWords.length > 0) {
+        // 异步预加载所有单词，不阻塞主流程
+        preloadMultipleWordAudio(allWords, audioAccent, 5).catch(err => {
+          console.warn('Lapse模式预加载所有音频失败:', err)
+        })
+      }
+      return
+    }
+
+    // 其他模式：只预加载接下来的几个单词
+    // 如果 includeCurrent 为 true，从当前索引开始；否则从下一个开始
+    const startIndex = includeCurrent ? currentIndex.value : currentIndex.value + 1
     const endIndex = Math.min(startIndex + preloadCount, wordQueue.value.length)
+
+    // 确保 startIndex 不超出范围
+    if (startIndex >= wordQueue.value.length) return
+
     const wordsToPreload = wordQueue.value.slice(startIndex, endIndex).map(w => w.word)
 
     if (wordsToPreload.length > 0) {
@@ -363,17 +385,41 @@ export const useReviewStore = defineStore('review', () => {
   }
 
   // 监听单词队列变化，自动预加载
-  watch([wordQueue, currentIndex, audioType], () => {
-    // 当队列、索引或音频类型变化时，预加载接下来的音频
-    // 使用 setTimeout 避免阻塞主流程
-    setTimeout(() => {
-      preloadUpcomingAudio(audioType.value, 5)
-    }, 100)
+  watch([wordQueue, currentIndex, audioType], ([newQueue, newIndex], [oldQueue, oldIndex]) => {
+    // 队列首次加载或队列内容变化时，包含当前单词立即预加载
+    const isQueueChanged = newQueue.length !== oldQueue?.length || newQueue !== oldQueue
+    const isInitialLoad = oldQueue === undefined || oldQueue.length === 0
+
+    if (mode.value === 'mode_lapse') {
+      // lapse 模式：只在初始加载时预加载一次所有音频
+      if (isInitialLoad && newQueue.length > 0) {
+        preloadUpcomingAudio(audioType.value, 0, true)
+      } else if (isQueueChanged && !isInitialLoad && oldQueue && oldQueue.length > 0) {
+        // 队列变化时（单词被移除/重排），清理不在队列中的单词的音频缓存
+        const currentWords = newQueue.map(w => w.word)
+        clearCacheNotInWords(currentWords, audioType.value)
+      }
+      return
+    }
+
+    // 其他模式的预加载逻辑
+    if (isQueueChanged || isInitialLoad) {
+      // 队列变化时，立即预加载包括当前单词在内的前5个
+      preloadUpcomingAudio(audioType.value, 5, true)
+    } else if (newIndex !== oldIndex) {
+      // 只是索引变化时，预加载接下来的单词（不包含当前）
+      setTimeout(() => {
+        preloadUpcomingAudio(audioType.value, 5, false)
+      }, 100)
+    }
   }, { deep: false })
 
   // 监听索引变化，定期清理缓存
   watch(currentIndex, (newIndex) => {
-    // 每复习10个单词，清理一次缓存，保留最近15个
+    // lapse 模式不清理缓存，保留所有音频直到组件卸载
+    if (mode.value === 'mode_lapse') return
+
+    // 其他模式：每复习10个单词，清理一次缓存，保留最近15个
     if (newIndex > 0 && newIndex % 10 === 0) {
       clearPreloadCache(15)
     }

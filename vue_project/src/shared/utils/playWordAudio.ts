@@ -12,12 +12,14 @@ const preloadCache = new Map<string, HTMLAudioElement>()
  * @param region 'us' | 'uk'，默认 'us'
  * @param maxRetries 最大重试次数，默认5次
  * @param retryDelay 重试延迟（毫秒），默认300ms
+ * @param cacheOnFallback 兜底播放成功后是否缓存（用于 lapse 模式），默认 false
  */
 export async function playWordAudio(
   word: string,
   region: 'us' | 'uk' = 'us',
   maxRetries: number = 5,
-  retryDelay: number = 300
+  retryDelay: number = 300,
+  cacheOnFallback: boolean = false
 ) {
   if (!word) return
 
@@ -71,7 +73,7 @@ export async function playWordAudio(
 
       return // 播放成功，退出
     } catch (err) {
-      console.warn('预加载音频播放失败，尝试重新加载', err)
+      // 静默处理预加载播放失败，自动降级到重试逻辑
       // 从缓存中移除失败的音频
       preloadCache.delete(cacheKey)
       if (currentAudio === cachedAudio) {
@@ -110,6 +112,11 @@ export async function playWordAudio(
         if (currentAudio === audio) {
           currentAudio = null
         }
+      }
+
+      // 如果是 lapse 模式，兜底播放成功后将音频放入缓存
+      if (cacheOnFallback && !preloadCache.has(cacheKey)) {
+        preloadCache.set(cacheKey, audio)
       }
 
       return // 播放成功，退出
@@ -212,13 +219,19 @@ export async function preloadWordAudio(
 
   // 监听加载完成
   return new Promise<void>((resolve) => {
+    let isResolved = false
+
     audio.addEventListener('canplaythrough', () => {
+      if (isResolved) return
+      isResolved = true
       preloadCache.set(cacheKey, audio)
       resolve()
     }, { once: true })
 
-    audio.addEventListener('error', (err) => {
-      console.warn(`预加载音频失败: ${word} (${region})`, err)
+    audio.addEventListener('error', () => {
+      if (isResolved) return
+      isResolved = true
+      // 静默处理预加载失败
       resolve() // 即使失败也 resolve，不阻塞后续操作
     }, { once: true })
 
@@ -262,6 +275,26 @@ export function clearPreloadCache(keepCount: number = 10): void {
   toKeep.forEach(([key, audio]) => {
     preloadCache.set(key, audio)
   })
+}
+
+/**
+ * 清理不在单词列表中的音频缓存（用于 lapse 模式）
+ * @param words 当前队列中的单词列表
+ * @param region 'us' | 'uk'
+ */
+export function clearCacheNotInWords(words: string[], region: 'us' | 'uk' = 'us'): void {
+  // 创建当前单词的缓存键集合
+  const currentKeys = new Set(words.map(word => getCacheKey(word, region)))
+
+  // 遍历缓存，删除不在当前单词列表中的项
+  const keysToDelete: string[] = []
+  preloadCache.forEach((_, key) => {
+    if (!currentKeys.has(key)) {
+      keysToDelete.push(key)
+    }
+  })
+
+  keysToDelete.forEach(key => preloadCache.delete(key))
 }
 
 /**
