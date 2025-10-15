@@ -14,7 +14,7 @@ def calculate_spell_strength(
     word: str,
     current_strength: float = None,
     initial_strength: float = 0.0,
-) -> float:
+) -> tuple[float, dict]:
     """
     计算拼写记忆强度的变化量 - 基于详细的输入行为分析
 
@@ -23,7 +23,7 @@ def calculate_spell_strength(
     :param word: str, 单词文本
     :param current_strength: float, 当前记忆强度（None表示首次）
     :param initial_strength: float, 初始记忆强度
-    :return: float, spell_strength的变化量（可以是正数或负数）
+    :return: tuple[float, dict], (spell_strength的变化量, 评分详情字典)
     """
     if current_strength is None:
         current_strength = initial_strength
@@ -31,19 +31,29 @@ def calculate_spell_strength(
     if not remembered:
         # 忘记时返回衰减变化量
         new_strength = round(current_strength * 0.3, 2)
-        return new_strength - current_strength  # 负的变化量
+        breakdown_info = {
+            "remembered": False,
+            "strength_gain": round(new_strength - current_strength, 2)
+        }
+        return new_strength - current_strength, breakdown_info  # 负的变化量
 
     # 记住时计算新强度并返回变化量
-    new_strength = _calculate_detailed_spell_strength(
+    new_strength, breakdown_info = _calculate_detailed_spell_strength(
         spelling_data, word, current_strength
     )
-    return new_strength - current_strength  # 正的变化量
+    breakdown_info["remembered"] = True
+    return new_strength - current_strength, breakdown_info  # 正的变化量
 
 
 def _calculate_detailed_spell_strength(
     spelling_data, word: str, current_strength: float
-) -> float:
-    """新版算法 - 基于详细的输入行为分析"""
+) -> tuple[float, dict]:
+    """
+    新版算法 - 基于详细的输入行为分析
+
+    返回: (new_strength, breakdown_info)
+    breakdown_info 包含详细的评分信息
+    """
     word_length = len(word)
     key_events = spelling_data.get("keyEvents", [])
     interactions = spelling_data.get("interactions", {})
@@ -71,16 +81,16 @@ def _calculate_detailed_spell_strength(
     backspace_count = len([e for e in key_events if e["key"] == "Backspace"])
 
     # 1. 输入准确性（60%权重） - 合并了原来的基础效率和错误修正
-    accuracy_score = (
-        _calculate_input_accuracy(typed_count, backspace_count, word_length, key_events)
-        * 0.6
-    )
+    accuracy_raw = _calculate_input_accuracy(typed_count, backspace_count, word_length, key_events)
+    accuracy_score = accuracy_raw * 0.6
 
     # 2. 输入流畅度分析（20%权重）
-    fluency_score = _analyze_input_fluency(input_analysis, word_length) * 0.2
+    fluency_raw = _analyze_input_fluency(input_analysis, word_length)
+    fluency_score = fluency_raw * 0.2
 
     # 3. 独立性评估（20%权重）
-    independence_score = _analyze_independence(interactions) * 0.2
+    independence_raw = _analyze_independence(interactions)
+    independence_score = independence_raw * 0.2
 
     # 综合评分
     total_score = accuracy_score + fluency_score + independence_score
@@ -94,7 +104,27 @@ def _calculate_detailed_spell_strength(
         # score: 0.0->0.55 映射到 gain: -0.7->0.0
         strength_gain = (total_score / 0.55) * 0.7 - 0.7
     new_strength = current_strength + strength_gain
-    return round(max(0.0, min(5.0, new_strength)), 2)
+
+    # 构建详细的评分信息
+    breakdown_info = {
+        "typed_count": typed_count,
+        "backspace_count": backspace_count,
+        "word_length": word_length,
+        "avg_key_interval": input_analysis.get("averageKeyInterval", 0),
+        "longest_pause": input_analysis.get("longestPause", 0),
+        "total_typing_time": input_analysis.get("totalTypingTime", 0),
+        "audio_requests": interactions.get("audioRequestCount", 0),
+        "accuracy_score": round(accuracy_raw, 3),
+        "fluency_score": round(fluency_raw, 3),
+        "independence_score": round(independence_raw, 3),
+        "weighted_accuracy": round(accuracy_score, 3),
+        "weighted_fluency": round(fluency_score, 3),
+        "weighted_independence": round(independence_score, 3),
+        "total_score": round(total_score, 3),
+        "strength_gain": round(strength_gain, 2),
+    }
+
+    return round(max(0.0, min(5.0, new_strength)), 2), breakdown_info
 
 
 def _calculate_input_accuracy(
@@ -170,12 +200,10 @@ def _analyze_input_fluency(input_analysis, word_length: int) -> float:
 def _analyze_independence(interactions) -> float:
     """分析学习独立性 - 较少使用提示和帮助"""
     audio_requests = interactions.get("audioRequestCount", 0)
-    forgot_requests = interactions.get("forgotRequestCount", 0)
 
     # 使用帮助的次数越多，独立性分数越低
-    # 忘记按钮的权重更高，因为表示完全不记得
-    help_usage = audio_requests + forgot_requests * 2
-    independence = max(0.0, 1.0 - help_usage * 0.2)
+    # 每次音频请求降低20%的独立性分数
+    independence = max(0.0, 1.0 - audio_requests * 0.2)
 
     return independence
 
@@ -358,10 +386,10 @@ def calculate_spell_strength_with_load_balancing(
     2. 低强度单词（0.8-2.5）：使用指数惩罚 + 严格推迟上限
     3. 高强度单词（> 2.5）：向后寻找负荷较小的日期，避免峰值堆积
 
-    返回: (strength_change, optimized_interval)
+    返回: (strength_change, optimized_interval, breakdown_info)
     """
-    # 1. 计算强度变化
-    strength_change = calculate_spell_strength(
+    # 1. 计算强度变化和评分详情
+    strength_change, breakdown_info = calculate_spell_strength(
         spelling_data, remembered, word, current_strength, initial_strength
     )
 
@@ -381,7 +409,7 @@ def calculate_spell_strength_with_load_balancing(
 
     # 4. 极低强度或未记住的单词：不参与负荷均衡，优先快速复习
     if new_strength < 0.8 or not remembered:
-        return strength_change, basic_interval
+        return strength_change, basic_interval, breakdown_info
 
     # 5. 低强度单词（0.8-2.5）：应用负荷均衡 + 严格推迟上限
     spell_loads = get_daily_spell_loads_by_source(word_source, base_date, max_prep_days)
@@ -420,4 +448,4 @@ def calculate_spell_strength_with_load_balancing(
             print(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
             optimized_interval = basic_interval
 
-    return strength_change, optimized_interval
+    return strength_change, optimized_interval, breakdown_info

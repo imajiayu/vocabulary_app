@@ -8,6 +8,8 @@
       :param-change="notification.paramChange"
       :new-param-value="notification.newParamValue"
       :next-review-date="notification.nextReviewDate"
+      :breakdown="notification.breakdown"
+      @close="handleCloseNotification"
     />
 
     <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
@@ -172,16 +174,16 @@ const notification = ref<{
   paramChange: number
   newParamValue: number
   nextReviewDate: string
+  breakdown?: any
 }>({
   show: false,
   word: '',
   paramType: 'ease_factor',
   paramChange: 0,
   newParamValue: 0,
-  nextReviewDate: ''
+  nextReviewDate: '',
+  breakdown: undefined
 })
-
-let notificationTimer: number | null = null
 
 // 计算属性
 const displayIndex = computed(() => {
@@ -318,12 +320,8 @@ const reviewParamsUpdatedCallback = (data: {
   newParamValue: number
   nextReviewDate: string
   timestamp: number
+  breakdown?: any
 }) => {
-  // 清除之前的定时器
-  if (notificationTimer !== null) {
-    window.clearTimeout(notificationTimer)
-  }
-
   // 更新通知内容并显示
   notification.value = {
     show: true,
@@ -331,14 +329,14 @@ const reviewParamsUpdatedCallback = (data: {
     paramType: data.paramType as 'ease_factor' | 'spell_strength',
     paramChange: data.paramChange,
     newParamValue: data.newParamValue,
-    nextReviewDate: data.nextReviewDate
+    nextReviewDate: data.nextReviewDate,
+    breakdown: data.breakdown
   }
+}
 
-  // 设置3秒后自动隐藏
-  notificationTimer = window.setTimeout(() => {
-    notification.value.show = false
-    notificationTimer = null
-  }, 3000)
+// 关闭通知
+const handleCloseNotification = () => {
+  notification.value.show = false
 }
 
 // 监听路由变化
@@ -372,11 +370,6 @@ onUnmounted(() => {
     off(WebSocketEvents.REVIEW_PARAMS_UPDATED, reviewParamsUpdatedCallback)
   } catch (error) {
     console.error('[ReviewPage] Error removing WebSocket listeners:', error)
-  }
-
-  // 清理通知定时器
-  if (notificationTimer !== null) {
-    window.clearTimeout(notificationTimer)
   }
 
   // 清理音频预加载缓存

@@ -10,6 +10,7 @@
     >
       <div class="notification-content">
         <div class="drag-handle">⋮⋮</div>
+        <button class="close-button" @click.stop="$emit('close')" title="关闭">×</button>
         <div class="word-display">{{ word }}</div>
         <div class="param-info">
           <span class="param-label">{{ paramLabel }}</span>
@@ -23,6 +24,130 @@
         <div class="next-review">
           下次复习: {{ formattedDate }}
         </div>
+
+        <!-- 复习模式信息 -->
+        <div v-if="breakdown && paramType === 'ease_factor'" class="breakdown-section">
+          <div class="breakdown-divider"></div>
+          <div class="breakdown-group">
+            <div class="review-stats">
+              <div class="stat-item">
+                <span class="stat-label">回忆耗时</span>
+                <span class="stat-value">{{ (breakdown.elapsed_time).toFixed(1) }}s</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">评分</span>
+                <span class="stat-value">{{ breakdown.score }} / 5</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">记忆状态</span>
+                <span class="stat-value" :class="breakdown.remembered ? 'text-success' : 'text-danger'">
+                  {{ breakdown.remembered ? '记住' : '忘记' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 详细评分信息 (拼写模式) -->
+        <div v-if="breakdown && paramType === 'spell_strength'" class="breakdown-section">
+          <div class="breakdown-divider"></div>
+
+          <!-- 未记住时显示简化信息 -->
+          <div v-if="!breakdown.remembered" class="breakdown-group">
+            <div class="review-stats">
+              <div class="stat-item">
+                <span class="stat-label">记忆状态</span>
+                <span class="stat-value text-danger">未记住</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 记住时显示详细统计 -->
+          <template v-else>
+            <!-- 输入统计 -->
+            <div class="breakdown-group">
+              <div class="breakdown-title">输入统计</div>
+              <div class="breakdown-stats">
+                <div class="stat-item">
+                  <span class="stat-label">字母数</span>
+                  <span class="stat-value">{{ breakdown.typed_count }} / {{ breakdown.word_length }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">退格数</span>
+                  <span class="stat-value">{{ breakdown.backspace_count }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">平均间隔</span>
+                  <span class="stat-value">{{ Math.round(breakdown.avg_key_interval) }}ms</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">最长停顿</span>
+                  <span class="stat-value">{{ Math.round(breakdown.longest_pause) }}ms</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">总耗时</span>
+                  <span class="stat-value">{{ (breakdown.total_typing_time / 1000).toFixed(1) }}s</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">音频帮助</span>
+                  <span class="stat-value">{{ breakdown.audio_requests }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 评分详情 -->
+            <div class="breakdown-group">
+              <div class="breakdown-title">评分详情</div>
+            <div class="score-items">
+              <div class="score-item">
+                <div class="score-header">
+                  <span class="score-name">准确性</span>
+                  <span class="score-weight">(60%)</span>
+                </div>
+                <div class="score-bar-container">
+                  <div class="score-bar" :style="{ width: `${breakdown.accuracy_score * 100}%` }"></div>
+                </div>
+                <span class="score-number">{{ breakdown.weighted_accuracy.toFixed(1) }}</span>
+              </div>
+              <div class="score-item">
+                <div class="score-header">
+                  <span class="score-name">流畅度</span>
+                  <span class="score-weight">(20%)</span>
+                </div>
+                <div class="score-bar-container">
+                  <div class="score-bar" :style="{ width: `${breakdown.fluency_score * 100}%` }"></div>
+                </div>
+                <span class="score-number">{{ breakdown.weighted_fluency.toFixed(1) }}</span>
+              </div>
+              <div class="score-item">
+                <div class="score-header">
+                  <span class="score-name">独立性</span>
+                  <span class="score-weight">(20%)</span>
+                </div>
+                <div class="score-bar-container">
+                  <div class="score-bar" :style="{ width: `${breakdown.independence_score * 100}%` }"></div>
+                </div>
+                <span class="score-number">{{ breakdown.weighted_independence.toFixed(1) }}</span>
+              </div>
+              <!-- 总分数轴 -->
+              <div class="total-score-axis">
+                <div class="score-header">
+                  <span class="score-name">总分</span>
+                </div>
+                <div class="axis-container">
+                  <div class="axis-line">
+                    <span class="axis-label axis-left">-0.7</span>
+                    <span class="axis-label axis-right">+1.0</span>
+                    <!-- 当前位置标记 -->
+                    <div class="axis-marker" :style="{ left: `${((breakdown.strength_gain + 0.7) / 1.7) * 100}%` }"></div>
+                  </div>
+                </div>
+                <span class="score-number">{{ breakdown.total_score.toFixed(1) }}</span>
+              </div>
+            </div>
+          </div>
+          </template>
+        </div>
       </div>
     </div>
   </Transition>
@@ -31,6 +156,25 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 
+interface BreakdownInfo {
+  typed_count: number
+  backspace_count: number
+  word_length: number
+  avg_key_interval: number
+  longest_pause: number
+  total_typing_time: number
+  audio_requests: number
+  accuracy_score: number
+  fluency_score: number
+  independence_score: number
+  weighted_accuracy: number
+  weighted_fluency: number
+  weighted_independence: number
+  total_score: number
+  strength_gain: number
+  remembered: boolean
+}
+
 interface Props {
   word: string
   paramType: 'ease_factor' | 'spell_strength'
@@ -38,6 +182,7 @@ interface Props {
   newParamValue: number
   nextReviewDate: string
   show?: boolean
+  breakdown?: BreakdownInfo
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -252,6 +397,34 @@ const formattedDate = computed(() => {
   cursor: grabbing;
 }
 
+.close-button {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.close-button:active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
 .word-display {
   font-size: 18px;
   font-weight: 600;
@@ -298,6 +471,214 @@ const formattedDate = computed(() => {
 .next-review {
   font-size: 12px;
   opacity: 0.85;
+}
+
+/* 详细评分信息样式 */
+.breakdown-section {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.breakdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 8px 0;
+}
+
+.breakdown-group {
+  margin-top: 10px;
+}
+
+.breakdown-title {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+  margin-bottom: 6px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breakdown-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 8px;
+  font-size: 11px;
+}
+
+.review-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.review-stats .stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.text-success {
+  color: #52c41a;
+}
+
+.text-danger {
+  color: #ff4d4f;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.stat-label {
+  opacity: 0.75;
+  font-size: 10px;
+}
+
+.stat-value {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.score-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.score-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+}
+
+.score-item.total-score {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.score-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 50px;
+}
+
+.score-name {
+  font-weight: 600;
+  font-size: 10px;
+}
+
+.score-weight {
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+.score-bar-container {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.score-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #52c41a, #73d13d);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.score-bar.total {
+  background: linear-gradient(90deg, #1890ff, #40a9ff);
+}
+
+.score-number {
+  font-weight: 700;
+  font-size: 11px;
+  min-width: 35px;
+  text-align: right;
+}
+
+/* 总分数轴样式 */
+.total-score-axis {
+  display: grid;
+  grid-template-columns: 34px 1fr 28px;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.total-score-axis .score-header {
+  min-width: auto;
+}
+
+.total-score-axis .score-name {
+  font-size: 10px;
+}
+
+.total-score-axis .score-number {
+  min-width: 28px;
+  font-size: 11px;
+}
+
+.axis-container {
+  flex: 1;
+}
+
+.axis-line {
+  position: relative;
+  height: 20px;
+  background: linear-gradient(to right,
+    rgba(255, 77, 79, 0.25) 0%,     /* 红色区域 -0.7到0 */
+    rgba(255, 77, 79, 0.25) 41.2%,  /* 41.2% = 0.7/1.7 */
+    rgba(255, 255, 255, 0.15) 41.2%,  /* 半透明白色区域 0到1.0 */
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.axis-label {
+  position: absolute;
+  font-size: 9px;
+  opacity: 0.8;
+  font-weight: 600;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.axis-label.axis-left {
+  left: 2px;
+}
+
+.axis-label.axis-right {
+  right: 2px;
+}
+
+.axis-marker {
+  position: absolute;
+  width: 3px;
+  height: 24px;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: left 0.3s ease;
 }
 
 /* 过渡动画 */

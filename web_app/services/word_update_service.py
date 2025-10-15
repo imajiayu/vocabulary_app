@@ -86,15 +86,24 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         avg_elapsed_time,
     )
 
-    # 6️⃣ 发送WebSocket通知
+    # 6️⃣ 发送WebSocket通知（带回忆时间信息）
     ease_factor_change = round(ease_factor - word_info.get("ease_factor", 2.5), 2)
     word_text = word_info.get("word", "")
+
+    # 构建复习模式的 breakdown 信息
+    review_breakdown = {
+        "elapsed_time": elapsed_time,
+        "remembered": remembered,
+        "score": score,
+    }
+
     ws_events.emit_review_params_updated(
         word=word_text,
         param_type="ease_factor",
         param_change=ease_factor_change,
         new_param_value=round(ease_factor, 2),
         next_review_date=next_review.isoformat(),
+        breakdown=review_breakdown,
     )
 
 
@@ -138,7 +147,7 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
     base_date = current_next_review if current_next_review else datetime.date.today()
 
     # 使用负荷均衡的拼写算法
-    strength_change, interval_days = calculate_spell_strength_with_load_balancing(
+    strength_change, interval_days, breakdown_info = calculate_spell_strength_with_load_balancing(
         spelling_data, remembered, word, word_source, base_date, current_strength
     )
 
@@ -150,11 +159,12 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
 
     db_update_word_for_spelling(word_id, round(new_strength, 2), next_review)
 
-    # 发送WebSocket通知
+    # 发送WebSocket通知（带详细评分信息）
     ws_events.emit_review_params_updated(
         word=word,
         param_type="spell_strength",
         param_change=round(strength_change, 2),
         new_param_value=round(new_strength, 2),
         next_review_date=next_review.isoformat(),
+        breakdown=breakdown_info,  # 传递详细评分信息
     )

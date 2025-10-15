@@ -413,6 +413,8 @@ def db_fetch_review_word_ids(limit=None):
             Word.next_review != None,
             Word.next_review <= datetime.date.today().isoformat(),
             Word.source == current_source,
+            # 排除已经完全掌握的单词（ease_factor达到最高值且复习次数充足）
+            ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
         )
         if limit:
             rows = rows.limit(limit).all()

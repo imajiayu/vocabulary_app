@@ -135,7 +135,8 @@ class WebSocketEvents:
         param_change: float,
         new_param_value: float,
         next_review_date: str,
-        room: Optional[str] = None
+        room: Optional[str] = None,
+        breakdown: Optional[Dict[str, Any]] = None
     ):
         """发送复习参数更新事件
 
@@ -146,6 +147,7 @@ class WebSocketEvents:
             new_param_value: 新的参数值
             next_review_date: 下次复习日期（ISO格式字符串）
             room: 房间ID（可选，用于广播）
+            breakdown: 评分详情（可选，仅用于拼写）
         """
         data = {
             "word": word,
@@ -155,6 +157,8 @@ class WebSocketEvents:
             "nextReviewDate": next_review_date,
             "timestamp": time.time()
         }
+        if breakdown:
+            data["breakdown"] = breakdown
         socketio.emit(WebSocketEvents.Events.REVIEW_PARAMS_UPDATED, data, room=room)
 
 

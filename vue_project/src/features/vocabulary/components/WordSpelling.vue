@@ -123,7 +123,6 @@ interface DetailedSpellingData {
   keyEvents: KeyEvent[]
   interactions: {
     audioRequestCount: number    // 音频播放请求次数（按钮+快捷键）
-    forgotRequestCount: number   // 忘记请求次数（按钮+快捷键）
   }
   inputAnalysis: {
     totalTypingTime: number
@@ -156,8 +155,7 @@ const isSubmitting = ref(false)
 const startTime = ref<number>(0)
 const keyEvents = ref<KeyEvent[]>([])
 const interactions = ref({
-  audioRequestCount: 0,
-  forgotRequestCount: 0
+  audioRequestCount: 0
 })
 const backspaceSequences = ref<BackspaceSequence[]>([])
 const currentBackspaceSequence = ref<BackspaceSequence | null>(null)
@@ -179,7 +177,6 @@ const handlePlayAudio = async () => {
 
 const handleForgot = async () => {
   if (isSubmitting.value) return
-  interactions.value.forgotRequestCount++
   forgotClicked.value = true
   userInput.value = props.word.word
   await nextTick()
@@ -398,8 +395,7 @@ const resetState = () => {
   startTime.value = Date.now()
   keyEvents.value = []
   interactions.value = {
-    audioRequestCount: 0,
-    forgotRequestCount: 0
+    audioRequestCount: 0
   }
   backspaceSequences.value = []
   currentBackspaceSequence.value = null
