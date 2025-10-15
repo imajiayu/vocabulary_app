@@ -75,3 +75,28 @@ def fetch_definition_from_web(word):
 
     except Exception:
         return None
+
+
+def fill_missing_definitions():
+    """
+    为所有缺失释义的单词填充释义
+    使用批量释义服务异步处理
+
+    Returns:
+        int: 需要填充释义的单词数量
+    """
+    from web_app.database.vocabulary_dao import db_fetch_words_without_definition
+    from web_app.services.batch_definition_service import get_batch_definition_service
+
+    # 获取所有缺失释义的单词
+    words_without_def = db_fetch_words_without_definition()
+
+    if not words_without_def:
+        return 0
+
+    # 使用批量释义服务添加任务
+    batch_service = get_batch_definition_service()
+    for word_data in words_without_def:
+        batch_service.add_task(word_data["id"], word_data["word"])
+
+    return len(words_without_def)

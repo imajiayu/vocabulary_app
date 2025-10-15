@@ -312,6 +312,21 @@ def db_fetch_word_info_for_insert_page():
     return [w.to_dict() for w in words]
 
 
+def db_fetch_words_without_definition():
+    """获取所有 definition 为 null、空字符串或无效释义的单词"""
+    # 无效释义的 JSON 字符串（暂无释义）
+    invalid_definition = '{"phonetic": {"us": "", "uk": ""}, "definitions": ["暂无释义"], "examples": []}'
+
+    with get_session() as db:
+        words = db.query(Word).filter(
+            (Word.definition == None)
+            | (Word.definition == "")
+            | (Word.definition == "{}")
+            | (Word.definition == invalid_definition)
+        ).all()
+        return [{"id": w.id, "word": w.word} for w in words]
+
+
 def db_fetch_word_info_paginated(limit=50, offset=0):
     """Fetch words with pagination support"""
     with get_session() as db:

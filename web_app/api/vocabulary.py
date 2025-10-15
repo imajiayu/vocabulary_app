@@ -195,6 +195,10 @@ def get_index_summary():
     using server-side templates.
     """
     try:
+        # 填充缺失释义的单词（异步处理，不阻塞响应）
+        from web_app.services.vocabulary_service import fill_missing_definitions
+        fill_missing_definitions()
+
         count_review = len(fetch_word_ids_by_mode(MODE_REVIEW))
         count_lapse = len(fetch_word_ids_by_mode(MODE_LAPSE))
         # spelling with no limit -> full candidate count
