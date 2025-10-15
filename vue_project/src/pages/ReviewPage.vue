@@ -165,7 +165,14 @@ const loadingText = ref('加载中...')
 const isInitializing = ref(true) // 初始化加载状态
 
 // 通知状态
-const notification = ref({
+const notification = ref<{
+  show: boolean
+  word: string
+  paramType: 'ease_factor' | 'spell_strength'
+  paramChange: number
+  newParamValue: number
+  nextReviewDate: string
+}>({
   show: false,
   word: '',
   paramType: 'ease_factor',

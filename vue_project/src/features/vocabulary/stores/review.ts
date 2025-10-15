@@ -31,6 +31,7 @@ export const useReviewStore = defineStore('review', () => {
   const mode = ref<ReviewMode>('mode_review')
   const audioType = ref<AudioType>('us')
   const isLoading = ref(false)
+  const isBackgroundLoading = ref(false)  // 后台预加载状态（不显示Loading UI）
   const hasMore = ref(true)
   const totalWords = ref(0)
   const initialLapseCount = ref(0)
@@ -79,7 +80,7 @@ export const useReviewStore = defineStore('review', () => {
   const shouldLoadMore = computed(() => {
     if (mode.value === 'mode_lapse') return false
     const remaining = wordQueue.value.length - currentIndex.value
-    return remaining <= settings.value.queueThreshold && hasMore.value && !isLoading.value
+    return remaining <= settings.value.queueThreshold && hasMore.value && !isLoading.value && !isBackgroundLoading.value
   })
 
   const isCompleted = computed(() => {
@@ -131,10 +132,16 @@ export const useReviewStore = defineStore('review', () => {
   }
 
   // 主要方法
-  const loadWords = async (resetQueue = false): Promise<void> => {
-    if (isLoading.value) return
+  const loadWords = async (resetQueue = false, silent = false): Promise<void> => {
+    // 防止重复加载
+    if (isLoading.value || isBackgroundLoading.value) return
 
-    isLoading.value = true
+    // silent = true 时使用后台加载（不显示 Loading UI）
+    if (silent) {
+      isBackgroundLoading.value = true
+    } else {
+      isLoading.value = true
+    }
     try {
       if (mode.value === 'mode_lapse') {
         // lapse模式：一次性加载所有单词
@@ -184,6 +191,7 @@ export const useReviewStore = defineStore('review', () => {
       throw error
     } finally {
       isLoading.value = false
+      isBackgroundLoading.value = false
     }
   }
 
@@ -220,7 +228,7 @@ export const useReviewStore = defineStore('review', () => {
       currentIndex.value++
       // Check if we need to load more data or if we're completed
       if (shouldLoadMore.value && !isCompleted.value) {
-        loadWords(false)
+        loadWords(false, true)  // silent = true，后台静默加载
       }
     }
 
@@ -255,7 +263,7 @@ export const useReviewStore = defineStore('review', () => {
       currentIndex.value++
       // Check if we need to load more data or if we're completed
       if (shouldLoadMore.value && !isCompleted.value) {
-        loadWords(false)
+        loadWords(false, true)  // silent = true，后台静默加载
       }
     }
 
@@ -432,6 +440,7 @@ export const useReviewStore = defineStore('review', () => {
     mode,
     audioType,
     isLoading,
+    isBackgroundLoading,  // 暴露后台加载状态
     totalWords,
     settings,
     wordResults,

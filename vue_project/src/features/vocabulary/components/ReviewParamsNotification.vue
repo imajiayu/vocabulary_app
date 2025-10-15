@@ -191,6 +191,13 @@ const formattedChange = computed(() => {
 })
 
 const changeClass = computed(() => {
+  // 当 change 为 0 时，需要判断是否已经达到最高值
+  if (props.paramChange === 0) {
+    const isAtMax = props.paramType === 'spell_strength'
+      ? props.newParamValue >= 5
+      : props.newParamValue >= 3.0
+    return isAtMax ? 'neutral-max' : 'neutral'
+  }
   return props.paramChange > 0 ? 'positive' : 'negative'
 })
 
@@ -273,6 +280,14 @@ const formattedDate = computed(() => {
 
 .param-change.negative {
   color: #ff4d4f;
+}
+
+.param-change.neutral {
+  color: #faad14;
+}
+
+.param-change.neutral-max {
+  color: #95de64;
 }
 
 .param-value-info {

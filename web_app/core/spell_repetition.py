@@ -93,7 +93,6 @@ def _calculate_detailed_spell_strength(
         # 低于临界点：线性映射到 [-0.7, 0.0]
         # score: 0.0->0.55 映射到 gain: -0.7->0.0
         strength_gain = (total_score / 0.55) * 0.7 - 0.7
-    print(word + str(strength_gain))
     new_strength = current_strength + strength_gain
     return round(max(0.0, min(5.0, new_strength)), 2)
 

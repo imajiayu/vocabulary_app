@@ -197,6 +197,7 @@ def get_index_summary():
     try:
         # 填充缺失释义的单词（异步处理，不阻塞响应）
         from web_app.services.vocabulary_service import fill_missing_definitions
+
         fill_missing_definitions()
 
         count_review = len(fetch_word_ids_by_mode(MODE_REVIEW))
@@ -366,7 +367,7 @@ def batch_insert_words():
         # 为每个失败的单词生成对齐的消息
         for word_text in failed_words:
             # 计算需要填充的空格数，空格在引号外
-            spaces = ' ' * (max_word_length - len(word_text))
+            spaces = " " * (max_word_length - len(word_text))
             failed_details.append(f"单词 '{word_text}'{spaces} 已存在或插入失败")
 
     # 构建消息：包含成功/失败统计和所有失败详情
@@ -433,7 +434,10 @@ def batch_update_words():
     try:
         # 1. 检查有效的 JSON 内容类型
         if not request.is_json:
-            return create_response(False, None, "Content-Type必须是 'application/json'"), 400
+            return (
+                create_response(False, None, "Content-Type必须是 'application/json'"),
+                400,
+            )
 
         # 2. 解析 JSON 请求体
         data = request.get_json()
@@ -464,7 +468,8 @@ def batch_update_words():
 
         # 过滤传入的数据，只包含允许的字段
         update_data = {
-            key: value for key, value in data.items()
+            key: value
+            for key, value in data.items()
             if key in allowed_fields and key != "word_ids"
         }
 
@@ -482,7 +487,7 @@ def batch_update_words():
             {
                 "updated_count": updated_count,
                 "requested_count": len(word_ids),
-                "words": updated_words
+                "words": updated_words,
             },
             f"成功更新 {updated_count} 个单词",
         )
@@ -543,14 +548,19 @@ def update_word(word_id):
                     # lapse模式特殊处理：将stop_review设置为1时，无条件从快照中移出，同时从session中移出
                     if mode == MODE_LAPSE:
                         try:
-                            from web_app.database.progress_dao import db_get_progress, db_save_progress
+                            from web_app.database.progress_dao import (
+                                db_get_progress,
+                                db_save_progress,
+                            )
 
                             # 从数据库快照中移除
                             progress = db_get_progress()
                             if progress and progress.get("mode") == "mode_lapse":
                                 word_ids = progress.get("word_ids_snapshot", [])
                                 if word_id in word_ids:
-                                    new_word_ids = [wid for wid in word_ids if wid != word_id]
+                                    new_word_ids = [
+                                        wid for wid in word_ids if wid != word_id
+                                    ]
                                     db_save_progress(
                                         progress["mode"],
                                         progress["source"],
@@ -558,12 +568,13 @@ def update_word(word_id):
                                         new_word_ids,
                                         progress.get("initial_lapse_count", 0),
                                     )
-                                    print(f"Removed word {word_id} from lapse progress snapshot (stop_review=1)")
 
                             # 从session快照中移除
                             session_ids = session.get(SESSION_KEY_SNAPSHOT, [])
                             if word_id in session_ids:
-                                session[SESSION_KEY_SNAPSHOT] = [wid for wid in session_ids if wid != word_id]
+                                session[SESSION_KEY_SNAPSHOT] = [
+                                    wid for wid in session_ids if wid != word_id
+                                ]
 
                             # lapse模式索引始终为0（循环队列）
                             update_current_progress_index(0)
@@ -572,9 +583,13 @@ def update_word(word_id):
                     else:
                         # 非lapse模式：直接从数据库获取和更新快照，确保多设备同步
                         try:
-                            from web_app.services.progress_service import try_restore_from_progress
+                            from web_app.services.progress_service import (
+                                try_restore_from_progress,
+                            )
 
-                            success, word_ids, progress_mode = try_restore_from_progress()
+                            success, word_ids, progress_mode = (
+                                try_restore_from_progress()
+                            )
 
                             if success and progress_mode == mode and word_ids:
                                 all_ids = word_ids
@@ -699,9 +714,7 @@ def update_review_word(word_id):
                 update_lapse_progress_after_word_update(word_id, updated_word)
                 # lapse模式索引始终为0（循环队列）
                 update_current_progress_index(0)
-                print(
-                    f"Lapse mode: word {word_id} processed, lapse={updated_word.get('lapse', 0)}, index=0"
-                )
+
             except Exception as e:
                 print(f"Failed to update lapse progress snapshot: {e}")
         else:

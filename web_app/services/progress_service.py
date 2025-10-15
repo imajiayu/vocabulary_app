@@ -51,12 +51,6 @@ def save_word_ids_snapshot(mode, all_ids, shuffle_enabled, limit):
         success = db_save_progress(
             mode, current_source, shuffle_enabled, all_ids, initial_lapse_count
         )
-
-        if success:
-            print(
-                f"Progress snapshot saved: {len(all_ids)} words, mode={mode}, source={current_source}, initial_lapse_count={initial_lapse_count}"
-            )
-
         return success
     except Exception as e:
         print(f"Failed to save progress snapshot: {e}")
@@ -199,9 +193,6 @@ def update_lapse_progress_after_word_update(word_id, updated_word):
                 new_word_ids,
                 progress.get("initial_lapse_count", 0),
             )
-
-            if success:
-                print(f"Removed word {word_id} from lapse progress snapshot (lapse=0)")
 
             return success
         else:
