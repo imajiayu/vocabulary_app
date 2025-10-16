@@ -28,22 +28,35 @@
         <!-- 复习模式信息 -->
         <div v-if="breakdown && paramType === 'ease_factor'" class="breakdown-section">
           <div class="breakdown-divider"></div>
-          <div class="breakdown-group">
+
+          <!-- 未记住时显示简化信息 -->
+          <div v-if="!breakdown.remembered" class="breakdown-group">
             <div class="review-stats">
               <div class="stat-item">
-                <span class="stat-label">回忆耗时</span>
-                <span class="stat-value">{{ (breakdown.elapsed_time).toFixed(1) }}s</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">评分</span>
-                <span class="stat-value">{{ breakdown.score }} / 5</span>
-              </div>
-              <div class="stat-item">
                 <span class="stat-label">记忆状态</span>
-                <span class="stat-value" :class="breakdown.remembered ? 'text-success' : 'text-danger'">
-                  {{ breakdown.remembered ? '记住' : '忘记' }}
-                </span>
+                <span class="stat-value text-danger">未记住</span>
               </div>
+            </div>
+          </div>
+
+          <!-- 记住时仅显示评分映射 -->
+          <div v-else class="breakdown-group">
+            <div class="breakdown-title">评分映射</div>
+            <div class="recall-time-axis">
+              <div class="score-header">
+                <span class="score-name">耗时</span>
+              </div>
+              <div class="axis-container">
+                <div class="axis-line recall-axis">
+                  <span class="axis-label axis-left">0s</span>
+                  <span class="axis-label axis-mid-1">2s</span>
+                  <span class="axis-label axis-mid-2">5s</span>
+                  <span class="axis-label axis-right">8s+</span>
+                  <!-- 当前耗时标记 -->
+                  <div class="axis-marker" :style="{ left: `${getRecallTimePosition(breakdown.elapsed_time)}%` }"></div>
+                </div>
+              </div>
+              <span class="score-number">{{ breakdown.score }}</span>
             </div>
           </div>
         </div>
@@ -157,21 +170,28 @@
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 
 interface BreakdownInfo {
-  typed_count: number
-  backspace_count: number
-  word_length: number
-  avg_key_interval: number
-  longest_pause: number
-  total_typing_time: number
-  audio_requests: number
-  accuracy_score: number
-  fluency_score: number
-  independence_score: number
-  weighted_accuracy: number
-  weighted_fluency: number
-  weighted_independence: number
-  total_score: number
-  strength_gain: number
+  // 拼写模式字段
+  typed_count?: number
+  backspace_count?: number
+  word_length?: number
+  avg_key_interval?: number
+  longest_pause?: number
+  total_typing_time?: number
+  audio_requests?: number
+  accuracy_score?: number
+  fluency_score?: number
+  independence_score?: number
+  weighted_accuracy?: number
+  weighted_fluency?: number
+  weighted_independence?: number
+  total_score?: number
+  strength_gain?: number
+
+  // 复习模式字段
+  elapsed_time?: number
+  score?: number
+
+  // 通用字段
   remembered: boolean
 }
 
@@ -357,6 +377,38 @@ const formattedDate = computed(() => {
     return props.nextReviewDate
   }
 })
+
+/**
+ * 计算回忆耗时在刻度尺上的位置百分比
+ * 基于 review_repetition.py 的 calculate_score 函数逻辑
+ *
+ * 时间区间映射（总共8秒范围）：
+ * 0-2s:   分数5 (流利掌握) - 刻度尺 0%-25%
+ * 2-5s:   分数4-3 (对数映射) - 刻度尺 25%-62.5%
+ * 5-8s+:  分数3 (勉强掌握) - 刻度尺 62.5%-100%
+ */
+const getRecallTimePosition = (elapsedTime: number): number => {
+  const maxDisplayTime = 8 // 刻度尺显示的最大时间（秒）
+  const fastThreshold = 2 // 流利性阈值
+  const slowThreshold = 5 // 认知负荷临界点
+
+  // 限制在显示范围内
+  const clampedTime = Math.min(elapsedTime, maxDisplayTime)
+
+  // 计算位置百分比
+  if (clampedTime <= fastThreshold) {
+    // 0-2s: 线性映射到 0%-25%
+    return (clampedTime / fastThreshold) * 25
+  } else if (clampedTime <= slowThreshold) {
+    // 2-5s: 线性映射到 25%-62.5%
+    const ratio = (clampedTime - fastThreshold) / (slowThreshold - fastThreshold)
+    return 25 + ratio * 37.5
+  } else {
+    // 5-8s: 线性映射到 62.5%-100%
+    const ratio = (clampedTime - slowThreshold) / (maxDisplayTime - slowThreshold)
+    return 62.5 + ratio * 37.5
+  }
+}
 </script>
 
 <style scoped>
@@ -633,6 +685,28 @@ const formattedDate = computed(() => {
   font-size: 11px;
 }
 
+/* 回忆耗时刻度尺样式 */
+.recall-time-axis {
+  display: grid;
+  grid-template-columns: 34px 1fr 28px;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.recall-time-axis .score-header {
+  min-width: auto;
+}
+
+.recall-time-axis .score-name {
+  font-size: 10px;
+}
+
+.recall-time-axis .score-number {
+  min-width: 28px;
+  font-size: 11px;
+}
+
 .axis-container {
   flex: 1;
 }
@@ -651,6 +725,18 @@ const formattedDate = computed(() => {
   align-items: center;
 }
 
+/* 回忆耗时刻度尺特殊渐变 */
+.axis-line.recall-axis {
+  background: linear-gradient(to right,
+    rgba(82, 196, 26, 0.35) 0%,      /* 绿色区域 0-2s (分数5) */
+    rgba(82, 196, 26, 0.35) 25%,
+    rgba(250, 173, 20, 0.3) 25%,     /* 黄色区域 2-5s (分数4-3) */
+    rgba(250, 173, 20, 0.3) 62.5%,
+    rgba(255, 77, 79, 0.25) 62.5%,   /* 红色区域 5-8s+ (分数3) */
+    rgba(255, 77, 79, 0.25) 100%
+  );
+}
+
 .axis-label {
   position: absolute;
   font-size: 9px;
@@ -662,6 +748,16 @@ const formattedDate = computed(() => {
 
 .axis-label.axis-left {
   left: 2px;
+}
+
+.axis-label.axis-mid-1 {
+  left: 25%;
+  transform: translate(-50%, -50%);
+}
+
+.axis-label.axis-mid-2 {
+  left: 62.5%;
+  transform: translate(-50%, -50%);
 }
 
 .axis-label.axis-right {
