@@ -190,9 +190,9 @@ const handleFilterChange = (status: string) => {
   background: none;
   border: none;
   color: #9ca3af;
-  font-size: 1.25rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  font-size: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -204,8 +204,6 @@ const handleFilterChange = (status: string) => {
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  min-width: 44px;
-  min-height: 44px;
 }
 
 .clear-button:hover {
@@ -240,8 +238,8 @@ const handleFilterChange = (status: string) => {
     right: 0.25rem;
     width: 2rem;
     height: 2rem;
-    min-width: 2rem;
-    min-height: 2rem;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 

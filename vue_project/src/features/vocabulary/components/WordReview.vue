@@ -52,6 +52,7 @@ import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
+import { useTimer } from '@/shared/composables/useTimer'
 
 
 interface Props {
@@ -76,9 +77,10 @@ const emit = defineEmits<Emits>()
 // 状态
 const showDefinition = ref(false)
 const pendingChoice = ref<string | null>(null)
-const startTime = ref(Date.now())
-const endTime = ref(Date.now());
 const isSubmitting = ref(false)
+
+// 使用计时器
+const timer = useTimer()
 
 // 使用全局音频设置
 const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
@@ -96,7 +98,8 @@ const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
 const handleChoice = (choice: string) => {
     if (isSubmitting.value) return
 
-    endTime.value = Date.now()
+    // 暂停计时器
+    timer.pause()
 
     pendingChoice.value = choice
 
@@ -139,7 +142,8 @@ const submitResult = async (remembered: boolean, forceResult: boolean = false) =
 
     isSubmitting.value = true
     try {
-        const elapsedTime = Math.min(10.0, (endTime.value - startTime.value) / 1000)
+        // 读取并清空计时器，返回经过的时间（秒）
+        const elapsedTime = timer.readAndReset(10.0)
 
         // 如果强制提交结果（来自"记错了"按钮），或者不是"不再复习"，则提交学习结果
         if (forceResult || pendingChoice.value !== 'stop') {
@@ -155,7 +159,6 @@ const submitResult = async (remembered: boolean, forceResult: boolean = false) =
         // 👉 提交成功后，重置状态
         showDefinition.value = false
         pendingChoice.value = null
-        startTime.value = Date.now()
 
     } catch (error) {
         console.error('Submit result failed:', error)
@@ -201,7 +204,10 @@ watch(() => props.word?.id, (newWordId, oldWordId) => {
         // 重置状态
         showDefinition.value = false
         pendingChoice.value = null
-        startTime.value = Date.now()
+
+        // 重置并启动计时器
+        timer.reset()
+        timer.start()
 
         // 播放新单词音频（根据设置决定是否自动播放）
         if (autoPlayOnWordChange.value && props.word) {
@@ -219,6 +225,9 @@ onMounted(async () => {
 
     // 🔧 注册快捷键到全局键盘管理器
     setupKeyboardShortcuts()
+
+    // 启动计时器
+    timer.start()
 
     // 初始播放音频（根据设置决定是否自动播放）
     if (props.word && autoPlayOnWordChange.value) {

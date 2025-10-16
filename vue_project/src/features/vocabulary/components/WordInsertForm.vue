@@ -696,9 +696,9 @@ onUnmounted(() => {
   background: none;
   border: none;
   color: #9ca3af;
-  font-size: 1.25rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  font-size: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -706,6 +706,10 @@ onUnmounted(() => {
   cursor: pointer;
   transition: all 0.2s;
   line-height: 1;
+  /* 移动端触摸优化 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .clear-button:hover {
@@ -916,11 +920,11 @@ onUnmounted(() => {
   }
 
   .clear-button {
+    right: 0.25rem;
     width: 2rem;
     height: 2rem;
     min-width: 44px;
     min-height: 44px;
-    right: 0.25rem;
   }
 
   .lookup-result {
@@ -984,6 +988,14 @@ onUnmounted(() => {
     width: 50px;
     min-width: 50px;
     height: 50px;
+  }
+
+  .clear-button {
+    right: 0.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
   }
 
   .lookup-result {
@@ -1052,6 +1064,14 @@ onUnmounted(() => {
     width: 36px;
     min-width: 36px;
     height: 36px;
+  }
+
+  .clear-button {
+    right: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
   }
 
   .lookup-result {
