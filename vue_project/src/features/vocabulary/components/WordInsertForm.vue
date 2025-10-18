@@ -191,8 +191,10 @@ const lookupDefinition = async () => {
 
   isLookupLoading.value = true;
   try {
-    // 模拟 API 调用 - 这里需要替换为实际的 API
-    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${lookupWord.value.trim()}`);
+    // 使用CORS代理访问字典API
+    const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${lookupWord.value.trim()}`;
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+    const response = await fetch(proxyUrl);
 
     if (response.ok) {
       const data = await response.json();

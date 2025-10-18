@@ -203,7 +203,7 @@ onUnmounted(() => {
 
 .word-card.selected {
   border-color: #ef4444;
-  border-width: 3px;
+  border-width: 2px;
   border-style: solid;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
 }
