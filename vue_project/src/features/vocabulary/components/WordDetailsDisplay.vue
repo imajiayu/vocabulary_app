@@ -1,8 +1,8 @@
 <template>
-  <!-- 完整展示模式 -->
-  <div v-if="hasDefinition" class="content-wrapper">
+  <div class="content-wrapper">
     <!-- 主内容 -->
     <div class="main-content">
+      <!-- 单词部分 - 始终显示 -->
       <div class="field-group word-field-group">
         <label class="field-label">单词</label>
         <div class="word-display">
@@ -10,9 +10,11 @@
         </div>
       </div>
 
+      <!-- 音标部分 -->
       <div class="field-group">
         <label class="field-label">音标</label>
-        <div class="phonetic-display">
+        <!-- 有定义时显示音标 -->
+        <div v-if="hasDefinition" class="phonetic-display">
           <div v-if="props.word?.definition.phonetic?.us" class="phonetic-item">
             <span class="phonetic-region">美音</span>
             <span class="phonetic-text clickable-phonetic" @click="playWordAudio(props.word.word, 'us')">
@@ -27,14 +29,26 @@
             </span>
           </div>
         </div>
+        <!-- 无定义时显示加载动画 -->
+        <div v-else class="loading-container">
+          <div class="loading-spinner"></div>
+          <p>加载中...</p>
+        </div>
       </div>
 
+      <!-- 释义部分 -->
       <div class="field-group">
         <label class="field-label">释义</label>
-        <div class="definitions-display">
+        <!-- 有定义时显示释义 -->
+        <div v-if="hasDefinition" class="definitions-display">
           <div v-for="(definition, index) in props.word?.definition.definitions" :key="`${props.word?.id}-def-${index}-${definition}`" class="definition-item">
             {{ definition }}
           </div>
+        </div>
+        <!-- 无定义时显示加载动画 -->
+        <div v-else class="loading-container">
+          <div class="loading-spinner"></div>
+          <p>加载中...</p>
         </div>
       </div>
     </div>
@@ -43,20 +57,20 @@
     <div class="examples-container">
       <div class="field-group">
         <label class="field-label">例句</label>
-        <div class="examples-display">
+        <!-- 有定义时显示例句 -->
+        <div v-if="hasDefinition" class="examples-display">
           <div v-for="(example, index) in props.word?.definition.examples" :key="`${props.word?.id}-ex-${index}-${example.en}`" class="example-item">
             <div class="example-en" v-html="example.en"></div>
             <div class="example-zh">{{ example.zh }}</div>
           </div>
         </div>
+        <!-- 无定义时显示加载动画 -->
+        <div v-else class="loading-container">
+          <div class="loading-spinner"></div>
+          <p>加载中...</p>
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- 加载状态 -->
-  <div v-else class="loading-container">
-    <div class="loading-spinner"></div>
-    <p>加载中...</p>
   </div>
 </template>
 

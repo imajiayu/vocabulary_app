@@ -34,10 +34,15 @@ class WebSocketEvents:
 
     @staticmethod
     def emit_word_updated(
-        word_id: int, definition: Dict[str, Any], room: Optional[str] = None
+        word_id: int, definition: Dict[str, Any], room: Optional[str] = None, queue_size: int = 0
     ):
         """发送单词更新事件"""
-        data = {"id": word_id, "definition": definition, "timestamp": time.time()}
+        data = {
+            "id": word_id,
+            "definition": definition,
+            "timestamp": time.time(),
+            "queue_size": queue_size  # 剩余队列长度
+        }
         socketio.emit(WebSocketEvents.Events.WORD_UPDATED, data, room=room)
 
     @staticmethod

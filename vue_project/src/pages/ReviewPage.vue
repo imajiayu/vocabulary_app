@@ -50,6 +50,10 @@
           <h2>恭喜完成！</h2>
           <p v-if="mode === 'mode_lapse'">所有遗忘单词已复习完成</p>
           <p v-else>当前批次复习完成</p>
+          <button @click="goHome" class="home-action-button">
+            <span class="button-icon">🏠</span>
+            <span class="button-text">回到首页</span>
+          </button>
         </div>
       </div>
     </main>
@@ -58,7 +62,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
@@ -147,6 +151,7 @@ const handleWordMastered = (wordId: number) => {
 
 // 路由和存储
 const route = useRoute()
+const router = useRouter()
 const reviewStore = useReviewStore()
 
 // 从store解构响应式状态
@@ -339,6 +344,17 @@ const handleCloseNotification = () => {
   notification.value.show = false
 }
 
+// 回到首页
+const goHome = async () => {
+  try {
+    await router.push('/')
+  } catch (error) {
+    console.error('导航失败:', error)
+    // 备选方案：使用原生跳转
+    window.location.href = '/'
+  }
+}
+
 // 监听路由变化
 watch(() => route.query, async () => {
   if (route.name === 'review') {
@@ -474,6 +490,71 @@ onUnmounted(() => {
   line-height: 1.6;
 }
 
+/* 回到首页按钮 */
+.home-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 按钮背景动画层 */
+.home-action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #7c8fef 0%, #8757a7 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.home-action-button:hover::before {
+  opacity: 1;
+}
+
+.home-action-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.home-action-button:active {
+  transform: translateY(-1px) scale(1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.button-icon {
+  font-size: 20px;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-text {
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.5px;
+}
+
 /* 移动端适配 - 恢复原始布局 */
 @media (max-width: 768px) {
   /* 移动端恢复原来的布局方式 */
@@ -505,6 +586,17 @@ onUnmounted(() => {
     bottom: 10px;
     padding: 0.4em 0.8em;
     font-size: 0.8em;
+  }
+
+  /* 移动端按钮样式 */
+  .home-action-button {
+    padding: 12px 28px;
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  .button-icon {
+    font-size: 18px;
   }
 }
 </style>

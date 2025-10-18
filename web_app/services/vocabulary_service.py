@@ -30,7 +30,8 @@ def fetch_definition_from_web(word):
     headers = {"User-Agent": "Mozilla/5.0"}
 
     try:
-        response = requests.get(url, headers=headers)
+        # 添加10秒超时，避免长时间阻塞
+        response = requests.get(url, headers=headers, timeout=10)
         response.encoding = response.apparent_encoding
         soup = BeautifulSoup(response.text, "html.parser")
 
@@ -80,10 +81,10 @@ def fetch_definition_from_web(word):
 def fill_missing_definitions():
     """
     为所有缺失释义的单词填充释义
-    使用批量释义服务异步处理
+    使用批量释义服务异步处理（自动去重）
 
     Returns:
-        int: 需要填充释义的单词数量
+        tuple: (总单词数, 新增单词数, 跳过单词数)
     """
     from web_app.database.vocabulary_dao import db_fetch_words_without_definition
     from web_app.services.batch_definition_service import get_batch_definition_service
@@ -92,11 +93,20 @@ def fill_missing_definitions():
     words_without_def = db_fetch_words_without_definition()
 
     if not words_without_def:
-        return 0
+        return (0, 0, 0)
 
-    # 使用批量释义服务添加任务
+    # 使用批量释义服务添加任务（自动去重）
     batch_service = get_batch_definition_service()
-    for word_data in words_without_def:
-        batch_service.add_task(word_data["id"], word_data["word"])
+    added_count = 0
+    skipped_count = 0
 
-    return len(words_without_def)
+    for word_data in words_without_def:
+        if batch_service.add_task(word_data["id"], word_data["word"]):
+            added_count += 1
+        else:
+            skipped_count += 1
+
+    total_count = len(words_without_def)
+    print(f"📊 Fill definitions: total={total_count}, added={added_count}, skipped={skipped_count}")
+
+    return (total_count, added_count, skipped_count)

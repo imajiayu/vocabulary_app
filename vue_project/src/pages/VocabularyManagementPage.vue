@@ -58,6 +58,17 @@
                             ></div>
                         </div>
                     </div>
+
+                    <!-- 释义加载进度指示器 -->
+                    <div v-if="definitionQueueSize > 0" class="definition-loading-progress">
+                        <div class="progress-info">
+                            <span class="progress-text">
+                                正在填充单词释义，剩余单词：{{ definitionQueueSize }}
+                            </span>
+                            <div class="loading-spinner-small"></div>
+                        </div>
+                    </div>
+
                     <WordGrid
                         ref="wordGridRef"
                         :words="words"
@@ -108,6 +119,9 @@ const loadedWords = ref(0);
 const isLoadingMore = ref(false);
 const hasMoreWords = ref(true);
 const shouldStopLoading = ref(false); // 控制是否停止后台加载
+
+// 释义加载队列大小
+const definitionQueueSize = ref(0);
 
 // Use read-only composable to get WordIndex selection
 const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
@@ -309,9 +323,14 @@ const handleBatchDelete = (wordIds: number[]) => {
 const { connect, isConnected, onWordUpdated, off } = useWordManagementWebSocket()
 
 // WebSocket事件回调 - 用于更新列表中的单词（特别是新增单词收到的definition）
-const wordUpdatedCallback = (data: { id: number; definition: any }) => {
+const wordUpdatedCallback = (data: { id: number; definition: any; queue_size?: number }) => {
     const wordId = data.id;
     const definition = data.definition;
+
+    // 更新队列大小
+    if (typeof data.queue_size === 'number') {
+        definitionQueueSize.value = data.queue_size;
+    }
 
     // 更新列表中的单词
     const index = words.value.findIndex(w => w.id === wordId);
@@ -379,6 +398,16 @@ onUnmounted(() => {
     padding-bottom: 1.5rem;
 }
 
+/* 释义加载进度指示器 */
+.definition-loading-progress {
+    padding: 1rem;
+    padding-bottom: 1.5rem;
+    background: #fef3c7;
+    border-radius: 0.5rem;
+    border: 1px solid #fbbf24;
+    margin-bottom: 1rem;
+}
+
 .progress-info {
     display: flex;
     align-items: center;
@@ -386,10 +415,18 @@ onUnmounted(() => {
     margin-bottom: 0.75rem;
 }
 
+.definition-loading-progress .progress-info {
+    margin-bottom: 0;
+}
+
 .progress-text {
     font-size: 0.875rem;
     color: #374151;
     font-weight: 500;
+}
+
+.definition-loading-progress .progress-text {
+    color: #92400e;
 }
 
 .loading-spinner-small {
@@ -399,6 +436,11 @@ onUnmounted(() => {
     border-top: 2px solid #3b82f6;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+.definition-loading-progress .loading-spinner-small {
+    border: 2px solid #fbbf24;
+    border-top: 2px solid #f59e0b;
 }
 
 .progress-bar {
@@ -458,6 +500,11 @@ onUnmounted(() => {
     .loading-progress {
         margin-top: 1rem;
         padding: 0.75rem;
+    }
+
+    .definition-loading-progress {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
     }
 
     .progress-text {

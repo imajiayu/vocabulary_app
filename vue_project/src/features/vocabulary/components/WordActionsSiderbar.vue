@@ -83,8 +83,10 @@ const emit = defineEmits<{
   wordMastered: [wordId: number];
 }>();
 
-// Single state for forget button - gets disabled after one click
-const isForgetButtonUsed = ref(false);
+// Computed property to check if word has been marked as forgotten (lapse > 0)
+const isForgetButtonUsed = computed(() => {
+  return props.word ? (props.word.lapse ?? 0) > 0 : false;
+});
 
 // Store the original word text when editing begins
 const originalWordText = ref<string>('');
@@ -134,9 +136,6 @@ const toggleReview = async () => {
 
 const resetProgress = async () => {
   if (!props.word || isForgetButtonUsed.value) return;
-
-  // Mark button as used immediately when clicked
-  isForgetButtonUsed.value = true;
 
   // 使用本地时间计算明天的日期，避免时区转换问题
   const tomorrow = new Date();

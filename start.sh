@@ -20,18 +20,18 @@ start_backend() {
 }
 
 start_frontend() {
-    echo "Starting Vue frontend in background..."
+    echo "Starting Vue frontend in background (HTTPS on port 443)..."
     cd vue_project || exit
 
-    # 使用 运行在 80 端口
+    # 使用 sudo 运行在 443 端口（HTTPS）
     nohup npm run dev &> "../$FRONTEND_LOG" &
     echo $! > "../$FRONTEND_PID_FILE"
     cd ..
     echo "Frontend PID: $(cat $FRONTEND_PID_FILE)"
-    echo "Frontend (Vue):   http://0.0.0.0:5173"
-    echo "                  http://localhost:5173"
-    echo "                  http://$(hostname -f):5173"
-    echo "Frontend logs:    ../$FRONTEND_LOG"
+    echo "Frontend (Vue):   https://localhost"
+    echo "                  https://127.0.0.1"
+    echo "                  https://$(hostname -f)"
+    echo "Frontend logs:    $FRONTEND_LOG"
 }
 
 start() {
@@ -60,7 +60,7 @@ stop_backend() {
 stop_frontend() {
     echo "Stopping frontend..."
 
-    # Kill process from PID file
+    # Kill process from PID file (需要 sudo 因为是以 sudo 启动的)
     if [ -f "$FRONTEND_PID_FILE" ]; then
         kill $(cat "$FRONTEND_PID_FILE") 2>/dev/null && rm "$FRONTEND_PID_FILE"
     fi
