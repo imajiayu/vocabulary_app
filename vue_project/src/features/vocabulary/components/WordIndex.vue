@@ -20,10 +20,13 @@
     </div>
 
     <header class="text-center header-section">
-      <h1 class="text-3xl font-bold text-primary m-0 main-title" style="margin-bottom: 6px;">单词复习</h1>
+      <div class="header-with-switch">
+        <h1 class="text-3xl font-bold text-primary m-0 main-title">单词复习</h1>
+        <IOSSwitch v-model="shuffleModel" label="打乱顺序" class="shuffle-switch" />
+      </div>
       <p class="text-sm text-secondary m-0 subtitle">选择一个模式开始练习，支持打乱顺序与单词数量设置</p>
     </header>
-    
+
     <!-- 来源切换 tabs -->
     <SwitchTab
       v-model="currentSource"
@@ -31,11 +34,8 @@
       container-class="secondary-theme"
       :show-indicator="true"
       @change="handleSourceChange"
+      class="source-tabs"
     />
-
-    <div class="switch-section">
-      <IOSSwitch v-model="shuffleModel" label="打乱顺序" />
-    </div>
 
     <ButtonGrid>
       <!-- Compact按钮容器 -->
@@ -324,12 +324,20 @@ const resumeProgress = () => {
   margin-bottom: 2rem;
 }
 
-.switch-section {
+.header-with-switch {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  margin: 1rem 0 1.5rem 0;
-  gap: 1rem;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.shuffle-switch {
+  flex-shrink: 0;
+}
+
+.source-tabs {
+  margin-bottom: 1.5rem;
 }
 
 /* Compact按钮容器 */
@@ -355,11 +363,6 @@ const resumeProgress = () => {
     margin-bottom: 1.5rem;
   }
 
-  .switch-section {
-    margin: 0.875rem 0 1.25rem 0;
-    justify-content: center;
-  }
-
   .compact-buttons-container {
     gap: 0.875rem;
   }
@@ -377,10 +380,6 @@ const resumeProgress = () => {
     margin-bottom: 1.25rem;
   }
 
-  .switch-section {
-    margin: 0.75rem 0 1rem 0;
-  }
-
   .compact-buttons-container {
     gap: 0.75rem;
   }
@@ -395,10 +394,6 @@ const resumeProgress = () => {
 
   .header-section {
     margin-bottom: 1rem;
-  }
-
-  .switch-section {
-    margin: 0.5rem 0 0.75rem 0;
   }
 
 }

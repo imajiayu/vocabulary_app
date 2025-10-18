@@ -67,6 +67,7 @@ export interface BatchImportResult {
   success_count: number
   failed_count: number
   failed_words: string[]
+  failed_details: string[]
   total: number
   inserted_words: Word[]
 }
