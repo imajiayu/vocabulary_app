@@ -331,40 +331,61 @@ export const useReviewStore = defineStore('review', () => {
 
       const data = await api.progress.getRestoreData()
 
-      if (!data.progress || !data.words) {
+      if (!data.progress) {
         console.log('No valid progress data to restore')
         return false
       }
 
-      const { progress, words } = data
+      const { progress } = data
 
       // 恢复基本状态
       mode.value = progress.mode as ReviewMode
       totalWords.value = data.total
 
-      // 对于lapse模式，特殊处理
+      // 后端已恢复session快照，现在使用 /api/words/review 加载单词
+      // 关键：使用 batch_id >= 1 避免覆盖快照
+
       if (progress.mode === 'mode_lapse') {
+        // Lapse模式：一次性加载所有单词
+        const restoreData: WordsApiResponse = await api.words.getReviewWords({
+          mode: mode.value,
+          limit: data.total,  // 使用快照总长度
+          batch_id: 1,  // 非0，使用session快照
+          batch_size: data.total,  // 一次性加载全部
+          offset: 0
+        })
+
         // 重新排序单词并恢复队列
-        const sortedWords = sortByLapse(words as Word[], progress.shuffle)
+        const sortedWords = sortByLapse(restoreData.words as Word[], progress.shuffle)
         wordQueue.value = sortedWords
-        // 恢复initial_lapse_count（关键修复：使用保存的初始值，而不是当前总和）
+        // 恢复initial_lapse_count（使用保存的初始值）
         initialLapseCount.value = progress.initial_lapse_count || 0
         hasMore.value = false
 
         // lapse模式索引始终为0（循环队列）
         currentIndex.value = 0
+
+        console.log(`Restored lapse progress: total=${data.total}, initial_lapse=${initialLapseCount.value}`)
       } else {
-        // 其他模式恢复保存的索引位置
-        currentIndex.value = progress.current_index
-        wordQueue.value = words as Word[]
-        // 正确计算hasMore：还有服务器数据 AND 当前队列还没到最后一个
-        hasMore.value = (words.length + progress.current_index) < totalWords.value
-        // 如果已经到达最后但队列还有数据，标记为无更多数据
-        if (currentIndex.value >= words.length && hasMore.value) {
-          // 需要加载更多数据继续
-        } else if (currentIndex.value >= words.length) {
-          hasMore.value = false
-        }
+        // 非lapse模式：分页加载
+        const savedIndex = progress.current_index || 0
+        const batchSize = settings.value.batchSize
+
+        // 直接从savedIndex位置开始加载
+        const restoreData: WordsApiResponse = await api.words.getReviewWords({
+          mode: mode.value,
+          limit: settings.value.totalLimit,
+          batch_id: 1,  // >= 1，使用session快照
+          batch_size: batchSize,
+          offset: savedIndex
+        })
+
+        wordQueue.value = restoreData.words as Word[]
+        currentIndex.value = 0  // 队列第一个就是当前单词
+        currentBatchId.value = 1  // 已加载一批
+        hasMore.value = savedIndex + batchSize < data.total
+
+        console.log(`Restored progress: mode=${mode.value}, savedIndex=${savedIndex}, loaded=${restoreData.words.length} words`)
       }
 
       return true

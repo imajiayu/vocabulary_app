@@ -72,6 +72,13 @@ export type {
 export class ProgressApi {
   /**
    * 获取可恢复的进度数据
+   *
+   * 统一逻辑：
+   * - 后端只恢复session快照，不返回单词数据
+   * - 前端需要调用 /api/words/review 分页加载单词
+   *   - lapse模式：batch_id=1, offset=0, batch_size=total（一次性加载全部）
+   *   - 非lapse模式：batch_id=计算的批次+1, 分批加载
+   * - 注意：使用 batch_id >= 1 避免覆盖快照（batch_id=0会创建新快照）
    */
   static async getRestoreData(): Promise<{
     progress: {
@@ -82,7 +89,6 @@ export class ProgressApi {
       word_ids: number[]
       initial_lapse_count: number
     }
-    words: Word[]
     total: number
   }> {
     return get('/api/progress/restore')

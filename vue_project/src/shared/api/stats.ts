@@ -63,6 +63,7 @@ export interface IndexSummary {
     progress_basic?: {
       mode: string
       source: string
+      shuffle: boolean
       current_index: number
     }
   }

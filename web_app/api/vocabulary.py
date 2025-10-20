@@ -218,6 +218,7 @@ def get_index_summary():
                     {
                         "mode": progress_info.get("progress", {}).get("mode"),
                         "source": progress_info.get("progress", {}).get("source"),
+                        "shuffle": progress_info.get("progress", {}).get("shuffle"),
                         "current_index": progress_info.get("progress", {}).get(
                             "current_index"
                         ),
@@ -726,7 +727,14 @@ def update_review_word(word_id):
 
 @api_bp.route("/progress/restore", methods=["GET"])
 def get_progress_restore():
-    """获取可恢复的进度详情，用于前端恢复复习状态"""
+    """获取可恢复的进度详情，用于前端恢复复习状态
+
+    统一逻辑：
+    - 所有模式都只恢复session快照，不返回单词数据
+    - 前端调用分页API获取单词数据
+      - lapse模式：调用 /api/words/paginated，offset=0, limit=快照长度
+      - 非lapse模式：调用 /api/words/review，分批加载
+    """
     try:
         # 使用service层获取进度恢复数据
         success, progress_data = get_progress_restore_data()
@@ -738,13 +746,17 @@ def get_progress_restore():
         if not word_ids:
             return create_response(False, None, "No words in progress snapshot"), 400
 
-        # 批量获取单词数据
-        words = db_get_words_review_info_batch(word_ids)
+        # 恢复session快照（对于后续分页请求）
+        session[SESSION_KEY_SNAPSHOT] = word_ids
 
+        # 统一返回进度信息，前端将调用 /api/words/review 加载单词
         return create_response(
             True,
-            {"progress": progress_data, "words": words, "total": len(word_ids)},
-            "Progress restore data retrieved successfully",
+            {
+                "progress": progress_data,
+                "total": len(word_ids),
+            },
+            "Progress initialized, use pagination to load words",
         )
 
     except Exception as e:

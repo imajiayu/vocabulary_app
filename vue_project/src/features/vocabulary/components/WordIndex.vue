@@ -8,9 +8,13 @@
         <div class="progress-notification-text">
           <div class="progress-notification-title">发现未完成的学习进度</div>
           <div class="progress-notification-details">
-            {{ progressInfo.source }} {{ getModeDisplayName(progressInfo.mode) }} 模式，
-            已完成 {{ progressInfo.current_index }}/{{ progressInfo.total_words }} 个单词，
-            还剩 {{ progressInfo.remaining_words }} 个
+            <span class="progress-source">{{ progressInfo.source }}</span>
+            <span class="progress-mode">{{ getModeDisplayName(progressInfo.mode) }}</span>
+            <span class="progress-shuffle">{{ progressInfo.shuffle ? '随机' : '顺序' }}</span>
+            <span class="progress-stats">
+              已完成 <span class="progress-number">{{ progressInfo.current_index }}/{{ progressInfo.total_words }}</span> 个单词，
+              还剩 <span class="progress-remaining">{{ progressInfo.remaining_words }}</span> 个
+            </span>
           </div>
         </div>
         <button @click.stop="dismissProgressNotification" class="progress-notification-close">
@@ -130,6 +134,7 @@ const showProgressNotification = ref(false)
 const progressInfo = ref({
   mode: '',
   source: '',
+  shuffle: false,
   current_index: 0,
   total_words: 0,
   remaining_words: 0
@@ -208,6 +213,7 @@ const fetchSummary = async (isRetry = false) => {
       progressInfo.value = {
         mode: basic.mode,
         source: basic.source,
+        shuffle: basic.shuffle,
         current_index: basic.current_index,
         total_words: summary?.total_words || 0,
         remaining_words: summary?.remaining_words || 0
@@ -469,6 +475,47 @@ const resumeProgress = () => {
   color: var(--color-text-secondary);
   font-size: 0.8rem;
   line-height: 1.4;
+}
+
+/* 进度通知高亮元素 */
+.progress-source {
+  color: #3b82f6;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.progress-mode {
+  color: #10b981;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.progress-shuffle {
+  color: #f59e0b;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.progress-shuffle::before {
+  content: '·';
+  margin-right: 0.25rem;
+  color: var(--color-text-tertiary);
+}
+
+.progress-stats {
+  color: var(--color-text-secondary);
+}
+
+.progress-number {
+  color: #6366f1;
+  font-weight: 600;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+}
+
+.progress-remaining {
+  color: #ef4444;
+  font-weight: 600;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
 }
 
 .progress-notification-close {
