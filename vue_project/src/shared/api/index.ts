@@ -88,6 +88,7 @@ export class ProgressApi {
       current_index: number
       word_ids: number[]
       initial_lapse_count: number
+      initial_lapse_word_count: number
     }
     total: number
   }> {

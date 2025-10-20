@@ -9,12 +9,22 @@
             class="word-item"
             :style="{ color: getWordColor(index) }"
             @click="() => openModal(w)"
+            @mouseenter="(e) => handleMouseEnter(e, w)"
+            @mouseleave="handleMouseLeave"
+            @mousemove="handleMouseMove"
           >
             {{ w.word }}
           </div>
         </transition-group>
       </div>
     </div>
+
+    <WordTooltip
+      v-if="!isMobile && tooltipWord"
+      :word="tooltipWord"
+      :visible="showTooltip"
+      :position="tooltipPosition"
+    />
 
     <teleport to="body">
       <WordDetailModal
@@ -36,6 +46,7 @@
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Word } from '@/shared/types'
 import WordDetailModal from '@/features/vocabulary/components/WordDetailModal.vue'
+import WordTooltip from '@/features/vocabulary/components/WordTooltip.vue'
 
 const wordListInnerRef = ref<HTMLDivElement | null>(null)
 
@@ -57,6 +68,12 @@ const props = defineProps<Props>()
 const selectedWordId = ref<number | undefined>(undefined)
 const isModalOpen = ref(false)
 const cachedSelectedWord = ref<Word | undefined>(undefined)
+
+// Tooltip 相关状态
+const showTooltip = ref(false)
+const tooltipPosition = ref({ x: 0, y: 0 })
+const tooltipWord = ref<Word | undefined>(undefined)
+const isMobile = ref(false)
 
 // 计算属性：优先使用缓存的单词，避免从队列删除后modal立即关闭
 const selectedWord = computed(() => {
@@ -179,16 +196,46 @@ watch(
   { deep: true, flush: 'post' }
 )
 
+// 检测是否为移动端
+const checkMobile = () => {
+  isMobile.value = !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+}
+
+// 处理鼠标进入事件
+const handleMouseEnter = (e: MouseEvent, word: Word) => {
+  if (isMobile.value) return
+
+  tooltipWord.value = word
+  tooltipPosition.value = { x: e.clientX, y: e.clientY }
+  showTooltip.value = true
+}
+
+// 处理鼠标移动事件
+const handleMouseMove = (e: MouseEvent) => {
+  if (isMobile.value) return
+
+  tooltipPosition.value = { x: e.clientX, y: e.clientY }
+}
+
+// 处理鼠标离开事件
+const handleMouseLeave = () => {
+  showTooltip.value = false
+  tooltipWord.value = undefined
+}
+
 onMounted(() => {
   updateMaxVisible()
   setTimeout(() => scrollToBottom(), 100)
   wordListInnerRef.value?.addEventListener('scroll', onScroll)
   window.addEventListener('resize', updateMaxVisible)
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
 })
 
 onUnmounted(() => {
   wordListInnerRef.value?.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', updateMaxVisible)
+  window.removeEventListener('resize', checkMobile)
 })
 
 const getWordColor = (index: number) => {

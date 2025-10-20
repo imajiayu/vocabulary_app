@@ -548,6 +548,7 @@ def update_word(word_id):
                                         progress["shuffle"],
                                         new_word_ids,
                                         progress.get("initial_lapse_count", 0),
+                                        progress.get("initial_lapse_word_count", 0),
                                     )
 
                             # 从session快照中移除

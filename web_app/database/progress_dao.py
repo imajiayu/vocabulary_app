@@ -6,7 +6,7 @@ from web_app.extensions import get_session
 from web_app.models.word import Progress
 
 
-def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0):
+def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0, initial_lapse_word_count=0):
     """
     保存学习进度（覆盖式更新）
 
@@ -16,6 +16,7 @@ def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0):
         shuffle: 是否打乱顺序
         word_ids: 单词ID列表
         initial_lapse_count: lapse模式的初始总lapse数（仅lapse模式需要）
+        initial_lapse_word_count: lapse模式的初始单词数量（仅lapse模式需要）
 
     Returns:
         bool: 是否保存成功
@@ -33,6 +34,7 @@ def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0):
                 existing_progress.word_ids_snapshot = json.dumps(word_ids)
                 existing_progress.current_index = 0
                 existing_progress.initial_lapse_count = initial_lapse_count
+                existing_progress.initial_lapse_word_count = initial_lapse_word_count
             else:
                 # 创建新记录
                 new_progress = Progress(
@@ -43,6 +45,7 @@ def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0):
                     word_ids_snapshot=json.dumps(word_ids),
                     current_index=0,
                     initial_lapse_count=initial_lapse_count,
+                    initial_lapse_word_count=initial_lapse_word_count,
                 )
                 db.add(new_progress)
 
@@ -124,6 +127,7 @@ def db_clear_progress():
                 progress.word_ids_snapshot = "[]"
                 progress.current_index = 0
                 progress.initial_lapse_count = 0
+                progress.initial_lapse_word_count = 0
                 db.commit()
                 return True
             else:
@@ -136,6 +140,7 @@ def db_clear_progress():
                     word_ids_snapshot="[]",
                     current_index=0,
                     initial_lapse_count=0,
+                    initial_lapse_word_count=0,
                 )
                 db.add(initial_progress)
                 db.commit()
@@ -203,6 +208,8 @@ def db_get_progress_summary():
         "total_words": total_words,
         "current_index": current_index,
         "remaining_words": remaining_words,
+        "initial_lapse_count": progress.get("initial_lapse_count", 0),
+        "initial_lapse_word_count": progress.get("initial_lapse_word_count", 0),
     }
 
 
@@ -249,7 +256,7 @@ def db_get_progress_restore_data():
             active_words = db_get_active_lapse_words(word_ids)
             active_word_ids = [w["id"] for w in active_words]
 
-            # 如果有单词被过滤掉，更新快照（保持initial_lapse_count不变）
+            # 如果有单词被过滤掉，更新快照（保持initial_lapse_count和initial_lapse_word_count不变）
             if len(active_word_ids) != len(word_ids):
                 success = db_save_progress(
                     progress["mode"],
@@ -257,6 +264,7 @@ def db_get_progress_restore_data():
                     progress["shuffle"],
                     active_word_ids,
                     progress.get("initial_lapse_count", 0),
+                    progress.get("initial_lapse_word_count", 0),
                 )
                 if not success:
                     return False, {}
@@ -270,6 +278,7 @@ def db_get_progress_restore_data():
             "current_index": progress.get("current_index", 0),
             "word_ids": word_ids,
             "initial_lapse_count": progress.get("initial_lapse_count", 0),
+            "initial_lapse_word_count": progress.get("initial_lapse_word_count", 0),
         }
 
     except Exception as e:

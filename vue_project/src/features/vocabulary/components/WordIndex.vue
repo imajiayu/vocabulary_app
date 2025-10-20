@@ -12,8 +12,8 @@
             <span class="progress-mode">{{ getModeDisplayName(progressInfo.mode) }}</span>
             <span class="progress-shuffle">{{ progressInfo.shuffle ? '随机' : '顺序' }}</span>
             <span class="progress-stats">
-              已完成 <span class="progress-number">{{ progressInfo.current_index }}/{{ progressInfo.total_words }}</span> 个单词，
-              还剩 <span class="progress-remaining">{{ progressInfo.remaining_words }}</span> 个
+              已完成 <span class="progress-number">{{ completedCount }}/{{ totalCount }}</span> 个单词，
+              还剩 <span class="progress-remaining">{{ remainingCount }}</span> 个
             </span>
           </div>
         </div>
@@ -137,7 +137,8 @@ const progressInfo = ref({
   shuffle: false,
   current_index: 0,
   total_words: 0,
-  remaining_words: 0
+  remaining_words: 0,
+  initial_lapse_word_count: 0
 })
 
 // 使用 source selection composable
@@ -216,7 +217,8 @@ const fetchSummary = async (isRetry = false) => {
         shuffle: basic.shuffle,
         current_index: basic.current_index,
         total_words: summary?.total_words || 0,
-        remaining_words: summary?.remaining_words || 0
+        remaining_words: summary?.remaining_words || 0,
+        initial_lapse_word_count: summary?.initial_lapse_word_count || 0
       }
       showProgressNotification.value = true
     }
@@ -311,6 +313,30 @@ const getModeDisplayName = (mode: string) => {
   }
   return modeMap[mode] || mode
 }
+
+// 根据模式计算已完成单词数
+const completedCount = computed(() => {
+  if (progressInfo.value.mode === 'mode_lapse') {
+    return progressInfo.value.initial_lapse_word_count - progressInfo.value.total_words
+  }
+  return progressInfo.value.current_index
+})
+
+// 根据模式计算总单词数
+const totalCount = computed(() => {
+  if (progressInfo.value.mode === 'mode_lapse') {
+    return progressInfo.value.initial_lapse_word_count
+  }
+  return progressInfo.value.total_words
+})
+
+// 根据模式计算剩余单词数
+const remainingCount = computed(() => {
+  if (progressInfo.value.mode === 'mode_lapse') {
+    return progressInfo.value.total_words
+  }
+  return progressInfo.value.remaining_words
+})
 
 const dismissProgressNotification = async () => {
   try {

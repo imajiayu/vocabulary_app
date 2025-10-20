@@ -59,6 +59,8 @@ export interface IndexSummary {
       total_words: number
       current_index: number
       remaining_words: number
+      initial_lapse_count: number
+      initial_lapse_word_count: number
     }
     progress_basic?: {
       mode: string
