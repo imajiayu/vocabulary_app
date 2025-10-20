@@ -62,6 +62,57 @@ def update_settings():
                 f"MAX_PREP_DAYS = {learning['maxPrepDays']}",
                 content,
             )
+        if "lapseQueueSize" in learning:
+            content = re.sub(
+                r"LAPSE_QUEUE_SIZE\s*=\s*\d+",
+                f"LAPSE_QUEUE_SIZE = {learning['lapseQueueSize']}",
+                content,
+            )
+        if "lapseMaxValue" in learning:
+            content = re.sub(
+                r"LAPSE_MAX_VALUE\s*=\s*\d+",
+                f"LAPSE_MAX_VALUE = {learning['lapseMaxValue']}",
+                content,
+            )
+        if "lapseInitialValue" in learning:
+            content = re.sub(
+                r"LAPSE_INITIAL_VALUE\s*=\s*\d+",
+                f"LAPSE_INITIAL_VALUE = {learning['lapseInitialValue']}",
+                content,
+            )
+        if "lapseFastExitEnabled" in learning:
+            content = re.sub(
+                r"LAPSE_FAST_EXIT_ENABLED\s*=\s*(?:True|False)",
+                f"LAPSE_FAST_EXIT_ENABLED = {learning['lapseFastExitEnabled']}",
+                content,
+            )
+        if "lapseConsecutiveThreshold" in learning:
+            content = re.sub(
+                r"LAPSE_CONSECUTIVE_THRESHOLD\s*=\s*\d+",
+                f"LAPSE_CONSECUTIVE_THRESHOLD = {learning['lapseConsecutiveThreshold']}",
+                content,
+            )
+        if "defaultShuffle" in learning:
+            content = re.sub(
+                r"DEFAULT_SHUFFLE\s*=\s*(?:True|False)",
+                f"DEFAULT_SHUFFLE = {learning['defaultShuffle']}",
+                content,
+            )
+
+        # 更新单词管理设置
+        management = data.get("management", {})
+        if "wordsLoadBatchSize" in management:
+            content = re.sub(
+                r"WORDS_LOAD_BATCH_SIZE\s*=\s*\d+",
+                f"WORDS_LOAD_BATCH_SIZE = {management['wordsLoadBatchSize']}",
+                content,
+            )
+        if "definitionFetchThreads" in management:
+            content = re.sub(
+                r"DEFINITION_FETCH_THREADS\s*=\s*\d+",
+                f"DEFINITION_FETCH_THREADS = {management['definitionFetchThreads']}",
+                content,
+            )
 
         # 更新音频设置
         audio = data.get("audio", {})
@@ -155,3 +206,31 @@ def update_settings():
 
     except Exception as e:
         return jsonify({"error": f"更新失败: {str(e)}"}), 400
+
+
+@settings_bp.route("/settings/restart", methods=["POST"])
+def restart_server():
+    """
+    重启服务器
+    用于应用某些需要重启才能生效的配置更改（如 DEFINITION_FETCH_THREADS）
+    """
+    import os
+    import subprocess
+    import threading
+
+    def restart():
+        # 获取项目根目录（web_app/api -> web_app -> project_root）
+        project_root = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        )
+        start_script = os.path.join(project_root, "start.sh")
+
+        # 调用 ./start.sh restart backend 来重启后端
+        subprocess.Popen([start_script, "restart", "backend"], cwd=project_root)
+
+    # 在后台线程中执行restart，避免阻塞响应
+    thread = threading.Thread(target=restart)
+    thread.daemon = True
+    thread.start()
+
+    return jsonify({"message": "服务器正在重启..."}), 200

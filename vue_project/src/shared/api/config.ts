@@ -92,24 +92,6 @@ export class ConfigApi {
   }
 
   /**
-   * 获取shuffle设置
-   */
-  static async getShuffle(): Promise<{
-    shuffle: boolean
-  }> {
-    return get('/api/shuffle')
-  }
-
-  /**
-   * 设置shuffle
-   */
-  static async setShuffle(shuffle: boolean): Promise<{
-    shuffle: boolean
-  }> {
-    return post('/api/shuffle', { shuffle })
-  }
-
-  /**
    * 获取应用设置
    */
   static async getSettings(): Promise<AppSettings> {

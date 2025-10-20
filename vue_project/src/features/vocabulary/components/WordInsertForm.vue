@@ -506,6 +506,7 @@ onUnmounted(() => {
   height: 100%;
   font-size: 16px; /* 防止移动端自动缩放 */
   -webkit-appearance: none;
+  appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -651,6 +652,7 @@ onUnmounted(() => {
   height: 100%;
   font-size: 16px; /* 防止移动端自动缩放 */
   -webkit-appearance: none;
+  appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
 

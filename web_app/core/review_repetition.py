@@ -5,6 +5,7 @@ from web_app.database.vocabulary_dao import (
     get_daily_review_loads_by_source,
 )
 from web_app.config import LOW_EF_THRESHOLD, ReviewLoadLimits, UserConfig
+from web_app.config import UserConfig as Config
 import math
 
 
@@ -162,7 +163,8 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         # 忘记（score <= 2）
         repetition_new = 0
         interval_new = 1
-        lapse = max(3, lapse)  # 进入错题集
+        # 进入错题集：首次设为LAPSE_INITIAL_VALUE，后续不超过LAPSE_MAX_VALUE
+        lapse = max(Config.LAPSE_INITIAL_VALUE, min(lapse, Config.LAPSE_MAX_VALUE))
         last_remembered = None
         last_forgot = today
         remember_inc = 0

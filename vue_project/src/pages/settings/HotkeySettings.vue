@@ -14,24 +14,24 @@
         <div class="hotkey-item">
           <label class="hotkey-label">记住 ✅</label>
           <KeySelector
-            v-model="settings.hotkeys.reviewInitial.remembered"
-            :used-keys="[settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.stopReview]"
+            v-model="hotkeys.reviewInitial.remembered"
+            :used-keys="[hotkeys.reviewInitial.notRemembered, hotkeys.reviewInitial.stopReview]"
           />
         </div>
 
         <div class="hotkey-item">
           <label class="hotkey-label">没记住 ❌</label>
           <KeySelector
-            v-model="settings.hotkeys.reviewInitial.notRemembered"
-            :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.stopReview]"
+            v-model="hotkeys.reviewInitial.notRemembered"
+            :used-keys="[hotkeys.reviewInitial.remembered, hotkeys.reviewInitial.stopReview]"
           />
         </div>
 
         <div class="hotkey-item">
           <label class="hotkey-label">不再复习 🚫</label>
           <KeySelector
-            v-model="settings.hotkeys.reviewInitial.stopReview"
-            :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.notRemembered]"
+            v-model="hotkeys.reviewInitial.stopReview"
+            :used-keys="[hotkeys.reviewInitial.remembered, hotkeys.reviewInitial.notRemembered]"
           />
         </div>
       </div>
@@ -48,16 +48,16 @@
         <div class="hotkey-item">
           <label class="hotkey-label">记错了 ❌</label>
           <KeySelector
-            v-model="settings.hotkeys.reviewAfter.wrong"
-            :used-keys="[settings.hotkeys.reviewAfter.next]"
+            v-model="hotkeys.reviewAfter.wrong"
+            :used-keys="[hotkeys.reviewAfter.next]"
           />
         </div>
 
         <div class="hotkey-item">
           <label class="hotkey-label">下一个 ➡️</label>
           <KeySelector
-            v-model="settings.hotkeys.reviewAfter.next"
-            :used-keys="[settings.hotkeys.reviewAfter.wrong]"
+            v-model="hotkeys.reviewAfter.next"
+            :used-keys="[hotkeys.reviewAfter.wrong]"
           />
         </div>
       </div>
@@ -74,24 +74,24 @@
         <div class="hotkey-item">
           <label class="hotkey-label">播放发音 🔊</label>
           <KeySelector
-            v-model="settings.hotkeys.spelling.playAudio"
-            :used-keys="[settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next]"
+            v-model="hotkeys.spelling.playAudio"
+            :used-keys="[hotkeys.spelling.forgot, hotkeys.spelling.next]"
           />
         </div>
 
         <div class="hotkey-item">
           <label class="hotkey-label">忘记了 ❓</label>
           <KeySelector
-            v-model="settings.hotkeys.spelling.forgot"
-            :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next]"
+            v-model="hotkeys.spelling.forgot"
+            :used-keys="[hotkeys.spelling.playAudio, hotkeys.spelling.next]"
           />
         </div>
 
         <div class="hotkey-item">
           <label class="hotkey-label">下一个 ➡️</label>
           <KeySelector
-            v-model="settings.hotkeys.spelling.next"
-            :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot]"
+            v-model="hotkeys.spelling.next"
+            :used-keys="[hotkeys.spelling.playAudio, hotkeys.spelling.forgot]"
           />
         </div>
       </div>
@@ -120,8 +120,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import KeySelector from '@/shared/components/ui/KeySelector.vue'
-import { api } from '@/shared/api'
-import type { UserSettings } from '@/shared/types'
+import { useSettings } from '@/shared/composables/useSettings'
+import type { UserSettings, HotkeySettings } from '@/shared/types'
 
 interface Props {
   modelValue: UserSettings['hotkeys']
@@ -135,24 +135,23 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+// 使用全局设置管理
+const { updateSettings } = useSettings()
+
 const isSaving = ref(false)
 const saveSuccess = ref(false)
 let saveSuccessTimeout: ReturnType<typeof setTimeout> | null = null
 
-// Local state for settings
-const settings = ref<UserSettings>({
-  learning: { dailyReviewLimit: 300, dailySpellLimit: 200, maxPrepDays: 45 },
-  audio: { accent: 'us', autoPlayOnWordChange: true, autoPlayAfterAnswer: true },
-  hotkeys: props.modelValue
-})
+// Local state - 只保留快捷键设置
+const hotkeys = ref<HotkeySettings>(props.modelValue)
 
 // Watch for external changes
 watch(() => props.modelValue, (newValue) => {
-  settings.value.hotkeys = newValue
+  hotkeys.value = newValue
 }, { deep: true })
 
 // Emit changes to parent
-watch(() => settings.value.hotkeys, (newValue) => {
+watch(hotkeys, (newValue) => {
   emit('update:modelValue', newValue)
 }, { deep: true })
 
@@ -170,11 +169,11 @@ const saveSettings = async () => {
   isSaving.value = true
   saveSuccess.value = false
   try {
-    await api.settings.updateSettings({
-      hotkeys: settings.value.hotkeys
+    // 使用全局设置管理器更新（自动更新缓存）
+    const latestSettings = await updateSettings({
+      hotkeys: hotkeys.value
     })
-    const latestSettings = await api.settings.getSettings()
-    settings.value.hotkeys = latestSettings.hotkeys
+    hotkeys.value = latestSettings.hotkeys
     emit('update:modelValue', latestSettings.hotkeys)
     showSaveSuccess()
     emit('save-success')
@@ -189,7 +188,7 @@ const saveSettings = async () => {
 const resetSettings = async () => {
   if (confirm('确定要恢复快捷键设置的默认值吗?')) {
     try {
-      settings.value.hotkeys = {
+      hotkeys.value = {
         reviewInitial: {
           remembered: 'ArrowLeft',
           notRemembered: 'ArrowRight',

@@ -113,6 +113,7 @@ import Loading from '@/shared/components/ui/Loading.vue'
 import { useSourceSelection } from '@/shared/composables/useSourceSelection'
 import { useShuffleSelection } from '@/shared/composables/useShuffleSelection'
 import { api } from '@/shared/api'
+import { useSettings } from '@/shared/composables/useSettings'
 
 type Counts = { review: number; lapse: number; spelling: number; today_spell: number }
 
@@ -142,6 +143,9 @@ const {
   switchSource: switchSourceComposable,
   initializeFromData
 } = useSourceSelection()
+
+// 使用全局设置管理
+const { loadSettings } = useSettings()
 
 // 使用 shuffle selection composable
 const {
@@ -183,8 +187,18 @@ const fetchSummary = async (isRetry = false) => {
     // 使用 composable 初始化源数据
     initializeFromData(data)
 
-    // 初始化shuffle状态
-    await initializeShuffleFromData()
+    // 从settings获取配置并初始化shuffle状态（使用缓存）
+    try {
+      const settings = await loadSettings()
+      // 初始化shuffle默认值（直接设置，不触发POST）
+      shuffle.value = settings.learning.defaultShuffle
+      // 设置lapse队列大小（从30改为配置值）
+      lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize)
+    } catch (e) {
+      console.error('Failed to load settings:', e)
+      // 如果获取settings失败，使用默认值
+      shuffle.value = false
+    }
 
     // 检查进度恢复信息
     if (data.progress_restore?.has_progress && data.progress_restore?.progress_basic) {
@@ -201,9 +215,8 @@ const fetchSummary = async (isRetry = false) => {
       showProgressNotification.value = true
     }
 
-    // 设置默认滚轮值
+    // 设置默认滚轮值（lapseLimit已在settings中设置）
     reviewLimit.value = counts.review > 0 ? counts.review : 0
-    lapseLimit.value = counts.lapse >= 30 ? 30 : counts.lapse > 0 ? counts.lapse : 0
     spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
 
     // 成功后清除错误
@@ -233,9 +246,14 @@ const switchSource = async (source: 'IELTS' | 'GRE') => {
     // 只更新计数数据
     Object.assign(counts, data.counts)
 
-    // 设置滚轮值
+    // 设置滚轮值（从settings获取lapseQueueSize，使用缓存）
+    try {
+      const settings = await loadSettings()
+      lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize)
+    } catch {
+      lapseLimit.value = Math.min(counts.lapse, 25) // 默认25
+    }
     reviewLimit.value = counts.review > 0 ? counts.review : 0
-    lapseLimit.value = counts.lapse >= 30 ? 30 : counts.lapse > 0 ? counts.lapse : 0
     spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
 
   } catch (e: any) {

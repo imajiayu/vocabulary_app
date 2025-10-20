@@ -101,6 +101,7 @@ import { useWordStats } from '@/shared/composables/useWordStats';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
 import { useWordManagementWebSocket, WebSocketEvents } from '@/shared/services/websocket';
 import { api } from '@/shared/api';
+import { useSettings } from '@/shared/composables/useSettings';
 
 const words = ref<Word[]>([]);
 const searchQuery = ref('');
@@ -112,8 +113,11 @@ const isLoading = ref(true);
 const sourceCounts = ref<SourceCounts | null>(null); // 存储源计数
 const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引用
 
+// 使用全局设置管理
+const { loadSettings } = useSettings();
+
 // 分批加载相关状态
-const batchSize = 200; // 每批加载50个单词
+const batchSize = ref(200); // 每批加载单词数量，从settings读取
 const totalWords = ref(0);
 const loadedWords = ref(0);
 const isLoadingMore = ref(false);
@@ -179,7 +183,7 @@ const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
     try {
         isLoadingMore.value = offset > 0; // 只有加载后续批次时才显示加载更多状态
 
-        const response = await api.words.getWordsPaginated(batchSize, offset);
+        const response = await api.words.getWordsPaginated(batchSize.value, offset);
 
         if (offset === 0) {
             // 首次加载，替换所有数据
@@ -208,7 +212,7 @@ const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
 
 // 自动加载后续批次的函数
 const loadRemainingBatches = async () => {
-    let offset = batchSize;
+    let offset = batchSize.value;
     let hasMore = hasMoreWords.value;
 
     while (hasMore && !shouldStopLoading.value) {
@@ -221,7 +225,7 @@ const loadRemainingBatches = async () => {
         }
 
         hasMore = await loadWordsBatch(offset);
-        offset += batchSize;
+        offset += batchSize.value;
     }
 };
 
@@ -234,6 +238,14 @@ onMounted(async () => {
         // Set initial source filter based on WordIndex selection
         if (currentSource.value) {
             sourceFilter.value = currentSource.value;
+        }
+
+        // 从settings加载批次大小（使用缓存）
+        try {
+            const settings = await loadSettings();
+            batchSize.value = settings.management.wordsLoadBatchSize;
+        } catch (error) {
+            console.error('Failed to load wordsLoadBatchSize from settings, using default 200:', error);
         }
 
         // 加载第一批单词

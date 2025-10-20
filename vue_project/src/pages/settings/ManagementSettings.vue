@@ -1,70 +1,52 @@
 <template>
-  <section class="settings-section">
-    <h1 class="section-title">学习设置</h1>
-    <p class="section-description">自定义您的学习节奏和复习策略</p>
+  <section id="management" class="settings-section">
+    <h1 class="section-title">单词管理设置</h1>
+    <p class="section-description">配置单词加载和释义获取参数</p>
 
     <div class="settings-group">
       <div class="settings-grid">
-        <!-- 每日复习上限 -->
+        <!-- 分页加载数量 -->
         <div class="setting-card">
           <div class="setting-info">
-            <label class="setting-label">每日复习上限</label>
-            <span class="setting-value">{{ learning.dailyReviewLimit }}</span>
+            <label class="setting-label">分页加载数量</label>
+            <span class="setting-value">{{ management.wordsLoadBatchSize }}</span>
             <span class="setting-unit">个单词</span>
           </div>
           <div class="setting-control">
             <WheelSelector
-              v-model="learning.dailyReviewLimit"
+              v-model="management.wordsLoadBatchSize"
               :min="50"
-              :max="1000"
+              :max="500"
               :step="50"
             />
           </div>
-          <p class="setting-hint">建议根据备考时间调整<br></br>50-500 适合大多数学习者</p>
+          <p class="setting-hint">单词管理页面<br>每批加载的单词数量</p>
         </div>
 
-        <!-- 每日拼写上限 -->
+        <!-- 释义获取线程数 -->
         <div class="setting-card">
           <div class="setting-info">
-            <label class="setting-label">每日拼写上限</label>
-            <span class="setting-value">{{ learning.dailySpellLimit }}</span>
-            <span class="setting-unit">个单词</span>
+            <label class="setting-label">释义获取线程</label>
+            <span class="setting-value">{{ management.definitionFetchThreads }}</span>
+            <span class="setting-unit">个</span>
           </div>
           <div class="setting-control">
             <WheelSelector
-              v-model="learning.dailySpellLimit"
-              :min="50"
-              :max="800"
-              :step="50"
+              v-model="management.definitionFetchThreads"
+              :min="1"
+              :max="10"
+              :step="1"
             />
           </div>
-          <p class="setting-hint">建议设置为复习量的 60-80%</p>
-        </div>
-
-        <!-- 最大准备天数 -->
-        <div class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">最大准备天数</label>
-            <span class="setting-value">{{ learning.maxPrepDays }}</span>
-            <span class="setting-unit">天</span>
-          </div>
-          <div class="setting-control">
-            <WheelSelector
-              v-model="learning.maxPrepDays"
-              :min="15"
-              :max="180"
-              :step="15"
-            />
-          </div>
-          <p class="setting-hint">系统将优化复习间隔<br></br>确保考前完成</p>
+          <p class="setting-hint">并发获取释义的线程数<br>推荐2-5个，需重启后端生效</p>
         </div>
       </div>
     </div>
 
-    <!-- 学习设置保存按钮 -->
+    <!-- 管理设置保存按钮 -->
     <div class="settings-actions">
       <button class="btn-save" @click="saveSettings" :disabled="isSaving">
-        <span v-if="!isSaving">💾 保存学习设置</span>
+        <span v-if="!isSaving">💾 保存管理设置</span>
         <span v-else>⏳ 保存中...</span>
       </button>
       <button class="btn-reset" @click="resetSettings">
@@ -72,10 +54,26 @@
       </button>
     </div>
 
+    <!-- 重启服务器按钮 -->
+    <div class="restart-section">
+      <p class="restart-hint">修改"释义获取线程数"后需要重启后端服务器才能生效</p>
+      <button class="btn-restart" @click="restartServer" :disabled="isRestarting">
+        <span v-if="!isRestarting">🔌 重启后端服务器</span>
+        <span v-else>⏳ 正在重启...</span>
+      </button>
+    </div>
+
     <!-- 保存成功提示 -->
     <transition name="fade">
       <div v-if="saveSuccess" class="save-success">
-        ✅ 学习设置已保存
+        ✅ 管理设置已保存
+      </div>
+    </transition>
+
+    <!-- 重启成功提示 -->
+    <transition name="fade">
+      <div v-if="restartSuccess" class="restart-success">
+        ✅ 服务器正在重启，请稍候...
       </div>
     </transition>
   </section>
@@ -85,14 +83,15 @@
 import { ref, watch } from 'vue'
 import WheelSelector from '@/shared/components/ui/WheelSelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
+import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
 
 interface Props {
-  modelValue: UserSettings['learning']
+  modelValue: UserSettings['management']
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: UserSettings['learning']): void
+  (e: 'update:modelValue', value: UserSettings['management']): void
   (e: 'save-success'): void
 }
 
@@ -106,16 +105,20 @@ const isSaving = ref(false)
 const saveSuccess = ref(false)
 let saveSuccessTimeout: ReturnType<typeof setTimeout> | null = null
 
-// Local state - 只保留学习设置
-const learning = ref<UserSettings['learning']>(props.modelValue)
+const isRestarting = ref(false)
+const restartSuccess = ref(false)
+let restartSuccessTimeout: ReturnType<typeof setTimeout> | null = null
+
+// Local state - 只保留管理设置
+const management = ref<UserSettings['management']>(props.modelValue)
 
 // Watch for external changes
 watch(() => props.modelValue, (newValue) => {
-  learning.value = newValue
+  management.value = newValue
 }, { deep: true })
 
 // Emit changes to parent
-watch(learning, (newValue) => {
+watch(management, (newValue) => {
   emit('update:modelValue', newValue)
 }, { deep: true })
 
@@ -135,14 +138,14 @@ const saveSettings = async () => {
   try {
     // 使用全局设置管理器更新（自动更新缓存）
     const latestSettings = await updateSettings({
-      learning: learning.value
+      management: management.value
     })
-    learning.value = latestSettings.learning
-    emit('update:modelValue', latestSettings.learning)
+    management.value = latestSettings.management
+    emit('update:modelValue', latestSettings.management)
     showSaveSuccess()
     emit('save-success')
   } catch (error) {
-    console.error('保存学习设置失败:', error)
+    console.error('保存管理设置失败:', error)
     alert('保存失败，请重试')
   } finally {
     isSaving.value = false
@@ -150,19 +153,41 @@ const saveSettings = async () => {
 }
 
 const resetSettings = async () => {
-  if (confirm('确定要恢复学习设置的默认值吗？')) {
+  if (confirm('确定要恢复管理设置的默认值吗？')) {
     try {
-      learning.value = {
-        ...learning.value,
-        dailyReviewLimit: 300,
-        dailySpellLimit: 200,
-        maxPrepDays: 45,
-        defaultShuffle: false
+      management.value = {
+        wordsLoadBatchSize: 200,
+        definitionFetchThreads: 3
       }
       await saveSettings()
     } catch (error) {
-      console.error('恢复学习设置失败:', error)
+      console.error('恢复管理设置失败:', error)
       alert('恢复失败，请重试')
+    }
+  }
+}
+
+const restartServer = async () => {
+  if (confirm('确定要重启后端服务器吗？\n\n重启过程中可能会中断当前的操作，请确保已保存所有更改。')) {
+    isRestarting.value = true
+    restartSuccess.value = false
+    try {
+      await api.settings.restartServer()
+
+      // Show success message
+      if (restartSuccessTimeout) {
+        clearTimeout(restartSuccessTimeout)
+      }
+      restartSuccess.value = true
+      restartSuccessTimeout = setTimeout(() => {
+        restartSuccess.value = false
+      }, 5000)
+
+    } catch (error) {
+      console.error('重启服务器失败:', error)
+      alert('重启失败，请检查后端服务器状态或手动重启')
+    } finally {
+      isRestarting.value = false
     }
   }
 }
@@ -308,6 +333,44 @@ const resetSettings = async () => {
   border-color: #cbd5e1;
 }
 
+.restart-section {
+  margin-top: 32px;
+  padding: 20px;
+  background: #fef3c7;
+  border: 1px solid #fde047;
+  border-radius: 12px;
+}
+
+.restart-hint {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.btn-restart {
+  width: 100%;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.btn-restart:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+}
+
+.btn-restart:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .save-success {
   margin-top: 16px;
   padding: 12px 16px;
@@ -315,6 +378,17 @@ const resetSettings = async () => {
   border: 1px solid #bbf7d0;
   border-radius: 8px;
   color: #15803d;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.restart-success {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #fef3c7;
+  border: 1px solid #fde047;
+  border-radius: 8px;
+  color: #92400e;
   font-size: 14px;
   font-weight: 500;
 }
@@ -327,52 +401,6 @@ const resetSettings = async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-/* Toggle switch 样式 */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
 }
 
 @media (max-width: 768px) {

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { api } from '@/shared/api'
 import type { HotkeySettings } from '@/shared/types'
+import { useSettings } from './useSettings'
 
 // 全局状态 - 快捷键设置
 const hotkeys = ref<HotkeySettings>({
@@ -27,12 +27,20 @@ const isLoaded = ref(false)
  * 提供加载、更新快捷键设置的功能
  */
 export function useHotkeys() {
+  const { loadSettings, updateSettings } = useSettings()
+
   /**
    * 从后端加载快捷键设置
    */
   const loadHotkeys = async () => {
+    // 如果已经加载过，直接返回，避免重复请求
+    if (isLoaded.value) {
+      return
+    }
+
     try {
-      const settings = await api.settings.getSettings()
+      // 使用统一的 settings 加载器，避免重复请求
+      const settings = await loadSettings()
       hotkeys.value = settings.hotkeys
       isLoaded.value = true
     } catch (error) {
@@ -46,8 +54,9 @@ export function useHotkeys() {
    */
   const updateHotkeys = async (newHotkeys: HotkeySettings) => {
     try {
-      await api.settings.updateSettings({ hotkeys: newHotkeys })
-      hotkeys.value = newHotkeys
+      // 使用全局设置管理器更新（自动更新缓存）
+      const updatedSettings = await updateSettings({ hotkeys: newHotkeys })
+      hotkeys.value = updatedSettings.hotkeys
     } catch (error) {
       console.error('[useHotkeys] 更新快捷键设置失败:', error)
       throw error

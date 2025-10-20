@@ -28,7 +28,17 @@ export class SettingsApi {
       learning: {
         dailyReviewLimit: 300,
         dailySpellLimit: 200,
-        maxPrepDays: 45
+        maxPrepDays: 45,
+        lapseQueueSize: 25,
+        lapseMaxValue: 4,
+        lapseInitialValue: 3,
+        lapseFastExitEnabled: true,
+        lapseConsecutiveThreshold: 2,
+        defaultShuffle: false
+      },
+      management: {
+        wordsLoadBatchSize: 200,
+        definitionFetchThreads: 3
       },
       audio: {
         accent: 'us',
@@ -53,6 +63,14 @@ export class SettingsApi {
       }
     }
     return this.updateSettings(defaults)
+  }
+
+  /**
+   * 重启服务器
+   * 用于应用需要重启才能生效的配置（如 definitionFetchThreads）
+   */
+  static async restartServer(): Promise<{ message: string }> {
+    return post<{ message: string }>('/api/settings/restart', {})
   }
 }
 

@@ -164,28 +164,8 @@ def set_source():
     return create_response(True, {"current_source": source}, "Source set successfully")
 
 
-@api_bp.route("/shuffle", methods=["GET"])
-def get_shuffle():
-    """Get the current shuffle setting from session."""
-    shuffle = session.get("shuffle", False)
-    return create_response(
-        True, {"shuffle": shuffle}, "Shuffle setting retrieved successfully"
-    )
-
-
-@api_bp.route("/shuffle", methods=["POST"])
-def set_shuffle():
-    """Set the current shuffle setting and save to session."""
-    data = request.get_json()
-    if not data or "shuffle" not in data:
-        return create_response(False, None, "Missing shuffle parameter"), 400
-
-    shuffle = bool(data["shuffle"])
-    session["shuffle"] = shuffle
-    return create_response(
-        True, {"shuffle": shuffle}, "Shuffle setting saved successfully"
-    )
-
+# Shuffle API已移除 - shuffle现在是config.py中的设置项
+# 通过 /api/settings 接口进行修改
 
 @api_bp.route("/index_summary", methods=["GET"])
 def get_index_summary():
@@ -267,8 +247,8 @@ def get_words_paginated():
         offset = int(request.args.get("offset", 0))
 
         # Validate parameters
-        if limit <= 0 or limit > 200:
-            return create_response(False, None, "Limit must be between 1 and 200"), 400
+        if limit <= 0 or limit > 500:
+            return create_response(False, None, "Limit must be between 1 and 500"), 400
         if offset < 0:
             return create_response(False, None, "Offset must be non-negative"), 400
 
@@ -637,14 +617,14 @@ def get_review_words():
         batch_id = int(request.args.get("batch_id", 0))
         limit = request.args.get("limit", None)
 
-        # 获取shuffle设置 - 先从请求参数获取，如果没有则从session获取
+        # 获取shuffle设置 - 先从请求参数获取，如果没有则从config获取
+        from web_app.config import UserConfig
+
         shuffle_param = request.args.get("shuffle")
         if shuffle_param is not None:
             shuffle_enabled = shuffle_param.lower() == "true"
-            # 更新session中的shuffle设置
-            session["shuffle"] = shuffle_enabled
         else:
-            shuffle_enabled = session.get("shuffle", False)
+            shuffle_enabled = UserConfig.DEFAULT_SHUFFLE
 
         # 第一次请求，batch_id=0 - 总是创建新的进度
         if batch_id == 0:

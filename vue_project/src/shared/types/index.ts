@@ -107,6 +107,17 @@ export interface LearningSettings {
   dailyReviewLimit: number;
   dailySpellLimit: number;
   maxPrepDays: number;
+  lapseQueueSize: number;
+  lapseMaxValue: number;
+  lapseInitialValue: number;
+  lapseFastExitEnabled: boolean;
+  lapseConsecutiveThreshold: number;
+  defaultShuffle: boolean;
+}
+
+export interface ManagementSettings {
+  wordsLoadBatchSize: number;
+  definitionFetchThreads: number;
 }
 
 export interface AudioSettings {
@@ -138,12 +149,14 @@ export interface HotkeySettings {
 
 export interface UserSettings {
   learning: LearningSettings;
+  management: ManagementSettings;
   audio: AudioSettings;
   hotkeys: HotkeySettings;
 }
 
 export interface SettingsApiResponse {
   learning: LearningSettings;
+  management: ManagementSettings;
   audio: AudioSettings;
   hotkeys: HotkeySettings;
 }

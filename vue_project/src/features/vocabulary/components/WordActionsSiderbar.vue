@@ -62,9 +62,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import type { Word } from '@/shared/types';
 import { api } from '@/shared/api';
+import { useSettings } from '@/shared/composables/useSettings';
 
 interface Props {
   word?: Word;
@@ -82,6 +83,14 @@ const emit = defineEmits<{
   wordForgot: [wordId: number];
   wordMastered: [wordId: number];
 }>();
+
+// 设置管理 - 用于获取lapse配置
+const { settings: userSettings, loadSettings } = useSettings();
+
+// 组件挂载时加载设置
+onMounted(async () => {
+  await loadSettings();
+});
 
 // Computed property to check if word has been marked as forgotten (lapse > 0)
 const isForgetButtonUsed = computed(() => {
@@ -146,13 +155,16 @@ const resetProgress = async () => {
     String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
     String(tomorrow.getDate()).padStart(2, '0');
 
+  // 从配置中获取lapse初始值（首次进入错题集时使用）
+  const lapseInitialValue = userSettings.value?.learning.lapseInitialValue ?? 3;
+
   try {
     const updatedWord = await api.words.updateWord(props.word.id, {
       repetition: 0,
       interval: 1,
       next_review: nextReview,
       ease_factor: parseFloat(Math.max(1.3, props.word.ease_factor - 0.4).toFixed(2)),
-      lapse: 3
+      lapse: lapseInitialValue
     });
     // 直接将更新后的数据发送给父组件
     emit('wordUpdated', updatedWord);

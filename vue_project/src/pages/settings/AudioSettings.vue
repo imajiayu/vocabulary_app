@@ -8,7 +8,7 @@
         <div class="audio-accent-selector">
           <label class="audio-label">单词发音</label>
           <SwitchTab
-            v-model="settings.audio.accent"
+            v-model="audio.accent"
             :tabs="[
               { value: 'us', label: '美音', icon: '🇺🇸' },
               { value: 'uk', label: '英音', icon: '🇬🇧' }
@@ -24,7 +24,7 @@
           <div class="autoplay-options">
             <div class="autoplay-item">
               <IOSSwitch
-                v-model="settings.audio.autoPlayOnWordChange"
+                v-model="audio.autoPlayOnWordChange"
               />
               <div class="autoplay-text">
                 <span class="autoplay-title">新单词出现时</span>
@@ -34,7 +34,7 @@
 
             <div class="autoplay-item">
               <IOSSwitch
-                v-model="settings.audio.autoPlayAfterAnswer"
+                v-model="audio.autoPlayAfterAnswer"
               />
               <div class="autoplay-text">
                 <span class="autoplay-title">选择答案后</span>
@@ -52,7 +52,7 @@
 import { ref, watch } from 'vue'
 import SwitchTab from '@/shared/components/ui/SwitchTab.vue'
 import IOSSwitch from '@/shared/components/ui/IOSSwitch.vue'
-import { api } from '@/shared/api'
+import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings } from '@/shared/types'
 
 interface Props {
@@ -67,37 +67,32 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+// 使用全局设置管理
+const { updateSettings } = useSettings()
+
 const isSaving = ref(false)
 
-// Local state for settings
-const settings = ref<UserSettings>({
-  learning: { dailyReviewLimit: 300, dailySpellLimit: 200, maxPrepDays: 45 },
-  audio: props.modelValue,
-  hotkeys: {
-    reviewInitial: { remembered: 'ArrowLeft', notRemembered: 'ArrowRight', stopReview: 'ArrowDown' },
-    reviewAfter: { wrong: 'ArrowLeft', next: 'ArrowRight' },
-    spelling: { playAudio: 'ArrowLeft', forgot: 'ArrowRight', next: 'Enter' }
-  }
-})
+// Local state - 只保留音频设置
+const audio = ref<UserSettings['audio']>(props.modelValue)
 
 // Watch for external changes
 watch(() => props.modelValue, (newValue) => {
-  settings.value.audio = newValue
+  audio.value = newValue
 }, { deep: true })
 
 // Emit changes to parent
-watch(() => settings.value.audio, (newValue) => {
+watch(audio, (newValue) => {
   emit('update:modelValue', newValue)
 }, { deep: true })
 
 const saveAudioSettings = async () => {
   isSaving.value = true
   try {
-    await api.settings.updateSettings({
-      audio: settings.value.audio
+    // 使用全局设置管理器更新（自动更新缓存）
+    const latestSettings = await updateSettings({
+      audio: audio.value
     })
-    const latestSettings = await api.settings.getSettings()
-    settings.value.audio = latestSettings.audio
+    audio.value = latestSettings.audio
     emit('update:modelValue', latestSettings.audio)
     emit('save-success')
   } catch (error) {
@@ -108,21 +103,21 @@ const saveAudioSettings = async () => {
 }
 
 // Auto-save on changes
-watch(() => settings.value.audio.accent, async (newAccent, oldAccent) => {
+watch(() => audio.value.accent, async (newAccent, oldAccent) => {
   if (oldAccent && newAccent !== oldAccent) {
     console.log('[AudioSettings] 音频口音变化，自动保存:', oldAccent, '->', newAccent)
     await saveAudioSettings()
   }
 })
 
-watch(() => settings.value.audio.autoPlayOnWordChange, async (newValue, oldValue) => {
+watch(() => audio.value.autoPlayOnWordChange, async (newValue, oldValue) => {
   if (oldValue !== undefined && newValue !== oldValue) {
     console.log('[AudioSettings] 新单词自动播放变化，自动保存:', oldValue, '->', newValue)
     await saveAudioSettings()
   }
 })
 
-watch(() => settings.value.audio.autoPlayAfterAnswer, async (newValue, oldValue) => {
+watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
   if (oldValue !== undefined && newValue !== oldValue) {
     console.log('[AudioSettings] 答案后自动播放变化，自动保存:', oldValue, '->', newValue)
     await saveAudioSettings()

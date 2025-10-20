@@ -19,6 +19,22 @@ class UserConfig:
     DAILY_SPELL_LIMIT = 200  # 每日拼写上限
     MAX_PREP_DAYS = 45  # 最大准备天数
 
+    # Lapse模式设置（错题集）
+    # 基于认知心理学优化：目标是确保单词间隔在5-10分钟（最佳记忆间隔）
+    # 假设每个单词15秒，则：15个=3.75分钟，25个=6.25分钟，35个=8.75分钟
+    LAPSE_QUEUE_SIZE = 25  # 错题集队列长度（默认25，推荐范围20-30）
+    LAPSE_MAX_VALUE = 4  # lapse最大值（从5降到4，避免"永久错题"）
+    LAPSE_INITIAL_VALUE = 3  # 首次进入错题集的lapse值
+    LAPSE_FAST_EXIT_ENABLED = True  # 是否启用加速退出（当lapse≥阈值时，答对-2而非-1）
+    LAPSE_CONSECUTIVE_THRESHOLD = 4  # 触发加速退出的lapse阈值（lapse≥此值时启用加速）
+
+    # 单词管理设置
+    WORDS_LOAD_BATCH_SIZE = 200  # 单词管理页面每批加载的单词数量
+    DEFINITION_FETCH_THREADS = 3  # 填充释义的并发线程数（推荐2-5）
+
+    # 复习顺序设置
+    DEFAULT_SHUFFLE = False  # 默认是否打乱顺序
+
     # 音频设置
     AUDIO_ACCENT = "us"  # 音频口音：us (美音) 或 uk (英音)
     AUDIO_AUTO_PLAY_ON_WORD_CHANGE = True  # 新单词出现时自动播放
@@ -45,6 +61,16 @@ class UserConfig:
                 "dailyReviewLimit": cls.DAILY_REVIEW_LIMIT,
                 "dailySpellLimit": cls.DAILY_SPELL_LIMIT,
                 "maxPrepDays": cls.MAX_PREP_DAYS,
+                "lapseQueueSize": cls.LAPSE_QUEUE_SIZE,
+                "lapseMaxValue": cls.LAPSE_MAX_VALUE,
+                "lapseInitialValue": cls.LAPSE_INITIAL_VALUE,
+                "lapseFastExitEnabled": cls.LAPSE_FAST_EXIT_ENABLED,
+                "lapseConsecutiveThreshold": cls.LAPSE_CONSECUTIVE_THRESHOLD,
+                "defaultShuffle": cls.DEFAULT_SHUFFLE,
+            },
+            "management": {
+                "wordsLoadBatchSize": cls.WORDS_LOAD_BATCH_SIZE,
+                "definitionFetchThreads": cls.DEFINITION_FETCH_THREADS,
             },
             "audio": {
                 "accent": cls.AUDIO_ACCENT,
@@ -79,6 +105,24 @@ class UserConfig:
             cls.DAILY_SPELL_LIMIT = learning["dailySpellLimit"]
         if "maxPrepDays" in learning:
             cls.MAX_PREP_DAYS = learning["maxPrepDays"]
+        if "lapseQueueSize" in learning:
+            cls.LAPSE_QUEUE_SIZE = learning["lapseQueueSize"]
+        if "lapseMaxValue" in learning:
+            cls.LAPSE_MAX_VALUE = learning["lapseMaxValue"]
+        if "lapseInitialValue" in learning:
+            cls.LAPSE_INITIAL_VALUE = learning["lapseInitialValue"]
+        if "lapseFastExitEnabled" in learning:
+            cls.LAPSE_FAST_EXIT_ENABLED = learning["lapseFastExitEnabled"]
+        if "lapseConsecutiveThreshold" in learning:
+            cls.LAPSE_CONSECUTIVE_THRESHOLD = learning["lapseConsecutiveThreshold"]
+        if "defaultShuffle" in learning:
+            cls.DEFAULT_SHUFFLE = learning["defaultShuffle"]
+
+        management = data.get("management", {})
+        if "wordsLoadBatchSize" in management:
+            cls.WORDS_LOAD_BATCH_SIZE = management["wordsLoadBatchSize"]
+        if "definitionFetchThreads" in management:
+            cls.DEFINITION_FETCH_THREADS = management["definitionFetchThreads"]
 
         audio = data.get("audio", {})
         if "accent" in audio:

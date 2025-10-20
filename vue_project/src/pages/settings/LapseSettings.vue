@@ -1,70 +1,100 @@
 <template>
   <section class="settings-section">
-    <h1 class="section-title">学习设置</h1>
-    <p class="section-description">自定义您的学习节奏和复习策略</p>
+    <h1 class="section-title">错题集设置</h1>
+    <p class="section-description">自定义错题复习策略和退出机制</p>
 
     <div class="settings-group">
       <div class="settings-grid">
-        <!-- 每日复习上限 -->
+        <!-- 错题队列大小 -->
         <div class="setting-card">
           <div class="setting-info">
-            <label class="setting-label">每日复习上限</label>
-            <span class="setting-value">{{ learning.dailyReviewLimit }}</span>
+            <label class="setting-label">错题队列默认大小</label>
+            <span class="setting-value">{{ learning.lapseQueueSize }}</span>
             <span class="setting-unit">个单词</span>
           </div>
           <div class="setting-control">
             <WheelSelector
-              v-model="learning.dailyReviewLimit"
-              :min="50"
-              :max="1000"
-              :step="50"
-            />
-          </div>
-          <p class="setting-hint">建议根据备考时间调整<br></br>50-500 适合大多数学习者</p>
-        </div>
-
-        <!-- 每日拼写上限 -->
-        <div class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">每日拼写上限</label>
-            <span class="setting-value">{{ learning.dailySpellLimit }}</span>
-            <span class="setting-unit">个单词</span>
-          </div>
-          <div class="setting-control">
-            <WheelSelector
-              v-model="learning.dailySpellLimit"
-              :min="50"
-              :max="800"
-              :step="50"
-            />
-          </div>
-          <p class="setting-hint">建议设置为复习量的 60-80%</p>
-        </div>
-
-        <!-- 最大准备天数 -->
-        <div class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">最大准备天数</label>
-            <span class="setting-value">{{ learning.maxPrepDays }}</span>
-            <span class="setting-unit">天</span>
-          </div>
-          <div class="setting-control">
-            <WheelSelector
-              v-model="learning.maxPrepDays"
+              v-model="learning.lapseQueueSize"
               :min="15"
-              :max="180"
-              :step="15"
+              :max="40"
+              :step="5"
             />
           </div>
-          <p class="setting-hint">系统将优化复习间隔<br></br>确保考前完成</p>
+          <p class="setting-hint">基于认知心理学优化<br>推荐20-30个单词</p>
+        </div>
+
+        <!-- 答错后需答对次数 -->
+        <div class="setting-card">
+          <div class="setting-info">
+            <label class="setting-label">答错后需连续答对次数</label>
+            <span class="setting-value">{{ learning.lapseInitialValue }}</span>
+            <span class="setting-unit">次</span>
+          </div>
+          <div class="setting-control">
+            <WheelSelector
+              v-model="learning.lapseInitialValue"
+              :min="1"
+              :max="learning.lapseMaxValue"
+              :step="1"
+            />
+          </div>
+          <p class="setting-hint">单词答错进入错题集后<br>需答对的次数才能移出</p>
+        </div>
+
+        <!-- 移出错题所需答对次数 -->
+        <div class="setting-card">
+          <div class="setting-info">
+            <label class="setting-label">最大需要连续答对次数</label>
+            <span class="setting-value">{{ learning.lapseMaxValue }}</span>
+            <span class="setting-unit">次</span>
+          </div>
+          <div class="setting-control">
+            <WheelSelector
+              v-model="learning.lapseMaxValue"
+              :min="3"
+              :max="5"
+              :step="1"
+            />
+          </div>
+          <p class="setting-hint">单词需连续答对的次数<br>才能彻底移出错题集</p>
+        </div>
+
+        <!-- 加速退出模式 -->
+        <div class="setting-card">
+          <div class="setting-info">
+            <label class="setting-label">加速退出模式</label>
+            <span class="setting-value">{{ learning.lapseFastExitEnabled ? '开启' : '关闭' }}</span>
+          </div>
+          <div class="setting-control">
+            <IOSSwitch v-model="learning.lapseFastExitEnabled" />
+          </div>
+          <p class="setting-hint">启用时，高难度错题<br>可更快移出错题集</p>
+        </div>
+
+        <!-- 快速退出门槛 -->
+        <div v-if="learning.lapseFastExitEnabled" class="setting-card">
+          <div class="setting-info">
+            <label class="setting-label">快速退出门槛</label>
+            <span class="setting-value">{{ learning.lapseConsecutiveThreshold }}</span>
+            <span class="setting-unit">次</span>
+          </div>
+          <div class="setting-control">
+            <WheelSelector
+              v-model="learning.lapseConsecutiveThreshold"
+              :min="1"
+              :max="learning.lapseMaxValue"
+              :step="1"
+            />
+          </div>
+          <p class="setting-hint">答错次数≥此数字时<br>答对一次等于两次（加速）</p>
         </div>
       </div>
     </div>
 
-    <!-- 学习设置保存按钮 -->
+    <!-- 错题集设置保存按钮 -->
     <div class="settings-actions">
       <button class="btn-save" @click="saveSettings" :disabled="isSaving">
-        <span v-if="!isSaving">💾 保存学习设置</span>
+        <span v-if="!isSaving">💾 保存错题集设置</span>
         <span v-else>⏳ 保存中...</span>
       </button>
       <button class="btn-reset" @click="resetSettings">
@@ -75,7 +105,7 @@
     <!-- 保存成功提示 -->
     <transition name="fade">
       <div v-if="saveSuccess" class="save-success">
-        ✅ 学习设置已保存
+        ✅ 错题集设置已保存
       </div>
     </transition>
   </section>
@@ -84,6 +114,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import WheelSelector from '@/shared/components/ui/WheelSelector.vue'
+import IOSSwitch from '@/shared/components/ui/IOSSwitch.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings } from '@/shared/types'
 
@@ -142,7 +173,7 @@ const saveSettings = async () => {
     showSaveSuccess()
     emit('save-success')
   } catch (error) {
-    console.error('保存学习设置失败:', error)
+    console.error('保存错题集设置失败:', error)
     alert('保存失败，请重试')
   } finally {
     isSaving.value = false
@@ -150,18 +181,19 @@ const saveSettings = async () => {
 }
 
 const resetSettings = async () => {
-  if (confirm('确定要恢复学习设置的默认值吗？')) {
+  if (confirm('确定要恢复错题集设置的默认值吗？')) {
     try {
       learning.value = {
         ...learning.value,
-        dailyReviewLimit: 300,
-        dailySpellLimit: 200,
-        maxPrepDays: 45,
-        defaultShuffle: false
+        lapseQueueSize: 25,
+        lapseMaxValue: 4,
+        lapseInitialValue: 3,
+        lapseFastExitEnabled: true,
+        lapseConsecutiveThreshold: 2
       }
       await saveSettings()
     } catch (error) {
-      console.error('恢复学习设置失败:', error)
+      console.error('恢复错题集设置失败:', error)
       alert('恢复失败，请重试')
     }
   }
@@ -327,52 +359,6 @@ const resetSettings = async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-/* Toggle switch 样式 */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
 }
 
 @media (max-width: 768px) {

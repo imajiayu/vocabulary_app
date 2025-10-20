@@ -112,7 +112,14 @@ def update_word_info_lapse(word_id, remembered):
     """
     更新错题集单词信息（MODE_LAPSE）
     仅更新 SRS 核心参数和 lapse，不修改长期统计字段
+
+    优化策略：
+    - 答错：lapse+1，最大为LAPSE_MAX_VALUE（默认4）
+    - 答对：lapse-1（基础）
+    - 答对且启用加速退出：lapse≥阈值时（默认≥2），lapse-2（加速）
     """
+    from web_app.config import UserConfig as Config
+
     word_info = db_fetch_word_info(word_id)
     if not word_info:
         return
@@ -120,9 +127,16 @@ def update_word_info_lapse(word_id, remembered):
     lapse = word_info.get("lapse", 0)
 
     if not remembered:
-        lapse = min(lapse + 1, 5)
+        # 答错：渐进增加，上限为配置值
+        lapse = min(lapse + 1, Config.LAPSE_MAX_VALUE)
     else:
-        lapse = max(0, lapse - 1)
+        # 答对：根据配置决定是否加速退出
+        if Config.LAPSE_FAST_EXIT_ENABLED and lapse >= Config.LAPSE_CONSECUTIVE_THRESHOLD:
+            # 加速退出：当lapse≥阈值（默认2）时，答对一次就-2
+            lapse = max(0, lapse - 2)
+        else:
+            # 正常退出：lapse<阈值时，答对一次-1
+            lapse = max(0, lapse - 1)
 
     db_update_word_for_lapse(word_id, lapse)
 

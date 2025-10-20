@@ -31,6 +31,20 @@
           @save-success="handleSaveSuccess"
         />
 
+        <!-- 错题集设置 -->
+        <LapseSettings
+          id="lapse"
+          v-model="settings.learning"
+          @save-success="handleSaveSuccess"
+        />
+
+        <!-- 单词管理设置 -->
+        <ManagementSettings
+          id="management"
+          v-model="settings.management"
+          @save-success="handleSaveSuccess"
+        />
+
         <!-- 音频设置 -->
         <AudioSettings
           id="audio"
@@ -52,12 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import LearningSettings from './settings/LearningSettings.vue'
+import LapseSettings from './settings/LapseSettings.vue'
+import ManagementSettings from './settings/ManagementSettings.vue'
 import AudioSettings from './settings/AudioSettings.vue'
 import HotkeySettings from './settings/HotkeySettings.vue'
 import RelationSettings from './settings/RelationSettings.vue'
-import { api } from '@/shared/api'
+import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings } from '@/shared/types'
 
 interface SettingsSection {
@@ -77,6 +93,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
+  { id: 'lapse', title: '错题集设置', subtitle: '错题复习策略与退出', icon: '❌' },
+  { id: 'management', title: '单词管理', subtitle: '批量导入与释义获取', icon: '📝' },
   { id: 'audio', title: '音频设置', subtitle: '发音口音选择', icon: '🔊' },
   { id: 'hotkeys', title: '快捷键设置', subtitle: '自定义键盘快捷键', icon: '⌨️' },
   { id: 'relations', title: '单词关联', subtitle: '管理单词关系网络', icon: '🕸️' },
@@ -86,11 +104,25 @@ const activeSection = ref('learning')
 const isScrollingProgrammatically = ref(false)
 let scrollTimeout: ReturnType<typeof setTimeout> | null = null
 
-const settings = ref<UserSettings>({
+// 使用全局设置管理
+const { settings: globalSettings, loadSettings: loadGlobalSettings } = useSettings()
+
+// 创建一个带默认值的 computed，确保在加载前有合理的默认值
+const settings = computed<UserSettings>(() => globalSettings.value || {
   learning: {
     dailyReviewLimit: 300,
     dailySpellLimit: 200,
-    maxPrepDays: 45
+    maxPrepDays: 45,
+    lapseQueueSize: 25,
+    lapseMaxValue: 4,
+    lapseInitialValue: 3,
+    lapseFastExitEnabled: true,
+    lapseConsecutiveThreshold: 2,
+    defaultShuffle: false
+  },
+  management: {
+    wordsLoadBatchSize: 200,
+    definitionFetchThreads: 3
   },
   audio: {
     accent: 'us',
@@ -198,21 +230,13 @@ const handleScroll = (event: Event) => {
   }
 }
 
-const loadSettings = async () => {
-  try {
-    const data = await api.settings.getSettings()
-    settings.value = data
-  } catch (error) {
-    console.error('加载设置失败:', error)
-  }
-}
-
 const handleSaveSuccess = () => {
   console.log('[SettingsPage] 设置保存成功')
 }
 
 onMounted(async () => {
-  loadSettings()
+  // 使用全局设置加载器（带缓存）
+  await loadGlobalSettings()
 })
 </script>
 

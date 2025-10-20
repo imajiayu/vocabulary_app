@@ -3,7 +3,7 @@
  * 用于在应用中共享音频设置（口音、自动播放）
  */
 import { ref, watch } from 'vue'
-import { api } from '@/shared/api'
+import { useSettings } from './useSettings'
 
 type AudioAccent = 'us' | 'uk'
 
@@ -14,12 +14,20 @@ const autoPlayAfterAnswer = ref<boolean>(true)
 const isLoaded = ref(false)
 
 export function useAudioAccent() {
+  const { loadSettings, updateSettings } = useSettings()
+
   /**
    * 从服务器加载音频设置
    */
   const loadAudioAccent = async () => {
+    // 如果已经加载过，直接返回，避免重复请求
+    if (isLoaded.value) {
+      return
+    }
+
     try {
-      const settings = await api.settings.getSettings()
+      // 使用统一的 settings 加载器，避免重复请求
+      const settings = await loadSettings()
       audioAccent.value = settings.audio.accent ?? 'us'
       autoPlayOnWordChange.value = settings.audio.autoPlayOnWordChange ?? true
       autoPlayAfterAnswer.value = settings.audio.autoPlayAfterAnswer ?? true
@@ -39,14 +47,15 @@ export function useAudioAccent() {
    */
   const updateAudioAccent = async (accent: AudioAccent) => {
     try {
-      await api.settings.updateSettings({
+      // 使用全局设置管理器更新（自动更新缓存）
+      const updatedSettings = await updateSettings({
         audio: {
           accent,
           autoPlayOnWordChange: autoPlayOnWordChange.value,
           autoPlayAfterAnswer: autoPlayAfterAnswer.value
         }
       })
-      audioAccent.value = accent
+      audioAccent.value = updatedSettings.audio.accent
     } catch (error) {
       console.error('更新音频设置失败:', error)
       throw error

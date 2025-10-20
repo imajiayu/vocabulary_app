@@ -121,9 +121,15 @@ def apply_schedule(schedule, dry_run=True):
     updated_count = 0
     with get_session() as db:
         for day, words in schedule.items():
-            for word in words:
-                word.spell_next_review = day
-                updated_count += 1
+            # 提取单词ID列表
+            word_ids = [word.id for word in words]
+
+            # 批量更新这些单词的 spell_next_review
+            db.query(Word).filter(Word.id.in_(word_ids)).update(
+                {Word.spell_next_review: day},
+                synchronize_session=False
+            )
+            updated_count += len(word_ids)
 
         db.commit()
         print(f"\n✓ 成功更新 {updated_count} 个单词的 spell_next_review")

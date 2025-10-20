@@ -6,6 +6,7 @@ import { api } from '@/shared/api'
 import { useShuffleSelectionReadOnly } from '@/shared/composables/useShuffleSelection'
 import { preloadMultipleWordAudio, clearPreloadCache, clearCacheNotInWords } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
+import { useSettings } from '@/shared/composables/useSettings'
 
 export interface WordResult {
   is_spelling: boolean
@@ -24,6 +25,9 @@ export const useReviewStore = defineStore('review', () => {
 
   // 音频口音状态管理 - 与全局设置同步
   const { audioAccent } = useAudioAccent()
+
+  // 设置管理 - 用于获取lapse配置
+  const { settings: userSettings, loadSettings } = useSettings()
 
   // 状态
   const wordQueue = ref<Word[]>([])
@@ -144,12 +148,13 @@ export const useReviewStore = defineStore('review', () => {
     }
     try {
       if (mode.value === 'mode_lapse') {
-        // lapse模式：一次性加载所有单词
+        // lapse模式：一次性加载所有单词，使用从WordIndex传入的limit
+        const lapseLimit = settings.value.totalLimit
         const data: WordsApiResponse = await api.words.getReviewWords({
           mode: mode.value,
-          limit: settings.value.totalLimit,
+          limit: lapseLimit,
           batch_id: 0,  // lapse模式使用batch_id=0获取所有数据
-          batch_size: settings.value.totalLimit
+          batch_size: lapseLimit
         })
         const newWords = sortByLapse(data.words as Word[], shuffle.value)
 
@@ -203,10 +208,24 @@ export const useReviewStore = defineStore('review', () => {
       const word = wordQueue.value[currentWordIndex]
 
       if (word && word.id === wordId) {
-        // 更新 lapse，记住时减1，没记住时加1，最大值为5（与后端一致）
-        word.lapse = result.remembered
-          ? Math.max(0, word.lapse - 1)  // 记住时减1，最小为0
-          : Math.min(word.lapse + 1, 5)  // 没记住时加1，最大为5
+        // 更新 lapse，与后端逻辑保持一致（使用配置值）
+        const LAPSE_MAX_VALUE = userSettings.value?.learning.lapseMaxValue ?? 4
+        const LAPSE_FAST_EXIT_THRESHOLD = userSettings.value?.learning.lapseConsecutiveThreshold ?? 2
+        const LAPSE_FAST_EXIT_ENABLED = userSettings.value?.learning.lapseFastExitEnabled ?? true
+
+        if (!result.remembered) {
+          // 答错：lapse+1，最大为配置的最大值
+          word.lapse = Math.min(word.lapse + 1, LAPSE_MAX_VALUE)
+        } else {
+          // 答对：根据配置和lapse值决定是否加速退出
+          if (LAPSE_FAST_EXIT_ENABLED && word.lapse >= LAPSE_FAST_EXIT_THRESHOLD) {
+            // 加速退出：当lapse≥阈值（默认2）时，答对一次-2
+            word.lapse = Math.max(0, word.lapse - 2)
+          } else {
+            // 正常退出：lapse<阈值时，答对一次-1
+            word.lapse = Math.max(0, word.lapse - 1)
+          }
+        }
 
         if (word.lapse === 0) {
           wordQueue.value.splice(currentWordIndex, 1)
@@ -283,8 +302,9 @@ export const useReviewStore = defineStore('review', () => {
     mode.value = newMode
     currentIndex.value = 0
     currentBatchId.value = 0
-    // 确保shuffle状态是最新的
+    // 确保shuffle状态和设置是最新的
     await initializeShuffle()
+    await loadSettings()
     await loadWords(true)
   }
 
@@ -306,6 +326,9 @@ export const useReviewStore = defineStore('review', () => {
     isLoading.value = true
 
     try {
+      // 确保设置已加载
+      await loadSettings()
+
       const data = await api.progress.getRestoreData()
 
       if (!data.progress || !data.words) {

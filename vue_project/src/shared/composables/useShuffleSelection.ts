@@ -1,19 +1,25 @@
 import { ref } from 'vue'
-import { api } from '@/shared/api'
+import { useSettings } from './useSettings'
 
 // For WordIndex - can read and write to backend session
 export function useShuffleSelection() {
   const shuffle = ref<boolean>(false)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const { updateSettings } = useSettings()
 
   const setShuffle = async (newShuffle: boolean) => {
     try {
       loading.value = true
       error.value = null
 
-      await api.config.setShuffle(newShuffle)
-      shuffle.value = newShuffle
+      // 使用全局设置管理器更新（自动更新缓存）
+      const updatedSettings = await updateSettings({
+        learning: {
+          defaultShuffle: newShuffle
+        }
+      } as any)
+      shuffle.value = updatedSettings.learning.defaultShuffle
 
       return { shuffle: newShuffle }
     } catch (e: any) {
@@ -26,9 +32,11 @@ export function useShuffleSelection() {
   }
 
   const initializeFromData = async () => {
+    const { loadSettings } = useSettings()
     try {
-      const data = await api.config.getShuffle()
-      shuffle.value = data.shuffle
+      // 使用统一的 settings 加载器，避免重复请求
+      const settings = await loadSettings()
+      shuffle.value = settings.learning.defaultShuffle
     } catch (error) {
       console.error('Failed to get current shuffle:', error)
       // Default to false if there's an error
@@ -50,9 +58,11 @@ export function useShuffleSelectionReadOnly() {
   const shuffle = ref<boolean>(false)
 
   const initializeFromData = async () => {
+    const { loadSettings } = useSettings()
     try {
-      const data = await api.config.getShuffle()
-      shuffle.value = data.shuffle
+      // 使用统一的 settings 加载器，避免重复请求
+      const settings = await loadSettings()
+      shuffle.value = settings.learning.defaultShuffle
     } catch (error) {
       console.error('Failed to get current shuffle:', error)
     }

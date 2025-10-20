@@ -179,12 +179,14 @@ def get_batch_definition_service(db_update_callback=None):
     Args:
         db_update_callback: 首次调用时设置的数据库更新回调函数
     """
+    from web_app.config import UserConfig
+
     global _batch_definition_service
     if _batch_definition_service is None:
         _batch_definition_service = BatchDefinitionService(
             delay_between_requests=0.2,  # 每个请求间隔0.2秒（降低延迟）
             db_update_callback=db_update_callback,
-            num_workers=5  # 5个并发工作线程
+            num_workers=UserConfig.DEFINITION_FETCH_THREADS  # 从配置读取线程数
         )
         _batch_definition_service.start_worker()
     return _batch_definition_service
