@@ -164,7 +164,8 @@ const {
   currentIndex,
   progress,
   wordResults,
-  shuffle
+  shuffle,
+  globalIndex  // 添加globalIndex
 } = storeToRefs(reviewStore)
 
 // 本地状态
@@ -195,8 +196,8 @@ const displayIndex = computed(() => {
   if (mode.value === 'mode_lapse') {
     return reviewStore.wordQueue.length === 0 ? 0 : (currentIndex.value % reviewStore.wordQueue.length) + 1
   }
-  // For non-lapse modes, only show index if we have a current word
-  return currentWord.value ? Math.max(1, currentIndex.value + 1) : 0
+  // 修复：使用globalIndex来显示正确的进度
+  return currentWord.value ? globalIndex.value + 1 : 0
 })
 
 const displayTotal = computed(() => {

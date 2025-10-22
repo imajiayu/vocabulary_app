@@ -1,7 +1,7 @@
 <template>
   <!-- onlyShowWord 模式 -->
   <div v-if="onlyShowWord && props.word" class="only-word-container">
-    <div class="word-display clickable-word" @click="playWordAudio(props.word.word, 'us')">
+    <div class="word-display clickable-word" @click="playWordAudio(props.word.word, audioAccent)">
       {{ props.word.word }}
     </div>
   </div>
@@ -80,6 +80,7 @@
 import { computed } from 'vue';
 import type { Word } from '@/shared/types';
 import { playWordAudio } from '@/shared/utils/playWordAudio';
+import { useAudioAccent } from '@/shared/composables/useAudioAccent';
 
 interface Props {
   word?: Word;
@@ -91,6 +92,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   horizontal: false,
 });
+
+// 使用全局音频设置
+const { audioAccent } = useAudioAccent();
 
 const hasDefinition = computed(() => {
   if (!props.word) return false;

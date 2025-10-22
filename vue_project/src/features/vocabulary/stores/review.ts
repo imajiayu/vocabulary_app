@@ -39,8 +39,8 @@ export const useReviewStore = defineStore('review', () => {
   const hasMore = ref(true)
   const totalWords = ref(0)
   const initialLapseCount = ref(0)
-  const currentBatchId = ref(0)
   const wordResults = ref<Map<number, boolean>>(new Map())
+  const initialOffset = ref(0)  // 初始偏移量（用于恢复进度）
 
   // 同步 audioType 与全局 audioAccent
   watch(audioAccent, (newAccent) => {
@@ -97,6 +97,14 @@ export const useReviewStore = defineStore('review', () => {
 
   const totalLapseSum = computed(() => {
     return wordQueue.value.reduce((sum, word) => sum + word.lapse, 0)
+  })
+
+  // 全局索引：在总队列中的当前位置（用于显示正确的进度）
+  const globalIndex = computed(() => {
+    if (mode.value === 'mode_lapse') {
+      return wordQueue.value.length === 0 ? 0 : (currentIndex.value % wordQueue.value.length)
+    }
+    return initialOffset.value + currentIndex.value
   })
 
   const sortByLapse = (words: Word[], shuffleEnabled: boolean = false): Word[] => {
@@ -166,13 +174,15 @@ export const useReviewStore = defineStore('review', () => {
 
       } else {
         // 其他模式：分页加载
-        const batchIdToUse = resetQueue ? 0 : currentBatchId.value
-        const offsetToUse = resetQueue ? 0 : currentBatchId.value * settings.value.batchSize
+        // 简化逻辑：offset直接使用队列长度 + 初始偏移量
+        const offsetToUse = resetQueue ? 0 : initialOffset.value + wordQueue.value.length
+
+        console.log(`[loadWords] resetQueue=${resetQueue}, initialOffset=${initialOffset.value}, queueLength=${wordQueue.value.length}, offsetToUse=${offsetToUse}`)
 
         const data: WordsApiResponse = await api.words.getReviewWords({
           mode: mode.value,
           limit: settings.value.totalLimit,
-          batch_id: batchIdToUse,
+          batch_id: resetQueue ? 0 : 1,  // 0=创建新快照，1=使用session快照
           batch_size: settings.value.batchSize,
           offset: offsetToUse
         })
@@ -181,10 +191,9 @@ export const useReviewStore = defineStore('review', () => {
         if (resetQueue) {
           wordQueue.value = newWords
           currentIndex.value = 0
-          currentBatchId.value = 1
+          initialOffset.value = 0  // 重置初始偏移量
         } else {
           wordQueue.value.push(...newWords)
-          currentBatchId.value++
         }
 
         totalWords.value = data.total
@@ -301,7 +310,7 @@ export const useReviewStore = defineStore('review', () => {
   const switchMode = async (newMode: ReviewMode): Promise<void> => {
     mode.value = newMode
     currentIndex.value = 0
-    currentBatchId.value = 0
+    initialOffset.value = 0  // 重置初始偏移量
     // 确保shuffle状态和设置是最新的
     await initializeShuffle()
     await loadSettings()
@@ -318,7 +327,7 @@ export const useReviewStore = defineStore('review', () => {
     totalWords.value = 0
     hasMore.value = true
     initialLapseCount.value = 0
-    currentBatchId.value = 0
+    initialOffset.value = 0  // 重置初始偏移量
     wordResults.value.clear()
   }
 
@@ -382,10 +391,10 @@ export const useReviewStore = defineStore('review', () => {
 
         wordQueue.value = restoreData.words as Word[]
         currentIndex.value = 0  // 队列第一个就是当前单词
-        currentBatchId.value = 1  // 已加载一批
+        initialOffset.value = savedIndex  // 设置初始偏移量（关键修复！）
         hasMore.value = savedIndex + batchSize < data.total
 
-        console.log(`Restored progress: mode=${mode.value}, savedIndex=${savedIndex}, loaded=${restoreData.words.length} words`)
+        console.log(`Restored progress: mode=${mode.value}, savedIndex=${savedIndex}, initialOffset=${initialOffset.value}, loaded=${restoreData.words.length} words`)
       }
 
       return true
@@ -495,6 +504,7 @@ export const useReviewStore = defineStore('review', () => {
     progress,
     shouldLoadMore,
     isCompleted,
+    globalIndex, // 全局索引（用于正确显示进度）
 
     // 方法
     loadWords,

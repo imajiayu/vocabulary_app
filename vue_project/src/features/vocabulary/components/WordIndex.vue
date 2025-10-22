@@ -2,26 +2,12 @@
   <Loading v-if="loading" text="连接中..." />
   <div v-else class="glass-card w-full word-index-container">
     <!-- 进度恢复通知条 -->
-    <div v-if="showProgressNotification" class="progress-notification">
-      <div class="progress-notification-content" @click="resumeProgress">
-        <div class="progress-notification-icon">📚</div>
-        <div class="progress-notification-text">
-          <div class="progress-notification-title">发现未完成的学习进度</div>
-          <div class="progress-notification-details">
-            <span class="progress-source">{{ progressInfo.source }}</span>
-            <span class="progress-mode">{{ getModeDisplayName(progressInfo.mode) }}</span>
-            <span class="progress-shuffle">{{ progressInfo.shuffle ? '随机' : '顺序' }}</span>
-            <span class="progress-stats">
-              已完成 <span class="progress-number">{{ completedCount }}/{{ totalCount }}</span> 个单词，
-              还剩 <span class="progress-remaining">{{ remainingCount }}</span> 个
-            </span>
-          </div>
-        </div>
-        <button @click.stop="dismissProgressNotification" class="progress-notification-close">
-          ✕
-        </button>
-      </div>
-    </div>
+    <ProgressNotification
+      :show="showProgressNotification"
+      :progress-info="progressInfo"
+      @resume="resumeProgress"
+      @dismiss="dismissProgressNotification"
+    />
 
     <header class="text-center header-section">
       <div class="header-with-switch">
@@ -112,6 +98,7 @@ import IndexButton from '@/shared/components/ui/IndexButton.vue'
 import ButtonGrid from '@/shared/components/ui/ButtonGrid.vue'
 import IOSSwitch from '@/shared/components/ui/IOSSwitch.vue'
 import SwitchTab from '@/shared/components/ui/SwitchTab.vue'
+import ProgressNotification from '@/shared/components/ui/ProgressNotification.vue'
 import { useRouter } from 'vue-router'
 import Loading from '@/shared/components/ui/Loading.vue'
 import { useSourceSelection } from '@/shared/composables/useSourceSelection'
@@ -305,39 +292,6 @@ const goManagement = () => {
   router.push('/management')
 }
 
-const getModeDisplayName = (mode: string) => {
-  const modeMap: Record<string, string> = {
-    'mode_review': '复习已有',
-    'mode_lapse': '复习错题',
-    'mode_spelling': '拼写熟练'
-  }
-  return modeMap[mode] || mode
-}
-
-// 根据模式计算已完成单词数
-const completedCount = computed(() => {
-  if (progressInfo.value.mode === 'mode_lapse') {
-    return progressInfo.value.initial_lapse_word_count - progressInfo.value.total_words
-  }
-  return progressInfo.value.current_index
-})
-
-// 根据模式计算总单词数
-const totalCount = computed(() => {
-  if (progressInfo.value.mode === 'mode_lapse') {
-    return progressInfo.value.initial_lapse_word_count
-  }
-  return progressInfo.value.total_words
-})
-
-// 根据模式计算剩余单词数
-const remainingCount = computed(() => {
-  if (progressInfo.value.mode === 'mode_lapse') {
-    return progressInfo.value.total_words
-  }
-  return progressInfo.value.remaining_words
-})
-
 const dismissProgressNotification = async () => {
   try {
     // 调用 API 清除进度
@@ -455,166 +409,6 @@ const resumeProgress = () => {
     max-width: 800px;
   }
 
-}
-
-/* 进度恢复通知条样式 */
-.progress-notification {
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.progress-notification-content {
-  display: flex;
-  align-items: flex-start;
-  padding: 1rem;
-  gap: 0.75rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.progress-notification-content:hover {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
-}
-
-.progress-notification-icon {
-  font-size: 1.25rem;
-  flex-shrink: 0;
-  margin-top: 0.125rem;
-}
-
-.progress-notification-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.progress-notification-title {
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
-}
-
-.progress-notification-details {
-  color: var(--color-text-secondary);
-  font-size: 0.8rem;
-  line-height: 1.4;
-}
-
-/* 进度通知高亮元素 */
-.progress-source {
-  color: #3b82f6;
-  font-weight: 600;
-  margin-right: 0.25rem;
-}
-
-.progress-mode {
-  color: #10b981;
-  font-weight: 600;
-  margin-right: 0.25rem;
-}
-
-.progress-shuffle {
-  color: #f59e0b;
-  font-weight: 600;
-  margin-right: 0.5rem;
-}
-
-.progress-shuffle::before {
-  content: '·';
-  margin-right: 0.25rem;
-  color: var(--color-text-tertiary);
-}
-
-.progress-stats {
-  color: var(--color-text-secondary);
-}
-
-.progress-number {
-  color: #6366f1;
-  font-weight: 600;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-}
-
-.progress-remaining {
-  color: #ef4444;
-  font-weight: 600;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-}
-
-.progress-notification-close {
-  background: none;
-  border: none;
-  color: var(--color-text-tertiary);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-  font-size: 1rem;
-  line-height: 1;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.progress-notification-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--color-text-primary);
-}
-
-/* 移动端通知条适配 */
-@media (max-width: 768px) {
-  .progress-notification {
-    margin-bottom: 1.25rem;
-  }
-
-  .progress-notification-content {
-    padding: 0.875rem;
-    gap: 0.625rem;
-  }
-
-  .progress-notification-icon {
-    font-size: 1.125rem;
-  }
-
-  .progress-notification-title {
-    font-size: 0.85rem;
-  }
-
-  .progress-notification-details {
-    font-size: 0.75rem;
-  }
-}
-
-/* 小屏手机通知条优化 */
-@media (max-width: 480px) {
-  .progress-notification-content {
-    padding: 0.75rem;
-    gap: 0.5rem;
-  }
-
-  .progress-notification-icon {
-    font-size: 1rem;
-  }
-
-  .progress-notification-title {
-    font-size: 0.8rem;
-  }
-
-  .progress-notification-details {
-    font-size: 0.7rem;
-  }
-
-  .progress-notification-close {
-    width: 20px;
-    height: 20px;
-    font-size: 0.9rem;
-  }
 }
 
 /* 复习按钮过渡动画 */

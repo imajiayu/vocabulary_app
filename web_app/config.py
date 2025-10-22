@@ -33,10 +33,10 @@ class UserConfig:
     DEFINITION_FETCH_THREADS = 3  # 填充释义的并发线程数（推荐2-5）
 
     # 复习顺序设置
-    DEFAULT_SHUFFLE = False  # 默认是否打乱顺序
+    DEFAULT_SHUFFLE = True  # 默认是否打乱顺序
 
     # 音频设置
-    AUDIO_ACCENT = "us"  # 音频口音：us (美音) 或 uk (英音)
+    AUDIO_ACCENT = "uk"  # 音频口音：us (美音) 或 uk (英音)
     AUDIO_AUTO_PLAY_ON_WORD_CHANGE = True  # 新单词出现时自动播放
     AUDIO_AUTO_PLAY_AFTER_ANSWER = True  # 选择答案后自动播放
 
