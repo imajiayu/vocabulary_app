@@ -321,11 +321,11 @@ onMounted(async () => {
   }
 })
 
-// EF histogram buckets (0.01 rounding)
+// EF histogram buckets (0.1 rounding)
 const efBuckets = computed(() => {
   const buckets: Record<string, number> = {}
   efDict.value.forEach(({ ef }) => {
-    const rounded = Math.round(ef * 100) / 100
+    const rounded = Math.round(ef * 10) / 10
     buckets[String(rounded)] = (buckets[String(rounded)] || 0) + 1
   })
   const labels = Object.keys(buckets).sort((a, b) => Number(a) - Number(b))

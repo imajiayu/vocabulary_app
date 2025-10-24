@@ -37,6 +37,17 @@
                     </button>
                 </div>
             </div>
+
+            <!-- 重置计时器按钮 - 只在第一阶段显示 -->
+            <div v-show="!showDefinition" class="reset-timer-wrapper">
+                <button class="reset-timer-button" @click="handleResetTimer" @mouseenter="showResetTooltip = true"
+                    @mouseleave="showResetTooltip = false" title="重置计时器">
+                    🔄
+                </button>
+                <div v-show="showResetTooltip" class="reset-timer-tooltip">
+                    重置计时器
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -78,6 +89,7 @@ const emit = defineEmits<Emits>()
 const showDefinition = ref(false)
 const pendingChoice = ref<string | null>(null)
 const isSubmitting = ref(false)
+const showResetTooltip = ref(false)
 
 // 使用计时器
 const timer = useTimer()
@@ -133,6 +145,12 @@ const handleSkip = async () => {
         console.error('Skip failed:', error)
     } finally {
     }
+}
+
+const handleResetTimer = () => {
+    // 重置并重新启动计时器
+    timer.reset()
+    timer.start()
 }
 
 const submitResult = async (remembered: boolean, forceResult: boolean = false) => {
@@ -351,6 +369,84 @@ onMounted(async () => {
     width: 100%;
 }
 
+/* 重置计时器容器 - 固定在右下角 */
+.reset-timer-wrapper {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+}
+
+/* 重置计时器按钮 */
+.reset-timer-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(240, 240, 240, 0.9);
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    touch-action: manipulation;
+}
+
+.reset-timer-button:hover {
+    background-color: rgba(220, 220, 220, 0.95);
+    transform: rotate(180deg) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.reset-timer-button:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+/* 重置计时器提示 - 只在桌面端显示 */
+.reset-timer-tooltip {
+    position: absolute;
+    right: calc(100% + 0.75rem);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: tooltipFadeIn 0.2s ease;
+}
+
+.reset-timer-tooltip::after {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0.375rem solid transparent;
+    border-left-color: rgba(0, 0, 0, 0.85);
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 移动端和平板隐藏提示 */
+@media (max-width: 1024px) {
+    .reset-timer-tooltip {
+        display: none;
+    }
+}
+
 /* 桌面端优化 - 增加底部空间避免被按钮栏挡住 */
 @media (min-width: 1025px) {
     .content-area {
@@ -406,6 +502,17 @@ onMounted(async () => {
         padding: 0.875rem;
         font-size: 1rem;
     }
+
+    .reset-timer-wrapper {
+        bottom: calc(1rem + env(safe-area-inset-bottom));
+        right: 0.75rem;
+    }
+
+    .reset-timer-button {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.3em;
+    }
 }
 
 /* 小屏幕手机适配 - 强制覆盖 */
@@ -437,6 +544,17 @@ onMounted(async () => {
         padding: 0.75rem;
         font-size: 0.95rem;
     }
+
+    .reset-timer-wrapper {
+        bottom: calc(0.875rem + env(safe-area-inset-bottom));
+        right: 0.5rem;
+    }
+
+    .reset-timer-button {
+        width: 2.75rem;
+        height: 2.75rem;
+        font-size: 1.2em;
+    }
 }
 
 /* 横屏适配 */
@@ -459,6 +577,17 @@ onMounted(async () => {
         padding: 0.5rem;
         font-size: 0.9rem;
     }
+
+    .reset-timer-wrapper {
+        bottom: 0.75rem;
+        right: 0.75rem;
+    }
+
+    .reset-timer-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.1em;
+    }
 }
 
 /* iOS Safari 特定修复 - 移除强制高度设置 */
@@ -472,6 +601,11 @@ onMounted(async () => {
         padding-left: max(1rem, env(safe-area-inset-left));
         padding-right: max(1rem, env(safe-area-inset-right));
         padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+
+    .reset-timer-wrapper {
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: max(1rem, env(safe-area-inset-bottom));
     }
 }
 </style>
