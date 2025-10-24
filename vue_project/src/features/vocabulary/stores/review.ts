@@ -177,8 +177,6 @@ export const useReviewStore = defineStore('review', () => {
         // 简化逻辑：offset直接使用队列长度 + 初始偏移量
         const offsetToUse = resetQueue ? 0 : initialOffset.value + wordQueue.value.length
 
-        console.log(`[loadWords] resetQueue=${resetQueue}, initialOffset=${initialOffset.value}, queueLength=${wordQueue.value.length}, offsetToUse=${offsetToUse}`)
-
         const data: WordsApiResponse = await api.words.getReviewWords({
           mode: mode.value,
           limit: settings.value.totalLimit,
@@ -373,8 +371,6 @@ export const useReviewStore = defineStore('review', () => {
 
         // lapse模式索引始终为0（循环队列）
         currentIndex.value = 0
-
-        console.log(`Restored lapse progress: total=${data.total}, initial_lapse=${initialLapseCount.value}`)
       } else {
         // 非lapse模式：分页加载
         const savedIndex = progress.current_index || 0
@@ -393,8 +389,6 @@ export const useReviewStore = defineStore('review', () => {
         currentIndex.value = 0  // 队列第一个就是当前单词
         initialOffset.value = savedIndex  // 设置初始偏移量（关键修复！）
         hasMore.value = savedIndex + batchSize < data.total
-
-        console.log(`Restored progress: mode=${mode.value}, savedIndex=${savedIndex}, initialOffset=${initialOffset.value}, loaded=${restoreData.words.length} words`)
       }
 
       return true
