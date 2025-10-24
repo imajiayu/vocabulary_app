@@ -118,7 +118,8 @@ const settings = computed<UserSettings>(() => globalSettings.value || {
     lapseInitialValue: 3,
     lapseFastExitEnabled: true,
     lapseConsecutiveThreshold: 2,
-    defaultShuffle: false
+    defaultShuffle: false,
+    lowEfExtraCount: 50
   },
   management: {
     wordsLoadBatchSize: 200,

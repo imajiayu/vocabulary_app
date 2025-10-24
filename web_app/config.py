@@ -35,6 +35,9 @@ class UserConfig:
     # 复习顺序设置
     DEFAULT_SHUFFLE = True  # 默认是否打乱顺序
 
+    # 低EF单词优先设置
+    LOW_EF_EXTRA_COUNT = 50  # 复习模式额外拉取的低EF单词数量（提升低EF单词的复习频率）
+
     # 音频设置
     AUDIO_ACCENT = "us"  # 音频口音：us (美音) 或 uk (英音)
     AUDIO_AUTO_PLAY_ON_WORD_CHANGE = True  # 新单词出现时自动播放
@@ -67,6 +70,7 @@ class UserConfig:
                 "lapseFastExitEnabled": cls.LAPSE_FAST_EXIT_ENABLED,
                 "lapseConsecutiveThreshold": cls.LAPSE_CONSECUTIVE_THRESHOLD,
                 "defaultShuffle": cls.DEFAULT_SHUFFLE,
+                "lowEfExtraCount": cls.LOW_EF_EXTRA_COUNT,
             },
             "management": {
                 "wordsLoadBatchSize": cls.WORDS_LOAD_BATCH_SIZE,
@@ -117,6 +121,8 @@ class UserConfig:
             cls.LAPSE_CONSECUTIVE_THRESHOLD = learning["lapseConsecutiveThreshold"]
         if "defaultShuffle" in learning:
             cls.DEFAULT_SHUFFLE = learning["defaultShuffle"]
+        if "lowEfExtraCount" in learning:
+            cls.LOW_EF_EXTRA_COUNT = learning["lowEfExtraCount"]
 
         management = data.get("management", {})
         if "wordsLoadBatchSize" in management:

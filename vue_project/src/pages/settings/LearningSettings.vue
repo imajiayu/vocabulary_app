@@ -58,6 +58,24 @@
           </div>
           <p class="setting-hint">系统将优化复习间隔<br></br>确保考前完成</p>
         </div>
+
+        <!-- 低EF额外数量 -->
+        <div class="setting-card">
+          <div class="setting-info">
+            <label class="setting-label">低EF额外数量</label>
+            <span class="setting-value">{{ learning.lowEfExtraCount }}</span>
+            <span class="setting-unit">个单词</span>
+          </div>
+          <div class="setting-control">
+            <WheelSelector
+              v-model="learning.lowEfExtraCount"
+              :min="0"
+              :max="200"
+              :step="10"
+            />
+          </div>
+          <p class="setting-hint">复习时额外加入低EF单词<br></br>加速提升掌握程度</p>
+        </div>
       </div>
     </div>
 
@@ -157,7 +175,8 @@ const resetSettings = async () => {
         dailyReviewLimit: 300,
         dailySpellLimit: 200,
         maxPrepDays: 45,
-        defaultShuffle: false
+        defaultShuffle: false,
+        lowEfExtraCount: 50
       }
       await saveSettings()
     } catch (error) {

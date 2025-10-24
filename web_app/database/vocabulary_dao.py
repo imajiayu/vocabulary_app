@@ -405,10 +405,27 @@ def db_fetch_word_info_paginated(limit=50, offset=0):
         }
 
 
-def db_fetch_review_word_ids(limit=None):
+def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
+    """
+    获取需要复习的单词ID列表
+
+    Args:
+        limit: 总数限制（可选）
+        low_ef_extra_count: 额外拉取的低EF单词数量（可选）
+
+    Returns:
+        list: 单词ID列表（到期单词 + 低EF单词，已去重）
+    """
     current_source = get_current_source()
+
+    # 如果未指定 low_ef_extra_count，从配置中获取
+    if low_ef_extra_count is None:
+        from web_app.config import UserConfig
+        low_ef_extra_count = UserConfig.LOW_EF_EXTRA_COUNT
+
     with get_session() as db:
-        rows = db.query(Word.id).filter(
+        # 1. 查询到期的单词
+        due_rows = db.query(Word.id).filter(
             Word.stop_review == 0,
             Word.next_review != None,
             Word.next_review <= datetime.date.today().isoformat(),
@@ -417,10 +434,33 @@ def db_fetch_review_word_ids(limit=None):
             ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
         )
         if limit:
-            rows = rows.limit(limit).all()
+            due_rows = due_rows.limit(limit).all()
         else:
-            rows = rows.all()
-        return [row[0] for row in rows]
+            due_rows = due_rows.all()
+        due_ids = [row[0] for row in due_rows]
+
+        # 2. 查询低EF单词（排除已到期的单词和完全掌握的单词）
+        if low_ef_extra_count > 0:
+            low_ef_rows = db.query(Word.id).filter(
+                Word.stop_review == 0,
+                Word.source == current_source,
+                # 排除已经完全掌握的单词
+                ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
+                # 排除已到期的单词
+                ~Word.id.in_(due_ids) if due_ids else True,
+            ).order_by(
+                Word.ease_factor.asc(),  # EF从低到高排序
+                Word.repetition.asc(),   # 相同EF时，复习次数少的优先
+            ).limit(low_ef_extra_count).all()
+
+            low_ef_ids = [row[0] for row in low_ef_rows]
+
+            # 3. 合并两个列表（到期单词在前，低EF单词在后）
+            all_ids = due_ids + low_ef_ids
+        else:
+            all_ids = due_ids
+
+        return all_ids
 
 
 def db_fetch_lapse_word_ids(limit=None):

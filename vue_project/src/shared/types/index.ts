@@ -113,6 +113,7 @@ export interface LearningSettings {
   lapseFastExitEnabled: boolean;
   lapseConsecutiveThreshold: number;
   defaultShuffle: boolean;
+  lowEfExtraCount: number;
 }
 
 export interface ManagementSettings {
