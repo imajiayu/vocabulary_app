@@ -36,7 +36,7 @@ class UserConfig:
     DEFAULT_SHUFFLE = True  # 默认是否打乱顺序
 
     # 低EF单词优先设置
-    LOW_EF_EXTRA_COUNT = 50  # 复习模式额外拉取的低EF单词数量（提升低EF单词的复习频率）
+    LOW_EF_EXTRA_COUNT = 0  # 复习模式额外拉取的低EF单词数量（提升低EF单词的复习频率）
 
     # 音频设置
     AUDIO_ACCENT = "us"  # 音频口音：us (美音) 或 uk (英音)

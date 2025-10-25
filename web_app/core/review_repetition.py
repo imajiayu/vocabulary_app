@@ -315,11 +315,25 @@ def calculate_srs_parameters_with_load_balancing(
     ease_factor,
     lapse,
     word_source,
-    original_next_review,
+    base_date,
     max_prep_days=45,
 ):
     """
     优化版的SRS参数计算，增加备考时间约束和负荷均衡
+
+    Args:
+        score: 评分 (1-5)
+        interval: 当前间隔天数
+        repetition: 复习次数
+        ease_factor: 难易因子
+        lapse: 错误次数
+        word_source: 单词来源 (IELTS/GRE)
+        base_date: 基准日期（通常是今天），用于计算负荷分布和下次复习日期
+        max_prep_days: 最大准备天数
+
+    Returns:
+        tuple: (repetition_new, interval_new, ease_factor_new, last_remembered,
+                last_forgot, remember_inc, forget_inc, lapse)
     """
     # 1. 先用原有逻辑计算基础参数
     basic_result = calculate_srs_parameters(
@@ -332,9 +346,9 @@ def calculate_srs_parameters_with_load_balancing(
         interval_new = max_prep_days
 
     # 3. 对低强度单词应用负荷均衡（填谷策略）
-    # 获取当前负荷分布
+    # 获取当前负荷分布（从base_date开始计算未来的负荷）
     daily_loads = get_daily_review_loads_by_source(
-        word_source, original_next_review, max_prep_days
+        word_source, base_date, max_prep_days
     )
 
     if should_apply_load_balancing(ease_factor_new, repetition_new, score):

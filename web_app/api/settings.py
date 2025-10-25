@@ -98,6 +98,12 @@ def update_settings():
                 f"DEFAULT_SHUFFLE = {learning['defaultShuffle']}",
                 content,
             )
+        if "lowEfExtraCount" in learning:
+            content = re.sub(
+                r"LOW_EF_EXTRA_COUNT\s*=\s*\d+",
+                f"LOW_EF_EXTRA_COUNT = {learning['lowEfExtraCount']}",
+                content,
+            )
 
         # 更新单词管理设置
         management = data.get("management", {})

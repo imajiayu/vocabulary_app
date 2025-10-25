@@ -694,16 +694,23 @@ def db_batch_update_words(word_ids: list[int], update_data: dict) -> tuple[int, 
         return updated_count, words_list
 
 
-def get_daily_review_loads_by_source(source, original_next_review, days_ahead=45):
+def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
     """
     获取指定source未来每日的复习负荷
-    从original_next_review日期开始计算
-    返回: [day1_count, day2_count, ..., day45_count]
+
+    Args:
+        source: 单词来源 (IELTS/GRE)
+        base_date: 基准日期（通常是今天），从此日期开始计算未来的负荷
+        days_ahead: 查询未来多少天的负荷（默认45天）
+
+    Returns:
+        list: [day1_count, day2_count, ..., day45_count]
+              day1是base_date+1天的负荷，day2是base_date+2天的负荷，以此类推
     """
     from datetime import timedelta
 
     future_dates = [
-        (original_next_review + timedelta(days=i)).isoformat()
+        (base_date + timedelta(days=i)).isoformat()
         for i in range(1, days_ahead + 1)
     ]
 
@@ -728,9 +735,17 @@ def get_daily_review_loads_by_source(source, original_next_review, days_ahead=45
 def get_daily_spell_loads_by_source(source, base_date, days_ahead=45):
     """
     获取指定source未来每日的拼写负荷
-    返回: [day1_count, day2_count, ..., day45_count]
+
+    Args:
+        source: 单词来源 (IELTS/GRE)
+        base_date: 基准日期（通常是今天），从此日期开始计算未来的负荷
+        days_ahead: 查询未来多少天的负荷（默认45天）
+
+    Returns:
+        list: [day1_count, day2_count, ..., day45_count]
+              day1是base_date+1天的负荷，day2是base_date+2天的负荷，以此类推
     """
-    from datetime import date, timedelta
+    from datetime import timedelta
 
     future_dates = [
         (base_date + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)

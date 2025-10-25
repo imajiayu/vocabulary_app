@@ -381,12 +381,24 @@ def calculate_spell_strength_with_load_balancing(
     """
     计算拼写记忆强度变化和优化间隔（方案5：组合优化）
 
+    Args:
+        spelling_data: 拼写输入数据（键盘事件、交互等）
+        remembered: 是否记住
+        word: 单词文本
+        word_source: 单词来源 (IELTS/GRE)
+        base_date: 基准日期（通常是今天），用于计算负荷分布和下次复习日期
+        current_strength: 当前拼写强度
+        initial_strength: 初始强度（默认0.0）
+        base_interval: 基础间隔天数（默认1）
+        max_prep_days: 最大准备天数（默认45）
+
     策略：
     1. 极低强度单词（< 0.8）或未记住：不参与负荷均衡，优先快速复习
     2. 低强度单词（0.8-2.5）：使用指数惩罚 + 严格推迟上限
     3. 高强度单词（> 2.5）：向后寻找负荷较小的日期，避免峰值堆积
 
-    返回: (strength_change, optimized_interval, breakdown_info)
+    Returns:
+        tuple: (strength_change, optimized_interval, breakdown_info)
     """
     # 1. 计算强度变化和评分详情
     strength_change, breakdown_info = calculate_spell_strength(
