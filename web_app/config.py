@@ -17,7 +17,7 @@ class UserConfig:
     # 学习设置
     DAILY_REVIEW_LIMIT = 300  # 每日复习上限
     DAILY_SPELL_LIMIT = 200  # 每日拼写上限
-    MAX_PREP_DAYS = 45  # 最大准备天数
+    MAX_PREP_DAYS = 30  # 最大准备天数
 
     # Lapse模式设置（错题集）
     # 基于认知心理学优化：目标是确保单词间隔在5-10分钟（最佳记忆间隔）

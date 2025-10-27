@@ -441,6 +441,7 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
 
         # 2. 查询低EF单词（排除已到期的单词和完全掌握的单词）
         if low_ef_extra_count > 0:
+            today = date.today()
             low_ef_rows = db.query(Word.id).filter(
                 Word.stop_review == 0,
                 Word.source == current_source,
@@ -448,6 +449,8 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
                 ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
                 # 排除已到期的单词
                 ~Word.id.in_(due_ids) if due_ids else True,
+                # 排除今天复习过的单词
+                ~((Word.last_remembered == today) | (Word.last_forgot == today)),
             ).order_by(
                 Word.ease_factor.asc(),  # EF从低到高排序
                 Word.repetition.asc(),   # 相同EF时，复习次数少的优先
@@ -481,10 +484,7 @@ def db_fetch_lapse_word_ids(limit=None):
 
 
 def db_fetch_spelled_word_ids(limit=None):
-    from datetime import date
-
     current_source = get_current_source()
-    today = date.today()
 
     with get_session() as db:
         rows = (
