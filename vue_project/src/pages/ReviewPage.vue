@@ -20,10 +20,19 @@
     <TopBar show-home-button show-management-button show-stats-button>
 
       <template #center>
-        <!-- lapse模式进度条 -->
-        <div v-if="mode === 'mode_lapse'" class="progress-bar-container">
-          <ProgressBar :progress="Math.abs(progress)" :fill-color="progress < 0 ? '#ff4d4f' : '#52c41a'"
-            :text="`${Math.round(progress)}%`" />
+        <div class="center-info-container">
+          <!-- 复习信息 -->
+          <div v-if="reviewInfo" class="review-info-text">
+            <span class="info-source">{{ reviewStore.wordQueue[0]?.source || '' }}</span>
+            <span class="info-mode">{{ mode === 'mode_lapse' ? '复习错题' : mode === 'mode_spelling' ? '拼写熟练' : '复习已有' }}</span>
+            <span class="info-shuffle">{{ shuffle ? '随机' : '顺序' }}</span>
+          </div>
+
+          <!-- lapse模式进度条 -->
+          <div v-if="mode === 'mode_lapse'" class="progress-bar-wrapper">
+            <ProgressBar :progress="Math.abs(progress)" :fill-color="progress < 0 ? '#ff4d4f' : '#52c41a'"
+              :text="`${Math.round(progress)}%`" />
+          </div>
         </div>
       </template>
 
@@ -210,6 +219,24 @@ const displayTotal = computed(() => {
 
 const currentComponent = computed(() => {
   return mode.value === 'mode_spelling' ? WordSpelling : WordReview
+})
+
+// 导航栏中间显示的信息
+const reviewInfo = computed(() => {
+  if (reviewStore.wordQueue.length === 0) return ''
+
+  // 获取source（所有单词都是同一种source）
+  const source = reviewStore.wordQueue[0]?.source || ''
+
+  // 模式描述
+  const modeText = mode.value === 'mode_lapse' ? '复习错题'
+    : mode.value === 'mode_spelling' ? '拼写熟练'
+    : '复习已有'
+
+  // 随机状态
+  const shuffleText = shuffle.value ? '随机' : '顺序'
+
+  return `${source} ${modeText} ${shuffleText}`
 })
 
 // 为WordSidebar准备的单词列表（确保响应式更新）
@@ -448,9 +475,55 @@ onUnmounted(() => {
     background: transparent;
 }
 
-/* TopBar中的进度条容器样式 */
-.progress-bar-container {
-  /* 让ProgressBar组件自己控制样式，只设置基本容器属性 */
+/* TopBar中的中心信息容器 */
+.center-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* 复习信息文本 */
+.review-info-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* 信息来源（蓝色） */
+.info-source {
+  color: #3b82f6;
+}
+
+/* 信息模式（绿色） */
+.info-mode {
+  color: #10b981;
+}
+
+/* 信息模式分隔符 */
+.info-mode::before {
+  content: '·';
+  margin-right: 6px;
+  color: #cbd5e1;
+}
+
+/* 信息顺序（橙色） */
+.info-shuffle {
+  color: #f59e0b;
+}
+
+/* 信息顺序分隔符 */
+.info-shuffle::before {
+  content: '·';
+  margin-right: 6px;
+  color: #cbd5e1;
+}
+
+/* 进度条包装器 */
+.progress-bar-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -581,6 +654,17 @@ onUnmounted(() => {
 
   .progress-text {
     font-size: 11px;
+  }
+
+  /* 移动端中心信息容器 */
+  .center-info-container {
+    gap: 6px;
+  }
+
+  /* 移动端复习信息文本 */
+  .review-info-text {
+    font-size: 12px;
+    gap: 4px;
   }
 
   .bottom-loading {

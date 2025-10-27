@@ -131,13 +131,17 @@ const remainingCount = computed(() => {
 .progress-source {
   color: #3b82f6;
   font-weight: 600;
-  margin-right: 0.25rem;
 }
 
 .progress-mode {
   color: #10b981;
   font-weight: 600;
-  margin-right: 0.25rem;
+}
+
+.progress-mode::before {
+  content: '·';
+  margin: 0 0.25rem;
+  color: var(--color-text-tertiary);
 }
 
 .progress-shuffle {
@@ -148,7 +152,7 @@ const remainingCount = computed(() => {
 
 .progress-shuffle::before {
   content: '·';
-  margin-right: 0.25rem;
+  margin: 0 0.25rem;
   color: var(--color-text-tertiary);
 }
 

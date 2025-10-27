@@ -29,9 +29,7 @@ def db_update_word_definition_only(word_id, definition_dict):
         definition_str = json.dumps(definition_dict, ensure_ascii=False)
         with get_session() as db:
             db.execute(
-                update(Word)
-                .values(definition=definition_str)
-                .where(Word.id == word_id)
+                update(Word).values(definition=definition_str).where(Word.id == word_id)
             )
             db.commit()
         return True
@@ -87,7 +85,12 @@ def db_get_comprehensive_stats(source=None):
                 Word.date_added,
                 Word.lapse,
             )
-            .filter(Word.source == source, Word.stop_review == 0)
+            .filter(
+                Word.source == source,
+                Word.stop_review == 0,
+                # 排除已经完全掌握的单词（ease_factor达到最高值且复习次数充足）
+                ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
+            )
             .all()
         )
 
@@ -318,12 +321,16 @@ def db_fetch_words_without_definition():
     invalid_definition = '{"phonetic": {"us": "", "uk": ""}, "definitions": ["暂无释义"], "examples": []}'
 
     with get_session() as db:
-        words = db.query(Word).filter(
-            (Word.definition == None)
-            | (Word.definition == "")
-            | (Word.definition == "{}")
-            | (Word.definition == invalid_definition)
-        ).all()
+        words = (
+            db.query(Word)
+            .filter(
+                (Word.definition == None)
+                | (Word.definition == "")
+                | (Word.definition == "{}")
+                | (Word.definition == invalid_definition)
+            )
+            .all()
+        )
         return [{"id": w.id, "word": w.word} for w in words]
 
 
@@ -421,6 +428,7 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
     # 如果未指定 low_ef_extra_count，从配置中获取
     if low_ef_extra_count is None:
         from web_app.config import UserConfig
+
         low_ef_extra_count = UserConfig.LOW_EF_EXTRA_COUNT
 
     with get_session() as db:
@@ -442,19 +450,25 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
         # 2. 查询低EF单词（排除已到期的单词和完全掌握的单词）
         if low_ef_extra_count > 0:
             today = date.today()
-            low_ef_rows = db.query(Word.id).filter(
-                Word.stop_review == 0,
-                Word.source == current_source,
-                # 排除已经完全掌握的单词
-                ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
-                # 排除已到期的单词
-                ~Word.id.in_(due_ids) if due_ids else True,
-                # 排除今天复习过的单词
-                ~((Word.last_remembered == today) | (Word.last_forgot == today)),
-            ).order_by(
-                Word.ease_factor.asc(),  # EF从低到高排序
-                Word.repetition.asc(),   # 相同EF时，复习次数少的优先
-            ).limit(low_ef_extra_count).all()
+            low_ef_rows = (
+                db.query(Word.id)
+                .filter(
+                    Word.stop_review == 0,
+                    Word.source == current_source,
+                    # 排除已经完全掌握的单词
+                    ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
+                    # 排除已到期的单词
+                    ~Word.id.in_(due_ids) if due_ids else True,
+                    # 排除今天复习过的单词
+                    ~((Word.last_remembered == today) | (Word.last_forgot == today)),
+                )
+                .order_by(
+                    Word.ease_factor.asc(),  # EF从低到高排序
+                    Word.repetition.asc(),  # 相同EF时，复习次数少的优先
+                )
+                .limit(low_ef_extra_count)
+                .all()
+            )
 
             low_ef_ids = [row[0] for row in low_ef_rows]
 
@@ -660,15 +674,19 @@ def db_batch_delete_words(word_ids: list[int]) -> int:
         ).delete(synchronize_session=False)
 
         # 3. 删除单词本身
-        deleted_count = db.query(Word).filter(Word.id.in_(word_ids)).delete(
-            synchronize_session=False
+        deleted_count = (
+            db.query(Word)
+            .filter(Word.id.in_(word_ids))
+            .delete(synchronize_session=False)
         )
 
         db.commit()
         return deleted_count
 
 
-def db_batch_update_words(word_ids: list[int], update_data: dict) -> tuple[int, list[dict]]:
+def db_batch_update_words(
+    word_ids: list[int], update_data: dict
+) -> tuple[int, list[dict]]:
     """
     批量更新单词字段
 
@@ -681,8 +699,10 @@ def db_batch_update_words(word_ids: list[int], update_data: dict) -> tuple[int, 
     """
     with get_session() as db:
         # 批量更新
-        updated_count = db.query(Word).filter(Word.id.in_(word_ids)).update(
-            update_data, synchronize_session=False
+        updated_count = (
+            db.query(Word)
+            .filter(Word.id.in_(word_ids))
+            .update(update_data, synchronize_session=False)
         )
 
         db.commit()
@@ -710,8 +730,7 @@ def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
     from datetime import timedelta
 
     future_dates = [
-        (base_date + timedelta(days=i)).isoformat()
-        for i in range(1, days_ahead + 1)
+        (base_date + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
     ]
 
     with get_session() as db:
@@ -724,6 +743,8 @@ def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
                     Word.source == source,
                     Word.stop_review == 0,
                     Word.next_review == date_str,
+                    # 排除已经完全掌握的单词（ease_factor达到最高值且复习次数充足）
+                    ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
                 )
                 .count()
             )
