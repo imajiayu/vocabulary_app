@@ -66,6 +66,9 @@
         </div>
       </div>
     </main>
+
+    <!-- AI词汇助手 -->
+    <VocabularyAIChat :current-word="currentWord" />
   </div>
 </template>
 
@@ -76,9 +79,9 @@ import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
 import type { Word } from '@/shared/types'
-import { api } from '@/shared/api'
 import { useWordManagementWebSocket, WebSocketEvents } from '@/shared/services/websocket'
 import { clearPreloadCache } from '@/shared/utils/playWordAudio'
+import { initChatHistoryStorage } from '@/shared/utils/chatHistoryStorage'
 import WordReview from '@/features/vocabulary/components/WordReview.vue'
 import WordSpelling from '@/features/vocabulary/components/WordSpelling.vue'
 import TopBar from '@/shared/components/layout/TopBar.vue'
@@ -86,6 +89,7 @@ import LoadingComponent from '@/shared/components/ui/Loading.vue'
 import ProgressBar from '@/shared/components/ui/ProgressBar.vue'
 import WordSideBar from '@/shared/components/ui/WordSideBar.vue'
 import ReviewParamsNotification from '@/features/vocabulary/components/ReviewParamsNotification.vue'
+import VocabularyAIChat from '@/shared/components/ui/VocabularyAIChat.vue'
 
 // Props
 interface RouteProps {
@@ -393,6 +397,9 @@ watch(() => route.query, async () => {
 
 // 生命周期
 onMounted(async () => {
+  // 初始化聊天历史存储并清理过期记录
+  initChatHistoryStorage()
+
   await initializeFromRoute()
 
   // 建立WebSocket连接并监听单词更新

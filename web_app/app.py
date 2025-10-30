@@ -7,6 +7,7 @@ from web_app.api.speaking import speaking_api_bp
 from web_app.api.vocabulary import api_bp
 from web_app.api.settings import settings_bp
 from web_app.api.relations import relations_bp
+from web_app.api.vocabulary_assistance import vocabulary_assistance_bp
 from web_app.extensions import socketio
 
 # 导入websocket服务以注册事件处理器
@@ -21,6 +22,7 @@ app.register_blueprint(api_bp)
 app.register_blueprint(speaking_api_bp)
 app.register_blueprint(settings_bp, url_prefix="/api")
 app.register_blueprint(relations_bp)
+app.register_blueprint(vocabulary_assistance_bp)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 

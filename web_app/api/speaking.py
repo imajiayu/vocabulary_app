@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_cors import CORS
 from flask.views import MethodView
-from openai import OpenAI
 from web_app.config import STATIC_PATH
+from web_app.utils.ai_helper import call_ai
 from web_app.database.speaking_dao import (
     db_delete_record,
     db_get_all_topics,
@@ -34,9 +34,6 @@ def create_response(success=True, data=None, message=""):
     """创建统一的API响应格式"""
     return jsonify({"success": success, "data": data, "message": message})
 
-
-API_KEY = "sk-74873efb25324ec8aa9d6e05168c8e5e"
-client = OpenAI(api_key=API_KEY, base_url="https://api.deepseek.com")
 
 # 创建转录器实例
 speech_transcriber = create_speech_transcriber()
@@ -120,22 +117,26 @@ def get_feedback():
         question_text = data["question_text"]
         answer = data["user_answer"]
         topic_title = data.get("topic_title", "")  # 获取topic标题，可选参数
-        # 构建完整的prompt，如果有topic标题则包含在内
-        full_prompt = prompt
+
+        # 构建完整的system prompt，如果有topic标题则包含在内
+        system_prompt = prompt
         if topic_title:
-            full_prompt = f"话题: {topic_title}\n{prompt}"
-        response = client.chat.completions.create(
-            model="deepseek-chat",
-            messages=[
-                {"role": "system", "content": full_prompt},
-                {"role": "user", "content": question_text + "\n" + answer},
-            ],
-            stream=False,
+            system_prompt = f"话题: {topic_title}\n{prompt}"
+
+        # 构建用户消息
+        user_message = question_text + "\n" + answer
+
+        # 调用AI助手
+        ai_response = call_ai(
+            system_prompt=system_prompt,
+            user_message=user_message
         )
-        text = response.choices[0].message.content
-        lines = text.splitlines()
+
+        # 解析响应
+        lines = ai_response.splitlines()
         score = float(lines[0])
         feedback = "".join(lines[1:]) if len(lines) > 1 else ""
+
         return create_response(
             True,
             {"feedback": feedback, "score": score},

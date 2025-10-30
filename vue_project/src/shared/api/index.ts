@@ -13,6 +13,7 @@ import { StatsApi } from './stats'
 import { ConfigApi } from './config'
 import { SettingsApi } from './settings'
 import { RelationsApi } from './relations'
+import { VocabularyAssistanceApi } from './vocabulary-assistance'
 import { get, post } from './client'
 import type { Word } from '@/shared/types'
 
@@ -68,6 +69,12 @@ export type {
   DeleteRelationPayload
 } from './relations'
 
+export { VocabularyAssistanceApi } from './vocabulary-assistance'
+export type {
+  VocabularyAssistanceMessagePayload,
+  VocabularyAssistanceResponse
+} from './vocabulary-assistance'
+
 // 进度恢复API
 export class ProgressApi {
   /**
@@ -111,7 +118,8 @@ export const api = {
   config: ConfigApi,
   settings: SettingsApi,
   relations: RelationsApi,
-  progress: ProgressApi
+  progress: ProgressApi,
+  vocabularyAssistance: VocabularyAssistanceApi
 } as const
 
 export default api
