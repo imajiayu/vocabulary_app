@@ -38,8 +38,8 @@
                 </div>
             </div>
 
-            <!-- 重置计时器按钮 - 只在第一阶段显示 -->
-            <div v-show="!showDefinition" class="reset-timer-wrapper">
+            <!-- 重置计时器按钮 - 只在第一阶段显示，且不在错题模式 -->
+            <div v-show="!showDefinition && !isLapseMode" class="reset-timer-wrapper">
                 <button class="reset-timer-button" @click="handleResetTimer" @mouseenter="showResetTooltip = true"
                     @mouseleave="showResetTooltip = false" title="重置计时器">
                     🔄
