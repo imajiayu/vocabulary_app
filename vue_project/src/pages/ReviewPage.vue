@@ -28,6 +28,9 @@
             <span class="info-shuffle">{{ shuffle ? '随机' : '顺序' }}</span>
           </div>
 
+          <!-- 复习速度和预估时间 - 非lapse模式 -->
+          <ReviewSpeedIndicator />
+
           <!-- lapse模式进度条 -->
           <div v-if="mode === 'mode_lapse'" class="progress-bar-wrapper">
             <ProgressBar :progress="Math.abs(progress)" :fill-color="progress < 0 ? '#ff4d4f' : '#52c41a'"
@@ -90,6 +93,7 @@ import ProgressBar from '@/shared/components/ui/ProgressBar.vue'
 import WordSideBar from '@/shared/components/ui/WordSideBar.vue'
 import ReviewParamsNotification from '@/features/vocabulary/components/ReviewParamsNotification.vue'
 import VocabularyAIChat from '@/shared/components/ui/VocabularyAIChat.vue'
+import ReviewSpeedIndicator from '@/features/vocabulary/components/ReviewSpeedIndicator.vue'
 
 // Props
 interface RouteProps {
