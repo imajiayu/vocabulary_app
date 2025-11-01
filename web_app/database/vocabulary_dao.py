@@ -296,7 +296,7 @@ def db_insert_word(word_text, source):
             # 设置next_review为当天
             today = date.today()
             new_word = Word(
-                word=word_text, source=SourceType(source), next_review=today
+                word=word_text, source=source, next_review=today
             )
             db.add(new_word)
             db.commit()
