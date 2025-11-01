@@ -155,22 +155,23 @@ const loadPosition = () => {
   const widgetWidth = 120 // 收起状态宽度
   const defaultRight = 16 // 1rem = 16px
 
-  // 移动端：放在底部按钮栏上方
+  // 移动端：放在左上角消息图标下方
   // 桌面端：放在重置计时器按钮上方
   const isMobile = viewportWidth <= 768
-  let defaultBottom
 
   if (isMobile) {
-    // 移动端：底部按钮栏高度约 140px (2 * 3.5rem + 0.75rem + 2rem)
-    // 再加上一些安全间距
-    defaultBottom = 150 // 约 9.4rem
+    // 移动端：左上角消息图标下方
+    // 消息图标位置：left: 12px, top: 56px, 高度 40px
+    // AI助手位置：在消息图标下方，间距 8px
+    currentX.value = 12 // 与消息图标左对齐
+    currentY.value = 56 + 40 + 8 // TopBar(56px) + 消息图标高度(40px) + 间距(8px)
   } else {
-    // 桌面端：重置计时器按钮上方
-    defaultBottom = 72 // 4.5rem = 72px (1rem + 2.5rem 按钮 + 1rem 间距)
+    // 桌面端：右下角，重置计时器按钮上方
+    const defaultBottom = 72 // 4.5rem = 72px (1rem + 2.5rem 按钮 + 1rem 间距)
+    currentX.value = viewportWidth - widgetWidth - defaultRight
+    currentY.value = viewportHeight - 50 - defaultBottom // 50 是收起状态的高度
   }
 
-  currentX.value = viewportWidth - widgetWidth - defaultRight
-  currentY.value = viewportHeight - 50 - defaultBottom // 50 是收起状态的高度
   savedX.value = currentX.value
   savedY.value = currentY.value
 }
@@ -370,6 +371,12 @@ const scrollToBottom = () => {
 
 // 拖动功能
 const startDrag = (e: MouseEvent) => {
+  // 移动端禁用拖动功能
+  const isMobile = window.innerWidth <= 768
+  if (isMobile) {
+    return
+  }
+
   // 点击关闭按钮时不拖动
   if ((e.target as HTMLElement).closest('.close-button')) {
     return
@@ -916,10 +923,16 @@ onUnmounted(() => {
 
   .chat-button {
     padding: 10px 16px;
+    cursor: pointer; /* 移动端改为普通指针，不能拖动 */
   }
 
   .chat-label {
     font-size: 13px;
+  }
+
+  /* 移动端标题栏不可拖动 */
+  .chat-header {
+    cursor: default;
   }
 
   /* 移动端聊天消息区域调整 */
