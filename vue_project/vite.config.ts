@@ -12,13 +12,15 @@ export default defineConfig({
     },
   },
   server: {
-    port: 443,
+    port: process.env.NODE_ENV === 'production' ? 5173 : 443,
     host: '0.0.0.0',
     open: true,
-    https: {
-      key: fs.readFileSync(resolve(__dirname, 'localhost+2-key.pem')),
-      cert: fs.readFileSync(resolve(__dirname, 'localhost+2.pem')),
-    },
+    https: process.env.NODE_ENV === 'production'
+      ? undefined
+      : (fs.existsSync(resolve(__dirname, 'localhost+2-key.pem')) ? {
+          key: fs.readFileSync(resolve(__dirname, 'localhost+2-key.pem')),
+          cert: fs.readFileSync(resolve(__dirname, 'localhost+2.pem')),
+        } : undefined),
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:5001',
