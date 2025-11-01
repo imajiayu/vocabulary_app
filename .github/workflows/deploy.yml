@@ -32,25 +32,20 @@ jobs:
             echo "📥 拉取最新代码..."
             git pull origin main
 
-            # 2. 更新 Python 依赖
+            # 2. 更新依赖并部署
             echo "📦 更新 Python 依赖..."
             source .venv/bin/activate
             pip install -r web_app/requirements.txt
 
-            # 3. 更新前端依赖
             echo "📦 更新前端依赖..."
             cd vue_project
             npm install
             cd ..
 
-            # 4. 重启服务
-            echo "🔄 重启服务..."
+            # 3. 执行完整部署
+            echo "🚀 执行完整部署..."
             chmod +x start-production.sh
-            ./start-production.sh restart
-
-            # 6. 重载 Nginx
-            echo "🌐 重载 Nginx..."
-            sudo systemctl reload nginx
+            ./start-production.sh deploy
 
             # 7. 验证部署
             echo "✅ 验证部署..."

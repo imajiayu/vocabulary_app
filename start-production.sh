@@ -2,16 +2,14 @@
 
 # Vocabulary App - 生产环境启动脚本
 # 用法: ./start-production.sh {start|stop|restart|status}
-# 说明: 生产环境使用 Nginx 提供 HTTPS 和静态文件，前后端均走 HTTP
+# 说明: 生产环境使用 Nginx 提供 HTTPS 和静态文件，只需启动后端
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$PROJECT_ROOT/web_app"
-FRONTEND_DIR="$PROJECT_ROOT/vue_project"
 
 PID_DIR="$PROJECT_ROOT/.pids"
 LOG_DIR="$PROJECT_ROOT/logs"
 BACKEND_PID="$PID_DIR/backend.pid"
-FRONTEND_PID="$PID_DIR/frontend.pid"
 
 mkdir -p "$PID_DIR" "$LOG_DIR"
 
@@ -62,28 +60,36 @@ start_backend() {
     fi
 }
 
-# 启动前端开发服务器（HTTP）
-start_frontend() {
-    echo "启动前端开发服务器..."
+# 构建前端
+build_frontend() {
+    echo "构建前端静态文件..."
 
-    if is_running "$FRONTEND_PID"; then
-        echo "✓ 前端已在运行 (PID: $(cat $FRONTEND_PID))"
-        return 0
+    if [ ! -d "$PROJECT_ROOT/vue_project/node_modules" ]; then
+        echo "安装前端依赖..."
+        cd "$PROJECT_ROOT/vue_project"
+        npm install
     fi
 
-    cd "$FRONTEND_DIR"
-    nohup npm run dev > "$LOG_DIR/frontend.log" 2>&1 &
-    echo $! > "$FRONTEND_PID"
-    sleep 3
+    echo "运行 npm run build..."
+    cd "$PROJECT_ROOT/vue_project"
+    npm run build
 
-    if is_running "$FRONTEND_PID"; then
-        echo "✓ 前端启动成功 (PID: $(cat $FRONTEND_PID))"
-        echo "  开发服务器: http://localhost:5173"
-        echo "  日志: $LOG_DIR/frontend.log"
+    if [ $? -eq 0 ]; then
+        echo "✓ 前端构建成功"
+        echo "  构建目录: $PROJECT_ROOT/vue_project/dist"
+
+        # 复制到 Nginx 目录
+        echo "复制静态文件到 Nginx 目录..."
+        sudo mkdir -p /var/www/vocabulary_app
+        sudo cp -r dist/* /var/www/vocabulary_app/
+        sudo chown -R www-data:www-data /var/www/vocabulary_app
+        echo "✓ 静态文件已部署到 /var/www/vocabulary_app"
     else
-        echo "✗ 前端启动失败，查看日志: $LOG_DIR/frontend.log"
+        echo "✗ 前端构建失败"
         return 1
     fi
+
+    cd "$PROJECT_ROOT"
 }
 
 # 停止后端
@@ -120,32 +126,6 @@ stop_backend() {
     fi
 }
 
-# 停止前端
-stop_frontend() {
-    echo "停止前端服务..."
-
-    local stopped=0
-
-    # 首先尝试从PID文件停止
-    if is_running "$FRONTEND_PID"; then
-        kill $(cat "$FRONTEND_PID") 2>/dev/null
-        sleep 2
-        if ps -p $(cat "$FRONTEND_PID") > /dev/null 2>&1; then
-            kill -9 $(cat "$FRONTEND_PID") 2>/dev/null
-        fi
-        rm -f "$FRONTEND_PID"
-        stopped=1
-    fi
-
-    # Kill所有相关的前端进程
-    pkill -f "vite.*vue_project" 2>/dev/null && stopped=1
-
-    if [ $stopped -eq 1 ]; then
-        echo "✓ 前端已停止"
-    else
-        echo "前端未运行"
-    fi
-}
 
 # 查看状态
 show_status() {
@@ -167,13 +147,16 @@ show_status() {
     echo ""
 
     # 前端
-    echo -n "前端开发服务器: "
-    if is_running "$FRONTEND_PID"; then
-        echo "运行中 (PID: $(cat $FRONTEND_PID))"
-        echo "  地址: http://localhost:5173"
-        echo "  日志: $LOG_DIR/frontend.log"
+    echo "前端: 由 Nginx 提供静态文件"
+    if [ -d "$PROJECT_ROOT/vue_project/dist" ]; then
+        echo "  构建文件: ✓ 存在"
+        if [ -d "/var/www/vocabulary_app" ]; then
+            echo "  Nginx 目录: ✓ 已部署"
+        else
+            echo "  Nginx 目录: ✗ 未部署"
+        fi
     else
-        echo "已停止"
+        echo "  构建文件: ✗ 不存在 (需要运行构建)"
     fi
     echo ""
 
@@ -194,45 +177,33 @@ show_status() {
 # 主函数
 case "${1:-help}" in
     start)
-        if [ "$2" = "backend" ]; then
-            start_backend
-        elif [ "$2" = "frontend" ]; then
-            start_frontend
-        else
-            start_backend
-            echo ""
-            start_frontend
-        fi
+        start_backend
         echo ""
         show_status
         ;;
     stop)
-        if [ "$2" = "backend" ]; then
-            stop_backend
-        elif [ "$2" = "frontend" ]; then
-            stop_frontend
-        else
-            stop_backend
-            stop_frontend
-        fi
+        stop_backend
         ;;
     restart)
-        if [ "$2" = "backend" ]; then
-            stop_backend
-            sleep 1
-            start_backend
-        elif [ "$2" = "frontend" ]; then
-            stop_frontend
-            sleep 1
-            start_frontend
-        else
-            stop_backend
-            stop_frontend
-            sleep 2
-            start_backend
-            echo ""
-            start_frontend
-        fi
+        stop_backend
+        sleep 2
+        start_backend
+        echo ""
+        show_status
+        ;;
+    build)
+        build_frontend
+        ;;
+    deploy)
+        echo "执行完整部署..."
+        build_frontend
+        echo ""
+        stop_backend
+        sleep 1
+        start_backend
+        echo ""
+        echo "重载 Nginx..."
+        sudo systemctl reload nginx
         echo ""
         show_status
         ;;
@@ -242,22 +213,18 @@ case "${1:-help}" in
     help|--help|-h)
         echo "生产环境启动脚本"
         echo ""
-        echo "用法: ./start-production.sh {start|stop|restart|status} [backend|frontend]"
+        echo "用法: ./start-production.sh {start|stop|restart|build|deploy|status}"
         echo ""
         echo "命令:"
-        echo "  start           - 启动所有服务"
-        echo "  start backend   - 只启动后端"
-        echo "  start frontend  - 只启动前端"
-        echo "  stop            - 停止所有服务"
-        echo "  stop backend    - 只停止后端"
-        echo "  stop frontend   - 只停止前端"
-        echo "  restart         - 重启所有服务"
-        echo "  restart backend - 只重启后端"
-        echo "  restart frontend- 只重启前端"
-        echo "  status          - 查看服务状态"
+        echo "  start    - 启动后端服务"
+        echo "  stop     - 停止后端服务"
+        echo "  restart  - 重启后端服务"
+        echo "  build    - 构建前端并部署到 Nginx"
+        echo "  deploy   - 完整部署（构建前端 + 重启后端 + 重载 Nginx）"
+        echo "  status   - 查看服务状态"
         echo ""
         echo "说明:"
-        echo "  前端: HTTP 开发服务器 (localhost:5173)"
+        echo "  前端: 构建为静态文件，由 Nginx 提供 (/var/www/vocabulary_app)"
         echo "  后端: HTTP API 服务器 (localhost:5001)"
         echo "  Nginx: HTTPS 反向代理 (https://47.96.4.107)"
         ;;
