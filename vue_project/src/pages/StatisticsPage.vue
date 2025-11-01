@@ -201,15 +201,18 @@ const showEFSettings = ref(false)
 const tempEFRangeConfig = ref<EFRangeConfig>({ ...efRangeConfig.value })
 
 // Use read-only source selection for initial sync from WordIndex
-const { currentSource: initialSource, initializeFromData } = useSourceSelectionReadOnly()
+const { currentSource: initialSource, availableSources, initializeFromData } = useSourceSelectionReadOnly()
 
 // Local source state for StatisticsPage - can be changed but doesn't affect WordIndex
-const currentSource = ref<'IELTS' | 'GRE'>('IELTS')
+const currentSource = ref<string>('')
 
-const sourceTabs = computed(() => [
-  { value: 'IELTS', label: 'IELTS', icon: '' },
-  { value: 'GRE', label: 'GRE', icon: '' }
-])
+const sourceTabs = computed(() => {
+  return availableSources.value.map(source => ({
+    value: source,
+    label: source,
+    icon: ''
+  }))
+})
 
 // Store data for both sources
 const statsData = ref<Record<string, {
@@ -288,10 +291,10 @@ const fetchStats = async (source: string) => {
 const preloadAllStats = async () => {
   try {
     isLoading.value = true
-    await Promise.all([
-      fetchStats('IELTS'),
-      fetchStats('GRE')
-    ])
+    // Dynamically fetch stats for all available sources
+    await Promise.all(
+      availableSources.value.map(source => fetchStats(source))
+    )
   } catch (e: any) {
     error.value = e?.message || String(e)
   } finally {
@@ -301,7 +304,7 @@ const preloadAllStats = async () => {
 
 // Handle source change - only changes local display, doesn't affect WordIndex
 const handleSourceChange = (newSource: string) => {
-  currentSource.value = newSource as 'IELTS' | 'GRE'
+  currentSource.value = newSource
 }
 
 onMounted(async () => {

@@ -197,6 +197,22 @@ def update_settings():
                 content,
             )
 
+        # 更新 sources 设置
+        sources = data.get("sources", {})
+        if "customSources" in sources:
+            import json as json_module
+
+            custom_sources = sources["customSources"]
+            # 验证：必须是列表，最少1个，最多3个，名称不能重复
+            if isinstance(custom_sources, list) and 1 <= len(custom_sources) <= 3:
+                if len(custom_sources) == len(set(custom_sources)):  # 去重检查
+                    sources_str = json_module.dumps(custom_sources, ensure_ascii=False)
+                    content = re.sub(
+                        r"CUSTOM_SOURCES\s*=\s*\[[^\]]*\]",
+                        f"CUSTOM_SOURCES = {sources_str}",
+                        content,
+                    )
+
         # 写回config.py
         with open(config_path, "w", encoding="utf-8") as f:
             f.write(content)
@@ -240,3 +256,116 @@ def restart_server():
     thread.start()
 
     return jsonify({"message": "服务器正在重启..."}), 200
+
+
+@settings_bp.route("/settings/sources/<source_name>", methods=["DELETE"])
+def delete_source(source_name):
+    """
+    删除指定的 source 及其所有关联数据
+    同时从 config.py 中移除该 source
+    """
+    from web_app.config import UserConfig
+    from web_app.extensions import get_session
+    from web_app.models.word import Word, Progress
+    from flask import session
+
+    try:
+        # 1. 验证：不能删除到只剩0个source
+        current_sources = UserConfig.CUSTOM_SOURCES.copy()
+        if len(current_sources) <= 1:
+            return jsonify({"error": "至少需要保留1个source"}), 400
+
+        if source_name not in current_sources:
+            return jsonify({"error": f"source '{source_name}' 不存在"}), 404
+
+        # 2. 删除数据库中的所有相关数据
+        with get_session() as db:
+            # 删除所有该 source 的单词
+            deleted_words = db.query(Word).filter(Word.source == source_name).delete()
+
+            # 删除所有该 source 的进度记录
+            deleted_progress = (
+                db.query(Progress).filter(Progress.source == source_name).delete()
+            )
+
+            db.commit()
+
+            # 3. 从 config.py 中移除该 source
+            current_sources.remove(source_name)
+
+            # 读取 config.py
+            config_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "..", "config.py"
+            )
+            with open(config_path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            # 更新 CUSTOM_SOURCES
+            import json as json_module
+
+            sources_str = json_module.dumps(current_sources, ensure_ascii=False)
+            content = re.sub(
+                r"CUSTOM_SOURCES\s*=\s*\[[^\]]*\]",
+                f"CUSTOM_SOURCES = {sources_str}",
+                content,
+            )
+
+            # 写回 config.py
+            with open(config_path, "w", encoding="utf-8") as f:
+                f.write(content)
+
+            # 4. 重新加载 config 模块
+            import importlib
+            import web_app.config
+
+            importlib.reload(web_app.config)
+
+        # 5. 如果删除的是当前选中的 source，切换到第一个可用的 source
+        if session.get("current_source") == source_name:
+            session["current_source"] = current_sources[0]
+
+        return (
+            jsonify(
+                {
+                    "message": f"成功删除 source '{source_name}'",
+                    "deleted_words": deleted_words,
+                    "deleted_progress": deleted_progress,
+                    "remaining_sources": current_sources,
+                }
+            ),
+            200,
+        )
+
+    except Exception as e:
+        return jsonify({"error": f"删除失败: {str(e)}"}), 400
+
+
+@settings_bp.route("/settings/sources/stats", methods=["GET"])
+def get_sources_stats():
+    """
+    获取所有 sources 的统计信息（每个 source 的单词数量）
+    """
+    from web_app.config import UserConfig
+    from web_app.extensions import get_session
+    from web_app.models.word import Word
+    from sqlalchemy import func
+
+    try:
+        with get_session() as db:
+            # 获取每个 source 的单词数量
+            source_counts = (
+                db.query(Word.source, func.count(Word.id))
+                .group_by(Word.source)
+                .all()
+            )
+
+            # 构建结果字典
+            stats = {}
+            for source in UserConfig.CUSTOM_SOURCES:
+                count = next((c for s, c in source_counts if s == source), 0)
+                stats[source] = count
+
+            return jsonify(stats), 200
+
+    except Exception as e:
+        return jsonify({"error": f"获取统计信息失败: {str(e)}"}), 400

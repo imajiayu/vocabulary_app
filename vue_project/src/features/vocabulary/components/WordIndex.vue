@@ -131,10 +131,11 @@ const progressInfo = ref({
 // 使用 source selection composable
 const {
   currentSource,
-  ieltsStats,
-  greStats,
+  availableSources,
+  sourceStatsMap,
   switchSource: switchSourceComposable,
-  initializeFromData
+  initializeFromData,
+  loadAvailableSources
 } = useSourceSelection()
 
 // 使用全局设置管理
@@ -149,15 +150,18 @@ const {
 
 const router = useRouter()
 
-// 构建选项卡数据
-const sourceTabs = computed(() => [
-  { value: 'IELTS', label: `IELTS ${ieltsStats.total}` },
-  { value: 'GRE', label: `GRE ${greStats.total}` }
-])
+// 构建选项卡数据 - 动态生成
+const sourceTabs = computed(() => {
+  return availableSources.value.map(source => ({
+    value: source,
+    label: `${source} ${sourceStatsMap[source]?.total || 0}`,
+    disabled: availableSources.value.length === 1  // 只有1个source时禁用
+  }))
+})
 
 // 处理来源切换
 const handleSourceChange = (source: string) => {
-  switchSource(source as 'IELTS' | 'GRE')
+  switchSource(source)
 }
 
 // 创建双向绑定的shuffle computed
@@ -233,7 +237,7 @@ const fetchSummary = async (isRetry = false) => {
   }
 }
 
-const switchSource = async (source: 'IELTS' | 'GRE') => {
+const switchSource = async (source: string) => {
   try {
     // 使用 composable 的 switchSource
     const data = await switchSourceComposable(source)
@@ -257,7 +261,10 @@ const switchSource = async (source: 'IELTS' | 'GRE') => {
   }
 }
 
-onMounted(fetchSummary)
+onMounted(async () => {
+  await loadAvailableSources()  // 先加载可用的 sources
+  await fetchSummary()
+})
 
 const goto = (mode: string) => {
   let limit: number

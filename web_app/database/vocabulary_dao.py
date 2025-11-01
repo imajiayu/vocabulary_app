@@ -5,13 +5,16 @@ import json
 from flask import session
 from sqlalchemy import func, or_, text, update
 from web_app.extensions import get_session
-from web_app.models.word import SourceType, Word, WordRelation
+from web_app.models.word import Word, WordRelation
 from web_app.services.websocket_events import ws_events
 
 
 def get_current_source():
-    """Get current source filter from session, default to IELTS"""
-    return session.get("current_source", "IELTS")
+    """Get current source filter from session, default to first available source"""
+    from web_app.config import UserConfig
+
+    default_source = UserConfig.CUSTOM_SOURCES[0] if UserConfig.CUSTOM_SOURCES else "IELTS"
+    return session.get("current_source", default_source)
 
 
 def db_update_word_definition_only(word_id, definition_dict):
@@ -39,11 +42,14 @@ def db_update_word_definition_only(word_id, definition_dict):
 
 
 def db_get_source_statistics():
-    """Get statistics for each source (IELTS and GRE)"""
+    """Get statistics for each source (dynamically based on CUSTOM_SOURCES)"""
+    from web_app.config import UserConfig
+
     with get_session() as db:
         stats = {}
 
-        for source in ["IELTS", "GRE"]:
+        # 动态遍历所有自定义的 sources
+        for source in UserConfig.CUSTOM_SOURCES:
             total = db.query(Word).filter(Word.source == source).count()
             remembered = (
                 db.query(Word)
@@ -350,9 +356,7 @@ def db_fetch_word_info_paginated(limit=50, offset=0):
         # Calculate counts for first request only
         counts = None
         if offset == 0:
-            # Source counts
-            ielts_total = db.query(Word).filter(Word.source == "IELTS").count()
-            gre_total = db.query(Word).filter(Word.source == "GRE").count()
+            from web_app.config import UserConfig
 
             # Status counts for all words
             remembered_total = (
@@ -362,47 +366,35 @@ def db_fetch_word_info_paginated(limit=50, offset=0):
             )
             unremembered_total = total_count - remembered_total
 
-            # Status counts for IELTS
-            ielts_remembered = (
-                db.query(Word)
-                .filter(
-                    Word.source == "IELTS",
-                    (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
-                )
-                .count()
-            )
-            ielts_unremembered = ielts_total - ielts_remembered
-
-            # Status counts for GRE
-            gre_remembered = (
-                db.query(Word)
-                .filter(
-                    Word.source == "GRE",
-                    (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
-                )
-                .count()
-            )
-            gre_unremembered = gre_total - gre_remembered
-
-            counts = {
-                "source_counts": {
-                    "all": {
-                        "total": total_count,
-                        "remembered": remembered_total,
-                        "unremembered": unremembered_total,
-                    },
-                    "IELTS": {
-                        "total": ielts_total,
-                        "remembered": ielts_remembered,
-                        "unremembered": ielts_unremembered,
-                    },
-                    "GRE": {
-                        "total": gre_total,
-                        "remembered": gre_remembered,
-                        "unremembered": gre_unremembered,
-                    },
+            # 构建动态的 source_counts
+            source_counts = {
+                "all": {
+                    "total": total_count,
+                    "remembered": remembered_total,
+                    "unremembered": unremembered_total,
                 }
             }
+
+            # 动态遍历所有自定义的 sources
+            for source in UserConfig.CUSTOM_SOURCES:
+                source_total = db.query(Word).filter(Word.source == source).count()
+                source_remembered = (
+                    db.query(Word)
+                    .filter(
+                        Word.source == source,
+                        (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
+                    )
+                    .count()
+                )
+                source_unremembered = source_total - source_remembered
+
+                source_counts[source] = {
+                    "total": source_total,
+                    "remembered": source_remembered,
+                    "unremembered": source_unremembered,
+                }
+
+            counts = {"source_counts": source_counts}
 
         return {
             "words": [w.to_dict() for w in words],

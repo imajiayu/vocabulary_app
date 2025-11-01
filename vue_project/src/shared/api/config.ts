@@ -6,7 +6,7 @@ import { get, post } from './client'
 
 // 源切换响应接口
 export interface SourceSwitchResponse {
-  current_source: 'IELTS' | 'GRE'
+  current_source: string  // 改为动态字符串
   counts: {
     new: number
     review: number
@@ -69,7 +69,7 @@ export class ConfigApi {
   /**
    * 切换单词源
    */
-  static async switchSource(source: 'IELTS' | 'GRE'): Promise<SourceSwitchResponse> {
+  static async switchSource(source: string): Promise<SourceSwitchResponse> {
     return post<SourceSwitchResponse>('/api/switch_source', { source })
   }
 
@@ -77,7 +77,7 @@ export class ConfigApi {
    * 获取当前源信息
    */
   static async getCurrentSource(): Promise<{
-    current_source: 'IELTS' | 'GRE'
+    current_source: string
   }> {
     return get('/api/source')
   }
@@ -85,10 +85,42 @@ export class ConfigApi {
   /**
    * 设置当前源
    */
-  static async setSource(source: 'IELTS' | 'GRE'): Promise<{
-    current_source: 'IELTS' | 'GRE'
+  static async setSource(source: string): Promise<{
+    current_source: string
   }> {
     return post('/api/source', { source })
+  }
+
+  /**
+   * 获取所有 sources 的统计信息
+   */
+  static async getSourcesStats(): Promise<Record<string, number>> {
+    return get('/api/settings/sources/stats')
+  }
+
+  /**
+   * 删除指定 source
+   */
+  static async deleteSource(sourceName: string): Promise<{
+    message: string
+    deleted_words: number
+    deleted_progress: number
+    remaining_sources: string[]
+  }> {
+    // 使用 fetch 直接发送 DELETE 请求
+    const response = await fetch(`/api/settings/sources/${sourceName}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.error || '删除失败')
+    }
+
+    return response.json()
   }
 
   /**

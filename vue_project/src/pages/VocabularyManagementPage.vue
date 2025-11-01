@@ -106,7 +106,7 @@ import { useSettings } from '@/shared/composables/useSettings';
 const words = ref<Word[]>([]);
 const searchQuery = ref('');
 const filterStatus = ref('all');
-const sourceFilter = ref<'all' | 'IELTS' | 'GRE'>('all'); // 新增来源筛选
+const sourceFilter = ref<string>('all'); // 新增来源筛选
 const selectedWord = ref<Word | undefined>();
 const isModalOpen = ref(false);
 const isLoading = ref(true);

@@ -147,20 +147,22 @@ const lookupResult = ref<any>(null);
 let lookupTimeout: NodeJS.Timeout | null = null;
 
 // Local source state for WordInsertForm only - starts with WordIndex selection but can be changed locally
-const source = ref<'IELTS' | 'GRE'>('IELTS');
+const source = ref<string>('');
 
 // Use read-only composable to get WordIndex selection
-const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
+const { currentSource, availableSources, initializeFromData } = useSourceSelectionReadOnly();
 
-// 选项卡数据
-const sourceTabs = computed(() => [
-  { value: 'IELTS', label: 'IELTS' },
-  { value: 'GRE', label: 'GRE' }
-]);
+// 选项卡数据 - 动态生成
+const sourceTabs = computed(() => {
+  return availableSources.value.map(src => ({
+    value: src,
+    label: src
+  }))
+});
 
 // 处理来源切换 - only changes local state, doesn't affect WordIndex
 const handleSourceChange = (value: string) => {
-  source.value = value as 'IELTS' | 'GRE';
+  source.value = value;
 };
 
 onMounted(async () => {
@@ -271,7 +273,7 @@ const handleSubmit = async () => {
     const newWord = await api.words.createWord({
       word: word.value.trim(),
       definition: {}, // 空定义，后续可以编辑
-      source: source.value as 'IELTS' | 'GRE'
+      source: source.value
     });
 
     emit('wordInserted', newWord);

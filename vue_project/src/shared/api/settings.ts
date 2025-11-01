@@ -41,6 +41,9 @@ export class SettingsApi {
         wordsLoadBatchSize: 200,
         definitionFetchThreads: 3
       },
+      sources: {
+        customSources: ['IELTS', 'GRE']
+      },
       audio: {
         accent: 'us',
         autoPlayOnWordChange: true,

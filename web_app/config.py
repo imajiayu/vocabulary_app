@@ -32,6 +32,9 @@ class UserConfig:
     WORDS_LOAD_BATCH_SIZE = 200  # 单词管理页面每批加载的单词数量
     DEFINITION_FETCH_THREADS = 3  # 填充释义的并发线程数（推荐2-5）
 
+    # Source 类型设置
+    CUSTOM_SOURCES = ["IELTS", "GRE"]  # 自定义词汇来源（最少1个，最多3个）
+
     # 复习顺序设置
     DEFAULT_SHUFFLE = True  # 默认是否打乱顺序
 
@@ -75,6 +78,9 @@ class UserConfig:
             "management": {
                 "wordsLoadBatchSize": cls.WORDS_LOAD_BATCH_SIZE,
                 "definitionFetchThreads": cls.DEFINITION_FETCH_THREADS,
+            },
+            "sources": {
+                "customSources": cls.CUSTOM_SOURCES,
             },
             "audio": {
                 "accent": cls.AUDIO_ACCENT,
@@ -129,6 +135,13 @@ class UserConfig:
             cls.WORDS_LOAD_BATCH_SIZE = management["wordsLoadBatchSize"]
         if "definitionFetchThreads" in management:
             cls.DEFINITION_FETCH_THREADS = management["definitionFetchThreads"]
+
+        sources = data.get("sources", {})
+        if "customSources" in sources:
+            custom_sources = sources["customSources"]
+            # 验证：最少1个，最多3个，必须是列表
+            if isinstance(custom_sources, list) and 1 <= len(custom_sources) <= 3:
+                cls.CUSTOM_SOURCES = custom_sources
 
         audio = data.get("audio", {})
         if "accent" in audio:

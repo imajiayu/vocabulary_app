@@ -10,7 +10,7 @@ export interface WordQueryParams {
   mode?: 'mode_review' | 'mode_lapse' | 'mode_spelling'
   shuffle?: boolean
   limit?: number
-  source?: 'IELTS' | 'GRE'
+  source?: string  // 改为动态字符串
   batch_id?: number
   batch_size?: number
   offset?: number
@@ -30,7 +30,7 @@ export interface CreateWordPayload {
       zh: string
     }[]
   }
-  source: 'IELTS' | 'GRE'
+  source: string  // 改为动态字符串
 }
 
 // 单词更新参数接口
@@ -59,7 +59,7 @@ export interface WordActionResult {
 // 批量导入参数接口
 export interface BatchImportPayload {
   words: string[]
-  source: 'IELTS' | 'GRE'
+  source: string  // 改为动态字符串
 }
 
 // 批量导入结果接口

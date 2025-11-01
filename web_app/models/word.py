@@ -23,11 +23,6 @@ from sqlalchemy.orm import relationship, declarative_base, Session
 Base = declarative_base()
 
 
-class SourceType(enum.Enum):
-    IELTS = "IELTS"
-    GRE = "GRE"
-
-
 class Word(Base):
     __tablename__ = "words"
 
@@ -49,7 +44,7 @@ class Word(Base):
     lapse = Column(Integer, default=0)
     spell_strength = Column(Float)
     spell_next_review = Column(Date)
-    source = Column(Enum(SourceType), nullable=False)
+    source = Column(String(20), nullable=False)  # 改为字符串类型，最大长度20
 
     def to_dict(self):
         JSONdefinition = json.loads(self.definition) if self.definition else {}
@@ -72,7 +67,7 @@ class Word(Base):
             "spell_next_review": self.spell_next_review.isoformat()
             if self.spell_next_review
             else None,
-            "source": self.source.value,
+            "source": self.source,  # 直接返回字符串值
         }
 
     related_words = relationship(

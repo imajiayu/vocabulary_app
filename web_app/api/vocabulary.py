@@ -126,13 +126,18 @@ def get_stats():
 @api_bp.route("/switch_source", methods=["POST"])
 def switch_source():
     """Switch the current source filter and save to session."""
+    from web_app.config import UserConfig
+
     data = request.get_json()
     if not data or "source" not in data:
         return create_response(False, None, "Missing source parameter"), 400
 
     source = data["source"]
-    if source not in ["IELTS", "GRE"]:
-        return create_response(False, None, "Invalid source. Must be IELTS or GRE"), 400
+    # 动态验证：检查是否在 CUSTOM_SOURCES 中
+    if source not in UserConfig.CUSTOM_SOURCES:
+        return create_response(
+            False, None, f"Invalid source. Must be one of: {UserConfig.CUSTOM_SOURCES}"
+        ), 400
 
     session["current_source"] = source
     return create_response(True, {"source": source}, "Source switched successfully")
@@ -141,7 +146,11 @@ def switch_source():
 @api_bp.route("/source", methods=["GET"])
 def get_source():
     """Get the current source filter from session."""
-    current_source = session.get("current_source", "IELTS")
+    from web_app.config import UserConfig
+
+    # 默认使用第一个可用的 source
+    default_source = UserConfig.CUSTOM_SOURCES[0] if UserConfig.CUSTOM_SOURCES else "IELTS"
+    current_source = session.get("current_source", default_source)
     return create_response(
         True,
         {"current_source": current_source},
@@ -152,13 +161,18 @@ def get_source():
 @api_bp.route("/source", methods=["POST"])
 def set_source():
     """Set the current source filter and save to session."""
+    from web_app.config import UserConfig
+
     data = request.get_json()
     if not data or "source" not in data:
         return create_response(False, None, "Missing source parameter"), 400
 
     source = data["source"]
-    if source not in ["IELTS", "GRE"]:
-        return create_response(False, None, "Invalid source. Must be IELTS or GRE"), 400
+    # 动态验证：检查是否在 CUSTOM_SOURCES 中
+    if source not in UserConfig.CUSTOM_SOURCES:
+        return create_response(
+            False, None, f"Invalid source. Must be one of: {UserConfig.CUSTOM_SOURCES}"
+        ), 400
 
     session["current_source"] = source
     return create_response(True, {"current_source": source}, "Source set successfully")
@@ -303,6 +317,8 @@ def insert_words():
 @api_bp.route("/words/batch", methods=["POST"])
 def batch_insert_words():
     """批量导入单词"""
+    from web_app.config import UserConfig
+
     data = request.get_json()
     if not data or "words" not in data or "source" not in data:
         return create_response(False, None, "缺少参数 words 或 source"), 400
@@ -313,8 +329,11 @@ def batch_insert_words():
     if not isinstance(words_list, list) or not words_list:
         return create_response(False, None, "words 必须是非空数组"), 400
 
-    if source not in ["IELTS", "GRE"]:
-        return create_response(False, None, "source 必须是 IELTS 或 GRE"), 400
+    # 动态验证：检查是否在 CUSTOM_SOURCES 中
+    if source not in UserConfig.CUSTOM_SOURCES:
+        return create_response(
+            False, None, f"source 必须是以下之一: {UserConfig.CUSTOM_SOURCES}"
+        ), 400
 
     success_count = 0
     failed_count = 0

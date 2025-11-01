@@ -52,7 +52,7 @@ interface Props {
   searchQuery: string;
   filterStatus: string;
   stats: Stats;
-  sourceFilter: 'all' | 'IELTS' | 'GRE';
+  sourceFilter: string;  // 改为动态字符串
   // 新增：原始单词数据，用于计算各来源的统计（保留作为后备）
   allWords?: Array<{ source: string; stop_review?: number; ease_factor: number; }>;
   // 新增：预计算的源计数
@@ -70,19 +70,29 @@ const { allStats, ieltsStats, greStats } = useWordStats(wordsRef);
 const emit = defineEmits<{
   searchChange: [value: string];
   filterChange: [status: string];
-  sourceChange: [source: 'all' | 'IELTS' | 'GRE'];
+  sourceChange: [source: string];
 }>();
 
-// 来源选项卡数据
+// 来源选项卡数据 - 动态生成
 const sourceTabs = computed(() => {
   // 如果有预计算的计数，使用它们
   if (props.sourceCounts?.source_counts) {
     const counts = props.sourceCounts.source_counts;
-    return [
-      { value: 'all', label: `全部 ${counts.all.total}` },
-      { value: 'IELTS', label: `IELTS ${counts.IELTS.total}` },
-      { value: 'GRE', label: `GRE ${counts.GRE.total}` }
+    const tabs = [
+      { value: 'all', label: `全部 ${counts.all.total}` }
     ];
+
+    // 动态添加所有 sources（除了 'all'）
+    Object.keys(counts).forEach(source => {
+      if (source !== 'all') {
+        tabs.push({
+          value: source,
+          label: `${source} ${counts[source].total}`
+        });
+      }
+    });
+
+    return tabs;
   }
 
   // 后备方案：使用动态计算的结果
@@ -102,10 +112,9 @@ const filterTabs = computed(() => {
 
     if (props.sourceFilter === 'all') {
       sourceStats = counts.all;
-    } else if (props.sourceFilter === 'IELTS') {
-      sourceStats = counts.IELTS;
     } else {
-      sourceStats = counts.GRE;
+      // 动态获取对应 source 的统计
+      sourceStats = counts[props.sourceFilter] || counts.all;
     }
 
     return [
@@ -125,7 +134,7 @@ const filterTabs = computed(() => {
 
 // 处理来源切换
 const handleSourceChange = (source: string) => {
-  emit('sourceChange', source as 'all' | 'IELTS' | 'GRE');
+  emit('sourceChange', source);
 };
 
 // 处理筛选切换

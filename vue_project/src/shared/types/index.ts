@@ -96,8 +96,7 @@ export interface SourceStats {
 export interface SourceCounts {
   source_counts: {
     all: SourceStats;
-    IELTS: SourceStats;
-    GRE: SourceStats;
+    [key: string]: SourceStats;  // 动态键，支持任意 source 名称
   };
 }
 
@@ -148,11 +147,16 @@ export interface HotkeySettings {
   };
 }
 
+export interface SourcesSettings {
+  customSources: string[];  // 自定义的 source 列表
+}
+
 export interface UserSettings {
   learning: LearningSettings;
   management: ManagementSettings;
   audio: AudioSettings;
   hotkeys: HotkeySettings;
+  sources: SourcesSettings;
 }
 
 export interface SettingsApiResponse {
@@ -160,4 +164,5 @@ export interface SettingsApiResponse {
   management: ManagementSettings;
   audio: AudioSettings;
   hotkeys: HotkeySettings;
+  sources: SourcesSettings;
 }

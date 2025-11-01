@@ -45,6 +45,12 @@
           @save-success="handleSaveSuccess"
         />
 
+        <!-- 词汇来源设置 -->
+        <SourceSettings
+          id="sources"
+          @save-success="handleSaveSuccess"
+        />
+
         <!-- 音频设置 -->
         <AudioSettings
           id="audio"
@@ -73,6 +79,7 @@ import ManagementSettings from './settings/ManagementSettings.vue'
 import AudioSettings from './settings/AudioSettings.vue'
 import HotkeySettings from './settings/HotkeySettings.vue'
 import RelationSettings from './settings/RelationSettings.vue'
+import SourceSettings from './settings/SourceSettings.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings } from '@/shared/types'
 
@@ -95,6 +102,7 @@ const sections: SettingsSection[] = [
   { id: 'learning', title: '学习设置', subtitle: '复习与拼写配置', icon: '📚' },
   { id: 'lapse', title: '错题集设置', subtitle: '错题复习策略与退出', icon: '❌' },
   { id: 'management', title: '单词管理', subtitle: '批量导入与释义获取', icon: '📝' },
+  { id: 'sources', title: '词汇来源', subtitle: '管理自定义来源', icon: '📖' },
   { id: 'audio', title: '音频设置', subtitle: '发音口音选择', icon: '🔊' },
   { id: 'hotkeys', title: '快捷键设置', subtitle: '自定义键盘快捷键', icon: '⌨️' },
   { id: 'relations', title: '单词关联', subtitle: '管理单词关系网络', icon: '🕸️' },
@@ -124,6 +132,9 @@ const settings = computed<UserSettings>(() => globalSettings.value || {
   management: {
     wordsLoadBatchSize: 200,
     definitionFetchThreads: 3
+  },
+  sources: {
+    customSources: ['IELTS', 'GRE']
   },
   audio: {
     accent: 'us',

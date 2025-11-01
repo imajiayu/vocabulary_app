@@ -81,7 +81,7 @@ interface Props {
     words: Word[];
     searchQuery: string;
     filterStatus: string;
-    sourceFilter: 'all' | 'IELTS' | 'GRE';
+    sourceFilter: string;  // 改为动态字符串，支持任意 source
     // 新增：预计算的源计数，用于显示稳定的总数
     sourceCounts?: any;
 }
