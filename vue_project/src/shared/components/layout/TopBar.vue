@@ -170,7 +170,7 @@ const goStats = () => {
             @click="toggleDropdown"
             :class="{ active: isDropdownOpen }"
           >
-            ☰
+            <span class="hamburger-icon">☰</span>
           </button>
           <div v-if="isDropdownOpen" class="dropdown-menu">
             <button
@@ -530,6 +530,7 @@ const goStats = () => {
   border: 1px solid rgba(0, 0, 0, 0.1);
   color: #666;
   font-size: 18px;
+  line-height: 1;
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 6px;
@@ -552,6 +553,14 @@ const goStats = () => {
   color: #667eea;
 }
 
+.hamburger-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 18px;
+}
+
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -560,7 +569,7 @@ const goStats = () => {
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   min-width: 140px;
-  z-index: 1001;
+  z-index: 10001;
   overflow: hidden;
   animation: dropdownSlideIn 0.2s ease;
 }

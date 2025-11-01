@@ -910,15 +910,17 @@ onUnmounted(() => {
     right: 0 !important;
     bottom: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: 100dvh !important; /* 使用 dvh 动态视口高度，考虑浏览器工具栏 */
     z-index: 10000 !important;
   }
 
   .chat-window {
     width: 100vw;
-    height: 100vh;
+    height: 100dvh; /* 使用 dvh 动态视口高度 */
     max-width: 100vw;
     border-radius: 0;
+    display: flex;
+    flex-direction: column;
   }
 
   .chat-button {
@@ -933,17 +935,28 @@ onUnmounted(() => {
   /* 移动端标题栏不可拖动 */
   .chat-header {
     cursor: default;
+    flex-shrink: 0; /* 防止标题栏被压缩 */
+  }
+
+  /* 当前单词信息 */
+  .current-word-info {
+    flex-shrink: 0; /* 防止被压缩 */
   }
 
   /* 移动端聊天消息区域调整 */
   .chat-messages {
     padding: 16px;
+    flex: 1;
+    min-height: 0; /* 允许 flex 子元素收缩 */
+    overflow-y: auto;
   }
 
   /* 移动端输入区域调整 */
   .chat-input-area {
     padding: 12px 16px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
+    flex-shrink: 0; /* 防止输入区域被压缩 */
+    background: white; /* 确保背景不透明 */
   }
 }
 

@@ -8,7 +8,7 @@
 
         <div class="button-bar">
             <div v-show="!showDefinition" class="button-group">
-                <div class="row-buttons first-row">
+                <div class="row-buttons first-row" :class="{ 'lapse-mode': isLapseMode }">
                     <button class="button yes-button" @click="handleChoice('yes')" :disabled="isSubmitting">
                         <span class="button-text-desktop">记住 ✅</span>
                         <span class="button-text-mobile">✅</span>
@@ -542,6 +542,11 @@ onMounted(async () => {
         display: grid;
         grid-template-columns: 1fr 1fr 0.6fr;
         gap: 0.5rem;
+    }
+
+    /* lapse 模式：两个按钮平分空间 */
+    .row-buttons.first-row.lapse-mode {
+        grid-template-columns: 1fr 1fr;
     }
 
     .button {
