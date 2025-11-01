@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 interface Props {
@@ -38,9 +38,46 @@ const emit = defineEmits<{
 
 const router = useRouter()
 const isNavigating = ref(false)
+const isDropdownOpen = ref(false)
+const isMobile = ref(false)
 
 const computedHeight = computed(() => {
   return typeof props.height === 'number' ? `${props.height}px` : props.height
+})
+
+// 检测是否为移动端
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+// 切换下拉菜单
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value
+}
+
+// 处理下拉菜单动作
+const handleDropdownAction = (action: () => void) => {
+  isDropdownOpen.value = false
+  action()
+}
+
+// 点击外部关闭下拉菜单
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (!target.closest('.mobile-dropdown')) {
+    isDropdownOpen.value = false
+  }
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+  document.removeEventListener('click', handleClickOutside)
 })
 
 // 导航方法
@@ -88,39 +125,82 @@ const goStats = () => {
   >
     <!-- 左侧区域 -->
     <div class="top-bar-section left">
-      <!-- 内置返回首页按钮 -->
-      <button
-        v-if="props.showHomeButton"
-        @click="goHome"
-        class="home-button"
-        :disabled="isNavigating"
-      >
-        <span v-if="!isNavigating">{{ props.homeButtonText }}</span>
-        <span v-else class="loading-text">
-          <span class="loading-dot"></span>
-          返回中...
-        </span>
-      </button>
+      <!-- 桌面端：独立按钮 -->
+      <template v-if="!isMobile">
+        <!-- 内置返回首页按钮 -->
+        <button
+          v-if="props.showHomeButton"
+          @click="goHome"
+          class="home-button"
+          :disabled="isNavigating"
+        >
+          <span v-if="!isNavigating">{{ props.homeButtonText }}</span>
+          <span v-else class="loading-text">
+            <span class="loading-dot"></span>
+            返回中...
+          </span>
+        </button>
 
-      <!-- 管理单词按钮 -->
-      <button
-        v-if="props.showManagementButton"
-        @click="goManagement"
-        class="icon-button"
-        title="管理单词"
-      >
-        ➕
-      </button>
+        <!-- 管理单词按钮 -->
+        <button
+          v-if="props.showManagementButton"
+          @click="goManagement"
+          class="icon-button"
+          title="管理单词"
+        >
+          ➕
+        </button>
 
-      <!-- 查看统计按钮 -->
-      <button
-        v-if="props.showStatsButton"
-        @click="goStats"
-        class="icon-button"
-        title="查看统计"
-      >
-        📈
-      </button>
+        <!-- 查看统计按钮 -->
+        <button
+          v-if="props.showStatsButton"
+          @click="goStats"
+          class="icon-button"
+          title="查看统计"
+        >
+          📈
+        </button>
+      </template>
+
+      <!-- 移动端：下拉菜单 -->
+      <template v-else>
+        <div class="mobile-dropdown" v-if="props.showHomeButton || props.showManagementButton || props.showStatsButton">
+          <button
+            class="dropdown-toggle"
+            @click="toggleDropdown"
+            :class="{ active: isDropdownOpen }"
+          >
+            ☰
+          </button>
+          <div v-if="isDropdownOpen" class="dropdown-menu">
+            <button
+              v-if="props.showHomeButton"
+              @click="handleDropdownAction(goHome)"
+              class="dropdown-item"
+              :disabled="isNavigating"
+            >
+              <span class="dropdown-icon">🏠</span>
+              <span>{{ props.homeButtonText }}</span>
+            </button>
+            <button
+              v-if="props.showManagementButton"
+              @click="handleDropdownAction(goManagement)"
+              class="dropdown-item"
+            >
+              <span class="dropdown-icon">➕</span>
+              <span>管理单词</span>
+            </button>
+            <button
+              v-if="props.showStatsButton"
+              @click="handleDropdownAction(goStats)"
+              class="dropdown-item"
+            >
+              <span class="dropdown-icon">📈</span>
+              <span>查看统计</span>
+            </button>
+          </div>
+        </div>
+      </template>
 
       <slot name="left" />
     </div>
@@ -438,6 +518,101 @@ const goStats = () => {
     background: linear-gradient(135deg, #5b72e0 0%, #7a61b2 100%);
     box-shadow: 0 4px 16px rgba(76, 99, 210, 0.4);
   }
+}
+
+/* 移动端下拉菜单样式 */
+.mobile-dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #666;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 32px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dropdown-toggle.active {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+  color: #667eea;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  min-width: 140px;
+  z-index: 1001;
+  overflow: hidden;
+  animation: dropdownSlideIn 0.2s ease;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  background: white;
+  color: #333;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.dropdown-item:active {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.dropdown-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdown-icon {
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
 }
 
 /* 移动端适配 */

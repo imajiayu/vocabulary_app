@@ -47,6 +47,7 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Word } from '@/shared/types'
 import WordDetailModal from '@/features/vocabulary/components/WordDetailModal.vue'
 import WordTooltip from '@/features/vocabulary/components/WordTooltip.vue'
+import { useTimerPause } from '@/shared/composables/useTimerPause'
 
 const wordListInnerRef = ref<HTMLDivElement | null>(null)
 
@@ -68,6 +69,9 @@ const props = defineProps<Props>()
 const selectedWordId = ref<number | undefined>(undefined)
 const isModalOpen = ref(false)
 const cachedSelectedWord = ref<Word | undefined>(undefined)
+
+// 使用全局计时器暂停管理
+const { requestPause, releasePause } = useTimerPause()
 
 // Tooltip 相关状态
 const showTooltip = ref(false)
@@ -97,11 +101,15 @@ const openModal = (word: Word) => {
   selectedWordId.value = word.id
   cachedSelectedWord.value = word
   isModalOpen.value = true
+  // 打开 modal 时请求暂停计时器
+  requestPause()
 }
 
 // 关闭modal的方法（由按钮/遮罩层调用）
 const closeModal = () => {
   isModalOpen.value = false
+  // 关闭 modal 时释放暂停请求
+  releasePause()
 }
 
 // WordDetailModal的@close事件处理（由watch触发）
@@ -113,6 +121,8 @@ const handleCloseModal = (finalWord: Word | undefined) => {
   if (finalWord) {
     emit('sidebarWordChange', finalWord)
   }
+  // 关闭 modal 时释放暂停请求
+  releasePause()
 }
 
 const handleWordDeleted = (wordId: number) => {
@@ -121,6 +131,8 @@ const handleWordDeleted = (wordId: number) => {
   selectedWordId.value = undefined
   // 通知父组件单词已被删除
   emit('wordDeleted', wordId)
+  // 关闭 modal 时释放暂停请求
+  releasePause()
 }
 
 const handleWordForgot = (wordId: number) => {

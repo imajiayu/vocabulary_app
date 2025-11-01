@@ -1,6 +1,6 @@
 <template>
   <div class="app-container with-topbar">
-    <!-- 复习参数更新通知 -->
+    <!-- 复习参数更新通知 - 桌面端浮动显示 -->
     <ReviewParamsNotification
       :show="notification.show"
       :word="notification.word"
@@ -11,6 +11,33 @@
       :breakdown="notification.breakdown"
       @close="handleCloseNotification"
     />
+
+    <!-- 移动端通知图标 -->
+    <button
+      v-if="notification.show"
+      class="mobile-notification-icon"
+      @click="showMobileNotification = true"
+      title="查看复习详情"
+    >
+      📊
+    </button>
+
+    <!-- 移动端全屏通知 -->
+    <div v-if="showMobileNotification" class="mobile-notification-overlay" @click="showMobileNotification = false">
+      <div class="mobile-notification-content" @click.stop>
+        <button class="mobile-notification-close" @click="showMobileNotification = false">×</button>
+        <ReviewParamsNotification
+          :show="notification.show"
+          :word="notification.word"
+          :param-type="notification.paramType"
+          :param-change="notification.paramChange"
+          :new-param-value="notification.newParamValue"
+          :next-review-date="notification.nextReviewDate"
+          :breakdown="notification.breakdown"
+          @close="handleMobileNotificationClose"
+        />
+      </div>
+    </div>
 
     <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
       :remember-history="wordResults" :mode="mode" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
@@ -94,6 +121,7 @@ import WordSideBar from '@/shared/components/ui/WordSideBar.vue'
 import ReviewParamsNotification from '@/features/vocabulary/components/ReviewParamsNotification.vue'
 import VocabularyAIChat from '@/shared/components/ui/VocabularyAIChat.vue'
 import ReviewSpeedIndicator from '@/features/vocabulary/components/ReviewSpeedIndicator.vue'
+import { useTimerPause } from '@/shared/composables/useTimerPause'
 
 // Props
 interface RouteProps {
@@ -188,6 +216,10 @@ const {
 // 本地状态
 const loadingText = ref('加载中...')
 const isInitializing = ref(true) // 初始化加载状态
+const showMobileNotification = ref(false) // 移动端全屏通知显示状态
+
+// 使用全局计时器暂停管理
+const { requestPause, releasePause } = useTimerPause()
 
 // 通知状态
 const notification = ref<{
@@ -379,6 +411,21 @@ const reviewParamsUpdatedCallback = (data: {
 const handleCloseNotification = () => {
   notification.value.show = false
 }
+
+// 关闭移动端全屏通知
+const handleMobileNotificationClose = () => {
+  showMobileNotification.value = false
+  notification.value.show = false
+}
+
+// 监听移动端全屏通知状态，控制计时器暂停/恢复
+watch(showMobileNotification, (isOpen) => {
+  if (isOpen) {
+    requestPause()
+  } else {
+    releasePause()
+  }
+})
 
 // 回到首页
 const goHome = async () => {
@@ -640,8 +687,22 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
+/* 移动端通知图标 - 桌面端隐藏 */
+.mobile-notification-icon {
+  display: none;
+}
+
+/* 移动端全屏通知 - 桌面端隐藏 */
+.mobile-notification-overlay {
+  display: none;
+}
+
 /* 移动端适配 - 恢复原始布局 */
 @media (max-width: 768px) {
+  /* 隐藏桌面端浮动通知 */
+  .app-container > .notification-container {
+    display: none !important;
+  }
   /* 移动端恢复原来的布局方式 */
   .app-container {
     height: auto !important;
@@ -693,6 +754,130 @@ onUnmounted(() => {
 
   .button-icon {
     font-size: 18px;
+  }
+
+  /* 移动端通知图标 - 显示在左上角 */
+  .mobile-notification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 12px;
+    top: 56px; /* TopBar 下方，留出一点间距 */
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    z-index: 999;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-notification-icon:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  }
+
+  /* 移动端全屏通知遮罩 */
+  .mobile-notification-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* 移动端通知内容容器 */
+  .mobile-notification-content {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: transparent;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 移动端关闭按钮 */
+  .mobile-notification-close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 36px;
+    height: 36px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 28px;
+    line-height: 1;
+    color: #666;
+    cursor: pointer;
+    z-index: 10001;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-notification-close:active {
+    transform: scale(0.95);
+  }
+
+  /* 移动端通知内部样式调整 */
+  .mobile-notification-content :deep(.notification-container) {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    cursor: default !important;
+  }
+
+  .mobile-notification-content :deep(.notification-content) {
+    max-width: 100%;
+  }
+
+  /* 移动端通知中隐藏拖动手柄和关闭按钮（外层有自己的关闭按钮） */
+  .mobile-notification-content :deep(.drag-handle) {
+    display: none;
+  }
+
+  .mobile-notification-content :deep(.close-button) {
+    display: none;
   }
 }
 </style>

@@ -91,6 +91,7 @@ import { api } from '@/shared/api'
 import { ChatHistoryStorage, type ChatMessage } from '@/shared/utils/chatHistoryStorage'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+import { useTimerPause } from '@/shared/composables/useTimerPause'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -112,6 +113,9 @@ const userInput = ref('')
 const messages = ref<Message[]>([])
 const isLoading = ref(false)
 const messagesContainer = ref<HTMLElement | null>(null)
+
+// 使用全局计时器暂停管理
+const { requestPause, releasePause } = useTimerPause()
 
 // localStorage key
 const POSITION_STORAGE_KEY = 'vocabulary-assistance-widget-position'
@@ -145,13 +149,25 @@ const loadPosition = () => {
     console.error('加载位置失败:', error)
   }
 
-  // 使用默认位置：重置计时器按钮上方
-  // 从右下角开始计算（right: 1rem, bottom: 4.5rem）
+  // 使用默认位置
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
   const widgetWidth = 120 // 收起状态宽度
   const defaultRight = 16 // 1rem = 16px
-  const defaultBottom = 72 // 4.5rem = 72px (1rem + 2.5rem 按钮 + 1rem 间距)
+
+  // 移动端：放在底部按钮栏上方
+  // 桌面端：放在重置计时器按钮上方
+  const isMobile = viewportWidth <= 768
+  let defaultBottom
+
+  if (isMobile) {
+    // 移动端：底部按钮栏高度约 140px (2 * 3.5rem + 0.75rem + 2rem)
+    // 再加上一些安全间距
+    defaultBottom = 150 // 约 9.4rem
+  } else {
+    // 桌面端：重置计时器按钮上方
+    defaultBottom = 72 // 4.5rem = 72px (1rem + 2.5rem 按钮 + 1rem 间距)
+  }
 
   currentX.value = viewportWidth - widgetWidth - defaultRight
   currentY.value = viewportHeight - 50 - defaultBottom // 50 是收起状态的高度
@@ -221,6 +237,13 @@ const toggleExpand = (e?: MouseEvent) => {
 
   const wasExpanded = isExpanded.value
   isExpanded.value = !isExpanded.value
+
+  // 控制计时器暂停/恢复
+  if (isExpanded.value) {
+    requestPause()
+  } else {
+    releasePause()
+  }
 
   nextTick(() => {
     if (isExpanded.value) {
@@ -872,10 +895,23 @@ onUnmounted(() => {
 
 /* 移动端适配 */
 @media (max-width: 768px) {
+  /* 移动端展开时全屏显示 */
+  .ai-chat-widget.expanded {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10000 !important;
+  }
+
   .chat-window {
-    width: calc(100vw - 20px);
-    height: calc(100vh - 100px);
-    max-width: 380px;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    border-radius: 0;
   }
 
   .chat-button {
@@ -884,6 +920,17 @@ onUnmounted(() => {
 
   .chat-label {
     font-size: 13px;
+  }
+
+  /* 移动端聊天消息区域调整 */
+  .chat-messages {
+    padding: 16px;
+  }
+
+  /* 移动端输入区域调整 */
+  .chat-input-area {
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 }
 

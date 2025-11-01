@@ -8,12 +8,18 @@
 
         <div class="button-bar">
             <div v-show="!showDefinition" class="button-group">
-                <div class="row-buttons">
+                <div class="row-buttons first-row">
                     <button class="button yes-button" @click="handleChoice('yes')" :disabled="isSubmitting">
-                        记住 ✅
+                        <span class="button-text-desktop">记住 ✅</span>
+                        <span class="button-text-mobile">✅</span>
                     </button>
                     <button class="button no-button" @click="handleChoice('no')" :disabled="isSubmitting">
-                        没记住 ❌
+                        <span class="button-text-desktop">没记住 ❌</span>
+                        <span class="button-text-mobile">❌</span>
+                    </button>
+                    <!-- 移动端：重置计时器按钮放在第一行 -->
+                    <button v-if="!isLapseMode" class="button reset-timer-button-mobile" @click="handleResetTimer" title="重置计时器">
+                        🔄
                     </button>
                 </div>
                 <div class="row-buttons">
@@ -64,6 +70,7 @@ import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import { useTimer } from '@/shared/composables/useTimer'
+import { useTimerPause } from '@/shared/composables/useTimerPause'
 
 
 interface Props {
@@ -94,6 +101,9 @@ const showResetTooltip = ref(false)
 // 使用计时器
 const timer = useTimer()
 
+// 使用全局计时器暂停管理
+const { pauseCount } = useTimerPause()
+
 // 使用全局音频设置
 const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
 
@@ -106,6 +116,22 @@ const { setContext, registerKeys, cleanup } = useKeyboardManager()
 // 获取当前复习模式，用于判断是否需要缓存兜底音频
 const reviewStore = useReviewStore()
 const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
+
+// 监听全局暂停状态，控制计时器
+watch(pauseCount, (newCount, oldCount) => {
+  if (newCount > 0 && oldCount === 0) {
+    // 从运行状态变为暂停状态
+    if (timer.isRunning.value) {
+      timer.pause()
+    }
+  } else if (newCount === 0 && oldCount > 0) {
+    // 从暂停状态变为运行状态
+    if (!timer.isRunning.value && !showDefinition.value) {
+      // 只有在第一阶段（未显示释义）时才恢复计时
+      timer.resume()
+    }
+  }
+})
 
 const handleChoice = (choice: string) => {
     if (isSubmitting.value) return
@@ -369,7 +395,12 @@ onMounted(async () => {
     width: 100%;
 }
 
-/* 重置计时器容器 - 固定在右下角 */
+/* 移动端重置计时器按钮（在第一行） */
+.reset-timer-button-mobile {
+    display: none; /* 桌面端隐藏 */
+}
+
+/* 桌面端重置计时器容器 - 固定在右下角 */
 .reset-timer-wrapper {
     position: absolute;
     bottom: 1rem;
@@ -377,7 +408,7 @@ onMounted(async () => {
     z-index: 10;
 }
 
-/* 重置计时器按钮 */
+/* 桌面端重置计时器按钮 */
 .reset-timer-button {
     width: 2.5rem;
     height: 2.5rem;
@@ -467,6 +498,15 @@ onMounted(async () => {
     }
 }
 
+/* 桌面端显示完整文本，隐藏简短文本 */
+.button-text-mobile {
+    display: none;
+}
+
+.button-text-desktop {
+    display: inline;
+}
+
 /* 移动端适配 - 强制覆盖 */
 @media (max-width: 768px) {
     .word-review-container .content-area {
@@ -497,21 +537,45 @@ onMounted(async () => {
         margin-bottom: 0.75rem;
     }
 
+    /* 第一行按钮（包含重置计时器） */
+    .row-buttons.first-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 0.6fr;
+        gap: 0.5rem;
+    }
+
     .button {
         min-height: 3.5rem;
         padding: 0.875rem;
         font-size: 1rem;
     }
 
-    .reset-timer-wrapper {
-        bottom: calc(1rem + env(safe-area-inset-bottom));
-        right: 0.75rem;
+    /* 移动端显示简短文本，隐藏完整文本 */
+    .button-text-desktop {
+        display: none;
     }
 
-    .reset-timer-button {
-        width: 3rem;
-        height: 3rem;
-        font-size: 1.3em;
+    .button-text-mobile {
+        display: inline;
+        font-size: 1.5rem;
+    }
+
+    /* 移动端重置计时器按钮显示 */
+    .reset-timer-button-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        background-color: rgba(240, 240, 240, 0.9);
+    }
+
+    .reset-timer-button-mobile:active {
+        transform: rotate(180deg) scale(0.95);
+    }
+
+    /* 桌面端重置计时器隐藏 */
+    .reset-timer-wrapper {
+        display: none;
     }
 }
 

@@ -37,6 +37,7 @@ import { ref, computed } from 'vue'
 import type { RelatedWord, Word } from '@/shared/types'
 import WordDetailModal from '@/features/vocabulary/components/WordDetailModal.vue'
 import { api } from '@/shared/api'
+import { useTimerPause } from '@/shared/composables/useTimerPause'
 
 interface Props {
   relatedWords?: RelatedWord[]
@@ -67,9 +68,14 @@ const groupedWords = computed(() => {
 const isModalOpen = ref(false)
 const selectedWord = ref<Word | undefined>(undefined)
 
+// 使用全局计时器暂停管理
+const { requestPause, releasePause } = useTimerPause()
+
 const handleClickWord = async (wordId: number) => {
   isModalOpen.value = true
   selectedWord.value = undefined
+  // 打开 modal 时请求暂停计时器
+  requestPause()
 
   try {
     const data = await api.words.getWord(wordId)
@@ -82,12 +88,16 @@ const handleClickWord = async (wordId: number) => {
 const closeModal = () => {
   isModalOpen.value = false
   selectedWord.value = undefined
+  // 关闭 modal 时释放暂停请求
+  releasePause()
 }
 
 const handleCloseModal = (finalWord: Word | undefined) => {
   isModalOpen.value = false
   selectedWord.value = undefined
   // finalWord包含最新数据，但这个组件不需要更新列表
+  // 关闭 modal 时释放暂停请求
+  releasePause()
 }
 
 const handleWordDeleted = (wordId: number) => {
@@ -95,6 +105,8 @@ const handleWordDeleted = (wordId: number) => {
   isModalOpen.value = false
   selectedWord.value = undefined
   // RelatedWordsDisplay不需要更新列表，因为相关词由后端管理
+  // 关闭 modal 时释放暂停请求
+  releasePause()
 }
 </script>
 
