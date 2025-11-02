@@ -170,7 +170,11 @@ const goStats = () => {
             @click="toggleDropdown"
             :class="{ active: isDropdownOpen }"
           >
-            <span class="hamburger-icon">☰</span>
+            <span class="hamburger-icon">
+              <span class="line"></span>
+              <span class="line"></span>
+              <span class="line"></span>
+            </span>
           </button>
           <div v-if="isDropdownOpen" class="dropdown-menu">
             <button
@@ -555,10 +559,21 @@ const goStats = () => {
 
 .hamburger-icon {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  line-height: 1;
+  align-items: center;
+  gap: 3px;
+  width: 18px;
   height: 18px;
+}
+
+.hamburger-icon .line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+  transition: all 0.2s ease;
 }
 
 .dropdown-menu {
