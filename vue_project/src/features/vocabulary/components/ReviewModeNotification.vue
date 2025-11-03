@@ -6,11 +6,10 @@
       class="notification-container"
       :style="{ left: `${position.x}px`, top: `${position.y}px` }"
       @mousedown="startDrag"
-      @touchstart="startDrag"
     >
       <div class="notification-content">
         <div class="drag-handle">⋮⋮</div>
-        <button class="close-button" @click.stop="$emit('close')" title="关闭">×</button>
+        <button class="close-button" @click.stop="handleClose" @touchend.stop="handleClose" title="关闭">×</button>
         <div class="word-display">{{ word }}</div>
         <div class="param-info">
           <span class="param-label">难度系数</span>
@@ -95,9 +94,14 @@ const props = withDefaults(defineProps<Props>(), {
   show: true
 })
 
-defineEmits<{
+const emit = defineEmits<{
   close: []
 }>()
+
+// 关闭处理函数
+const handleClose = () => {
+  emit('close')
+}
 
 // 位置存储key
 const POSITION_STORAGE_KEY = 'review-mode-notification-position'
@@ -564,37 +568,121 @@ const getVerticalPosition = (elapsedTime: number): number => {
 /* 移动端适配 */
 @media (max-width: 768px) {
   .notification-container {
-    top: 52px;
+    /* 紧贴WordSidebar下方 */
+    left: auto !important;
+    right: 0 !important;
+    top: calc(48px + 30vh) !important; /* topbar高度 + WordSidebar高度 */
+    bottom: auto !important;
+    transform: none;
+    max-width: 35vw; /* 进一步缩小宽度 */
+    max-height: calc(100vh - 48px - 30vh - 90px); /* 调整高度：总高度 - topbar - WordSidebar - 底部按钮栏空间 */
+    /* 禁用拖拽 */
+    cursor: default !important;
   }
 
   .notification-content {
-    padding: 12px 16px;
-    min-width: auto;
-    max-width: 90vw;
+    padding: 8px 10px; /* 进一步减小padding */
+    min-width: 120px; /* 进一步减小最小宽度 */
+    max-width: 35vw;
+    border-radius: 10px 0 0 10px; /* 只有左侧圆角 */
+    overflow-y: auto;
+    max-height: calc(100vh - 48px - 30vh - 90px); /* 与容器一致 */
+    gap: 3px; /* 进一步减小间距 */
   }
 
-  .word-display {
+  /* 隐藏拖拽手柄 */
+  .drag-handle {
+    display: none;
+  }
+
+  /* 关闭按钮 - 右上角 */
+  .close-button {
+    width: 18px;
+    height: 18px;
     font-size: 16px;
+    top: 2px;
+    right: 4px;
+    left: auto;
+  }
+
+  /* 字体大小调整 */
+  .word-display {
+    font-size: 14px; /* 减小字体 */
+    margin-bottom: 0;
   }
 
   .param-info {
-    font-size: 13px;
+    font-size: 11px; /* 减小字体 */
+    gap: 6px;
+    margin-bottom: 2px;
   }
 
   .param-change {
-    font-size: 18px;
+    font-size: 16px; /* 减小字体 */
   }
 
   .info-row {
+    font-size: 11px; /* 减小字体 */
+    gap: 8px; /* 减小间距 */
+  }
+
+  /* 评分信息 */
+  .breakdown-section {
+    margin-top: 6px;
+  }
+
+  .breakdown-divider {
+    margin: 6px 0;
+  }
+
+  .breakdown-group {
+    gap: 8px;
+  }
+
+  .score-section {
+    gap: 2px;
+  }
+
+  .score-label {
+    font-size: 10px;
+  }
+
+  .score-display {
+    font-size: 24px; /* 减小评分字体 */
+  }
+
+  .time-label {
+    font-size: 10px;
+  }
+
+  .memory-status-label {
+    font-size: 10px;
+  }
+
+  .memory-status-value {
     font-size: 12px;
   }
 
+  /* 刻度尺 */
   .vertical-scale {
-    height: 100px;
+    height: 80px; /* 减小高度 */
   }
 
   .scale-bar {
-    width: 32px;
+    width: 28px; /* 减小宽度 */
+  }
+
+  .scale-marker {
+    width: 36px; /* 减小标记宽度 */
+    height: 3px;
+  }
+
+  .scale-labels {
+    right: 6px;
+  }
+
+  .scale-label {
+    font-size: 9px;
   }
 }
 </style>

@@ -383,17 +383,37 @@ const getWordColor = (index: number) => {
     left: auto;
     right: 0;
     width: 50vw;
-    height: calc(50vh - 48px);
+    height: calc(30vh - 48px); /* 缩短高度：50vh -> 30vh */
     background-color: transparent;
     border: none;
-    padding: 0;
+    padding: 0.5rem;
+  }
+
+  .word-list {
+    width: 100%;
+    height: 100%;
+  }
+
+  .word-list-inner {
+    width: 100%;
+    height: 100%;
+    padding-right: 4px;
   }
 
   .word-item {
     font-size: 0.9rem;
-    padding: 0.4rem;
+    padding: 0.4rem 0.6rem;
     text-align: right;
     justify-content: flex-end;
+    width: auto; /* 改为auto，让宽度自适应文字 */
+    align-self: flex-end; /* 靠右对齐 */
+    box-sizing: border-box;
+  }
+
+  .word-list-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* 确保子元素靠右 */
   }
 }
 

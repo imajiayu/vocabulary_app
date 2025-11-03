@@ -1,7 +1,10 @@
 <template>
-  <div class="ai-chat-widget" :class="{ expanded: isExpanded }" :style="widgetPosition">
+  <div class="ai-chat-widget" :class="{ expanded: isExpanded, 'show-button': showButton }" :style="widgetPosition">
+    <!-- 遮罩层（移动端点击收回） -->
+    <div v-if="showButton && isMobile" class="mobile-overlay" @click="handleOverlayClick"></div>
+
     <!-- 收起状态：浮动按钮 -->
-    <div v-if="!isExpanded" class="chat-button" @click="toggleExpand" @mousedown="startDrag">
+    <div v-if="!isExpanded" class="chat-button" @click="handleButtonClick" @mousedown="handleMouseDown">
       <span class="chat-icon">💬</span>
       <span class="chat-label">AI助手</span>
     </div>
@@ -109,6 +112,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // State
 const isExpanded = ref(false)
+const showButton = ref(false) // 移动端：是否显示"AI助手"按钮（false时只显示箭头）
 const userInput = ref('')
 const messages = ref<Message[]>([])
 const isLoading = ref(false)
@@ -228,6 +232,42 @@ const saveChatHistory = () => {
   ChatHistoryStorage.saveMessages(props.currentWord.word, chatMessages)
 }
 
+// 检测是否为移动端
+const isMobile = computed(() => window.innerWidth <= 768)
+
+// 移动端遮罩层点击处理
+const handleOverlayClick = () => {
+  showButton.value = false
+}
+
+// 处理 mousedown 事件
+const handleMouseDown = (e: MouseEvent) => {
+  // 移动端：阻止默认行为，只使用 click 事件
+  if (isMobile.value) {
+    e.preventDefault()
+    return
+  }
+  // 桌面端：执行拖拽逻辑
+  startDrag(e)
+}
+
+// 移动端按钮点击处理
+const handleButtonClick = (e?: MouseEvent) => {
+  if (isMobile.value) {
+    // 移动端逻辑
+    if (!showButton.value) {
+      // 第一次点击箭头：显示"AI助手"按钮（左侧垂直居中）
+      showButton.value = true
+    } else {
+      // 点击"AI助手"按钮：展开全屏对话框
+      toggleExpand(e)
+    }
+  } else {
+    // 桌面端逻辑
+    toggleExpand(e)
+  }
+}
+
 // 方法
 const toggleExpand = (e?: MouseEvent) => {
   // 如果正在拖动，或者刚刚拖动过，不触发展开/收起
@@ -244,6 +284,10 @@ const toggleExpand = (e?: MouseEvent) => {
     requestPause()
   } else {
     releasePause()
+    // 移动端收起时，也收回按钮
+    if (isMobile.value) {
+      showButton.value = false
+    }
   }
 
   nextTick(() => {
@@ -371,12 +415,6 @@ const scrollToBottom = () => {
 
 // 拖动功能
 const startDrag = (e: MouseEvent) => {
-  // 移动端禁用拖动功能
-  const isMobile = window.innerWidth <= 768
-  if (isMobile) {
-    return
-  }
-
   // 点击关闭按钮时不拖动
   if ((e.target as HTMLElement).closest('.close-button')) {
     return
@@ -902,6 +940,113 @@ onUnmounted(() => {
 
 /* 移动端适配 */
 @media (max-width: 768px) {
+  .ai-chat-widget {
+    z-index: 1001; /* 在 WordSidebar 上方 */
+  }
+
+  /* 移动端收起状态：左边隐藏的小箭头 */
+  .chat-button {
+    position: fixed !important;
+    left: -60px !important; /* 默认隐藏在左边 */
+    top: 50% !important;
+    transform: translateY(-50%);
+    width: 80px;
+    height: 40px;
+    padding: 0;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 2px 0 8px rgba(102, 126, 234, 0.4);
+    transition: left 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+  }
+
+  /* 箭头悬停时稍微伸出 */
+  .chat-button:active {
+    left: -50px !important;
+  }
+
+  .chat-icon {
+    display: none; /* 隐藏 emoji 图标 */
+  }
+
+  .chat-label {
+    display: none; /* 收起时不显示文字 */
+  }
+
+  /* 添加向右箭头 */
+  .chat-button::before {
+    content: '→';
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    right: 12px;
+  }
+
+  /* 移动端遮罩层 */
+  .mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* 展开后显示"AI助手"按钮（左侧垂直居中） */
+  .ai-chat-widget.show-button .chat-button {
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+    width: auto;
+    height: auto;
+    padding: 10px 16px;
+    border-radius: 0 20px 20px 0;
+    justify-content: center;
+    gap: 8px;
+    z-index: 1000;
+    box-shadow: 2px 0 12px rgba(102, 126, 234, 0.4);
+    animation: slideInFromLeft 0.3s ease;
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      transform: translateY(-50%) translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(-50%) translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .ai-chat-widget.show-button .chat-button::before {
+    content: none;
+  }
+
+  .ai-chat-widget.show-button .chat-icon {
+    display: inline;
+  }
+
+  .ai-chat-widget.show-button .chat-label {
+    display: inline;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
   /* 移动端展开时全屏显示 */
   .ai-chat-widget.expanded {
     position: fixed !important;
@@ -910,44 +1055,39 @@ onUnmounted(() => {
     right: 0 !important;
     bottom: 0 !important;
     width: 100% !important;
-    height: 100dvh !important; /* 使用 dvh 动态视口高度，考虑浏览器工具栏 */
+    height: 100dvh !important;
     z-index: 10000 !important;
+  }
+
+  .ai-chat-widget.expanded .chat-button {
+    display: none; /* 全屏时隐藏按钮 */
   }
 
   .chat-window {
     width: 100vw;
-    height: 100dvh; /* 使用 dvh 动态视口高度 */
+    height: 100dvh;
     max-width: 100vw;
     border-radius: 0;
     display: flex;
     flex-direction: column;
   }
 
-  .chat-button {
-    padding: 10px 16px;
-    cursor: pointer; /* 移动端改为普通指针，不能拖动 */
-  }
-
-  .chat-label {
-    font-size: 13px;
-  }
-
   /* 移动端标题栏不可拖动 */
   .chat-header {
     cursor: default;
-    flex-shrink: 0; /* 防止标题栏被压缩 */
+    flex-shrink: 0;
   }
 
   /* 当前单词信息 */
   .current-word-info {
-    flex-shrink: 0; /* 防止被压缩 */
+    flex-shrink: 0;
   }
 
   /* 移动端聊天消息区域调整 */
   .chat-messages {
     padding: 16px;
     flex: 1;
-    min-height: 0; /* 允许 flex 子元素收缩 */
+    min-height: 0;
     overflow-y: auto;
   }
 
@@ -955,8 +1095,8 @@ onUnmounted(() => {
   .chat-input-area {
     padding: 12px 16px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
-    flex-shrink: 0; /* 防止输入区域被压缩 */
-    background: white; /* 确保背景不透明 */
+    flex-shrink: 0;
+    background: white;
   }
 }
 
