@@ -55,7 +55,7 @@ def db_get_source_statistics():
                 db.query(Word)
                 .filter(
                     Word.source == source,
-                    (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
+                    Word.stop_review == 1,
                 )
                 .count()
             )
@@ -95,8 +95,6 @@ def db_get_comprehensive_stats(source=None):
             .filter(
                 Word.source == source,
                 Word.stop_review == 0,
-                # 排除已经完全掌握的单词（ease_factor达到最高值且复习次数充足）
-                ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
             )
             .all()
         )
@@ -367,7 +365,7 @@ def db_fetch_word_info_paginated(limit=50, offset=0):
             # Status counts for all words
             remembered_total = (
                 db.query(Word)
-                .filter((Word.stop_review == 1) | (Word.ease_factor >= 3.0))
+                .filter(Word.stop_review == 1)
                 .count()
             )
             unremembered_total = total_count - remembered_total
@@ -388,7 +386,7 @@ def db_fetch_word_info_paginated(limit=50, offset=0):
                     db.query(Word)
                     .filter(
                         Word.source == source,
-                        (Word.stop_review == 1) | (Word.ease_factor >= 3.0),
+                        Word.stop_review == 1,
                     )
                     .count()
                 )
@@ -436,8 +434,6 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
             Word.next_review != None,
             Word.next_review <= datetime.date.today().isoformat(),
             Word.source == current_source,
-            # 排除已经完全掌握的单词（ease_factor达到最高值且复习次数充足）
-            ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
         )
         if limit:
             due_rows = due_rows.limit(limit).all()
@@ -453,8 +449,6 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
                 .filter(
                     Word.stop_review == 0,
                     Word.source == current_source,
-                    # 排除已经完全掌握的单词
-                    ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
                     # 排除已到期的单词
                     ~Word.id.in_(due_ids) if due_ids else True,
                     # 排除今天复习过的单词
@@ -564,24 +558,31 @@ def db_update_word_for_review(
     next_review,
     lapse,
     avg_elapsed_time,
+    should_stop_review=False,
 ):
     with get_session() as db:
+        values_dict = {
+            "last_remembered": last_remembered,
+            "last_forgot": last_forgot,
+            "remember_count": Word.remember_count + remember_inc,
+            "forget_count": Word.forget_count + forget_inc,
+            "repetition": repetition,
+            "interval": interval,
+            "ease_factor": ease_factor,
+            "last_score": last_score,
+            "next_review": next_review,
+            "lapse": lapse,
+            "avg_elapsed_time": avg_elapsed_time,
+        }
+
+        # 如果满足条件，设置 stop_review = 1
+        if should_stop_review:
+            values_dict["stop_review"] = 1
+
         db.execute(
             update(Word)
             .where(Word.id == id)
-            .values(
-                last_remembered=last_remembered,
-                last_forgot=last_forgot,
-                remember_count=Word.remember_count + remember_inc,
-                forget_count=Word.forget_count + forget_inc,
-                repetition=repetition,
-                interval=interval,
-                ease_factor=ease_factor,
-                last_score=last_score,
-                next_review=next_review,
-                lapse=lapse,
-                avg_elapsed_time=avg_elapsed_time,
-            )
+            .values(**values_dict)
         )
         db.commit()
 
@@ -741,8 +742,6 @@ def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
                     Word.source == source,
                     Word.stop_review == 0,
                     Word.next_review == date_str,
-                    # 排除已经完全掌握的单词（ease_factor达到最高值且复习次数充足）
-                    ~((Word.ease_factor >= 3.0) & (Word.repetition >= 6)),
                 )
                 .count()
             )
@@ -842,3 +841,69 @@ def db_update_word(word_id: int, update_data: dict):
         db.rollback()
         # 3. 发生异常时，回滚事务并返回错误信息
         return f"发生错误: {str(e)}", 500, None
+
+
+def adjust_words_for_max_prep_days(max_prep_days):
+    """
+    当 maxPrepDays 变小时，调整超出范围的单词
+    - 将 interval 超过 max_prep_days 的单词的 interval 设置为 max_prep_days
+    - 将 next_review 超过今天+max_prep_days 的单词重新计算 next_review
+    - 将 spell_next_review 超过今天+max_prep_days 的单词重新计算 spell_next_review
+
+    Args:
+        max_prep_days: 新的最大准备天数
+    """
+    import datetime
+    from sqlalchemy import and_
+
+    today = datetime.date.today()
+    max_date = today + datetime.timedelta(days=max_prep_days)
+
+    with get_session() as db:
+        # 1. 调整 interval 超过 max_prep_days 的单词
+        # 同时重新计算 next_review（使用 date 对象，不是字符串）
+        affected_interval = db.execute(
+            update(Word)
+            .where(
+                Word.stop_review == 0,
+                Word.interval > max_prep_days
+            )
+            .values(
+                interval=max_prep_days,
+                next_review=max_date
+            )
+        ).rowcount
+
+        # 2. 调整 next_review 超出范围的单词（interval 已经是最大值的情况）
+        # SQLite 中日期以字符串存储，需要比较字符串
+        affected_next_review = db.execute(
+            update(Word)
+            .where(
+                and_(
+                    Word.stop_review == 0,
+                    Word.next_review != None,
+                    Word.next_review > max_date.isoformat()
+                )
+            )
+            .values(next_review=max_date)
+        ).rowcount
+
+        # 3. 调整 spell_next_review 超出范围的单词
+        affected_spell_next_review = db.execute(
+            update(Word)
+            .where(
+                and_(
+                    Word.stop_review == 0,
+                    Word.spell_next_review != None,
+                    Word.spell_next_review > max_date.isoformat()
+                )
+            )
+            .values(spell_next_review=max_date)
+        ).rowcount
+
+        db.commit()
+
+        print(f"调整完成:")
+        print(f"  - 调整 interval 的单词数: {affected_interval}")
+        print(f"  - 调整 next_review 的单词数: {affected_next_review}")
+        print(f"  - 调整 spell_next_review 的单词数: {affected_spell_next_review}")

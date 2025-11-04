@@ -57,11 +57,24 @@ def update_settings():
                 content,
             )
         if "maxPrepDays" in learning:
+            old_max_prep_days = None
+            # 提取旧的 MAX_PREP_DAYS 值
+            import re as re_module
+            match = re_module.search(r"MAX_PREP_DAYS\s*=\s*(\d+)", content)
+            if match:
+                old_max_prep_days = int(match.group(1))
+
+            new_max_prep_days = learning['maxPrepDays']
             content = re.sub(
                 r"MAX_PREP_DAYS\s*=\s*\d+",
-                f"MAX_PREP_DAYS = {learning['maxPrepDays']}",
+                f"MAX_PREP_DAYS = {new_max_prep_days}",
                 content,
             )
+
+            # 如果 maxPrepDays 变小了，需要调整超出范围的单词
+            if old_max_prep_days and new_max_prep_days < old_max_prep_days:
+                from web_app.database.vocabulary_dao import adjust_words_for_max_prep_days
+                adjust_words_for_max_prep_days(new_max_prep_days)
         if "lapseQueueSize" in learning:
             content = re.sub(
                 r"LAPSE_QUEUE_SIZE\s*=\s*\d+",

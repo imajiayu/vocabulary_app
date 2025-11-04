@@ -67,6 +67,9 @@ def update_word_info_review(word_id, remembered, elapsed_time):
     # 5️⃣ 计算下次复习日期（从今天开始计算）
     next_review = today + datetime.timedelta(days=interval)
 
+    # 5.5️⃣ 检查是否需要设置 stop_review = 1（已完全掌握）
+    should_stop_review = ease_factor >= 3.0 and repetition >= 6
+
     # 6️⃣ 更新数据库
     db_update_word_for_review(
         word_id,
@@ -81,6 +84,7 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         next_review,
         lapse,
         avg_elapsed_time,
+        should_stop_review,
     )
 
     # 7️⃣ 发送WebSocket通知（带回忆时间信息）

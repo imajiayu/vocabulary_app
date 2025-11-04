@@ -111,6 +111,7 @@ export class StatsApi {
     spell_strength_dict: Array<{ word: string; strength: number | null; available: boolean }>
     added_date_count_dict: Record<string, number>
     review_count_dict: Record<number, number>
+    interval_dict: Record<number, number>
     spell_heatmap_cells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
     ef_heatmap_cells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
   }> {
