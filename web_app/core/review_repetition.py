@@ -145,8 +145,10 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         else:
             shrink_factor = 1.0  # 普通单词
 
-        if repetition < 3:
+        if repetition == 0:
             interval_new = 1
+        elif repetition == 1:
+            interval_new = 6 if shrink_factor == 1.0 else 2
         else:
             interval_new = max(
                 1,
@@ -272,7 +274,7 @@ def find_optimal_review_day_for_strong_words(base_interval, daily_limit, current
     Args:
         base_interval: 基础间隔天数
         daily_limit: 每日限制
-        current_loads: 当前负荷分布
+        current_loads: 当前负荷分布（长度由max_prep_days决定）
 
     Returns:
         最优复习日期（天数）
@@ -281,6 +283,7 @@ def find_optimal_review_day_for_strong_words(base_interval, daily_limit, current
         return base_interval
 
     # 从base_interval开始向后搜索，范围较大（高强度单词可以推迟更多）
+    # len(current_loads)已经由get_daily_review_loads_by_source的days_ahead参数限制
     search_range = min(len(current_loads), base_interval + 15)
 
     # 首先检查base_interval当天是否可用
