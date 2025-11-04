@@ -25,6 +25,11 @@
           <span class="info-label">下次复习</span>
           <span class="info-value">{{ formattedDate }}</span>
         </div>
+        <!-- 间隔天数 -->
+        <div v-if="breakdown && breakdown.interval !== undefined" class="info-row">
+          <span class="info-label">间隔天数</span>
+          <span class="info-value">{{ breakdown.interval }} 天</span>
+        </div>
         <!-- 连续记住次数 -->
         <div v-if="breakdown && breakdown.repetition !== undefined" class="info-row">
           <span class="info-label">连续记住</span>
@@ -78,6 +83,7 @@ interface BreakdownInfo {
   elapsed_time?: number
   score?: number
   repetition?: number
+  interval?: number
   remembered: boolean
 }
 

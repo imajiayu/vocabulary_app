@@ -93,6 +93,7 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         "remembered": remembered,
         "score": score,
         "repetition": repetition,
+        "interval": interval,
     }
 
     ws_events.emit_review_params_updated(

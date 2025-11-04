@@ -100,6 +100,13 @@ def get_stats():
             for count in sorted(review_count_counter.keys())
         }
 
+        # Process interval data
+        interval_counter = Counter(stats["intervals"])
+        sorted_interval_dict = {
+            interval: interval_counter[interval]
+            for interval in sorted(interval_counter.keys())
+        }
+
         return create_response(
             True,
             {
@@ -110,6 +117,7 @@ def get_stats():
                 "spell_strength_dict": stats["spell_strengths"],
                 "added_date_count_dict": stats["added_dates"],
                 "review_count_dict": sorted_review_count_dict,
+                "interval_dict": sorted_interval_dict,
                 "spell_heatmap_cells": stats["spell_heatmap_cells"],
                 "ef_heatmap_cells": stats["ef_heatmap_cells"],
             },

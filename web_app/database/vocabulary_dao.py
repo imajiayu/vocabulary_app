@@ -90,6 +90,7 @@ def db_get_comprehensive_stats(source=None):
                 Word.repetition,
                 Word.date_added,
                 Word.lapse,
+                Word.interval,
             )
             .filter(
                 Word.source == source,
@@ -112,6 +113,7 @@ def db_get_comprehensive_stats(source=None):
             "total_lapse": 0,
             "spell_heatmap_cells": [],
             "ef_heatmap_cells": [],
+            "intervals": [],
         }
 
         date_counter = {}
@@ -168,6 +170,10 @@ def db_get_comprehensive_stats(source=None):
             # Total lapse
             if row.lapse is not None:
                 stats["total_lapse"] += row.lapse
+
+            # Intervals
+            if row.interval is not None:
+                stats["intervals"].append(row.interval)
 
         # Use fixed max spell strength of 5.0 (not normalized to current data)
         max_spell_strength = 5.0

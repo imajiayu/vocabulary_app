@@ -121,7 +121,7 @@ const filteredBySourceWords = computed(() => {
 
 const filteredWords = computed(() => {
     return filteredBySourceWords.value.filter(word => {
-        const isRemembered = word.stop_review === 1 || word.ease_factor >= 3.0;
+        const isRemembered = word.stop_review === 1 || (word.ease_factor >= 3.0 && word.repetition >= 6);
 
         // 状态过滤
         if (props.filterStatus === 'remembered' && !isRemembered) return false;

@@ -148,7 +148,7 @@ const stats = computed(() => {
 
 // 判断单词是否已掌握的辅助函数
 const isWordRemembered = (word: Word): boolean => {
-    return word.stop_review === 1 || word.ease_factor >= 3.0;
+    return word.stop_review === 1 || (word.ease_factor >= 3.0 && word.repetition >= 6);
 };
 
 // 动态更新sourceCounts的辅助函数

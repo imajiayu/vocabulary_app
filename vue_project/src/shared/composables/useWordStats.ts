@@ -3,6 +3,7 @@ import { computed, type Ref } from 'vue'
 export interface Word {
   stop_review?: number // 0 或 1
   ease_factor: number
+  repetition: number
   source: string
 }
 
@@ -15,7 +16,7 @@ export type WordStats = {
 export function useWordStats(words: Ref<Word[]>) {
   const calculateStats = (wordList: Word[]): WordStats => {
     const total = wordList.length
-    const remembered = wordList.filter(w => w.stop_review === 1 || w.ease_factor >= 3.0).length
+    const remembered = wordList.filter(w => w.stop_review === 1 || (w.ease_factor >= 3.0 && w.repetition >= 6)).length
     const unremembered = total - remembered
     return { total, remembered, unremembered }
   }
