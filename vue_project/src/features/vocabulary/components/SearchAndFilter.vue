@@ -36,11 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { Search as SearchIcon } from 'lucide-vue-next';
 import { useWordStats, type Word } from '@/shared/composables/useWordStats';
 import SwitchTab from '@/shared/components/ui/SwitchTab.vue';
 import type { SourceCounts } from '@/shared/types';
+import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
 
 interface Stats {
   total: number;
@@ -61,11 +62,18 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// 将 allWords 转换为 ref 以使用 composable
+// 使用 source selection composable 获取 availableSources
+const { availableSources, initializeFromData } = useSourceSelectionReadOnly();
+
+onMounted(async () => {
+  await initializeFromData();
+});
+
+// 将 allWords 转换为 ref 以使用 composable（仅用于后备方案）
 const wordsRef = computed(() => (props.allWords || []) as Word[]);
 
-// 使用 word stats composable
-const { allStats, ieltsStats, greStats } = useWordStats(wordsRef);
+// 使用 word stats composable（仅用于后备方案）
+const { allStats } = useWordStats(wordsRef);
 
 const emit = defineEmits<{
   searchChange: [value: string];
@@ -82,25 +90,49 @@ const sourceTabs = computed(() => {
       { value: 'all', label: `全部 ${counts.all.total}` }
     ];
 
-    // 动态添加所有 sources（除了 'all'）
-    Object.keys(counts).forEach(source => {
-      if (source !== 'all') {
-        tabs.push({
-          value: source,
-          label: `${source} ${counts[source].total}`
-        });
-      }
-    });
+    // 使用 availableSources 的顺序来生成 tabs (和 WordInsertForm 一致)
+    if (availableSources.value && availableSources.value.length > 0) {
+      availableSources.value.forEach(source => {
+        if (counts[source]) {
+          tabs.push({
+            value: source,
+            label: `${source} ${counts[source].total}`
+          });
+        }
+      });
+    } else {
+      // 降级方案：使用 Object.keys (但这不保证顺序)
+      Object.keys(counts).forEach(source => {
+        if (source !== 'all') {
+          tabs.push({
+            value: source,
+            label: `${source} ${counts[source].total}`
+          });
+        }
+      });
+    }
 
     return tabs;
   }
 
-  // 后备方案：使用动态计算的结果
-  return [
-    { value: 'all', label: `全部 ${allStats.value.total}` },
-    { value: 'IELTS', label: `IELTS ${ieltsStats.value.total}` },
-    { value: 'GRE', label: `GRE ${greStats.value.total}` }
+  // 后备方案：基于 allWords 动态计算每个 source 的数量
+  const tabs = [
+    { value: 'all', label: `全部 ${allStats.value.total}` }
   ];
+
+  // 使用 availableSources 的顺序
+  if (availableSources.value && availableSources.value.length > 0) {
+    availableSources.value.forEach(source => {
+      // 从 allWords 中计算该 source 的数量
+      const count = wordsRef.value.filter(w => w.source === source).length;
+      tabs.push({
+        value: source,
+        label: `${source} ${count}`
+      });
+    });
+  }
+
+  return tabs;
 });
 
 // 筛选选项卡数据
