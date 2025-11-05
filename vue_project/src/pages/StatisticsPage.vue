@@ -44,13 +44,6 @@
             :transparent="true" />
         </section>
 
-        <!-- Interval分布图表 -->
-        <section class="chart-card ultra" data-width="wide">
-          <h2>复习间隔分布图</h2>
-          <BarChart :labels="Object.keys(intervalDict)" :values="Object.values(intervalDict)"
-            :bar-color="palette.cyan" :transparent="true" />
-        </section>
-
         <!-- 超宽图表 - 累积分布 -->
         <section class="chart-card ultra-wide" data-width="extra-wide">
           <h2>新增与复习趋势</h2>
@@ -230,7 +223,6 @@ const statsData = ref<Record<string, {
   spellStrengthDict: StrengthItem[]
   addedDateCountDict: Record<string, number>
   reviewCountDict: Record<number, number>
-  intervalDict: Record<number, number>
   spellHeatmapCells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
   efHeatmapCells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
 }>>({})
@@ -246,7 +238,6 @@ const elapseTimeDict = computed(() => statsData.value[currentSource.value]?.elap
 const spellStrengthDict = computed(() => statsData.value[currentSource.value]?.spellStrengthDict || EMPTY_ARRAY)
 const addedDateCountDict = computed(() => statsData.value[currentSource.value]?.addedDateCountDict || {})
 const reviewCountDict = computed(() => statsData.value[currentSource.value]?.reviewCountDict || {})
-const intervalDict = computed(() => statsData.value[currentSource.value]?.intervalDict || {})
 const spellHeatmapCells = computed(() => statsData.value[currentSource.value]?.spellHeatmapCells || EMPTY_ARRAY)
 const efHeatmapCells = computed(() => statsData.value[currentSource.value]?.efHeatmapCells || EMPTY_ARRAY)
 
@@ -288,7 +279,6 @@ const fetchStats = async (source: string) => {
       spellStrengthDict: data.spell_strength_dict,
       addedDateCountDict: data.added_date_count_dict,
       reviewCountDict: data.review_count_dict,
-      intervalDict: data.interval_dict || {},
       spellHeatmapCells: data.spell_heatmap_cells || [],
       efHeatmapCells: data.ef_heatmap_cells || []
     }
