@@ -467,19 +467,29 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
 
 
 def db_fetch_lapse_word_ids(limit=None):
+    """获取错题集单词ID列表（根据配置决定是否随机排序）"""
+    from sqlalchemy import func
+    from web_app.config import get_shuffle_setting
+
     current_source = get_current_source()
+    shuffle = get_shuffle_setting()
+
     with get_session() as db:
-        rows = (
-            db.query(Word.id)
-            .filter(
-                Word.stop_review == 0, Word.lapse > 0, Word.source == current_source
-            )
-            .order_by(Word.lapse.asc())
+        query = db.query(Word.id).filter(
+            Word.stop_review == 0, Word.lapse > 0, Word.source == current_source
         )
-        if limit:
-            rows = rows.limit(limit).all()
+
+        if shuffle:
+            # 随机排序
+            query = query.order_by(func.random())
         else:
-            rows = rows.all()
+            # 按lapse升序排序（错误次数少的优先）
+            query = query.order_by(Word.lapse.asc())
+
+        if limit:
+            rows = query.limit(limit).all()
+        else:
+            rows = query.all()
         return [row[0] for row in rows]
 
 

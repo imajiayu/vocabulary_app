@@ -638,14 +638,10 @@ def get_review_words():
         batch_id = int(request.args.get("batch_id", 0))
         limit = request.args.get("limit", None)
 
-        # 获取shuffle设置 - 先从请求参数获取，如果没有则从config获取
-        from web_app.config import UserConfig
+        # 获取shuffle设置
+        from web_app.config import get_shuffle_setting
 
-        shuffle_param = request.args.get("shuffle")
-        if shuffle_param is not None:
-            shuffle_enabled = shuffle_param.lower() == "true"
-        else:
-            shuffle_enabled = UserConfig.DEFAULT_SHUFFLE
+        shuffle_enabled = get_shuffle_setting()
 
         # 第一次请求，batch_id=0 - 总是创建新的进度
         if batch_id == 0:

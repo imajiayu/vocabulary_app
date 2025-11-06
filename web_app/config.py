@@ -175,6 +175,16 @@ class UserConfig:
             cls.HOTKEY_SPELLING_NEXT = spelling["next"]
 
 
+# --- 工具函数 ---
+def get_shuffle_setting():
+    """获取shuffle设置（从配置中读取）
+
+    Returns:
+        bool: shuffle是否启用
+    """
+    return UserConfig.DEFAULT_SHUFFLE
+
+
 # --- 常量定义 ---
 LOW_EF_THRESHOLD = 2.5  # 低 EF 阈值，用于判断需要加速复习的单词
 
