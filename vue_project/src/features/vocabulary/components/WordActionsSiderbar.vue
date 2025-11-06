@@ -164,7 +164,8 @@ const resetProgress = async () => {
       interval: 1,
       next_review: nextReview,
       ease_factor: parseFloat(Math.max(1.3, props.word.ease_factor - 0.4).toFixed(2)),
-      lapse: lapseInitialValue
+      lapse: lapseInitialValue,
+      stop_review: 0
     });
     // 直接将更新后的数据发送给父组件
     emit('wordUpdated', updatedWord);
