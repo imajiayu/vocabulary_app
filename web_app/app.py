@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 项目入口
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 from web_app.api.speaking import speaking_api_bp
@@ -25,6 +25,12 @@ app.register_blueprint(relations_bp)
 app.register_blueprint(vocabulary_assistance_bp)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
+@app.route("/api/health")
+def health_check():
+    """健康检查端点"""
+    return jsonify({"status": "healthy"})
 
 # 初始化SocketIO
 socketio.init_app(app, cors_allowed_origins="*")
