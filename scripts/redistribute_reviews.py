@@ -32,10 +32,9 @@ DAILY_SPELL_LIMIT = 100       # 每日拼写上限
 MAX_DAYS = 60                 # 最大分配天数
 START_DATE = date(2026, 1, 16)  # 起始日期
 
-# 数据库路径
+# 数据库路径 (在项目根目录)
 DB_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "web_app",
     "vocabulary.db"
 )
 
