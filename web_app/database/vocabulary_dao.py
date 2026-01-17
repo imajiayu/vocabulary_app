@@ -426,7 +426,7 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
         due_rows = db.query(Word.id).filter(
             Word.stop_review == 0,
             Word.next_review != None,
-            Word.next_review <= datetime.date.today().isoformat(),
+            Word.next_review <= datetime.date.today(),
             Word.source == current_source,
         )
         if limit:
@@ -732,20 +732,17 @@ def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
     """
     from datetime import timedelta
 
-    future_dates = [
-        (base_date + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
-    ]
-
     with get_session() as db:
         # 查询每个日期的复习单词数量
         loads = []
-        for date_str in future_dates:
+        for i in range(1, days_ahead + 1):
+            future_date = base_date + timedelta(days=i)
             count = (
                 db.query(Word.id)
                 .filter(
                     Word.source == source,
                     Word.stop_review == 0,
-                    Word.next_review == date_str,
+                    Word.next_review == future_date,
                 )
                 .count()
             )
@@ -769,19 +766,16 @@ def get_daily_spell_loads_by_source(source, base_date, days_ahead=45):
     """
     from datetime import timedelta
 
-    future_dates = [
-        (base_date + timedelta(days=i)).isoformat() for i in range(1, days_ahead + 1)
-    ]
-
     with get_session() as db:
         loads = []
-        for date_str in future_dates:
+        for i in range(1, days_ahead + 1):
+            future_date = base_date + timedelta(days=i)
             count = (
                 db.query(Word.id)
                 .filter(
                     Word.source == source,
                     Word.stop_review == 0,
-                    Word.spell_next_review == date_str,
+                    Word.spell_next_review == future_date,
                 )
                 .count()
             )
@@ -879,14 +873,13 @@ def adjust_words_for_max_prep_days(max_prep_days):
         ).rowcount
 
         # 2. 调整 next_review 超出范围的单词（interval 已经是最大值的情况）
-        # SQLite 中日期以字符串存储，需要比较字符串
         affected_next_review = db.execute(
             update(Word)
             .where(
                 and_(
                     Word.stop_review == 0,
                     Word.next_review != None,
-                    Word.next_review > max_date.isoformat()
+                    Word.next_review > max_date
                 )
             )
             .values(next_review=max_date)
@@ -899,7 +892,7 @@ def adjust_words_for_max_prep_days(max_prep_days):
                 and_(
                     Word.stop_review == 0,
                     Word.spell_next_review != None,
-                    Word.spell_next_review > max_date.isoformat()
+                    Word.spell_next_review > max_date
                 )
             )
             .values(spell_next_review=max_date)

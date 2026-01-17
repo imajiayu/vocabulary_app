@@ -1,222 +1,147 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+IELTS词汇学习应用 - Flask后端 + Vue3前端，实现间隔重复记忆系统和Whisper.cpp语音练习。
 
-## Project Overview
+## 快速启动
 
-This is an IELTS vocabulary learning application built with Flask backend and Vue.js frontend, implementing a spaced repetition system for vocabulary memorization and speaking practice with real-time audio transcription using Whisper.cpp.
-
-## Development Commands
-
-### Starting the Application
 ```bash
-# Start both backend and frontend
-./start.sh start
-
-# Stop both services
-./start.sh stop
+./start.sh start    # 启动前后端
+./start.sh stop     # 停止服务
 ```
 
-### Frontend Development (Vue.js)
+单独运行：
 ```bash
-cd vue_project
-npm install                    # Install dependencies
-npm run dev                    # Start development server (with HTTPS)
-npm run build                  # Build for production
-npm run preview                # Preview production build
-npm run type-check             # TypeScript type checking
+# 后端 (端口5001)
+source .venv/bin/activate && python -m web_app.app
+
+# 前端 (HTTPS)
+cd vue_project && npm run dev
 ```
 
-### Backend Development (Flask)
-```bash
-# Activate virtual environment (required)
-source .venv/bin/activate
+## 项目结构
 
-# Install Python dependencies
-pip install -r web_app/requirements.txt
+### 后端 `web_app/`
 
-# Run backend directly
-python -m web_app.app
+```
+app.py                 # Flask入口，注册5个蓝图
+config.py              # 用户配置（学习限制、Lapse设置等）
+extensions.py          # SQLAlchemy + SocketIO初始化
+
+api/
+├── vocabulary.py      # 单词CRUD、复习结果提交
+├── speaking.py        # 语音转文字、话题/问题管理
+├── settings.py        # 用户设置读写
+├── relations.py       # 词汇关系（同义词/反义词等）
+└── vocabulary_assistance.py  # AI辅助
+
+core/
+├── review_repetition.py   # SM-2间隔重复算法 + 负荷均衡
+└── spell_repetition.py    # 拼写强度算法
+
+database/
+├── vocabulary_dao.py  # 单词数据操作
+├── speaking_dao.py    # 口语数据操作
+├── progress_dao.py    # 学习进度
+└── relation_dao.py    # 词汇关系
+
+services/
+├── word_update_service.py      # 复习/Lapse/拼写更新
+├── websocket_service.py        # WebSocket事件推送
+├── relation_generation_manager.py  # 词汇关系生成
+└── relations/                  # 各类关系生成器
+
+models/
+├── word.py           # Word模型（SRS字段、拼写字段）
+└── speaking.py       # Topic/Question/Record模型
+
+utils/
+├── whisper_integration.py  # Whisper进程管理
+└── speech_processing.py    # 语音转录
 ```
 
-### Whisper.cpp Setup
-```bash
-# Download AI models (if not already present)
-cd whisper.cpp/models
-./download-ggml-model.sh small          # Download small model (465MB)
-./download-coreml-model.sh              # Download CoreML models
+### 前端 `vue_project/src/`
 
-# Build whisper.cpp (if needed)
-cd whisper.cpp
-mkdir build && cd build
-cmake ..
-make
+```
+app/
+├── main.ts           # Vue应用入口
+└── router/index.ts   # 路由配置
 
-# Test stream_stdin (custom implementation)
-./build/bin/whisper-stream-stdin --model models/ggml-small.bin
+pages/
+├── HomePage.vue              # 主页导航
+├── ReviewPage.vue            # 复习页（复习/Lapse/拼写三种模式）
+├── VocabularyManagementPage.vue  # 单词管理
+├── SpeakingPage.vue          # 口语练习
+├── StatisticsPage.vue        # 统计图表
+└── SettingsPage.vue          # 用户设置
+
+features/
+├── vocabulary/       # WordCard/WordReview/WordSpelling等组件
+├── speaking/         # 录音/转录/AI反馈组件
+└── statistics/       # ECharts图表组件
+
+shared/
+├── api/              # HTTP客户端（words/speaking/settings等）
+├── services/websocket.ts   # WebSocket客户端
+├── types/index.ts    # TypeScript类型定义
+├── composables/      # 快捷键/定时器/音频等
+└── components/       # 通用UI组件
 ```
 
-## Architecture
+## 核心算法
 
-### Backend Structure (`web_app/`)
-- **Flask App**: Main entry point at `app.py`, runs on port 5001
-- **Database**: SQLite database (`vocabulary.db`) with SQLAlchemy ORM
-  - ⚠️ `vocabulary.db` is excluded from git (see .gitignore)
-  - Database schema is defined in `models/`
-- **API Endpoints**:
-  - `api/vocabulary.py` - Vocabulary CRUD and review endpoints
-  - `api/speaking.py` - Speaking practice and recording endpoints
-- **Core Logic**:
-  - `core/review_repetition.py` - Spaced repetition algorithm (SM-2 based)
-- **Data Access**:
-  - `database/vocabulary_dao.py` - Word database operations
-  - `database/speaking_dao.py` - Speaking practice data operations
-  - `database/progress_dao.py` - Learning progress tracking
-- **Services**:
-  - `services/vocabulary_service.py` - Business logic for vocabulary
-  - `services/websocket_service.py` - WebSocket event handlers
-  - `services/word_update_service.py` - Word synchronization
-- **Models**:
-  - `models/word.py` - Word model with spaced repetition metadata
-  - `models/speaking.py` - Speaking practice questions and responses
-- **Utils**:
-  - `utils/whisper_integration.py` - Whisper.cpp audio transcription
-  - `utils/audio_processing.py` - Audio file processing
-  - `utils/speech_processing.py` - Speech recognition utilities
+**SM-2复习算法** (`core/review_repetition.py`)
+- `calculate_score()` - 基于反应时间评分(1-5)
+- `sm2_update_ease_factor()` - EF值更新(1.3-3.0)
+- `calculate_srs_parameters_with_load_balancing()` - 间隔计算 + 负荷均衡
 
-### Frontend Structure (`vue_project/src/`)
-- **Pages**:
-  - `pages/HomePage.vue` - Main landing page
-  - `pages/VocabularyManagementPage.vue` - Word CRUD interface
-  - `pages/ReviewPage.vue` - Spaced repetition review interface
-  - `pages/SpeakingPage.vue` - IELTS speaking practice
-  - `pages/StatisticsPage.vue` - Learning analytics
-- **Features**:
-  - `features/vocabulary/` - Word management components
-  - `features/speaking/` - Speaking practice with audio recording
-  - `features/statistics/` - Data visualization components
-- **Shared**:
-  - `shared/api/` - API client with type definitions
-  - `shared/components/` - Reusable UI components
-  - `shared/composables/` - Vue composition functions
-  - `shared/services/websocket.ts` - WebSocket client
-- **Tech Stack**: Vue 3 + TypeScript + Vite + Tailwind CSS + ECharts + Socket.io
+**拼写算法** (`core/spell_repetition.py`)
+- 分析输入行为（按键事件、退格次数、准确率）
+- 考虑单词难度和长度计算拼写强度
 
-### Whisper.cpp Integration (`whisper.cpp/`)
-- **Custom Implementation**:
-  - `examples/stream/stream_stdin.cpp` - Custom real-time transcription from stdin
-  - Modified for IELTS speaking practice with low latency
-- **Models** (not in git):
-  - `models/ggml-small.bin` - Primary model (465MB)
-  - `models/*.mlmodelc` - CoreML optimized models
-  - Use download scripts to obtain models
-- **Build Artifacts** (not in git):
-  - `build/` - Compiled binaries and libraries
+## 数据流
 
-### Key Features
-- **Spaced Repetition**: Four learning modes (new, review, lapse, spelling)
-- **Word Management**: Full CRUD with batch operations
-- **Statistics**: Learning progress visualization with ECharts
-- **Speaking Practice**: IELTS speaking questions with real-time transcription
-- **Real-time Audio**: WebSocket streaming with Whisper.cpp integration
-- **Word Relations**: Synonyms, antonyms, roots, topics
+```
+复习流程:
+前端请求 → db_fetch_review_word_ids() → 用户复习 → POST /review-result
+→ calculate_srs_parameters_with_load_balancing() → 更新DB → WebSocket推送
 
-### Database Models
-- **Word**: Core vocabulary model with spaced repetition metadata
-  - Fields: word, definition, example, source_type, ease_factor, interval, etc.
-  - Supports IELTS and GRE categorization
-- **Speaking Models**: IELTS speaking questions (Part 1, 2, 3) and user responses
-- **Progress Tracking**: Learning statistics and review history
-
-### Configuration
-- **Database**: `web_app/config.py` - SQLite database path
-- **CORS**: Enabled for frontend-backend communication
-- **WebSocket**: Socket.io for real-time features (port 5001)
-- **HTTPS**: Frontend uses HTTPS with local certificates (*.pem files excluded from git)
-
-## Git and Version Control
-
-### What's Tracked in Git
-- ✅ Source code (Python, TypeScript, Vue)
-- ✅ Configuration files
-- ✅ Whisper.cpp source code (including custom stream_stdin.cpp)
-- ✅ Documentation
-
-### What's NOT Tracked (see .gitignore)
-- ❌ `vocabulary.db` - Database file (too large, user-specific data)
-- ❌ `.venv/` - Python virtual environment (1.3GB)
-- ❌ `node_modules/` - NPM dependencies (257MB)
-- ❌ `whisper.cpp/models/*.bin` - AI models (465MB+, use download scripts)
-- ❌ `whisper.cpp/models/*.mlmodelc` - CoreML models (168MB+)
-- ❌ `whisper.cpp/build/` - Compiled binaries (41MB)
-- ❌ `web_app/static/audios/` - Recording files (*.wav)
-- ❌ `*.pem`, `*.key` - SSL certificates
-- ❌ `*.tsbuildinfo` - TypeScript build cache
-- ❌ `.DS_Store` - macOS metadata
-
-### Repository Size
-- Git repository: ~5MB (after cleanup)
-- Full project with dependencies: ~2.5GB
-
-## Important Notes
-
-### Development Workflow
-1. Always activate Python virtual environment before backend development
-2. Ensure Whisper models are downloaded before using speech features
-3. SSL certificates are needed for HTTPS in development (use mkcert)
-4. Frontend runs on HTTPS, backend on HTTP (CORS configured)
-
-### Database Management
-- `vocabulary.db` is NOT in git - each developer needs their own copy
-- Use database migration scripts if schema changes
-- Backup database regularly as it contains user learning data
-
-### Whisper.cpp
-- Contains custom modifications in `examples/stream/stream_stdin.cpp`
-- Models must be downloaded separately (not in git)
-- Build directory regenerated on each compile
-- Use the provided download scripts for model acquisition
-
-### Dependencies
-- **Python**: torch, transformers, scipy (large packages, ~1GB)
-- **Node.js**: echarts, typescript, tailwind (257MB total)
-- Backend dependencies focus on NLP and ML for word processing
-- Frontend dependencies focus on UI and visualization
-
-### Performance Considerations
-- Spaced repetition algorithm is in `core/spaced_repetition.py`
-- WebSocket used for real-time audio streaming
-- Database queries optimized with SQLAlchemy
-- Frontend uses lazy loading for better performance
-
-## Troubleshooting
-
-### Backend Issues
-```bash
-# Reset virtual environment
-rm -rf .venv
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r web_app/requirements.txt
+语音练习:
+录音 → WAV上传 → speech_processing.py → Whisper转录 → OpenAI评分 → 返回反馈
 ```
 
-### Frontend Issues
-```bash
-# Clean install
-rm -rf node_modules package-lock.json
-npm install
-```
+## 数据库
 
-### Whisper Issues
-```bash
-# Rebuild whisper.cpp
-cd whisper.cpp
-rm -rf build
-mkdir build && cd build
-cmake ..
-make
-```
+- **位置**: `vocabulary.db` (SQLite，不在git中)
+- **Word模型**: word, definition(JSON), ease_factor, interval, repetition, lapse, spell_strength, next_review
+- **Speaking模型**: SpeakingTopic, SpeakingQuestion, SpeakingRecord
 
-### Database Issues
-- If `vocabulary.db` is corrupted, restore from backup
-- Schema is defined in `models/` - can regenerate empty database
+## 技术栈
+
+| 后端 | 前端 |
+|------|------|
+| Flask 3.1 | Vue 3 + TypeScript |
+| SQLAlchemy | Vite + Tailwind |
+| Flask-SocketIO | Socket.io |
+| Whisper.cpp | ECharts |
+
+## 不在Git中的文件
+
+- `vocabulary.db` - 数据库
+- `.venv/` - Python虚拟环境
+- `node_modules/` - NPM依赖
+- `whisper.cpp/models/*.bin` - AI模型（用download脚本下载）
+- `whisper.cpp/build/` - 编译产物
+- `*.pem` - SSL证书
+
+## 故障排除
+
+```bash
+# 重建Python环境
+rm -rf .venv && python3 -m venv .venv && source .venv/bin/activate && pip install -r web_app/requirements.txt
+
+# 重建前端
+cd vue_project && rm -rf node_modules && npm install
+
+# 重建Whisper
+cd whisper.cpp && rm -rf build && mkdir build && cd build && cmake .. && make
+```

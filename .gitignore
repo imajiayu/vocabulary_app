@@ -45,3 +45,6 @@ web_app/static/audios/
 
 # Database (should not be in git)
 vocabulary.db
+
+# Environment variables (contains secrets)
+.env

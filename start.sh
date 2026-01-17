@@ -10,6 +10,12 @@ start_backend() {
     echo "Activating Python virtual environment..."
     source .venv/bin/activate
 
+    # 加载 .env 文件（如果存在）
+    if [ -f .env ]; then
+        echo "Loading environment variables from .env..."
+        export $(cat .env | grep -v '^#' | xargs)
+    fi
+
     echo "Starting Python backend in background..."
     # 后台启动并写 PID
     nohup python -m web_app.app &> "$BACKEND_LOG" &

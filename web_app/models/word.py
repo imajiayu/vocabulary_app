@@ -117,7 +117,7 @@ class WordRelation(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     related_word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
-    relation_type = Column(Enum(RelationType), nullable=False)
+    relation_type = Column(Enum(RelationType, name="relation_type_enum", create_constraint=True), nullable=False)
     confidence = Column(Float, default=1.0)
 
     # 关系映射
@@ -140,7 +140,7 @@ class RelationGenerationLog(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
-    relation_type = Column(Enum(RelationType), nullable=False)
+    relation_type = Column(Enum(RelationType, name="relation_type_enum", create_constraint=True), nullable=False)
     processed_at = Column(DateTime, nullable=False)  # 处理时间
     found_count = Column(Integer, default=0)  # 找到的关系数
 
