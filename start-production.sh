@@ -46,6 +46,13 @@ start_backend() {
 
     cd "$PROJECT_ROOT"
     source .venv/bin/activate
+
+    # 加载 .env 文件（如果存在）
+    if [ -f "$PROJECT_ROOT/.env" ]; then
+        echo "加载环境变量..."
+        export $(cat "$PROJECT_ROOT/.env" | grep -v '^#' | xargs)
+    fi
+
     nohup python -m web_app.app > "$LOG_DIR/backend.log" 2>&1 &
     echo $! > "$BACKEND_PID"
     sleep 2
