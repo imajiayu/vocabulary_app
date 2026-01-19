@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-IELTS词汇学习应用 - Flask后端 + Vue3前端，实现间隔重复记忆系统和Whisper.cpp语音练习。
+IELTS词汇学习应用 - Flask后端 + Vue3前端，实现间隔重复记忆系统和口语练习。
 
 ## 快速启动
 
@@ -12,26 +12,26 @@ IELTS词汇学习应用 - Flask后端 + Vue3前端，实现间隔重复记忆系
 单独运行：
 ```bash
 # 后端 (端口5001)
-source .venv/bin/activate && python -m web_app.app
+source .venv/bin/activate && python -m backend.app
 
-# 前端 (HTTPS)
-cd vue_project && npm run dev
+# 前端
+cd frontend && npm run dev
 ```
 
 ## 项目结构
 
-### 后端 `web_app/`
+### 后端 `backend/`
 
 ```
 app.py                 # Flask入口，注册5个蓝图
 config.py              # 用户配置（学习限制、Lapse设置等）
-extensions.py          # SQLAlchemy + SocketIO初始化
+extensions.py          # SQLAlchemy初始化
 
 api/
 ├── vocabulary.py      # 单词CRUD、复习结果提交
-├── speaking.py        # 语音转文字、话题/问题管理
+├── speaking.py        # 话题/问题管理、录音上传（转录TODO）
 ├── settings.py        # 用户设置读写
-├── relations.py       # 词汇关系（同义词/反义词等）
+├── relations.py       # 词汇关系（含轮询进度接口）
 └── vocabulary_assistance.py  # AI辅助
 
 core/
@@ -46,8 +46,7 @@ database/
 
 services/
 ├── word_update_service.py      # 复习/Lapse/拼写更新
-├── websocket_service.py        # WebSocket事件推送
-├── relation_generation_manager.py  # 词汇关系生成
+├── relation_generation_manager.py  # 词汇关系生成（轮询进度）
 └── relations/                  # 各类关系生成器
 
 models/
@@ -55,11 +54,10 @@ models/
 └── speaking.py       # Topic/Question/Record模型
 
 utils/
-├── whisper_integration.py  # Whisper进程管理
-└── speech_processing.py    # 语音转录
+└── ai_helper.py      # AI辅助工具
 ```
 
-### 前端 `vue_project/src/`
+### 前端 `frontend/src/`
 
 ```
 app/
@@ -76,12 +74,11 @@ pages/
 
 features/
 ├── vocabulary/       # WordCard/WordReview/WordSpelling等组件
-├── speaking/         # 录音/转录/AI反馈组件
+├── speaking/         # 录音/AI反馈组件（转录TODO）
 └── statistics/       # ECharts图表组件
 
 shared/
 ├── api/              # HTTP客户端（words/speaking/settings等）
-├── services/websocket.ts   # WebSocket客户端
 ├── types/index.ts    # TypeScript类型定义
 ├── composables/      # 快捷键/定时器/音频等
 └── components/       # 通用UI组件
@@ -103,15 +100,15 @@ shared/
 ```
 复习流程:
 前端请求 → db_fetch_review_word_ids() → 用户复习 → POST /review-result
-→ calculate_srs_parameters_with_load_balancing() → 更新DB → WebSocket推送
+→ calculate_srs_parameters_with_load_balancing() → 更新DB
 
-语音练习:
-录音 → WAV上传 → speech_processing.py → Whisper转录 → OpenAI评分 → 返回反馈
+关系生成进度:
+启动生成 → 后台线程执行 → 前端轮询 /generate/progress → 显示进度
 ```
 
 ## 数据库
 
-- **位置**: `vocabulary.db` (SQLite，不在git中)
+- **位置**: `vocabulary.db` (SQLite，不在git中) 或 Supabase PostgreSQL
 - **Word模型**: word, definition(JSON), ease_factor, interval, repetition, lapse, spell_strength, next_review
 - **Speaking模型**: SpeakingTopic, SpeakingQuestion, SpeakingRecord
 
@@ -121,27 +118,24 @@ shared/
 |------|------|
 | Flask 3.1 | Vue 3 + TypeScript |
 | SQLAlchemy | Vite + Tailwind |
-| Flask-SocketIO | Socket.io |
-| Whisper.cpp | ECharts |
+| OpenAI API | ECharts |
 
 ## 不在Git中的文件
 
 - `vocabulary.db` - 数据库
 - `.venv/` - Python虚拟环境
 - `node_modules/` - NPM依赖
-- `whisper.cpp/models/*.bin` - AI模型（用download脚本下载）
-- `whisper.cpp/build/` - 编译产物
-- `*.pem` - SSL证书
 
 ## 故障排除
 
 ```bash
 # 重建Python环境
-rm -rf .venv && python3 -m venv .venv && source .venv/bin/activate && pip install -r web_app/requirements.txt
+rm -rf .venv && python3 -m venv .venv && source .venv/bin/activate && pip install -r backend/requirements.txt
 
 # 重建前端
-cd vue_project && rm -rf node_modules && npm install
-
-# 重建Whisper
-cd whisper.cpp && rm -rf build && mkdir build && cd build && cmake .. && make
+cd frontend && rm -rf node_modules && npm install
 ```
+
+## TODO
+
+- 语音转录功能：待接入在线API（如OpenAI Whisper API）

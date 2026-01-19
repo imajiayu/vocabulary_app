@@ -34,10 +34,10 @@ cd vocabulary_app
 # Python 环境
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r web_app/requirements.txt
+pip install -r backend/requirements.txt
 
 # 前端依赖
-cd vue_project && npm install && cd ..
+cd frontend && npm install && cd ..
 chmod +x start-production.sh
 ```
 

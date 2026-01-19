@@ -35,10 +35,10 @@ jobs:
             # 2. 更新依赖并部署
             echo "📦 更新 Python 依赖..."
             source .venv/bin/activate
-            pip install -r web_app/requirements.txt
+            pip install -r backend/requirements.txt
 
             echo "📦 更新前端依赖..."
-            cd vue_project
+            cd frontend
             npm install
             cd ..
 

@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from web_app.config import DB_PATH
+from backend.config import DB_PATH
 
 
 def get_supabase_url():
@@ -31,8 +31,8 @@ def get_supabase_url():
 def create_tables_in_supabase(pg_engine):
     """在 Supabase 中创建表结构"""
     print("正在创建表结构...")
-    from web_app.models.word import Base as WordBase
-    from web_app.models.speaking import Base as SpeakingBase
+    from backend.models.word import Base as WordBase
+    from backend.models.speaking import Base as SpeakingBase
     WordBase.metadata.create_all(pg_engine)
     SpeakingBase.metadata.create_all(pg_engine)
     print("表结构创建完成!")

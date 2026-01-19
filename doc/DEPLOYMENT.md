@@ -112,10 +112,10 @@ cd vocabulary_app
 # 创建 Python 虚拟环境
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r web_app/requirements.txt
+pip install -r backend/requirements.txt
 
 # 安装前端依赖
-cd vue_project
+cd frontend
 npm install
 cd ..
 
@@ -172,7 +172,7 @@ curl http://localhost:5001/api/health
 ls -la /var/www/vocabulary_app/
 
 # 检查进程
-ps aux | grep "python -m web_app.app"
+ps aux | grep "python -m backend.app"
 
 # 查看日志
 tail -f logs/backend.log
@@ -218,10 +218,10 @@ git pull origin main
 
 # 更新 Python 依赖
 source .venv/bin/activate
-pip install -r web_app/requirements.txt
+pip install -r backend/requirements.txt
 
 # 更新前端依赖
-cd vue_project
+cd frontend
 npm install
 cd ..
 
@@ -305,7 +305,7 @@ tail -n 100 /root/vocabulary_app/logs/backend.log
 
 ```bash
 # 检查后端进程
-ps aux | grep "python -m web_app.app"
+ps aux | grep "python -m backend.app"
 
 # 检查 Nginx 进程
 ps aux | grep nginx
@@ -341,7 +341,7 @@ cd /root/vocabulary_app
 tail -f /root/vocabulary_app/logs/backend.log
 
 # 检查后端进程
-ps aux | grep "python -m web_app.app"
+ps aux | grep "python -m backend.app"
 
 # 重启后端
 cd /root/vocabulary_app
@@ -386,7 +386,7 @@ ssh -i ~/.ssh/vocabulary_app_deploy root@47.96.4.107
 lsof -i :5001
 
 # 强制停止后端
-pkill -f "python -m web_app.app"
+pkill -f "python -m backend.app"
 
 # 重新启动
 ./start-production.sh start
@@ -461,7 +461,7 @@ crontab -e
 ```bash
 # 使用 Gunicorn 替代 Flask 开发服务器（可选）
 pip install gunicorn
-gunicorn -w 4 -b 127.0.0.1:5001 web_app.app:app
+gunicorn -w 4 -b 127.0.0.1:5001 backend.app:app
 ```
 
 ---
@@ -482,8 +482,8 @@ gunicorn -w 4 -b 127.0.0.1:5001 web_app.app:app
 | `start-production.sh` | 生产环境启动脚本 |
 | `nginx-vocabulary-app.conf` | Nginx 配置文件 |
 | `.github/workflows/deploy.yml` | GitHub Actions 自动部署配置 |
-| `vue_project/vite.config.ts` | Vite 构建配置 |
-| `web_app/requirements.txt` | Python 依赖 |
+| `frontend/vite.config.ts` | Vite 构建配置 |
+| `backend/requirements.txt` | Python 依赖 |
 
 ### 数据目录
 

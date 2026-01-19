@@ -1,0 +1,58 @@
+/* shared/styles/breakpoints.css - 响应式断点 */
+
+/*
+ * 断点约定：
+ * - sm: 480px  (手机竖屏)
+ * - md: 768px  (平板/手机横屏)
+ * - lg: 1024px (小型桌面)
+ * - xl: 1440px (大型桌面)
+ *
+ * 使用方式 (Desktop First)：
+ * .element { 桌面端样式 }
+ * @media (max-width: 768px) { 平板及以下 }
+ * @media (max-width: 480px) { 手机端 }
+ */
+
+:root {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+}
+
+/* ── 响应式显示/隐藏工具类 ── */
+
+/* 平板及以下隐藏 */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* 桌面端隐藏 */
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* 手机端隐藏 */
+@media (max-width: 480px) {
+  .hide-phone {
+    display: none !important;
+  }
+}
+
+/* 仅手机端显示 */
+@media (min-width: 481px) {
+  .show-phone-only {
+    display: none !important;
+  }
+}
+
+/* 仅平板端显示 */
+@media (max-width: 480px), (min-width: 769px) {
+  .show-tablet-only {
+    display: none !important;
+  }
+}
