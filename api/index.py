@@ -45,6 +45,4 @@ def health_check():
 # 注意：在 Serverless 环境中，后台线程服务不可用
 # 批量释义获取和关系生成需要改为同步处理或使用外部队列
 
-# Vercel 需要导出 app 对象
-# 使用 handler 名称以兼容 Vercel Python runtime
-handler = app
+# Vercel 自动检测 Flask 的 app 对象作为 WSGI 入口
