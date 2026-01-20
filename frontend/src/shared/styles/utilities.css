@@ -1,0 +1,573 @@
+/* shared/styles/utilities.css - 组件级别可复用样式 */
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   拖拽通知组件
+   用于 ReviewModeNotification / SpellingModeNotification 等可拖拽浮层
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.draggable-notification {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: auto;
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+.draggable-notification--disabled {
+  cursor: default;
+}
+
+.draggable-notification__content {
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  padding: var(--spacing-md) 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 180px;
+  max-width: 220px;
+  position: relative;
+}
+
+.draggable-notification__drag-handle {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 14px;
+  opacity: 0.6;
+  cursor: grab;
+  line-height: 1;
+}
+
+.draggable-notification:active .draggable-notification__drag-handle {
+  cursor: grabbing;
+}
+
+.draggable-notification__close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: var(--radius-full);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+  transition: background var(--transition-fast);
+}
+
+.draggable-notification__close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.draggable-notification__close:active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ── 通知内容样式 ── */
+.notification-word {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.notification-param {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-base);
+  margin-bottom: 4px;
+}
+
+.notification-param__label {
+  opacity: 0.9;
+}
+
+.notification-param__change {
+  font-weight: var(--font-weight-bold);
+  font-size: 20px;
+}
+
+.notification-param__change--positive {
+  color: var(--color-secondary);
+}
+
+.notification-param__change--negative {
+  color: var(--color-danger);
+}
+
+.notification-param__change--neutral {
+  color: var(--color-warning);
+}
+
+.notification-param__change--neutral-max {
+  color: var(--color-secondary);
+}
+
+.notification-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 13px;
+  opacity: 0.9;
+  gap: var(--spacing-md);
+}
+
+.notification-info-row__label {
+  flex-shrink: 0;
+  text-align: left;
+}
+
+.notification-info-row__value {
+  flex-shrink: 0;
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+/* ── 通知详情区块 ── */
+.notification-breakdown {
+  width: 100%;
+  margin-top: var(--spacing-sm);
+}
+
+.notification-breakdown__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: var(--spacing-sm) 0;
+}
+
+.notification-breakdown__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.notification-breakdown__title {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  opacity: 0.8;
+  margin-bottom: var(--spacing-sm);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── 评分展示 ── */
+.notification-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.notification-score__label {
+  font-size: 11px;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notification-score__value {
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.notification-score__time {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+/* ── 手机端适配 ── */
+@media (max-width: 480px) {
+  .draggable-notification--mobile-fixed {
+    left: auto !important;
+    right: 0 !important;
+    top: calc(48px + 30vh) !important;
+    bottom: auto !important;
+    transform: none;
+    max-width: 35vw;
+    cursor: default !important;
+  }
+
+  .draggable-notification--mobile-fixed .draggable-notification__content {
+    padding: var(--spacing-sm) 10px;
+    min-width: 120px;
+    max-width: 35vw;
+    border-radius: var(--radius-md) 0 0 10px;
+    gap: 3px;
+  }
+
+  .draggable-notification--mobile-fixed .draggable-notification__drag-handle {
+    display: none;
+  }
+
+  .draggable-notification--mobile-fixed .draggable-notification__close {
+    width: 18px;
+    height: 18px;
+    font-size: 16px;
+    top: 2px;
+    right: 4px;
+  }
+
+  .draggable-notification--mobile-fixed .notification-word {
+    font-size: var(--font-size-base);
+    margin-bottom: 0;
+  }
+
+  .draggable-notification--mobile-fixed .notification-param {
+    font-size: 11px;
+    gap: var(--spacing-sm);
+    margin-bottom: 2px;
+  }
+
+  .draggable-notification--mobile-fixed .notification-param__change {
+    font-size: var(--font-size-lg);
+  }
+
+  .draggable-notification--mobile-fixed .notification-info-row {
+    font-size: 11px;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   渐变卡片
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.card-gradient {
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-md);
+}
+
+.card-gradient--compact {
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   竖向刻度尺 (复习评分可视化)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.vertical-scale {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-scale__bar {
+  width: 40px;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.vertical-scale__segment {
+  flex: 1;
+  transition: opacity var(--transition-slow);
+}
+
+.vertical-scale__segment--excellent {
+  background: var(--color-scale-excellent);
+}
+
+.vertical-scale__segment--good {
+  background: var(--color-scale-good);
+}
+
+.vertical-scale__segment--fair {
+  background: var(--color-scale-fair);
+}
+
+.vertical-scale__marker {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 4px;
+  background: var(--color-text-inverse);
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  transition: top var(--transition-slow);
+}
+
+.vertical-scale__labels {
+  position: absolute;
+  right: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.vertical-scale__label {
+  font-size: 10px;
+  opacity: 0.8;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .vertical-scale {
+    height: 80px;
+  }
+
+  .vertical-scale__bar {
+    width: 28px;
+  }
+
+  .vertical-scale__marker {
+    width: 36px;
+    height: 3px;
+  }
+
+  .vertical-scale__labels {
+    right: 6px;
+  }
+
+  .vertical-scale__label {
+    font-size: 9px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   评分条 (拼写模式详情)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.score-bar-container {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  flex: 1;
+}
+
+.score-bar {
+  height: 100%;
+  background: var(--gradient-success);
+  border-radius: var(--radius-xs);
+  transition: width var(--transition-slow);
+}
+
+.score-bar--primary {
+  background: var(--gradient-primary-bar);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   数轴 (拼写强度增益可视化)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.axis-line {
+  position: relative;
+  height: 20px;
+  background: var(--gradient-axis-spell);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+}
+
+.axis-line__label {
+  position: absolute;
+  font-size: 9px;
+  opacity: 0.8;
+  font-weight: var(--font-weight-semibold);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.axis-line__label--left {
+  left: 2px;
+}
+
+.axis-line__label--right {
+  right: 2px;
+}
+
+.axis-line__marker {
+  position: absolute;
+  width: 3px;
+  height: 24px;
+  background: var(--color-text-inverse);
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: left var(--transition-slow);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   过渡动画
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all var(--transition-slow);
+}
+
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-normal);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   状态颜色
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.text-success {
+  color: var(--color-secondary);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.bg-success {
+  background-color: var(--color-secondary);
+}
+
+.bg-danger {
+  background-color: var(--color-danger);
+}
+
+.bg-warning {
+  background-color: var(--color-warning);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   Speaking 模块输入框
+   用于 PartItem / TopicItem / QuestionItem 的编辑和添加输入框
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.speaking-input-container {
+  padding: var(--spacing-sm) var(--spacing-md);
+  animation: speakingSlideIn 0.2s ease-out;
+  overflow: hidden;
+}
+
+.speaking-input-container--compact {
+  padding: 6px 14px;
+  margin: 0 -1px;
+}
+
+.speaking-input-container--bordered {
+  border-top: 1px solid var(--color-purple-light);
+  background: var(--color-bg-glass-strong);
+}
+
+.speaking-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-sm) 10px;
+  border: 2px solid var(--color-purple);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  background: var(--color-bg-primary);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px var(--color-purple-light);
+}
+
+.speaking-input--lg {
+  padding: 10px 12px;
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-default);
+}
+
+.speaking-input:focus {
+  outline: none;
+  border-color: var(--color-purple-dark);
+  box-shadow: 0 0 0 3px var(--color-purple-light);
+}
+
+.speaking-input:focus.speaking-input--scale {
+  transform: scale(1.01);
+}
+
+/* textarea 特定样式 */
+textarea.speaking-input {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.4;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   Speaking 模块动画
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes speakingSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes speakingSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes speakingSlideInStaggered {
+  from {
+    opacity: 0;
+    transform: translateX(-12px) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}

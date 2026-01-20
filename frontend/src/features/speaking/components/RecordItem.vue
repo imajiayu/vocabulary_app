@@ -71,7 +71,7 @@ const formatTime = (timeStr: string) => {
 .record-item.temporary {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), rgba(59, 130, 246, 0.05));
   border: 1px solid rgba(168, 85, 247, 0.2);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 12px;
   margin-bottom: 8px;
 }
@@ -92,7 +92,7 @@ const formatTime = (timeStr: string) => {
 
 .record-time {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
@@ -103,20 +103,20 @@ const formatTime = (timeStr: string) => {
 
 .temporary-badge {
   font-size: 10px;
-  background: linear-gradient(135deg, #a855f7, #3b82f6);
+  background: linear-gradient(135deg, #a855f7, var(--color-primary));
   color: white;
   padding: 2px 8px;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   font-weight: 600;
 }
 
 .delete-btn {
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -126,7 +126,7 @@ const formatTime = (timeStr: string) => {
 
 .delete-btn:hover:not(:disabled) {
   background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  color: var(--color-delete);
   opacity: 1;
 }
 

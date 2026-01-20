@@ -228,13 +228,13 @@ const resetSettings = async () => {
 
 .section-description {
   font-size: 16px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin: 0 0 32px 0;
 }
 
 .settings-group {
   background: white;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 32px;
   margin-bottom: 24px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -254,7 +254,7 @@ const resetSettings = async () => {
 
 .group-description {
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin: 0;
   line-height: 1.6;
 }
@@ -291,7 +291,7 @@ const resetSettings = async () => {
 .btn-reset {
   padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
@@ -316,12 +316,12 @@ const resetSettings = async () => {
 
 .btn-reset {
   background: white;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-medium);
 }
 
 .btn-reset:hover {
-  background: #f8fafc;
+  background: var(--color-bg-secondary);
   border-color: #cbd5e1;
 }
 
@@ -330,7 +330,7 @@ const resetSettings = async () => {
   padding: 12px 16px;
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   color: #15803d;
   font-size: 14px;
   font-weight: 500;
@@ -350,7 +350,7 @@ const resetSettings = async () => {
   display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .desktop-only {
     display: none !important;
   }

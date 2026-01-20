@@ -200,7 +200,7 @@ const handleFilterChange = (status: string) => {
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  color: var(--color-text-muted);
   width: 1.25rem;
   height: 1.25rem;
 }
@@ -209,7 +209,7 @@ const handleFilterChange = (status: string) => {
   width: 100%;
   box-sizing: border-box;
   padding: 0.75rem 2.5rem 0.75rem 2.5rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border-medium);
   border-radius: 0.5rem;
   height: 100%;
   font-size: 16px; /* 防止移动端自动缩放 */
@@ -219,7 +219,7 @@ const handleFilterChange = (status: string) => {
 
 .search-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #3b82f6;
+  box-shadow: 0 0 0 2px var(--color-primary);
   border-color: transparent;
 }
 
@@ -230,11 +230,11 @@ const handleFilterChange = (status: string) => {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 1rem;
   width: 1.25rem;
   height: 1.25rem;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -248,12 +248,12 @@ const handleFilterChange = (status: string) => {
 }
 
 .clear-button:hover {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
 }
 
 /* 移动端响应式适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .search-filter-container {
     padding: 1rem;
     border-radius: 0.5rem;

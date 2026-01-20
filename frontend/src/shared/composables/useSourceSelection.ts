@@ -58,15 +58,16 @@ export function useSourceSelection() {
       }
 
       return data
-    } catch (e: any) {
-      error.value = e?.message || String(e)
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e)
+      error.value = message
       throw e
     } finally {
       loading.value = false
     }
   }
 
-  const initializeFromData = (data: any) => {
+  const initializeFromData = (data: { current_source?: string; source_stats?: Record<string, SourceStats> }) => {
     // 设置当前源
     if (data.current_source) {
       currentSource.value = data.current_source
@@ -82,7 +83,7 @@ export function useSourceSelection() {
       // 填充新的统计数据
       Object.entries(data.source_stats).forEach(([sourceName, stats]) => {
         if (sourceName !== 'all') {  // 跳过 'all'
-          sourceStatsMap[sourceName] = stats as SourceStats
+          sourceStatsMap[sourceName] = stats
         }
       })
     }

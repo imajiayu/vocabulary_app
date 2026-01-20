@@ -117,9 +117,10 @@ const addSource = async () => {
 
     showSuccess(`已添加来源"${name}"`)
     emit('save-success')
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('添加失败:', error)
-    alert(`添加失败：${error?.message || '请重试'}`)
+    const message = error instanceof Error ? error.message : '请重试'
+    alert(`添加失败：${message}`)
   } finally {
     isAdding.value = false
   }
@@ -146,9 +147,10 @@ const confirmDelete = async (source: string) => {
 
     showSuccess(`已成功删除来源"${source}"`)
     emit('save-success')
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('删除失败:', error)
-    alert(`删除失败：${error?.message || '请重试'}`)
+    const message = error instanceof Error ? error.message : '请重试'
+    alert(`删除失败：${message}`)
   } finally {
     isDeleting.value = false
   }
@@ -183,13 +185,13 @@ onMounted(async () => {
 
 .section-description {
   font-size: 16px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin: 0 0 32px 0;
 }
 
 .settings-group {
   background: white;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 32px;
   margin-bottom: 24px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -208,8 +210,8 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: #f8fafc;
-  border-radius: 12px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
   border: 1px solid rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
@@ -233,7 +235,7 @@ onMounted(async () => {
 
 .source-count {
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .btn-delete {
@@ -241,7 +243,7 @@ onMounted(async () => {
   border: 1px solid #fee2e2;
   background: #fef2f2;
   color: #dc2626;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -267,8 +269,8 @@ onMounted(async () => {
 .add-source-section input {
   flex: 1;
   padding: 12px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
   font-size: 15px;
   transition: all 0.2s;
 }
@@ -289,7 +291,7 @@ onMounted(async () => {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 15px;
   font-weight: 500;
@@ -313,7 +315,7 @@ onMounted(async () => {
   padding: 12px;
   background: #fef3c7;
   border: 1px solid #fde047;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
 }
 
 .save-success {
@@ -321,7 +323,7 @@ onMounted(async () => {
   padding: 12px 16px;
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   color: #15803d;
   font-size: 14px;
   font-weight: 500;
@@ -337,7 +339,7 @@ onMounted(async () => {
   opacity: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .settings-group {
     padding: 20px 16px;
   }

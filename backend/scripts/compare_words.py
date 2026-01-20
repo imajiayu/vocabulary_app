@@ -2,23 +2,39 @@
 """
 Compare extracted words with database words.
 Find out how many words from extracted_words.txt are not in the database.
+
+Usage:
+    Ensure DATABASE_URL is set in .env file, then run:
+    python -m backend.scripts.compare_words
 """
 
+import os
 import sys
 from pathlib import Path
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from backend.models.word import Word, Base
-from backend.config import DB_PATH
+# Load .env file
+env_file = Path(__file__).parent.parent.parent / '.env'
+if env_file.exists():
+    for line in env_file.read_text().strip().split('\n'):
+        if line and not line.startswith('#') and '=' in line:
+            key, value = line.split('=', 1)
+            os.environ[key] = value
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from backend.models.word import Word
 
 
 def get_db_words():
     """Get all words from database."""
-    engine = create_engine(f'sqlite:///{DB_PATH}')
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+    if not DATABASE_URL:
+        raise RuntimeError("DATABASE_URL environment variable is required")
+
+    engine = create_engine(DATABASE_URL)
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -49,11 +65,6 @@ def main():
     # Check file exists
     if not extracted_file.exists():
         print(f"Error: File not found: {extracted_file}")
-        sys.exit(1)
-
-    # Check database exists
-    if not Path(DB_PATH).exists():
-        print(f"Error: Database not found: {DB_PATH}")
         sys.exit(1)
 
     print("Reading words from database...")

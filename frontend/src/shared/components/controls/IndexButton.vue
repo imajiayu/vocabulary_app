@@ -158,7 +158,7 @@ const handleClick = () => {
 }
 
 /* 移动端compact按钮优化 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .tile--compact .tile-icon {
         font-size: 24px;
     }

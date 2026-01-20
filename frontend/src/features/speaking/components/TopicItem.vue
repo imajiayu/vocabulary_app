@@ -1,20 +1,20 @@
 <template>
   <div class="topic-item">
     <div class="topic-header">
-      <div class="topic-title-row" @click="toggleExpanded">
+      <div class="topic-title-row" @click="handleToggle">
         <AppIcon name="expand" :class="{ expanded: isExpanded }" class="expand-icon" />
         <span class="topic-title">{{ topic.title }}</span>
       </div>
       <div class="topic-controls" :class="{ editing: showAddQuestionInput || showEditInput }">
         <span class="count">{{ topic.questions.length }}</span>
-        <div class="topic-actions">
-          <button class="action-btn add-btn" @click.stop="showAddQuestionInput = true" title="添加问题">
+        <div class="topic-actions action-btn-group">
+          <button class="icon-action-btn icon-action-btn--md icon-action-btn--add" @click.stop="showAddQuestionInput = true" title="添加问题">
             <AppIcon name="plus" />
           </button>
-          <button class="action-btn edit-btn" @click.stop="showEditInput = true" title="编辑主题">
+          <button class="icon-action-btn icon-action-btn--md icon-action-btn--edit" @click.stop="showEditInput = true" title="编辑主题">
             <AppIcon name="edit" />
           </button>
-          <button class="action-btn delete-btn" @click.stop="confirmDelete" title="删除主题">
+          <button class="icon-action-btn icon-action-btn--md icon-action-btn--delete" @click.stop="handleDelete" title="删除主题">
             <AppIcon name="delete" />
           </button>
         </div>
@@ -40,39 +40,44 @@
       :class="{ expanded: isExpanded }"
       :style="{ '--estimated-questions-height': estimatedQuestionsHeight }"
     >
-      <QuestionItem v-for="question in topic.questions" :key="`question-${question.id}`" :question="question"
-        :is-active="selectedQuestionId === question.id" @select="$emit('question-select', $event)"
-        @edit="$emit('edit-question', $event.id, $event.text)" @delete="$emit('question-delete', $event.id)" />
+      <QuestionItem
+        v-for="question in topic.questions"
+        :key="`question-${question.id}`"
+        :question="question"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch, computed, onMounted } from 'vue'
+import { ref, nextTick, watch, computed } from 'vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 import QuestionItem from './QuestionItem.vue'
 import type { TopicGroup } from '@/shared/types'
+import { useSpeakingContext } from '../composables'
 
-interface Props {
+const props = defineProps<{
   topic: TopicGroup
-  isExpanded: boolean
-  selectedQuestionId?: number | null
-}
-
-const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  'toggle-expanded': [topicId: number]
-  'add-question': [topicId: number, text: string]
-  'edit-topic': [topicId: number, title: string]
-  'delete-topic': [topicId: number]
-  'edit-question': [questionId: number, text: string]
-  'question-select': [question: any]
-  'question-delete': [questionId: number]
 }>()
 
-const toggleExpanded = () => {
-  emit('toggle-expanded', props.topic.id)
+// 从 context 获取状态和方法
+const {
+  expandedTopics,
+  toggleTopic,
+  editTopic,
+  deleteTopic,
+  addQuestion
+} = useSpeakingContext()
+
+// 计算当前 Topic 是否展开
+const isExpanded = computed(() => expandedTopics.value.has(props.topic.id))
+
+const handleToggle = () => {
+  toggleTopic(props.topic.id)
+}
+
+const handleDelete = () => {
+  deleteTopic(props.topic.id)
 }
 
 // 编辑主题状态
@@ -85,10 +90,10 @@ const showAddQuestionInput = ref(false)
 const newQuestionText = ref('')
 const addInputRef = ref<HTMLTextAreaElement | null>(null)
 
-const submitEdit = () => {
+const submitEdit = async () => {
   const title = editTitle.value.trim()
   if (title && title !== props.topic.title) {
-    emit('edit-topic', props.topic.id, title)
+    await editTopic(props.topic.id, title)
   }
   showEditInput.value = false
 }
@@ -98,14 +103,17 @@ const cancelEdit = () => {
   editTitle.value = props.topic.title
 }
 
-const submitNewQuestion = () => {
+const submitNewQuestion = async () => {
   const text = newQuestionText.value.trim()
   if (text) {
-    emit('add-question', props.topic.id, text)
+    await addQuestion(props.topic.id, text)
     newQuestionText.value = ''
   }
   showAddQuestionInput.value = false
-  emit('toggle-expanded', props.topic.id)
+  // 确保 topic 展开以显示新添加的问题
+  if (!isExpanded.value) {
+    toggleTopic(props.topic.id)
+  }
 }
 
 const cancelAddQuestion = () => {
@@ -113,9 +121,6 @@ const cancelAddQuestion = () => {
   newQuestionText.value = ''
 }
 
-const confirmDelete = () => {
-    emit('delete-topic', props.topic.id)
-}
 
 // 实际内容高度的响应式引用
 const actualContentHeight = ref(0)
@@ -128,7 +133,7 @@ const estimatedQuestionsHeight = computed(() => {
   const questionCount = props.topic.questions.length
 
   // 如果已经测量到实际高度且展开，使用实际高度加缓冲
-  if (actualContentHeight.value > 0 && props.isExpanded) {
+  if (actualContentHeight.value > 0 && isExpanded.value) {
     const heightWithBuffer = actualContentHeight.value + 20
     return `${heightWithBuffer}px`
   }
@@ -146,7 +151,7 @@ const estimatedQuestionsHeight = computed(() => {
 
 // 测量实际内容高度
 const measureContentHeight = () => {
-  if (!questionsContainer.value || !props.isExpanded) return
+  if (!questionsContainer.value || !isExpanded.value) return
 
   nextTick(() => {
     const container = questionsContainer.value
@@ -183,7 +188,7 @@ watch(showAddQuestionInput, val => {
 })
 
 // 监听展开状态变化，展开时测量高度
-watch(() => props.isExpanded, (isExpanded) => {
+watch(() => isExpanded.value, (isExpanded) => {
   if (isExpanded) {
     // 延迟测量，等待动画和DOM更新完成
     setTimeout(measureContentHeight, 350)
@@ -195,7 +200,7 @@ watch(() => props.isExpanded, (isExpanded) => {
 
 // 监听问题数量变化，重新测量高度
 watch(() => props.topic.questions?.length, () => {
-  if (props.isExpanded) {
+  if (isExpanded.value) {
     setTimeout(measureContentHeight, 100)
   }
 })
@@ -216,18 +221,18 @@ watch(() => props.topic.title, (newTitle) => {
   flex-direction: column;
   gap: 8px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--color-bg-glass-light);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(102, 126, 234, 0.15);
-  border-radius: 10px;
+  border: 1px solid var(--color-purple-light);
+  border-radius: var(--radius-default);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .topic-header:hover {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(102, 126, 234, 0.3);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.15);
+  background: var(--color-bg-glass-strong);
+  border-color: var(--color-purple-border);
+  box-shadow: 0 6px 16px var(--color-purple-light);
 }
 
 /* 添加点击反馈动画 */
@@ -251,26 +256,26 @@ watch(() => props.topic.title, (newTitle) => {
 
 .topic-title {
   font-weight: 500;
-  color: #4c1d95;
+  color: var(--color-purple-dark);
   font-size: 14px;
   flex: 1;
   line-height: 1.4;
 }
 
 .count {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: var(--color-purple-light);
+  color: var(--color-purple);
   padding: 3px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 11px;
   font-weight: 600;
   min-width: 20px;
   text-align: center;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid var(--color-purple-border);
 }
 
 .expand-icon {
-  color: #667eea;
+  color: var(--color-purple);
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   transform-origin: center;
   will-change: transform;
@@ -278,19 +283,10 @@ watch(() => props.topic.title, (newTitle) => {
 
 .expand-icon.expanded {
   transform: rotate(90deg);
-  color: #764ba2;
+  color: var(--color-purple-dark);
 }
 
-.topic-actions {
-  display: flex;
-  gap: 4px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(8px);
-  transition: all 0.3s ease;
-}
-
-/* 非编辑状态，hover 显示 */
+/* 非编辑状态，hover 显示按钮组 */
 .topic-header:hover .topic-controls .topic-actions {
   opacity: 1;
   pointer-events: auto;
@@ -302,43 +298,6 @@ watch(() => props.topic.title, (newTitle) => {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: translateX(8px) !important;
-}
-
-.action-btn {
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  color: #667eea;
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
-}
-
-.action-btn:hover {
-  transform: translateY(-1px) scale(1.05);
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.25);
-  background: white;
-}
-
-.add-btn:hover {
-  color: #10b981;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-}
-
-.edit-btn:hover {
-  color: #f59e0b;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
-}
-
-.delete-btn:hover {
-  color: #ef4444;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
 }
 
 .input-container {
@@ -368,12 +327,12 @@ watch(() => props.topic.title, (newTitle) => {
   max-width: 100%;
   box-sizing: border-box;
   padding: 8px 10px;
-  border: 2px solid #667eea;
-  border-radius: 6px;
+  border: 2px solid var(--color-purple);
+  border-radius: var(--radius-sm);
   font-size: 13px;
-  background: white;
+  background: var(--color-bg-primary);
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 2px 6px var(--color-purple-light);
   font-family: inherit;
   resize: vertical;
   min-height: 36px;
@@ -382,8 +341,8 @@ watch(() => props.topic.title, (newTitle) => {
 .input-container input:focus,
 .input-container textarea:focus {
   outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  border-color: var(--color-purple-dark);
+  box-shadow: 0 0 0 3px var(--color-purple-light);
   transform: scale(1.01);
 }
 
@@ -431,47 +390,25 @@ watch(() => props.topic.title, (newTitle) => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .topic-header {
     padding: 8px 10px;
-  }
-
-  .action-btn {
-    width: 22px;
-    height: 22px;
   }
 
   .topic-title {
     font-size: 13px;
   }
 
-  /* 移动端始终显示操作按钮 */
-  .topic-actions {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-  }
-
   /* 移动端禁用hover效果，使用触摸反馈 */
   .topic-header:hover {
-    background: rgba(255, 255, 255, 0.7);
-    border-color: rgba(102, 126, 234, 0.15);
+    background: var(--color-bg-glass-light);
+    border-color: var(--color-purple-light);
     box-shadow: none;
   }
 
   .topic-header:active {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--color-bg-glass-hover);
     transform: scale(0.98);
-  }
-
-  .action-btn:hover {
-    transform: none;
-    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
-    background: rgba(255, 255, 255, 0.8);
-  }
-
-  .action-btn:active {
-    transform: scale(0.9);
   }
 }
 </style>

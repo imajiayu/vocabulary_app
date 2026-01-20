@@ -480,30 +480,30 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
   align-items: center;
   width: 100%;
   min-height: 200px;
-  background: rgba(248, 250, 252, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
   padding: 20px;
   box-sizing: border-box;
   gap: 20px;
 }
 
 .start-btn {
-  background: linear-gradient(135deg, #a855f7, #3b82f6);
-  border: 2px solid rgba(168, 85, 247, 0.3);
-  border-radius: 50px;
+  background: linear-gradient(135deg, var(--color-purple-vivid), var(--color-primary));
+  border: 2px solid var(--color-purple-vivid-light);
+  border-radius: var(--radius-full);
   padding: 20px 40px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.25);
+  box-shadow: 0 8px 25px var(--color-purple-vivid-light);
   position: relative;
   overflow: hidden;
 }
 
 .start-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(168, 85, 247, 0.35);
-  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 12px 35px var(--color-purple-vivid-light);
+  border-color: var(--color-purple-vivid);
 }
 
 .start-btn:disabled {
@@ -517,7 +517,7 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
   display: flex;
   align-items: center;
   gap: 12px;
-  color: white;
+  color: var(--color-text-inverse);
 }
 
 .siri-circles {
@@ -529,8 +529,8 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
 .circle {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  background: white;
+  border-radius: var(--radius-full);
+  background: var(--color-text-inverse);
   opacity: 0.7;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -556,10 +556,10 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  background: rgba(248, 250, 252, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  padding: 16px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   box-sizing: border-box;
 }
 
@@ -591,8 +591,8 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
 .processing-dots span {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #a855f7, #3b82f6);
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #a855f7, var(--color-primary));
   animation: processing-pulse 1.4s ease-in-out infinite both;
 }
 
@@ -603,7 +603,7 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
 .processing-text, .waiting-text {
   margin: 0;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
@@ -616,7 +616,7 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   border: 2px solid transparent;
   font-size: 14px;
   font-weight: 600;
@@ -629,31 +629,31 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
 }
 
 .control-btn.primary {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-  border-color: rgba(168, 85, 247, 0.3);
-  color: white;
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  background: linear-gradient(135deg, var(--color-purple-vivid), var(--color-purple-vivid-dark));
+  border-color: var(--color-purple-vivid-light);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px var(--color-purple-vivid-light);
 }
 
 .control-btn.primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
-  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 6px 20px var(--color-purple-vivid-light);
+  border-color: var(--color-purple-vivid);
 }
 
 .control-btn.secondary {
-  background: rgba(255, 255, 255, 0.9);
-  color: #6b7280;
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-glass-hover);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-light);
+  box-shadow: var(--shadow-sm);
 }
 
 .control-btn.secondary:hover {
-  background: rgba(255, 255, 255, 1);
-  color: #374151;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   transform: translateY(-1px);
-  border-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-border-medium);
+  box-shadow: var(--shadow-md);
 }
 
 @keyframes pulse {

@@ -165,11 +165,11 @@ onUnmounted(() => {
 }
 
 .eta-value {
-  color: #f59e0b; /* 橙色 */
+  color: var(--color-edit); /* 橙色 */
 }
 
 /* 移动端适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .speed-indicator {
     font-size: 12px;
     gap: 4px;

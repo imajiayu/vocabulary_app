@@ -124,7 +124,7 @@ const switchTab = (tabId: string) => {
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #64748b;
+  color: var(--color-text-secondary);
   transition: all 0.2s ease;
   flex-shrink: 0;
   /* 移动端触摸优化 */
@@ -195,11 +195,11 @@ const switchTab = (tabId: string) => {
   padding: 0;
   border: none;
   background: transparent;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 15px;
   font-weight: 500;
-  color: #64748b;
+  color: var(--color-text-secondary);
   transition: all 0.2s ease;
   text-align: left;
   width: 100%;
@@ -228,7 +228,7 @@ const switchTab = (tabId: string) => {
   margin: 0 6px;
   /* 左右居中 */
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
 }
 
 .main-nav:not(.expanded) .nav-tab:hover {
@@ -243,7 +243,7 @@ const switchTab = (tabId: string) => {
   width: 36px;
   /* 保持较小宽度 */
   height: 36px;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
 }
 
 /* 展开状态下的样式 */
@@ -270,7 +270,7 @@ const switchTab = (tabId: string) => {
   content: '';
   position: absolute;
   inset: -2px;
-  border-radius: 24px;
+  border-radius: var(--radius-2xl);
   background: linear-gradient(135deg, #667eea, #764ba2);
   z-index: -1;
   opacity: 0.1;
@@ -349,7 +349,7 @@ const switchTab = (tabId: string) => {
 }
 
 /* 移动端响应式适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .main-nav {
     width: 44px;
   }
@@ -462,13 +462,13 @@ const switchTab = (tabId: string) => {
     height: 28px;
     min-height: 28px;
     margin: 0 6px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
   }
 
   .main-nav:not(.expanded) .nav-tab.active {
     width: 28px;
     height: 28px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
   }
 
   .main-nav:not(.expanded) .tab-icon {

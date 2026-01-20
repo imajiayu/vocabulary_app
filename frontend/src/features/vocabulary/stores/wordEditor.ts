@@ -90,9 +90,24 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   async function save(): Promise<boolean> {
     if (!currentWord.value || !canSave.value) return false
 
+    // 检查单词字段是否发生变化
+    const wordFieldChanged = originalWord.value && currentWord.value.word !== originalWord.value.word
+
     isSaving.value = true
     try {
-      const updatedWord = await api.words.updateWord(currentWord.value.id, currentWord.value)
+      let updatedWord = await api.words.updateWord(currentWord.value.id, currentWord.value)
+
+      // 如果单词字段变化了，自动获取新释义
+      if (wordFieldChanged) {
+        try {
+          const wordWithDefinition = await api.words.fetchDefinition(updatedWord.id)
+          updatedWord = wordWithDefinition
+        } catch (defError) {
+          log.error('获取释义失败，但单词已保存:', defError)
+          // 释义获取失败不影响保存结果
+        }
+      }
+
       currentWord.value = updatedWord
       originalWord.value = { ...updatedWord }
       isEditing.value = false

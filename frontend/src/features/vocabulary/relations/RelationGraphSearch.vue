@@ -130,7 +130,7 @@ function selectCandidate(node: GraphNode) {
   gap: 12px;
   padding: 8px 16px;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -148,8 +148,8 @@ function selectCandidate(node: GraphNode) {
 
 .search-input {
   padding: 8px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-default);
   min-width: 240px;
   font-size: 14px;
   color: #0f172a;
@@ -173,7 +173,7 @@ function selectCandidate(node: GraphNode) {
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border-medium);
   border-top: none;
   border-radius: 0 0 8px 8px;
   max-height: 240px;
@@ -200,7 +200,7 @@ function selectCandidate(node: GraphNode) {
 
 .candidate-item:hover,
 .candidate-item.selected {
-  background: #f8fafc;
+  background: var(--color-bg-secondary);
 }
 
 .candidate-word {
@@ -211,7 +211,7 @@ function selectCandidate(node: GraphNode) {
 
 .candidate-definition {
   font-size: 11px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

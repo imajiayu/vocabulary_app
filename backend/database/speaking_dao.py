@@ -1,7 +1,10 @@
+import logging
 import os
 from sqlalchemy.orm import joinedload
 from sqlalchemy.exc import SQLAlchemyError
 from backend.config import STATIC_PATH
+
+logger = logging.getLogger(__name__)
 from backend.models.speaking import (
     SpeakingTopic,
     SpeakingQuestion,
@@ -149,21 +152,30 @@ def db_insert_record(
 def _delete_audio_file(audio_file_path: str) -> None:
     """
     删除音频文件的辅助函数
+    支持 Supabase Storage URL 和本地文件路径（向后兼容）
     """
     if not audio_file_path:
         return
 
-    # 去掉开头的 /static，如果已经有
-    relative_path = audio_file_path
-    if relative_path.startswith("/static/"):
-        relative_path = relative_path[len("/static/") :]
-    audio_path = os.path.join(STATIC_PATH, relative_path)
+    # 判断是 Supabase Storage URL 还是本地路径
+    if "supabase" in audio_file_path and "/storage/" in audio_file_path:
+        # Supabase Storage URL: 提取文件名并删除
+        from backend.services.storage_service import delete_audio, extract_filename_from_url
+        filename = extract_filename_from_url(audio_file_path)
+        if filename:
+            delete_audio(filename)
+    else:
+        # 本地文件路径（向后兼容）
+        relative_path = audio_file_path
+        if relative_path.startswith("/static/"):
+            relative_path = relative_path[len("/static/"):]
+        audio_path = os.path.join(STATIC_PATH, relative_path)
 
-    if os.path.exists(audio_path):
-        try:
-            os.remove(audio_path)
-        except OSError as e:
-            print(f"Failed to delete audio file {audio_path}: {e}")
+        if os.path.exists(audio_path):
+            try:
+                os.remove(audio_path)
+            except OSError as e:
+                logger.warning(f"Failed to delete audio file {audio_path}: {e}")
 
 
 def db_delete_topic(topic_id: int) -> bool:

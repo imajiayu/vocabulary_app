@@ -355,7 +355,7 @@ onMounted(async () => {
     font-size: 1.1em;
     padding: 0.8em;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-default);
     cursor: pointer;
     background-color: #f0f0f0;
     transition: all 0.2s ease;
@@ -414,7 +414,7 @@ onMounted(async () => {
     width: 2.5rem;
     height: 2.5rem;
     border: none;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background-color: rgba(240, 240, 240, 0.9);
     cursor: pointer;
     font-size: 1.2em;
@@ -445,7 +445,7 @@ onMounted(async () => {
     background-color: rgba(0, 0, 0, 0.85);
     color: white;
     padding: 0.5rem 0.75rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 0.875rem;
     white-space: nowrap;
     pointer-events: none;
@@ -472,30 +472,17 @@ onMounted(async () => {
     }
 }
 
-/* 移动端和平板隐藏提示 */
-@media (max-width: 1024px) {
+/* 手机端隐藏提示 */
+@media (max-width: 480px) {
     .reset-timer-tooltip {
         display: none;
     }
 }
 
-/* 桌面端优化 - 增加底部空间避免被按钮栏挡住 */
-@media (min-width: 1025px) {
+/* 桌面端优化 */
+@media (min-width: 481px) {
     .content-area {
-        padding-bottom: 8rem; /* 桌面端增加底部空间 */
-        /* 允许轻微滚动以查看被遮挡的内容 */
-    }
-}
-
-/* 平板适配 */
-@media (max-width: 1024px) and (min-width: 769px) {
-    .content-area {
-        max-width: 100%;
-        padding: 1rem 1rem 6rem 1rem !important; /* 强制覆盖基础样式 */
-    }
-
-    .button-group {
-        max-width: 100%;
+        padding-bottom: 8rem;
     }
 }
 
@@ -509,7 +496,7 @@ onMounted(async () => {
 }
 
 /* 移动端适配 - 强制覆盖 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .word-review-container .content-area {
         padding-top: 0.5rem !important;
         padding-left: 0.5rem !important;

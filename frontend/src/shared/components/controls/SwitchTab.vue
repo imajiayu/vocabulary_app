@@ -138,9 +138,9 @@ const indicatorBackground = computed(() => {
       case 'all':
         return 'linear-gradient(135deg, #667eea, #764ba2)' // 紫蓝渐变 - 全部
       case 'unremembered':
-        return '#f59e0b' // 橙色 - 学习中
+        return 'var(--color-edit)' // 橙色 - 学习中
       case 'remembered':
-        return '#10b981' // 绿色 - 已掌握
+        return 'var(--color-success)' // 绿色 - 已掌握
       default:
         return 'linear-gradient(135deg, #667eea, #764ba2)'
     }
@@ -219,7 +219,7 @@ onMounted(() => {
   gap: 4px;
   background: rgba(0, 0, 0, 0.05);
   padding: 4px;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   overflow: hidden;
 }
 
@@ -227,10 +227,10 @@ onMounted(() => {
   position: absolute;
   top: 4px;
   height: calc(100% - 8px);
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 6px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
   z-index: 1;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px var(--color-purple-light);
 }
 
 .tab-indicator-animated {
@@ -243,11 +243,11 @@ onMounted(() => {
   padding: 8px 12px;
   border: none;
   background: transparent;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   transition: all 0.3s ease;
   text-align: center;
   display: flex;
@@ -264,9 +264,9 @@ onMounted(() => {
 
 /* 默认活跃状态：当没有指示器时使用背景色 */
 .switch-tab.active {
-  background: linear-gradient(135deg, #a855f7, #3b82f6);
-  color: white;
-  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 2px 8px var(--color-purple-light);
 }
 
 /* 当容器有指示器时，默认主题也移除按钮背景 */
@@ -293,26 +293,26 @@ onMounted(() => {
 /* Size variants */
 .switch-tab-container.large {
   padding: 6px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   gap: 6px;
 }
 
 .switch-tab-container.large .switch-tab {
   padding: 12px 16px;
   font-size: 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
 }
 
 .switch-tab-container.small {
   padding: 2px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   gap: 2px;
 }
 
 .switch-tab-container.small .switch-tab {
   padding: 6px 10px;
   font-size: 12px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Custom theme variants */
@@ -324,15 +324,15 @@ onMounted(() => {
 }
 
 .switch-tab-container.primary-theme .tab-indicator {
-  background: var(--gradient-primary, linear-gradient(135deg, #667eea, #764ba2));
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  background: var(--gradient-primary);
+  box-shadow: 0 2px 8px var(--color-purple-light);
 }
 
 /* Mobile theme for navigation */
 .switch-tab-container.mobile-theme {
   background: rgba(0, 0, 0, 0.05);
   padding: 4px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   gap: 0;
 }
 
@@ -358,9 +358,9 @@ onMounted(() => {
 }
 
 .switch-tab-container.mobile-theme .tab-indicator {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  background: var(--gradient-primary);
+  border-radius: var(--radius-default);
+  box-shadow: 0 2px 8px var(--color-purple-light);
 }
 
 .switch-tab-container.secondary-theme {
@@ -368,7 +368,7 @@ onMounted(() => {
 }
 
 .switch-tab-container.secondary-theme .switch-tab {
-  color: var(--color-text-secondary, #6b7280);
+  color: var(--color-text-secondary, var(--color-text-secondary));
 }
 
 .switch-tab-container.secondary-theme .switch-tab.active {
@@ -378,8 +378,8 @@ onMounted(() => {
 }
 
 .switch-tab-container.secondary-theme .tab-indicator {
-  background: var(--gradient-primary, linear-gradient(135deg, #667eea, #764ba2));
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  background: var(--gradient-primary);
+  box-shadow: 0 2px 8px var(--color-purple-light);
 }
 
 /* Filter theme with specific colors for different states */
@@ -391,7 +391,7 @@ onMounted(() => {
 /* Default state for filter theme buttons */
 .switch-tab-container.filter-theme .switch-tab {
   background-color: transparent;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   border-radius: 0.5rem;
   font-weight: 500;
   box-shadow: none;
@@ -405,7 +405,7 @@ onMounted(() => {
 
 /* Override default active style for filter theme */
 .switch-tab-container.filter-theme .switch-tab.active {
-  background: #f3f4f6;
+  background: var(--color-bg-tertiary);
   color: #374151;
   box-shadow: none;
 }

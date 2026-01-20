@@ -72,7 +72,7 @@
 import { ref, computed } from 'vue';
 import WordCard from './WordCard.vue';
 import { ChevronUp, ChevronDown, Square, CheckSquare, Trash2 } from 'lucide-vue-next';
-import type { Word } from '@/shared/types';
+import type { Word, SourceCounts } from '@/shared/types';
 import { api } from '@/shared/api';
 import { logger } from '@/shared/utils/logger';
 
@@ -84,7 +84,7 @@ interface Props {
     filterStatus: string;
     sourceFilter: string;  // 改为动态字符串，支持任意 source
     // 新增：预计算的源计数，用于显示稳定的总数
-    sourceCounts?: any;
+    sourceCounts?: SourceCounts;
 }
 
 const props = defineProps<Props>();
@@ -431,8 +431,8 @@ const handleBatchDelete = async () => {
 .sort-controls-integrated {
     position: relative;
     display: inline-flex;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
     border-radius: 0.75rem;
     overflow: hidden;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -447,7 +447,7 @@ const handleBatchDelete = async () => {
     padding: 0.75rem 1rem;
     border: none;
     background: transparent;
-    color: #64748b;
+    color: var(--color-text-secondary);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -463,12 +463,12 @@ const handleBatchDelete = async () => {
 }
 
 .sort-field-btn:hover:not(.active) {
-    background: #e2e8f0;
-    color: #475569;
+    background: var(--color-border-medium);
+    color: var(--color-text-primary);
 }
 
 .sort-field-btn.active {
-    background: #3b82f6;
+    background: var(--color-primary);
     color: white;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -477,10 +477,10 @@ const handleBatchDelete = async () => {
     padding: 0.75rem;
     border: none;
     background: transparent;
-    color: #64748b;
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
-    border-left: 1px solid #e2e8f0;
+    border-left: 1px solid var(--color-border-medium);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -497,22 +497,22 @@ const handleBatchDelete = async () => {
     top: 25%;
     height: 50%;
     width: 1px;
-    background: #e2e8f0;
+    background: var(--color-border-medium);
     transition: background-color 0.2s ease;
 }
 
 .sort-order-btn:hover:not(:disabled):not(.ascending):not(.descending) {
-    background: #e2e8f0;
-    color: #475569;
+    background: var(--color-border-medium);
+    color: var(--color-text-primary);
 }
 
 .sort-order-btn.ascending {
-    background: #10b981;
+    background: var(--color-success);
     color: white;
 }
 
 .sort-order-btn.ascending:hover {
-    background: #059669;
+    background: var(--color-success-hover);
 }
 
 .sort-order-btn.ascending::before {
@@ -520,12 +520,12 @@ const handleBatchDelete = async () => {
 }
 
 .sort-order-btn.descending {
-    background: #f59e0b;
+    background: var(--color-edit);
     color: white;
 }
 
 .sort-order-btn.descending:hover {
-    background: #d97706;
+    background: var(--color-processing-dark);
 }
 
 .sort-order-btn.descending::before {
@@ -540,7 +540,7 @@ const handleBatchDelete = async () => {
 
 .sort-order-btn:disabled:hover {
     background: transparent;
-    color: #64748b;
+    color: var(--color-text-secondary);
 }
 
 .sort-icon {
@@ -557,14 +557,14 @@ const handleBatchDelete = async () => {
 
 .word-count {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     flex-shrink: 0;
     padding: 0.5rem 0.75rem;
     white-space: nowrap;
 }
 
 /* 移动端优化 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .header-controls {
         gap: 0.375rem;
     }
@@ -667,7 +667,7 @@ const handleBatchDelete = async () => {
 .empty-text {
     width: 100%;
     text-align: center;
-    color: #9ca3af;
+    color: var(--color-text-muted);
     padding: 1rem 0;
 }
 
@@ -677,10 +677,10 @@ const handleBatchDelete = async () => {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
     border-radius: 0.75rem;
-    color: #64748b;
+    color: var(--color-text-secondary);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -690,20 +690,20 @@ const handleBatchDelete = async () => {
 }
 
 .multi-select-btn:hover {
-    background: #e2e8f0;
-    color: #475569;
+    background: var(--color-border-medium);
+    color: var(--color-text-primary);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .multi-select-btn.active {
-    background: #3b82f6;
+    background: var(--color-primary);
     color: white;
-    border-color: #3b82f6;
+    border-color: var(--color-primary);
 }
 
 .multi-select-btn.active:hover {
-    background: #2563eb;
-    border-color: #2563eb;
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
 }
 
 /* 批量切换复习状态按钮样式 */
@@ -723,30 +723,30 @@ const handleBatchDelete = async () => {
 }
 
 .batch-toggle-btn.master {
-    background: #10b981;
-    border-color: #059669;
+    background: var(--color-success);
+    border-color: var(--color-success-hover);
     color: white;
 }
 
 .batch-toggle-btn.master:hover:not(:disabled) {
-    background: #059669;
+    background: var(--color-success-hover);
     box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
 }
 
 .batch-toggle-btn.restore {
-    background: #f59e0b;
-    border-color: #d97706;
+    background: var(--color-edit);
+    border-color: var(--color-processing-dark);
     color: white;
 }
 
 .batch-toggle-btn.restore:hover:not(:disabled) {
-    background: #d97706;
+    background: var(--color-processing-dark);
     box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
 }
 
 .batch-toggle-btn.mixed {
-    background: #94a3b8;
-    border-color: #64748b;
+    background: var(--color-text-tertiary);
+    border-color: var(--color-text-secondary);
     color: white;
 }
 
@@ -761,8 +761,8 @@ const handleBatchDelete = async () => {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: #ef4444;
-    border: 1px solid #dc2626;
+    background: var(--color-delete);
+    border: 1px solid var(--color-recording-dark);
     border-radius: 0.75rem;
     color: white;
     font-size: 0.875rem;
@@ -774,7 +774,7 @@ const handleBatchDelete = async () => {
 }
 
 .batch-delete-btn:hover:not(:disabled) {
-    background: #dc2626;
+    background: var(--color-recording-dark);
     box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
 }
 

@@ -30,15 +30,6 @@ export interface RelationStats {
   total: number
 }
 
-export interface GenerateRelationsPayload {
-  relation_type: string  // 单个类型
-}
-
-export interface GenerateRelationsResponse {
-  relation_type: string
-  status: string
-}
-
 export interface ClearRelationsPayload {
   relation_types?: string[]
 }
@@ -93,59 +84,6 @@ export class RelationsApi {
    */
   static async getStats(): Promise<RelationStats> {
     return get<RelationStats>('/api/relations/stats')
-  }
-
-  /**
-   * 生成指定类型的关系（异步，通过WebSocket推送进度）
-   * @param relationType 关系类型
-   */
-  static async generate(relationType: string): Promise<GenerateRelationsResponse> {
-    return post<GenerateRelationsResponse>('/api/relations/generate', { relation_type: relationType })
-  }
-
-  /**
-   * 检查生成任务状态
-   * @param relationType 关系类型
-   */
-  static async getGenerationStatus(relationType: string): Promise<{ is_running: boolean }> {
-    return get<{ is_running: boolean }>(`/api/relations/generate/status/${relationType}`)
-  }
-
-  /**
-   * 获取生成进度（轮询用）
-   * @param relationType 关系类型
-   */
-  static async getGenerationProgress(relationType: string): Promise<{
-    relation_type: string
-    status: string
-    current: number
-    total: number
-    percent: number
-    message: string
-  } | null> {
-    return get(`/api/relations/generate/progress/${relationType}`)
-  }
-
-  /**
-   * 获取所有生成进度
-   */
-  static async getAllGenerationProgress(): Promise<Record<string, {
-    relation_type: string
-    status: string
-    current: number
-    total: number
-    percent: number
-    message: string
-  }>> {
-    return get('/api/relations/generate/progress')
-  }
-
-  /**
-   * 停止生成任务
-   * @param relationType 关系类型
-   */
-  static async stopGeneration(relationType: string): Promise<{ relation_type: string; status: string }> {
-    return post<{ relation_type: string; status: string }>('/api/relations/generate/stop', { relation_type: relationType })
   }
 
   /**

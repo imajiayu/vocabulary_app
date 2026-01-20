@@ -2,7 +2,7 @@
 
 > 创建日期：2026-01-18
 > 最后更新：2026-01-19
-> 状态：进行中（阶段一、二已完成）
+> 状态：✅ 核心重构已完成
 > 前置条件：REFACTOR_PLAN.md V1 已完成
 
 ---
@@ -50,11 +50,11 @@
 | 类别 | 原数量 | 当前数量 | 状态 |
 |------|--------|----------|------|
 | console 语句 | 89 处 | 0 处 | ✅ 已清理 |
-| `any` 类型使用 | 20+ 处 | 56 处 | 🟡 需处理 |
+| `any` 类型使用 | 56 处 | 4 处 | ✅ 减少93% |
 | 巨型组件 (>1000行) | 4 个 | 0 个 | ✅ 已拆分 |
-| 空目录 | 9 个 | 1 个 | 🟢 待清理 |
+| 空目录 | 9 个 | 0 个 | ✅ 已清理 |
 | WebSocket 代码 | 存在 | 已移除 | ✅ Vercel 适配 |
-| 分散的设置管理 | 4 个 | 4 个 | 🟡 待优化 |
+| 分散的设置管理 | 4 个 | 4 个 | ✅ 架构合理，保持 |
 
 ### 1.3 优秀实践（保持）
 
@@ -847,30 +847,46 @@ features/vocabulary/relations/
 
 #### 阶段三：类型系统强化 ✅ (2026-01-19)
 
-**any 类型修复统计**：56处 → 27处（减少52%）
+**any 类型修复统计**：56处 → 4处（减少93%）
 
 | 文件/区域 | 修复内容 |
 |-----------|----------|
 | `client.ts` | 泛型默认值 `any` → `unknown` |
 | `useAudioRecording.ts` | 浏览器 API 类型声明 |
 | `router/index.ts` | `RouteLocationNormalized` 类型 |
-| `words.ts` | `DefinitionObject` 类型 |
+| `words.ts` | `DefinitionObject` 类型，`[key: string]: unknown` |
 | `speaking.ts`, `config.ts` | `unknown[]` 替代 `any[]` |
+| `useShuffleSelection.ts` | `catch (e: any)` → `catch (e: unknown)` |
+| `useSourceSelection.ts` | catch 块 + 函数参数类型 |
+| `WordIndex.vue` | catch 块类型修复 |
+| `RelationSettings.vue` | 5处 catch 块修复 |
+| `SourceSettings.vue` | 2处 catch 块修复 |
+| `StatisticsPage.vue` | 3处 catch 块 + `never[]` 类型 |
+| `PartItem.vue`, `TopicItem.vue` | 事件 emit 类型 `Question` |
+| `ReviewParamsNotification.vue` | breakdown 类型定义 |
+| `WordGrid.vue` | `SourceCounts` 类型 |
+| `ReviewPage.vue` | `CardResultEvent` 接口 |
 
 **新增文件**：
 - `shared/types/global.d.ts` - 浏览器 API 类型扩展（AudioContext、AudioProcessingEvent）
 
-**剩余 any 类型（27处）**：
-- catch 块异常处理（14处）- 可选优化
-- ECharts 回调（3处）- 已添加 eslint-disable 注释
-- API/数据类型（10处）- 需后续定义完整类型
+**剩余 any 类型（4处，均为合理使用）**：
+- `HeatMap.vue` (2处) - ECharts 回调参数，类型过于复杂
+- `CustomSelect.vue` (1处) - 通用组件索引签名
+- `client.ts` (1处) - 内部 JSON 解析
 
 ---
 
-### 待开始
+### 阶段四/五：优化与清理 ✅ (2026-01-19)
 
-- [ ] 阶段四：状态管理优化（可选）
-- [ ] 阶段五：目录结构清理
+**分析结论**：
+- 现有设置管理架构已经合理，`useSettings` 作为核心单例，其他 composables 基于它构建
+- 无需完全重构为 Pinia store，保持现有模式
+
+**已完成**：
+- [x] 修复 `useShuffleSelection.ts` 中的 `any` 类型（any: 27 → 26）
+- [x] 删除空目录 `src/shared/assets/`
+- [x] 构建验证通过
 
 ---
 
@@ -881,10 +897,15 @@ features/vocabulary/relations/
 | 阶段一 | ✅ 完成 | - | - |
 | 阶段二 | ✅ 完成 | - | - |
 | 阶段三 | ✅ 完成 | - | - |
-| 阶段四 | 待开始 | 2-3小时 | P2（可选）|
-| 阶段五 | 待开始 | 0.5小时 | P2 |
+| 阶段四/五 | ✅ 完成 | - | - |
 
-**剩余总计**：约 2.5-3.5 小时（均为可选优化）
+**核心重构已全部完成** 🎉
+
+**最终成果**：
+- `any` 类型：56 → 4（减少93%，剩余4处均为合理使用）
+- 所有 catch 块已修复为 `unknown` 类型
+- 所有事件 emit 类型已明确
+- 所有 Props 类型已完善
 
 ---
 

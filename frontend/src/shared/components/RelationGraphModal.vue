@@ -250,7 +250,7 @@ watch(
   width: 95vw;
   height: 95vh;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -275,7 +275,7 @@ watch(
   height: 40px;
   border: none;
   background: white;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -292,7 +292,7 @@ watch(
 }
 
 .close-btn svg {
-  color: #64748b;
+  color: var(--color-text-secondary);
   width: 20px;
   height: 20px;
   transition: color 0.2s;
@@ -321,14 +321,14 @@ watch(
   gap: 12px;
   padding: 8px 16px;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .show-all-btn {
   padding: 8px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -364,11 +364,11 @@ watch(
   display: flex;
   gap: 20px;
   font-size: 13px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   font-weight: 500;
   padding: 8px 16px;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 

@@ -18,7 +18,7 @@
     </div>
 
     <div v-else class="records-container">
-      <div class="records-scroll" ref="scrollContainer">
+      <div class="records-scroll scrollbar-gradient" ref="scrollContainer">
         <!-- 临时记录 (置顶) -->
         <RecordItem
           v-if="temporaryRecord"
@@ -84,21 +84,21 @@ watch(() => props.records.length, async (newLength, oldLength) => {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   gap: 16px;
 }
 
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #e5e7eb;
+  border: 3px solid var(--color-border-medium);
   border-top: 3px solid #a855f7;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
 }
 
 .empty-icon {
-  color: #d1d5db;
+  color: var(--color-border-strong);
   opacity: 0.7;
 }
 
@@ -129,26 +129,4 @@ watch(() => props.records.length, async (newLength, oldLength) => {
   gap: 16px;
 }
 
-.records-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.records-scroll::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-}
-
-.records-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #a855f7, #3b82f6);
-  border-radius: 3px;
-}
-
-.records-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #9333ea, #2563eb);
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 </style>

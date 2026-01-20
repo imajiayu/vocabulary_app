@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
+import logging
+import math
 from backend.database.vocabulary_dao import (
     db_get_word_elapse_info,
     get_daily_review_loads_by_source,
 )
 from backend.config import LOW_EF_THRESHOLD, ReviewLoadLimits, UserConfig
 from backend.config import UserConfig as Config
-import math
+
+logger = logging.getLogger(__name__)
 
 
 # --- 平均停留时间计算（修正版） ---
@@ -366,8 +369,7 @@ def calculate_srs_parameters_with_load_balancing(
             )
         except Exception as e:
             # 如果负荷均衡失败，使用原始间隔
-            print(f"低强度单词负荷均衡失败，使用原始间隔: {e}")
-            pass
+            logger.warning(f"低强度单词负荷均衡失败，使用原始间隔: {e}")
 
     # 4. 对高强度单词应用向后搜索策略，避免峰值堆积
     else:
@@ -380,7 +382,6 @@ def calculate_srs_parameters_with_load_balancing(
             )
         except Exception as e:
             # 如果负荷均衡失败，使用原始间隔
-            print(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
-            pass
+            logger.warning(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
 
     return (repetition_new, interval_new, ease_factor_new) + basic_result[3:]

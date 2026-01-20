@@ -1,0 +1,42 @@
+{
+  "learning": {
+    "dailyReviewLimit": 300,
+    "dailySpellLimit": 200,
+    "maxPrepDays": 30,
+    "lapseQueueSize": 25,
+    "lapseMaxValue": 4,
+    "lapseInitialValue": 3,
+    "lapseFastExitEnabled": true,
+    "lapseConsecutiveThreshold": 4,
+    "defaultShuffle": true,
+    "lowEfExtraCount": 0
+  },
+  "management": {
+    "wordsLoadBatchSize": 200,
+    "definitionFetchThreads": 3
+  },
+  "sources": {
+    "customSources": ["IELTS", "GRE"]
+  },
+  "audio": {
+    "accent": "us",
+    "autoPlayOnWordChange": true,
+    "autoPlayAfterAnswer": true
+  },
+  "hotkeys": {
+    "reviewInitial": {
+      "remembered": "ArrowLeft",
+      "notRemembered": "ArrowRight",
+      "stopReview": "ArrowDown"
+    },
+    "reviewAfter": {
+      "wrong": "ArrowLeft",
+      "next": "ArrowRight"
+    },
+    "spelling": {
+      "playAudio": "ArrowLeft",
+      "forgot": "ArrowRight",
+      "next": "Enter"
+    }
+  }
+}

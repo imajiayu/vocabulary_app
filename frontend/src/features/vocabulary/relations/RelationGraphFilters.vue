@@ -65,7 +65,7 @@ function emitChange() {
   gap: 12px;
   padding: 8px 16px;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -90,7 +90,7 @@ function emitChange() {
   font-size: 13px;
   color: #475569;
   padding: 4px 8px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s;
   font-weight: normal;
 }

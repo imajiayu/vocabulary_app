@@ -165,7 +165,7 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
@@ -191,7 +191,7 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -207,7 +207,7 @@ onMounted(() => {
   /* 减少最大高度 */
   padding: 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   font-size: 14px;
   line-height: 1.5;
   color: #374151;
@@ -225,7 +225,7 @@ onMounted(() => {
 }
 
 .notes-input::placeholder {
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 /* 右侧面板 */
@@ -236,7 +236,7 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
@@ -262,10 +262,10 @@ onMounted(() => {
 
 .records-count {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   background: rgba(168, 85, 247, 0.1);
   padding: 4px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-weight: 500;
 }
 
@@ -275,37 +275,8 @@ onMounted(() => {
   overflow: auto;
 }
 
-/* 移动端适配 */
-@media (max-width: 1024px) {
-  .question-practice {
-    flex-direction: column;
-    padding: 8px; /* 减少padding */
-    gap: 12px; /* 减少gap */
-    height: auto; /* 移动端使用自动高度 */
-    min-height: calc(100vh - 120px); /* 减去顶部空间 */
-  }
-
-  .left-panel {
-    width: 100%;
-    flex-shrink: 1;
-  }
-
-  .notes-container {
-    padding: 16px;
-  }
-
-  .notes-input {
-    min-height: 80px;
-    max-height: 120px;
-  }
-
-  .right-panel {
-    flex: 1;
-    min-height: 400px;
-  }
-}
-
-@media (max-width: 768px) {
+/* 手机端适配 */
+@media (max-width: 480px) {
   .question-practice {
     padding: 4px; /* 进一步减少padding */
     gap: 8px; /* 进一步减少gap */
@@ -315,7 +286,7 @@ onMounted(() => {
   .question-header,
   .notes-container {
     padding: 16px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
   }
 
   .question-title {
@@ -350,7 +321,7 @@ onMounted(() => {
   .question-header,
   .notes-container {
     padding: 12px; /* 小屏幕减少内部padding */
-    border-radius: 10px;
+    border-radius: var(--radius-md);
   }
 }
 </style>

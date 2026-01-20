@@ -2,7 +2,10 @@
 """
 进度管理服务层 - 在vocabulary API和progress DAO之间的中间层
 """
+import logging
 from flask import session
+
+logger = logging.getLogger(__name__)
 from backend.database.progress_dao import (
     db_save_progress,
     db_get_progress,
@@ -55,7 +58,7 @@ def save_word_ids_snapshot(mode, all_ids, shuffle_enabled, limit):
         )
         return success
     except Exception as e:
-        print(f"Failed to save progress snapshot: {e}")
+        logger.error(f"Failed to save progress snapshot: {e}")
         return False
 
 
@@ -76,7 +79,7 @@ def update_current_progress_index(current_index):
         success = db_update_progress_index(current_index)
         return success
     except Exception as e:
-        print(f"Failed to update progress index: {e}")
+        logger.error(f"Failed to update progress index: {e}")
         return False
 
 
@@ -104,7 +107,7 @@ def try_restore_from_progress():
 
         return True, word_ids, mode
     except Exception as e:
-        print(f"Failed to restore progress: {e}")
+        logger.error(f"Failed to restore progress: {e}")
         return False, [], ""
 
 
@@ -132,7 +135,7 @@ def get_progress_info():
             "progress": progress,
         }
     except Exception as e:
-        print(f"Failed to get progress info: {e}")
+        logger.error(f"Failed to get progress info: {e}")
         return {"enabled": True, "has_progress": False, "error": str(e)}
 
 
@@ -152,11 +155,11 @@ def clear_progress():
         success = db_clear_progress()
 
         if success:
-            print("Progress cleared")
+            logger.info("Progress cleared")
 
         return success
     except Exception as e:
-        print(f"Failed to clear progress: {e}")
+        logger.error(f"Failed to clear progress: {e}")
         return False
 
 
@@ -203,7 +206,7 @@ def update_lapse_progress_after_word_update(word_id, updated_word):
             return True
 
     except Exception as e:
-        print(f"Failed to update lapse progress: {e}")
+        logger.error(f"Failed to update lapse progress: {e}")
         return False
 
 
@@ -221,13 +224,13 @@ def get_progress_restore_data():
         success, data = db_get_progress_restore_data()
 
         if success:
-            print(
+            logger.info(
                 f"Progress restore data retrieved: mode={data.get('mode')}, word_count={len(data.get('word_ids', []))}"
             )
 
         return success, data
     except Exception as e:
-        print(f"Failed to get progress restore data: {e}")
+        logger.error(f"Failed to get progress restore data: {e}")
         return False, {}
 
 

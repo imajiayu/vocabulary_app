@@ -95,28 +95,28 @@ const formatTime = (seconds: number) => {
 
 <style scoped>
 .record-content {
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--color-bg-glass-light);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  padding: 16px;
+  border: 1px solid var(--color-bg-glass);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
   position: relative;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-md);
 }
 
 .record-content.practicing {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(168, 85, 247, 0.3);
-  box-shadow: 0 15px 35px rgba(168, 85, 247, 0.12);
+  background: var(--color-bg-glass-strong);
+  border: 2px solid var(--color-purple-vivid-light);
+  box-shadow: 0 15px 35px var(--color-purple-vivid-bg);
 }
 
 .record-content:not(.practicing):hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--color-bg-glass);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 .user-section {
@@ -127,10 +127,10 @@ const formatTime = (seconds: number) => {
 
 .content-wrapper {
   flex: 1;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(147, 197, 253, 0.04));
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  border-radius: 10px;
-  padding: 12px;
+  background: linear-gradient(135deg, var(--color-blue-bg), rgba(147, 197, 253, 0.04));
+  border: 1px solid var(--color-blue-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
 }
 
 .status-section {
@@ -143,12 +143,12 @@ const formatTime = (seconds: number) => {
   position: relative;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .pulse-ring {
@@ -157,18 +157,18 @@ const formatTime = (seconds: number) => {
   left: -2px;
   right: -2px;
   bottom: -2px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: pulse-ring 2s ease-in-out infinite;
 }
 
 .status-indicator.recording .pulse-ring {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--color-recording-light);
   animation: pulse-ring 1s ease-in-out infinite;
 }
 
 .status-indicator.transcribing .pulse-ring,
 .status-indicator.analyzing .pulse-ring {
-  background: rgba(245, 158, 11, 0.2);
+  background: var(--color-processing-light);
 }
 
 .status-content {
@@ -181,27 +181,27 @@ const formatTime = (seconds: number) => {
 .status-icon {
   width: 16px;
   height: 16px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-text-inverse);
 }
 
 .status-indicator.recording .status-icon {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, var(--color-recording), var(--color-recording-dark));
 }
 
 .status-indicator.transcribing .status-icon,
 .status-indicator.analyzing .status-icon {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, var(--color-processing), var(--color-processing-dark));
   animation: rotate 2s linear infinite;
 }
 
 .status-time {
-  font-size: 10px;
-  font-weight: 600;
-  color: #ef4444;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-recording);
   min-width: 30px;
   text-align: center;
 }
@@ -213,18 +213,18 @@ const formatTime = (seconds: number) => {
 .answer-text, .feedback-text {
   margin: 0;
   line-height: 1.4;
-  color: #374151;
-  font-size: 13px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
 }
 
 .ai-section {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(196, 181, 253, 0.04));
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  border-radius: 10px;
-  padding: 12px;
+  background: linear-gradient(135deg, var(--color-purple-vivid-bg), rgba(196, 181, 253, 0.04));
+  border: 1px solid var(--color-purple-vivid-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
 }
 
 .feedback-content {
@@ -237,11 +237,11 @@ const formatTime = (seconds: number) => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-  color: white;
+  background: linear-gradient(135deg, var(--color-purple-vivid), var(--color-purple-vivid-dark));
+  color: var(--color-text-inverse);
   padding: 3px 10px;
-  border-radius: 16px;
-  font-size: 11px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
   font-weight: 600;
   align-self: flex-start;
 }

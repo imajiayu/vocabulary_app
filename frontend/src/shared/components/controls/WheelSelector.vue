@@ -123,7 +123,7 @@ onMounted(() => {
 
 <template>
   <div class="wheel" @click.stop>
-    <div class="wheel-list" ref="wheelRef" @scroll="onWheelScroll">
+    <div class="wheel-list scrollbar-hidden" ref="wheelRef" @scroll="onWheelScroll">
       <!-- 添加顶部和底部的占位空间，确保第一个和最后一个元素能滚动到中心 -->
       <div class="wheel-spacer"></div>
       <div class="wheel-item" v-for="value in validValues" :key="value" :class="{ active: value === modelValue }">
@@ -145,7 +145,7 @@ onMounted(() => {
   width: 60px;
   height: 80px;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(146, 84, 222, 0.15);
@@ -155,15 +155,6 @@ onMounted(() => {
   height: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* IE 10+ */
-}
-
-.wheel-list::-webkit-scrollbar {
-  display: none;
-  /* Chrome, Safari, Opera */
 }
 
 /* 顶部和底部占位空间，高度为容器高度的一半减去一个item高度的一半 */

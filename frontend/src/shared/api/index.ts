@@ -63,8 +63,6 @@ export type {
   GraphEdge,
   GraphData,
   RelationStats,
-  GenerateRelationsPayload,
-  GenerateRelationsResponse,
   ClearRelationsPayload,
   ClearRelationsResponse,
   AddRelationPayload,

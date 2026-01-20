@@ -235,7 +235,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
   width: 100%;
   box-sizing: border-box;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border-strong);
   border-radius: 0.5rem;
   transition: all 0.2s;
   font-size: 16px; /* 防止移动端自动缩放 */
@@ -246,7 +246,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 
 .field-input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -264,7 +264,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 
 .phonetic-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   width: 3rem;
   flex-shrink: 0;
 }
@@ -297,7 +297,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.75rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border-medium);
   border-radius: 0.5rem;
 }
 
@@ -333,9 +333,9 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 
 .add-button {
   padding: 0.5rem 1rem;
-  border: 1px dashed #d1d5db;
+  border: 1px dashed var(--color-border-strong);
   background: transparent;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -350,12 +350,12 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 }
 
 .add-button:hover {
-  border-color: #3b82f6;
-  color: #3b82f6;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* 移动端响应式适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .field-group {
     margin-bottom: 1.25rem;
   }

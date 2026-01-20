@@ -149,7 +149,7 @@ const handleSave = async () => {
 
 .status-badge {
   padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -200,16 +200,16 @@ const handleSave = async () => {
 }
 
 .save-btn {
-  background-color: #10b981;
+  background-color: var(--color-success);
   color: white;
 }
 
 .save-btn:hover {
-  background-color: #059669;
+  background-color: var(--color-success-hover);
 }
 
 .cancel-btn {
-  background-color: #6b7280;
+  background-color: var(--color-text-secondary);
   color: white;
 }
 
@@ -219,16 +219,16 @@ const handleSave = async () => {
 
 /* 各按钮配色 */
 .master-btn {
-  background-color: #10b981;
+  background-color: var(--color-success);
   color: white;
 }
 
 .master-btn:hover {
-  background-color: #059669;
+  background-color: var(--color-success-hover);
 }
 
 .restore-btn {
-  background-color: #6b7280;
+  background-color: var(--color-text-secondary);
   color: white;
 }
 
@@ -237,7 +237,7 @@ const handleSave = async () => {
 }
 
 .reset-btn {
-  background-color: #f59e0b;
+  background-color: var(--color-edit);
   color: white;
 }
 
@@ -246,12 +246,12 @@ const handleSave = async () => {
 }
 
 .edit-btn {
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
   color: white;
 }
 
 .edit-btn:hover {
-  background-color: #2563eb;
+  background-color: var(--color-primary-hover);
 }
 
 .delete-btn {
@@ -264,7 +264,7 @@ const handleSave = async () => {
 }
 
 /* 移动端布局优化 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .actions-sidebar {
     gap: 1rem;
   }

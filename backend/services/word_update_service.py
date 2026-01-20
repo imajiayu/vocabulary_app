@@ -64,7 +64,7 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         lapse,
         word_source,
         today,  # 使用今天的日期作为基准
-        UserConfig.MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
+        UserConfig().MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
     )
 
     # 5️⃣ 计算下次复习日期（从今天开始计算）
@@ -175,7 +175,7 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
         word_source,
         today,
         current_strength,
-        max_prep_days=UserConfig.MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
+        max_prep_days=UserConfig().MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
     )
 
     # 计算新的强度 (ensure current_strength is not None, and cap at 5.0)

@@ -35,7 +35,7 @@ const formattedDefinition = computed(() => props.word.definition.definitions?.jo
   position: fixed;
   z-index: 50;
   background: white;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border-medium);
   border-radius: 0.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   padding: 0.5rem 0.75rem;
@@ -49,7 +49,7 @@ const formattedDefinition = computed(() => props.word.definition.definitions?.jo
 
 .tooltip-word {
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text-primary);
 }
 
 .tooltip-definition {

@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar-container">
     <div class="word-list">
-      <div class="word-list-inner" ref="wordListInnerRef">
+      <div class="word-list-inner scrollbar-light" ref="wordListInnerRef">
         <transition-group name="word-list" tag="div">
           <div
             v-for="(w, index) in displayedWords"
@@ -267,33 +267,7 @@ const getWordColor = (index: number) => {
 .word-list-inner {
   flex: 1;
   overflow-y: auto;
-  /* 内层允许垂直滚动 */
-  scrollbar-width: thin;
-  /* Firefox 显示细滚动条 */
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-  /* Firefox 滚动条颜色 */
   padding-right: 8px;
-  /* 为滚动条留出空间 */
-  /* 移除 scroll-behavior: smooth 避免与JS滚动冲突 */
-}
-
-/* 自定义滚动条样式 */
-.word-list-inner::-webkit-scrollbar {
-  width: 6px;
-}
-
-.word-list-inner::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-.word-list-inner::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
-
-.word-list-inner::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
 }
 
 /* 每个单词元素 */
@@ -307,7 +281,7 @@ const getWordColor = (index: number) => {
   /* 确保最小高度 */
   display: flex;
   align-items: center;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* hover效果 */
@@ -334,7 +308,7 @@ const getWordColor = (index: number) => {
 }
 
 /* 移动端适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .sidebar-container {
     left: auto;
     right: 0;

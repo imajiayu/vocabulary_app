@@ -179,7 +179,7 @@ onUnmounted(() => {
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   backdrop-filter: blur(5px);
 }
 
@@ -188,9 +188,9 @@ onUnmounted(() => {
   width: 32px;
   height: 32px;
   border: none;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
   color: white;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,7 +204,7 @@ onUnmounted(() => {
 }
 
 .play-btn:disabled {
-  background: #d1d5db;
+  background: var(--color-border-strong);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -220,7 +220,7 @@ onUnmounted(() => {
 
 .duration {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -247,7 +247,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   bottom: 0;
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, var(--color-primary), #1d4ed8);
   transition: width 0.1s ease;
 }
 

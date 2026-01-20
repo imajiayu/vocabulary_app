@@ -82,7 +82,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
-import type { Word } from '@/shared/types'
+import type { Word, SpellingMetrics } from '@/shared/types'
+
+// 来自 ReviewCard/SpellingCard 的结果事件类型
+interface CardResultEvent {
+  remembered: boolean
+  elapsedTime?: number
+  spellingData?: SpellingMetrics
+}
 // WebSocket 已移除，单词更新通过直接刷新数据实现
 import { clearPreloadCache } from '@/shared/utils/playWordAudio'
 import { initChatHistoryStorage } from '@/shared/utils/chatHistoryStorage'
@@ -308,7 +315,7 @@ const initializeFromRoute = async () => {
   }
 }
 
-const handleResult = async (result: any) => {
+const handleResult = async (result: CardResultEvent) => {
   if (!currentWord.value) return
 
   try {
@@ -393,7 +400,7 @@ onUnmounted(() => {
 }
 
 /* 桌面端使用flex布局避免滚动条 */
-@media (min-width: 769px) {
+@media (min-width: 481px) {
   .app-container {
     height: 100vh;
     display: flex;
@@ -449,12 +456,12 @@ onUnmounted(() => {
 
 /* 信息来源（蓝色） */
 .info-source {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 /* 信息模式（绿色） */
 .info-mode {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 /* 信息模式分隔符 */
@@ -466,7 +473,7 @@ onUnmounted(() => {
 
 /* 信息顺序（橙色） */
 .info-shuffle {
-  color: #f59e0b;
+  color: var(--color-edit);
 }
 
 /* 信息顺序分隔符 */
@@ -530,7 +537,7 @@ onUnmounted(() => {
   color: white;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
@@ -583,41 +590,38 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
-/* 移动端适配 - 固定高度布局防止不必要滚动 */
-@media (max-width: 768px) {
-  /* 移动端使用固定高度布局 */
+/* 手机端适配 - 固定高度布局防止不必要滚动 */
+@media (max-width: 480px) {
   .app-container {
     height: 100vh !important;
-    height: 100dvh !important; /* 动态视口高度，更好地处理移动端地址栏 */
+    height: 100dvh !important;
     display: flex !important;
     flex-direction: column !important;
-    overflow: hidden !important; /* 禁止app-container本身滚动 */
+    overflow: hidden !important;
     background-size: 100% 100vh !important;
-    overscroll-behavior: none; /* 禁止弹性滚动 */
+    overscroll-behavior: none;
   }
 
   .app-container.with-topbar {
-    padding-top: 0 !important; /* 移除padding，使用flex布局 */
+    padding-top: 0 !important;
   }
 
   .main-content {
-    margin-top: 48px !important; /* TopBar高度 */
+    margin-top: 48px !important;
     flex: 1 !important;
-    overflow-y: auto !important; /* 让main-content成为滚动容器 */
-    min-height: 0 !important; /* 允许flex子项收缩 */
-    overscroll-behavior: contain; /* 防止滚动链传播 */
+    overflow-y: auto !important;
+    min-height: 0 !important;
+    overscroll-behavior: contain;
   }
 
   .progress-text {
     font-size: 11px;
   }
 
-  /* 移动端中心信息容器 */
   .center-info-container {
     gap: 6px;
   }
 
-  /* 移动端复习信息文本 */
   .review-info-text {
     font-size: 12px;
     gap: 4px;
@@ -629,7 +633,6 @@ onUnmounted(() => {
     font-size: 0.8em;
   }
 
-  /* 移动端按钮样式 */
   .home-action-button {
     padding: 12px 28px;
     font-size: 15px;

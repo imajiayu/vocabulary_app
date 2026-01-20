@@ -86,7 +86,7 @@ const remainingCount = computed(() => {
   margin-bottom: 1.5rem;
   background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
   border: 1px solid rgba(34, 197, 94, 0.2);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -129,12 +129,12 @@ const remainingCount = computed(() => {
 
 /* 进度通知高亮元素 */
 .progress-source {
-  color: #3b82f6;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .progress-mode {
-  color: #10b981;
+  color: var(--color-success);
   font-weight: 600;
 }
 
@@ -145,7 +145,7 @@ const remainingCount = computed(() => {
 }
 
 .progress-shuffle {
-  color: #f59e0b;
+  color: var(--color-edit);
   font-weight: 600;
   margin-right: 0.5rem;
 }
@@ -167,7 +167,7 @@ const remainingCount = computed(() => {
 }
 
 .progress-remaining {
-  color: #ef4444;
+  color: var(--color-delete);
   font-weight: 600;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
 }
@@ -178,7 +178,7 @@ const remainingCount = computed(() => {
   color: var(--color-text-tertiary);
   cursor: pointer;
   padding: 0.25rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   flex-shrink: 0;
   transition: all 0.2s ease;
   font-size: 1rem;
@@ -196,7 +196,7 @@ const remainingCount = computed(() => {
 }
 
 /* 移动端通知条适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .progress-notification {
     margin-bottom: 1.25rem;
   }

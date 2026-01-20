@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import TopBarDropdown, { type DropdownItem } from './TopBarDropdown.vue'
 
 interface Props {
   background?: string
@@ -38,7 +39,6 @@ const emit = defineEmits<{
 
 const router = useRouter()
 const isNavigating = ref(false)
-const isDropdownOpen = ref(false)
 const isMobile = ref(false)
 
 const computedHeight = computed(() => {
@@ -50,34 +50,44 @@ const checkMobile = () => {
   isMobile.value = window.innerWidth <= 768
 }
 
-// 切换下拉菜单
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value
-}
-
-// 处理下拉菜单动作
-const handleDropdownAction = (action: () => void) => {
-  isDropdownOpen.value = false
-  action()
-}
-
-// 点击外部关闭下拉菜单
-const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement
-  if (!target.closest('.mobile-dropdown')) {
-    isDropdownOpen.value = false
+// 下拉菜单项
+const dropdownItems = computed<DropdownItem[]>(() => {
+  const items: DropdownItem[] = []
+  if (props.showHomeButton) {
+    items.push({
+      key: 'home',
+      label: props.homeButtonText,
+      icon: '🏠',
+      disabled: isNavigating.value,
+      action: goHome
+    })
   }
-}
+  if (props.showManagementButton) {
+    items.push({
+      key: 'management',
+      label: '管理单词',
+      icon: '➕',
+      action: goManagement
+    })
+  }
+  if (props.showStatsButton) {
+    items.push({
+      key: 'stats',
+      label: '查看统计',
+      icon: '📈',
+      action: goStats
+    })
+  }
+  return items
+})
 
 onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
-  document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
-  document.removeEventListener('click', handleClickOutside)
 })
 
 // 导航方法
@@ -164,46 +174,10 @@ const goStats = () => {
 
       <!-- 移动端：下拉菜单 -->
       <template v-else>
-        <div class="mobile-dropdown" v-if="props.showHomeButton || props.showManagementButton || props.showStatsButton">
-          <button
-            class="dropdown-toggle"
-            @click="toggleDropdown"
-            :class="{ active: isDropdownOpen }"
-          >
-            <span class="hamburger-icon">
-              <span class="line"></span>
-              <span class="line"></span>
-              <span class="line"></span>
-            </span>
-          </button>
-          <div v-if="isDropdownOpen" class="dropdown-menu">
-            <button
-              v-if="props.showHomeButton"
-              @click="handleDropdownAction(goHome)"
-              class="dropdown-item"
-              :disabled="isNavigating"
-            >
-              <span class="dropdown-icon">🏠</span>
-              <span>{{ props.homeButtonText }}</span>
-            </button>
-            <button
-              v-if="props.showManagementButton"
-              @click="handleDropdownAction(goManagement)"
-              class="dropdown-item"
-            >
-              <span class="dropdown-icon">➕</span>
-              <span>管理单词</span>
-            </button>
-            <button
-              v-if="props.showStatsButton"
-              @click="handleDropdownAction(goStats)"
-              class="dropdown-item"
-            >
-              <span class="dropdown-icon">📈</span>
-              <span>查看统计</span>
-            </button>
-          </div>
-        </div>
+        <TopBarDropdown
+          v-if="dropdownItems.length > 0"
+          :items="dropdownItems"
+        />
       </template>
 
       <slot name="left" />
@@ -281,7 +255,7 @@ const goStats = () => {
   font: inherit;
   cursor: pointer;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   display: inline-flex;
@@ -306,7 +280,7 @@ const goStats = () => {
   font-size: 16px;
   cursor: pointer;
   padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -360,7 +334,7 @@ const goStats = () => {
 .loading-dot {
   width: 4px;
   height: 4px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   background: currentColor;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -423,7 +397,7 @@ const goStats = () => {
 
 :deep(.button) {
   padding: 4px 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border: 1px solid #d9d9d9;
   background: #fff;
   color: #262626;
@@ -457,34 +431,7 @@ const goStats = () => {
   border-color: #4096ff;
 }
 
-/* 移动端工具类样式适配 */
-@media (max-width: 768px) {
-  :deep(.nav-link) {
-    font-size: 14px;
-    gap: 3px;
-  }
-
-  :deep(.title) {
-    font-size: 15px;
-  }
-
-  :deep(.subtitle) {
-    font-size: 13px;
-  }
-
-  :deep(.button) {
-    padding: 6px 10px;
-    font-size: 13px;
-    min-height: 36px;
-  }
-
-  /* 右侧进度文本优化 */
-  :deep(.progress-text) {
-    font-size: 12px;
-    white-space: nowrap;
-  }
-}
-
+/* 手机端工具类样式适配 */
 @media (max-width: 480px) {
   :deep(.nav-link) {
     font-size: 13px;
@@ -505,9 +452,9 @@ const goStats = () => {
     min-height: 32px;
   }
 
-  /* 小屏幕进度文本更紧凑 */
   :deep(.progress-text) {
     font-size: 11px;
+    white-space: nowrap;
   }
 }
 
@@ -524,172 +471,13 @@ const goStats = () => {
   }
 }
 
-/* 移动端下拉菜单样式 */
-.mobile-dropdown {
-  position: relative;
-}
-
-.dropdown-toggle {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #666;
-  font-size: 18px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  min-height: 32px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.dropdown-toggle.active {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: rgba(102, 126, 234, 0.3);
-  color: #667eea;
-}
-
-.hamburger-icon {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 3px;
-  width: 18px;
-  height: 18px;
-}
-
-.hamburger-icon .line {
-  display: block;
-  width: 100%;
-  height: 2px;
-  background-color: currentColor;
-  border-radius: 1px;
-  transition: all 0.2s ease;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  min-width: 140px;
-  z-index: 10001;
-  overflow: hidden;
-  animation: dropdownSlideIn 0.2s ease;
-}
-
-@keyframes dropdownSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.dropdown-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border: none;
-  background: white;
-  color: #333;
-  font-size: 14px;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.dropdown-item:hover {
-  background: rgba(102, 126, 234, 0.05);
-}
-
-.dropdown-item:active {
-  background: rgba(102, 126, 234, 0.1);
-}
-
-.dropdown-item:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.dropdown-icon {
-  font-size: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
-  .top-bar {
-    padding: 0 12px;
-    height: auto !important;
-    min-height: 44px; /* iOS 最小触摸目标 */
-    grid-template-columns: 1fr 1fr 1fr; /* 保持三等分确保居中 */
-  }
-
-  .home-button {
-    padding: 6px 10px;
-    font-size: 12px;
-    min-width: 68px;
-    min-height: 32px; /* 确保触摸目标足够大 */
-  }
-
-  .icon-button {
-    padding: 6px 8px;
-    font-size: 15px;
-    min-width: 32px;
-    min-height: 32px;
-  }
-
-  /* 移动端特定的触摸反馈 */
-  .home-button:active {
-    background: linear-gradient(135deg, #5a6fd8 0%, #694b94 100%);
-    transform: scale(0.98);
-    box-shadow: 0 1px 4px rgba(102, 126, 234, 0.2);
-  }
-
-  .icon-button:active {
-    transform: scale(0.95);
-  }
-
-  .top-bar-section.left,
-  .top-bar-section.center,
-  .top-bar-section.right {
-    gap: 4px; /* 减少内部元素间距 */
-  }
-
-  /* 移动端各区域保持基本布局不变 */
-  .top-bar-section.center {
-    justify-content: center; /* 确保中间内容居中 */
-  }
-}
-
-/* 小屏手机适配 */
+/* 手机端适配 */
 @media (max-width: 480px) {
   .top-bar {
     padding: 0 8px;
-    min-height: 48px; /* 更大的触摸目标 */
+    height: auto !important;
+    min-height: 48px;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
   .home-button {
@@ -706,60 +494,24 @@ const goStats = () => {
     min-height: 30px;
   }
 
+  .home-button:active {
+    background: linear-gradient(135deg, #5a6fd8 0%, #694b94 100%);
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(102, 126, 234, 0.2);
+  }
+
+  .icon-button:active {
+    transform: scale(0.95);
+  }
+
   .top-bar-section.left,
   .top-bar-section.center,
   .top-bar-section.right {
     gap: 4px;
   }
 
-  /* 小屏幕上保持居中布局 */
   .top-bar-section.center {
     justify-content: center;
-  }
-}
-
-/* 超小屏幕适配 */
-@media (max-width: 360px) {
-  .top-bar {
-    padding: 0 6px;
-  }
-
-  .home-button {
-    padding: 6px 10px;
-    font-size: 11px;
-    min-width: 64px;
-  }
-
-  .top-bar-section.left,
-  .top-bar-section.center,
-  .top-bar-section.right {
-    gap: 2px;
-  }
-}
-
-/* 平板适配 (769px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .top-bar {
-    padding: 0 20px;
-  }
-
-  .home-button {
-    padding: 6px 14px;
-    font-size: 13px;
-    min-width: 82px;
-  }
-}
-
-/* 大屏幕适配 (1025px+) */
-@media (min-width: 1025px) {
-  .top-bar {
-    padding: 0 24px;
-  }
-
-  .home-button {
-    padding: 6px 12px;
-    font-size: 13px;
-    min-width: 80px;
   }
 }
 

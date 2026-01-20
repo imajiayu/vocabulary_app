@@ -1,3 +1,5 @@
 export { useSpeakingData } from './useSpeakingData'
 export { useSpeakingImport } from './useSpeakingImport'
+export { createSpeakingContext, useSpeakingContext } from './useSpeakingContext'
+export type { SpeakingContext, CreateSpeakingContextOptions } from './useSpeakingContext'
 export type { ParsedTopic } from './useSpeakingImport'

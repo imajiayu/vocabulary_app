@@ -1,30 +1,39 @@
 import { ref } from 'vue'
 import { useSettings } from './useSettings'
 import { logger } from '@/shared/utils/logger'
+import type { UserSettings } from '@/shared/types'
 
 // For WordIndex - can read and write to backend session
 export function useShuffleSelection() {
   const shuffle = ref<boolean>(false)
   const loading = ref(false)
   const error = ref<string | null>(null)
-  const { updateSettings } = useSettings()
+  const { settings, updateSettings } = useSettings()
 
   const setShuffle = async (newShuffle: boolean) => {
     try {
       loading.value = true
       error.value = null
 
-      // 使用全局设置管理器更新（自动更新缓存）
+      // 获取当前设置，确保有完整的 learning 对象
+      const currentLearning = settings.value?.learning
+      if (!currentLearning) {
+        throw new Error('Settings not loaded')
+      }
+
+      // 使用全局设置管理器更新
       const updatedSettings = await updateSettings({
         learning: {
+          ...currentLearning,
           defaultShuffle: newShuffle
         }
-      } as any)
+      } as Partial<UserSettings>)
       shuffle.value = updatedSettings.learning.defaultShuffle
 
       return { shuffle: newShuffle }
-    } catch (e: any) {
-      error.value = e?.message || String(e)
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e)
+      error.value = message
       logger.error('Failed to set shuffle:', e)
       throw e
     } finally {

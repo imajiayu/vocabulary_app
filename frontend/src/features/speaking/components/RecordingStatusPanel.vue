@@ -92,7 +92,7 @@ const secondaryText = computed(() => {
   position: relative;
   width: 56px;
   height: 56px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,7 +107,7 @@ const secondaryText = computed(() => {
   left: -3px;
   right: -3px;
   bottom: -3px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: pulse-ring 2s ease-in-out infinite;
 }
 
@@ -136,7 +136,7 @@ const secondaryText = computed(() => {
 .status-icon {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,12 +144,12 @@ const secondaryText = computed(() => {
 }
 
 .status-indicator.recording .status-icon {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, var(--color-delete), #dc2626);
 }
 
 .status-indicator.transcribing .status-icon,
 .status-indicator.analyzing .status-icon {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, var(--color-edit), #d97706);
   animation: rotate 2s linear infinite;
 }
 
@@ -160,7 +160,7 @@ const secondaryText = computed(() => {
 .status-time {
   font-size: 10px;
   font-weight: 600;
-  color: #ef4444;
+  color: var(--color-delete);
   min-width: 30px;
   text-align: center;
 }
@@ -179,7 +179,7 @@ const secondaryText = computed(() => {
 
 .secondary-text {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   line-height: 1.3;
 }
 

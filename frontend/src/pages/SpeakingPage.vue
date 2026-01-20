@@ -98,18 +98,10 @@ onUnmounted(() => {
   background-clip: text;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
+/* fadeIn animation defined in animations.css */
 
 /* 移动端响应式适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .speaking-index {
     padding: 0 1rem;
     align-items: flex-start;

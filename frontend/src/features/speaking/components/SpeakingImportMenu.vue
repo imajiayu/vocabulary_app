@@ -41,11 +41,11 @@ const emit = defineEmits<{
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 0.5rem;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: var(--spacing-sm);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-default);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
   z-index: 1000;
   min-width: 280px;
@@ -55,39 +55,39 @@ const emit = defineEmits<{
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
   padding: 0.75rem 1rem;
   border: none;
-  background: white;
+  background: var(--color-bg-primary);
   cursor: pointer;
   transition: background 0.2s ease;
-  font-size: 0.875rem;
-  color: #374151;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
 }
 
 .menu-item:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--color-purple-light);
 }
 
 .menu-icon {
   width: 1rem;
   height: 1rem;
-  color: #667eea;
+  color: var(--color-purple);
 }
 
 .menu-hint {
   padding: 0.75rem 1rem;
-  background: #f8fafc;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  font-size: 0.75rem;
-  color: #64748b;
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border-light);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
 .hint-title {
-  font-weight: 600;
-  color: #475569;
-  margin-bottom: 0.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
 .hint-item {
@@ -118,7 +118,7 @@ const emit = defineEmits<{
   color: #334155;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .import-menu {
     right: 0;
     left: auto;

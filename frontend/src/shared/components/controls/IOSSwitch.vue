@@ -68,7 +68,7 @@ const handleChange = (event: Event) => {
   width: 48px;
   height: 28px;
   background: #cbd5e1;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   transition: background .2s ease;
   /* 防止点击时出现边框 */
   outline: none;
@@ -86,7 +86,7 @@ const handleChange = (event: Event) => {
   width: 22px;
   height: 22px;
   background: #fff;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
   transition: transform .2s ease;
 }

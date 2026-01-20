@@ -80,7 +80,7 @@ function handleAddRelation() {
   position: fixed;
   z-index: 9999;
   background: white;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   padding: 4px;
   min-width: 150px;
@@ -92,7 +92,7 @@ function handleAddRelation() {
   gap: 8px;
   padding: 8px 12px;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s;
   font-size: 14px;
   color: #0f172a;

@@ -223,7 +223,7 @@ onMounted(async () => {
 .form-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--color-text-primary);
   margin: 0;
   line-height: 1.2;
   display: flex;
@@ -255,7 +255,7 @@ onMounted(async () => {
   transition: all 0.3s ease-in-out;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  color: #6b7280;
+  color: var(--color-text-secondary);
   max-width: 100%;
 }
 
@@ -275,26 +275,26 @@ onMounted(async () => {
 .status-dot {
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: 50%;
-  background-color: #6b7280;
+  border-radius: var(--radius-full);
+  background-color: var(--color-text-secondary);
   margin-top: 0.25rem;
   flex-shrink: 0;
 }
 
 .message-success {
-  color: #16a34a;
+  color: var(--color-success);
 }
 
 .status-dot-success {
-  background-color: #16a34a;
+  background-color: var(--color-success);
 }
 
 .message-error {
-  color: #ef4444;
+  color: var(--color-delete);
 }
 
 .status-dot-error {
-  background-color: #ef4444;
+  background-color: var(--color-delete);
 }
 
 .input-group {
@@ -316,7 +316,7 @@ onMounted(async () => {
   width: 100%;
   box-sizing: border-box;
   padding: 0.75rem 2.5rem 0.75rem 1rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border-medium);
   border-radius: 0.5rem;
   transition: all 0.2s;
   height: 100%;
@@ -329,17 +329,17 @@ onMounted(async () => {
 .word-input:focus {
   outline: none;
   /* 关键改动：将 'ring' 替换为 'box-shadow' */
-  box-shadow: 0 0 0 2px #3b82f6;
+  box-shadow: 0 0 0 2px var(--color-primary);
   border-color: transparent;
 }
 
 .word-input:disabled {
-  background-color: #f9fafb;
+  background-color: var(--color-bg-secondary);
   cursor: not-allowed;
 }
 
 .submit-button {
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -360,11 +360,11 @@ onMounted(async () => {
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #2563eb;
+  background-color: var(--color-primary-hover);
 }
 
 .submit-button:disabled {
-  background-color: #d1d5db;
+  background-color: var(--color-border-strong);
   cursor: not-allowed;
 }
 
@@ -375,7 +375,7 @@ onMounted(async () => {
 }
 
 .batch-button {
-  background-color: #8b5cf6;
+  background-color: var(--color-purple-vivid);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -396,11 +396,11 @@ onMounted(async () => {
 }
 
 .batch-button:hover:not(:disabled) {
-  background-color: #7c3aed;
+  background-color: var(--color-purple-vivid-dark);
 }
 
 .batch-button:disabled {
-  background-color: #d1d5db;
+  background-color: var(--color-border-strong);
   cursor: not-allowed;
 }
 
@@ -409,7 +409,7 @@ onMounted(async () => {
   bottom: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%);
-  background-color: #1f2937;
+  background-color: var(--color-text-primary);
   color: white;
   padding: 0.5rem 0.75rem;
   border-radius: 0.375rem;
@@ -430,7 +430,7 @@ onMounted(async () => {
   left: 50%;
   transform: translateX(-50%);
   border: 0.25rem solid transparent;
-  border-top-color: #1f2937;
+  border-top-color: var(--color-text-primary);
 }
 
 .batch-button-wrapper:hover .batch-tooltip {
@@ -462,7 +462,7 @@ onMounted(async () => {
   width: 100%;
   box-sizing: border-box;
   padding: 0.75rem 2.5rem 0.75rem 1rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border-medium);
   border-radius: 0.5rem;
   transition: all 0.2s;
   height: 100%;
@@ -474,12 +474,12 @@ onMounted(async () => {
 
 .lookup-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #10b981;
+  box-shadow: 0 0 0 2px var(--color-success);
   border-color: transparent;
 }
 
 .lookup-button {
-  background-color: #10b981;
+  background-color: var(--color-success);
   color: white;
   padding: 0.75rem;
   border-radius: 0.5rem;
@@ -500,11 +500,11 @@ onMounted(async () => {
 }
 
 .lookup-button:hover:not(:disabled) {
-  background-color: #059669;
+  background-color: var(--color-success-hover);
 }
 
 .lookup-button:disabled {
-  background-color: #d1d5db;
+  background-color: var(--color-border-strong);
   cursor: not-allowed;
 }
 
@@ -515,11 +515,11 @@ onMounted(async () => {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 1rem;
   width: 1.25rem;
   height: 1.25rem;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -533,8 +533,8 @@ onMounted(async () => {
 }
 
 .clear-button:hover {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
 }
 
 .lookup-result-wrapper {
@@ -568,8 +568,8 @@ onMounted(async () => {
 }
 
 .lookup-result {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-medium);
   border-radius: 0.5rem;
   padding: 1rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -581,7 +581,7 @@ onMounted(async () => {
   background: none;
   border: none;
   font-size: 1.25rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 0.25rem;
   min-width: 2rem;
@@ -591,7 +591,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   transition: all 0.2s ease;
   /* 移动端触摸优化 */
   touch-action: manipulation;
@@ -600,17 +600,17 @@ onMounted(async () => {
 }
 
 .close-button:hover {
-  color: #6b7280;
-  background-color: #f3f4f6;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-tertiary);
 }
 
 .close-button:active {
-  background-color: #e5e7eb;
+  background-color: var(--color-border-medium);
   transform: scale(0.95);
 }
 
 .error-message {
-  color: #ef4444;
+  color: var(--color-delete);
   font-size: 0.9rem;
   text-align: center;
   padding: 0.5rem;
@@ -627,7 +627,7 @@ onMounted(async () => {
 .word-text {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text-primary);
 }
 
 .phonetic {
@@ -636,7 +636,7 @@ onMounted(async () => {
   flex-direction: column;
   gap: 0.25rem;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .phonetic-item {
@@ -651,7 +651,7 @@ onMounted(async () => {
 
 .definition-item {
   font-size: 0.9rem;
-  color: #374151;
+  color: var(--color-text-primary);
   line-height: 1.5;
 }
 
@@ -660,18 +660,14 @@ onMounted(async () => {
   height: 1rem;
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* spin animation defined in animations.css */
 
 /* 移动端响应式适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .form-container {
     padding: 1rem;
     border-radius: 0.5rem;

@@ -57,32 +57,65 @@ utils/
 └── ai_helper.py      # AI辅助工具
 ```
 
-### 前端 `frontend/src/`
+### 前端 `frontend/src/` (Feature-Sliced Design)
 
 ```
 app/
 ├── main.ts           # Vue应用入口
 └── router/index.ts   # 路由配置
 
-pages/
-├── HomePage.vue              # 主页导航
+pages/                # 页面组件
+├── HomePage.vue
 ├── ReviewPage.vue            # 复习页（复习/Lapse/拼写三种模式）
-├── VocabularyManagementPage.vue  # 单词管理
-├── SpeakingPage.vue          # 口语练习
-├── StatisticsPage.vue        # 统计图表
-└── SettingsPage.vue          # 用户设置
+├── VocabularyManagementPage.vue
+├── SpeakingPage.vue
+├── StatisticsPage.vue
+└── SettingsPage.vue
 
-features/
-├── vocabulary/       # WordCard/WordReview/WordSpelling等组件
-├── speaking/         # 录音/AI反馈组件（转录TODO）
-└── statistics/       # ECharts图表组件
+features/             # 功能模块
+├── vocabulary/
+│   ├── review/       # ReviewCard, ReviewResult, ReviewModeNotification
+│   ├── spelling/     # SpellingCard, SpellingKeyboard, SpellingModeNotification
+│   ├── editor/       # WordEditorModal, WordDetailsEdit, WordInsertForm
+│   ├── grid/         # WordGrid, WordCard, SearchFilter
+│   ├── relations/    # RelatedWordsPanel, RelationGraph系列组件
+│   ├── sidebar/      # WordSideBar
+│   └── stores/       # useReviewStore, useWordEditorStore
+├── speaking/
+│   ├── components/   # SpeakingSidebar, PartItem, TopicItem, QuestionItem, VoicePractice
+│   └── composables/  # useSpeakingContext, useSpeakingData
+└── statistics/
+    └── components/   # ChartGrid
 
-shared/
+shared/               # 公共资源
 ├── api/              # HTTP客户端（words/speaking/settings等）
 ├── types/index.ts    # TypeScript类型定义
-├── composables/      # 快捷键/定时器/音频等
-└── components/       # 通用UI组件
+├── composables/      # useSettings, useHotkeys, useDraggableNotification等
+├── components/       # 通用UI组件（layout/controls/feedback/overlay/charts）
+├── styles/           # 样式系统（tokens.css/utilities.css/animations.css）
+├── config/           # chartColors.ts
+└── utils/            # logger.ts, playWordAudio.ts
 ```
+
+## 核心架构
+
+### 状态管理
+
+| 类型 | 实现 | 用途 |
+|------|------|------|
+| Pinia Store | `useWordEditorStore` | 单词编辑器状态（全局Modal控制） |
+| Pinia Store | `useReviewStore` | 复习会话状态 |
+| Context | `useReviewContext` | 复习页组件树通信 |
+| Context | `useSpeakingContext` | 口语页组件树通信 |
+
+### 样式系统
+
+使用 CSS 变量统一设计，定义在 `shared/styles/tokens.css`：
+- 颜色变量：`--color-primary`, `--color-secondary`, `--color-danger`
+- 圆角变量：`--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`
+- 间距变量：`--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`
+
+**采用率**：~71%
 
 ## 核心算法
 
@@ -117,8 +150,27 @@ shared/
 | 后端 | 前端 |
 |------|------|
 | Flask 3.1 | Vue 3 + TypeScript |
-| SQLAlchemy | Vite + Tailwind |
-| OpenAI API | ECharts |
+| SQLAlchemy | Pinia（状态管理） |
+| OpenAI API | Vite + Tailwind CSS |
+| | ECharts（图表） |
+
+## 开发规范
+
+### 前端日志
+使用 `logger.ts`，生产环境自动禁用：
+```typescript
+import { logger } from '@/shared/utils/logger'
+const log = logger.create('ComponentName')
+log.log('message')
+```
+
+### 组件通信
+- 浅层嵌套：Props + Emit
+- 深层嵌套：Provide/Inject（Context 模式）
+- 跨模块：Pinia Store
+
+### 样式
+优先使用 CSS 变量，避免硬编码颜色/间距/圆角
 
 ## 不在Git中的文件
 
@@ -135,6 +187,17 @@ rm -rf .venv && python3 -m venv .venv && source .venv/bin/activate && pip instal
 # 重建前端
 cd frontend && rm -rf node_modules && npm install
 ```
+
+## 重构历史
+
+前端经历了4轮重构优化（详见 `frontend/doc/REFACTOR_PLAN*.md`）：
+
+| 版本 | 主要内容 | 成果 |
+|------|----------|------|
+| V1 | 目录结构重组、组件命名规范 | Feature-Sliced Design |
+| V2 | console清理、类型强化、巨型组件拆分 | any类型: 56→4 |
+| V3 | 拖拽逻辑提取、键盘组件提取 | useDraggableNotification |
+| V4 | CSS变量全面采用、Speaking通信优化 | 变量采用率: 7.5%→71% |
 
 ## TODO
 

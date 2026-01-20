@@ -4,8 +4,11 @@
 
 包含拼写强度评估、间隔计算和负荷均衡优化算法
 """
+import logging
 from backend.config import ReviewLoadLimits
 from backend.database.vocabulary_dao import get_daily_spell_loads_by_source
+
+logger = logging.getLogger(__name__)
 
 
 def calculate_spell_strength(
@@ -445,7 +448,7 @@ def calculate_spell_strength_with_load_balancing(
                 max_delay=max_delay,
             )
         except Exception as e:
-            print(f"拼写负荷均衡失败，使用原始间隔: {e}")
+            logger.warning(f"拼写负荷均衡失败，使用原始间隔: {e}")
             optimized_interval = basic_interval
 
     # 6. 高强度单词（> 2.5）：向后寻找负荷较小的日期
@@ -457,7 +460,7 @@ def calculate_spell_strength_with_load_balancing(
                 spell_loads,
             )
         except Exception as e:
-            print(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
+            logger.warning(f"高强度单词负荷均衡失败，使用原始间隔: {e}")
             optimized_interval = basic_interval
 
     return strength_change, optimized_interval, breakdown_info

@@ -140,13 +140,13 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 
 .section-description {
   font-size: 16px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin: 0 0 32px 0;
 }
 
 .settings-group {
   background: white;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 32px;
   margin-bottom: 24px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -179,7 +179,7 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 
 .audio-hint {
   font-size: 13px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -201,8 +201,8 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: #f8fafc;
-  border-radius: 8px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-default);
   border: 1px solid rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
@@ -227,11 +227,11 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 
 .autoplay-desc {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .settings-group {
     padding: 20px 16px;
   }

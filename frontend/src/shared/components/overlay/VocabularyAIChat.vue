@@ -28,7 +28,7 @@
       </div>
 
       <!-- 聊天消息区域 -->
-      <div class="chat-messages" ref="messagesContainer">
+      <div class="chat-messages scrollbar-thin" ref="messagesContainer">
         <div v-if="messages.length === 0" class="welcome-message">
           <p>👋 你好！我是你的AI词汇学习助手。</p>
           <p>你可以问我关于当前词汇的任何问题，比如：</p>
@@ -220,10 +220,10 @@ const toggleExpand = (e?: MouseEvent) => {
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 50px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 15px var(--color-purple-light);
   cursor: pointer;
   transition: all 0.3s ease;
   user-select: none;
@@ -231,7 +231,7 @@ const toggleExpand = (e?: MouseEvent) => {
 
 .chat-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 20px var(--color-purple-border);
 }
 
 .chat-button:active {
@@ -252,7 +252,7 @@ const toggleExpand = (e?: MouseEvent) => {
   width: 380px;
   height: 600px;
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
@@ -265,8 +265,8 @@ const toggleExpand = (e?: MouseEvent) => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
   cursor: move;
   user-select: none;
 }
@@ -299,7 +299,7 @@ const toggleExpand = (e?: MouseEvent) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   transition: background 0.2s ease;
 }
 
@@ -318,7 +318,7 @@ const toggleExpand = (e?: MouseEvent) => {
 .word-title {
   font-size: 20px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--color-purple);
 }
 
 /* 消息区域 */
@@ -351,8 +351,8 @@ const toggleExpand = (e?: MouseEvent) => {
 
 .suggestion-btn {
   background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-default);
   padding: 10px 14px;
   font-size: 13px;
   color: #4a5568;
@@ -364,10 +364,10 @@ const toggleExpand = (e?: MouseEvent) => {
 
 .suggestion-btn:hover {
   background: #f7fafc;
-  border-color: #667eea;
-  color: #667eea;
+  border-color: var(--color-purple);
+  color: var(--color-purple);
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 2px 4px var(--color-purple-light);
 }
 
 .suggestion-btn:active {
@@ -393,7 +393,7 @@ const toggleExpand = (e?: MouseEvent) => {
 
 .message-text {
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 14px;
   line-height: 1.6;
   width: 100%;
@@ -421,7 +421,7 @@ const toggleExpand = (e?: MouseEvent) => {
 .message-text :deep(code) {
   background: rgba(0, 0, 0, 0.05);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   font-family: 'Monaco', 'Courier New', monospace;
   font-size: 0.9em;
 }
@@ -437,7 +437,7 @@ const toggleExpand = (e?: MouseEvent) => {
 }
 
 .message-text :deep(li::marker) {
-  color: #667eea;
+  color: var(--color-purple);
 }
 
 .message-text :deep(h1) {
@@ -476,7 +476,7 @@ const toggleExpand = (e?: MouseEvent) => {
 .message-text :deep(blockquote) {
   margin: 0.5em 0;
   padding-left: 1em;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid var(--color-purple);
   color: inherit;
   font-style: italic;
 }
@@ -487,8 +487,8 @@ const toggleExpand = (e?: MouseEvent) => {
 }
 
 .user-message .message-text {
-  background: #667eea;
-  color: white;
+  background: var(--color-purple);
+  color: var(--color-text-inverse);
   border-bottom-right-radius: 4px;
 }
 
@@ -522,7 +522,7 @@ const toggleExpand = (e?: MouseEvent) => {
   gap: 4px;
   padding: 10px 14px;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   border-bottom-left-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -531,7 +531,7 @@ const toggleExpand = (e?: MouseEvent) => {
   width: 8px;
   height: 8px;
   background: #cbd5e0;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: bounce 1.4s infinite ease-in-out;
 }
 
@@ -567,14 +567,14 @@ const toggleExpand = (e?: MouseEvent) => {
   flex: 1;
   padding: 10px 14px;
   border: 1px solid #dee2e6;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s ease;
 }
 
 .chat-input:focus {
-  border-color: #667eea;
+  border-color: var(--color-purple);
 }
 
 .chat-input:disabled {
@@ -584,10 +584,10 @@ const toggleExpand = (e?: MouseEvent) => {
 
 .send-button {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
   border: none;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -596,7 +596,7 @@ const toggleExpand = (e?: MouseEvent) => {
 
 .send-button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 2px 8px var(--color-purple-light);
 }
 
 .send-button:disabled {
@@ -605,7 +605,7 @@ const toggleExpand = (e?: MouseEvent) => {
 }
 
 /* 移动端适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .ai-chat-widget {
     z-index: 1001; /* 在 WordSidebar 上方 */
   }
@@ -620,7 +620,7 @@ const toggleExpand = (e?: MouseEvent) => {
     height: 40px;
     padding: 0;
     border-radius: 0 20px 20px 0;
-    box-shadow: 2px 0 8px rgba(102, 126, 234, 0.4);
+    box-shadow: 2px 0 8px var(--color-purple-light);
     transition: left 0.3s ease;
     cursor: pointer;
     display: flex;
@@ -684,7 +684,7 @@ const toggleExpand = (e?: MouseEvent) => {
     justify-content: center;
     gap: 8px;
     z-index: 1000;
-    box-shadow: 2px 0 12px rgba(102, 126, 234, 0.4);
+    box-shadow: 2px 0 12px var(--color-purple-light);
     animation: slideInFromLeft 0.3s ease;
   }
 
@@ -766,21 +766,4 @@ const toggleExpand = (e?: MouseEvent) => {
   }
 }
 
-/* 滚动条样式 */
-.chat-messages::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
-  border-radius: 3px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #a0aec0;
-}
 </style>

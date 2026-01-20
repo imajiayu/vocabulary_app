@@ -29,6 +29,19 @@
 import ReviewModeNotification from './ReviewModeNotification.vue'
 import SpellingModeNotification from '../spelling/SpellingModeNotification.vue'
 
+// 通用的 breakdown 类型，兼容复习和拼写模式
+interface BreakdownData {
+  elapsed_time?: number
+  remembered?: boolean
+  score?: number
+  repetition?: number
+  interval?: number
+  typed_count?: number
+  backspace_count?: number
+  word_length?: number
+  [key: string]: unknown
+}
+
 interface Props {
   word: string
   paramType: 'ease_factor' | 'spell_strength'
@@ -36,7 +49,7 @@ interface Props {
   newParamValue: number
   nextReviewDate: string
   show?: boolean
-  breakdown?: any
+  breakdown?: BreakdownData
 }
 
 withDefaults(defineProps<Props>(), {

@@ -3,21 +3,21 @@
     class="question-item"
     :class="{ active: isActive }"
     :data-question-id="question.id"
-    @click="selectQuestion"
+    @click="handleSelect"
   >
     <div v-show="!showEditInput" class="question-content">
       <div class="question-text">{{ question.question_text }}</div>
-      <div class="question-actions">
-        <button 
-          class="action-btn edit-btn"
+      <div class="question-actions action-btn-group">
+        <button
+          class="icon-action-btn icon-action-btn--sm icon-action-btn--edit"
           @click.stop="showEditInput = true"
           title="编辑问题"
         >
           <AppIcon name="edit" />
         </button>
-        <button 
-          class="action-btn delete-btn"
-          @click.stop="confirmDelete"
+        <button
+          class="icon-action-btn icon-action-btn--sm icon-action-btn--delete"
+          @click.stop="handleDelete"
           title="删除问题"
         >
           <AppIcon name="delete" />
@@ -49,32 +49,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch, computed } from 'vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 import type { Question } from '@/shared/types'
+import { useSpeakingContext } from '../composables'
 
-interface Props {
+const props = defineProps<{
   question: Question
-  isActive?: boolean
-}
-
-const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  select: [question: Question]
-  edit: [data: { id: number, text: string }]
-  delete: [data: { id: number }]
 }>()
+
+// 从 context 获取状态和方法
+const {
+  selectedQuestionId,
+  selectQuestion,
+  editQuestion,
+  deleteQuestion
+} = useSpeakingContext()
+
+// 计算当前问题是否被选中
+const isActive = computed(() => selectedQuestionId.value === props.question.id)
 
 // 编辑状态
 const showEditInput = ref(false)
 const editText = ref(props.question.question_text)
 const editInputRef = ref<HTMLTextAreaElement | null>(null)
 
-const submitEdit = () => {
+const submitEdit = async () => {
   const text = editText.value.trim()
   if (text && text !== props.question.question_text) {
-    emit('edit', { id: props.question.id, text })
+    await editQuestion(props.question.id, text)
   }
   showEditInput.value = false
 }
@@ -84,12 +87,12 @@ const cancelEdit = () => {
   editText.value = props.question.question_text
 }
 
-const confirmDelete = () => {
-    emit('delete', { id: props.question.id })
+const handleDelete = () => {
+  deleteQuestion(props.question.id)
 }
 
-const selectQuestion = () => {
-  emit('select', props.question)
+const handleSelect = () => {
+  selectQuestion(props.question)
 }
 
 // 自动 focus 输入框
@@ -111,30 +114,28 @@ watch(() => props.question.question_text, (newText) => {
 <style scoped>
 .question-item {
   margin-bottom: 6px;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   border: 2px solid transparent;
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--color-bg-glass-light);
   backdrop-filter: blur(8px);
 }
 
 .question-item:hover {
-  background: rgba(255, 255, 255, 0.9);
-  /* transform: translateX(4px); */
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
-  border-color: rgba(102, 126, 234, 0.1);
+  background: var(--color-bg-glass-hover);
+  box-shadow: 0 2px 8px var(--color-purple-light);
+  border-color: var(--color-purple-light);
 }
 
 .question-item.active {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1));
-  border-color: #667eea;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
-  /* transform: translateX(6px); */
+  background: var(--gradient-purple-subtle);
+  border-color: var(--color-purple);
+  box-shadow: 0 4px 16px var(--color-purple-border);
 }
 
 .question-item.active:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.15));
+  background: var(--gradient-purple-hover);
 }
 
 .question-content {
@@ -148,7 +149,7 @@ watch(() => props.question.question_text, (newText) => {
 .question-text {
   flex: 1;
   font-size: 13px;
-  color: #374151;
+  color: var(--color-text-secondary);
   line-height: 1.5;
   word-break: break-word;
   padding-right: 8px;
@@ -156,64 +157,26 @@ watch(() => props.question.question_text, (newText) => {
 }
 
 .question-item.active .question-text {
-  color: #1e293b;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
+/* 按钮组位置覆盖 */
 .question-actions {
-  display: flex;
-  gap: 4px;
-  opacity: 0;
-  transition: all 0.3s ease;
-  transform: translateX(8px);
   flex-shrink: 0;
 }
 
-.question-item:hover .question-actions {
-  opacity: 1;
-  transform: translateX(0);
-}
-
+/* hover 和 active 状态显示按钮组 */
+.question-item:hover .question-actions,
 .question-item.active .question-actions {
   opacity: 1;
+  pointer-events: auto;
   transform: translateX(0);
-}
-
-.action-btn {
-  width: 24px;
-  height: 24px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  color: #667eea;
-  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
-}
-
-.action-btn:hover {
-  transform: translateY(-1px) scale(1.1);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
-  background: white;
-}
-
-.edit-btn:hover {
-  color: #f59e0b;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
-}
-
-.delete-btn:hover {
-  color: #ef4444;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
 }
 
 .edit-input-container {
   padding: 8px 14px 12px;
-  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  border-top: 1px solid var(--color-purple-light);
   background: rgba(255, 255, 255, 0.95);
   animation: slideIn 0.2s ease-out;
 
@@ -236,12 +199,12 @@ watch(() => props.question.question_text, (newText) => {
   max-width: 100%;
   box-sizing: border-box;
   padding: 8px 10px;
-  border: 2px solid #667eea;
-  border-radius: 6px;
+  border: 2px solid var(--color-purple);
+  border-radius: var(--radius-sm);
   font-size: 13px;
-  background: white;
+  background: var(--color-bg-primary);
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 2px 6px var(--color-purple-light);
   font-family: inherit;
   resize: vertical;
   min-height: 60px;
@@ -250,8 +213,8 @@ watch(() => props.question.question_text, (newText) => {
 
 .edit-input-container textarea:focus {
   outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  border-color: var(--color-purple-dark);
+  box-shadow: 0 0 0 3px var(--color-purple-light);
 }
 
 .edit-actions {
@@ -266,7 +229,7 @@ watch(() => props.question.question_text, (newText) => {
   width: 28px;
   height: 28px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -276,28 +239,28 @@ watch(() => props.question.question_text, (newText) => {
 }
 
 .confirm-btn {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, var(--color-success), var(--color-success-hover));
+  color: var(--color-text-inverse);
+  box-shadow: 0 2px 6px var(--color-success-light);
 }
 
 .confirm-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 10px var(--color-success-light);
 }
 
 .cancel-btn {
-  background: rgba(156, 163, 175, 0.2);
-  color: #6b7280;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
 }
 
 .cancel-btn:hover {
-  background: rgba(156, 163, 175, 0.3);
-  color: #374151;
+  background: var(--color-border-medium);
+  color: var(--color-text-primary);
   transform: translateY(-1px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .question-content {
     padding: 10px 12px;
   }
@@ -306,41 +269,20 @@ watch(() => props.question.question_text, (newText) => {
     font-size: 12px;
   }
 
-  .action-btn {
-    width: 20px;
-    height: 20px;
-  }
-
-  /* 移动端始终显示操作按钮 */
-  .question-actions {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
   /* 移动端禁用hover效果，使用触摸反馈 */
   .question-item:hover {
-    background: rgba(255, 255, 255, 0.6);
+    background: var(--color-bg-glass-light);
     box-shadow: none;
     border-color: transparent;
   }
 
   .question-item:active {
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--color-bg-glass);
     transform: scale(0.98);
   }
 
   .question-item.active:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1));
-  }
-
-  .action-btn:hover {
-    transform: none;
-    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
-    background: rgba(255, 255, 255, 0.9);
-  }
-
-  .action-btn:active {
-    transform: scale(0.9);
+    background: var(--gradient-purple-subtle);
   }
 }
 </style>

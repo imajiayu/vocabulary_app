@@ -52,16 +52,6 @@
                         </div>
                     </div>
 
-                    <!-- 释义加载进度指示器 -->
-                    <div v-if="definitionQueueSize > 0" class="definition-loading-progress">
-                        <div class="progress-info">
-                            <span class="progress-text">
-                                正在填充单词释义，剩余单词：{{ definitionQueueSize }}
-                            </span>
-                            <div class="loading-spinner-small"></div>
-                        </div>
-                    </div>
-
                     <WordGrid
                         ref="wordGridRef"
                         :words="words"
@@ -104,7 +94,7 @@ const sourceFilter = ref<string>('all'); // 新增来源筛选
 // Word Editor Store
 const wordEditorStore = useWordEditorStore();
 const isLoading = ref(true);
-const sourceCounts = ref<SourceCounts | null>(null); // 存储源计数
+const sourceCounts = ref<SourceCounts | undefined>(undefined); // 存储源计数
 const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引用
 
 // 使用全局设置管理
@@ -117,11 +107,6 @@ const loadedWords = ref(0);
 const isLoadingMore = ref(false);
 const hasMoreWords = ref(true);
 const shouldStopLoading = ref(false); // 控制是否停止后台加载
-
-// 释义加载队列大小和轮询
-const definitionQueueSize = ref(0);
-let definitionPollingTimer: ReturnType<typeof setInterval> | null = null;
-const DEFINITION_POLLING_INTERVAL = 1000; // 1秒轮询一次
 
 // Use read-only composable to get WordIndex selection
 const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
@@ -225,47 +210,6 @@ const loadRemainingBatches = async () => {
     }
 };
 
-// 释义更新轮询函数
-const pollDefinitionUpdates = async () => {
-    try {
-        const result = await api.words.getDefinitionUpdates();
-
-        // 更新队列大小
-        definitionQueueSize.value = result.queue_size;
-
-        // 应用更新到列表
-        for (const update of result.updates) {
-            const index = words.value.findIndex(w => w.id === update.id);
-            if (index !== -1) {
-                words.value[index] = { ...words.value[index], definition: update.definition };
-            }
-        }
-
-        // 如果队列为空，停止轮询
-        if (result.queue_size === 0 && result.updates.length === 0) {
-            stopDefinitionPolling();
-        }
-    } catch (error) {
-        logger.error('Failed to poll definition updates:', error);
-    }
-};
-
-// 启动释义更新轮询
-const startDefinitionPolling = () => {
-    if (definitionPollingTimer) return; // 已经在轮询
-    definitionPollingTimer = setInterval(pollDefinitionUpdates, DEFINITION_POLLING_INTERVAL);
-    // 立即执行一次
-    pollDefinitionUpdates();
-};
-
-// 停止释义更新轮询
-const stopDefinitionPolling = () => {
-    if (definitionPollingTimer) {
-        clearInterval(definitionPollingTimer);
-        definitionPollingTimer = null;
-    }
-};
-
 // 初始化加载数据
 onMounted(async () => {
     try {
@@ -292,27 +236,6 @@ onMounted(async () => {
         if (hasMoreWords.value) {
             // 不等待这个函数完成，让它在后台运行
             loadRemainingBatches();
-        }
-
-        // 检查是否有待处理的释义，如果有则启动轮询
-        try {
-            const result = await api.words.getDefinitionUpdates();
-            if (result.queue_size > 0 || result.updates.length > 0) {
-                definitionQueueSize.value = result.queue_size;
-                // 应用已有的更新
-                for (const update of result.updates) {
-                    const index = words.value.findIndex(w => w.id === update.id);
-                    if (index !== -1) {
-                        words.value[index] = { ...words.value[index], definition: update.definition };
-                    }
-                }
-                // 如果还有队列，启动轮询
-                if (result.queue_size > 0) {
-                    startDefinitionPolling();
-                }
-            }
-        } catch (error) {
-            logger.error('Failed to check definition queue:', error);
         }
     } catch (error) {
         logger.error('Failed to load initial words batch:', error);
@@ -373,16 +296,24 @@ const handleShowDetail = (word: Word) => {
     });
 };
 
-const handleWordInserted = (word: Word) => {
+const handleWordInserted = async (word: Word) => {
     words.value.unshift(word);
     // 更新计数
     updateSourceCounts();
     // 标记为新增单词，使其显示在最前面
     wordGridRef.value?.addNewWordId(word.id);
 
-    // 新增单词后，启动释义轮询（如果还没有启动）
-    // 后台会异步获取释义，通过轮询获取更新
-    startDefinitionPolling();
+    // 新增单词后，异步获取释义
+    try {
+        const updatedWord = await api.words.fetchDefinition(word.id);
+        // 更新列表中的单词
+        const index = words.value.findIndex(w => w.id === word.id);
+        if (index !== -1) {
+            words.value[index] = updatedWord;
+        }
+    } catch (error) {
+        logger.error('Failed to fetch definition for new word:', error);
+    }
 };
 
 const handleBatchDelete = (wordIds: number[]) => {
@@ -395,8 +326,6 @@ const handleBatchDelete = (wordIds: number[]) => {
 onUnmounted(() => {
     // 停止后台加载
     shouldStopLoading.value = true;
-    // 停止释义更新轮询
-    stopDefinitionPolling();
 })
 </script>
 
@@ -445,29 +374,6 @@ onUnmounted(() => {
     padding-bottom: 1.5rem;
 }
 
-/* 释义加载进度指示器 */
-.definition-loading-progress {
-    padding: 1rem;
-    padding-bottom: 1.5rem;
-    background: #fef3c7;
-    border-radius: 0.5rem;
-    border: 1px solid #fbbf24;
-    margin-bottom: 1rem;
-}
-
-.definition-loading-progress .progress-info {
-    margin-bottom: 0;
-}
-
-.definition-loading-progress .progress-text {
-    color: #92400e;
-}
-
-.definition-loading-progress .loading-spinner-small {
-    border: 2px solid #fbbf24;
-    border-top: 2px solid #f59e0b;
-}
-
 .progress-info {
     display: flex;
     align-items: center;
@@ -484,38 +390,31 @@ onUnmounted(() => {
 .loading-spinner-small {
     width: 1rem;
     height: 1rem;
-    border: 2px solid #e5e7eb;
-    border-top: 2px solid #3b82f6;
-    border-radius: 50%;
+    border: 2px solid var(--color-border-medium);
+    border-top: 2px solid var(--color-primary);
+    border-radius: var(--radius-full);
     animation: spin 1s linear infinite;
 }
 
 .progress-bar {
     width: 100%;
     height: 0.5rem;
-    background: #e5e7eb;
+    background: var(--color-border-medium);
     border-radius: 0.25rem;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(90deg, var(--color-primary), #1d4ed8);
     border-radius: 0.25rem;
     transition: width 0.3s ease;
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
+/* spin animation defined in animations.css */
 
 /* 移动端全面适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .main-content {
         padding: 1rem 0.75rem;
         gap: 1rem;
@@ -536,11 +435,6 @@ onUnmounted(() => {
     .loading-progress {
         margin-top: 1rem;
         padding: 0.75rem;
-    }
-
-    .definition-loading-progress {
-        padding: 0.75rem;
-        margin-bottom: 0.75rem;
     }
 
     .progress-text {

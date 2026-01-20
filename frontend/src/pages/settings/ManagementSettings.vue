@@ -38,7 +38,7 @@
               :step="1"
             />
           </div>
-          <p class="setting-hint">并发获取释义的线程数<br>推荐2-5个，需重启后端生效</p>
+          <p class="setting-hint">并发获取释义的线程数<br>推荐2-5个</p>
         </div>
       </div>
     </div>
@@ -54,15 +54,6 @@
       </button>
     </div>
 
-    <!-- 重启服务器按钮 -->
-    <div class="restart-section">
-      <p class="restart-hint">修改"释义获取线程数"后需要重启后端服务器才能生效</p>
-      <button class="btn-restart" @click="restartServer" :disabled="isRestarting">
-        <span v-if="!isRestarting">🔌 重启后端服务器</span>
-        <span v-else>⏳ 正在重启...</span>
-      </button>
-    </div>
-
     <!-- 保存成功提示 -->
     <transition name="fade">
       <div v-if="saveSuccess" class="save-success">
@@ -70,12 +61,6 @@
       </div>
     </transition>
 
-    <!-- 重启成功提示 -->
-    <transition name="fade">
-      <div v-if="restartSuccess" class="restart-success">
-        ✅ 服务器正在重启，请稍候...
-      </div>
-    </transition>
   </section>
 </template>
 
@@ -83,7 +68,6 @@
 import { ref, watch } from 'vue'
 import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
-import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
 
@@ -105,10 +89,6 @@ const { updateSettings } = useSettings()
 const isSaving = ref(false)
 const saveSuccess = ref(false)
 let saveSuccessTimeout: ReturnType<typeof setTimeout> | null = null
-
-const isRestarting = ref(false)
-const restartSuccess = ref(false)
-let restartSuccessTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Local state - 只保留管理设置
 const management = ref<UserSettings['management']>(props.modelValue)
@@ -168,30 +148,6 @@ const resetSettings = async () => {
   }
 }
 
-const restartServer = async () => {
-  if (confirm('确定要重启后端服务器吗？\n\n重启过程中可能会中断当前的操作，请确保已保存所有更改。')) {
-    isRestarting.value = true
-    restartSuccess.value = false
-    try {
-      await api.settings.restartServer()
-
-      // Show success message
-      if (restartSuccessTimeout) {
-        clearTimeout(restartSuccessTimeout)
-      }
-      restartSuccess.value = true
-      restartSuccessTimeout = setTimeout(() => {
-        restartSuccess.value = false
-      }, 5000)
-
-    } catch (error) {
-      logger.error('重启服务器失败:', error)
-      alert('重启失败，请检查后端服务器状态或手动重启')
-    } finally {
-      isRestarting.value = false
-    }
-  }
-}
 </script>
 
 <style scoped>
@@ -208,13 +164,13 @@ const restartServer = async () => {
 
 .section-description {
   font-size: 16px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin: 0 0 32px 0;
 }
 
 .settings-group {
   background: white;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 32px;
   margin-bottom: 24px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -232,8 +188,8 @@ const restartServer = async () => {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background: #f8fafc;
-  border-radius: 12px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
   border: 1px solid rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
@@ -254,7 +210,7 @@ const restartServer = async () => {
 .setting-label {
   font-size: 13px;
   font-weight: 500;
-  color: #64748b;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -300,7 +256,7 @@ const restartServer = async () => {
 .btn-reset {
   padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
@@ -325,51 +281,13 @@ const restartServer = async () => {
 
 .btn-reset {
   background: white;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-medium);
 }
 
 .btn-reset:hover {
-  background: #f8fafc;
+  background: var(--color-bg-secondary);
   border-color: #cbd5e1;
-}
-
-.restart-section {
-  margin-top: 32px;
-  padding: 20px;
-  background: #fef3c7;
-  border: 1px solid #fde047;
-  border-radius: 12px;
-}
-
-.restart-hint {
-  margin: 0 0 12px 0;
-  font-size: 14px;
-  color: #92400e;
-  font-weight: 500;
-}
-
-.btn-restart {
-  width: 100%;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
-}
-
-.btn-restart:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
-}
-
-.btn-restart:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .save-success {
@@ -377,19 +295,8 @@ const restartServer = async () => {
   padding: 12px 16px;
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   color: #15803d;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.restart-success {
-  margin-top: 16px;
-  padding: 12px 16px;
-  background: #fef3c7;
-  border: 1px solid #fde047;
-  border-radius: 8px;
-  color: #92400e;
   font-size: 14px;
   font-weight: 500;
 }
@@ -404,7 +311,7 @@ const restartServer = async () => {
   opacity: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .settings-group {
     padding: 20px 16px;
   }

@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import logging
+import re
+import requests
 from flask import json
-import re, requests
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger(__name__)
 
 
 def get_bold_definition(word, jsonStr):
@@ -78,35 +82,6 @@ def fetch_definition_from_web(word):
         return None
 
 
-def fill_missing_definitions():
-    """
-    为所有缺失释义的单词填充释义
-    使用批量释义服务异步处理（自动去重）
 
-    Returns:
-        tuple: (总单词数, 新增单词数, 跳过单词数)
-    """
-    from backend.database.vocabulary_dao import db_fetch_words_without_definition
-    from backend.services.batch_definition_service import get_batch_definition_service
-
-    # 获取所有缺失释义的单词
-    words_without_def = db_fetch_words_without_definition()
-
-    if not words_without_def:
-        return (0, 0, 0)
-
-    # 使用批量释义服务添加任务（自动去重）
-    batch_service = get_batch_definition_service()
-    added_count = 0
-    skipped_count = 0
-
-    for word_data in words_without_def:
-        if batch_service.add_task(word_data["id"], word_data["word"]):
-            added_count += 1
-        else:
-            skipped_count += 1
-
-    total_count = len(words_without_def)
-    print(f"📊 Fill definitions: total={total_count}, added={added_count}, skipped={skipped_count}")
-
-    return (total_count, added_count, skipped_count)
+# fill_missing_definitions() 已移除
+# 释义获取已改为前端同步调用 POST /words/<id>/fetch-definition

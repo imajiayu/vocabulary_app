@@ -69,13 +69,6 @@ export class SettingsApi {
     return this.updateSettings(defaults)
   }
 
-  /**
-   * 重启服务器
-   * 用于应用需要重启才能生效的配置（如 definitionFetchThreads）
-   */
-  static async restartServer(): Promise<{ message: string }> {
-    return post<{ message: string }>('/api/settings/restart', {})
-  }
 }
 
 export default SettingsApi

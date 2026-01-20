@@ -68,13 +68,13 @@
             单词拼写热力图
             <span class="legend">
               <span class="legend-item">
-                <span class="spell-cell" style="background:#2e7d32"></span>拼写强度 ({{ spellLegendCounts.hasStrength }})
+                <span class="spell-cell" :style="{ background: heatmapColors.spell.hasStrength }"></span>拼写强度 ({{ spellLegendCounts.hasStrength }})
               </span>
               <span class="legend-item">
-                <span class="spell-cell" style="background:#4da6ff"></span>未拼写过 ({{ spellLegendCounts.notSpelled }})
+                <span class="spell-cell" :style="{ background: heatmapColors.spell.notSpelled }"></span>未拼写过 ({{ spellLegendCounts.notSpelled }})
               </span>
               <span class="legend-item">
-                <span class="spell-cell" style="background:#cbcbcb"></span>不可拼写 ({{ spellLegendCounts.notAvailable }})
+                <span class="spell-cell" :style="{ background: heatmapColors.spell.notAvailable }"></span>不可拼写 ({{ spellLegendCounts.notAvailable }})
               </span>
             </span>
           </h2>
@@ -86,10 +86,10 @@
             单词EF热力图
             <span class="legend">
               <span class="legend-item">
-                <span class="spell-cell" style="background:#1890ff"></span>熟练单词 ({{ efLegendCounts.mastered }})
+                <span class="spell-cell" :style="{ background: heatmapColors.ef.mastered }"></span>熟练单词 ({{ efLegendCounts.mastered }})
               </span>
               <span class="legend-item">
-                <span class="spell-cell" style="background:#ff4d4f"></span>困难单词 ({{ efLegendCounts.difficult }})
+                <span class="spell-cell" :style="{ background: heatmapColors.ef.difficult }"></span>困难单词 ({{ efLegendCounts.difficult }})
               </span>
             </span>
           </h2>
@@ -176,6 +176,7 @@ import Loading from '@/shared/components/feedback/Loading.vue'
 import SwitchTab from '@/shared/components/controls/SwitchTab.vue'
 import { api } from '@/shared/api'
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
+import { palette as chartPalette, heatmapColors } from '@/shared/config/chartColors'
 
 type EfItem = { word: string; ef: number }
 type StrengthItem = { word: string; strength: number | null; available: boolean }
@@ -228,7 +229,7 @@ const statsData = ref<Record<string, {
 }>>({})
 
 // 空数组常量，避免每次computed都创建新引用
-const EMPTY_ARRAY: any[] = []
+const EMPTY_ARRAY: readonly never[] = []
 
 // Current data refs (computed from statsData)
 const efDict = computed(() => statsData.value[currentSource.value]?.efDict || EMPTY_ARRAY)
@@ -241,29 +242,19 @@ const reviewCountDict = computed(() => statsData.value[currentSource.value]?.rev
 const spellHeatmapCells = computed(() => statsData.value[currentSource.value]?.spellHeatmapCells || EMPTY_ARRAY)
 const efHeatmapCells = computed(() => statsData.value[currentSource.value]?.efHeatmapCells || EMPTY_ARRAY)
 
-// Color palette for charts in ChartGrid
+// Color palette for charts - using centralized config
 const palette = {
-  teal: '#36cfc9',
+  ...chartPalette,
+  // Light variants for charts
   tealLight: 'rgba(54,207,201,0.25)',
-  orange: '#fa8c16',
   orangeLight: 'rgba(250,140,22,0.25)',
-  blue: '#1890ff',
   blueLight: 'rgba(24,144,255,0.25)',
-  purple: '#9254de',
   purpleLight: 'rgba(146,84,222,0.25)',
-  green: '#52c41a',
   greenLight: 'rgba(82,196,26,0.25)',
-  
-  // 新增颜色
-  red: '#ff4d4f',
   redLight: 'rgba(255,77,79,0.25)',
-  yellow: '#fadb14',
   yellowLight: 'rgba(250,219,20,0.25)',
-  pink: '#eb2f96',
   pinkLight: 'rgba(235,47,150,0.25)',
-  gray: '#8c8c8c',
   grayLight: 'rgba(140,140,140,0.25)',
-  cyan: '#13c2c2',
   cyanLight: 'rgba(19,194,194,0.25)'
 }
 
@@ -282,8 +273,8 @@ const fetchStats = async (source: string) => {
       spellHeatmapCells: data.spell_heatmap_cells || [],
       efHeatmapCells: data.ef_heatmap_cells || []
     }
-  } catch (e: any) {
-    error.value = e?.message || String(e)
+  } catch (e: unknown) {
+    error.value = e instanceof Error ? e.message : String(e)
     throw e
   }
 }
@@ -295,8 +286,8 @@ const preloadAllStats = async () => {
     await Promise.all(
       availableSources.value.map(source => fetchStats(source))
     )
-  } catch (e: any) {
-    error.value = e?.message || String(e)
+  } catch (e: unknown) {
+    error.value = e instanceof Error ? e.message : String(e)
   } finally {
     isLoading.value = false
   }
@@ -319,8 +310,8 @@ onMounted(async () => {
 
     // Then preload stats data for both sources
     await preloadAllStats()
-  } catch (e: any) {
-    error.value = e?.message || String(e)
+  } catch (e: unknown) {
+    error.value = e instanceof Error ? e.message : String(e)
   }
 })
 
@@ -531,7 +522,7 @@ const resetEFRange = () => {
 
 .chart-card {
   background: #fff;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 1.2em;
   display: flex;
@@ -549,7 +540,7 @@ const resetEFRange = () => {
   font-size: 1.1em;
   font-weight: 600;
   margin-bottom: 0.8em;
-  color: #2c3e50;
+  color: var(--color-text-primary);
   flex-shrink: 0;
 }
 
@@ -560,7 +551,7 @@ const resetEFRange = () => {
   font-size: 1.1em;
   font-weight: 600;
   margin-bottom: 0.8em;
-  color: #2c3e50;
+  color: var(--color-text-primary);
   flex-wrap: wrap;
 }
 
@@ -575,7 +566,7 @@ const resetEFRange = () => {
   align-items: center;
   gap: 4px;
   font-size: 0.85em;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .legend .spell-cell {
@@ -586,7 +577,7 @@ const resetEFRange = () => {
 }
 
 /* 响应式优化 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .chart-card {
     padding: 1em;
   }
@@ -618,7 +609,7 @@ const resetEFRange = () => {
   font-size: 1.2em;
   cursor: pointer;
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   transition: background-color 0.2s;
   line-height: 1;
 }
@@ -644,7 +635,7 @@ const resetEFRange = () => {
 
 .modal-content {
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   width: 90%;
   max-width: 450px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -667,14 +658,14 @@ const resetEFRange = () => {
   justify-content: space-between;
   align-items: center;
   padding: 1.2em 1.5em;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .modal-header h3 {
   margin: 0;
   font-size: 1.2em;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--color-text-primary);
 }
 
 .close-btn {
@@ -682,14 +673,14 @@ const resetEFRange = () => {
   border: none;
   font-size: 1.5em;
   cursor: pointer;
-  color: #8c8c8c;
+  color: var(--color-text-muted);
   padding: 0;
   width: 28px;
   height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   transition: background-color 0.2s;
 }
 
@@ -713,40 +704,40 @@ const resetEFRange = () => {
 
 .setting-row label {
   font-size: 0.95em;
-  color: #2c3e50;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
 .number-input {
   width: 100px;
   padding: 0.5em 0.75em;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
   font-size: 0.95em;
   transition: border-color 0.2s;
 }
 
 .number-input:focus {
   outline: none;
-  border-color: #1890ff;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
 }
 
 .number-input.input-error {
-  border-color: #ff4d4f;
+  border-color: var(--color-danger);
 }
 
 .number-input.input-error:focus {
-  border-color: #ff4d4f;
+  border-color: var(--color-danger);
   box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
 }
 
 .error-message {
-  background: #fff2f0;
-  border: 1px solid #ffccc7;
-  color: #cf1322;
+  background: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
   padding: 0.6em 0.8em;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.9em;
   display: flex;
   align-items: center;
@@ -754,9 +745,9 @@ const resetEFRange = () => {
 }
 
 .preview {
-  background: #f5f5f5;
+  background: var(--color-bg-page);
   padding: 1em;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   margin-top: 0.5em;
 }
 
@@ -764,7 +755,7 @@ const resetEFRange = () => {
   margin: 0 0 0.5em 0;
   font-size: 0.9em;
   font-weight: 600;
-  color: #595959;
+  color: var(--color-text-secondary);
 }
 
 .preview ul {
@@ -775,13 +766,13 @@ const resetEFRange = () => {
 
 .preview li {
   font-size: 0.9em;
-  color: #595959;
+  color: var(--color-text-secondary);
   margin: 0.3em 0;
 }
 
 .modal-footer {
   padding: 1em 1.5em;
-  border-top: 1px solid #e8e8e8;
+  border-top: 1px solid var(--color-border-light);
   display: flex;
   justify-content: flex-end;
   gap: 0.8em;
@@ -789,7 +780,7 @@ const resetEFRange = () => {
 
 .reset-btn, .confirm-btn {
   padding: 0.6em 1.2em;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.95em;
   cursor: pointer;
   transition: all 0.2s;
@@ -798,30 +789,30 @@ const resetEFRange = () => {
 }
 
 .reset-btn {
-  background: #f5f5f5;
-  color: #595959;
+  background: var(--color-bg-page);
+  color: var(--color-text-secondary);
 }
 
 .reset-btn:hover {
-  background: #e8e8e8;
+  background: var(--color-border-light);
 }
 
 .confirm-btn {
-  background: #1890ff;
+  background: var(--color-primary);
   color: white;
 }
 
 .confirm-btn:hover {
-  background: #40a9ff;
+  background: var(--color-primary-hover);
 }
 
 .confirm-btn:disabled {
-  background: #d9d9d9;
-  color: #8c8c8c;
+  background: var(--color-border-strong);
+  color: var(--color-text-muted);
   cursor: not-allowed;
 }
 
 .confirm-btn:disabled:hover {
-  background: #d9d9d9;
+  background: var(--color-border-strong);
 }
 </style>

@@ -223,9 +223,9 @@ const fetchSummary = async (isRetry = false) => {
 
     // 成功后清除错误
     error.value = null
-  } catch (e: any) {
+  } catch (e: unknown) {
     log.error('Failed to fetch summary:', e)
-    error.value = e?.message || String(e)
+    error.value = e instanceof Error ? e.message : String(e)
 
     // 无限重试
     log.log(`Retrying in ${retryDelay}ms...`)
@@ -258,9 +258,9 @@ const switchSource = async (source: string) => {
     reviewLimit.value = counts.review > 0 ? counts.review : 0
     spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
 
-  } catch (e: any) {
+  } catch (e: unknown) {
     log.error('Failed to switch source:', e)
-    error.value = e?.message || String(e)
+    error.value = e instanceof Error ? e.message : String(e)
   }
 }
 
@@ -363,7 +363,7 @@ const resumeProgress = () => {
 
 
 /* 移动端全面适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .word-index-container {
     padding: 1.5rem;
     max-width: 100%;

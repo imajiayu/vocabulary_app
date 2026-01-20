@@ -36,7 +36,7 @@ export interface CreateWordPayload {
 // 单词更新参数接口
 export interface UpdateWordPayload {
   word?: string
-  definition?: any
+  definition?: DefinitionObject
   ease_factor?: number
   stop_review?: boolean | number  // 支持 boolean 和 number (0/1)
   repetition?: number
@@ -70,7 +70,7 @@ export interface ReviewNotificationData {
     repetition?: number
     interval?: number
     // 拼写模式可能有其他字段
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -207,16 +207,11 @@ export class WordsApi {
   }
 
   /**
-   * 获取最近更新的单词释义（轮询用）
-   * @returns { updates: [{ id, definition }], queue_size }
+   * 同步获取单词释义
+   * 调用后端爬虫获取释义并更新数据库，返回更新后的单词
    */
-  static async getDefinitionUpdates(): Promise<{
-    updates: Array<{ id: number; definition: DefinitionObject }>;
-    queue_size: number;
-  }> {
-    return get<{ updates: Array<{ id: number; definition: DefinitionObject }>; queue_size: number }>(
-      '/api/words/definition-updates'
-    )
+  static async fetchDefinition(wordId: number): Promise<Word> {
+    return post<Word>(`/api/words/${wordId}/fetch-definition`)
   }
 }
 

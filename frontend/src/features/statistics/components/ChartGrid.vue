@@ -113,7 +113,7 @@ const gap = computed(() => props.gap ?? 16)
 }
 
 /* 响应式断点 - 中等屏幕 */
-@media (min-width: 768px) {
+@media (min-width: 481px) {
   .chart-grid-masonry {
     /* 在中等屏幕上使用更灵活的网格 */
     grid-template-columns: repeat(auto-fit, minmax(calc(var(--min-chart-width) * 0.85), 1fr));
@@ -158,8 +158,8 @@ const gap = computed(() => props.gap ?? 16)
   }
 }
 
-/* 小屏幕优化 */
-@media (max-width: 767px) {
+/* 手机端优化 */
+@media (max-width: 480px) {
   .chart-grid-masonry {
     grid-template-columns: 1fr;
     grid-auto-rows: minmax(300px, auto);

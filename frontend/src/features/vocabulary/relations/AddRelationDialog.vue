@@ -174,7 +174,7 @@ function handleConfirm() {
 
 .add-relation-dialog {
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 24px;
   width: 90%;
   max-width: 480px;
@@ -204,8 +204,8 @@ function handleConfirm() {
   width: 100%;
   box-sizing: border-box;
   padding: 10px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-default);
   font-size: 14px;
   color: #0f172a;
   transition: all 0.2s;
@@ -229,7 +229,7 @@ function handleConfirm() {
   flex: 1;
   padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -249,12 +249,12 @@ function handleConfirm() {
 
 .btn-cancel {
   background: white;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-medium);
 }
 
 .btn-cancel:hover {
-  background: #f8fafc;
+  background: var(--color-bg-secondary);
   border-color: #cbd5e1;
 }
 
@@ -271,7 +271,7 @@ function handleConfirm() {
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border-medium);
   border-top: none;
   border-radius: 0 0 8px 8px;
   max-height: 240px;
@@ -297,7 +297,7 @@ function handleConfirm() {
 
 .candidate-item:hover,
 .candidate-item.selected {
-  background: #f8fafc;
+  background: var(--color-bg-secondary);
 }
 
 .candidate-word {
@@ -308,13 +308,13 @@ function handleConfirm() {
 
 .candidate-definition {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .autocomplete-wrapper input:focus {
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius-default) 8px 0 0;
 }
 </style>

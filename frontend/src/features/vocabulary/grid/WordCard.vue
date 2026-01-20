@@ -9,7 +9,7 @@
         'selected': isSelected
       }"
       :style="{
-        backgroundColor: isRemembered ? '#10b981' : backgroundColor,
+        backgroundColor: isRemembered ? 'var(--color-success)' : backgroundColor,
         color: '#374151'
       }"
       @mouseenter="handleMouseEnter"
@@ -137,7 +137,7 @@ onUnmounted(() => {
   justify-content: center;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-border-medium);
   cursor: pointer;
   transition: all 0.3s ease-out;
   position: relative;
@@ -200,7 +200,7 @@ onUnmounted(() => {
 }
 
 .word-card.selected {
-  border-color: #ef4444;
+  border-color: var(--color-delete);
   border-width: 2px;
   border-style: solid;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);

@@ -54,25 +54,13 @@
       </header>
 
       <!-- Content -->
-      <div class="sidebar-content">
+      <div class="sidebar-content scrollbar-purple">
         <Loading v-if="data.loading.value" />
         <div v-else class="directory-tree">
           <PartItem
             v-for="part in data.partGroups.value"
             :key="`part-${part.number}`"
             :part="part"
-            :is-expanded="data.expandedParts.value.has(part.number)"
-            :expanded-topics="data.expandedTopics.value"
-            :selected-question-id="props.selectQuestionId"
-            @toggle-expanded="data.togglePart"
-            @toggle-topic="data.toggleTopic"
-            @add-topic="handleAddTopic"
-            @edit-topic="handleEditTopic"
-            @delete-topic="handleDeleteTopic"
-            @add-question="handleAddQuestion"
-            @edit-question="handleEditQuestion"
-            @question-select="handleQuestionSelect"
-            @question-delete="handleDeleteQuestion"
           />
         </div>
       </div>
@@ -87,7 +75,7 @@ import Loading from '@/shared/components/feedback/Loading.vue'
 import PartItem from './PartItem.vue'
 import SpeakingImportMenu from './SpeakingImportMenu.vue'
 import type { Question } from '@/shared/types'
-import { useSpeakingData, useSpeakingImport } from '../composables'
+import { createSpeakingContext, useSpeakingImport } from '../composables'
 
 const props = defineProps<{
   selectQuestionId: number | undefined
@@ -100,8 +88,11 @@ const emit = defineEmits<{
   (e: 'sidebar-expanded', expanded: boolean): void
 }>()
 
-// Composables
-const data = useSpeakingData()
+// 创建并提供 Speaking Context
+// 子组件 (PartItem, TopicItem, QuestionItem) 通过 useSpeakingContext 注入使用
+const { data } = createSpeakingContext({
+  onQuestionSelected: (question) => emit('question-selected', question)
+})
 const importHandler = useSpeakingImport()
 
 // Local state
@@ -126,45 +117,6 @@ function toggleSidebar() {
     setTimeout(() => {
       emit('sidebar-expanded', newExpandedState)
     }, 50)
-  }
-}
-
-// Question selection
-function handleQuestionSelect(question: Question) {
-  data.selectQuestion(question)
-  emit('question-selected', question)
-}
-
-// CRUD handlers that emit events on selection changes
-async function handleAddTopic(partNumber: number, title: string) {
-  await data.addTopic(partNumber, title)
-}
-
-async function handleEditTopic(topicId: number, newTitle: string) {
-  await data.editTopic(topicId, newTitle)
-}
-
-async function handleDeleteTopic(topicId: number) {
-  if (!confirm('确定要删除此主题及其所有问题吗？')) return
-  const result = await data.deleteTopic(topicId)
-  if (result.clearedSelection) {
-    emit('question-selected', null)
-  }
-}
-
-async function handleAddQuestion(topicId: number, questionText: string) {
-  await data.addQuestion(topicId, questionText)
-}
-
-async function handleEditQuestion(questionId: number, newText: string) {
-  await data.editQuestion(questionId, newText)
-}
-
-async function handleDeleteQuestion(questionId: number) {
-  if (!confirm('确定要删除此问题吗？')) return
-  const result = await data.deleteQuestion(questionId)
-  if (result.clearedSelection) {
-    emit('question-selected', null)
   }
 }
 
@@ -268,7 +220,10 @@ onUnmounted(() => {
 defineExpose({
   loadTopics: data.loadTopics,
   toggleSidebar,
-  selectQuestion: handleQuestionSelect,
+  selectQuestion: (question: Question) => {
+    data.selectQuestion(question)
+    emit('question-selected', question)
+  },
   clearSelection: () => {
     data.selectQuestion(null)
     emit('question-selected', null)
@@ -309,7 +264,7 @@ defineExpose({
   transform: translateY(-50%);
   width: 32px;
   height: 80px;
-  background: #667eea;
+  background: var(--color-purple);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -334,12 +289,12 @@ defineExpose({
 }
 
 .sidebar-tab.expanded:hover {
-  background: #667eea;
+  background: var(--color-purple);
   transform: translateY(-50%) scale(1.05);
 }
 
 .sidebar-tab:hover .icon-light {
-  color: #667eea;
+  color: var(--color-purple);
 }
 
 .sidebar-tab.expanded:hover .icon-dark {
@@ -352,7 +307,7 @@ defineExpose({
 }
 
 .icon-dark {
-  color: #1e293b;
+  color: var(--color-text-primary);
   transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -363,15 +318,15 @@ defineExpose({
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-bottom: 1px solid var(--color-purple-light);
+  background: var(--gradient-purple-subtle);
 }
 
 .sidebar-header h2 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-purple);
   letter-spacing: -0.025em;
 }
 
@@ -397,7 +352,7 @@ defineExpose({
 }
 
 .action-btn:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--color-purple-light);
   transform: scale(1.05);
 }
 
@@ -431,11 +386,11 @@ defineExpose({
 }
 
 .clear-btn .btn-icon {
-  color: #ef4444;
+  color: var(--color-delete);
 }
 
 .import-btn .btn-icon {
-  color: #667eea;
+  color: var(--color-purple);
 }
 
 .btn-icon {
@@ -456,40 +411,7 @@ defineExpose({
   animation: fadeInUp 0.5s ease forwards;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.sidebar-content {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
-}
-
-.sidebar-content::-webkit-scrollbar {
-  width: 4px;
-  display: block;
-}
-
-.sidebar-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar-content::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.3);
-  border-radius: 2px;
-  transition: background 0.2s ease;
-}
-
-.sidebar-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(102, 126, 234, 0.5);
-}
+/* fadeInUp animation defined in animations.css */
 
 .overlay {
   display: none;
@@ -505,7 +427,7 @@ defineExpose({
   padding: 0;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 481px) {
   .sidebar-tab {
     opacity: 1 !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -513,7 +435,7 @@ defineExpose({
 }
 
 /* Mobile responsive - bottom drawer design */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .sidebar {
     top: auto;
     bottom: 0;
@@ -523,7 +445,7 @@ defineExpose({
     height: 65vh;
     max-height: 65vh;
     transform: translateY(100%);
-    border-radius: 20px 20px 0 0;
+    border-radius: var(--radius-xl) 20px 0 0;
     border-right: none;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
@@ -547,8 +469,8 @@ defineExpose({
     transform: translateX(-50%);
     width: 80px;
     height: 40px;
-    background: #667eea;
-    border-radius: 20px 20px 0 0;
+    background: var(--color-purple);
+    border-radius: var(--radius-xl) 20px 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -586,13 +508,13 @@ defineExpose({
   }
 
   .sidebar-tab:hover {
-    background: #667eea;
+    background: var(--color-purple);
     transform: translateX(-50%);
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
   }
 
   .sidebar-tab:active {
-    background: #5a6fd8;
+    background: var(--color-purple-dark);
     transform: translateX(-50%) scale(0.95);
   }
 
@@ -601,7 +523,7 @@ defineExpose({
   }
 
   .sidebar-tab.expanded:hover {
-    background: #667eea;
+    background: var(--color-purple);
     transform: translateX(-50%);
   }
 
@@ -617,7 +539,7 @@ defineExpose({
     transform: translateX(-50%);
     width: 40px;
     height: 4px;
-    background: rgba(102, 126, 234, 0.3);
+    background: var(--color-purple-border);
     border-radius: 2px;
   }
 
@@ -724,7 +646,7 @@ defineExpose({
   }
 }
 
-@media (max-width: 768px) and (max-height: 500px) and (orientation: landscape) {
+@media (max-width: 480px) and (max-height: 500px) and (orientation: landscape) {
   .sidebar {
     height: 60vh;
     max-height: 60vh;

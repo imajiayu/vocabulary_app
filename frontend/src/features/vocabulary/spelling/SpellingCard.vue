@@ -13,57 +13,17 @@
     </div>
 
     <!-- 移动端自定义键盘 -->
-    <div v-if="isMobile" class="custom-keyboard">
-      <div class="keyboard-row">
-        <button v-for="letter in ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']"
-          :key="letter"
-          class="key-btn letter-key"
-          @click="handleVirtualKey(letter.toLowerCase())"
-          :disabled="isSubmitting">
-          {{ letter }}
-        </button>
-      </div>
-      <div class="keyboard-row">
-        <button v-for="letter in ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L']"
-          :key="letter"
-          class="key-btn letter-key"
-          @click="handleVirtualKey(letter.toLowerCase())"
-          :disabled="isSubmitting">
-          {{ letter }}
-        </button>
-      </div>
-      <div class="keyboard-row third-row">
-        <div class="letters-centered">
-          <button v-for="letter in ['Z', 'X', 'C', 'V', 'B', 'N', 'M']"
-            :key="letter"
-            class="key-btn letter-key third-row-letter"
-            @click="handleVirtualKey(letter.toLowerCase())"
-            :disabled="isSubmitting">
-            {{ letter }}
-          </button>
-        </div>
-        <button class="key-btn backspace-key backspace-absolute" @click="handleVirtualBackspace" :disabled="isSubmitting">
-          ⌫
-        </button>
-      </div>
-      <div class="keyboard-row bottom-row">
-        <button class="key-btn special-key" @click="handleVirtualKey('-')" :disabled="isSubmitting">
-          -
-        </button>
-        <button class="key-btn play-key" @click="handlePlayAudio" :disabled="isSubmitting">
-          🔊
-        </button>
-        <button class="key-btn space-key" @click="handleVirtualKey(' ')" :disabled="isSubmitting">
-          空格
-        </button>
-        <button class="key-btn forgot-key" @click="handleForgot" :disabled="isCorrect || isSubmitting">
-          😵
-        </button>
-        <button class="key-btn enter-key" @click="handleVirtualEnter" :disabled="!canProceed || isSubmitting">
-          ✓
-        </button>
-      </div>
-    </div>
+    <SpellingKeyboard
+      v-if="isMobile"
+      :disabled="isSubmitting"
+      :forgot-disabled="isCorrect || isSubmitting"
+      :enter-disabled="!canProceed || isSubmitting"
+      @key="handleVirtualKey"
+      @backspace="handleVirtualBackspace"
+      @enter="handleVirtualEnter"
+      @play-audio="handlePlayAudio"
+      @forgot="handleForgot"
+    />
 
     <!-- 按钮栏固定在底部 - 仅桌面端显示 -->
     <div v-if="!isMobile" class="button-bar">
@@ -93,6 +53,7 @@ import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import ReviewResult from '../review/ReviewResult.vue'
+import SpellingKeyboard from './SpellingKeyboard.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
@@ -500,7 +461,7 @@ onBeforeUnmount(() => {
   font-size: 1.6em;
   text-align: center;
   padding: 0.5em;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   border: 2px solid #e1e5e9;
   outline: none;
   background: #fff;
@@ -609,7 +570,7 @@ onBeforeUnmount(() => {
   font-size: 1.1em;
   padding: 0.8em;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   cursor: pointer;
   background-color: #f0f0f0;
   transition: all 0.2s ease;
@@ -634,12 +595,12 @@ onBeforeUnmount(() => {
 }
 
 .play-btn {
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
   color: white;
 }
 
 .play-btn:hover:not(:disabled):not(.hidden) {
-  background-color: #2563eb;
+  background-color: var(--color-primary-hover);
 }
 
 .forgot-btn {
@@ -652,165 +613,17 @@ onBeforeUnmount(() => {
 }
 
 .next-btn {
-  background-color: #10b981;
+  background-color: var(--color-success);
   color: white;
   font-size: 1.1em;
 }
 
 .next-btn:hover:not(:disabled):not(.hidden) {
-  background-color: #059669;
-}
-
-/* 自定义键盘样式 */
-.custom-keyboard {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #d1d5db;
-  padding: 0.5rem 0.25rem;
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
-  z-index: 1000;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.keyboard-row {
-  display: flex;
-  justify-content: center;
-  gap: 0.25rem;
-  margin-bottom: 0.4rem;
-}
-
-.keyboard-row:last-child {
-  margin-bottom: 0;
-}
-
-.keyboard-row.third-row {
-  position: relative;
-  justify-content: center;
-}
-
-.letters-centered {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.third-row-letter {
-  width: 2.5rem;
-  flex: 0 0 2.5rem;
-}
-
-.backspace-absolute {
-  position: absolute;
-  right: 0.25rem;
-}
-
-.key-btn {
-  min-width: 2rem;
-  height: 3rem;
-  padding: 0.25rem 0.5rem;
-  border: none;
-  border-radius: 5px;
-  background: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #000000;
-  cursor: pointer;
-  transition: all 0.1s ease;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-
-.key-btn:active:not(:disabled) {
-  background: #d1d5db;
-  transform: scale(0.97);
-  box-shadow: none;
-}
-
-.key-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.letter-key {
-  flex: 1;
-  max-width: 2.5rem;
-}
-
-.special-key {
-  flex: 1.5;
-  background: #adb5bd;
-  color: #000000;
-}
-
-.special-key:active:not(:disabled) {
-  background: #9ca3af;
-}
-
-.backspace-key {
-  width: 3rem;
-  background: #adb5bd;
-  color: #000000;
-  font-size: 1.2rem;
-}
-
-.backspace-key:active:not(:disabled) {
-  background: #9ca3af;
-}
-
-.space-key {
-  flex: 3;
-  background: #ffffff;
-  color: #000000;
-  font-size: 0.9rem;
-}
-
-.space-key:active:not(:disabled) {
-  background: #d1d5db;
-}
-
-.play-key {
-  flex: 1.5;
-  background: #3b82f6;
-  color: white;
-  font-size: 1.2rem;
-}
-
-.play-key:active:not(:disabled) {
-  background: #2563eb;
-}
-
-.forgot-key {
-  flex: 1.5;
-  background: #a855f7;
-  color: white;
-  font-size: 1.2rem;
-}
-
-.forgot-key:active:not(:disabled) {
-  background: #9333ea;
-}
-
-.enter-key {
-  flex: 1.5;
-  background: #10b981;
-  color: white;
-  font-size: 1.2rem;
-}
-
-.enter-key:active:not(:disabled) {
-  background: #059669;
-}
-
-.enter-key:disabled {
-  background: #94d3a2;
-  opacity: 0.5;
+  background-color: var(--color-success-hover);
 }
 
 /* 移动端适配 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .word-spelling-container {
     padding-bottom: 2em;
     margin: 1em auto;
@@ -844,22 +657,6 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 480px) {
-  .custom-keyboard {
-    padding: 0.4rem 0.2rem;
-    padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
-  }
-
-  .key-btn {
-    min-width: 1.8rem;
-    height: 2.8rem;
-    font-size: 1rem;
-  }
-
-  .keyboard-row {
-    gap: 0.2rem;
-    margin-bottom: 0.35rem;
-  }
-
   .definition-container {
     top: calc(48px + 0.75rem); /* TopBar 高度 + 间距 */
     max-height: calc(100vh - 48px - 13rem - 3rem - 1.5rem); /* 屏幕高度 - TopBar - 键盘(4行*2.8rem+间距) - 输入框 - 间距 */

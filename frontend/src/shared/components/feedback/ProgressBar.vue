@@ -124,19 +124,19 @@ const displayText = computed(() => {
 
 /* 预设样式 */
 .progress-bar-container.success .progress-bar-fill {
-  background: #52c41a;
+  background: var(--color-secondary);
 }
 
 .progress-bar-container.warning .progress-bar-fill {
-  background: #faad14;
+  background: var(--color-warning);
 }
 
 .progress-bar-container.danger .progress-bar-fill {
-  background: #ff4d4f;
+  background: var(--color-danger);
 }
 
 .progress-bar-container.info .progress-bar-fill {
-  background: #1677ff;
+  background: var(--color-primary);
 }
 
 /* 条纹动画效果 */
@@ -182,7 +182,7 @@ const displayText = computed(() => {
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .progress-bar-container {
     width: 120px !important;
     height: 18px !important;

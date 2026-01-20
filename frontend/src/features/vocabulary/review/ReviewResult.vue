@@ -138,7 +138,7 @@ const hasExamples = computed(() => {
 }
 
 /* 桌面端横向布局的特殊样式 */
-@media (min-width: 1025px) {
+@media (min-width: 481px) {
   .content-wrapper.horizontal {
     width: 100%;
     min-width: 600px;
@@ -232,7 +232,7 @@ const hasExamples = computed(() => {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -242,7 +242,7 @@ const hasExamples = computed(() => {
 .word-display {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--color-text-primary);
   line-height: 1.2;
   word-break: break-word;
   width: 100%;
@@ -251,12 +251,12 @@ const hasExamples = computed(() => {
 
 .clickable-word {
   cursor: pointer;
-  color: #3b82f6;
+  color: var(--color-primary);
   transition: all 0.2s ease;
 }
 
 .clickable-word:hover {
-  color: #2563eb;
+  color: var(--color-primary-hover);
   /* 移除下划线 */
 }
 
@@ -272,25 +272,25 @@ const hasExamples = computed(() => {
   align-items: center;
   gap: 1rem;
   padding: 0.5rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-default);
+  border: 1px solid var(--color-border-medium);
 }
 
 .phonetic-region {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-text-secondary);
   min-width: 3rem;
   text-align: center;
-  background: #e2e8f0;
+  background: var(--color-border-medium);
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .phonetic-text {
   font-family: 'Courier New', monospace;
-  color: #3b82f6;
+  color: var(--color-primary);
   font-weight: 500;
   font-size: 1rem;
 }
@@ -299,13 +299,13 @@ const hasExamples = computed(() => {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .clickable-phonetic:hover {
   /* 移除下划线 */
-  color: #2563eb;
-  background: #dbeafe;
+  color: var(--color-primary-hover);
+  background: var(--color-primary-light);
 }
 
 /* 释义显示 */
@@ -316,13 +316,13 @@ const hasExamples = computed(() => {
 }
 
 .definition-item {
-  color: #4b5563;
+  color: var(--color-text-primary);
   line-height: 1.6;
   font-size: 1rem;
   padding: 0.75rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border-left: 4px solid #3b82f6;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-default);
+  border-left: 4px solid var(--color-primary);
 }
 
 /* 例句显示 */
@@ -342,13 +342,13 @@ const hasExamples = computed(() => {
 
 .example-item {
   padding: 1rem;
-  background: #f9fafb;
-  border-radius: 12px;
-  border-left: 4px solid #10b981;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-success);
 }
 
 .example-en {
-  color: #111827;
+  color: var(--color-text-primary);
   font-weight: 500;
   margin-bottom: 0.5rem;
   line-height: 1.5;
@@ -356,7 +356,7 @@ const hasExamples = computed(() => {
 }
 
 .example-zh {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
   line-height: 1.4;
   font-style: italic;
@@ -370,96 +370,22 @@ const hasExamples = computed(() => {
   justify-content: center;
   padding: 2rem 0;
   gap: 1rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .loading-spinner {
   width: 2rem;
   height: 2rem;
-  border: 4px solid #e5e7eb;
-  border-top: 4px solid #3b82f6;
-  border-radius: 50%;
+  border: 4px solid var(--color-border-medium);
+  border-top: 4px solid var(--color-primary);
+  border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* spin animation defined in animations.css */
 
-/* 平板适配 */
-@media (max-width: 1024px) {
-  .content-wrapper.horizontal {
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  .main-content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .field-group {
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  /* 单词字段组特殊处理 */
-  .field-group:first-child,
-  .word-field-group {
-    width: 100%;
-    align-items: center;
-    min-height: 100px; /* 平板端稍微减小高度 */
-  }
-
-  .field-group:first-child .field-label,
-  .word-field-group .field-label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-bottom: 0;
-  }
-
-  .word-display {
-    font-size: 2.25rem;
-    text-align: center !important;
-    width: 100%;
-  }
-
-  .phonetic-display, .definitions-display {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .examples-display {
-    width: 100%;
-    max-width: 100%;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .examples-container {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
+/* 手机端适配 */
+@media (max-width: 480px) {
   .content-wrapper {
     gap: 1.25rem;
     width: 100%;

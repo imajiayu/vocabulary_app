@@ -306,7 +306,7 @@ onMounted(async () => {
   margin-bottom: 4px;
   border: none;
   background: transparent;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
   transition: all 0.2s;
@@ -350,7 +350,7 @@ onMounted(async () => {
 
 .nav-subtitle {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .nav-item.active .nav-subtitle {
@@ -382,7 +382,7 @@ onMounted(async () => {
   display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .desktop-only {
     display: none !important;
   }

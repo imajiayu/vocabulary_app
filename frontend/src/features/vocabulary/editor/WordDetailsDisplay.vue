@@ -147,7 +147,7 @@ const hasDefinition = computed(() => {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -157,7 +157,7 @@ const hasDefinition = computed(() => {
 .word-display {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--color-text-primary);
   line-height: 1.2;
   word-break: break-word;
   width: 100%;
@@ -176,25 +176,25 @@ const hasDefinition = computed(() => {
   align-items: center;
   gap: 1rem;
   padding: 0.5rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-default);
+  border: 1px solid var(--color-border-medium);
 }
 
 .phonetic-region {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-text-secondary);
   min-width: 3rem;
   text-align: center;
-  background: #e2e8f0;
+  background: var(--color-border-medium);
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .phonetic-text {
   font-family: 'Courier New', monospace;
-  color: #3b82f6;
+  color: var(--color-primary);
   font-weight: 500;
   font-size: 1rem;
 }
@@ -203,12 +203,12 @@ const hasDefinition = computed(() => {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .clickable-phonetic:hover {
   /* 移除下划线 */
-  color: #2563eb;
+  color: var(--color-primary-hover);
   background: #dbeafe;
 }
 
@@ -224,9 +224,9 @@ const hasDefinition = computed(() => {
   line-height: 1.6;
   font-size: 1rem;
   padding: 0.75rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border-left: 4px solid #3b82f6;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-default);
+  border-left: 4px solid var(--color-primary);
 }
 
 /* 例句显示 */
@@ -240,12 +240,12 @@ const hasDefinition = computed(() => {
 .example-item {
   padding: 1rem;
   background: #f9fafb;
-  border-radius: 12px;
-  border-left: 4px solid #10b981;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-success);
 }
 
 .example-en {
-  color: #111827;
+  color: var(--color-text-primary);
   font-weight: 500;
   margin-bottom: 0.5rem;
   line-height: 1.5;
@@ -253,7 +253,7 @@ const hasDefinition = computed(() => {
 }
 
 .example-zh {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
   line-height: 1.4;
   font-style: italic;
@@ -267,36 +267,22 @@ const hasDefinition = computed(() => {
   justify-content: center;
   padding: 2rem 0;
   gap: 1rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .loading-spinner {
   width: 2rem;
   height: 2rem;
-  border: 4px solid #e5e7eb;
-  border-top: 4px solid #3b82f6;
-  border-radius: 50%;
+  border: 4px solid var(--color-border-medium);
+  border-top: 4px solid var(--color-primary);
+  border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* spin animation defined in animations.css */
 
-/* 平板适配 */
-@media (max-width: 1024px) {
-  .word-display {
-    font-size: 2.25rem;
-  }
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
+/* 手机端适配 */
+@media (max-width: 480px) {
   .content-wrapper {
     gap: 1.25rem;
   }

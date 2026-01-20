@@ -145,7 +145,7 @@ const handleClickWord = async (wordId: number) => {
 }
 
 /* 移动端适配 - 保持水平布局且字体更大 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .relation-columns {
     gap: 0.25em;
   }

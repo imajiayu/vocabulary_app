@@ -1,7 +1,10 @@
-from collections import Counter
+import logging
 import random
+from collections import Counter
 from flask import Blueprint, jsonify, request, session
 from flask_cors import CORS
+
+logger = logging.getLogger(__name__)
 
 from backend.database.vocabulary_dao import (
     db_delete_word,
@@ -19,7 +22,6 @@ from backend.database.vocabulary_dao import (
     db_fetch_spelled_word_ids,
 )
 from backend.services.vocabulary_service import get_bold_definition
-from backend.services.batch_definition_service import get_batch_definition_service
 from backend.const import (
     MODE_REVIEW,
     MODE_LAPSE,
@@ -123,33 +125,14 @@ def get_stats():
         )
 
 
-@api_bp.route("/switch_source", methods=["POST"])
-def switch_source():
-    """Switch the current source filter and save to session."""
-    from backend.config import UserConfig
-
-    data = request.get_json()
-    if not data or "source" not in data:
-        return create_response(False, None, "Missing source parameter"), 400
-
-    source = data["source"]
-    # 动态验证：检查是否在 CUSTOM_SOURCES 中
-    if source not in UserConfig.CUSTOM_SOURCES:
-        return create_response(
-            False, None, f"Invalid source. Must be one of: {UserConfig.CUSTOM_SOURCES}"
-        ), 400
-
-    session["current_source"] = source
-    return create_response(True, {"source": source}, "Source switched successfully")
-
-
 @api_bp.route("/source", methods=["GET"])
 def get_source():
     """Get the current source filter from session."""
     from backend.config import UserConfig
 
+    config = UserConfig()
     # 默认使用第一个可用的 source
-    default_source = UserConfig.CUSTOM_SOURCES[0] if UserConfig.CUSTOM_SOURCES else "IELTS"
+    default_source = config.CUSTOM_SOURCES[0] if config.CUSTOM_SOURCES else "IELTS"
     current_source = session.get("current_source", default_source)
     return create_response(
         True,
@@ -163,15 +146,16 @@ def set_source():
     """Set the current source filter and save to session."""
     from backend.config import UserConfig
 
+    config = UserConfig()
     data = request.get_json()
     if not data or "source" not in data:
         return create_response(False, None, "Missing source parameter"), 400
 
     source = data["source"]
     # 动态验证：检查是否在 CUSTOM_SOURCES 中
-    if source not in UserConfig.CUSTOM_SOURCES:
+    if source not in config.CUSTOM_SOURCES:
         return create_response(
-            False, None, f"Invalid source. Must be one of: {UserConfig.CUSTOM_SOURCES}"
+            False, None, f"Invalid source. Must be one of: {config.CUSTOM_SOURCES}"
         ), 400
 
     session["current_source"] = source
@@ -307,10 +291,7 @@ def insert_words():
     if not new_word:
         return create_response(False, None, f"单词 '{word}' 已存在或插入失败"), 400
 
-    # 使用队列服务获取定义
-    batch_service = get_batch_definition_service()
-    batch_service.add_task(new_word["id"], new_word["word"])
-
+    # 释义获取已改为前端同步调用 POST /words/<id>/fetch-definition
     return create_response(True, new_word, "Word inserted successfully")
 
 
@@ -319,6 +300,7 @@ def batch_insert_words():
     """批量导入单词"""
     from backend.config import UserConfig
 
+    config = UserConfig()
     data = request.get_json()
     if not data or "words" not in data or "source" not in data:
         return create_response(False, None, "缺少参数 words 或 source"), 400
@@ -330,9 +312,9 @@ def batch_insert_words():
         return create_response(False, None, "words 必须是非空数组"), 400
 
     # 动态验证：检查是否在 CUSTOM_SOURCES 中
-    if source not in UserConfig.CUSTOM_SOURCES:
+    if source not in config.CUSTOM_SOURCES:
         return create_response(
-            False, None, f"source 必须是以下之一: {UserConfig.CUSTOM_SOURCES}"
+            False, None, f"source 必须是以下之一: {config.CUSTOM_SOURCES}"
         ), 400
 
     success_count = 0
@@ -341,8 +323,7 @@ def batch_insert_words():
     failed_details = []  # 存储失败详情
     inserted_words = []
 
-    # 获取批量释义服务
-    batch_service = get_batch_definition_service()
+    # 释义获取已改为前端同步调用 POST /words/<id>/fetch-definition
 
     for word_text in words_list:
         word_text = word_text.strip().lower()
@@ -353,9 +334,6 @@ def batch_insert_words():
         if new_word:
             success_count += 1
             inserted_words.append(new_word)
-
-            # 使用队列服务获取定义，避免并发过多
-            batch_service.add_task(new_word["id"], new_word["word"])
         else:
             failed_count += 1
             failed_words.append(word_text)
@@ -580,7 +558,7 @@ def update_word(word_id):
                             # lapse模式索引始终为0（循环队列）
                             update_current_progress_index(0)
                         except Exception as e:
-                            print(f"Failed to update lapse progress snapshot: {e}")
+                            logger.error(f"Failed to update lapse progress snapshot: {e}")
                     else:
                         # 非lapse模式：直接从数据库获取和更新快照，确保多设备同步
                         try:
@@ -600,7 +578,7 @@ def update_word(word_id):
                                     )  # +1 因为已完成当前单词
                                     update_current_progress_index(current_index)
                         except Exception as e:
-                            print(f"Failed to update progress index: {e}")
+                            logger.error(f"Failed to update progress index: {e}")
 
             # 6. 将完整的 updated_word 对象作为响应返回
             return create_response(True, updated_word, "Word updated successfully")
@@ -716,7 +694,7 @@ def update_review_word(word_id):
                 update_current_progress_index(0)
 
             except Exception as e:
-                print(f"Failed to update lapse progress snapshot: {e}")
+                logger.error(f"Failed to update lapse progress snapshot: {e}")
         else:
             # 其他模式（包括拼写）：直接从数据库恢复快照，确保多设备同步
             try:
@@ -732,7 +710,7 @@ def update_review_word(word_id):
                         )  # +1 因为已完成当前单词
                         update_current_progress_index(current_index)
             except Exception as e:
-                print(f"Failed to update progress index: {e}")
+                logger.error(f"Failed to update progress index: {e}")
 
         # 构建响应数据，包含更新后的单词和通知数据
         response_data = {
@@ -809,22 +787,42 @@ def clear_progress_route():
         )
 
 
-@api_bp.route("/words/definition-updates", methods=["GET"])
-def get_definition_updates():
-    """获取最近更新的单词释义（轮询用）
+@api_bp.route("/words/<int:word_id>/fetch-definition", methods=["POST"])
+def fetch_word_definition(word_id):
+    """同步获取单词释义
+
+    从网络爬取单词释义并更新数据库，返回更新后的完整单词对象。
+    用于替代原有的异步队列+轮询模式。
 
     Returns:
-        {
-            "updates": [{ "id": int, "definition": dict }, ...],
-            "queue_size": int  # 剩余待处理数量
-        }
+        更新后的完整单词对象
     """
+    from backend.services.vocabulary_service import fetch_definition_from_web
+    from backend.database.vocabulary.word_crud import db_update_word_definition_only
+    from backend.database.vocabulary.word_query import db_get_word_review_info
+
     try:
-        batch_service = get_batch_definition_service()
-        result = batch_service.get_updated_words()
-        return create_response(True, result, "Definition updates retrieved")
+        # 1. 获取单词信息
+        word = db_get_word_review_info(word_id)
+        if not word:
+            return create_response(False, None, "Word not found"), 404
+
+        # 2. 从网络获取释义
+        definition = fetch_definition_from_web(word["word"])
+        if not definition:
+            return create_response(False, None, "Failed to fetch definition from web"), 500
+
+        # 3. 更新数据库
+        success = db_update_word_definition_only(word_id, definition)
+        if not success:
+            return create_response(False, None, "Failed to update definition in database"), 500
+
+        # 4. 返回更新后的完整单词
+        updated_word = db_get_word_review_info(word_id)
+        return create_response(True, updated_word, "Definition fetched successfully")
+
     except Exception as e:
         return (
-            create_response(False, None, f"Failed to get definition updates: {str(e)}"),
+            create_response(False, None, f"Failed to fetch definition: {str(e)}"),
             500,
         )

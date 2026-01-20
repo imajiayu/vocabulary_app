@@ -275,11 +275,11 @@ onUnmounted(() => {
   position: relative;
 }
 
-/* 移动端允许滚动 */
-@media (max-width: 768px) {
+/* 手机端允许滚动 */
+@media (max-width: 480px) {
   .app-container {
-    overflow: visible; /* 移动端允许滚动 */
-    height: auto; /* 高度由内容决定 */
+    overflow: visible;
+    height: auto;
   }
 }
 
@@ -316,12 +316,11 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-/* 移动端优化 */
-@media (max-width: 768px) {
+/* 手机端优化 */
+@media (max-width: 480px) {
   .main-container {
-    height: auto; /* 高度由内容决定 */
-    overflow: visible; /* 移动端不需要内部滚动 */
-    /* 移动端触摸优化 */
+    height: auto;
+    overflow: visible;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
@@ -361,23 +360,21 @@ onUnmounted(() => {
   transform: translateX(-100%);
 }
 
-/* 移动端全面适配 */
-@media (max-width: 768px) {
+/* 手机端全面适配 */
+@media (max-width: 480px) {
   .main-container {
     padding: 1rem;
-    padding-top: calc(80px + 1rem); /* 为顶部Tab导航留出空间 */
-    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem); /* 为Safari底部栏留出空间 */
+    padding-top: calc(80px + 1rem);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
     align-items: flex-start;
-    min-height: calc(100vh - env(safe-area-inset-bottom)); /* 考虑安全区域 */
-    height: auto; /* 高度由内容决定 */
+    min-height: calc(100vh - env(safe-area-inset-bottom));
+    height: auto;
   }
 
   .mobile-tab-nav {
     height: 60px;
   }
 
-
-  /* 在移动端调整动画时长，减少延迟感 */
   .fade-slide-enter-active,
   .fade-slide-leave-active {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);

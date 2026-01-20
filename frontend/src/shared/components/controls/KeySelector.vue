@@ -109,19 +109,19 @@ const selectableKeys = computed(() => {
 }
 
 .key-select.has-error :deep(.custom-select-trigger) {
-  border-color: #ef4444;
+  border-color: var(--color-delete);
 }
 
 .error-hint {
   font-size: 12px;
-  color: #ef4444;
+  color: var(--color-delete);
   margin-left: 4px;
 }
 
 /* 自定义 CustomSelect 样式以匹配原始设计 */
 .key-select :deep(.custom-select-trigger) {
   font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border-medium);
 }
 
 .key-select :deep(.custom-select-trigger:hover) {

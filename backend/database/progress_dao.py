@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
-import datetime
+import logging
 from sqlalchemy.exc import IntegrityError
 from backend.extensions import get_session
 from backend.models.word import Progress
+
+logger = logging.getLogger(__name__)
 
 
 def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0, initial_lapse_word_count=0):
@@ -53,7 +55,7 @@ def db_save_progress(mode, source, shuffle, word_ids, initial_lapse_count=0, ini
             return True
 
     except Exception as e:
-        print(f"Error saving progress: {e}")
+        logger.error(f"Error saving progress: {e}")
         if db:
             db.rollback()
         return False
@@ -76,7 +78,7 @@ def db_get_progress():
             return progress.to_dict()
 
     except Exception as e:
-        print(f"Error getting progress: {e}")
+        logger.error(f"Error getting progress: {e}")
         return None
 
 
@@ -99,11 +101,11 @@ def db_update_progress_index(current_index):
                 db.commit()
                 return True
             else:
-                print("No progress record found to update")
+                logger.warning("No progress record found to update")
                 return False
 
     except Exception as e:
-        print(f"Error updating progress index: {e}")
+        logger.error(f"Error updating progress index: {e}")
         if db:
             db.rollback()
         return False
@@ -147,7 +149,7 @@ def db_clear_progress():
                 return True
 
     except Exception as e:
-        print(f"Error clearing progress: {e}")
+        logger.error(f"Error clearing progress: {e}")
         if db:
             db.rollback()
         return False
@@ -232,7 +234,7 @@ def db_get_active_lapse_words(word_ids):
             )
             return [word.to_dict() for word in active_words]
     except Exception as e:
-        print(f"Error getting active lapse words: {e}")
+        logger.error(f"Error getting active lapse words: {e}")
         return []
 
 
@@ -282,5 +284,5 @@ def db_get_progress_restore_data():
         }
 
     except Exception as e:
-        print(f"Error getting progress restore data: {e}")
+        logger.error(f"Error getting progress restore data: {e}")
         return False, {}

@@ -1,8 +1,16 @@
+import logging
+import time
+from pathlib import Path
+
 from flask import Blueprint, jsonify, request
 from flask_cors import CORS
 from flask.views import MethodView
-from backend.config import STATIC_PATH
+from werkzeug.utils import secure_filename
+
 from backend.utils.ai_helper import call_ai
+from backend.services.storage_service import upload_audio
+
+logger = logging.getLogger(__name__)
 from backend.database.speaking_dao import (
     db_delete_record,
     db_get_all_topics,
@@ -17,11 +25,6 @@ from backend.database.speaking_dao import (
     db_clear_all_speaking_data,
     db_import_topics,
 )
-from werkzeug.utils import secure_filename
-import time
-import os
-import shutil
-from pathlib import Path
 
 # 创建蓝图
 speaking_api_bp = Blueprint("speaking_api", __name__, url_prefix="/api/speaking")
@@ -63,25 +66,6 @@ prompt = "你是我的雅思口语陪练。\
 【输出格式】\
 第一行：分数（纯数字）\
 第二行开始：仅输出改写后的高分参考版本，一个字都不要多说。"
-
-
-@speaking_api_bp.route("/speech-to-text", methods=["POST"])
-def speech_to_text():
-    """语音转文本 API
-
-    TODO: 实现在线转录 API（如 OpenAI Whisper API）
-    当前功能已禁用，等待后续实现。
-    """
-    # TODO: 实现在线转录功能
-    # 可选方案：
-    # 1. OpenAI Whisper API: https://platform.openai.com/docs/guides/speech-to-text
-    # 2. Google Cloud Speech-to-Text
-    # 3. Azure Speech Services
-    return create_response(
-        False,
-        None,
-        "Speech-to-text is not yet implemented. TODO: Integrate online transcription API."
-    ), 501  # 501 Not Implemented
 
 
 @speaking_api_bp.route("/ai-feedback", methods=["POST"])
@@ -149,7 +133,6 @@ class QuestionRecordsAPI(MethodView):
 
     def post(self):
         """POST /api/speaking/records - 插入新记录"""
-        temp_wav_path = None
         try:
             # 普通表单字段
             question_id = request.form.get("question_id")
@@ -167,36 +150,27 @@ class QuestionRecordsAPI(MethodView):
             if not original_filename:
                 return create_response(False, None, "Invalid filename"), 400
 
-            # 生成时间戳文件名，确保保存为WAV格式
+            # 生成时间戳文件名
             timestamp = int(time.time())
             base_name = Path(original_filename).stem
-            wav_filename = f"{base_name}_{timestamp}.wav"
+            filename = f"{base_name}_{timestamp}.wav"
 
-            # 确保音频目录存在
-            audio_dir = os.path.join(STATIC_PATH, "audios")
-            os.makedirs(audio_dir, exist_ok=True)
+            # 读取文件数据并上传到 Supabase Storage
+            file_data = file.read()
+            audio_url = upload_audio(file_data, filename)
 
-            # 最终的WAV文件路径
-            final_wav_path = os.path.join(audio_dir, wav_filename)
+            if not audio_url:
+                return create_response(False, None, "Failed to upload audio to storage"), 500
 
-            # 检查原始文件格式并进行转换
-            original_extension = Path(original_filename).suffix.lower()
+            logger.info(f"音频已上传到 Supabase Storage: {filename}")
 
-            # 直接保存音频文件（保持原格式或 WAV）
-            # TODO: 如需支持更多格式转换，可以使用 pydub 或 ffmpeg
-            file.save(final_wav_path)
-            print(f"保存音频文件: {final_wav_path}")
-
-            # 生成相对路径用于数据库存储
-            relative_path = f"/static/audios/{wav_filename}"
-
-            # 写入数据库
+            # 写入数据库（存储完整 URL）
             record = db_insert_record(
                 question_id=question_id,
                 user_answer=user_answer,
                 ai_feedback=ai_feedback,
                 score=score,
-                audio_file=relative_path,
+                audio_file=audio_url,
             )
 
             return create_response(True, record, "Record created successfully"), 201
@@ -204,14 +178,6 @@ class QuestionRecordsAPI(MethodView):
         except ValueError as e:
             return create_response(False, None, str(e)), 400
         except Exception as e:
-            # 清理临时文件
-            if temp_wav_path and os.path.exists(temp_wav_path):
-                try:
-                    temp_dir = os.path.dirname(temp_wav_path)
-                    shutil.rmtree(temp_dir)
-                except:
-                    pass
-
             return (
                 create_response(False, None, f"Failed to create record: {str(e)}"),
                 500,

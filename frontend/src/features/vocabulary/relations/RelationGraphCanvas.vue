@@ -310,7 +310,7 @@ defineExpose({
   flex: 1;
   background: white;
   margin: 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -331,16 +331,13 @@ defineExpose({
 .spinner {
   border: 4px solid #f3f3f3;
   border-top: 4px solid #1677ff;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+/* spin animation defined in animations.css */
 
 .error-message {
   position: absolute;
@@ -349,7 +346,7 @@ defineExpose({
   transform: translate(-50%, -50%);
   background: #fff2f0;
   border: 1px solid #ffccc7;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   padding: 1rem 2rem;
   color: #ff4d4f;
   font-size: 14px;

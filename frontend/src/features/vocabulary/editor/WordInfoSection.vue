@@ -37,7 +37,7 @@ const onUpdateEditData = (updatedData: Word) => {
 }
 
 /* 移动端优化 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .word-info {
     gap: 1rem;
   }
