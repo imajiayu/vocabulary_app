@@ -152,4 +152,21 @@
   --topbar-height: 48px;
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 64px;
+
+  /* ── 导航栏尺寸 ── */
+  --nav-width: 48px;
+  --nav-width-expanded: 280px;
+  --nav-width-mobile: 44px;
+  --nav-width-expanded-mobile: 240px;
+  --nav-width-small-mobile: 40px;
+  --nav-width-expanded-small-mobile: 220px;
+
+  /* ── Speaking 侧边栏尺寸 ── */
+  --speaking-sidebar-width: 320px;
+  --speaking-sidebar-width-tablet: 280px;
+  --speaking-sidebar-width-mobile: 260px;
+
+  /* ── 按钮栏高度 ── */
+  --button-bar-height: 120px;
+  --button-bar-height-mobile: 140px;
 }

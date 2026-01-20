@@ -1,5 +1,12 @@
 <template>
-  <div class="app-container">
+  <div
+    class="app-container"
+    :class="{
+      'nav-expanded': navExpanded && !isMobile,
+      'sidebar-expanded': sidebarExpanded && activeTab === 'speaking' && !isMobile,
+      'is-mobile': isMobile
+    }"
+  >
     <!-- 桌面端主导航栏 -->
     <MainNavigation
       v-if="!isMobile"
@@ -35,13 +42,7 @@
     </transition>
 
     <!-- 主内容区域 -->
-    <main
-      class="main-container"
-      :style="{
-        marginLeft: isMobile ? '0px' : (navMargin + sidebarMargin) + 'px',
-        paddingTop: isMobile ? '80px' : '0px'
-      }"
-    >
+    <main class="main-container">
       <!-- 内容切换动画 -->
       <transition name="fade-slide" mode="out-in">
         <WordIndex v-if="activeTab === 'words'" key="words" class="word-index" />
@@ -132,29 +133,7 @@ const clearSelectedQuestion = () => {
   localStorage.removeItem(SELECTED_QUESTION_KEY)
 }
 
-// 计算左侧边距（导航栏）
-const navMargin = computed(() => {
-  const isMobile = window.innerWidth <= 768
-  const isSmallMobile = window.innerWidth <= 480
-
-  if (navExpanded.value) {
-    return isSmallMobile ? 220 : (isMobile ? 240 : 280)
-  } else {
-    return isSmallMobile ? 40 : (isMobile ? 44 : 48)
-  }
-})
-
-// 计算右侧边距（侧边栏）- 移动端不需要边距因为是底部抽屉
-const sidebarMargin = computed(() => {
-  if (activeTab.value !== 'speaking' || !sidebarExpanded.value) return 0
-
-  // 移动端不需要边距，因为SpeakingSidebar是底部抽屉
-  const isMobile = window.innerWidth <= 768
-  if (isMobile) return 0
-
-  const isSmallMobile = window.innerWidth <= 480
-  return isSmallMobile ? 260 : (isMobile ? 280 : 320)
-})
+// 边距计算已移至 CSS（使用 .nav-expanded 和 .sidebar-expanded 类控制）
 
 // 添加一个标志来跟踪是否正在延迟切换
 const isDelayingSwitchToWords = ref(false)
@@ -267,71 +246,100 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ══════════════════════════════════════════════════════════════════════════════
+   布局容器 - 使用 CSS 变量控制边距
+   ══════════════════════════════════════════════════════════════════════════════ */
+
 .app-container {
+  /* 定义当前边距变量，通过类选择器切换 */
+  --current-nav-width: var(--nav-width);
+  --current-sidebar-width: 0px;
+
   display: flex;
   width: 100vw;
-  min-height: 100vh; /* 使用min-height而不是height */
+  min-height: 100vh;
   overflow: hidden;
   position: relative;
 }
 
-/* 手机端允许滚动 */
-@media (max-width: 480px) {
-  .app-container {
-    overflow: visible;
-    height: auto;
-  }
+/* 导航栏展开时 */
+.app-container.nav-expanded {
+  --current-nav-width: var(--nav-width-expanded);
 }
 
-/* 移动端顶部Tab导航 - 刘海屏效果 */
+/* 侧边栏展开时 */
+.app-container.sidebar-expanded {
+  --current-sidebar-width: var(--speaking-sidebar-width);
+}
+
+/* 移动端：无左侧导航边距 */
+.app-container.is-mobile {
+  --current-nav-width: 0px;
+  --current-sidebar-width: 0px;
+  overflow: visible;
+  height: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   移动端顶部 Tab 导航
+   ══════════════════════════════════════════════════════════════════════════════ */
+
 .mobile-tab-nav {
   position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  height: 64px;
+  height: 56px;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 只让SwitchTab本身阻止点击穿透，周围区域可以点击 */
-  pointer-events: none;
+  pointer-events: none; /* 只让 SwitchTab 本身阻止点击穿透 */
 }
 
 .mobile-switch-wrapper {
-  /* 恢复点击事件，但只针对SwitchTab区域 */
   pointer-events: auto;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════════
+   主内容区域 - 边距由 CSS 变量控制
+   ══════════════════════════════════════════════════════════════════════════════ */
+
 .main-container {
   width: 100%;
-  min-height: 100vh; /* 使用min-height */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* 桌面端去掉padding避免滚动条 */
-  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  /* 边距由 CSS 变量控制，不再依赖 JS 计算 */
+  margin-left: calc(var(--current-nav-width) + var(--current-sidebar-width));
+  transition: margin-left var(--transition-slow);
   position: relative;
-  overflow: visible; /* 桌面端不需要内部滚动 */
+  overflow: visible;
   box-sizing: border-box;
 }
 
-/* 手机端优化 */
-@media (max-width: 480px) {
-  .main-container {
-    height: auto;
-    overflow: visible;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-  }
+/* 移动端主内容区域 */
+.app-container.is-mobile .main-container {
+  margin-left: 0;
+  padding: 0.75rem;
+  padding-top: calc(56px + 0.75rem);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
+  min-height: calc(100vh - env(safe-area-inset-bottom));
+  height: auto;
+  align-items: flex-start;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
-/* 移除强制的子组件样式，让组件保持自己的布局 */
+/* ══════════════════════════════════════════════════════════════════════════════
+   页面切换动画
+   ══════════════════════════════════════════════════════════════════════════════ */
 
-/* 页面切换动画 */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-slow);
 }
 
 .fade-slide-enter-from {
@@ -360,24 +368,24 @@ onUnmounted(() => {
   transform: translateX(-100%);
 }
 
-/* 手机端全面适配 */
-@media (max-width: 480px) {
-  .main-container {
-    padding: 1rem;
-    padding-top: calc(80px + 1rem);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
-    align-items: flex-start;
-    min-height: calc(100vh - env(safe-area-inset-bottom));
-    height: auto;
-  }
+/* ══════════════════════════════════════════════════════════════════════════════
+   响应式适配（合并后的媒体查询）
+   ══════════════════════════════════════════════════════════════════════════════ */
 
-  .mobile-tab-nav {
-    height: 60px;
+/* 小屏移动端优化 */
+@media (max-width: 480px) {
+  .app-container.is-mobile .main-container {
+    /* 小屏幕上减少动画效果，提升性能 */
   }
 
   .fade-slide-enter-active,
   .fade-slide-leave-active {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .fade-slide-enter-from,
+  .fade-slide-leave-to {
+    transform: translateY(10px);
   }
 
   .sidebar-slide-enter-active,
@@ -386,41 +394,18 @@ onUnmounted(() => {
   }
 }
 
-/* 小屏手机进一步优化 */
-@media (max-width: 480px) {
-  .main-container {
-    padding: 0.75rem;
-    padding-top: calc(56px + 0.75rem); /* 为小屏顶部Tab导航留出空间 */
-    padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
-    min-height: calc(100vh - env(safe-area-inset-bottom));
-    height: auto;
-  }
-
-  .mobile-tab-nav {
-    height: 56px;
-  }
-
-
-  /* 小屏幕上减少动画效果，提升性能 */
-  .fade-slide-enter-from,
-  .fade-slide-leave-to {
-    transform: translateY(10px);
-  }
-}
-
 /* 横屏手机适配 */
 @media (max-height: 500px) and (orientation: landscape) {
-  .main-container {
+  .app-container.is-mobile .main-container {
     padding: 0.5rem;
     align-items: center;
   }
 
   .mobile-tab-nav {
-    height: 48px;
+    height: var(--topbar-height);
     padding: 0 0.5rem;
   }
 
-  /* 横屏时减少动画时间 */
   .fade-slide-enter-active,
   .fade-slide-leave-active {
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -429,13 +414,6 @@ onUnmounted(() => {
   .sidebar-slide-enter-active,
   .sidebar-slide-leave-active {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-}
-
-/* 超宽屏适配 */
-@media (min-width: 1440px) {
-  .main-container {
-    padding: 0; /* 超宽屏也去掉padding避免滚动条 */
   }
 }
 </style>

@@ -1,22 +1,26 @@
 <template>
-  <div class="app-container with-topbar">
-    <TopBar show-home-button show-management-button>
-      <template #center>
-        <span class="title">统计</span>
-      </template>
-      <template #right>
-        <SwitchTab
-          v-model="currentSource"
-          :tabs="sourceTabs"
-          container-class="primary-theme"
-          :show-indicator="true"
-          @change="handleSourceChange"
-        />
-      </template>
-    </TopBar>
+  <PageLayout
+    with-topbar
+    show-top-bar
+    show-home-button
+    show-management-button
+    max-width="100%"
+    content-class="statistics-content"
+  >
+    <template #topbar-center>
+      <span class="title">统计</span>
+    </template>
+    <template #topbar-right>
+      <SwitchTab
+        v-model="currentSource"
+        :tabs="sourceTabs"
+        container-class="primary-theme"
+        :show-indicator="true"
+        @change="handleSourceChange"
+      />
+    </template>
 
     <Loading v-if="isLoading" text="加载中..." />
-    <main v-else class="main-content">
       <ChartGrid :min-width="280" :gap="20">
         <section class="chart-card ultra" data-width="tall">
           <h2>复习次数分布</h2>
@@ -98,75 +102,76 @@
 
 
       </ChartGrid>
-    </main>
 
     <!-- EF Range Settings Modal -->
-    <div v-if="showEFSettings" class="modal-overlay" @click.self="cancelEFSettings">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>EF 区间配置</h3>
-          <button @click="cancelEFSettings" class="close-btn">✕</button>
-        </div>
-        <div class="modal-body">
-          <div class="setting-row">
-            <label>低 EF 上限（不含）:</label>
-            <input
-              type="number"
-              step="0.1"
-              min="1.3"
-              :max="tempEFRangeConfig.mediumMax"
-              v-model.number="tempEFRangeConfig.lowMax"
-              class="number-input"
-              :class="{ 'input-error': tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax }"
-            />
+    <Teleport to="body">
+      <div v-if="showEFSettings" class="modal-overlay" @click.self="cancelEFSettings">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>EF 区间配置</h3>
+            <button @click="cancelEFSettings" class="close-btn">✕</button>
           </div>
-          <div class="setting-row">
-            <label>中 EF 上限（不含）:</label>
-            <input
-              type="number"
-              step="0.1"
-              :min="tempEFRangeConfig.lowMax"
-              max="3.0"
-              v-model.number="tempEFRangeConfig.mediumMax"
-              class="number-input"
-              :class="{ 'input-error': tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax }"
-            />
+          <div class="modal-body">
+            <div class="setting-row">
+              <label>低 EF 上限（不含）:</label>
+              <input
+                type="number"
+                step="0.1"
+                min="1.3"
+                :max="tempEFRangeConfig.mediumMax"
+                v-model.number="tempEFRangeConfig.lowMax"
+                class="number-input"
+                :class="{ 'input-error': tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax }"
+              />
+            </div>
+            <div class="setting-row">
+              <label>中 EF 上限（不含）:</label>
+              <input
+                type="number"
+                step="0.1"
+                :min="tempEFRangeConfig.lowMax"
+                max="3.0"
+                v-model.number="tempEFRangeConfig.mediumMax"
+                class="number-input"
+                :class="{ 'input-error': tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax }"
+              />
+            </div>
+            <div v-if="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax" class="error-message">
+              ⚠️ 低 EF 上限必须小于等于中 EF 上限
+            </div>
+            <div class="preview">
+              <p>预览:</p>
+              <ul v-if="tempEFRangeConfig.lowMax === tempEFRangeConfig.mediumMax">
+                <li>低 EF: &lt;{{ tempEFRangeConfig.lowMax }}</li>
+                <li>中 EF: ={{ tempEFRangeConfig.lowMax }}</li>
+                <li>高 EF: &gt;{{ tempEFRangeConfig.lowMax }}</li>
+              </ul>
+              <ul v-else>
+                <li>低 EF: &lt;{{ tempEFRangeConfig.lowMax }}</li>
+                <li>中 EF: [{{ tempEFRangeConfig.lowMax }}, {{ tempEFRangeConfig.mediumMax }})</li>
+                <li>高 EF: ≥{{ tempEFRangeConfig.mediumMax }}</li>
+              </ul>
+            </div>
           </div>
-          <div v-if="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax" class="error-message">
-            ⚠️ 低 EF 上限必须小于等于中 EF 上限
+          <div class="modal-footer">
+            <button @click="resetEFRange" class="reset-btn">重置默认</button>
+            <button
+              @click="confirmEFSettings"
+              class="confirm-btn"
+              :disabled="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax"
+            >
+              确定
+            </button>
           </div>
-          <div class="preview">
-            <p>预览:</p>
-            <ul v-if="tempEFRangeConfig.lowMax === tempEFRangeConfig.mediumMax">
-              <li>低 EF: &lt;{{ tempEFRangeConfig.lowMax }}</li>
-              <li>中 EF: ={{ tempEFRangeConfig.lowMax }}</li>
-              <li>高 EF: &gt;{{ tempEFRangeConfig.lowMax }}</li>
-            </ul>
-            <ul v-else>
-              <li>低 EF: &lt;{{ tempEFRangeConfig.lowMax }}</li>
-              <li>中 EF: [{{ tempEFRangeConfig.lowMax }}, {{ tempEFRangeConfig.mediumMax }})</li>
-              <li>高 EF: ≥{{ tempEFRangeConfig.mediumMax }}</li>
-            </ul>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button @click="resetEFRange" class="reset-btn">重置默认</button>
-          <button
-            @click="confirmEFSettings"
-            class="confirm-btn"
-            :disabled="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax"
-          >
-            确定
-          </button>
         </div>
       </div>
-    </div>
-  </div>
+    </Teleport>
+  </PageLayout>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue'
-import TopBar from '@/shared/components/layout/TopBar.vue'
+import { onMounted, ref, computed, watch, Teleport } from 'vue'
+import PageLayout from '@/shared/components/layout/PageLayout.vue'
 import ChartGrid from '@/features/statistics/components/ChartGrid.vue'
 import BarChart from '@/shared/components/charts/BarChart.vue'
 import PieChart from '@/shared/components/charts/PieChart.vue'

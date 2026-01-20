@@ -89,6 +89,30 @@ select {
   padding-top: var(--topbar-height);
 }
 
+/* Flex 布局变体 - 用于需要 TopBar + 可滚动内容的页面（如 ReviewPage） */
+.app-container.flex-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  padding-top: 0; /* 不使用 padding，由子元素 margin-top 控制 */
+  overflow: hidden;
+}
+
+.app-container.flex-layout .main-content {
+  margin-top: var(--topbar-height);
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* 移动端 flex-layout 优化 */
+@media (max-width: 480px) {
+  .app-container.flex-layout {
+    height: 100dvh;
+  }
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════
    组件样式
    ══════════════════════════════════════════════════════════════════════════════ */

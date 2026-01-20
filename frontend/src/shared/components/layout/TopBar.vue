@@ -19,10 +19,10 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   background: '#fff',
-  height: '48px',
+  height: 'var(--topbar-height)',
   sticky: true,
-  border: '1px solid #eee',
-  padding: '0 16px',
+  border: '1px solid var(--color-border-medium)',
+  padding: '0 var(--spacing-md)',
   showHomeButton: false,
   homeButtonText: '返回首页',
   homeButtonTo: '/',

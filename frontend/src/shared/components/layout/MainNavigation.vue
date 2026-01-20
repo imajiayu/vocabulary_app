@@ -89,28 +89,28 @@ const switchTab = (tabId: string) => {
   top: 0;
   left: 0;
   height: 100vh;
-  width: 48px;
+  width: var(--nav-width);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width var(--transition-slow);
   z-index: 101;
   overflow: hidden;
 }
 
 .main-nav.expanded {
-  width: 280px;
+  width: var(--nav-width-expanded);
 }
 
 .nav-header {
   display: flex;
   align-items: center;
-  height: 48px;
+  height: var(--nav-width); /* 与导航栏宽度保持一致 */
   padding: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-border-light);
   position: relative;
 }
 
@@ -118,14 +118,14 @@ const switchTab = (tabId: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  min-width: 44px;
+  width: var(--nav-width);
+  height: var(--nav-width);
+  min-width: var(--nav-width-mobile);
   border: none;
   background: transparent;
   cursor: pointer;
   color: var(--color-text-secondary);
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   flex-shrink: 0;
   /* 移动端触摸优化 */
   touch-action: manipulation;
@@ -148,7 +148,7 @@ const switchTab = (tabId: string) => {
 
 .logo-container {
   position: relative;
-  height: 48px;
+  height: var(--nav-width);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -182,9 +182,9 @@ const switchTab = (tabId: string) => {
 .nav-footer {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 48px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  gap: var(--spacing-sm);
+  height: var(--nav-width);
+  border-top: 1px solid var(--color-border-light);
   margin-top: auto;
 }
 
@@ -348,33 +348,33 @@ const switchTab = (tabId: string) => {
   transform: translateX(-10px);
 }
 
-/* 移动端响应式适配 */
+/* 移动端响应式适配 - 使用 CSS 变量 */
 @media (max-width: 480px) {
   .main-nav {
-    width: 44px;
+    width: var(--nav-width-small-mobile);
   }
 
   .main-nav.expanded {
-    width: 240px;
+    width: var(--nav-width-expanded-small-mobile);
   }
 
   .nav-header {
-    height: 44px;
+    height: var(--nav-width-small-mobile);
   }
 
   .nav-toggle {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
+    width: var(--nav-width-small-mobile);
+    height: var(--nav-width-small-mobile);
+    min-width: var(--nav-width-small-mobile);
   }
 
-  /* 移动端禁用hover效果，使用active替代 */
+  /* 移动端禁用 hover 效果，使用 active 替代 */
   .nav-toggle:hover {
     background: transparent;
   }
 
   .nav-toggle:active {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--color-border-light);
     transform: scale(0.95);
   }
 
@@ -384,77 +384,8 @@ const switchTab = (tabId: string) => {
   }
 
   .nav-tab:active {
-    background: rgba(102, 126, 234, 0.15);
+    background: var(--color-purple-light);
     transform: scale(0.98);
-  }
-
-  .main-nav:not(.expanded) .nav-tab {
-    width: 32px;
-    height: 32px;
-    min-height: 32px;
-    margin: 0 6px;
-  }
-
-  .main-nav:not(.expanded) .nav-tab.active {
-    width: 32px;
-    height: 32px;
-  }
-
-  .main-nav:not(.expanded) .tab-icon {
-    width: 32px;
-    min-width: 32px;
-    height: 32px;
-    font-size: 16px;
-  }
-
-  .main-nav.expanded .tab-icon {
-    width: 44px;
-    min-width: 44px;
-    height: 44px;
-  }
-
-  .main-nav.expanded .nav-tab:hover {
-    transform: none;
-  }
-
-  .app-title {
-    font-size: 20px;
-    left: 12px;
-  }
-
-  .nav-tabs {
-    padding: 16px 0;
-    gap: 6px;
-  }
-
-  .main-nav.expanded .nav-tab {
-    min-height: 40px;
-    height: 40px;
-  }
-
-  .tab-label {
-    font-size: 14px;
-  }
-}
-
-/* 小屏手机进一步优化 */
-@media (max-width: 480px) {
-  .main-nav {
-    width: 40px;
-  }
-
-  .main-nav.expanded {
-    width: 220px;
-  }
-
-  .nav-header {
-    height: 40px;
-  }
-
-  .nav-toggle {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
   }
 
   .main-nav:not(.expanded) .nav-tab {
@@ -475,7 +406,7 @@ const switchTab = (tabId: string) => {
     width: 28px;
     min-width: 28px;
     height: 28px;
-    font-size: 14px;
+    font-size: var(--font-size-base);
   }
 
   .main-nav.expanded .tab-icon {
@@ -490,19 +421,23 @@ const switchTab = (tabId: string) => {
     border-radius: 18px;
   }
 
+  .main-nav.expanded .nav-tab:hover {
+    transform: none;
+  }
+
   .app-title {
-    font-size: 18px;
+    font-size: var(--font-size-xl);
     left: 10px;
   }
 
   .nav-tabs {
-    padding: 12px 0;
-    gap: 4px;
+    padding: var(--spacing-md) 0;
+    gap: var(--spacing-xs);
   }
 
   .tab-label {
-    font-size: 13px;
-    left: 8px;
+    font-size: var(--font-size-sm);
+    left: var(--spacing-sm);
   }
 }
 

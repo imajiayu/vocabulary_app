@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container with-topbar">
+  <div class="app-container flex-layout">
     <!-- 复习参数更新通知 -->
     <ReviewParamsNotification
       v-if="notification.data"
@@ -385,55 +385,26 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ReviewPage 容器 - 应用全局背景 */
-.app-container {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  overflow-x: hidden;
-  /* 明确应用全局背景样式 */
-  background: var(--gradient-background);
-  background-attachment: scroll;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  /* 确保背景能覆盖包括padding在内的所有区域 */
-  box-sizing: border-box;
-}
-
-/* 桌面端使用flex布局避免滚动条 */
-@media (min-width: 481px) {
-  .app-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-size: 100% 100vh;
-  }
-
-  /* 桌面端重写with-topbar的padding，使用flex布局代替 */
-  .app-container.with-topbar {
-    padding-top: 0 !important;
-  }
-
-  .main-content {
-    margin-top: 48px;
-    flex: 1;
-    overflow-y: auto;
-  }
-
-  /* 桌面端WordReview组件顶部额外间距 */
-  .main-content :deep(.word-review-container .content-area) {
-    padding-top: 4rem !important;
-  }
-}
+/* ══════════════════════════════════════════════════════════════════════════════
+   ReviewPage 样式 - 基础布局由 base.css .flex-layout 提供
+   ══════════════════════════════════════════════════════════════════════════════ */
 
 .main-content {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    /* 确保背景透明，显示app-container的背景 */
-    background: transparent;
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: transparent;
+}
+
+/* 桌面端 WordReview 组件顶部额外间距 */
+@media (min-width: 481px) {
+  .main-content :deep(.word-review-container .content-area) {
+    padding-top: 4rem;
+  }
 }
 
 /* TopBar中的中心信息容器 */
@@ -590,28 +561,10 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
-/* 手机端适配 - 固定高度布局防止不必要滚动 */
+/* 移动端适配 - 布局由 base.css .flex-layout 处理，这里只处理组件样式 */
 @media (max-width: 480px) {
-  .app-container {
-    height: 100vh !important;
-    height: 100dvh !important;
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: hidden !important;
-    background-size: 100% 100vh !important;
-    overscroll-behavior: none;
-  }
-
-  .app-container.with-topbar {
-    padding-top: 0 !important;
-  }
-
   .main-content {
-    margin-top: 48px !important;
-    flex: 1 !important;
-    overflow-y: auto !important;
-    min-height: 0 !important;
-    overscroll-behavior: contain;
+    padding: 1rem 0.75rem;
   }
 
   .progress-text {
@@ -625,12 +578,6 @@ onUnmounted(() => {
   .review-info-text {
     font-size: 12px;
     gap: 4px;
-  }
-
-  .bottom-loading {
-    bottom: 10px;
-    padding: 0.4em 0.8em;
-    font-size: 0.8em;
   }
 
   .home-action-button {
