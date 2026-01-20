@@ -80,8 +80,3 @@ def fetch_definition_from_web(word):
 
     except Exception:
         return None
-
-
-
-# fill_missing_definitions() 已移除
-# 释义获取已改为前端同步调用 POST /words/<id>/fetch-definition
