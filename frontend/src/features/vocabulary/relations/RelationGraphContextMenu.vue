@@ -7,12 +7,12 @@
         :style="{ left: x + 'px', top: y + 'px' }"
         @click.stop
       >
-        <div v-if="type === 'edge'" class="menu-item" @click="handleDelete">
-          <span>🗑️</span>
+        <div v-if="type === 'edge'" class="menu-item menu-item--danger" @click="handleDelete">
+          <BaseIcon name="Trash2" size="sm" />
           <span>删除关系</span>
         </div>
         <div v-if="type === 'node'" class="menu-item" @click="handleAddRelation">
-          <span>➕</span>
+          <BaseIcon name="Plus" size="sm" />
           <span>添加关系</span>
         </div>
       </div>
@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import type { GraphNode } from '@/shared/api'
+import { BaseIcon } from '@/shared/components/base'
 
 interface EdgeData {
   source: string
@@ -79,22 +80,22 @@ function handleAddRelation() {
 .context-menu {
   position: fixed;
   z-index: 9999;
-  background: white;
+  background: var(--color-surface-elevated);
   border-radius: var(--radius-default);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  padding: 4px;
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-1);
   min-width: 150px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   cursor: pointer;
   border-radius: var(--radius-sm);
-  transition: all 0.2s;
-  font-size: 14px;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
   color: var(--color-text-primary);
 }
 
@@ -102,7 +103,11 @@ function handleAddRelation() {
   background: var(--color-bg-tertiary);
 }
 
-.menu-item span:first-child {
-  font-size: 16px;
+.menu-item--danger {
+  color: var(--color-state-error);
+}
+
+.menu-item--danger:hover {
+  background: rgba(239, 68, 68, 0.1);
 }
 </style>

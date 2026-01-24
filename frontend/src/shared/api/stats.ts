@@ -34,6 +34,14 @@ export interface LearningStats {
   }
 }
 
+// 每个 source 的 counts
+export interface SourceCounts {
+  review: number
+  lapse: number
+  spelling: number
+  today_spell: number
+}
+
 // 首页摘要接口
 export interface IndexSummary {
   counts: {
@@ -43,6 +51,8 @@ export interface IndexSummary {
     spelling: number
     today_spell: number
   }
+  // 所有 source 的 counts（新增）
+  all_counts?: Record<string, SourceCounts>
   source_stats: {
     IELTS: WordStats
     GRE: WordStats

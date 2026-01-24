@@ -8,10 +8,8 @@
       <div class="modal-content">
         <div class="graph-wrapper">
           <!-- Close button -->
-          <button class="close-btn" @click="handleClose">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
+          <button class="close-btn" @click="handleClose" aria-label="关闭">
+            <BaseIcon name="X" size="md" />
           </button>
 
           <!-- Controls bar -->
@@ -30,13 +28,16 @@
             />
 
             <div class="control-group">
-              <button
+              <BaseButton
+                :variant="graph.showAllNodes.value ? 'primary' : 'secondary'"
+                size="sm"
                 @click="graph.toggleShowAllNodes"
-                class="show-all-btn"
-                :class="{ active: graph.showAllNodes.value }"
               >
+                <template #icon>
+                  <BaseIcon :name="graph.showAllNodes.value ? 'EyeOff' : 'Eye'" size="sm" />
+                </template>
                 {{ graph.showAllNodes.value ? '隐藏全部节点' : '展示所有节点' }}
-              </button>
+              </BaseButton>
             </div>
 
             <div class="stats">
@@ -93,6 +94,7 @@ import RelationGraphSearch from '@/features/vocabulary/relations/RelationGraphSe
 import RelationGraphCanvas from '@/features/vocabulary/relations/RelationGraphCanvas.vue'
 import RelationGraphContextMenu from '@/features/vocabulary/relations/RelationGraphContextMenu.vue'
 import AddRelationDialog from '@/features/vocabulary/relations/AddRelationDialog.vue'
+import { BaseButton, BaseIcon } from '@/shared/components/base'
 
 interface Props {
   show: boolean
@@ -274,107 +276,59 @@ watch(
   width: 40px;
   height: 40px;
   border: none;
-  background: white;
+  background: var(--color-surface-elevated);
   border-radius: var(--radius-md);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
   z-index: 1000;
+  color: var(--color-text-secondary);
 }
 
 .close-btn:hover {
   background: var(--color-bg-tertiary);
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.close-btn svg {
-  color: var(--color-text-secondary);
-  width: 20px;
-  height: 20px;
-  transition: color 0.2s;
-}
-
-.close-btn:hover svg {
+  box-shadow: var(--shadow-md);
   color: var(--color-text-primary);
 }
 
 .controls-bar {
-  background: linear-gradient(to bottom, #ffffff, #fafafa);
-  padding: 16px 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(to bottom, var(--color-surface-elevated), var(--color-bg-secondary));
+  padding: var(--space-4) var(--space-5);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-4);
   align-items: center;
   z-index: 10;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .control-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
-  background: white;
-  border-radius: var(--radius-md);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-.show-all-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: var(--radius-default);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  background: white;
-  color: var(--color-primary);
-  border: 1px solid var(--color-border-light);
-}
-
-.show-all-btn:hover {
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border-medium);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
-}
-
-.show-all-btn:active {
-  transform: translateY(0);
-}
-
-.show-all-btn.active {
-  background: var(--gradient-primary);
-  color: white;
-  border-color: transparent;
-}
-
-.show-all-btn.active:hover {
-  background: var(--gradient-primary);
+  gap: var(--space-3);
 }
 
 .stats {
   display: flex;
-  gap: 20px;
-  font-size: 13px;
+  gap: var(--space-5);
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  font-weight: 500;
-  padding: 8px 16px;
-  background: white;
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface-elevated);
   border-radius: var(--radius-md);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-xs);
 }
 
 .stats span {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 </style>

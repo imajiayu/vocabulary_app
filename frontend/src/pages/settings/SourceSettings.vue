@@ -15,45 +15,48 @@
             <span class="source-name">{{ source }}</span>
             <span class="source-count">{{ sourceStats[source] || 0 }} 个单词</span>
           </div>
-          <button
-            class="btn-delete"
+          <BaseButton
+            variant="danger"
+            size="sm"
             :disabled="localSources.length <= 1 || isDeleting"
             @click="confirmDelete(source)"
           >
-            🗑️ 删除
-          </button>
+            <template #icon><BaseIcon name="Trash2" size="sm" /></template>
+            删除
+          </BaseButton>
         </div>
       </div>
 
       <!-- 添加新 Source -->
       <div class="add-source-section">
-        <input
+        <BaseInput
           v-model="newSourceName"
-          type="text"
           placeholder="输入新的来源名称（如 TOEFL）"
-          maxlength="20"
           :disabled="localSources.length >= 3 || isAdding"
           @keyup.enter="addSource"
         />
-        <button
-          class="btn-add"
+        <BaseButton
+          variant="primary"
           :disabled="!canAddSource || isAdding"
+          :loading="isAdding"
           @click="addSource"
         >
-          <span v-if="!isAdding">➕ 添加来源</span>
-          <span v-else>⏳ 添加中...</span>
-        </button>
+          <template #icon><BaseIcon name="Plus" size="sm" /></template>
+          {{ isAdding ? '添加中...' : '添加来源' }}
+        </BaseButton>
       </div>
 
-      <p class="hint">
-        ⚠️ 提示：删除来源会同时删除该来源的所有单词及相关记录，操作不可撤销！
-      </p>
+      <div class="hint">
+        <BaseIcon name="AlertTriangle" size="sm" color="warning" />
+        <span>提示：删除来源会同时删除该来源的所有单词及相关记录，操作不可撤销！</span>
+      </div>
     </div>
 
     <!-- 成功提示 -->
     <transition name="fade">
       <div v-if="successMessage" class="save-success">
-        ✅ {{ successMessage }}
+        <BaseIcon name="CheckCircle" size="sm" color="success" />
+        <span>{{ successMessage }}</span>
       </div>
     </transition>
   </section>
@@ -64,6 +67,7 @@ import { ref, computed, onMounted } from 'vue'
 import { api } from '@/shared/api'
 import { useSettings } from '@/shared/composables/useSettings'
 import { logger } from '@/shared/utils/logger'
+import { BaseButton, BaseInput, BaseIcon } from '@/shared/components/base'
 
 interface Emits {
   (e: 'save-success'): void
@@ -238,77 +242,21 @@ onMounted(async () => {
   color: var(--color-text-secondary);
 }
 
-.btn-delete {
-  padding: 8px 16px;
-  border: 1px solid #fee2e2;
-  background: #fef2f2;
-  color: #dc2626;
-  border-radius: var(--radius-default);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-delete:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-delete:hover:not(:disabled) {
-  background: #fee2e2;
-  transform: translateY(-1px);
-}
-
 .add-source-section {
   display: flex;
   gap: 12px;
   margin-bottom: 16px;
+  align-items: flex-start;
 }
 
-.add-source-section input {
+.add-source-section :deep(.input-wrapper) {
   flex: 1;
-  padding: 12px 16px;
-  border: 1px solid var(--color-border-medium);
-  border-radius: var(--radius-md);
-  font-size: 15px;
-  transition: all 0.2s;
-}
-
-.add-source-section input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.add-source-section input:disabled {
-  background: var(--color-bg-tertiary);
-  cursor: not-allowed;
-}
-
-.btn-add {
-  padding: 12px 24px;
-  background: var(--gradient-primary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-add:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-add:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-size: 13px;
   color: #92400e;
   margin: 0;
@@ -319,6 +267,9 @@ onMounted(async () => {
 }
 
 .save-success {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin-top: 16px;
   padding: 12px 16px;
   background: #f0fdf4;

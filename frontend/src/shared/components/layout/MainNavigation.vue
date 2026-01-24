@@ -138,6 +138,12 @@ const switchTab = (tabId: string) => {
 }
 
 .toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  transform-origin: center;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

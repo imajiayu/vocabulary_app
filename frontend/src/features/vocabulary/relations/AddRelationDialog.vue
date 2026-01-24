@@ -1,58 +1,64 @@
 <template>
-  <Teleport to="body">
-    <div v-if="show" class="dialog-overlay" @click="emit('cancel')">
-      <div class="add-relation-dialog" @click.stop>
-        <h3>为「{{ sourceNode?.word }}」添加关系</h3>
+  <BaseModal
+    v-model="internalShow"
+    title=""
+    size="md"
+    :close-on-overlay="true"
+    :closable="false"
+    @close="emit('cancel')"
+  >
+    <template #header>
+      <h3 class="dialog-title">为「{{ sourceNode?.word }}」添加关系</h3>
+    </template>
 
-        <div class="dialog-field">
-          <label>目标单词：</label>
-          <div class="autocomplete-wrapper">
-            <input
-              v-model="targetWord"
-              type="text"
-              placeholder="输入单词名称"
-              @input="updateCandidates"
-              @keydown="handleKeydown"
-              autocomplete="off"
-            />
-            <div v-if="candidates.length > 0" class="candidates-list">
-              <div
-                v-for="(candidate, index) in candidates"
-                :key="candidate.id"
-                class="candidate-item"
-                :class="{ selected: index === selectedIndex }"
-                @click="selectCandidate(candidate)"
-                @mouseenter="selectedIndex = index"
-              >
-                <span class="candidate-word">{{ candidate.word }}</span>
-                <span v-if="candidate.definition" class="candidate-definition">
-                  {{ candidate.definition.split('; ')[0] }}
-                </span>
-              </div>
+    <div class="dialog-content">
+      <div class="dialog-field">
+        <label class="field-label">目标单词：</label>
+        <div class="autocomplete-wrapper">
+          <BaseInput
+            v-model="targetWord"
+            placeholder="输入单词名称"
+            size="md"
+            @keydown="handleKeydown"
+          />
+          <div v-if="candidates.length > 0" class="candidates-list">
+            <div
+              v-for="(candidate, index) in candidates"
+              :key="candidate.id"
+              class="candidate-item"
+              :class="{ selected: index === selectedIndex }"
+              @click="selectCandidate(candidate)"
+              @mouseenter="selectedIndex = index"
+            >
+              <span class="candidate-word">{{ candidate.word }}</span>
+              <span v-if="candidate.definition" class="candidate-definition">
+                {{ candidate.definition.split('; ')[0] }}
+              </span>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="dialog-field">
-          <label>关系类型：</label>
-          <CustomSelect
-            v-model="relationType"
-            :options="relationTypeOptions"
-          />
-        </div>
-
-        <div class="dialog-actions">
-          <button class="btn-confirm" @click="handleConfirm">确认</button>
-          <button class="btn-cancel" @click="emit('cancel')">取消</button>
-        </div>
+      <div class="dialog-field">
+        <label class="field-label">关系类型：</label>
+        <CustomSelect
+          v-model="relationType"
+          :options="relationTypeOptions"
+        />
       </div>
     </div>
-  </Teleport>
+
+    <template #footer>
+      <BaseButton variant="ghost" @click="emit('cancel')">取消</BaseButton>
+      <BaseButton variant="primary" @click="handleConfirm">确认</BaseButton>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import type { GraphNode } from '@/shared/api'
+import { BaseModal, BaseButton, BaseInput } from '@/shared/components/base'
 import CustomSelect from '@/shared/components/CustomSelect.vue'
 import { relationTypeOptions } from './useRelationGraph'
 
@@ -65,10 +71,21 @@ interface Props {
 interface Emits {
   (e: 'cancel'): void
   (e: 'confirm', data: { targetWord: string; relationType: string }): void
+  (e: 'update:show', value: boolean): void
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// 双向绑定 show
+const internalShow = computed({
+  get: () => props.show,
+  set: (value) => {
+    if (!value) {
+      emit('cancel')
+    }
+  }
+})
 
 const targetWord = ref('')
 const relationType = ref('synonym')
@@ -87,6 +104,11 @@ watch(
     }
   }
 )
+
+// 监听 targetWord 变化更新候选词
+watch(targetWord, () => {
+  updateCandidates()
+})
 
 function isSubsequenceMatch(pattern: string, text: string): boolean {
   let patternIndex = 0
@@ -158,111 +180,35 @@ function handleConfirm() {
 </script>
 
 <style scoped>
-.dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
-
-.add-relation-dialog {
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  width: 90%;
-  max-width: 480px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.add-relation-dialog h3 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
-  font-weight: 600;
+.dialog-title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .dialog-field {
-  margin-bottom: 16px;
-}
-
-.dialog-field label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-}
-
-.dialog-field input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 14px;
-  border: 1px solid var(--color-border-medium);
-  border-radius: var(--radius-default);
-  font-size: 14px;
-  color: var(--color-text-primary);
-  transition: all 0.2s;
-  background: white;
-}
-
-.dialog-field input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.dialog-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 24px;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-.btn-confirm,
-.btn-cancel {
-  flex: 1;
-  padding: 10px 20px;
-  border: none;
-  border-radius: var(--radius-default);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-confirm {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}
-
-.btn-confirm:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.btn-cancel {
-  background: white;
+.field-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
-  border: 1px solid var(--color-border-medium);
-}
-
-.btn-cancel:hover {
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border-medium);
 }
 
 /* Autocomplete */
 .autocomplete-wrapper {
   position: relative;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .candidates-list {
@@ -270,25 +216,25 @@ function handleConfirm() {
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
+  background: var(--color-surface-elevated);
   border: 1px solid var(--color-border-medium);
   border-top: none;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 var(--radius-default) var(--radius-default);
   max-height: 240px;
   overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   z-index: 1000;
   margin-top: -1px;
 }
 
 .candidate-item {
-  padding: 10px 14px;
+  padding: var(--space-3);
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition: background-color var(--transition-fast);
   border-bottom: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .candidate-item:last-child {
@@ -301,20 +247,16 @@ function handleConfirm() {
 }
 
 .candidate-word {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
-  font-size: 14px;
+  font-size: var(--font-size-base);
 }
 
 .candidate-definition {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.autocomplete-wrapper input:focus {
-  border-radius: var(--radius-default) 8px 0 0;
 }
 </style>

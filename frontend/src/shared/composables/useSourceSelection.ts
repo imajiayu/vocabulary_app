@@ -6,11 +6,20 @@ import { logger } from '@/shared/utils/logger'
 export type Source = string  // 改为动态字符串
 export type SourceStats = WordStats  // 使用 WordStats 作为 SourceStats 的别名
 
+// Counts 类型
+export type SourceCounts = {
+  review: number
+  lapse: number
+  spelling: number
+  today_spell: number
+}
+
 // For WordIndex - can read and write to backend session
 export function useSourceSelection() {
   const currentSource = ref<Source>('')
   const availableSources = ref<string[]>([])  // 可用的 sources 列表
-  const sourceStatsMap = reactive<Record<string, SourceStats>>({})  // 动态存储各 source 统计
+  const sourceStatsMap = reactive<Record<string, SourceStats>>({})  // 动态存储各 source 统计（total）
+  const allCountsMap = reactive<Record<string, SourceCounts>>({})  // 所有 source 的 counts
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -30,34 +39,20 @@ export function useSourceSelection() {
     }
   }
 
+  // 切换 source（仅更新本地状态和后端 session，不重新获取数据）
   const switchSource = async (source: Source) => {
     try {
       loading.value = true
       error.value = null
 
-      // Use the new API to set source
+      // 更新后端 session
       await api.config.setSource(source)
       currentSource.value = source
       // Update cache
       sessionStorage.setItem('currentSource', source)
 
-      // 获取更新的数据
-      const data = await api.stats.getIndexSummary()
-
-      // 动态更新统计数据
-      if (data.source_stats) {
-        // 清空之前的统计
-        Object.keys(sourceStatsMap).forEach(key => delete sourceStatsMap[key])
-
-        // 填充新的统计数据
-        Object.entries(data.source_stats).forEach(([sourceName, stats]) => {
-          if (sourceName !== 'all') {  // 跳过 'all'
-            sourceStatsMap[sourceName] = stats as SourceStats
-          }
-        })
-      }
-
-      return data
+      // 返回本地缓存的 counts（不再调用 getIndexSummary）
+      return allCountsMap[source] || { review: 0, lapse: 0, spelling: 0, today_spell: 0 }
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e)
       error.value = message
@@ -67,7 +62,16 @@ export function useSourceSelection() {
     }
   }
 
-  const initializeFromData = (data: { current_source?: string; source_stats?: Record<string, SourceStats> }) => {
+  // 获取当前 source 的 counts
+  const getCurrentCounts = () => {
+    return allCountsMap[currentSource.value] || { review: 0, lapse: 0, spelling: 0, today_spell: 0 }
+  }
+
+  const initializeFromData = (data: {
+    current_source?: string
+    source_stats?: Record<string, SourceStats>
+    all_counts?: Record<string, SourceCounts>
+  }) => {
     // 设置当前源
     if (data.current_source) {
       currentSource.value = data.current_source
@@ -75,7 +79,7 @@ export function useSourceSelection() {
       sessionStorage.setItem('currentSource', data.current_source)
     }
 
-    // 动态加载源统计数据
+    // 动态加载源统计数据（total）
     if (data.source_stats) {
       // 清空之前的统计
       Object.keys(sourceStatsMap).forEach(key => delete sourceStatsMap[key])
@@ -87,15 +91,25 @@ export function useSourceSelection() {
         }
       })
     }
+
+    // 加载所有 source 的 counts（新增）
+    if (data.all_counts) {
+      Object.keys(allCountsMap).forEach(key => delete allCountsMap[key])
+      Object.entries(data.all_counts).forEach(([sourceName, counts]) => {
+        allCountsMap[sourceName] = counts
+      })
+    }
   }
 
   return {
     currentSource,
     availableSources,
-    sourceStatsMap,  // 替代之前的 ieltsStats 和 greStats
+    sourceStatsMap,  // 各 source 的 total
+    allCountsMap,    // 各 source 的 counts（新增）
     loading,
     error,
     switchSource,
+    getCurrentCounts,
     initializeFromData,
     loadAvailableSources
   }

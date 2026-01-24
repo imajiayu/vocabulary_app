@@ -2,14 +2,12 @@
   <div class="control-group">
     <label>搜索单词:</label>
     <div class="search-autocomplete-wrapper">
-      <input
+      <BaseInput
         v-model="localSearchWord"
-        type="text"
         placeholder="输入单词查看其关系网络..."
+        size="sm"
         @input="updateCandidates"
         @keydown="handleKeydown"
-        class="search-input"
-        autocomplete="off"
       />
       <div v-if="candidates.length > 0" class="candidates-list">
         <div
@@ -33,6 +31,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { GraphNode } from '@/shared/api'
+import { BaseInput } from '@/shared/components/base'
 
 interface Props {
   searchWord: string
@@ -144,27 +143,7 @@ function selectCandidate(node: GraphNode) {
 .search-autocomplete-wrapper {
   position: relative;
   display: inline-block;
-}
-
-.search-input {
-  padding: 8px 14px;
-  border: 1px solid var(--color-border-medium);
-  border-radius: var(--radius-default);
   min-width: 240px;
-  font-size: 14px;
-  color: var(--color-text-primary);
-  transition: all 0.2s;
-  background: white;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.search-input::placeholder {
-  color: var(--color-text-tertiary);
 }
 
 .candidates-list {
@@ -172,26 +151,25 @@ function selectCandidate(node: GraphNode) {
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
+  background: var(--color-surface-elevated);
   border: 1px solid var(--color-border-medium);
   border-top: none;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 var(--radius-default) var(--radius-default);
   max-height: 240px;
   overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   z-index: 1000;
   margin-top: -1px;
-  min-width: 240px;
 }
 
 .candidate-item {
-  padding: 8px 14px;
+  padding: var(--space-2) var(--space-3);
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition: background-color var(--transition-fast);
   border-bottom: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-1);
 }
 
 .candidate-item:last-child {
@@ -204,13 +182,13 @@ function selectCandidate(node: GraphNode) {
 }
 
 .candidate-word {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
-  font-size: 13px;
+  font-size: var(--font-size-sm);
 }
 
 .candidate-definition {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;

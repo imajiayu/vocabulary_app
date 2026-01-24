@@ -11,19 +11,27 @@
 
     <!-- 搜索框 -->
     <div class="search-box">
-      <SearchIcon class="search-icon" />
-      <input
-        :value="searchQuery"
-        @input="$emit('searchChange', ($event.target as HTMLInputElement).value)"
-        type="text"
+      <BaseInput
+        :model-value="searchQuery"
+        @update:model-value="$emit('searchChange', $event)"
         placeholder="输入单词或中文释义..."
-        class="search-input"
-      />
-      <button v-if="searchQuery.trim()" @click="$emit('searchChange', '')" class="clear-button" type="button">
-        ×
-      </button>
+      >
+        <template #prefix>
+          <BaseIcon name="Search" size="sm" color="muted" />
+        </template>
+        <template #suffix>
+          <button
+            v-if="searchQuery.trim()"
+            @click="$emit('searchChange', '')"
+            class="clear-button"
+            type="button"
+          >
+            <BaseIcon name="X" size="xs" />
+          </button>
+        </template>
+      </BaseInput>
     </div>
-    
+
     <!-- 筛选按钮 -->
     <SwitchTab
       :model-value="filterStatus"
@@ -37,11 +45,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { Search as SearchIcon } from 'lucide-vue-next';
 import { useWordStats, type Word } from '@/shared/composables/useWordStats';
 import SwitchTab from '@/shared/components/controls/SwitchTab.vue';
 import type { SourceCounts } from '@/shared/types';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
+import { BaseInput, BaseIcon } from '@/shared/components/base';
 
 interface Stats {
   total: number;
@@ -178,70 +186,30 @@ const handleFilterChange = (status: string) => {
 <style scoped>
 .search-filter-container {
   background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
   height: 100%;
 }
-
 
 .search-box {
-  position: relative;
   flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.search-icon {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-muted);
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.search-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
-  border: 1px solid var(--color-border-medium);
-  border-radius: 0.5rem;
-  height: 100%;
-  font-size: 16px; /* 防止移动端自动缩放 */
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.search-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-primary);
-  border-color: transparent;
 }
 
 .clear-button {
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
   color: var(--color-text-muted);
-  font-size: 1rem;
-  width: 1.25rem;
-  height: 1.25rem;
+  padding: var(--space-1);
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
-  line-height: 1;
-  /* 移动端触摸优化 */
+  transition: all var(--transition-fast);
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -255,96 +223,22 @@ const handleFilterChange = (status: string) => {
 /* 移动端响应式适配 */
 @media (max-width: 480px) {
   .search-filter-container {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    gap: 0.875rem;
-  }
-
-  .search-box {
-    height: 48px;
-  }
-
-  .search-input {
-    height: 48px;
-    padding: 0.875rem 2.5rem;
-  }
-
-  .search-icon {
-    width: 1.125rem;
-    height: 1.125rem;
-    left: 0.875rem;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    gap: var(--space-3);
   }
 
   .clear-button {
-    right: 0.25rem;
-    width: 2rem;
-    height: 2rem;
     min-width: 44px;
     min-height: 44px;
-  }
-}
-
-/* 小屏手机进一步优化 */
-@media (max-width: 480px) {
-  .search-filter-container {
-    padding: 0.875rem;
-    border-radius: 0.375rem;
-    gap: 0.75rem;
-  }
-
-  .search-box {
-    height: 50px;
-  }
-
-  .search-input {
-    height: 50px;
-    padding: 1rem 2.5rem 1rem 2.25rem;
-  }
-
-  .search-icon {
-    width: 1rem;
-    height: 1rem;
-    left: 0.75rem;
-  }
-
-  .clear-button {
-    right: 0.5rem;
-    width: 2.25rem;
-    height: 2.25rem;
-    min-width: 2.25rem;
-    min-height: 2.25rem;
   }
 }
 
 /* 横屏适配 */
 @media (max-height: 500px) and (orientation: landscape) {
   .search-filter-container {
-    padding: 0.75rem;
-    gap: 0.625rem;
-  }
-
-  .search-box {
-    height: 36px;
-  }
-
-  .search-input {
-    height: 36px;
-    padding: 0.5rem 2rem 0.5rem 2rem;
-  }
-
-  .search-icon {
-    width: 1rem;
-    height: 1rem;
-    left: 0.5rem;
-  }
-
-  .clear-button {
-    right: 0.25rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    min-width: 1.5rem;
-    min-height: 1.5rem;
+    padding: var(--space-3);
+    gap: var(--space-2);
   }
 }
-
 </style>

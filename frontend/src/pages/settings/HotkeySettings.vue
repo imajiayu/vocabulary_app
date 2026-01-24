@@ -99,19 +99,27 @@
 
     <!-- 快捷键设置保存按钮 -->
     <div class="settings-actions">
-      <button class="btn-save" @click="saveSettings" :disabled="isSaving">
-        <span v-if="!isSaving">💾 保存快捷键设置</span>
-        <span v-else>⏳ 保存中...</span>
-      </button>
-      <button class="btn-reset" @click="resetSettings">
-        🔄 恢复默认
-      </button>
+      <BaseButton
+        variant="primary"
+        :loading="isSaving"
+        :disabled="isSaving"
+        @click="saveSettings"
+        class="btn-save"
+      >
+        <template #icon><BaseIcon name="Save" size="sm" /></template>
+        {{ isSaving ? '保存中...' : '保存快捷键设置' }}
+      </BaseButton>
+      <BaseButton variant="secondary" @click="resetSettings">
+        <template #icon><BaseIcon name="RotateCcw" size="sm" /></template>
+        恢复默认
+      </BaseButton>
     </div>
 
     <!-- 保存成功提示 -->
     <transition name="fade">
       <div v-if="saveSuccess" class="save-success">
-        ✅ 快捷键设置已保存
+        <BaseIcon name="CheckCircle" size="sm" color="success" />
+        <span>快捷键设置已保存</span>
       </div>
     </transition>
   </section>
@@ -123,6 +131,7 @@ import KeySelector from '@/shared/components/controls/KeySelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings, HotkeySettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
+import { BaseButton, BaseIcon } from '@/shared/components/base'
 
 interface Props {
   modelValue: UserSettings['hotkeys']
@@ -283,57 +292,26 @@ const resetSettings = async () => {
 
 .settings-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 32px;
-}
-
-.btn-save,
-.btn-reset {
-  padding: 12px 24px;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
 }
 
 .btn-save {
-  background: var(--gradient-primary);
-  color: white;
   flex: 1;
 }
 
-.btn-save:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-}
-
-.btn-save:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-reset {
-  background: white;
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border-medium);
-}
-
-.btn-reset:hover {
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border-medium);
-}
-
 .save-success {
-  margin-top: 16px;
-  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
   border-radius: var(--radius-default);
   color: #15803d;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .fade-enter-active,
