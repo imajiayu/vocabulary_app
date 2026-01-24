@@ -118,7 +118,7 @@ export function useSourceSelection() {
 // For other components - read-only access to WordIndex selection from backend
 export function useSourceSelectionReadOnly() {
   const currentSource = ref<Source>('')
-  const availableSources = ref<string[]>([])
+  const availableSources = ref<string[]>(['IELTS', 'GRE'])  // 设置默认值
 
   const initializeFromData = async () => {
     try {
@@ -138,9 +138,19 @@ export function useSourceSelectionReadOnly() {
         currentSource.value = data.current_source
         // Cache the value to avoid future redundant calls
         sessionStorage.setItem('currentSource', data.current_source)
+      } else if (availableSources.value.length > 0) {
+        // 如果后端没有返回 currentSource，使用第一个可用的 source
+        currentSource.value = availableSources.value[0]
       }
     } catch (error) {
       logger.error('Failed to get current source:', error)
+      // 确保即使失败也有默认值
+      if (availableSources.value.length === 0) {
+        availableSources.value = ['IELTS', 'GRE']
+      }
+      if (!currentSource.value && availableSources.value.length > 0) {
+        currentSource.value = availableSources.value[0]
+      }
     }
   }
 

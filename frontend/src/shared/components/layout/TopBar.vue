@@ -113,12 +113,14 @@ const goHome = async () => {
 
 // 导航到管理单词页面（新窗口）
 const goManagement = () => {
-  window.open('/management', '_blank')
+  const resolved = router.resolve('/management')
+  window.open(resolved.href, '_blank')
 }
 
 // 导航到统计页面（新窗口）
 const goStats = () => {
-  window.open('/stats', '_blank')
+  const resolved = router.resolve('/stats')
+  window.open(resolved.href, '_blank')
 }
 </script>
 

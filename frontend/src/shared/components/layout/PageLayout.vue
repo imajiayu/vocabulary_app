@@ -107,6 +107,7 @@ const hasFooter = computed(() => !!slots.footer)
 <style scoped>
 /* 主内容区域基础样式 */
 .main-content {
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding: 1.5rem 1rem;

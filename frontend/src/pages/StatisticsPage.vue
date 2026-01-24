@@ -66,42 +66,41 @@
             :colors="[palette.orange, palette.green, palette.blue]" />
         </section>
 
-        <!-- 热力图 - 单词拼写热力图 -->
-        <section class="chart-card" data-width="full">
-          <h2 class="chart-title">
-            单词拼写热力图
-            <span class="legend">
-              <span class="legend-item">
-                <span class="spell-cell" :style="{ background: heatmapColors.spell.hasStrength }"></span>拼写强度 ({{ spellLegendCounts.hasStrength }})
-              </span>
-              <span class="legend-item">
-                <span class="spell-cell" :style="{ background: heatmapColors.spell.notSpelled }"></span>未拼写过 ({{ spellLegendCounts.notSpelled }})
-              </span>
-              <span class="legend-item">
-                <span class="spell-cell" :style="{ background: heatmapColors.spell.notAvailable }"></span>不可拼写 ({{ spellLegendCounts.notAvailable }})
-              </span>
-            </span>
-          </h2>
-          <HeatMap :key="`spell-${currentSource}-${spellHeatmapCells.length}`" :cells="spellHeatmapCells" :precomputed-colors="true" :gap="0.1" />
-        </section>
-        <!-- 热力图 - 单词EF热力图 -->
-        <section class="chart-card" data-width="full">
-          <h2 class="chart-title">
-            单词EF热力图
-            <span class="legend">
-              <span class="legend-item">
-                <span class="spell-cell" :style="{ background: heatmapColors.ef.mastered }"></span>熟练单词 ({{ efLegendCounts.mastered }})
-              </span>
-              <span class="legend-item">
-                <span class="spell-cell" :style="{ background: heatmapColors.ef.difficult }"></span>困难单词 ({{ efLegendCounts.difficult }})
-              </span>
-            </span>
-          </h2>
-          <HeatMap :key="`ef-${currentSource}-${efHeatmapCells.length}`" :cells="efHeatmapCells" :precomputed-colors="true" :gap="0.1"/>
-        </section>
-
-
       </ChartGrid>
+
+    <!-- 热力图单独放在 ChartGrid 外面，避免 grid-column: 1/-1 影响其他图表的布局 -->
+    <section v-if="!isLoading" class="chart-card heatmap-card">
+      <h2 class="chart-title">
+        单词拼写热力图
+        <span class="legend">
+          <span class="legend-item">
+            <span class="spell-cell" :style="{ background: heatmapColors.spell.hasStrength }"></span>拼写强度 ({{ spellLegendCounts.hasStrength }})
+          </span>
+          <span class="legend-item">
+            <span class="spell-cell" :style="{ background: heatmapColors.spell.notSpelled }"></span>未拼写过 ({{ spellLegendCounts.notSpelled }})
+          </span>
+          <span class="legend-item">
+            <span class="spell-cell" :style="{ background: heatmapColors.spell.notAvailable }"></span>不可拼写 ({{ spellLegendCounts.notAvailable }})
+          </span>
+        </span>
+      </h2>
+      <HeatMap :cells="spellHeatmapCells" :precomputed-colors="true" :gap="0.1" />
+    </section>
+
+    <section v-if="!isLoading" class="chart-card heatmap-card">
+      <h2 class="chart-title">
+        单词EF热力图
+        <span class="legend">
+          <span class="legend-item">
+            <span class="spell-cell" :style="{ background: heatmapColors.ef.mastered }"></span>熟练单词 ({{ efLegendCounts.mastered }})
+          </span>
+          <span class="legend-item">
+            <span class="spell-cell" :style="{ background: heatmapColors.ef.difficult }"></span>困难单词 ({{ efLegendCounts.difficult }})
+          </span>
+        </span>
+      </h2>
+      <HeatMap :cells="efHeatmapCells" :precomputed-colors="true" :gap="0.1"/>
+    </section>
 
     <!-- EF Range Settings Modal -->
     <Teleport to="body">
@@ -308,9 +307,11 @@ onMounted(async () => {
     // First get the current source from the backend to sync with WordIndex
     await initializeFromData()
 
-    // Set local source to match WordIndex selection
+    // Set local source to match WordIndex selection, or use first available source as fallback
     if (initialSource.value) {
       currentSource.value = initialSource.value
+    } else if (availableSources.value.length > 0) {
+      currentSource.value = availableSources.value[0]
     }
 
     // Then preload stats data for both sources
@@ -516,14 +517,6 @@ const resetEFRange = () => {
   min-height: calc(100vh - 48px);
 }
 
-.main-content {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
 
 .chart-card {
   background: #fff;
@@ -539,6 +532,12 @@ const resetEFRange = () => {
 .chart-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+
+/* 热力图卡片 - 放在 ChartGrid 外面，全宽显示 */
+.heatmap-card {
+  width: 100%;
 }
 
 .chart-card h2 {
@@ -819,5 +818,12 @@ const resetEFRange = () => {
 
 .confirm-btn:disabled:hover {
   background: var(--color-border-strong);
+}
+</style>
+
+<!-- 非 scoped 样式，用于覆盖 PageLayout 的 gap -->
+<style>
+.statistics-content {
+  gap: 20px !important;
 }
 </style>

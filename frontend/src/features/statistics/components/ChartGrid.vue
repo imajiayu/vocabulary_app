@@ -32,17 +32,16 @@ const gap = computed(() => props.gap ?? 16)
   display: grid;
   gap: var(--grid-gap);
   width: 100%;
-  margin-bottom: 16px;
-  
+
   /* 响应式列数配置 */
   grid-template-columns: repeat(auto-fit, minmax(var(--min-chart-width), 1fr));
-  
+
   /* 移除 aspect-ratio 冲突，使用 min-height 替代 */
   grid-auto-rows: minmax(280px, auto);
-  
+
   /* 启用密集打包算法，让项目尽可能填满空隙 */
   grid-auto-flow: row dense;
-  
+
   /* 确保网格容器有足够高度 */
   align-items: stretch;
 }
