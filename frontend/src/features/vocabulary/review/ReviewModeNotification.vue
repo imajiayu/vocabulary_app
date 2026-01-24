@@ -115,7 +115,6 @@
               <span class="notification-info-row__label">耗时</span>
               <span class="notification-info-row__value">{{ (breakdown.elapsed_time ?? 0).toFixed(1) }}s</span>
             </div>
-            <button class="notification-expanded__close" @click.stop="handleClose">关闭</button>
           </div>
         </template>
       </div>

@@ -169,7 +169,6 @@
                 </div>
               </template>
             </template>
-            <button class="notification-expanded__close" @click.stop="handleClose">关闭</button>
           </div>
         </template>
       </div>

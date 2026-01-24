@@ -339,28 +339,6 @@
   .draggable-notification--mobile-fixed .notification-info-row__value {
     font-weight: 600;
   }
-
-  /* 展开面板的关闭按钮 */
-  .draggable-notification--mobile-fixed .notification-expanded__close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    padding: 6px 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    border-radius: var(--radius-sm);
-    color: white;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-
-  .draggable-notification--mobile-fixed .notification-expanded__close:active {
-    background: rgba(255, 255, 255, 0.25);
-  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
