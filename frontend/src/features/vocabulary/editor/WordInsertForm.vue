@@ -147,6 +147,7 @@ const { currentSource, availableSources, initializeFromData } = useSourceSelecti
 // Define emit first so we can pass it to composable
 const emit = defineEmits<{
   wordInserted: [word: Word]
+  batchWordInserted: [words: Word[]]
 }>()
 
 // Composables

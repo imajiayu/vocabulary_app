@@ -19,7 +19,7 @@
                 <div class="top-controls">
                     <!-- 添加单词表单 -->
                     <div class="control-item">
-                        <WordInsertForm @word-inserted="handleWordInserted" />
+                        <WordInsertForm @word-inserted="handleWordInserted" @batch-word-inserted="handleBatchWordInserted" />
                     </div>
 
                     <!-- 搜索和筛选 -->
@@ -192,22 +192,66 @@ const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
     }
 };
 
-// 自动加载后续批次的函数
+// 并行加载所有剩余批次（按顺序即时插入）
 const loadRemainingBatches = async () => {
-    let offset = batchSize.value;
-    let hasMore = hasMoreWords.value;
+    if (!hasMoreWords.value || shouldStopLoading.value) return;
 
-    while (hasMore && !shouldStopLoading.value) {
-        // 等待一小段时间，避免过于频繁的请求
-        await new Promise(resolve => setTimeout(resolve, 100));
+    isLoadingMore.value = true;
 
-        // 再次检查是否应该停止加载
-        if (shouldStopLoading.value) {
-            break;
+    try {
+        // 计算所有需要请求的 offset
+        const offsets: number[] = [];
+        for (let offset = batchSize.value; offset < totalWords.value; offset += batchSize.value) {
+            offsets.push(offset);
         }
 
-        hasMore = await loadWordsBatch(offset);
-        offset += batchSize.value;
+        if (offsets.length === 0) {
+            hasMoreWords.value = false;
+            return;
+        }
+
+        // 缓存乱序到达的批次，等待按顺序插入
+        const pendingBatches = new Map<number, Word[]>();
+        let nextExpectedOffset = batchSize.value;
+
+        // 尝试将缓存中的批次按顺序插入
+        const flushPendingBatches = () => {
+            while (pendingBatches.has(nextExpectedOffset)) {
+                words.value.push(...pendingBatches.get(nextExpectedOffset)!);
+                pendingBatches.delete(nextExpectedOffset);
+                nextExpectedOffset += batchSize.value;
+            }
+            loadedWords.value = words.value.length;
+        };
+
+        // 并发请求，完成时按顺序插入
+        await Promise.all(
+            offsets.map(async (offset) => {
+                const response = await api.words.getWordsPaginated(batchSize.value, offset);
+
+                if (shouldStopLoading.value) return;
+
+                if (offset === nextExpectedOffset) {
+                    // 正好是期望的下一批，直接追加
+                    words.value.push(...response.words);
+                    nextExpectedOffset += batchSize.value;
+                    loadedWords.value = words.value.length;
+                    // 检查缓存中是否有后续批次可以插入
+                    flushPendingBatches();
+                } else {
+                    // 不是期望的下一批，先缓存
+                    pendingBatches.set(offset, response.words);
+                }
+            })
+        );
+
+        // 最终确保所有缓存都已插入
+        flushPendingBatches();
+        hasMoreWords.value = false;
+    } catch (error) {
+        logger.error('Failed to load remaining batches:', error);
+    } finally {
+        isLoadingMore.value = false;
     }
 };
 
@@ -315,6 +359,34 @@ const handleWordInserted = async (word: Word) => {
     } catch (error) {
         logger.error('Failed to fetch definition for new word:', error);
     }
+};
+
+// 批量插入单词后并行获取释义
+const handleBatchWordInserted = async (insertedWords: Word[]) => {
+    // 先将所有单词添加到列表（无释义状态）
+    insertedWords.forEach(word => {
+        words.value.unshift(word);
+        wordGridRef.value?.addNewWordId(word.id);
+    });
+    updateSourceCounts();
+
+    if (insertedWords.length === 0) return;
+
+    // 并行获取所有单词的释义
+    await Promise.all(
+        insertedWords.map(async (word) => {
+            try {
+                const updatedWord = await api.words.fetchDefinition(word.id);
+                // 获取完成后立即更新对应单词
+                const index = words.value.findIndex(w => w.id === word.id);
+                if (index !== -1) {
+                    words.value[index] = updatedWord;
+                }
+            } catch (error) {
+                logger.error(`Failed to fetch definition for word ${word.word}:`, error);
+            }
+        })
+    );
 };
 
 const handleBatchDelete = (wordIds: number[]) => {

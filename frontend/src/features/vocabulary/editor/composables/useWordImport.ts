@@ -14,7 +14,10 @@ interface MessageState {
 export function useWordImport(
   source: Ref<string>,
   inputRef: Ref<HTMLInputElement | undefined>,
-  emit: (event: 'wordInserted', word: Word) => void
+  emit: {
+    (event: 'wordInserted', word: Word): void
+    (event: 'batchWordInserted', words: Word[]): void
+  }
 ) {
   const word = ref('')
   const isLoading = ref(false)
@@ -118,9 +121,8 @@ export function useWordImport(
       }
 
       if (result.inserted_words && result.inserted_words.length > 0) {
-        result.inserted_words.forEach(insertedWord => {
-          emit('wordInserted', insertedWord)
-        })
+        // 批量插入使用专用事件，支持并行获取释义
+        emit('batchWordInserted', result.inserted_words)
       }
     } catch (error) {
       const errorMessage = handleWordInsertError(error)
