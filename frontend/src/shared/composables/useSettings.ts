@@ -19,11 +19,19 @@ let loadingPromise: Promise<UserSettings> | null = null
 export function useSettings() {
   /**
    * 加载用户设置（带缓存和去重）
+   * @param options.force - 强制重新查询，忽略缓存
    */
-  const loadSettings = async (): Promise<UserSettings> => {
-    // 如果已经加载过，直接返回缓存
-    if (isLoaded.value && settings.value) {
+  const loadSettings = async (options?: { force?: boolean }): Promise<UserSettings> => {
+    const force = options?.force ?? false
+
+    // 如果已经加载过且不是强制刷新，直接返回缓存
+    if (!force && isLoaded.value && settings.value) {
       return settings.value
+    }
+
+    // 强制刷新时清除之前的加载状态
+    if (force) {
+      loadingPromise = null
     }
 
     // 如果正在加载中，返回相同的 Promise

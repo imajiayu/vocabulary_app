@@ -18,7 +18,7 @@
   <!-- 默认完整展示模式 -->
   <div v-else-if="hasDefinition" :class="['content-wrapper', { horizontal: props.horizontal }]">
     <!-- 右侧内容 -->
-    <div class="main-content">
+    <div class="review-left-column">
       <div class="field-group word-field-group">
         <label class="field-label">单词</label>
         <div class="word-display">
@@ -142,40 +142,40 @@ const hasExamples = computed(() => {
   .content-wrapper.horizontal {
     width: 100%;
     min-width: 600px;
-  }
-
-  .content-wrapper.horizontal .main-content {
-    width: 50%;
     align-items: flex-start;
   }
 
+  .content-wrapper.horizontal .review-left-column,
   .content-wrapper.horizontal .examples-container {
     width: 50%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
   }
 
-  .content-wrapper.horizontal .field-group {
-    width: 100%;
-    align-items: flex-start;
+  /*
+   * 横向布局标签对齐方案：
+   * 两边的 field-group 都使用静态定位的标签
+   * 标签在顶部，内容在下方，自然流动对齐
+   */
+
+  /* 重置所有 field-group 的标签为静态定位 */
+  .content-wrapper.horizontal .field-group .field-label {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    margin-bottom: 0.75rem !important;
   }
 
-  /* 桌面端横向布局时调整单词字段组 */
+  /* 单词字段组：移除居中，让布局与例句一致 */
   .content-wrapper.horizontal .word-field-group {
-    min-height: 80px; /* 减少最小高度 */
-    position: relative;
-    padding-top: 1.5rem; /* 为标题留出空间 */
+    min-height: auto;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 
-  /* 横向布局时调整单词标题标签位置 */
-  .content-wrapper.horizontal .word-field-group .field-label {
-    position: absolute;
-    top: 0; /* 改为从顶部开始 */
-    left: 0;
-    right: 0;
-    white-space: nowrap;
-    overflow: visible;
+  /* 单词显示样式 */
+  .content-wrapper.horizontal .word-field-group .word-display {
+    text-align: left;
   }
 
   /* 桌面端横向布局下only-show-word模式的居中样式 */
@@ -185,7 +185,7 @@ const hasExamples = computed(() => {
 }
 
 /* 非横向布局下的主内容区 */
-.main-content {
+.review-left-column {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -332,8 +332,8 @@ const hasExamples = computed(() => {
   gap: 1rem;
 }
 
-/* 例句标签特殊样式 - 覆盖word-field-group的绝对定位 */
-.examples-container .field-label {
+/* 例句标签特殊样式 - 非横向布局时使用静态定位 */
+.content-wrapper:not(.horizontal) .examples-container .field-label {
   position: static !important;
   top: auto !important;
   left: auto !important;
@@ -409,7 +409,7 @@ const hasExamples = computed(() => {
     flex-direction: column !important;
   }
 
-  .main-content {
+  .review-left-column {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -429,15 +429,15 @@ const hasExamples = computed(() => {
     margin-bottom: 0.5rem;
   }
 
-  /* 单词字段组特殊处理 */
-  .field-group:first-child,
+  /* 单词字段组特殊处理 - 只针对 review-left-column 内的第一个 field-group */
+  .review-left-column > .field-group:first-child,
   .word-field-group {
     width: 100%;
     align-items: center;
     min-height: 90px; /* 移动端减小高度 */
   }
 
-  .field-group:first-child .field-label,
+  .review-left-column > .field-group:first-child .field-label,
   .word-field-group .field-label {
     align-self: flex-start;
     position: absolute;
@@ -548,7 +548,7 @@ const hasExamples = computed(() => {
     gap: 0.625rem !important;
   }
 
-  .main-content {
+  .review-left-column {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -563,15 +563,15 @@ const hasExamples = computed(() => {
     align-items: flex-start;
   }
 
-  /* 单词字段组特殊处理 */
-  .field-group:first-child,
+  /* 单词字段组特殊处理 - 只针对 review-left-column 内的第一个 field-group */
+  .review-left-column > .field-group:first-child,
   .word-field-group {
     width: 100%;
     align-items: center;
     min-height: 80px; /* 小屏幕进一步减小高度 */
   }
 
-  .field-group:first-child .field-label,
+  .review-left-column > .field-group:first-child .field-label,
   .word-field-group .field-label {
     align-self: flex-start;
     position: absolute;

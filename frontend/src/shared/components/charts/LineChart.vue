@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { watch, computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import * as echarts from 'echarts'
-import { logger } from '@/shared/utils/logger'
 
 interface LineSeries {
   name?: string
@@ -23,7 +22,6 @@ let ro: ResizeObserver | null = null
 
 // 对齐 labels 和 values
 const processedData = computed(() => {
-  logger.log(props.series)
   if (!props.series || props.series.length === 0) return { mergedLabels: [], processedSeries: [] }
 
   const allLabelsSet = new Set<string>()

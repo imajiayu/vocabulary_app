@@ -1,19 +1,21 @@
 <template>
-    <div class="app-container with-topbar">
+    <PageLayout
+        with-topbar
+        show-top-bar
+        show-home-button
+        show-stats-button
+        max-width="72rem"
+        content-class="management-content"
+    >
+        <template #topbar-center>
+            <span class="title">单词管理</span>
+        </template>
+
         <!-- Loading State -->
         <Loading v-if="isLoading" text="加载中..." />
 
         <!-- Main Content -->
         <template v-else>
-            <!-- Header -->
-            <TopBar show-home-button show-stats-button>
-                <template #center>
-                    <span class="title">单词管理</span>
-                </template>
-            </TopBar>
-
-            <!-- Main Content -->
-            <main class="main-content">
                 <div class="top-controls">
                     <!-- 添加单词表单 -->
                     <div class="control-item">
@@ -62,12 +64,11 @@
                         @show-detail="handleShowDetail"
                         @batch-delete="handleBatchDelete" />
                 </div>
-            </main>
 
             <!-- 详情弹窗 - 使用 store 管理状态 -->
             <WordEditorModal />
         </template>
-    </div>
+    </PageLayout>
 </template>
 
 <script setup lang="ts">
@@ -77,7 +78,7 @@ import SearchFilter from '@/features/vocabulary/grid/SearchFilter.vue';
 import WordGrid from '@/features/vocabulary/grid/WordGrid.vue';
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue';
 import Loading from '@/shared/components/feedback/Loading.vue'
-import TopBar from '@/shared/components/layout/TopBar.vue';
+import PageLayout from '@/shared/components/layout/PageLayout.vue';
 import type { Word, SourceCounts } from '@/shared/types';
 import { useWordStats } from '@/shared/composables/useWordStats';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
@@ -330,16 +331,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.main-content {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    min-height: calc(100vh - 60px); /* 减去 TopBar 高度 */
-    box-sizing: border-box;
-}
+/* PageLayout 已提供基础布局，这里只需要页面特有样式 */
 
 .top-controls {
     display: flex;
@@ -413,14 +405,8 @@ onUnmounted(() => {
 
 /* spin animation defined in animations.css */
 
-/* 移动端全面适配 */
+/* 移动端适配 */
 @media (max-width: 480px) {
-    .main-content {
-        padding: 1rem 0.75rem;
-        gap: 1rem;
-        min-height: calc(100vh - 48px); /* 调整 TopBar 高度 */
-    }
-
     .top-controls {
         flex-direction: column;
         gap: 1rem;
@@ -442,31 +428,8 @@ onUnmounted(() => {
     }
 }
 
-/* 小屏手机进一步优化 */
-@media (max-width: 480px) {
-    .main-content {
-        padding: 0.875rem 0.5rem;
-        gap: 0.875rem;
-    }
-
-    .top-controls {
-        gap: 0.875rem;
-    }
-
-    .words-section {
-        padding: 0.875rem;
-        border-radius: 0.375rem;
-    }
-}
-
 /* 横屏适配 */
 @media (max-height: 500px) and (orientation: landscape) {
-    .main-content {
-        padding: 0.75rem;
-        gap: 0.75rem;
-        min-height: calc(100vh - 40px);
-    }
-
     .words-section {
         padding: 0.75rem;
     }

@@ -121,8 +121,17 @@ const renderChart = () => {
     elRef.value.style.width = '100%'
     elRef.value.style.height = targetHeight + 'px'
 
-    // 强制触发重排，然后初始化
+    // 强制触发重排
     elRef.value.offsetHeight
+
+    // 检查容器是否有有效尺寸，避免 ECharts 警告
+    const containerWidth = elRef.value.clientWidth
+    const containerHeight = elRef.value.clientHeight
+    if (containerWidth === 0 || containerHeight === 0) {
+      // 容器尚无尺寸，延迟重试
+      setTimeout(() => renderChart(), 100)
+      return
+    }
 
     try {
       chart = echarts.init(elRef.value)

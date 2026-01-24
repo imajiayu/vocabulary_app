@@ -1,3 +1,4 @@
+import json
 import logging
 import random
 from collections import Counter
@@ -287,12 +288,16 @@ def insert_words():
     if not word or not source:
         return create_response(False, None, "单词不能为空"), 400
 
-    new_word = db_insert_word(word, source)
-    if not new_word:
-        return create_response(False, None, f"单词 '{word}' 已存在或插入失败"), 400
+    try:
+        new_word = db_insert_word(word, source)
+        if new_word is None:
+            return create_response(False, None, f"单词 '{word}' 已存在"), 400
 
-    # 释义获取已改为前端同步调用 POST /words/<id>/fetch-definition
-    return create_response(True, new_word, "Word inserted successfully")
+        # 释义获取已改为前端同步调用 POST /words/<id>/fetch-definition
+        return create_response(True, new_word, "Word inserted successfully")
+    except Exception as e:
+        logger.error(f"Failed to insert word '{word}': {e}")
+        return create_response(False, None, f"插入失败: {str(e)}"), 500
 
 
 @api_bp.route("/words/batch", methods=["POST"])
@@ -330,11 +335,16 @@ def batch_insert_words():
         if not word_text:
             continue
 
-        new_word = db_insert_word(word_text, source)
-        if new_word:
-            success_count += 1
-            inserted_words.append(new_word)
-        else:
+        try:
+            new_word = db_insert_word(word_text, source)
+            if new_word:
+                success_count += 1
+                inserted_words.append(new_word)
+            else:
+                failed_count += 1
+                failed_words.append(word_text)
+        except Exception as e:
+            logger.error(f"Failed to insert word '{word_text}': {e}")
             failed_count += 1
             failed_words.append(word_text)
 
@@ -508,8 +518,12 @@ def update_word(word_id):
             return create_response(False, None, "未提供有效的更新字段。"), 400
 
         if update_data.get("word") and update_data.get("definition"):
+            # 如果 definition 是 dict，先序列化为 JSON 字符串
+            definition = update_data["definition"]
+            if isinstance(definition, dict):
+                definition = json.dumps(definition, ensure_ascii=False)
             update_data["definition"] = get_bold_definition(
-                update_data["word"], update_data["definition"]
+                update_data["word"], definition
             )
 
         # 5. 调用数据库更新函数，并获取完整的更新后对象

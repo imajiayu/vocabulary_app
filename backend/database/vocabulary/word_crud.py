@@ -3,30 +3,39 @@
 单词 CRUD 操作
 """
 import json
+import logging
 from datetime import date
 from sqlalchemy import text, update
 
 from backend.extensions import get_session
 from backend.models.word import Word, WordRelation
 
+logger = logging.getLogger(__name__)
+
 
 def db_insert_word(word_text, source):
-    """插入新单词"""
-    try:
-        with get_session() as db:
-            existing = db.query(Word).filter(Word.word == word_text).first()
-            if existing:
-                return None
-            today = date.today()
-            new_word = Word(word=word_text, source=source, next_review=today)
-            db.add(new_word)
-            db.commit()
+    """插入新单词
 
-            new_word = db.query(Word).filter(Word.word == word_text).first()
-            return new_word.to_dict()
-    except Exception:
-        db.rollback()
-        return None
+    Returns:
+        dict: 新插入的单词字典，成功时返回
+        None: 单词已存在时返回
+
+    Raises:
+        Exception: 数据库操作失败时抛出，由调用方处理
+    """
+    with get_session() as db:
+        existing = db.query(Word).filter(Word.word == word_text).first()
+        if existing:
+            logger.debug(f"Word '{word_text}' already exists with id={existing.id}, source={existing.source}")
+            return None
+
+        today = date.today()
+        new_word = Word(word=word_text, source=source, next_review=today)
+        db.add(new_word)
+        db.commit()
+
+        new_word = db.query(Word).filter(Word.word == word_text).first()
+        return new_word.to_dict()
 
 
 def db_delete_word(word_id: int):
@@ -55,6 +64,11 @@ def db_update_word(word_id: int, update_data: dict):
     """更新单词字段"""
     if not update_data:
         return "没有提供更新字段。", 400, None
+
+    # 如果 definition 是 dict，序列化为 JSON 字符串
+    if "definition" in update_data and isinstance(update_data["definition"], dict):
+        update_data = update_data.copy()  # 避免修改原始数据
+        update_data["definition"] = json.dumps(update_data["definition"], ensure_ascii=False)
 
     # 构建 SET 子句，使用命名参数
     set_clause = ", ".join([f'"{key}" = :{key}' for key in update_data.keys()])

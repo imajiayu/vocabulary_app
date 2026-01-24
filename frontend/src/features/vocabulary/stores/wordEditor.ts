@@ -95,32 +95,47 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     isSaving.value = true
     try {
-      let updatedWord = await api.words.updateWord(currentWord.value.id, currentWord.value)
+      const updatedWord = await api.words.updateWord(currentWord.value.id, currentWord.value)
 
-      // 如果单词字段变化了，自动获取新释义
-      if (wordFieldChanged) {
-        try {
-          const wordWithDefinition = await api.words.fetchDefinition(updatedWord.id)
-          updatedWord = wordWithDefinition
-        } catch (defError) {
-          log.error('获取释义失败，但单词已保存:', defError)
-          // 释义获取失败不影响保存结果
-        }
-      }
-
+      // 立即更新状态并退出编辑模式
       currentWord.value = updatedWord
       originalWord.value = { ...updatedWord }
       isEditing.value = false
+      isSaving.value = false
 
-      // 触发更新回调
+      // 触发更新回调（先用当前数据）
       onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
+
+      // 如果单词字段变化了，异步获取新释义（不阻塞 UI）
+      if (wordFieldChanged) {
+        fetchDefinitionAsync(updatedWord.id)
+      }
 
       return true
     } catch (error) {
       log.error('保存单词失败:', error)
-      return false
-    } finally {
       isSaving.value = false
+      return false
+    }
+  }
+
+  /**
+   * 异步获取释义并更新状态
+   */
+  async function fetchDefinitionAsync(wordId: number) {
+    try {
+      const wordWithDefinition = await api.words.fetchDefinition(wordId)
+
+      // 只有当 modal 还在显示同一个单词时才更新
+      if (currentWord.value?.id === wordId) {
+        currentWord.value = wordWithDefinition
+        originalWord.value = { ...wordWithDefinition }
+      }
+
+      // 再次触发回调，用新释义更新外部 UI（如 hover tooltip）
+      onWordUpdatedCallbacks.value.forEach(cb => cb(wordWithDefinition))
+    } catch (defError) {
+      log.error('获取释义失败:', defError)
     }
   }
 

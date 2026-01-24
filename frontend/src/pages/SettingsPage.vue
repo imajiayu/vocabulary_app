@@ -248,8 +248,8 @@ const handleSaveSuccess = () => {
 }
 
 onMounted(async () => {
-  // 使用全局设置加载器（带缓存）
-  await loadGlobalSettings()
+  // 进入设置页面时强制刷新，确保显示最新数据
+  await loadGlobalSettings({ force: true })
 })
 </script>
 

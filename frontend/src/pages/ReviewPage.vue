@@ -591,3 +591,20 @@ onUnmounted(() => {
   }
 }
 </style>
+
+<!-- 移动端隐藏滚动条但保持滚动功能 -->
+<style>
+@media (max-width: 480px) {
+  /* 隐藏页面滚动条但保持滚动 */
+  html,
+  body {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}
+</style>
