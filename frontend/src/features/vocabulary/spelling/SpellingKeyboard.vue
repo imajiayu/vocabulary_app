@@ -250,13 +250,13 @@ const emit = defineEmits<{
 
 .forgot-key {
   flex: 1.5;
-  background: #a855f7;
+  background: var(--color-primary);
   color: white;
   font-size: 1.2rem;
 }
 
 .forgot-key:active:not(:disabled) {
-  background: #9333ea;
+  background: var(--color-primary-hover);
 }
 
 .enter-key {

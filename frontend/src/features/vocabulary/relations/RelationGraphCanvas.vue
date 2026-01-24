@@ -83,7 +83,7 @@ function renderGraph() {
       symbol: 'rect',
       symbolSize: [width, height],
       itemStyle: {
-        color: isCenterNode ? '#5470c6' : '#91cc75',
+        color: isCenterNode ? '#996B3D' : '#91cc75',
         borderRadius: 4
       },
       label: {
@@ -329,8 +329,8 @@ defineExpose({
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #1677ff;
+  border: 4px solid var(--color-bg-tertiary);
+  border-top: 4px solid var(--color-primary);
   border-radius: var(--radius-full);
   width: 40px;
   height: 40px;
@@ -344,11 +344,11 @@ defineExpose({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff2f0;
-  border: 1px solid #ffccc7;
+  background: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
   border-radius: var(--radius-xs);
   padding: 1rem 2rem;
-  color: #ff4d4f;
+  color: var(--color-danger);
   font-size: 14px;
   z-index: 101;
 }

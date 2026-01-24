@@ -158,7 +158,7 @@ const resetSettings = async () => {
 .section-title {
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 8px 0;
 }
 
@@ -195,7 +195,7 @@ const resetSettings = async () => {
 }
 
 .setting-card:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   border-color: rgba(102, 126, 234, 0.2);
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
 }
@@ -218,14 +218,14 @@ const resetSettings = async () => {
 .setting-value {
   font-size: 32px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--color-primary);
   line-height: 1;
 }
 
 .setting-unit {
   font-size: 14px;
   font-weight: 500;
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   margin-top: 2px;
 }
 
@@ -240,7 +240,7 @@ const resetSettings = async () => {
 
 .setting-hint {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   margin: 0;
   line-height: 1.5;
   text-align: center;
@@ -264,7 +264,7 @@ const resetSettings = async () => {
 }
 
 .btn-save {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   flex: 1;
 }
@@ -287,7 +287,7 @@ const resetSettings = async () => {
 
 .btn-reset:hover {
   background: var(--color-bg-secondary);
-  border-color: #cbd5e1;
+  border-color: var(--color-border-medium);
 }
 
 .save-success {

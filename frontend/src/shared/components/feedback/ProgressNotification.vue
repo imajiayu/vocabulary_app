@@ -161,7 +161,7 @@ const remainingCount = computed(() => {
 }
 
 .progress-number {
-  color: #6366f1;
+  color: var(--color-primary);
   font-weight: 600;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
 }

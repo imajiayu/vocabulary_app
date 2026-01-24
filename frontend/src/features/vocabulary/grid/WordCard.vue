@@ -144,7 +144,7 @@ onUnmounted(() => {
 }
 
 .word-card.remembered {
-  border-color: #93c5fd;
+  border-color: var(--color-border-medium);
 }
 
 /* hover 效果已移至媒体查询中 */
@@ -194,7 +194,7 @@ onUnmounted(() => {
 }
 
 .word-card.selection-mode:not(.selected) {
-  border-color: #cbd5e1;
+  border-color: var(--color-border-medium);
   border-width: 2px;
   border-style: dashed;
 }
@@ -208,7 +208,7 @@ onUnmounted(() => {
 
 /* 多选模式下hover效果 */
 .word-card.selection-mode:hover:not(.selected) {
-  border-color: #94a3b8;
+  border-color: var(--color-text-tertiary);
   border-width: 2px;
 }
 </style>

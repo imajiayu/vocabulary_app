@@ -10,37 +10,28 @@
 </script>
 
 <style>
-/* iOS Safari 滚动条修复 */
+/* 基础样式 - 允许页面自然滚动 */
 html, body {
   height: 100%;
-  overflow-x: hidden;
-  /* iOS Safari 视口高度修复 */
   min-height: 100vh;
-  min-height: -webkit-fill-available;
+  min-height: 100dvh;
+  /* 允许页面自然滚动，滚动条在最右边 */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
-  /* iOS Safari 弹性滚动和滚动条隐藏 */
-  -webkit-overflow-scrolling: touch;
-  overflow-scrolling: touch;
-  overscroll-behavior-y: none;
+  /* 禁止过度滚动的弹性效果，但不禁止正常滚动 */
+  overscroll-behavior-y: contain;
 }
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 容器高度修复 */
+  /* 让内容自然撑开 */
   min-height: 100vh;
-  min-height: -webkit-fill-available;
-  overflow-x: hidden;
+  min-height: 100dvh;
   position: relative;
-}
-
-/* iOS Safari 特定修复 */
-@supports (-webkit-touch-callout: none) {
-  #app {
-    height: -webkit-fill-available;
-  }
 }
 </style>

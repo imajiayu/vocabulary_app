@@ -287,7 +287,7 @@ onMounted(async () => {
 .sidebar-header h2 {
   font-size: 20px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
@@ -313,11 +313,11 @@ onMounted(async () => {
 }
 
 .nav-item:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
 }
 

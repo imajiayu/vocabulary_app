@@ -144,7 +144,7 @@ const handleSave = async () => {
 .status-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text-primary);
 }
 
 .status-badge {
@@ -166,7 +166,7 @@ const handleSave = async () => {
 
 .status-value {
   font-size: 0.875rem;
-  color: #4b5563;
+  color: var(--color-text-secondary);
 }
 
 .normal-actions {
@@ -214,7 +214,7 @@ const handleSave = async () => {
 }
 
 .cancel-btn:hover {
-  background-color: #4b5563;
+  background-color: var(--color-text-secondary);
 }
 
 /* 各按钮配色 */
@@ -233,7 +233,7 @@ const handleSave = async () => {
 }
 
 .restore-btn:hover {
-  background-color: #4b5563;
+  background-color: var(--color-text-secondary);
 }
 
 .reset-btn {

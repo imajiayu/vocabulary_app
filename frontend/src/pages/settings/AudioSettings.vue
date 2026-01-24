@@ -134,7 +134,7 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 .section-title {
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 8px 0;
 }
 
@@ -170,7 +170,7 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 .audio-label {
   font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .accent-switch {
@@ -208,7 +208,7 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 }
 
 .autoplay-item:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   border-color: rgba(102, 126, 234, 0.2);
 }
 
@@ -222,7 +222,7 @@ watch(() => audio.value.autoPlayAfterAnswer, async (newValue, oldValue) => {
 .autoplay-title {
   font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .autoplay-desc {

@@ -116,7 +116,7 @@ onUnmounted(() => {
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-default);
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text-primary);
   background: white;
   cursor: pointer;
   display: flex;
@@ -127,7 +127,7 @@ onUnmounted(() => {
 }
 
 .custom-select-trigger:hover {
-  border-color: #cbd5e1;
+  border-color: var(--color-border-medium);
   background: var(--color-bg-secondary);
 }
 
@@ -176,7 +176,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .select-option:hover {
@@ -184,7 +184,7 @@ onUnmounted(() => {
 }
 
 .select-option.selected {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   font-weight: 500;
 }
 </style>

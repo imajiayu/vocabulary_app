@@ -1,108 +1,112 @@
 /* shared/styles/tokens.css - 设计变量 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Editorial Study 风格 - 温暖纸质感、墨水色调、铜褐强调
+   灵感：高端教科书、学术期刊、古典图书馆
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── 颜色 - 主色 ── */
-  --color-primary: #1677ff;
-  --color-primary-hover: #4096ff;
-  --color-primary-light: rgba(22, 119, 255, 0.1);
-  --color-secondary: #52c41a;
-  --color-secondary-light: rgba(82, 196, 26, 0.1);
-  --color-danger: #ff4d4f;
-  --color-danger-light: rgba(255, 77, 79, 0.1);
-  --color-warning: #faad14;
-  --color-warning-light: rgba(250, 173, 20, 0.1);
+  /* ── 颜色 - 主色（铜褐/暗金 - 学术感强调色） ── */
+  --color-primary: #996B3D;
+  --color-primary-hover: #B8860B;
+  --color-primary-light: rgba(153, 107, 61, 0.12);
+  --color-secondary: #5D7A5D;
+  --color-secondary-light: rgba(93, 122, 93, 0.12);
+  --color-danger: #9B3B3B;
+  --color-danger-light: rgba(155, 59, 59, 0.1);
+  --color-warning: #B8860B;
+  --color-warning-light: rgba(184, 134, 11, 0.12);
 
-  /* ── 颜色 - 语义化操作色 ── */
-  --color-success: #10b981;
-  --color-success-hover: #059669;
-  --color-success-light: rgba(16, 185, 129, 0.1);
-  --color-success-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-  --color-edit: #f59e0b;
-  --color-edit-light: rgba(245, 158, 11, 0.1);
-  --color-edit-gradient: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
-  --color-delete: #ef4444;
-  --color-delete-light: rgba(239, 68, 68, 0.1);
-  --color-delete-gradient: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  /* ── 颜色 - 语义化操作色（内敛学术风） ── */
+  --color-success: #5D7A5D;
+  --color-success-hover: #4A6B4A;
+  --color-success-light: rgba(93, 122, 93, 0.12);
+  --color-success-gradient: linear-gradient(135deg, rgba(93, 122, 93, 0.12), rgba(93, 122, 93, 0.06));
+  --color-edit: #996B3D;
+  --color-edit-light: rgba(153, 107, 61, 0.12);
+  --color-edit-gradient: linear-gradient(135deg, rgba(153, 107, 61, 0.12), rgba(153, 107, 61, 0.06));
+  --color-delete: #9B3B3B;
+  --color-delete-light: rgba(155, 59, 59, 0.1);
+  --color-delete-gradient: linear-gradient(135deg, rgba(155, 59, 59, 0.1), rgba(155, 59, 59, 0.05));
 
-  /* ── 颜色 - 玻璃态背景 ── */
-  --color-bg-glass: rgba(255, 255, 255, 0.8);
-  --color-bg-glass-light: rgba(255, 255, 255, 0.6);
-  --color-bg-glass-strong: rgba(255, 255, 255, 0.95);
-  --color-bg-glass-hover: rgba(255, 255, 255, 0.9);
+  /* ── 颜色 - 纸质感背景（替代玻璃态） ── */
+  --color-bg-glass: rgba(250, 247, 242, 0.95);
+  --color-bg-glass-light: rgba(250, 247, 242, 0.85);
+  --color-bg-glass-strong: rgba(255, 253, 250, 0.98);
+  --color-bg-glass-hover: rgba(245, 240, 230, 0.95);
 
   /* ── 颜色 - 滚动条 ── */
-  --color-scrollbar-thumb: #cbd5e0;
-  --color-scrollbar-thumb-hover: #a0aec0;
+  --color-scrollbar-thumb: #C4B8A8;
+  --color-scrollbar-thumb-hover: #A69888;
 
   /* ── 颜色 - 刻度/评分可视化 ── */
-  --color-scale-excellent: rgba(82, 196, 26, 0.4);
-  --color-scale-good: rgba(250, 173, 20, 0.35);
-  --color-scale-fair: rgba(255, 77, 79, 0.3);
-  --color-scale-negative: rgba(255, 77, 79, 0.25);
+  --color-scale-excellent: rgba(93, 122, 93, 0.45);
+  --color-scale-good: rgba(184, 134, 11, 0.4);
+  --color-scale-fair: rgba(155, 59, 59, 0.35);
+  --color-scale-negative: rgba(155, 59, 59, 0.25);
 
-  /* ── 颜色 - 紫色主题（Speaking模块） ── */
-  --color-purple: #667eea;
-  --color-purple-dark: #764ba2;
-  --color-purple-light: rgba(102, 126, 234, 0.1);
-  --color-purple-border: rgba(102, 126, 234, 0.2);
-  --color-purple-vivid: #a855f7;
-  --color-purple-vivid-dark: #7c3aed;
-  --color-purple-vivid-light: rgba(168, 85, 247, 0.15);
-  --color-purple-vivid-bg: rgba(168, 85, 247, 0.08);
+  /* ── 颜色 - 赭石主题（Speaking模块 - 替代紫色） ── */
+  --color-purple: #8B6914;
+  --color-purple-dark: #6B4F0F;
+  --color-purple-light: rgba(139, 105, 20, 0.1);
+  --color-purple-border: rgba(139, 105, 20, 0.2);
+  --color-purple-vivid: #B8860B;
+  --color-purple-vivid-dark: #8B6914;
+  --color-purple-vivid-light: rgba(184, 134, 11, 0.15);
+  --color-purple-vivid-bg: rgba(184, 134, 11, 0.08);
 
-  /* ── 颜色 - 蓝色主题（用户内容区域） ── */
-  --color-blue-light: rgba(59, 130, 246, 0.15);
-  --color-blue-bg: rgba(59, 130, 246, 0.08);
+  /* ── 颜色 - 赭石主题（用户内容区域 - 替代蓝色） ── */
+  --color-blue-light: rgba(139, 105, 20, 0.12);
+  --color-blue-bg: rgba(139, 105, 20, 0.06);
 
   /* ── 颜色 - 状态指示 ── */
-  --color-recording: #ef4444;
-  --color-recording-dark: #dc2626;
-  --color-recording-light: rgba(239, 68, 68, 0.2);
-  --color-processing: #f59e0b;
-  --color-processing-dark: #d97706;
-  --color-processing-light: rgba(245, 158, 11, 0.2);
+  --color-recording: #9B3B3B;
+  --color-recording-dark: #7A2E2E;
+  --color-recording-light: rgba(155, 59, 59, 0.2);
+  --color-processing: #B8860B;
+  --color-processing-dark: #8B6914;
+  --color-processing-light: rgba(184, 134, 11, 0.2);
 
-  /* ── 颜色 - 文本 ── */
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #64748b;
-  --color-text-tertiary: #94a3b8;
-  --color-text-muted: #9ca3af;
-  --color-text-inverse: #ffffff;
+  /* ── 颜色 - 文本（墨水色调） ── */
+  --color-text-primary: #2D3748;
+  --color-text-secondary: #5A6578;
+  --color-text-tertiary: #8A94A6;
+  --color-text-muted: #A0A8B8;
+  --color-text-inverse: #FFFDF7;
 
-  /* ── 颜色 - 背景 ── */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f3f4f6;
-  --color-bg-overlay: rgba(255, 255, 255, 0.95);
-  --color-bg-tooltip: rgba(50, 50, 50, 0.9);
-  --color-bg-page: #f5f5f5;
+  /* ── 颜色 - 背景（温暖纸质感） ── */
+  --color-bg-primary: #FFFDF7;
+  --color-bg-secondary: #FAF7F2;
+  --color-bg-tertiary: #F0EBE3;
+  --color-bg-overlay: rgba(255, 253, 247, 0.97);
+  --color-bg-tooltip: rgba(45, 55, 72, 0.92);
+  --color-bg-page: #FAF7F2;
 
-  /* ── 颜色 - 边框 ── */
-  --color-border-light: rgba(0, 0, 0, 0.1);
-  --color-border-medium: #e2e8f0;
-  --color-border-strong: #cbd5e1;
+  /* ── 颜色 - 边框（温暖灰调） ── */
+  --color-border-light: rgba(139, 105, 20, 0.1);
+  --color-border-medium: #E8E0D5;
+  --color-border-strong: #D4C9B8;
 
-  /* ── 渐变 ── */
-  --gradient-primary: linear-gradient(135deg, #667eea, #764ba2);
-  --gradient-background: linear-gradient(135deg, #dbeafe 0%, #ffffff 50%, #f3e8ff 100%);
-  --gradient-success: linear-gradient(90deg, #52c41a, #73d13d);
-  --gradient-primary-bar: linear-gradient(90deg, #1890ff, #40a9ff);
-  --gradient-purple-subtle: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
-  --gradient-purple-hover: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+  /* ── 渐变（温暖纸质渐变） ── */
+  --gradient-primary: linear-gradient(135deg, #996B3D, #B8860B);
+  --gradient-background: #FAF7F2;
+  --gradient-success: linear-gradient(90deg, #5D7A5D, #6B8C6B);
+  --gradient-primary-bar: linear-gradient(90deg, #996B3D, #B8860B);
+  --gradient-purple-subtle: linear-gradient(135deg, rgba(139, 105, 20, 0.06), rgba(184, 134, 11, 0.04));
+  --gradient-purple-hover: linear-gradient(135deg, rgba(139, 105, 20, 0.1), rgba(184, 134, 11, 0.08));
   --gradient-axis-spell: linear-gradient(to right,
-    rgba(255, 77, 79, 0.25) 0%,
-    rgba(255, 77, 79, 0.25) 41.2%,
-    rgba(255, 255, 255, 0.15) 41.2%,
-    rgba(255, 255, 255, 0.15) 100%
+    rgba(155, 59, 59, 0.25) 0%,
+    rgba(155, 59, 59, 0.25) 41.2%,
+    rgba(250, 247, 242, 0.15) 41.2%,
+    rgba(250, 247, 242, 0.15) 100%
   );
 
-  /* ── 图表颜色 ── */
-  --chart-color-primary: #1677ff;
-  --chart-color-success: #52c41a;
-  --chart-color-warning: #faad14;
-  --chart-color-danger: #ff4d4f;
-  --chart-color-purple: #722ed1;
-  --chart-color-cyan: #13c2c2;
+  /* ── 图表颜色（学术感配色） ── */
+  --chart-color-primary: #996B3D;
+  --chart-color-success: #5D7A5D;
+  --chart-color-warning: #B8860B;
+  --chart-color-danger: #9B3B3B;
+  --chart-color-purple: #6B4F0F;
+  --chart-color-cyan: #4A7A7A;
 
   /* ── 间距 ── */
   --spacing-xs: 4px;

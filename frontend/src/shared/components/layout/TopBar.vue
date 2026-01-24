@@ -204,9 +204,9 @@ const goStats = () => {
   z-index: 10;
   width: 100%;
   box-sizing: border-box;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border-medium);
+  box-shadow: 0 1px 4px rgba(45, 55, 72, 0.04);
 }
 
 .top-bar.sticky {
@@ -249,9 +249,9 @@ const goStats = () => {
 
 /* 内置返回首页按钮样式 */
 .home-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   border: none;
-  color: white;
+  color: var(--color-text-inverse);
   font: inherit;
   cursor: pointer;
   padding: 6px 12px;
@@ -265,7 +265,7 @@ const goStats = () => {
   justify-content: center;
   font-size: 13px;
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 6px rgba(153, 107, 61, 0.2);
   /* 触摸优化 */
   touch-action: manipulation; /* 防止双击缩放 */
   user-select: none; /* 防止文本选择 */
@@ -274,9 +274,9 @@ const goStats = () => {
 
 /* 图标按钮样式 */
 .icon-button {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #666;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-text-secondary);
   font-size: 16px;
   cursor: pointer;
   padding: 6px 10px;
@@ -287,8 +287,6 @@ const goStats = () => {
   justify-content: center;
   min-width: 36px;
   min-height: 32px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   /* 触摸优化 */
   touch-action: manipulation;
   user-select: none;
@@ -310,7 +308,7 @@ const goStats = () => {
 .home-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #7c8fef 0%, #8757a7 100%);
+  background: linear-gradient(135deg, #B8860B 0%, #996B3D 100%);
 }
 
 .home-button:active:not(:disabled) {
@@ -350,12 +348,12 @@ const goStats = () => {
   }
 }
 
-/* 工具类样式（保持你的原样） */
+/* 工具类样式 */
 :deep(.nav-link) {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #1677ff;
+  color: var(--color-primary);
   text-decoration: none;
   font-size: 16px;
   font-weight: bold;
@@ -369,13 +367,13 @@ const goStats = () => {
 }
 
 :deep(.nav-link:hover) {
-  color: #4096ff;
+  color: var(--color-primary-hover);
 }
 
 :deep(.title) {
   font-weight: 600;
   font-size: 16px;
-  color: #262626;
+  color: var(--color-text-primary);
   /* 移动端文本优化 */
   white-space: nowrap;
   overflow: hidden;
@@ -386,7 +384,7 @@ const goStats = () => {
 
 :deep(.subtitle) {
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-secondary);
   /* 移动端文本优化 */
   white-space: nowrap;
   overflow: hidden;
@@ -398,9 +396,9 @@ const goStats = () => {
 :deep(.button) {
   padding: 4px 12px;
   border-radius: var(--radius-sm);
-  border: 1px solid #d9d9d9;
-  background: #fff;
-  color: #262626;
+  border: 1px solid var(--color-border-medium);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -416,19 +414,19 @@ const goStats = () => {
 }
 
 :deep(.button:hover) {
-  border-color: #4096ff;
-  color: #4096ff;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 :deep(.button.primary) {
-  background: #1677ff;
-  border-color: #1677ff;
-  color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
 }
 
 :deep(.button.primary:hover) {
-  background: #4096ff;
-  border-color: #4096ff;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 /* 手机端工具类样式适配 */
@@ -461,12 +459,12 @@ const goStats = () => {
 /* 深色主题适配 */
 @media (prefers-color-scheme: dark) {
   .home-button {
-    background: linear-gradient(135deg, #4c63d2 0%, #6b52a3 100%);
+    background: linear-gradient(135deg, #8B6914 0%, #6B4F0F 100%);
     box-shadow: 0 2px 8px rgba(76, 99, 210, 0.3);
   }
 
   .home-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #5b72e0 0%, #7a61b2 100%);
+    background: linear-gradient(135deg, #996B3D 0%, #B8860B 100%);
     box-shadow: 0 4px 16px rgba(76, 99, 210, 0.4);
   }
 }
@@ -495,7 +493,7 @@ const goStats = () => {
   }
 
   .home-button:active {
-    background: linear-gradient(135deg, #5a6fd8 0%, #694b94 100%);
+    background: linear-gradient(135deg, #996B3D 0%, #8B6914 100%);
     transform: scale(0.98);
     box-shadow: 0 1px 4px rgba(102, 126, 234, 0.2);
   }
@@ -558,12 +556,12 @@ const goStats = () => {
 /* 高对比度模式支持 */
 @media (prefers-contrast: high) {
   .home-button {
-    background: #0066cc;
+    background: var(--color-primary);
     border: 2px solid #ffffff;
   }
 
   .home-button:hover:not(:disabled) {
-    background: #004499;
+    background: var(--color-primary-hover);
   }
 }
 </style>

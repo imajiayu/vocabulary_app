@@ -157,7 +157,7 @@ onUnmounted(() => {
 }
 
 .speed-value {
-  color: #8b5cf6; /* 紫色 */
+  color: var(--color-primary); /* 紫色 */
 }
 
 .separator {

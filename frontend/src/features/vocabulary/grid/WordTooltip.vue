@@ -54,7 +54,7 @@ const formattedDefinition = computed(() => props.word.definition.definitions?.jo
 
 .tooltip-definition {
   font-size: 0.875rem;
-  color: #4b5563;
+  color: var(--color-text-secondary);
   white-space: pre-line; /* 保留换行显示 */
 }
 </style>

@@ -222,7 +222,7 @@ const resetSettings = async () => {
 .section-title {
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 8px 0;
 }
 
@@ -248,7 +248,7 @@ const resetSettings = async () => {
 .group-title {
   font-size: 20px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 8px 0;
 }
 
@@ -275,7 +275,7 @@ const resetSettings = async () => {
 .hotkey-label {
   font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -299,7 +299,7 @@ const resetSettings = async () => {
 }
 
 .btn-save {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   flex: 1;
 }
@@ -322,7 +322,7 @@ const resetSettings = async () => {
 
 .btn-reset:hover {
   background: var(--color-bg-secondary);
-  border-color: #cbd5e1;
+  border-color: var(--color-border-medium);
 }
 
 .save-success {

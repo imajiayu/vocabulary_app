@@ -1,5 +1,5 @@
 <template>
-    <div class="word-review-container">
+    <div class="word-review-container" :class="{ 'phase-one': !showDefinition }">
         <div class="content-area">
             <ReviewResult :word="word" :only-show-word="!showDefinition" :horizontal="true" />
             <RelatedWordsPanel v-if="word.related_words && word.related_words.length > 0 && showDefinition"
@@ -282,22 +282,21 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 主容器 - 移除不必要的高度限制 */
+/* 主容器 */
 .word-review-container {
     display: flex;
     flex-direction: column;
     max-width: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-    /* 使用自然高度，不强制设置固定高度 */
     position: relative;
 }
 
 /* 内容区域 - 移除滚动容器设置 */
 .content-area {
     padding: 1rem;
-    padding-bottom: 5rem; /* 为底部按钮栏留空间，减少过多间距 */
+    /* 底部间距 = 按钮栏高度 + 额外空间 */
+    padding-bottom: calc(2 * 2.8rem + 0.75rem + 2rem + 1.5rem);
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
@@ -312,12 +311,10 @@ onMounted(async () => {
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 100vw; /* 使用视口宽度而非百分比 */
     padding: 1rem;
-    background: none;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--color-bg-overlay);
+    border-top: 1px solid var(--color-border-medium);
     box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     box-sizing: border-box;
@@ -501,7 +498,8 @@ onMounted(async () => {
         padding-top: 0.5rem !important;
         padding-left: 0.5rem !important;
         padding-right: 0.5rem !important;
-        padding-bottom: 6rem !important; /* 强制设置底部间距 - 96px */
+        /* 底部间距 = 按钮栏高度 + 额外空间 */
+        padding-bottom: calc(2 * 3.5rem + 0.75rem + 2rem + env(safe-area-inset-bottom) + 1rem) !important;
     }
 
     .button-bar {
@@ -512,6 +510,8 @@ onMounted(async () => {
         bottom: 0;
         left: 0;
         right: 0;
+        width: 100vw; /* 使用视口宽度 */
+        background: rgba(255, 255, 255, 0.9); /* 确保有背景色 */
         z-index: 1001;
         /* 使用固定高度防止跳动 */
         height: calc(2 * 3.5rem + 0.75rem + 2rem + env(safe-area-inset-bottom));
@@ -578,12 +578,15 @@ onMounted(async () => {
         padding-top: 0.25rem !important;
         padding-left: 0.25rem !important;
         padding-right: 0.25rem !important;
-        padding-bottom: 8rem !important; /* 强制设置底部间距 - 88px */
+        /* 底部间距 = 按钮栏高度 + 额外空间 */
+        padding-bottom: calc(2 * 3.25rem + 0.625rem + 1.75rem + env(safe-area-inset-bottom) + 1rem) !important;
     }
 
     .button-bar {
         padding: 0.875rem 0.5rem;
         padding-bottom: calc(0.875rem + env(safe-area-inset-bottom));
+        width: 100vw; /* 使用视口宽度 */
+        background: rgba(255, 255, 255, 0.9); /* 确保有背景色 */
         /* 使用固定高度防止跳动 */
         height: calc(2 * 3.25rem + 0.625rem + 1.75rem + env(safe-area-inset-bottom));
         display: flex;

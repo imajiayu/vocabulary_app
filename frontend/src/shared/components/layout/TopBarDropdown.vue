@@ -79,9 +79,9 @@ onUnmounted(() => {
 }
 
 .dropdown-toggle {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #666;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-text-secondary);
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
@@ -93,17 +93,15 @@ onUnmounted(() => {
   justify-content: center;
   min-width: 36px;
   min-height: 32px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 .dropdown-toggle.active {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: rgba(102, 126, 234, 0.3);
-  color: #667eea;
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .hamburger-icon {

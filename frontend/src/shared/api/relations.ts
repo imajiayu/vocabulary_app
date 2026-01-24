@@ -30,14 +30,6 @@ export interface RelationStats {
   total: number
 }
 
-export interface ClearRelationsPayload {
-  relation_types?: string[]
-}
-
-export interface ClearRelationsResponse {
-  count: number
-}
-
 export interface AddRelationPayload {
   word_id: number
   related_word_id: number
@@ -84,14 +76,6 @@ export class RelationsApi {
    */
   static async getStats(): Promise<RelationStats> {
     return get<RelationStats>('/api/relations/stats')
-  }
-
-  /**
-   * 清空指定类型的关系
-   * @param payload 请求体
-   */
-  static async clear(payload?: ClearRelationsPayload): Promise<ClearRelationsResponse> {
-    return post<ClearRelationsResponse>('/api/relations/clear', payload || {})
   }
 
   /**

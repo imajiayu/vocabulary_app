@@ -19,12 +19,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .loading-container {
-  /* 填充父容器的可用空间 */
+  /* 填满可用空间并居中 */
+  width: 100%;
+  /* 使用 flex: 1 填满父容器，配合 min-height 确保有足够高度 */
   flex: 1;
+  min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 回退：当父容器没有 flex 布局时，使用最小高度 */
-  min-height: 200px;
 }
 </style>

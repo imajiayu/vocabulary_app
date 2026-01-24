@@ -7,6 +7,8 @@ const props = defineProps<{
   itemHeight?: number
   min?: number
   step?: number
+  /** 显示的最大值（超过 max 的部分会显示为禁用状态） */
+  displayMax?: number
 }>()
 
 const emit = defineEmits<{
@@ -20,14 +22,20 @@ const minValue = () => props.min ?? 1
 // 步长
 const stepValue = () => props.step ?? 1
 
-// 生成所有有效值的数组
+// 显示的最大值（如果没有指定，则等于可滚动的最大值）
+const displayMaxValue = computed(() => props.displayMax ?? props.max)
+
+// 生成所有显示值的数组（包括禁用的）
 const validValues = computed(() => {
   const result: number[] = []
-  for (let v = minValue(); v <= props.max; v += stepValue()) {
+  for (let v = minValue(); v <= displayMaxValue.value; v += stepValue()) {
     result.push(v)
   }
   return result
 })
+
+// 判断某个值是否禁用（超过可滚动的最大值）
+const isDisabled = (value: number) => value > props.max
 
 const wheelRef = ref<HTMLDivElement | null>(null)
 const isScrolling = ref(false)
@@ -126,7 +134,7 @@ onMounted(() => {
     <div class="wheel-list scrollbar-hidden" ref="wheelRef" @scroll="onWheelScroll">
       <!-- 添加顶部和底部的占位空间，确保第一个和最后一个元素能滚动到中心 -->
       <div class="wheel-spacer"></div>
-      <div class="wheel-item" v-for="value in validValues" :key="value" :class="{ active: value === modelValue }">
+      <div class="wheel-item" v-for="value in validValues" :key="value" :class="{ active: value === modelValue, disabled: isDisabled(value) }">
         {{ value }}
       </div>
       <div class="wheel-spacer"></div>
@@ -168,7 +176,7 @@ onMounted(() => {
   height: 28px;
   line-height: 28px;
   text-align: center;
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   scroll-snap-align: center;
   font-size: 13px;
   transition: color .2s ease, font-size .2s ease;
@@ -176,9 +184,13 @@ onMounted(() => {
 }
 
 .wheel-item.active {
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-weight: 600;
   font-size: 15px;
+}
+
+.wheel-item.disabled {
+  color: #fca5a5;
 }
 
 .wheel-mask {

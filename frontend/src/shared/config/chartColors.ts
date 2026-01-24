@@ -1,83 +1,83 @@
 /**
  * 图表和统计页面的颜色配置
- * 集中管理所有图表相关的颜色值，便于统一维护
+ * Editorial Study 风格 - 学术感配色
  */
 
 // 调色板 - 用于图表系列颜色
 export const palette = {
-  // 主要颜色
-  primary: '#1677ff',
-  success: '#52c41a',
-  warning: '#faad14',
-  danger: '#ff4d4f',
+  // 主要颜色（学术风）
+  primary: '#996B3D',    // 铜褐
+  success: '#5D7A5D',    // 橄榄绿
+  warning: '#B8860B',    // 暗金
+  danger: '#9B3B3B',     // 砖红
 
   // 扩展颜色
-  teal: '#36cfc9',
-  orange: '#fa8c16',
-  blue: '#1890ff',
-  purple: '#9254de',
-  green: '#52c41a',
-  red: '#ff4d4f',
-  yellow: '#fadb14',
-  pink: '#eb2f96',
-  gray: '#8c8c8c',
-  cyan: '#13c2c2',
+  teal: '#4A7A7A',
+  orange: '#B87333',
+  blue: '#5D6D7E',
+  purple: '#6B4F0F',
+  green: '#5D7A5D',
+  red: '#9B3B3B',
+  yellow: '#C4A000',
+  pink: '#A05050',
+  gray: '#7A7A7A',
+  cyan: '#4A7A7A',
 } as const
 
 // 热力图颜色
 export const heatmapColors = {
   // 拼写强度热力图
   spell: {
-    hasStrength: '#2e7d32',    // 有拼写强度
-    notSpelled: '#4da6ff',     // 未拼写过
-    notAvailable: '#cbcbcb',   // 不可拼写
+    hasStrength: '#4A6B4A',    // 有拼写强度（橄榄绿深）
+    notSpelled: '#8B7355',     // 未拼写过（沙褐）
+    notAvailable: '#C4B8A8',   // 不可拼写（温暖灰）
   },
 
   // EF(难度系数)热力图
   ef: {
-    mastered: '#1890ff',       // 熟练单词
-    difficult: '#ff4d4f',      // 困难单词
+    mastered: '#5D7A5D',       // 熟练单词
+    difficult: '#9B3B3B',      // 困难单词
   },
 } as const
 
 // 状态颜色
 export const statusColors = {
-  success: '#52c41a',
-  warning: '#faad14',
-  danger: '#ff4d4f',
-  info: '#1890ff',
+  success: '#5D7A5D',
+  warning: '#B8860B',
+  danger: '#9B3B3B',
+  info: '#996B3D',
 } as const
 
 // 文本颜色
 export const textColors = {
-  primary: '#2c3e50',
-  secondary: '#64748b',
-  muted: '#8c8c8c',
-  disabled: '#595959',
+  primary: '#2D3748',
+  secondary: '#5A6578',
+  muted: '#8A94A6',
+  disabled: '#A0A8B8',
 } as const
 
 // 边框颜色
 export const borderColors = {
-  light: '#e8e8e8',
-  medium: '#d9d9d9',
-  focus: '#1890ff',
-  error: '#ff4d4f',
+  light: '#E8E0D5',
+  medium: '#D4C9B8',
+  focus: '#996B3D',
+  error: '#9B3B3B',
 } as const
 
 // 背景颜色
 export const bgColors = {
-  light: '#f5f5f5',
-  hover: '#e8e8e8',
-  error: '#fff2f0',
-  errorBorder: '#ffccc7',
+  light: '#FAF7F2',
+  hover: '#F0EBE3',
+  error: '#FDF6F4',
+  errorBorder: '#E8C4C4',
 } as const
 
 // 按钮颜色
 export const buttonColors = {
-  primary: '#1890ff',
-  primaryHover: '#40a9ff',
-  disabled: '#d9d9d9',
-  disabledText: '#8c8c8c',
+  primary: '#996B3D',
+  primaryHover: '#B8860B',
+  disabled: '#D4C9B8',
+  disabledText: '#A0A8B8',
 } as const
 
 // 导出类型

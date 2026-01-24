@@ -73,12 +73,10 @@ onUnmounted(() => {
 
 .title {
   font-size: 50px;
-  font-weight: 800;
+  font-weight: 700;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #a3bffa, #667eea, #a3bffa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -92,7 +90,7 @@ onUnmounted(() => {
   display: inline-block;
   opacity: 0;
   animation: fadeInUp 0.4s forwards;
-  background: linear-gradient(135deg, #42a5f5, #7e57c2);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

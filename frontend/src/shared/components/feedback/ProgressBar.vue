@@ -36,9 +36,9 @@ const props = withDefaults(defineProps<Props>(), {
   progress: 0,
   width: '160px',
   height: '20px',
-  backgroundColor: '#f0f0f0',
-  fillColor: '#1677ff',
-  textColor: '#000',
+  backgroundColor: 'var(--color-bg-tertiary)',
+  fillColor: 'var(--color-primary)',
+  textColor: 'var(--color-text-primary)',
   showText: true,
   animated: true,
   borderRadius: '10px'

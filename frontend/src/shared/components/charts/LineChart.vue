@@ -56,14 +56,14 @@ const render = () => {
       smooth: true,
       showSymbol: true,
       connectNulls: true,
-      lineStyle: { color: s.lineColor ?? '#36cfc9', width: 3 },
+      lineStyle: { color: s.lineColor ?? '#996B3D', width: 3 },
       areaStyle: {
         color: {
           type: 'linear',
           x: 0, y: 0, x2: 0, y2: 1,
           colorStops: [
-            { offset: 0, color: (s.areaColor ?? '#36cfc9') + '66' },
-            { offset: 1, color: (s.areaColor ?? '#36cfc9') + '11' }
+            { offset: 0, color: (s.areaColor ?? '#996B3D') + '66' },
+            { offset: 1, color: (s.areaColor ?? '#996B3D') + '11' }
           ]
         }
       },

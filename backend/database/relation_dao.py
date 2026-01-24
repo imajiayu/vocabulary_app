@@ -266,37 +266,6 @@ def db_delete_relation(word_id: int, related_word_id: int, relation_type: str):
         return {"success": True, "message": f"关系已删除（删除了 {len(relations)} 条数据库记录）"}
 
 
-def db_clear_relations(relation_types: Optional[List[str]] = None):
-    """清空指定类型的关系，同时清除对应的处理日志"""
-    from backend.models.word import RelationGenerationLog
-
-    with get_session() as db:
-        # 删除关系记录
-        relation_query = db.query(WordRelation)
-        if relation_types:
-            relation_query = relation_query.filter(
-                WordRelation.relation_type.in_([RelationType[rt] for rt in relation_types])
-            )
-        relation_count = relation_query.delete(synchronize_session=False)
-
-        # 删除对应的处理日志
-        log_query = db.query(RelationGenerationLog)
-        if relation_types:
-            log_query = log_query.filter(
-                RelationGenerationLog.relation_type.in_([RelationType[rt] for rt in relation_types])
-            )
-        log_count = log_query.delete(synchronize_session=False)
-
-        db.commit()
-
-        return {
-            "success": True,
-            "count": relation_count,
-            "log_count": log_count,
-            "message": f"已删除 {relation_count} 条关系，{log_count} 条处理日志"
-        }
-
-
 def db_get_relation_stats():
     """
     获取关系统计信息（去重后的实际关系数）

@@ -1,7 +1,9 @@
 <template>
-  <div class="ai-chat-widget" :class="{ expanded: isExpanded, 'show-button': showButton }" :style="widgetPosition">
+  <div class="ai-chat-widget" :class="{ expanded: isExpanded, 'show-button': showButton }" :style="isMobile ? {} : widgetPosition">
     <!-- 遮罩层（移动端点击收回） -->
-    <div v-if="showButton && isMobile" class="mobile-overlay" @click="handleOverlayClick"></div>
+    <Teleport to="body">
+      <div v-if="showButton && isMobile && !isExpanded" class="mobile-overlay" @click="showButton = false"></div>
+    </Teleport>
 
     <!-- 收起状态：浮动按钮 -->
     <div v-if="!isExpanded" class="chat-button" @click="handleButtonClick" @mousedown="handleMouseDown">
@@ -133,18 +135,12 @@ const {
 } = useChatMessages(currentWordRef, isExpanded)
 
 // 检测是否为移动端
-const isMobile = computed(() => window.innerWidth <= 768)
-
-// 移动端遮罩层点击处理
-const handleOverlayClick = () => {
-  showButton.value = false
-}
+const isMobile = computed(() => window.innerWidth <= 480)
 
 // 处理 mousedown 事件
 const handleMouseDown = (e: MouseEvent) => {
-  // 移动端：阻止默认行为，只使用 click 事件
+  // 移动端：不执行拖拽
   if (isMobile.value) {
-    e.preventDefault()
     return
   }
   // 桌面端：执行拖拽逻辑
@@ -152,24 +148,24 @@ const handleMouseDown = (e: MouseEvent) => {
 }
 
 // 移动端按钮点击处理
-const handleButtonClick = (e?: MouseEvent) => {
+const handleButtonClick = () => {
   if (isMobile.value) {
     // 移动端逻辑
     if (!showButton.value) {
-      // 第一次点击箭头：显示"AI助手"按钮（左侧垂直居中）
+      // 第一次点击箭头：显示"AI助手"按钮
       showButton.value = true
     } else {
       // 点击"AI助手"按钮：展开全屏对话框
-      toggleExpand(e)
+      toggleExpand()
     }
   } else {
     // 桌面端逻辑
-    toggleExpand(e)
+    toggleExpand()
   }
 }
 
 // 方法
-const toggleExpand = (e?: MouseEvent) => {
+const toggleExpand = () => {
   // 如果正在拖动，或者刚刚拖动过，不触发展开/收起
   if (shouldBlockToggle()) {
     return
@@ -192,13 +188,17 @@ const toggleExpand = (e?: MouseEvent) => {
     if (isExpanded.value) {
       // 展开时：先保存当前收起状态的位置
       saveCurrentPosition()
-      // 然后调整位置以适应展开后的尺寸
-      adjustPositionWithinBounds()
+      // 然后调整位置以适应展开后的尺寸（仅桌面端）
+      if (!isMobile.value) {
+        adjustPositionWithinBounds()
+      }
       // 加载聊天历史
       loadChatHistory()
     } else {
-      // 收起时：恢复到保存的收起状态位置
-      restorePosition()
+      // 收起时：恢复到保存的收起状态位置（仅桌面端）
+      if (!isMobile.value) {
+        restorePosition()
+      }
       // 保存聊天记录
       saveChatHistory()
     }
@@ -310,8 +310,8 @@ const toggleExpand = (e?: MouseEvent) => {
 /* 当前词汇信息 */
 .current-word-info {
   padding: 12px 20px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-medium);
   text-align: center;
 }
 
@@ -326,14 +326,14 @@ const toggleExpand = (e?: MouseEvent) => {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background: #fafbfc;
+  background: var(--color-bg-secondary);
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 .welcome-message {
-  color: #6c757d;
+  color: var(--color-text-tertiary);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -355,7 +355,7 @@ const toggleExpand = (e?: MouseEvent) => {
   border-radius: var(--radius-default);
   padding: 10px 14px;
   font-size: 13px;
-  color: #4a5568;
+  color: var(--color-text-secondary);
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -363,7 +363,7 @@ const toggleExpand = (e?: MouseEvent) => {
 }
 
 .suggestion-btn:hover {
-  background: #f7fafc;
+  background: var(--color-bg-secondary);
   border-color: var(--color-purple);
   color: var(--color-purple);
   transform: translateY(-1px);
@@ -560,13 +560,13 @@ const toggleExpand = (e?: MouseEvent) => {
   gap: 10px;
   padding: 16px 20px;
   background: white;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--color-border-medium);
 }
 
 .chat-input {
   flex: 1;
   padding: 10px 14px;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-xl);
   font-size: 14px;
   outline: none;
@@ -578,7 +578,7 @@ const toggleExpand = (e?: MouseEvent) => {
 }
 
 .chat-input:disabled {
-  background: #f8f9fa;
+  background: var(--color-bg-secondary);
   cursor: not-allowed;
 }
 
@@ -607,113 +607,91 @@ const toggleExpand = (e?: MouseEvent) => {
 /* 移动端适配 */
 @media (max-width: 480px) {
   .ai-chat-widget {
-    z-index: 1001; /* 在 WordSidebar 上方 */
+    z-index: 1001;
   }
 
-  /* 移动端收起状态：左边隐藏的小箭头 */
+  /* 移动端按钮：完全重置桌面端样式 */
   .chat-button {
+    /* 定位：用 calc 避免 transform */
     position: fixed !important;
-    left: -60px !important; /* 默认隐藏在左边 */
-    top: 50% !important;
-    transform: translateY(-50%);
-    width: 80px;
-    height: 40px;
-    padding: 0;
-    border-radius: 0 20px 20px 0;
-    box-shadow: 2px 0 8px var(--color-purple-light);
-    transition: left 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 12px;
+    left: 0 !important;
+    top: calc(50% - 22px) !important;
+    /* 尺寸 */
+    width: 28px;
+    height: 44px;
+    padding: 0 0 0 8px !important;
+    /* 外观 */
+    border-radius: 0 12px 12px 0 !important;
+    box-shadow: 2px 0 8px var(--color-purple-light) !important;
+    /* 布局 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    overflow: hidden;
+    /* 过渡：只对宽度和 padding */
+    transition: width 0.25s ease, padding 0.25s ease !important;
+    /* 禁用桌面端的 transform */
+    transform: none !important;
   }
 
-  /* 箭头悬停时稍微伸出 */
+  /* 禁用桌面端的 hover/active 效果 */
+  .chat-button:hover,
   .chat-button:active {
-    left: -50px !important;
+    transform: none !important;
+    box-shadow: 2px 0 8px var(--color-purple-light) !important;
   }
 
   .chat-icon {
-    display: none; /* 隐藏 emoji 图标 */
+    flex-shrink: 0;
+    font-size: 18px !important;
+    opacity: 0;
+    width: 0;
+    transition: opacity 0.2s ease, width 0.2s ease;
   }
 
   .chat-label {
-    display: none; /* 收起时不显示文字 */
+    flex-shrink: 0;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, width 0.2s ease;
   }
 
-  /* 添加向右箭头 */
+  /* 箭头图标 */
   .chat-button::before {
-    content: '→';
-    font-size: 20px;
+    content: '›';
+    font-size: 22px;
     font-weight: bold;
-    position: absolute;
-    right: 12px;
+    color: white;
+    flex-shrink: 0;
   }
 
-  /* 移动端遮罩层 */
-  .mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 999;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* 展开后显示"AI助手"按钮（左侧垂直居中） */
+  /* 展开状态：显示"AI助手" */
   .ai-chat-widget.show-button .chat-button {
-    left: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%);
-    width: auto;
-    height: auto;
-    padding: 10px 16px;
-    border-radius: 0 20px 20px 0;
-    justify-content: center;
-    gap: 8px;
-    z-index: 1000;
-    box-shadow: 2px 0 12px var(--color-purple-light);
-    animation: slideInFromLeft 0.3s ease;
-  }
-
-  @keyframes slideInFromLeft {
-    from {
-      transform: translateY(-50%) translateX(-100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(-50%) translateX(0);
-      opacity: 1;
-    }
+    width: 116px;
+    padding: 0 14px 0 12px !important;
+    border-radius: 0 22px 22px 0 !important;
   }
 
   .ai-chat-widget.show-button .chat-button::before {
-    content: none;
+    display: none;
   }
 
   .ai-chat-widget.show-button .chat-icon {
-    display: inline;
+    opacity: 1;
+    width: 20px;
   }
 
   .ai-chat-widget.show-button .chat-label {
-    display: inline;
-    font-size: 14px;
-    font-weight: 600;
+    opacity: 1;
+    width: 56px;
   }
 
-  /* 移动端展开时全屏显示 */
+  /* 全屏聊天窗口 */
   .ai-chat-widget.expanded {
     position: fixed !important;
     left: 0 !important;
@@ -726,7 +704,7 @@ const toggleExpand = (e?: MouseEvent) => {
   }
 
   .ai-chat-widget.expanded .chat-button {
-    display: none; /* 全屏时隐藏按钮 */
+    display: none !important;
   }
 
   .chat-window {
@@ -738,18 +716,15 @@ const toggleExpand = (e?: MouseEvent) => {
     flex-direction: column;
   }
 
-  /* 移动端标题栏不可拖动 */
   .chat-header {
     cursor: default;
     flex-shrink: 0;
   }
 
-  /* 当前单词信息 */
   .current-word-info {
     flex-shrink: 0;
   }
 
-  /* 移动端聊天消息区域调整 */
   .chat-messages {
     padding: 16px;
     flex: 1;
@@ -757,7 +732,6 @@ const toggleExpand = (e?: MouseEvent) => {
     overflow-y: auto;
   }
 
-  /* 移动端输入区域调整 */
   .chat-input-area {
     padding: 12px 16px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
@@ -766,4 +740,17 @@ const toggleExpand = (e?: MouseEvent) => {
   }
 }
 
+</style>
+
+<style>
+/* 移动端遮罩层（全局样式，因为使用 Teleport） */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 1000;
+}
 </style>

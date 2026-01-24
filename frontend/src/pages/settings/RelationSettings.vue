@@ -1,7 +1,7 @@
 <template>
   <section id="relations" class="settings-section">
     <h1 class="section-title">单词关联</h1>
-    <p class="section-description">查看和管理单词间的关系网络</p>
+    <p class="section-description">查看单词间的关系网络</p>
 
     <div class="settings-group">
       <div class="relation-list">
@@ -9,55 +9,30 @@
         <div class="relation-row">
           <span class="relation-name">同义词</span>
           <span class="relation-count">{{ relationStats.synonym || 0 }} 条</span>
-          <div class="relation-actions">
-            <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('synonym')" :disabled="clearingType === 'synonym'">
-              {{ clearingType === 'synonym' ? '清空中...' : '清空' }}
-            </button>
-          </div>
         </div>
 
         <!-- 反义词 -->
         <div class="relation-row">
           <span class="relation-name">反义词</span>
           <span class="relation-count">{{ relationStats.antonym || 0 }} 条</span>
-          <div class="relation-actions">
-            <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('antonym')" :disabled="clearingType === 'antonym'">
-              {{ clearingType === 'antonym' ? '清空中...' : '清空' }}
-            </button>
-          </div>
         </div>
 
         <!-- 词根 -->
         <div class="relation-row">
           <span class="relation-name">词根</span>
           <span class="relation-count">{{ relationStats.root || 0 }} 条</span>
-          <div class="relation-actions">
-            <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('root')" :disabled="clearingType === 'root'">
-              {{ clearingType === 'root' ? '清空中...' : '清空' }}
-            </button>
-          </div>
         </div>
 
         <!-- 易混淆 -->
         <div class="relation-row">
           <span class="relation-name">易混淆</span>
           <span class="relation-count">{{ relationStats.confused || 0 }} 条</span>
-          <div class="relation-actions">
-            <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('confused')" :disabled="clearingType === 'confused'">
-              {{ clearingType === 'confused' ? '清空中...' : '清空' }}
-            </button>
-          </div>
         </div>
 
         <!-- 主题 -->
         <div class="relation-row">
           <span class="relation-name">主题</span>
           <span class="relation-count">{{ relationStats.topic || 0 }} 条</span>
-          <div class="relation-actions">
-            <button class="btn-relation-action btn-clear-small" @click="clearSingleRelation('topic')" :disabled="clearingType === 'topic'">
-              {{ clearingType === 'topic' ? '清空中...' : '清空' }}
-            </button>
-          </div>
         </div>
 
         <!-- 总计 -->
@@ -85,7 +60,6 @@ import RelationGraphModal from '@/shared/components/RelationGraphModal.vue'
 import { logger } from '@/shared/utils/logger'
 
 const showGraphModal = ref(false)
-const clearingType = ref<string | null>(null)
 
 const relationStats = ref({
   synonym: 0,
@@ -102,34 +76,6 @@ const loadRelationStats = async () => {
     relationStats.value = data
   } catch (e: unknown) {
     logger.error('Failed to load relation stats:', e)
-  }
-}
-
-const clearSingleRelation = async (relationType: string) => {
-  const typeNames: Record<string, string> = {
-    synonym: '同义词',
-    antonym: '反义词',
-    root: '词根',
-    confused: '易混淆',
-    topic: '主题'
-  }
-
-  if (!confirm(`确定要清空所有${typeNames[relationType] || relationType}关系吗？此操作不可撤销。`)) {
-    return
-  }
-
-  clearingType.value = relationType
-
-  try {
-    await api.relations.clear({
-      relation_types: [relationType]
-    })
-    await loadRelationStats()
-  } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : String(e)
-    logger.error('清空失败:', message)
-  } finally {
-    clearingType.value = null
   }
 }
 
@@ -150,7 +96,7 @@ onMounted(async () => {
 .section-title {
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 8px 0;
 }
 
@@ -188,17 +134,17 @@ onMounted(async () => {
 }
 
 .relation-row:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   border-color: rgba(102, 126, 234, 0.2);
 }
 
 .relation-row-total {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   border: none;
 }
 
 .relation-row-total:hover {
-  background: linear-gradient(135deg, #5a6dd8, #6a4190);
+  background: var(--gradient-primary);
 }
 
 .relation-row-total .relation-name,
@@ -209,7 +155,7 @@ onMounted(async () => {
 .relation-name {
   font-size: 15px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   min-width: 70px;
   flex-shrink: 0;
   text-align: left;
@@ -251,24 +197,9 @@ onMounted(async () => {
   white-space: nowrap;
 }
 
-.btn-relation-action:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-clear-small {
-  background: var(--color-delete);
-  color: white;
-}
-
-.btn-clear-small:hover:not(:disabled) {
-  background: #dc2626;
-  transform: translateY(-2px);
-}
-
 .btn-view-graph {
   background: white;
-  color: #667eea;
+  color: var(--color-primary);
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 

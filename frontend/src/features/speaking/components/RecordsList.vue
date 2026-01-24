@@ -92,7 +92,7 @@ watch(() => props.records.length, async (newLength, oldLength) => {
   width: 32px;
   height: 32px;
   border: 3px solid var(--color-border-medium);
-  border-top: 3px solid #a855f7;
+  border-top: 3px solid var(--color-primary);
   border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
 }

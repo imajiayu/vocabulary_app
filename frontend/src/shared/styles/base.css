@@ -24,17 +24,21 @@ html {
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Crimson Pro', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
   background-color: var(--color-bg-page);
   color: var(--color-text-primary);
   font-size: var(--font-size-base);
   height: 100%;
+  /* 细微纸质纹理 */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-blend-mode: soft-light;
+  background-size: 200px 200px;
 }
 
-/* 手机端防止弹性滚动 */
-@media (max-width: 480px) {
+/* 移动端防止过度弹性滚动 */
+@media (max-width: 768px) {
   html, body {
-    overscroll-behavior: none;
+    overscroll-behavior-y: contain; /* 防止过度滚动，但允许正常滚动 */
   }
 }
 
@@ -70,16 +74,11 @@ select {
 .app-container {
   min-height: 100vh;
   background: var(--gradient-background);
-  background-attachment: scroll;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
 }
 
 /* 桌面端背景优化 */
 @media (min-width: 481px) {
   .app-container {
-    background-attachment: scroll;
-    background-size: 100% auto;
     min-height: 100vh;
   }
 }
@@ -87,43 +86,37 @@ select {
 /* 带 TopBar 的页面上间距 */
 .app-container.with-topbar {
   padding-top: var(--topbar-height);
+  /* 确保 min-height 包含 padding，不超出视口 */
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
 }
 
-/* Flex 布局变体 - 用于需要 TopBar + 可滚动内容的页面（如 ReviewPage） */
+/* Flex 布局变体 - 用于需要 TopBar 的页面（如 ReviewPage） */
 .app-container.flex-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
-  padding-top: 0; /* 不使用 padding，由子元素 margin-top 控制 */
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: 0;
 }
 
 .app-container.flex-layout .main-content {
   margin-top: var(--topbar-height);
   flex: 1;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
-/* 移动端 flex-layout 优化 */
-@media (max-width: 480px) {
-  .app-container.flex-layout {
-    height: 100dvh;
-  }
+  /* 不设置 overflow，让页面自然滚动 */
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
    组件样式
    ══════════════════════════════════════════════════════════════════════════════ */
 
-/* 玻璃卡片效果 */
+/* 纸质卡片效果（替代玻璃态） */
 .glass-card {
-  background: var(--color-bg-overlay);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(45, 55, 72, 0.06), 0 1px 2px rgba(45, 55, 72, 0.04);
 }
 
 /* 加载旋转器 */

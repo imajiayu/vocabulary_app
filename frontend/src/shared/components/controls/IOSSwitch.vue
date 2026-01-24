@@ -92,7 +92,7 @@ const handleChange = (event: Event) => {
 }
 
 .ios-switch input:checked + .slider {
-  background: #1890ff;
+  background: var(--color-primary);
 }
 
 .ios-switch input:checked + .slider::after {

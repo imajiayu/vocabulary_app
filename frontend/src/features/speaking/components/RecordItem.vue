@@ -97,13 +97,13 @@ const formatTime = (timeStr: string) => {
 }
 
 .record-item.temporary .record-time {
-  color: #a855f7;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .temporary-badge {
   font-size: 10px;
-  background: linear-gradient(135deg, #a855f7, var(--color-primary));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
   color: white;
   padding: 2px 8px;
   border-radius: var(--radius-default);

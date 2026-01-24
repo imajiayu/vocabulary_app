@@ -188,7 +188,7 @@ onUnmounted(() => {
   width: 32px;
   height: 32px;
   border: none;
-  background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   color: white;
   border-radius: var(--radius-full);
   display: flex;
@@ -247,7 +247,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   bottom: 0;
-  background: linear-gradient(90deg, var(--color-primary), #1d4ed8);
+  background: var(--gradient-primary);
   transition: width 0.1s ease;
 }
 

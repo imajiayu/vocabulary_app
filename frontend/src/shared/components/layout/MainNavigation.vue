@@ -90,12 +90,11 @@ const switchTab = (tabId: string) => {
   left: 0;
   height: 100vh;
   width: var(--nav-width);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid var(--color-border-light);
+  background: var(--color-bg-primary);
+  border-right: 1px solid var(--color-border-medium);
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 12px rgba(45, 55, 72, 0.04);
   transition: width var(--transition-slow);
   z-index: 101;
   overflow: hidden;
@@ -135,7 +134,7 @@ const switchTab = (tabId: string) => {
 
 .nav-toggle:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #334155;
+  color: var(--color-text-primary);
 }
 
 .toggle-icon {
@@ -161,14 +160,12 @@ const switchTab = (tabId: string) => {
 .app-title {
   font-size: 24px;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-primary);
   margin: 0;
   white-space: nowrap;
   position: absolute;
   left: 16px;
+  letter-spacing: 0.05em;
 }
 
 .nav-tabs {
@@ -215,7 +212,7 @@ const switchTab = (tabId: string) => {
 }
 
 .nav-tab:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--color-bg-tertiary);
 }
 
 /* 收起状态下的样式 */
@@ -237,9 +234,9 @@ const switchTab = (tabId: string) => {
 }
 
 .main-nav:not(.expanded) .nav-tab.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.25);
   width: 36px;
   /* 保持较小宽度 */
   height: 36px;
@@ -260,9 +257,9 @@ const switchTab = (tabId: string) => {
 }
 
 .main-nav.expanded .nav-tab.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.2);
   border-radius: 22px;
 }
 
@@ -271,9 +268,9 @@ const switchTab = (tabId: string) => {
   position: absolute;
   inset: -2px;
   border-radius: var(--radius-2xl);
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   z-index: -1;
-  opacity: 0.1;
+  opacity: 0.08;
 }
 
 .tab-icon {

@@ -383,7 +383,7 @@ onUnmounted(() => {
 
 .progress-text {
     font-size: 0.875rem;
-    color: #374151;
+    color: var(--color-text-primary);
     font-weight: 500;
 }
 
@@ -406,7 +406,7 @@ onUnmounted(() => {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-primary), #1d4ed8);
+    background: var(--gradient-primary);
     border-radius: 0.25rem;
     transition: width 0.3s ease;
 }

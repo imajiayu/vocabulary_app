@@ -592,7 +592,7 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
   width: 8px;
   height: 8px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #a855f7, var(--color-primary));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
   animation: processing-pulse 1.4s ease-in-out infinite both;
 }
 
@@ -608,7 +608,7 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
 }
 
 .processing-text {
-  color: #a855f7;
+  color: var(--color-primary);
 }
 
 .control-btn {

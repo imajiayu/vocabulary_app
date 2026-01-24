@@ -209,7 +209,7 @@ const hasDefinition = computed(() => {
 .clickable-phonetic:hover {
   /* 移除下划线 */
   color: var(--color-primary-hover);
-  background: #dbeafe;
+  background: var(--color-primary-light);
 }
 
 /* 释义显示 */
@@ -220,7 +220,7 @@ const hasDefinition = computed(() => {
 }
 
 .definition-item {
-  color: #4b5563;
+  color: var(--color-text-secondary);
   line-height: 1.6;
   font-size: 1rem;
   padding: 0.75rem;
@@ -239,7 +239,7 @@ const hasDefinition = computed(() => {
 
 .example-item {
   padding: 1rem;
-  background: #f9fafb;
+  background: var(--color-bg-secondary);
   border-radius: var(--radius-md);
   border-left: 4px solid var(--color-success);
 }

@@ -12,19 +12,19 @@ export interface RelationFilters {
 }
 
 export const relationColors: Record<string, string> = {
-  synonym: '#52c41a',
-  antonym: '#ff4d4f',
-  root: '#722ed1',
-  confused: '#fa8c16',
-  topic: '#1677ff'
+  synonym: '#5D7A5D',   // 橄榄绿
+  antonym: '#9B3B3B',   // 砖红
+  root: '#6B4F0F',      // 深赭石
+  confused: '#B87333',  // 铜橙
+  topic: '#996B3D'      // 铜褐
 }
 
 export const relationTypeOptions = [
-  { value: 'synonym', label: '同义词', color: '#52c41a' },
-  { value: 'antonym', label: '反义词', color: '#ff4d4f' },
-  { value: 'root', label: '词根', color: '#722ed1' },
-  { value: 'confused', label: '易混淆', color: '#fa8c16' },
-  { value: 'topic', label: '主题', color: '#1677ff' }
+  { value: 'synonym', label: '同义词', color: '#5D7A5D' },
+  { value: 'antonym', label: '反义词', color: '#9B3B3B' },
+  { value: 'root', label: '词根', color: '#6B4F0F' },
+  { value: 'confused', label: '易混淆', color: '#B87333' },
+  { value: 'topic', label: '主题', color: '#996B3D' }
 ]
 
 export function useRelationGraph() {

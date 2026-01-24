@@ -263,7 +263,7 @@ watch(
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f5f5f5;
+  background: var(--color-bg-tertiary);
   position: relative;
 }
 
@@ -286,7 +286,7 @@ watch(
 }
 
 .close-btn:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -299,7 +299,7 @@ watch(
 }
 
 .close-btn:hover svg {
-  color: #334155;
+  color: var(--color-text-primary);
 }
 
 .controls-bar {
@@ -335,13 +335,13 @@ watch(
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   background: white;
-  color: #667eea;
-  border: 1px solid #e0e7ff;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border-light);
 }
 
 .show-all-btn:hover {
-  background: #f5f7ff;
-  border-color: #c7d2fe;
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border-medium);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
 }
@@ -351,13 +351,13 @@ watch(
 }
 
 .show-all-btn.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   border-color: transparent;
 }
 
 .show-all-btn.active:hover {
-  background: linear-gradient(135deg, #5568d3, #6a3f8f);
+  background: var(--gradient-primary);
 }
 
 .stats {

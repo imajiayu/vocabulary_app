@@ -21,7 +21,7 @@
     </template>
 
     <Loading v-if="isLoading" text="加载中..." />
-      <ChartGrid :min-width="280" :gap="20">
+    <ChartGrid v-else :min-width="280" :gap="20">
         <section class="chart-card ultra" data-width="tall">
           <h2>复习次数分布</h2>
           <BarChart :labels="Object.keys(reviewCountDict)" :values="Object.values(reviewCountDict)"

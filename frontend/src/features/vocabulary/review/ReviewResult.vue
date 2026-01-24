@@ -391,6 +391,12 @@ const hasExamples = computed(() => {
     width: 100%;
   }
 
+  /* 移动端强制垂直布局 */
+  .content-wrapper.horizontal {
+    flex-direction: column !important;
+    gap: 1.25rem;
+  }
+
   .phonetic-display {
     gap: 0.75rem !important;
     display: flex !important;
@@ -526,6 +532,12 @@ const hasExamples = computed(() => {
   .content-wrapper {
     gap: 1rem;
     width: 100%;
+  }
+
+  /* 小屏幕强制垂直布局 */
+  .content-wrapper.horizontal {
+    flex-direction: column !important;
+    gap: 1rem;
   }
 
   .phonetic-display {

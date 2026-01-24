@@ -258,7 +258,7 @@ onUnmounted(() => {
   display: flex;
   width: 100vw;
   min-height: 100vh;
-  overflow: hidden;
+  min-height: 100dvh;
   position: relative;
 }
 
@@ -276,8 +276,8 @@ onUnmounted(() => {
 .app-container.is-mobile {
   --current-nav-width: 0px;
   --current-sidebar-width: 0px;
-  overflow: visible;
-  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -308,15 +308,16 @@ onUnmounted(() => {
 .main-container {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 0;
-  /* 边距由 CSS 变量控制，不再依赖 JS 计算 */
+  /* 边距由 CSS 变量控制 */
   margin-left: calc(var(--current-nav-width) + var(--current-sidebar-width));
   transition: margin-left var(--transition-slow);
   position: relative;
-  overflow: visible;
   box-sizing: border-box;
 }
 
@@ -326,11 +327,10 @@ onUnmounted(() => {
   padding: 0.75rem;
   padding-top: calc(56px + 0.75rem);
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
-  min-height: calc(100vh - env(safe-area-inset-bottom));
-  height: auto;
-  align-items: flex-start;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -366,6 +366,20 @@ onUnmounted(() => {
 .sidebar-slide-leave-to {
   opacity: 0;
   transform: translateX(-100%);
+}
+
+/* 移动端：只使用opacity动画，避免与sidebar内部的translateY动画冲突 */
+@media (max-width: 480px) {
+  .sidebar-slide-enter-active,
+  .sidebar-slide-leave-active {
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-slide-enter-from,
+  .sidebar-slide-leave-to {
+    opacity: 0;
+    transform: none;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════

@@ -171,7 +171,7 @@ onMounted(() => {
 }
 
 .question-icon {
-  color: #a855f7;
+  color: var(--color-primary);
   margin-bottom: 12px;
   display: flex;
   justify-content: center;
@@ -181,7 +181,7 @@ onMounted(() => {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text-primary);
   line-height: 1.5;
   text-align: left;
   white-space: pre-line;
@@ -210,7 +210,7 @@ onMounted(() => {
   border-radius: var(--radius-default);
   font-size: 14px;
   line-height: 1.5;
-  color: #374151;
+  color: var(--color-text-primary);
   background: white;
   resize: vertical;
   font-family: inherit;
@@ -220,7 +220,7 @@ onMounted(() => {
 
 .notes-input:focus {
   outline: none;
-  border-color: #a855f7;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
 }
 
@@ -254,7 +254,7 @@ onMounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   gap: 8px;

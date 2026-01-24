@@ -136,7 +136,7 @@ function selectCandidate(node: GraphNode) {
 
 .control-group label {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   white-space: nowrap;
   font-size: 14px;
 }
@@ -152,19 +152,19 @@ function selectCandidate(node: GraphNode) {
   border-radius: var(--radius-default);
   min-width: 240px;
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text-primary);
   transition: all 0.2s;
   background: white;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .search-input::placeholder {
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
 }
 
 .candidates-list {
@@ -188,7 +188,7 @@ function selectCandidate(node: GraphNode) {
   padding: 8px 14px;
   cursor: pointer;
   transition: background-color 0.15s;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -205,7 +205,7 @@ function selectCandidate(node: GraphNode) {
 
 .candidate-word {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-size: 13px;
 }
 

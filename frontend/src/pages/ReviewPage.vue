@@ -34,7 +34,7 @@
 
           <!-- lapse模式进度条 -->
           <div v-if="mode === 'mode_lapse'" class="progress-bar-wrapper">
-            <ProgressBar :progress="Math.abs(progress)" :fill-color="progress < 0 ? '#ff4d4f' : '#52c41a'"
+            <ProgressBar :progress="Math.abs(progress)" :fill-color="progress < 0 ? 'var(--color-danger)' : 'var(--color-success)'"
               :text="`${Math.round(progress)}%`" />
           </div>
         </div>
@@ -505,13 +505,13 @@ onUnmounted(() => {
   padding: 14px 32px;
   font-size: 16px;
   font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--color-text-inverse);
+  background: var(--gradient-primary);
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.25);
   position: relative;
   overflow: hidden;
   user-select: none;
@@ -526,7 +526,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #7c8fef 0%, #8757a7 100%);
+  background: linear-gradient(135deg, #B8860B 0%, #996B3D 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
@@ -537,13 +537,13 @@ onUnmounted(() => {
 }
 
 .home-action-button:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(153, 107, 61, 0.3);
 }
 
 .home-action-button:active {
-  transform: translateY(-1px) scale(1);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.25);
 }
 
 .button-icon {

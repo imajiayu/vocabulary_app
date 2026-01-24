@@ -123,20 +123,21 @@ def update_word_info_lapse(word_id, remembered):
     - 答对：lapse-1（基础）
     - 答对且启用加速退出：lapse≥阈值时（默认≥2），lapse-2（加速）
     """
-    from backend.config import UserConfig as Config
+    from backend.config import UserConfig
 
     word_info = db_fetch_word_info(word_id)
     if not word_info:
         return
 
     lapse = word_info.get("lapse", 0)
+    config = UserConfig()  # 创建实例以访问属性
 
     if not remembered:
         # 答错：渐进增加，上限为配置值
-        lapse = min(lapse + 1, Config.LAPSE_MAX_VALUE)
+        lapse = min(lapse + 1, config.LAPSE_MAX_VALUE)
     else:
         # 答对：根据配置决定是否加速退出
-        if Config.LAPSE_FAST_EXIT_ENABLED and lapse >= Config.LAPSE_CONSECUTIVE_THRESHOLD:
+        if config.LAPSE_FAST_EXIT_ENABLED and lapse >= config.LAPSE_CONSECUTIVE_THRESHOLD:
             # 加速退出：当lapse≥阈值（默认2）时，答对一次就-2
             lapse = max(0, lapse - 2)
         else:

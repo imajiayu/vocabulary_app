@@ -95,11 +95,11 @@ function handleAddRelation() {
   border-radius: var(--radius-sm);
   transition: all 0.2s;
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .menu-item:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
 }
 
 .menu-item span:first-child {

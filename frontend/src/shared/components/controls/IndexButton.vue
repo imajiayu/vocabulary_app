@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import WheelSelector from './WheelSelector.vue'
 
 interface Props {
@@ -16,6 +17,8 @@ interface Props {
     wheelValue?: number
     /** 按钮样式变体 */
     variant?: 'default' | 'compact'
+    /** 滚轮最大可选值限制（默认 200，防止单词太多时 DOM 过载） */
+    maxWheel?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,6 +26,13 @@ const props = withDefaults(defineProps<Props>(), {
     borderColor: 'rgba(0,0,0,0.1)',
     wheelValue: 1,
     variant: 'default',
+    maxWheel: 500,
+})
+
+// 计算滚轮实际使用的最大值（取 count 和 maxWheel 的较小值）
+const effectiveMax = computed(() => {
+    if (props.count === undefined) return props.maxWheel
+    return Math.min(props.count, props.maxWheel)
 })
 
 const emit = defineEmits<{
@@ -65,7 +75,7 @@ const handleClick = () => {
             </div>
 
             <div class="tile-right" @click.stop>
-                <WheelSelector v-if="count !== undefined" :model-value="wheelValue" :max="count" :min="0"
+                <WheelSelector v-if="count !== undefined" :model-value="wheelValue" :max="effectiveMax" :display-max="count" :min="0"
                     @update:model-value="handleWheelChange" />
             </div>
         </template>
@@ -82,7 +92,7 @@ const handleClick = () => {
     border-radius: 14px;
     padding: 16px;
     cursor: pointer;
-    color: #0f172a;
+    color: var(--color-text-primary);
     box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
     transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
@@ -116,7 +126,7 @@ const handleClick = () => {
 
 .tile-count {
     font-weight: 700;
-    color: #334155;
+    color: var(--color-text-primary);
     white-space: nowrap;
 }
 

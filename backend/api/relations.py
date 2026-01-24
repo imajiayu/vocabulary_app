@@ -8,7 +8,6 @@ from backend.database.relation_dao import (
     db_get_relations_graph,
     db_add_relation,
     db_delete_relation,
-    db_clear_relations,
     db_get_relation_stats
 )
 
@@ -174,45 +173,6 @@ def delete_relation():
     except Exception as e:
         return (
             create_response(False, None, f"Failed to delete relation: {str(e)}"),
-            500,
-        )
-
-
-@relations_bp.route("/clear", methods=["POST"])
-def clear_relations():
-    """
-    清空指定类型的关系
-
-    请求体:
-    {
-      "relation_types": ["synonym", "antonym"]  // 可选，不传则清空所有
-    }
-    """
-    try:
-        data = request.get_json() or {}
-        relation_types = data.get("relation_types")
-
-        if relation_types:
-            valid_types = ["synonym", "antonym", "root", "confused", "topic"]
-            for rt in relation_types:
-                if rt not in valid_types:
-                    return create_response(
-                        False,
-                        None,
-                        f"Invalid relation_type: {rt}. Must be one of: {', '.join(valid_types)}"
-                    ), 400
-
-        result = db_clear_relations(relation_types)
-
-        return create_response(
-            True,
-            {"count": result["count"]},
-            result["message"]
-        )
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to clear relations: {str(e)}"),
             500,
         )
 

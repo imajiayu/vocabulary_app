@@ -103,7 +103,7 @@ const emit = defineEmits<{
 
 .example-title {
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary);
   margin-bottom: 0.5rem;
 }
 
@@ -115,7 +115,7 @@ const emit = defineEmits<{
   font-family: monospace;
   font-size: 0.7rem;
   line-height: 1.6;
-  color: #334155;
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 480px) {

@@ -185,7 +185,7 @@ function handleConfirm() {
   margin: 0 0 20px 0;
   font-size: 18px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .dialog-field {
@@ -197,7 +197,7 @@ function handleConfirm() {
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #475569;
+  color: var(--color-text-secondary);
 }
 
 .dialog-field input {
@@ -207,14 +207,14 @@ function handleConfirm() {
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-default);
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text-primary);
   transition: all 0.2s;
   background: white;
 }
 
 .dialog-field input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -237,7 +237,7 @@ function handleConfirm() {
 }
 
 .btn-confirm {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
@@ -255,7 +255,7 @@ function handleConfirm() {
 
 .btn-cancel:hover {
   background: var(--color-bg-secondary);
-  border-color: #cbd5e1;
+  border-color: var(--color-border-medium);
 }
 
 /* Autocomplete */
@@ -285,7 +285,7 @@ function handleConfirm() {
   padding: 10px 14px;
   cursor: pointer;
   transition: background-color 0.15s;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -302,7 +302,7 @@ function handleConfirm() {
 
 .candidate-word {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-size: 14px;
 }
 

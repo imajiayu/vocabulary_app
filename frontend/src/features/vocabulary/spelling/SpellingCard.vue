@@ -445,11 +445,9 @@ onBeforeUnmount(() => {
   right: 0;
   width: 100%;
   padding: 1rem;
-  background: none;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-overlay);
+  border-top: 1px solid var(--color-border-medium);
+  box-shadow: 0 -2px 12px rgba(45, 55, 72, 0.06);
   z-index: 1000;
   box-sizing: border-box;
   /* 设置最小高度防止布局跳动 */
@@ -462,9 +460,9 @@ onBeforeUnmount(() => {
   text-align: center;
   padding: 0.5em;
   border-radius: var(--radius-default);
-  border: 2px solid #e1e5e9;
+  border: 2px solid var(--color-border-medium);
   outline: none;
-  background: #fff;
+  background: var(--color-bg-primary);
   box-sizing: border-box;
 }
 
@@ -494,24 +492,24 @@ onBeforeUnmount(() => {
 }
 
 .spelling-input:focus {
-  border-color: #1677ff;
-  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
 .spelling-input.correct {
-  color: #52c41a;
-  border-color: #52c41a;
-  box-shadow: 0 0 0 3px rgba(82, 196, 26, 0.1);
+  color: var(--color-success);
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 3px var(--color-success-light);
 }
 
 .spelling-input.incorrect {
-  color: #ff4d4f;
-  border-color: #ff4d4f;
-  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.1);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-light);
 }
 
 .spelling-input:disabled {
-  background: #f5f5f5;
+  background: var(--color-bg-tertiary);
   cursor: not-allowed;
 }
 
@@ -604,12 +602,12 @@ onBeforeUnmount(() => {
 }
 
 .forgot-btn {
-  background-color: #a855f7;
+  background-color: var(--color-primary);
   color: white;
 }
 
 .forgot-btn:hover:not(:disabled):not(.hidden) {
-  background-color: #9333ea;
+  background-color: var(--color-primary-hover);
 }
 
 .next-btn {

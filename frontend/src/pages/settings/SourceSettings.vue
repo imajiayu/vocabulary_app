@@ -179,7 +179,7 @@ onMounted(async () => {
 .section-title {
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 8px 0;
 }
 
@@ -217,7 +217,7 @@ onMounted(async () => {
 }
 
 .source-item:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   border-color: rgba(102, 126, 234, 0.2);
 }
 
@@ -230,7 +230,7 @@ onMounted(async () => {
 .source-name {
   font-size: 18px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .source-count {
@@ -277,18 +277,18 @@ onMounted(async () => {
 
 .add-source-section input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .add-source-section input:disabled {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
   cursor: not-allowed;
 }
 
 .btn-add {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: var(--radius-md);

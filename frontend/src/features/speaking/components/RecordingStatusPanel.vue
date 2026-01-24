@@ -173,7 +173,7 @@ const secondaryText = computed(() => {
 .primary-text {
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin-bottom: 2px;
 }
 

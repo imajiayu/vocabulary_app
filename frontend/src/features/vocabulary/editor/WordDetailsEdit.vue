@@ -227,7 +227,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-text-primary);
   margin-bottom: 0.5rem;
 }
 

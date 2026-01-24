@@ -131,6 +131,7 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         remember_inc, forget_inc, lapse
     """
     today = datetime.date.today()
+    config = Config()  # 创建实例以访问属性
 
     # 1️⃣ 更新 EF
     ease_factor_new = sm2_update_ease_factor(ease_factor, score)
@@ -169,7 +170,7 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         repetition_new = 0
         interval_new = 1
         # 进入错题集：首次设为LAPSE_INITIAL_VALUE，后续不超过LAPSE_MAX_VALUE
-        lapse = max(Config.LAPSE_INITIAL_VALUE, min(lapse, Config.LAPSE_MAX_VALUE))
+        lapse = max(config.LAPSE_INITIAL_VALUE, min(lapse, config.LAPSE_MAX_VALUE))
         last_remembered = None
         last_forgot = today
         remember_inc = 0

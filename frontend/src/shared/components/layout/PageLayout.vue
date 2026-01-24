@@ -114,12 +114,18 @@ const hasFooter = computed(() => !!slots.footer)
   flex-direction: column;
   gap: 1rem;
   background: transparent;
+  /* 确保内容区域至少填满视口减去 TopBar 高度 */
+  min-height: calc(100vh - var(--topbar-height, 48px) - 3rem);
+  min-height: calc(100dvh - var(--topbar-height, 48px) - 3rem);
+  box-sizing: border-box;
 }
 
 /* 移动端内容区域 */
 @media (max-width: 480px) {
   .main-content {
     padding: 1rem 0.75rem;
+    min-height: calc(100vh - var(--topbar-height, 48px) - 2rem);
+    min-height: calc(100dvh - var(--topbar-height, 48px) - 2rem);
   }
 }
 

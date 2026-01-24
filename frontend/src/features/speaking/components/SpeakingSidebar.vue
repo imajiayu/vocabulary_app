@@ -238,10 +238,9 @@ defineExpose({
   left: 48px;
   width: 320px;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
+  background: var(--color-bg-primary);
+  border-right: 1px solid var(--color-border-medium);
+  box-shadow: 2px 0 12px rgba(45, 55, 72, 0.04);
   transform: translateX(-100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;

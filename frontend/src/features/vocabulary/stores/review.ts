@@ -222,6 +222,9 @@ export const useReviewStore = defineStore('review', () => {
   }
 
   const submitResult = (wordId: number, result: WordResult): void => {
+    // 同步设置 wordResults，确保 sidebar 能立即显示
+    wordResults.value.set(wordId, result.remembered)
+
     if (mode.value === 'mode_lapse') {
       if (wordQueue.value.length === 0) return
 
@@ -283,8 +286,6 @@ export const useReviewStore = defineStore('review', () => {
         if (index !== -1) {
           wordQueue.value[index] = updatedWord
         }
-        // 更新wordResults，确保与最新数据同步
-        wordResults.value.set(updatedWord.id, result.remembered)
 
         // 如果有通知数据（复习/拼写模式），设置通知状态
         if (notificationData) {
@@ -306,6 +307,9 @@ export const useReviewStore = defineStore('review', () => {
   }
 
   const stopReviewWord = (wordId: number): void => {
+    // 同步设置 wordResults，确保 sidebar 能立即显示（跳过视为记住）
+    wordResults.value.set(wordId, true)
+
     if (mode.value === 'mode_lapse') {
       if (wordQueue.value.length === 0) return
 
@@ -331,7 +335,6 @@ export const useReviewStore = defineStore('review', () => {
         if (index !== -1) {
           wordQueue.value[index] = updatedWord
         }
-        wordResults.value.set(updatedWord.id, true)
       })
       .catch(log.error)
   }

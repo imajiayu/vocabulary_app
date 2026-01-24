@@ -136,18 +136,18 @@ const indicatorBackground = computed(() => {
   if (containerClass.includes('filter-theme')) {
     switch (props.modelValue) {
       case 'all':
-        return 'linear-gradient(135deg, #667eea, #764ba2)' // 紫蓝渐变 - 全部
+        return 'var(--gradient-primary)' // 铜褐渐变 - 全部
       case 'unremembered':
-        return 'var(--color-edit)' // 橙色 - 学习中
+        return 'var(--color-edit)' // 铜褐 - 学习中
       case 'remembered':
-        return 'var(--color-success)' // 绿色 - 已掌握
+        return 'var(--color-success)' // 橄榄绿 - 已掌握
       default:
-        return 'linear-gradient(135deg, #667eea, #764ba2)'
+        return 'var(--gradient-primary)'
     }
   }
 
   // 其他主题使用默认渐变
-  return 'linear-gradient(135deg, #667eea, #764ba2)'
+  return 'var(--gradient-primary)'
 })
 
 // 为filter-theme计算指示器的动态阴影
@@ -157,18 +157,18 @@ const indicatorBoxShadow = computed(() => {
   if (containerClass.includes('filter-theme')) {
     switch (props.modelValue) {
       case 'all':
-        return '0 2px 8px rgba(102, 126, 234, 0.3)' // 紫蓝渐变阴影
+        return '0 2px 8px rgba(153, 107, 61, 0.25)' // 铜褐阴影
       case 'unremembered':
-        return '0 2px 8px rgba(245, 158, 11, 0.4)' // 橙色阴影
+        return '0 2px 8px rgba(153, 107, 61, 0.3)' // 铜褐阴影
       case 'remembered':
-        return '0 2px 8px rgba(16, 185, 129, 0.4)' // 绿色阴影
+        return '0 2px 8px rgba(93, 122, 93, 0.3)' // 橄榄绿阴影
       default:
-        return '0 2px 8px rgba(102, 126, 234, 0.3)'
+        return '0 2px 8px rgba(153, 107, 61, 0.25)'
     }
   }
 
   // 其他主题使用默认阴影
-  return '0 2px 8px rgba(102, 126, 234, 0.3)'
+  return '0 2px 8px rgba(153, 107, 61, 0.25)'
 })
 
 const handleTabClick = (value: string) => {
@@ -278,7 +278,7 @@ onMounted(() => {
 
 .switch-tab:hover:not(.active) {
   background: rgba(0, 0, 0, 0.08);
-  color: #374151;
+  color: var(--color-text-primary);
 }
 
 .tab-icon {
@@ -406,7 +406,7 @@ onMounted(() => {
 /* Override default active style for filter theme */
 .switch-tab-container.filter-theme .switch-tab.active {
   background: var(--color-bg-tertiary);
-  color: #374151;
+  color: var(--color-text-primary);
   box-shadow: none;
 }
 

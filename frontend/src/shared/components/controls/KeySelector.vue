@@ -125,7 +125,7 @@ const selectableKeys = computed(() => {
 }
 
 .key-select :deep(.custom-select-trigger:hover) {
-  border-color: #667eea;
+  border-color: var(--color-primary);
 }
 
 .key-select :deep(.select-option) {

@@ -71,7 +71,7 @@ function emitChange() {
 
 .control-group label {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   white-space: nowrap;
   font-size: 14px;
 }
@@ -88,7 +88,7 @@ function emitChange() {
   gap: 6px;
   cursor: pointer;
   font-size: 13px;
-  color: #475569;
+  color: var(--color-text-secondary);
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   transition: all 0.2s;
@@ -96,13 +96,13 @@ function emitChange() {
 }
 
 .checkbox-label:hover {
-  background: #f1f5f9;
+  background: var(--color-bg-tertiary);
 }
 
 .checkbox-label input[type="checkbox"] {
   cursor: pointer;
   width: 16px;
   height: 16px;
-  accent-color: #667eea;
+  accent-color: var(--color-primary);
 }
 </style>
