@@ -225,6 +225,21 @@ export const useReviewStore = defineStore('review', () => {
     // 同步设置 wordResults，确保 sidebar 能立即显示
     wordResults.value.set(wordId, result.remembered)
 
+    // 在递增 currentIndex 之前，先保存当前 word 数据（用于分离式 API）
+    const wordForCalc = currentWord.value
+    const wordDataForApi = wordForCalc ? {
+      word: wordForCalc.word,
+      interval: wordForCalc.interval,
+      repetition: wordForCalc.repetition,
+      ease_factor: wordForCalc.ease_factor,
+      lapse: wordForCalc.lapse,
+      source: wordForCalc.source,
+      spell_strength: wordForCalc.spell_strength,
+      remember_count: wordForCalc.remember_count,
+      forget_count: wordForCalc.forget_count,
+      avg_elapsed_time: wordForCalc.avg_elapsed_time,
+    } : undefined
+
     if (mode.value === 'mode_lapse') {
       if (wordQueue.value.length === 0) return
 
@@ -275,8 +290,8 @@ export const useReviewStore = defineStore('review', () => {
       }
     }
 
-    // 添加 mode 参数到 result 中
-    const resultWithMode = { ...result, mode: mode.value }
+    // 添加 mode 参数和 word_data 到 result 中
+    const resultWithMode = { ...result, mode: mode.value, word_data: wordDataForApi }
 
     // lapse 模式：使用原同步 API（无 notification）
     if (mode.value === 'mode_lapse') {
@@ -293,6 +308,7 @@ export const useReviewStore = defineStore('review', () => {
     }
 
     // review/spelling 模式：使用分离式 API，先计算立即显示通知，再异步持久化
+    // word_data 已包含在 resultWithMode 中，后端无需查数据库
     api.words.calculateWordResult(wordId, resultWithMode)
       .then((calcResponse) => {
         const { notification: notificationData, persist_data } = calcResponse

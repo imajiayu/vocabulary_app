@@ -68,6 +68,10 @@ class Word(Base):
             if self.spell_next_review
             else None,
             "source": self.source,  # 直接返回字符串值
+            # 统计字段（用于分离式 API 计算，避免额外数据库查询）
+            "remember_count": self.remember_count or 0,
+            "forget_count": self.forget_count or 0,
+            "avg_elapsed_time": self.avg_elapsed_time or 0,
         }
 
     related_words = relationship(

@@ -11,11 +11,15 @@ export interface Word {
   repetition: number;
   interval: number;
   next_review: string;
-  lapse :number;
+  lapse: number;
   spell_strength: number | null;
   spell_next_review: string | null;
-  source : string
+  source: string;
   related_words?: RelatedWord[];
+  // 统计字段（用于分离式 API 计算，跳过数据库查询）
+  remember_count: number;
+  forget_count: number;
+  avg_elapsed_time: number;
 }
 
 export interface RelatedWord {

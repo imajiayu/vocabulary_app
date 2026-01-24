@@ -745,6 +745,7 @@ def calculate_word_result(word_id):
         - is_spelling: bool
         - spelling_data: dict (拼写模式)
         - mode: str
+        - word_data: dict (可选，前端传来的完整 word 数据，用于跳过数据库查询)
 
     Response:
         - notification: 前端显示用的通知数据
@@ -758,15 +759,16 @@ def calculate_word_result(word_id):
         remembered = bool(data.get("remembered", False))
         is_spelling = bool(data.get("is_spelling", False))
         mode = data.get("mode", MODE_REVIEW)
+        word_data = data.get("word_data")  # 前端传来的完整 word 数据
 
         result = None
 
         if not is_spelling and mode == MODE_REVIEW:
             elapsed_time = data.get("elapsed_time")
-            result = calculate_review_result(word_id, remembered, elapsed_time)
+            result = calculate_review_result(word_id, remembered, elapsed_time, word_data)
         elif is_spelling and mode == MODE_SPELLING:
             spelling_data = data.get("spelling_data")
-            result = calculate_spelling_result(word_id, remembered, spelling_data)
+            result = calculate_spelling_result(word_id, remembered, spelling_data, word_data)
         else:
             # lapse 模式不支持分离式 API（无 notification）
             return create_response(False, None, "Mode not supported for calculate-result"), 400

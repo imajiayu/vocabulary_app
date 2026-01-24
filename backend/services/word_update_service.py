@@ -25,9 +25,15 @@ from backend.database.vocabulary_dao import (
 # ============================================================================
 
 
-def calculate_review_result(word_id, remembered, elapsed_time):
+def calculate_review_result(word_id, remembered, elapsed_time, word_data=None):
     """
     只计算复习结果，不写数据库。返回 notification 数据和需要持久化的参数。
+
+    Args:
+        word_id: 单词ID
+        remembered: 是否记住
+        elapsed_time: 反应时间
+        word_data: 前端传来的完整 word 数据（可选，用于跳过数据库查询）
 
     Returns:
         dict: {
@@ -36,9 +42,13 @@ def calculate_review_result(word_id, remembered, elapsed_time):
         }
         或 None（单词不存在）
     """
-    word_info = db_fetch_word_info(word_id)
-    if not word_info:
-        return None
+    # 优先使用前端传来的数据，跳过数据库查询
+    if word_data:
+        word_info = word_data
+    else:
+        word_info = db_fetch_word_info(word_id)
+        if not word_info:
+            return None
 
     interval = word_info.get("interval", 1)
     repetition = word_info.get("repetition", 0)
@@ -46,7 +56,16 @@ def calculate_review_result(word_id, remembered, elapsed_time):
     ease_factor = old_ease_factor
     lapse = word_info.get("lapse", 0)
 
-    avg_elapsed_time = calculate_avg_elapsed_time(word_id, elapsed_time)
+    # 使用前端数据计算 avg_elapsed_time，跳过第二次数据库查询
+    if word_data:
+        prev_avg = word_data.get("avg_elapsed_time", 0) or 0
+        remember_count = word_data.get("remember_count", 0) or 0
+        forget_count = word_data.get("forget_count", 0) or 0
+        total_reviews = remember_count + forget_count
+        avg_elapsed_time = (prev_avg * total_reviews + elapsed_time) / (total_reviews + 1) if total_reviews >= 0 else elapsed_time
+    else:
+        avg_elapsed_time = calculate_avg_elapsed_time(word_id, elapsed_time)
+
     score = calculate_score(remembered, elapsed_time)
     today = datetime.date.today()
 
@@ -137,9 +156,15 @@ def persist_review_result(persist_data):
     )
 
 
-def calculate_spelling_result(word_id, remembered, spelling_data):
+def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None):
     """
     只计算拼写结果，不写数据库。返回 notification 数据和需要持久化的参数。
+
+    Args:
+        word_id: 单词ID
+        remembered: 是否记住
+        spelling_data: 拼写数据
+        word_data: 前端传来的完整 word 数据（可选，用于跳过数据库查询）
 
     Returns:
         dict: {
@@ -148,9 +173,13 @@ def calculate_spelling_result(word_id, remembered, spelling_data):
         }
         或 None（单词不存在）
     """
-    word_info = db_fetch_word_info(word_id)
-    if not word_info:
-        return None
+    # 优先使用前端传来的数据，跳过数据库查询
+    if word_data:
+        word_info = word_data
+    else:
+        word_info = db_fetch_word_info(word_id)
+        if not word_info:
+            return None
 
     word = word_info.get("word")
     word_source = word_info.get("source")

@@ -54,6 +54,20 @@ export interface WordActionResult {
     backspace_count: number
   }
   is_spelling?: boolean
+  mode?: string
+  // 分离式 API 使用：前端传完整 word 数据，跳过后端数据库查询
+  word_data?: {
+    word: string
+    interval: number
+    repetition: number
+    ease_factor: number
+    lapse: number
+    source: string
+    spell_strength?: number | null
+    remember_count: number
+    forget_count: number
+    avg_elapsed_time: number
+  }
 }
 
 // 复习结果通知数据接口
