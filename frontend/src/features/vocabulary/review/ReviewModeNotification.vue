@@ -4,82 +4,127 @@
       v-if="show"
       ref="notificationRef"
       class="draggable-notification"
-      :class="{ 'draggable-notification--mobile-fixed': isMobile }"
-      :style="positionStyle"
+      :class="{
+        'draggable-notification--mobile-fixed': isMobile,
+        'is-expanded': isMobileExpanded
+      }"
+      :style="isMobile ? {} : positionStyle"
       @mousedown="startDrag"
       @touchstart="startDrag"
     >
       <div class="draggable-notification__content">
-        <div v-if="!isMobile" class="draggable-notification__drag-handle">⋮⋮</div>
-        <button class="draggable-notification__close" @click.stop="handleClose" @touchend.stop="handleClose" title="关闭">×</button>
-        <div class="notification-word">{{ word }}</div>
-        <div class="notification-param">
-          <span class="notification-param__label">难度系数</span>
-          <span class="notification-param__change" :class="changeClass">
-            {{ formattedChange }}
-          </span>
-        </div>
-        <div class="notification-info-row">
-          <span class="notification-info-row__label">新值</span>
-          <span class="notification-info-row__value">{{ newParamValue.toFixed(2) }}</span>
-        </div>
-        <div class="notification-info-row">
-          <span class="notification-info-row__label">下次复习</span>
-          <span class="notification-info-row__value">{{ formattedDate }}</span>
-        </div>
-        <!-- 间隔天数 -->
-        <div v-if="breakdown && breakdown.interval !== undefined" class="notification-info-row">
-          <span class="notification-info-row__label">间隔天数</span>
-          <span class="notification-info-row__value">{{ breakdown.interval }} 天</span>
-        </div>
-        <!-- 连续记住次数 -->
-        <div v-if="breakdown && breakdown.repetition !== undefined" class="notification-info-row">
-          <span class="notification-info-row__label">连续记住</span>
-          <span class="notification-info-row__value">{{ breakdown.repetition }}</span>
-        </div>
-
-        <!-- 复习详情 -->
-        <div v-if="breakdown" class="notification-breakdown">
-          <div class="notification-breakdown__divider"></div>
-
-          <!-- 未记住时显示简化信息 -->
-          <div v-if="!breakdown.remembered" class="notification-breakdown__group">
-            <div class="notification-score__label">记忆状态</div>
-            <div class="memory-status-value text-danger">未记住</div>
+        <!-- 桌面端：完整展示 -->
+        <template v-if="!isMobile">
+          <div class="draggable-notification__drag-handle">⋮⋮</div>
+          <button class="draggable-notification__close" @click.stop="handleClose" @touchend.stop="handleClose" title="关闭">×</button>
+          <div class="notification-word">{{ word }}</div>
+          <div class="notification-param">
+            <span class="notification-param__label">难度系数</span>
+            <span class="notification-param__change" :class="changeClass">
+              {{ formattedChange }}
+            </span>
+          </div>
+          <div class="notification-info-row">
+            <span class="notification-info-row__label">新值</span>
+            <span class="notification-info-row__value">{{ newParamValue.toFixed(2) }}</span>
+          </div>
+          <div class="notification-info-row">
+            <span class="notification-info-row__label">下次复习</span>
+            <span class="notification-info-row__value">{{ formattedDate }}</span>
+          </div>
+          <!-- 间隔天数 -->
+          <div v-if="breakdown && breakdown.interval !== undefined" class="notification-info-row">
+            <span class="notification-info-row__label">间隔天数</span>
+            <span class="notification-info-row__value">{{ breakdown.interval }} 天</span>
+          </div>
+          <!-- 连续记住次数 -->
+          <div v-if="breakdown && breakdown.repetition !== undefined" class="notification-info-row">
+            <span class="notification-info-row__label">连续记住</span>
+            <span class="notification-info-row__value">{{ breakdown.repetition }}</span>
           </div>
 
-          <!-- 记住时显示评分信息 -->
-          <div v-else class="notification-breakdown__group">
-            <div class="notification-score">
-              <div class="notification-score__label">回忆评分</div>
-              <div class="notification-score__value">{{ breakdown.score }}</div>
-              <div class="notification-score__time">耗时 {{ (breakdown.elapsed_time ?? 0).toFixed(1) }}s</div>
+          <!-- 复习详情 -->
+          <div v-if="breakdown" class="notification-breakdown">
+            <div class="notification-breakdown__divider"></div>
+
+            <!-- 未记住时显示简化信息 -->
+            <div v-if="!breakdown.remembered" class="notification-breakdown__group">
+              <div class="notification-score__label">记忆状态</div>
+              <div class="memory-status-value text-danger">未记住</div>
             </div>
 
-            <!-- 竖向刻度尺 -->
-            <div class="vertical-scale">
-              <div class="vertical-scale__bar">
-                <div class="vertical-scale__segment vertical-scale__segment--excellent"></div>
-                <div class="vertical-scale__segment vertical-scale__segment--good"></div>
-                <div class="vertical-scale__segment vertical-scale__segment--fair"></div>
+            <!-- 记住时显示评分信息 -->
+            <div v-else class="notification-breakdown__group">
+              <div class="notification-score">
+                <div class="notification-score__label">回忆评分</div>
+                <div class="notification-score__value">{{ breakdown.score }}</div>
+                <div class="notification-score__time">耗时 {{ (breakdown.elapsed_time ?? 0).toFixed(1) }}s</div>
               </div>
-              <div class="vertical-scale__marker" :style="{ top: `${getVerticalPosition(breakdown.elapsed_time ?? 0)}%` }"></div>
-              <div class="vertical-scale__labels">
-                <span class="vertical-scale__label">0s</span>
-                <span class="vertical-scale__label">2s</span>
-                <span class="vertical-scale__label">5s</span>
-                <span class="vertical-scale__label">8s+</span>
+
+              <!-- 竖向刻度尺 -->
+              <div class="vertical-scale">
+                <div class="vertical-scale__bar">
+                  <div class="vertical-scale__segment vertical-scale__segment--excellent"></div>
+                  <div class="vertical-scale__segment vertical-scale__segment--good"></div>
+                  <div class="vertical-scale__segment vertical-scale__segment--fair"></div>
+                </div>
+                <div class="vertical-scale__marker" :style="{ top: `${getVerticalPosition(breakdown.elapsed_time ?? 0)}%` }"></div>
+                <div class="vertical-scale__labels">
+                  <span class="vertical-scale__label">0s</span>
+                  <span class="vertical-scale__label">2s</span>
+                  <span class="vertical-scale__label">5s</span>
+                  <span class="vertical-scale__label">8s+</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
+
+        <!-- 移动端：收起/展开式 -->
+        <template v-else>
+          <!-- 收起状态：紧凑指示条 -->
+          <div class="notification-collapsed" @click="toggleMobileExpand">
+            <span class="notification-collapsed__word">{{ word }}</span>
+            <span class="notification-collapsed__change" :class="changeClass">{{ formattedChange }}</span>
+            <span class="notification-collapsed__arrow">‹</span>
+          </div>
+
+          <!-- 展开状态：详细信息 -->
+          <div class="notification-expanded">
+            <div class="notification-info-row">
+              <span class="notification-info-row__label">新值</span>
+              <span class="notification-info-row__value">{{ newParamValue.toFixed(2) }}</span>
+            </div>
+            <div class="notification-info-row">
+              <span class="notification-info-row__label">下次复习</span>
+              <span class="notification-info-row__value">{{ formattedDate }}</span>
+            </div>
+            <div v-if="breakdown && breakdown.interval !== undefined" class="notification-info-row">
+              <span class="notification-info-row__label">间隔天数</span>
+              <span class="notification-info-row__value">{{ breakdown.interval }} 天</span>
+            </div>
+            <div v-if="breakdown && breakdown.repetition !== undefined" class="notification-info-row">
+              <span class="notification-info-row__label">连续记住</span>
+              <span class="notification-info-row__value">{{ breakdown.repetition }}</span>
+            </div>
+            <div v-if="breakdown" class="notification-info-row">
+              <span class="notification-info-row__label">回忆评分</span>
+              <span class="notification-info-row__value">{{ breakdown.remembered ? breakdown.score : '未记住' }}</span>
+            </div>
+            <div v-if="breakdown?.remembered" class="notification-info-row">
+              <span class="notification-info-row__label">耗时</span>
+              <span class="notification-info-row__value">{{ (breakdown.elapsed_time ?? 0).toFixed(1) }}s</span>
+            </div>
+            <button class="notification-expanded__close" @click.stop="handleClose">关闭</button>
+          </div>
+        </template>
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRef } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
 import { useDraggableNotification } from '@/shared/composables/useDraggableNotification'
 
 interface BreakdownInfo {
@@ -110,7 +155,7 @@ const emit = defineEmits<{
 // ── 拖拽逻辑（使用 composable） ──
 const notificationRef = ref<HTMLElement | null>(null)
 
-const { position, positionStyle, isMobile, startDrag } = useDraggableNotification(
+const { positionStyle, isMobile, startDrag } = useDraggableNotification(
   notificationRef,
   toRef(props, 'show'),
   {
@@ -120,8 +165,23 @@ const { position, positionStyle, isMobile, startDrag } = useDraggableNotificatio
   }
 )
 
+// ── 移动端展开状态 ──
+const isMobileExpanded = ref(false)
+
+const toggleMobileExpand = () => {
+  isMobileExpanded.value = !isMobileExpanded.value
+}
+
+// 当通知隐藏时，重置展开状态
+watch(() => props.show, (newShow) => {
+  if (!newShow) {
+    isMobileExpanded.value = false
+  }
+})
+
 // ── 事件处理 ──
 const handleClose = () => {
+  isMobileExpanded.value = false
   emit('close')
 }
 
@@ -181,47 +241,5 @@ const getVerticalPosition = (elapsedTime: number): number => {
 .memory-status-value {
   font-size: 14px;
   font-weight: 600;
-}
-
-/* 移动端特有调整 - 覆盖全局样式的细节 */
-.draggable-notification--mobile-fixed {
-  max-height: calc(100vh - 48px - 30vh - 90px);
-}
-
-.draggable-notification--mobile-fixed .draggable-notification__content {
-  overflow-y: auto;
-  max-height: calc(100vh - 48px - 30vh - 90px);
-}
-
-.draggable-notification--mobile-fixed .notification-breakdown {
-  margin-top: 6px;
-}
-
-.draggable-notification--mobile-fixed .notification-breakdown__divider {
-  margin: 6px 0;
-}
-
-.draggable-notification--mobile-fixed .notification-breakdown__group {
-  gap: 8px;
-}
-
-.draggable-notification--mobile-fixed .notification-score {
-  gap: 2px;
-}
-
-.draggable-notification--mobile-fixed .notification-score__label {
-  font-size: 10px;
-}
-
-.draggable-notification--mobile-fixed .notification-score__value {
-  font-size: 24px;
-}
-
-.draggable-notification--mobile-fixed .notification-score__time {
-  font-size: 10px;
-}
-
-.draggable-notification--mobile-fixed .memory-status-value {
-  font-size: 12px;
 }
 </style>

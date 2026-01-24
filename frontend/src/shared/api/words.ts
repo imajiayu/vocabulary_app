@@ -80,6 +80,19 @@ export interface SubmitWordResultResponse {
   notification: ReviewNotificationData | null
 }
 
+// 分离式 API：计算结果响应
+export interface CalculateResultResponse {
+  notification: ReviewNotificationData
+  persist_data: Record<string, unknown>  // 需要传给 persist 接口的数据
+}
+
+// 分离式 API：持久化请求参数
+export interface PersistResultPayload {
+  persist_data: Record<string, unknown>
+  mode: string
+  is_spelling: boolean
+}
+
 // 批量导入参数接口
 export interface BatchImportPayload {
   words: string[]
@@ -192,11 +205,27 @@ export class WordsApi {
   }
 
   /**
-   * 提交单词复习结果
+   * 提交单词复习结果（原同步 API，保留向后兼容）
    * @returns 返回更新后的完整单词数据和通知数据
    */
   static async submitWordResult(wordId: number, result: WordActionResult): Promise<SubmitWordResultResponse> {
     return patch<SubmitWordResultResponse>(`/api/words/${wordId}/result`, result)
+  }
+
+  /**
+   * 【分离式 API】只计算复习/拼写结果，不写数据库
+   * 用于快速返回 notification，前端可立即显示
+   */
+  static async calculateWordResult(wordId: number, result: WordActionResult): Promise<CalculateResultResponse> {
+    return post<CalculateResultResponse>(`/api/words/${wordId}/calculate-result`, result)
+  }
+
+  /**
+   * 【分离式 API】持久化复习/拼写结果到数据库
+   * 由前端在显示 notification 后异步调用（fire-and-forget）
+   */
+  static async persistWordResult(wordId: number, payload: PersistResultPayload): Promise<{ word: Word }> {
+    return post<{ word: Word }>(`/api/words/${wordId}/persist-result`, payload)
   }
 
   /**

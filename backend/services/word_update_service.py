@@ -20,6 +20,196 @@ from backend.database.vocabulary_dao import (
 )
 
 
+# ============================================================================
+# 分离式 API：计算与持久化解耦，用于优化响应速度
+# ============================================================================
+
+
+def calculate_review_result(word_id, remembered, elapsed_time):
+    """
+    只计算复习结果，不写数据库。返回 notification 数据和需要持久化的参数。
+
+    Returns:
+        dict: {
+            "notification": {...},  # 前端显示用
+            "persist_data": {...},  # 后续持久化用
+        }
+        或 None（单词不存在）
+    """
+    word_info = db_fetch_word_info(word_id)
+    if not word_info:
+        return None
+
+    interval = word_info.get("interval", 1)
+    repetition = word_info.get("repetition", 0)
+    old_ease_factor = word_info.get("ease_factor", 2.5)
+    ease_factor = old_ease_factor
+    lapse = word_info.get("lapse", 0)
+
+    avg_elapsed_time = calculate_avg_elapsed_time(word_id, elapsed_time)
+    score = calculate_score(remembered, elapsed_time)
+    today = datetime.date.today()
+
+    word_source = word_info.get("source")
+    (
+        repetition,
+        interval,
+        ease_factor,
+        last_remembered,
+        last_forgot,
+        remember_inc,
+        forget_inc,
+        lapse,
+    ) = calculate_srs_parameters_with_load_balancing(
+        score,
+        interval,
+        repetition,
+        ease_factor,
+        lapse,
+        word_source,
+        today,
+        UserConfig().MAX_PREP_DAYS,
+    )
+
+    next_review = today + datetime.timedelta(days=interval)
+    should_stop_review = ease_factor >= 3.0 and repetition >= 6
+
+    # 构建 notification
+    ease_factor_change = round(ease_factor - old_ease_factor, 2)
+    word_text = word_info.get("word", "")
+    review_breakdown = {
+        "elapsed_time": elapsed_time,
+        "remembered": remembered,
+        "score": score,
+        "repetition": repetition,
+        "interval": interval,
+    }
+
+    return {
+        "notification": {
+            "word": word_text,
+            "param_type": "ease_factor",
+            "param_change": ease_factor_change,
+            "new_param_value": round(ease_factor, 2),
+            "next_review_date": next_review.isoformat(),
+            "breakdown": review_breakdown,
+        },
+        "persist_data": {
+            "word_id": word_id,
+            "last_remembered": last_remembered,
+            "last_forgot": last_forgot,
+            "remember_inc": remember_inc,
+            "forget_inc": forget_inc,
+            "repetition": repetition,
+            "interval": interval,
+            "ease_factor": round(ease_factor, 2),
+            "score": score,
+            "next_review": next_review.isoformat(),
+            "lapse": lapse,
+            "avg_elapsed_time": avg_elapsed_time,
+            "should_stop_review": should_stop_review,
+        },
+    }
+
+
+def persist_review_result(persist_data):
+    """
+    持久化复习结果到数据库。
+
+    Args:
+        persist_data: calculate_review_result 返回的 persist_data
+    """
+    next_review = datetime.date.fromisoformat(persist_data["next_review"])
+    db_update_word_for_review(
+        persist_data["word_id"],
+        persist_data["last_remembered"],
+        persist_data["last_forgot"],
+        persist_data["remember_inc"],
+        persist_data["forget_inc"],
+        persist_data["repetition"],
+        persist_data["interval"],
+        persist_data["ease_factor"],
+        persist_data["score"],
+        next_review,
+        persist_data["lapse"],
+        persist_data["avg_elapsed_time"],
+        persist_data["should_stop_review"],
+    )
+
+
+def calculate_spelling_result(word_id, remembered, spelling_data):
+    """
+    只计算拼写结果，不写数据库。返回 notification 数据和需要持久化的参数。
+
+    Returns:
+        dict: {
+            "notification": {...},
+            "persist_data": {...},
+        }
+        或 None（单词不存在）
+    """
+    word_info = db_fetch_word_info(word_id)
+    if not word_info:
+        return None
+
+    word = word_info.get("word")
+    word_source = word_info.get("source")
+    if not word:
+        return None
+
+    current_strength = word_info.get("spell_strength") or 0
+    today = datetime.date.today()
+
+    strength_change, interval_days, breakdown_info = calculate_spell_strength_with_load_balancing(
+        spelling_data,
+        remembered,
+        word,
+        word_source,
+        today,
+        current_strength,
+        max_prep_days=UserConfig().MAX_PREP_DAYS,
+    )
+
+    new_strength = max(0, min(5.0, (current_strength or 0) + strength_change))
+    next_review = today + datetime.timedelta(days=interval_days)
+
+    return {
+        "notification": {
+            "word": word,
+            "param_type": "spell_strength",
+            "param_change": round(strength_change, 2),
+            "new_param_value": round(new_strength, 2),
+            "next_review_date": next_review.isoformat(),
+            "breakdown": breakdown_info,
+        },
+        "persist_data": {
+            "word_id": word_id,
+            "new_strength": round(new_strength, 2),
+            "next_review": next_review.isoformat(),
+        },
+    }
+
+
+def persist_spelling_result(persist_data):
+    """
+    持久化拼写结果到数据库。
+
+    Args:
+        persist_data: calculate_spelling_result 返回的 persist_data
+    """
+    next_review = datetime.date.fromisoformat(persist_data["next_review"])
+    db_update_word_for_spelling(
+        persist_data["word_id"],
+        persist_data["new_strength"],
+        next_review,
+    )
+
+
+# ============================================================================
+# 原有的同步 API（保持向后兼容，lapse 模式仍使用）
+# ============================================================================
+
+
 def update_word_info_review(word_id, remembered, elapsed_time):
     """
     更新已有单词的复习信息（MODE_REVIEW）

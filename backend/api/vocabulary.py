@@ -32,6 +32,11 @@ from backend.services.word_update_service import (
     update_word_info_lapse,
     update_word_info_review,
     update_word_info_spelling,
+    # 分离式 API（计算与持久化解耦）
+    calculate_review_result,
+    persist_review_result,
+    calculate_spelling_result,
+    persist_spelling_result,
 )
 from backend.services.progress_service import (
     save_word_ids_snapshot,
@@ -721,6 +726,114 @@ def update_review_word(word_id):
             create_response(False, None, f"Failed to update word result: {str(e)}"),
             500,
         )
+
+
+# ============================================================================
+# 分离式 API：计算与持久化解耦，优化响应速度
+# ============================================================================
+
+
+@api_bp.route("/words/<int:word_id>/calculate-result", methods=["POST"])
+def calculate_word_result(word_id):
+    """
+    只计算复习/拼写结果，不写数据库。
+    用于快速返回 notification 数据，前端可立即显示。
+
+    Request body:
+        - remembered: bool
+        - elapsed_time: float (复习模式)
+        - is_spelling: bool
+        - spelling_data: dict (拼写模式)
+        - mode: str
+
+    Response:
+        - notification: 前端显示用的通知数据
+        - persist_data: 需要传给 persist-result 接口的数据
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return create_response(False, None, "Missing request body"), 400
+
+        remembered = bool(data.get("remembered", False))
+        is_spelling = bool(data.get("is_spelling", False))
+        mode = data.get("mode", MODE_REVIEW)
+
+        result = None
+
+        if not is_spelling and mode == MODE_REVIEW:
+            elapsed_time = data.get("elapsed_time")
+            result = calculate_review_result(word_id, remembered, elapsed_time)
+        elif is_spelling and mode == MODE_SPELLING:
+            spelling_data = data.get("spelling_data")
+            result = calculate_spelling_result(word_id, remembered, spelling_data)
+        else:
+            # lapse 模式不支持分离式 API（无 notification）
+            return create_response(False, None, "Mode not supported for calculate-result"), 400
+
+        if not result:
+            return create_response(False, None, "Word not found"), 404
+
+        return create_response(True, result, "Calculation completed")
+
+    except Exception as e:
+        logger.error(f"Failed to calculate word result: {e}")
+        return create_response(False, None, f"Failed to calculate: {str(e)}"), 500
+
+
+@api_bp.route("/words/<int:word_id>/persist-result", methods=["POST"])
+def persist_word_result(word_id):
+    """
+    持久化复习/拼写结果到数据库。
+    由前端在显示 notification 后异步调用（fire-and-forget）。
+
+    Request body:
+        - persist_data: calculate-result 返回的 persist_data
+        - mode: str
+        - is_spelling: bool
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return create_response(False, None, "Missing request body"), 400
+
+        persist_data = data.get("persist_data")
+        mode = data.get("mode", MODE_REVIEW)
+        is_spelling = bool(data.get("is_spelling", False))
+
+        if not persist_data:
+            return create_response(False, None, "Missing persist_data"), 400
+
+        # 执行持久化
+        if not is_spelling and mode == MODE_REVIEW:
+            persist_review_result(persist_data)
+        elif is_spelling and mode == MODE_SPELLING:
+            persist_spelling_result(persist_data)
+        else:
+            return create_response(False, None, "Mode not supported"), 400
+
+        # 更新进度索引（与原 API 保持一致）
+        try:
+            from backend.services.progress_service import try_restore_from_progress
+
+            success, word_ids, progress_mode = try_restore_from_progress()
+
+            if success and progress_mode == mode and word_ids:
+                all_ids = word_ids
+                if word_id in all_ids:
+                    current_index = all_ids.index(word_id) + 1
+                    update_current_progress_index(current_index)
+        except Exception as e:
+            logger.error(f"Failed to update progress index: {e}")
+
+        # 获取更新后的单词信息
+        updated_word = db_get_word_review_info(word_id)
+
+        return create_response(True, {"word": updated_word}, "Persisted successfully")
+
+    except Exception as e:
+        logger.error(f"Failed to persist word result: {e}")
+        return create_response(False, None, f"Failed to persist: {str(e)}"), 500
 
 
 @api_bp.route("/progress/restore", methods=["GET"])

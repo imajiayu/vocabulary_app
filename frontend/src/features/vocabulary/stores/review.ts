@@ -275,27 +275,71 @@ export const useReviewStore = defineStore('review', () => {
       }
     }
 
-    // 异步提交并更新最新word（直接使用返回的数据，包含related_words）
-    // 添加mode参数到result中
+    // 添加 mode 参数到 result 中
     const resultWithMode = { ...result, mode: mode.value }
-    api.words.submitWordResult(wordId, resultWithMode)
-      .then((response) => {
-        const { word: updatedWord, notification: notificationData } = response
-        // 替换queue中的word
-        const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
-        if (index !== -1) {
-          wordQueue.value[index] = updatedWord
-        }
 
-        // 如果有通知数据（复习/拼写模式），设置通知状态
+    // lapse 模式：使用原同步 API（无 notification）
+    if (mode.value === 'mode_lapse') {
+      api.words.submitWordResult(wordId, resultWithMode)
+        .then((response) => {
+          const { word: updatedWord } = response
+          const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
+          if (index !== -1) {
+            wordQueue.value[index] = updatedWord
+          }
+        })
+        .catch(log.error)
+      return
+    }
+
+    // review/spelling 模式：使用分离式 API，先计算立即显示通知，再异步持久化
+    api.words.calculateWordResult(wordId, resultWithMode)
+      .then((calcResponse) => {
+        const { notification: notificationData, persist_data } = calcResponse
+
+        // 立即显示通知（不等待持久化）
         if (notificationData) {
           notification.value = {
             show: true,
             data: notificationData
           }
         }
+
+        // fire-and-forget：异步持久化，不阻塞用户
+        api.words.persistWordResult(wordId, {
+          persist_data,
+          mode: mode.value,
+          is_spelling: result.is_spelling
+        })
+          .then((persistResponse) => {
+            // 持久化完成后更新 word 数据
+            const { word: updatedWord } = persistResponse
+            const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
+            if (index !== -1) {
+              wordQueue.value[index] = updatedWord
+            }
+          })
+          .catch((err) => {
+            log.error('Failed to persist word result:', err)
+            // 持久化失败不影响用户体验，下次复习会重新计算
+          })
       })
-      .catch(log.error)
+      .catch((err) => {
+        log.error('Failed to calculate word result, falling back to sync API:', err)
+        // 计算失败时回退到原同步 API
+        api.words.submitWordResult(wordId, resultWithMode)
+          .then((response) => {
+            const { word: updatedWord, notification: notificationData } = response
+            const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
+            if (index !== -1) {
+              wordQueue.value[index] = updatedWord
+            }
+            if (notificationData) {
+              notification.value = { show: true, data: notificationData }
+            }
+          })
+          .catch(log.error)
+      })
   }
 
   // 关闭通知

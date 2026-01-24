@@ -5,135 +5,180 @@
       v-if="show"
       ref="notificationRef"
       class="draggable-notification"
-      :class="{ 'draggable-notification--mobile-fixed': isMobile }"
-      :style="positionStyle"
+      :class="{
+        'draggable-notification--mobile-fixed': isMobile,
+        'is-expanded': isMobileExpanded
+      }"
+      :style="isMobile ? {} : positionStyle"
       @mousedown="startDrag"
       @touchstart="startDrag"
     >
       <div class="draggable-notification__content spelling-content">
-        <div v-if="!isMobile" class="draggable-notification__drag-handle">⋮⋮</div>
-        <button class="draggable-notification__close" @click.stop="$emit('close')" title="关闭">×</button>
-        <div class="notification-word">{{ word }}</div>
-        <div class="notification-param">
-          <span class="notification-param__label">{{ paramLabel }}</span>
-          <span class="notification-param__change" :class="changeClass">
-            {{ formattedChange }}
-          </span>
-        </div>
-        <div class="notification-info-row">
-          <span class="notification-info-row__label">新值</span>
-          <span class="notification-info-row__value">{{ newParamValue.toFixed(2) }}</span>
-        </div>
-        <div class="notification-info-row">
-          <span class="notification-info-row__label">下次复习</span>
-          <span class="notification-info-row__value">{{ formattedDate }}</span>
-        </div>
-
-        <!-- 详细评分信息 (拼写模式) -->
-        <div v-if="breakdown" class="notification-breakdown">
-          <div class="notification-breakdown__divider"></div>
-
-          <!-- 未记住时显示简化信息 -->
-          <div v-if="!breakdown.remembered" class="notification-breakdown__group">
-            <div class="stat-item">
-              <span class="stat-label">记忆状态</span>
-              <span class="stat-value text-danger">未记住</span>
-            </div>
+        <!-- 桌面端：完整展示 -->
+        <template v-if="!isMobile">
+          <div class="draggable-notification__drag-handle">⋮⋮</div>
+          <button class="draggable-notification__close" @click.stop="handleClose" title="关闭">×</button>
+          <div class="notification-word">{{ word }}</div>
+          <div class="notification-param">
+            <span class="notification-param__label">{{ paramLabel }}</span>
+            <span class="notification-param__change" :class="changeClass">
+              {{ formattedChange }}
+            </span>
+          </div>
+          <div class="notification-info-row">
+            <span class="notification-info-row__label">新值</span>
+            <span class="notification-info-row__value">{{ newParamValue.toFixed(2) }}</span>
+          </div>
+          <div class="notification-info-row">
+            <span class="notification-info-row__label">下次复习</span>
+            <span class="notification-info-row__value">{{ formattedDate }}</span>
           </div>
 
-          <!-- 记住时显示详细统计 -->
-          <template v-else>
-            <!-- 输入统计 -->
-            <div class="notification-breakdown__group">
-              <div class="notification-breakdown__title">输入统计</div>
-              <div class="breakdown-stats">
-                <div class="stat-item">
-                  <span class="stat-label">字母数</span>
-                  <span class="stat-value">{{ breakdown.typed_count }} / {{ breakdown.word_length }}</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-label">退格数</span>
-                  <span class="stat-value">{{ breakdown.backspace_count }}</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-label">平均间隔</span>
-                  <span class="stat-value">{{ Math.round(breakdown.avg_key_interval ?? 0) }}ms</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-label">最长停顿</span>
-                  <span class="stat-value">{{ Math.round(breakdown.longest_pause ?? 0) }}ms</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-label">总耗时</span>
-                  <span class="stat-value">{{ ((breakdown.total_typing_time ?? 0) / 1000).toFixed(1) }}s</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-label">音频帮助</span>
-                  <span class="stat-value">{{ breakdown.audio_requests }}</span>
-                </div>
+          <!-- 详细评分信息 (拼写模式) -->
+          <div v-if="breakdown" class="notification-breakdown">
+            <div class="notification-breakdown__divider"></div>
+
+            <!-- 未记住时显示简化信息 -->
+            <div v-if="!breakdown.remembered" class="notification-breakdown__group">
+              <div class="stat-item">
+                <span class="stat-label">记忆状态</span>
+                <span class="stat-value text-danger">未记住</span>
               </div>
             </div>
 
-            <!-- 评分详情 -->
-            <div class="notification-breakdown__group">
-              <div class="notification-breakdown__title">评分详情</div>
-              <div class="score-items">
-                <div class="score-item">
-                  <div class="score-header">
-                    <span class="score-name">准确性</span>
-                    <span class="score-weight">(60%)</span>
+            <!-- 记住时显示详细统计 -->
+            <template v-else>
+              <!-- 输入统计 -->
+              <div class="notification-breakdown__group">
+                <div class="notification-breakdown__title">输入统计</div>
+                <div class="breakdown-stats">
+                  <div class="stat-item">
+                    <span class="stat-label">字母数</span>
+                    <span class="stat-value">{{ breakdown.typed_count }} / {{ breakdown.word_length }}</span>
                   </div>
-                  <div class="score-bar-container">
-                    <div class="score-bar" :style="{ width: `${(breakdown.accuracy_score ?? 0) * 100}%` }"></div>
+                  <div class="stat-item">
+                    <span class="stat-label">退格数</span>
+                    <span class="stat-value">{{ breakdown.backspace_count }}</span>
                   </div>
-                  <span class="score-number">{{ (breakdown.weighted_accuracy ?? 0).toFixed(1) }}</span>
-                </div>
-                <div class="score-item">
-                  <div class="score-header">
-                    <span class="score-name">流畅度</span>
-                    <span class="score-weight">(20%)</span>
+                  <div class="stat-item">
+                    <span class="stat-label">平均间隔</span>
+                    <span class="stat-value">{{ Math.round(breakdown.avg_key_interval ?? 0) }}ms</span>
                   </div>
-                  <div class="score-bar-container">
-                    <div class="score-bar" :style="{ width: `${(breakdown.fluency_score ?? 0) * 100}%` }"></div>
+                  <div class="stat-item">
+                    <span class="stat-label">最长停顿</span>
+                    <span class="stat-value">{{ Math.round(breakdown.longest_pause ?? 0) }}ms</span>
                   </div>
-                  <span class="score-number">{{ (breakdown.weighted_fluency ?? 0).toFixed(1) }}</span>
-                </div>
-                <div class="score-item">
-                  <div class="score-header">
-                    <span class="score-name">独立性</span>
-                    <span class="score-weight">(20%)</span>
+                  <div class="stat-item">
+                    <span class="stat-label">总耗时</span>
+                    <span class="stat-value">{{ ((breakdown.total_typing_time ?? 0) / 1000).toFixed(1) }}s</span>
                   </div>
-                  <div class="score-bar-container">
-                    <div class="score-bar" :style="{ width: `${(breakdown.independence_score ?? 0) * 100}%` }"></div>
+                  <div class="stat-item">
+                    <span class="stat-label">音频帮助</span>
+                    <span class="stat-value">{{ breakdown.audio_requests }}</span>
                   </div>
-                  <span class="score-number">{{ (breakdown.weighted_independence ?? 0).toFixed(1) }}</span>
-                </div>
-                <!-- 总分数轴 -->
-                <div class="total-score-axis">
-                  <div class="score-header">
-                    <span class="score-name">总分</span>
-                  </div>
-                  <div class="axis-container">
-                    <div class="axis-line">
-                      <span class="axis-line__label axis-line__label--left">-0.7</span>
-                      <span class="axis-line__label axis-line__label--right">+1.0</span>
-                      <!-- 当前位置标记 -->
-                      <div class="axis-line__marker" :style="{ left: `${(((breakdown.strength_gain ?? 0) + 0.7) / 1.7) * 100}%` }"></div>
-                    </div>
-                  </div>
-                  <span class="score-number">{{ (breakdown.total_score ?? 0).toFixed(1) }}</span>
                 </div>
               </div>
+
+              <!-- 评分详情 -->
+              <div class="notification-breakdown__group">
+                <div class="notification-breakdown__title">评分详情</div>
+                <div class="score-items">
+                  <div class="score-item">
+                    <div class="score-header">
+                      <span class="score-name">准确性</span>
+                      <span class="score-weight">(60%)</span>
+                    </div>
+                    <div class="score-bar-container">
+                      <div class="score-bar" :style="{ width: `${(breakdown.accuracy_score ?? 0) * 100}%` }"></div>
+                    </div>
+                    <span class="score-number">{{ (breakdown.weighted_accuracy ?? 0).toFixed(1) }}</span>
+                  </div>
+                  <div class="score-item">
+                    <div class="score-header">
+                      <span class="score-name">流畅度</span>
+                      <span class="score-weight">(20%)</span>
+                    </div>
+                    <div class="score-bar-container">
+                      <div class="score-bar" :style="{ width: `${(breakdown.fluency_score ?? 0) * 100}%` }"></div>
+                    </div>
+                    <span class="score-number">{{ (breakdown.weighted_fluency ?? 0).toFixed(1) }}</span>
+                  </div>
+                  <div class="score-item">
+                    <div class="score-header">
+                      <span class="score-name">独立性</span>
+                      <span class="score-weight">(20%)</span>
+                    </div>
+                    <div class="score-bar-container">
+                      <div class="score-bar" :style="{ width: `${(breakdown.independence_score ?? 0) * 100}%` }"></div>
+                    </div>
+                    <span class="score-number">{{ (breakdown.weighted_independence ?? 0).toFixed(1) }}</span>
+                  </div>
+                  <!-- 总分数轴 -->
+                  <div class="total-score-axis">
+                    <div class="score-header">
+                      <span class="score-name">总分</span>
+                    </div>
+                    <div class="axis-container">
+                      <div class="axis-line">
+                        <span class="axis-line__label axis-line__label--left">-0.7</span>
+                        <span class="axis-line__label axis-line__label--right">+1.0</span>
+                        <!-- 当前位置标记 -->
+                        <div class="axis-line__marker" :style="{ left: `${(((breakdown.strength_gain ?? 0) + 0.7) / 1.7) * 100}%` }"></div>
+                      </div>
+                    </div>
+                    <span class="score-number">{{ (breakdown.total_score ?? 0).toFixed(1) }}</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- 移动端：收起/展开式 -->
+        <template v-else>
+          <!-- 收起状态：紧凑指示条 -->
+          <div class="notification-collapsed" @click="toggleMobileExpand">
+            <span class="notification-collapsed__word">{{ word }}</span>
+            <span class="notification-collapsed__change" :class="changeClass">{{ formattedChange }}</span>
+            <span class="notification-collapsed__arrow">‹</span>
+          </div>
+
+          <!-- 展开状态：详细信息 -->
+          <div class="notification-expanded">
+            <div class="notification-info-row">
+              <span class="notification-info-row__label">拼写强度</span>
+              <span class="notification-info-row__value">{{ newParamValue.toFixed(2) }}</span>
             </div>
-          </template>
-        </div>
+            <div class="notification-info-row">
+              <span class="notification-info-row__label">下次复习</span>
+              <span class="notification-info-row__value">{{ formattedDate }}</span>
+            </div>
+            <template v-if="breakdown">
+              <div v-if="!breakdown.remembered" class="notification-info-row">
+                <span class="notification-info-row__label">记忆状态</span>
+                <span class="notification-info-row__value text-danger">未记住</span>
+              </div>
+              <template v-else>
+                <div class="notification-info-row">
+                  <span class="notification-info-row__label">总耗时</span>
+                  <span class="notification-info-row__value">{{ ((breakdown.total_typing_time ?? 0) / 1000).toFixed(1) }}s</span>
+                </div>
+                <div class="notification-info-row">
+                  <span class="notification-info-row__label">总分</span>
+                  <span class="notification-info-row__value">{{ (breakdown.total_score ?? 0).toFixed(1) }}</span>
+                </div>
+              </template>
+            </template>
+            <button class="notification-expanded__close" @click.stop="handleClose">关闭</button>
+          </div>
+        </template>
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRef } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
 import { useDraggableNotification } from '@/shared/composables/useDraggableNotification'
 
 interface BreakdownInfo {
@@ -172,7 +217,7 @@ const props = withDefaults(defineProps<Props>(), {
   show: true
 })
 
-defineEmits<{
+const emit = defineEmits<{
   close: []
 }>()
 
@@ -188,6 +233,26 @@ const { positionStyle, isMobile, startDrag } = useDraggableNotification(
     disableOnMobile: true, // 统一移动端行为：禁用拖拽
   }
 )
+
+// ── 移动端展开状态 ──
+const isMobileExpanded = ref(false)
+
+const toggleMobileExpand = () => {
+  isMobileExpanded.value = !isMobileExpanded.value
+}
+
+// 当通知隐藏时，重置展开状态
+watch(() => props.show, (newShow) => {
+  if (!newShow) {
+    isMobileExpanded.value = false
+  }
+})
+
+// ── 事件处理 ──
+const handleClose = () => {
+  isMobileExpanded.value = false
+  emit('close')
+}
 
 // ── 计算属性 ──
 const paramLabel = computed(() => {
@@ -323,25 +388,12 @@ const formattedDate = computed(() => {
   flex: 1;
 }
 
-/* 移动端适配 */
-.draggable-notification--mobile-fixed .spelling-content {
-  max-width: 40vw;
-  padding: 10px 16px;
-}
-
-.draggable-notification--mobile-fixed .notification-word {
-  font-size: 14px;
-}
-
-.draggable-notification--mobile-fixed .notification-param {
-  font-size: 12px;
-}
-
-.draggable-notification--mobile-fixed .notification-param__change {
-  font-size: 14px;
-}
-
-.draggable-notification--mobile-fixed .notification-info-row {
-  font-size: 11px;
+/* 移动端适配 - 使用全局 utilities.css 中的边缘收起式设计 */
+@media (max-width: 480px) {
+  .spelling-content {
+    padding: 0;
+    min-width: auto;
+    max-width: none;
+  }
 }
 </style>
