@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, nextTick, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 
 interface Tab {
   value: string
@@ -65,6 +65,7 @@ const emit = defineEmits<Emits>()
 const containerRef = ref<HTMLElement>()
 const tabWidths = ref<number[]>([])
 const hasUserInteracted = ref(false)
+const resizeObserver = ref<ResizeObserver | null>(null)
 
 // 计算指示器的 left 偏移（基于实际tab宽度和gap）
 const indicatorLeft = computed(() => {
@@ -209,6 +210,22 @@ watch(() => props.modelValue, measureTabWidths)
 
 onMounted(() => {
   measureTabWidths()
+
+  // 使用 ResizeObserver 监听容器大小变化，实时更新指示器
+  if (containerRef.value) {
+    resizeObserver.value = new ResizeObserver(() => {
+      measureTabWidths()
+    })
+    resizeObserver.value.observe(containerRef.value)
+  }
+})
+
+onUnmounted(() => {
+  // 清理 ResizeObserver
+  if (resizeObserver.value) {
+    resizeObserver.value.disconnect()
+    resizeObserver.value = null
+  }
 })
 </script>
 

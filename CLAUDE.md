@@ -9,15 +9,14 @@ IELTS词汇学习应用 - Flask后端 + Vue3前端，实现间隔重复记忆和
 - **数据库**: Supabase PostgreSQL
 - **存储**: Supabase Storage (音频文件)
 
-## 快速启动
+## 本地开发
 
 ```bash
-./start.sh start    # 启动前后端
-./start.sh stop     # 停止服务
+# 后端
+source .venv/bin/activate && python -m backend.app  # :5001
 
-# 单独运行
-source .venv/bin/activate && python -m backend.app  # 后端 :5001
-cd frontend && npm run dev                          # 前端
+# 前端
+cd frontend && npm run dev
 ```
 
 ## 项目结构
