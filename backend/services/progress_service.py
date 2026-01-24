@@ -10,8 +10,6 @@ from backend.database.progress_dao import (
     db_save_progress,
     db_get_progress,
     db_update_progress_index,
-    db_has_valid_progress,
-    db_get_progress_summary,
     db_get_progress_restore_data,
 )
 
@@ -87,6 +85,8 @@ def try_restore_from_progress():
     """
     尝试从保存的进度中恢复单词ID列表
 
+    优化：合并 db_has_valid_progress() 和 db_get_progress() 为单次查询
+
     Returns:
         tuple: (success: bool, word_ids: list, mode: str)
     """
@@ -94,17 +94,21 @@ def try_restore_from_progress():
         return False, [], ""
 
     try:
-        if not db_has_valid_progress():
-            return False, [], ""
-
+        # 单次查询获取 progress
         progress = db_get_progress()
         if not progress:
             return False, [], ""
 
+        # 在内存中验证（原 db_has_valid_progress 的逻辑）
         word_ids = progress.get("word_ids_snapshot", [])
-        mode = progress.get("mode", "")
-        current_index = progress.get("current_index", 0)
+        if not word_ids:
+            return False, [], ""
 
+        current_index = progress.get("current_index", 0)
+        if current_index < 0 or current_index >= len(word_ids):
+            return False, [], ""
+
+        mode = progress.get("mode", "")
         return True, word_ids, mode
     except Exception as e:
         logger.error(f"Failed to restore progress: {e}")
@@ -115,6 +119,8 @@ def get_progress_info():
     """
     获取进度信息（用于前端显示）
 
+    优化：合并 3 次查询为 1 次，在内存中构建 summary
+
     Returns:
         dict: 进度信息
     """
@@ -122,11 +128,36 @@ def get_progress_info():
         return {"enabled": False}
 
     try:
-        if not db_has_valid_progress():
+        # 单次查询获取 progress
+        progress = db_get_progress()
+
+        # 在内存中验证（原 db_has_valid_progress 的逻辑）
+        if not progress:
             return {"enabled": True, "has_progress": False}
 
-        summary = db_get_progress_summary()
-        progress = db_get_progress()
+        word_ids = progress.get("word_ids_snapshot", [])
+        if not word_ids:
+            return {"enabled": True, "has_progress": False}
+
+        current_index = progress.get("current_index", 0)
+        if current_index < 0 or current_index >= len(word_ids):
+            return {"enabled": True, "has_progress": False}
+
+        # 在内存中构建 summary（原 db_get_progress_summary 的逻辑）
+        total_words = len(word_ids)
+        remaining_words = max(0, total_words - current_index)
+
+        summary = {
+            "has_progress": True,
+            "mode": progress.get("mode"),
+            "source": progress.get("source"),
+            "shuffle": progress.get("shuffle"),
+            "total_words": total_words,
+            "current_index": current_index,
+            "remaining_words": remaining_words,
+            "initial_lapse_count": progress.get("initial_lapse_count", 0),
+            "initial_lapse_word_count": progress.get("initial_lapse_word_count", 0),
+        }
 
         return {
             "enabled": True,
@@ -232,21 +263,3 @@ def get_progress_restore_data():
     except Exception as e:
         logger.error(f"Failed to get progress restore data: {e}")
         return False, {}
-
-
-def calculate_word_index_from_batch(batch_id, batch_size, offset):
-    """
-    根据批次信息计算当前单词在总队列中的位置
-
-    Args:
-        batch_id: 批次ID
-        batch_size: 批次大小
-        offset: 偏移量
-
-    Returns:
-        int: 当前位置索引
-    """
-    # 计算当前处理到的单词位置
-    # offset 是当前批次的起始位置
-    # 假设每次请求后都处理了一个单词，所以位置是 offset + 处理过的单词数
-    return offset

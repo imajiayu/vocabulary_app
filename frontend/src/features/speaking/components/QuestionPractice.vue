@@ -122,6 +122,7 @@ const handleTemporaryRecord = (record: Partial<SpeakingRecord> | null) => {
 }
 
 // 监听选中题目变化
+// immediate: true 会在组件挂载时立即执行，无需 onMounted 重复调用
 watch(() => props.selectQuestion, (newQuestion) => {
   if (newQuestion) {
     fetchRecords()
@@ -133,12 +134,6 @@ watch(() => props.selectQuestion, (newQuestion) => {
     temporaryRecord.value = null
   }
 }, { immediate: true })
-
-onMounted(() => {
-  if (props.selectQuestion) {
-    fetchRecords()
-  }
-})
 </script>
 
 <style scoped>

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
-from sqlalchemy.exc import IntegrityError
 from backend.extensions import get_session
 from backend.models.word import Progress
 
@@ -153,66 +152,6 @@ def db_clear_progress():
         if db:
             db.rollback()
         return False
-
-
-def db_has_valid_progress():
-    """
-    检查是否有有效的学习进度
-
-    Returns:
-        bool: 是否有有效进度
-    """
-    progress = db_get_progress()
-
-    if not progress:
-        return False
-
-    # 检查是否有单词队列
-    word_ids = progress.get("word_ids_snapshot", [])
-    if not word_ids or len(word_ids) == 0:
-        return False
-
-    # 检查进度是否合理
-    current_index = progress.get("current_index", 0)
-    if current_index < 0 or current_index >= len(word_ids):
-        return False
-
-    return True
-
-
-def db_get_progress_summary():
-    """
-    获取学习进度摘要信息
-
-    Returns:
-        dict: 包含进度摘要的字典
-    """
-    progress = db_get_progress()
-
-    if not progress:
-        return {
-            "has_progress": False,
-            "total_words": 0,
-            "current_index": 0,
-            "remaining_words": 0,
-        }
-
-    word_ids = progress.get("word_ids_snapshot", [])
-    current_index = progress.get("current_index", 0)
-    total_words = len(word_ids)
-    remaining_words = max(0, total_words - current_index)
-
-    return {
-        "has_progress": True,
-        "mode": progress.get("mode"),
-        "source": progress.get("source"),
-        "shuffle": progress.get("shuffle"),
-        "total_words": total_words,
-        "current_index": current_index,
-        "remaining_words": remaining_words,
-        "initial_lapse_count": progress.get("initial_lapse_count", 0),
-        "initial_lapse_word_count": progress.get("initial_lapse_word_count", 0),
-    }
 
 
 def db_get_active_lapse_words(word_ids):

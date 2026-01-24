@@ -66,15 +66,6 @@ def db_update_word(word_id: int, update_data: dict):
 
     try:
         with get_session() as db:
-            # 如果更新数据包含word字段，先查询原始的word文本
-            original_word = None
-            if "word" in update_data:
-                original_word_result = (
-                    db.query(Word.word).filter(Word.id == word_id).first()
-                )
-                if original_word_result:
-                    original_word = original_word_result[0]
-
             # 执行 UPDATE
             result = db.execute(text(sql_query), params)
             db.commit()

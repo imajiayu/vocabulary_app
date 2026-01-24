@@ -152,9 +152,9 @@ class BaseGenerator(ABC):
 
 def print_section(title: str, char: str = "─"):
     """打印分节标题"""
-    print(f"\n{'─' * 60}")
+    print(f"\n{char * 60}")
     print(f"  {title}")
-    print(f"{'─' * 60}")
+    print(f"{char * 60}")
 
 
 def print_stat(label: str, value, indent: int = 3):

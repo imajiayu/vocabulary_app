@@ -904,21 +904,23 @@ def fetch_word_definition(word_id):
     从网络爬取单词释义并更新数据库，返回更新后的完整单词对象。
     用于替代原有的异步队列+轮询模式。
 
+    优化：使用轻量级查询验证存在性（2次完整查询 → 1次轻量 + 1次完整）
+
     Returns:
         更新后的完整单词对象
     """
     from backend.services.vocabulary_service import fetch_definition_from_web
     from backend.database.vocabulary.word_crud import db_update_word_definition_only
-    from backend.database.vocabulary.word_query import db_get_word_review_info
+    from backend.database.vocabulary.word_query import db_get_word_review_info, db_get_word_text_only
 
     try:
-        # 1. 获取单词信息
-        word = db_get_word_review_info(word_id)
-        if not word:
+        # 1. 轻量查询验证存在性并获取单词文本
+        word_basic = db_get_word_text_only(word_id)
+        if not word_basic:
             return create_response(False, None, "Word not found"), 404
 
         # 2. 从网络获取释义
-        definition = fetch_definition_from_web(word["word"])
+        definition = fetch_definition_from_web(word_basic["word"])
         if not definition:
             return create_response(False, None, "Failed to fetch definition from web"), 500
 

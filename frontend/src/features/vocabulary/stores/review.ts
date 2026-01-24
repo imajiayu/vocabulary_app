@@ -340,22 +340,7 @@ export const useReviewStore = defineStore('review', () => {
             // 持久化失败不影响用户体验，下次复习会重新计算
           })
       })
-      .catch((err) => {
-        log.error('Failed to calculate word result, falling back to sync API:', err)
-        // 计算失败时回退到原同步 API
-        api.words.submitWordResult(wordId, resultWithMode)
-          .then((response) => {
-            const { word: updatedWord, notification: notificationData } = response
-            const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
-            if (index !== -1) {
-              wordQueue.value[index] = updatedWord
-            }
-            if (notificationData) {
-              notification.value = { show: true, data: notificationData }
-            }
-          })
-          .catch(log.error)
-      })
+      .catch(log.error)
   }
 
   // 关闭通知
@@ -388,9 +373,9 @@ export const useReviewStore = defineStore('review', () => {
       }
     }
 
+    // 优化：直接使用 stopReview 返回的更新数据，避免额外 getWord 查询
     api.words.stopReview(wordId, mode.value)
-      .then(async () => {
-        const updatedWord = await api.words.getWord(wordId)
+      .then((updatedWord) => {
         const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
         if (index !== -1) {
           wordQueue.value[index] = updatedWord

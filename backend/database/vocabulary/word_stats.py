@@ -4,31 +4,44 @@
 """
 from datetime import timedelta
 
+from sqlalchemy import func
+
 from backend.extensions import get_session
 from backend.models.word import Word
 from .common import get_current_source
 
 
 def db_get_source_statistics():
-    """Get statistics for each source"""
+    """Get statistics for each source
+
+    优化：使用单次分组查询代替 N×2 次循环查询
+    """
+    from sqlalchemy import case
     from backend.config import UserConfig
 
     with get_session() as db:
-        stats = {}
-
-        for source in UserConfig().CUSTOM_SOURCES:
-            total = db.query(Word).filter(Word.source == source).count()
-            remembered = (
-                db.query(Word)
-                .filter(Word.source == source, Word.stop_review == 1)
-                .count()
+        # 单次分组查询获取所有 source 的统计
+        results = (
+            db.query(
+                Word.source,
+                func.count(Word.id).label("total"),
+                func.sum(case((Word.stop_review == 1, 1), else_=0)).label("remembered"),
             )
-            unremembered = total - remembered
+            .group_by(Word.source)
+            .all()
+        )
 
+        # 构建结果映射
+        stats_map = {r.source: {"total": r.total, "remembered": r.remembered} for r in results}
+
+        # 确保所有配置的 source 都有数据（即使为空）
+        stats = {}
+        for source in UserConfig().CUSTOM_SOURCES:
+            data = stats_map.get(source, {"total": 0, "remembered": 0})
             stats[source] = {
-                "total": total,
-                "remembered": remembered,
-                "unremembered": unremembered,
+                "total": data["total"],
+                "remembered": data["remembered"],
+                "unremembered": data["total"] - data["remembered"],
             }
 
         return stats
@@ -161,40 +174,56 @@ def db_get_comprehensive_stats(source=None):
 
 
 def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
-    """获取指定source未来每日的复习负荷"""
-    with get_session() as db:
-        loads = []
-        for i in range(1, days_ahead + 1):
-            future_date = base_date + timedelta(days=i)
-            count = (
-                db.query(Word.id)
-                .filter(
-                    Word.source == source,
-                    Word.stop_review == 0,
-                    Word.next_review == future_date,
-                )
-                .count()
-            )
-            loads.append(count)
+    """获取指定source未来每日的复习负荷
 
-    return loads
+    优化：使用单次分组查询代替 45-90 次循环查询
+    """
+    with get_session() as db:
+        # 计算日期范围
+        future_dates = [base_date + timedelta(days=i) for i in range(1, days_ahead + 1)]
+
+        # 单次分组查询获取所有日期的计数
+        results = (
+            db.query(Word.next_review, func.count(Word.id))
+            .filter(
+                Word.source == source,
+                Word.stop_review == 0,
+                Word.next_review.in_(future_dates),
+            )
+            .group_by(Word.next_review)
+            .all()
+        )
+
+        # 构建日期到计数的映射
+        date_counts = {date: count for date, count in results}
+
+        # 按顺序返回每天的负荷（未出现的日期计数为0）
+        return [date_counts.get(date, 0) for date in future_dates]
 
 
 def get_daily_spell_loads_by_source(source, base_date, days_ahead=45):
-    """获取指定source未来每日的拼写负荷"""
-    with get_session() as db:
-        loads = []
-        for i in range(1, days_ahead + 1):
-            future_date = base_date + timedelta(days=i)
-            count = (
-                db.query(Word.id)
-                .filter(
-                    Word.source == source,
-                    Word.stop_review == 0,
-                    Word.spell_next_review == future_date,
-                )
-                .count()
-            )
-            loads.append(count)
+    """获取指定source未来每日的拼写负荷
 
-    return loads
+    优化：使用单次分组查询代替 45-90 次循环查询
+    """
+    with get_session() as db:
+        # 计算日期范围
+        future_dates = [base_date + timedelta(days=i) for i in range(1, days_ahead + 1)]
+
+        # 单次分组查询获取所有日期的计数
+        results = (
+            db.query(Word.spell_next_review, func.count(Word.id))
+            .filter(
+                Word.source == source,
+                Word.stop_review == 0,
+                Word.spell_next_review.in_(future_dates),
+            )
+            .group_by(Word.spell_next_review)
+            .all()
+        )
+
+        # 构建日期到计数的映射
+        date_counts = {date: count for date, count in results}
+
+        # 按顺序返回每天的负荷（未出现的日期计数为0）
+        return [date_counts.get(date, 0) for date in future_dates]

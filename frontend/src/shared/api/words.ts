@@ -191,13 +191,6 @@ export class WordsApi {
   }
 
   /**
-   * 部分更新单词信息
-   */
-  static async patchWord(wordId: number, wordData: Partial<UpdateWordPayload>): Promise<Word> {
-    return patch<Word>(`/api/word/${wordId}`, wordData)
-  }
-
-  /**
    * 删除单词
    */
   static async deleteWord(wordId: number): Promise<void> {
@@ -219,8 +212,8 @@ export class WordsApi {
   }
 
   /**
-   * 提交单词复习结果（原同步 API，保留向后兼容）
-   * @returns 返回更新后的完整单词数据和通知数据
+   * 提交单词复习结果（同步 API，仅用于 lapse 模式）
+   * review/spelling 模式使用分离式 API (calculateWordResult + persistWordResult)
    */
   static async submitWordResult(wordId: number, result: WordActionResult): Promise<SubmitWordResultResponse> {
     return patch<SubmitWordResultResponse>(`/api/words/${wordId}/result`, result)
@@ -244,9 +237,10 @@ export class WordsApi {
 
   /**
    * 停止复习单词
+   * 返回更新后的完整单词数据（后端已返回，避免额外查询）
    */
-  static async stopReview(wordId: number, mode?: string): Promise<void> {
-    return patch<void>(`/api/word/${wordId}`, { stop_review: true, mode })
+  static async stopReview(wordId: number, mode?: string): Promise<Word> {
+    return patch<Word>(`/api/word/${wordId}`, { stop_review: true, mode })
   }
 
   /**
@@ -257,6 +251,3 @@ export class WordsApi {
     return post<Word>(`/api/words/${wordId}/fetch-definition`)
   }
 }
-
-// 导出便捷方法
-export const wordsApi = WordsApi

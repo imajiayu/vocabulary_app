@@ -181,6 +181,8 @@ def _delete_audio_file(audio_file_path: str) -> None:
 def db_delete_topic(topic_id: int) -> bool:
     """
     删除主题，同时删除所有相关的问题和记录
+
+    优化：使用批量查询代替 N+1 循环查询
     """
     try:
         with get_session() as session:
@@ -193,14 +195,18 @@ def db_delete_topic(topic_id: int) -> bool:
             if not topic:
                 return False
 
-            # 删除所有相关问题的所有记录的音频文件
-            for question in topic.questions:
-                records = (
+            # 批量获取所有 question_ids
+            question_ids = [q.id for q in topic.questions]
+
+            # 批量查询所有相关记录（单次查询代替 N 次查询）
+            if question_ids:
+                all_records = (
                     session.query(SpeakingRecord)
-                    .filter(SpeakingRecord.question_id == question.id)
+                    .filter(SpeakingRecord.question_id.in_(question_ids))
                     .all()
                 )
-                for record in records:
+                # 删除所有音频文件
+                for record in all_records:
                     _delete_audio_file(record.audio_file)
 
             session.delete(topic)

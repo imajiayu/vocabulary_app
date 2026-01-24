@@ -203,9 +203,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
       // 如果存在 mode，使用 stopReview API（会更新进度索引）
       // 如果不存在 mode，使用 updateWord API（仅更新字段）
+      // 优化：直接使用 API 返回的更新数据，避免额外 getWord 查询
       if (mode.value) {
-        await api.words.stopReview(wordId, mode.value)
-        updatedWord = await api.words.getWord(wordId)
+        updatedWord = await api.words.stopReview(wordId, mode.value)
       } else {
         updatedWord = await api.words.updateWord(wordId, {
           stop_review: 1
