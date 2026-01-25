@@ -513,6 +513,23 @@ const goStats = () => {
   .top-bar-section.center {
     justify-content: center;
   }
+
+  /* SwitchTab 在 TopBar 右侧区域的紧凑样式 */
+  .top-bar-section.right :deep(.switch-tab-container) {
+    padding: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .top-bar-section.right :deep(.switch-tab) {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-height: auto;
+  }
+
+  .top-bar-section.right :deep(.tab-indicator) {
+    top: 2px;
+    height: calc(100% - 4px);
+  }
 }
 
 /* 横屏手机适配 */

@@ -42,6 +42,19 @@ export interface SourceCounts {
   today_spell: number
 }
 
+// Source 统计数据（用于单个 source 的统计信息）
+export interface SourceStats {
+  total: number
+  remembered: number
+  unremembered: number
+}
+
+// Source 统计 API 响应
+export interface SourceStatsResponse {
+  counts: SourceCounts
+  source_stats: SourceStats
+}
+
 // 首页摘要接口
 export interface IndexSummary {
   counts: {
@@ -51,13 +64,8 @@ export interface IndexSummary {
     spelling: number
     today_spell: number
   }
-  // 所有 source 的 counts（新增）
-  all_counts?: Record<string, SourceCounts>
-  source_stats: {
-    IELTS: WordStats
-    GRE: WordStats
-  }
-  current_source: 'IELTS' | 'GRE'
+  source_stats: Record<string, SourceStats>
+  current_source: string
   recent_activity?: Array<{
     type: 'review' | 'new' | 'spelling'
     count: number

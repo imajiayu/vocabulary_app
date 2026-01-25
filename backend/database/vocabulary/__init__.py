@@ -42,13 +42,13 @@ from .word_review import (
     db_update_word_for_lapse,
     db_update_word_for_spelling,
     db_get_total_lapse_count,
-    db_get_all_sources_counts,
     adjust_words_for_max_prep_days,
 )
 
 # Stats
 from .word_stats import (
     db_get_source_statistics,
+    db_get_source_stats_from_view,
     db_get_comprehensive_stats,
     get_daily_review_loads_by_source,
     get_daily_spell_loads_by_source,
@@ -82,10 +82,10 @@ __all__ = [
     "db_update_word_for_lapse",
     "db_update_word_for_spelling",
     "db_get_total_lapse_count",
-    "db_get_all_sources_counts",
     "adjust_words_for_max_prep_days",
     # Stats
     "db_get_source_statistics",
+    "db_get_source_stats_from_view",
     "db_get_comprehensive_stats",
     "get_daily_review_loads_by_source",
     "get_daily_spell_loads_by_source",

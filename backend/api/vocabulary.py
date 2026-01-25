@@ -21,7 +21,7 @@ from backend.database.vocabulary_dao import (
     db_fetch_review_word_ids,
     db_fetch_lapse_word_ids,
     db_fetch_spelled_word_ids,
-    db_get_all_sources_counts,
+    db_get_source_stats_from_view,
 )
 from backend.services.vocabulary_service import get_bold_definition
 from backend.const import (
@@ -176,29 +176,23 @@ def set_source():
 def get_index_summary():
     """Simple summary for the modern index page.
 
-    Returns counts for ALL sources so the frontend can switch without API calls.
+    Uses word_source_stats view for efficient single-query statistics.
+    Only returns current source data - use /source_stats/<source> for other sources.
     """
     try:
         from backend.config import UserConfig
-        from backend.database.vocabulary_dao import db_get_source_statistics
 
         config = UserConfig()
         available_sources = config.CUSTOM_SOURCES or ["IELTS", "GRE"]
 
-        # 获取所有 source 的 counts（一次查询）
-        all_counts = db_get_all_sources_counts(available_sources)
+        # 获取当前 source
+        current_source = session.get("current_source", available_sources[0])
 
-        # Get source statistics (total per source)
-        source_stats = db_get_source_statistics()
+        # 从 view 获取当前 source 的统计数据
+        stats = db_get_source_stats_from_view(current_source)
 
         # 获取进度恢复信息
         progress_info = get_progress_info()
-
-        # 当前 source 的 counts（保持向后兼容）
-        current_source = session.get("current_source", available_sources[0])
-        current_counts = all_counts.get(current_source, {
-            "review": 0, "lapse": 0, "spelling": 0, "today_spell": 0
-        })
 
     except Exception as e:
         return (
@@ -209,11 +203,8 @@ def get_index_summary():
     return create_response(
         True,
         {
-            # 当前 source 的 counts（向后兼容）
-            "counts": current_counts,
-            # 所有 source 的 counts（新增）
-            "all_counts": all_counts,
-            "source_stats": source_stats,
+            "counts": stats["counts"],
+            "source_stats": {current_source: stats["source_stats"]},
             "current_source": current_source,
             "progress_restore": {
                 "has_progress": progress_info.get("has_progress", False),

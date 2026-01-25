@@ -4,11 +4,58 @@
 """
 from datetime import timedelta
 
-from sqlalchemy import func
+from sqlalchemy import func, text
 
 from backend.extensions import get_session
 from backend.models.word import Word
 from .common import get_current_source
+
+
+def db_get_source_stats_from_view(source: str):
+    """
+    从 word_source_stats view 获取单个 source 的统计数据
+
+    View 在 Supabase 中定义，使用 COUNT(*) FILTER 语法单次扫描计算所有指标
+
+    Args:
+        source: 单词来源 (如 "IELTS", "GRE")
+
+    Returns:
+        dict: {
+            "counts": {"review": int, "lapse": int, "spelling": int, "today_spell": int},
+            "source_stats": {"total": int, "remembered": int, "unremembered": int}
+        }
+    """
+    from backend.config import UserConfig
+
+    config = UserConfig()
+    low_ef_extra_count = config.LOW_EF_EXTRA_COUNT
+
+    with get_session() as db:
+        result = db.execute(
+            text("SELECT * FROM word_source_stats WHERE source = :source"),
+            {"source": source}
+        ).fetchone()
+
+        if result is None:
+            return {
+                "counts": {"review": 0, "lapse": 0, "spelling": 0, "today_spell": 0},
+                "source_stats": {"total": 0, "remembered": 0, "unremembered": 0}
+            }
+
+        return {
+            "counts": {
+                "review": (result.due_count or 0) + low_ef_extra_count,
+                "lapse": result.lapse_count or 0,
+                "spelling": result.spelling_count or 0,
+                "today_spell": result.today_spell_count or 0,
+            },
+            "source_stats": {
+                "total": result.total or 0,
+                "remembered": result.remembered or 0,
+                "unremembered": result.unremembered or 0,
+            }
+        }
 
 
 def db_get_source_statistics():

@@ -13,17 +13,6 @@
       <div class="header-with-switch">
         <h1 class="text-3xl font-bold text-primary m-0 main-title">单词复习</h1>
         <IOSSwitch v-model="shuffleModel" label="打乱顺序" class="shuffle-switch" />
-        <button
-          class="refresh-button"
-          :class="{ 'is-refreshing': isRefreshing }"
-          @click="handleRefresh"
-          :disabled="isRefreshing"
-          title="刷新数据"
-        >
-          <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
       </div>
       <p class="text-sm text-secondary m-0 subtitle">选择一个模式开始练习，支持打乱顺序与单词数量设置</p>
     </header>
@@ -122,7 +111,6 @@ const log = logger.create('WordIndex')
 type Counts = { review: number; lapse: number; spelling: number; today_spell: number }
 
 const loading = ref(true)
-const isRefreshing = ref(false)
 const error = ref<string | null>(null)
 const retryDelay = 1000 // 1秒
 const counts = reactive<Counts>({ review: 0, lapse: 0, spelling: 0, today_spell: 0 })
@@ -150,7 +138,9 @@ const {
   allCountsMap,
   switchSource: switchSourceComposable,
   initializeFromData,
-  loadAvailableSources
+  loadAvailableSources,
+  fetchAllSourcesStats,
+  updateAllCaches
 } = useSourceSelection()
 
 // 使用全局设置管理
@@ -174,17 +164,15 @@ const sourceTabs = computed(() => {
   }))
 })
 
-// 处理来源切换（不再调用 API）
+// 处理来源切换 - 直接从 Supabase 获取最新数据（不显示整页 loading，保留卡片动画）
 const handleSourceChange = async (source: string) => {
-  // 更新后端 session（保持一致性）
-  await switchSourceComposable(source)
-
-  // 从本地缓存获取 counts
-  const sourceCounts = allCountsMap[source] || { review: 0, lapse: 0, spelling: 0, today_spell: 0 }
-  Object.assign(counts, sourceCounts)
-
-  // 更新滚轮值
-  updateWheelValues()
+  try {
+    const sourceCounts = await switchSourceComposable(source)
+    Object.assign(counts, sourceCounts)
+    updateWheelValues()
+  } catch (e) {
+    log.error('Failed to switch source:', e)
+  }
 }
 
 // 更新滚轮值的辅助函数
@@ -207,31 +195,27 @@ const shuffleModel = computed({
   }
 })
 
-// 刷新数据
-const handleRefresh = async () => {
-  if (isRefreshing.value) return
-
-  isRefreshing.value = true
-  loading.value = true
-
-  try {
-    await fetchSummary(false)
-  } finally {
-    isRefreshing.value = false
-  }
-}
-
 const fetchSummary = async (isRetry = false) => {
   try {
     if (!isRetry) {
       loading.value = true
     }
 
-    const data = await api.stats.getIndexSummary()
-    Object.assign(counts, data.counts)
+    // 并行获取：后端 index_summary + Supabase 所有 source 统计
+    const [data, allStats] = await Promise.all([
+      api.stats.getIndexSummary(),
+      fetchAllSourcesStats()
+    ])
 
-    // 使用 composable 初始化源数据（包含 all_counts）
-    initializeFromData(data)
+    // 设置当前 source（从后端获取）
+    initializeFromData({ current_source: data.current_source })
+
+    // 更新所有缓存（sourceStatsMap 和 allCountsMap）
+    updateAllCaches(allStats)
+
+    // 使用当前 source 的 counts
+    const currentCounts = allCountsMap[data.current_source] || data.counts
+    Object.assign(counts, currentCounts)
 
     // 从settings获取配置并初始化shuffle状态（使用缓存）
     try {
@@ -370,53 +354,6 @@ const resumeProgress = () => {
 
 .shuffle-switch {
   flex-shrink: 0;
-}
-
-/* 刷新按钮 */
-.refresh-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-default);
-  background: var(--color-bg-glass-light);
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  flex-shrink: 0;
-}
-
-.refresh-button:hover:not(:disabled) {
-  background: var(--color-bg-glass-hover);
-  color: var(--color-brand-primary);
-  border-color: var(--color-brand-primary);
-}
-
-.refresh-button:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.refresh-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.refresh-icon {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s ease;
-}
-
-.refresh-button.is-refreshing .refresh-icon {
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 .source-tabs {
