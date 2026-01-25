@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { logger } from '@/shared/utils/logger'
+import { heatmapColors } from '@/shared/config/chartColors'
 
 interface CellData {
   word: string
@@ -218,7 +219,7 @@ const renderChart = () => {
           const isAvail = typeof availRaw === 'boolean' ? availRaw : !!availRaw
           color = props.valueToColor(val, isAvail)
         } else {
-          color = '#cccccc'
+          color = heatmapColors.spell.notAvailable
         }
 
         return {

@@ -510,8 +510,8 @@ const toggleExpand = () => {
 }
 
 .ai-message .message-text {
-  background: white;
-  color: #2d3748;
+  background: var(--primitive-paper-50);
+  color: var(--color-text-primary);
   border-bottom-left-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -530,7 +530,7 @@ const toggleExpand = () => {
 .loading-dots span {
   width: 8px;
   height: 8px;
-  background: #cbd5e0;
+  background: var(--primitive-ink-200);
   border-radius: var(--radius-full);
   animation: bounce 1.4s infinite ease-in-out;
 }

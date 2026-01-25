@@ -1,7 +1,6 @@
 import json
 import logging
 import random
-from collections import Counter
 from flask import Blueprint, jsonify, request, session
 from flask_cors import CORS
 
@@ -13,7 +12,6 @@ from backend.database.vocabulary_dao import (
     db_fetch_word_info,
     db_fetch_word_info_for_insert_page,
     db_fetch_word_info_paginated,
-    db_get_comprehensive_stats,
     db_get_word_review_info,
     db_get_words_review_info_batch,
     db_insert_word,
@@ -69,67 +67,6 @@ def fetch_word_ids_by_mode(mode=MODE_REVIEW, limit=None):
         return db_fetch_spelled_word_ids(limit)
     else:
         return []
-
-
-@api_bp.route("/stats", methods=["GET"])
-def get_stats():
-    """Optimized stats endpoint using single comprehensive query"""
-    try:
-        # Get source parameter from query string
-        source = request.args.get("source", "IELTS")  # Default to IELTS
-
-        # Get all stats in a single database query
-        stats = db_get_comprehensive_stats(source=source)
-
-        # Process next_review data
-        next_review_counter = Counter(stats["next_reviews"])
-        sorted_next_review_dict = {
-            date.isoformat(): next_review_counter[date]
-            for date in sorted(next_review_counter.keys())
-        }
-
-        # Process spell_next_review data
-        spell_next_review_counter = Counter(stats["spell_next_reviews"])
-        sorted_spell_next_review_dict = {
-            date.isoformat(): spell_next_review_counter[date]
-            for date in sorted(spell_next_review_counter.keys())
-        }
-
-        # Process elapse_time data
-        elapse_time_counter = Counter(stats["elapse_times"])
-        sorted_elapse_time_dict = {
-            time: elapse_time_counter[time]
-            for time in sorted(elapse_time_counter.keys())
-        }
-
-        # Process review_count data
-        review_count_counter = Counter(stats["review_counts"])
-        sorted_review_count_dict = {
-            count: review_count_counter[count]
-            for count in sorted(review_count_counter.keys())
-        }
-
-        return create_response(
-            True,
-            {
-                "ef_dict": stats["ef_data"],
-                "next_review_dict": sorted_next_review_dict,
-                "spell_next_review_dict": sorted_spell_next_review_dict,
-                "elapse_time_dict": sorted_elapse_time_dict,
-                "spell_strength_dict": stats["spell_strengths"],
-                "added_date_count_dict": stats["added_dates"],
-                "review_count_dict": sorted_review_count_dict,
-                "spell_heatmap_cells": stats["spell_heatmap_cells"],
-                "ef_heatmap_cells": stats["ef_heatmap_cells"],
-            },
-            "Statistics retrieved successfully",
-        )
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to retrieve statistics: {str(e)}"),
-            500,
-        )
 
 
 @api_bp.route("/source", methods=["GET"])

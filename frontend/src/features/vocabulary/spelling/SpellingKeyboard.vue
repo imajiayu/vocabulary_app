@@ -175,10 +175,10 @@ const emit = defineEmits<{
   padding: 0.25rem 0.5rem;
   border: none;
   border-radius: var(--radius-xs);
-  background: #ffffff;
+  background: var(--key-bg);
   font-size: 1.1rem;
   font-weight: 400;
-  color: #000000;
+  color: var(--key-text);
   cursor: pointer;
   transition: all 0.1s ease;
   touch-action: manipulation;
@@ -206,8 +206,8 @@ const emit = defineEmits<{
 /* 特殊键样式 */
 .special-key {
   flex: 1.5;
-  background: #adb5bd;
-  color: #000000;
+  background: var(--key-special-bg);
+  color: var(--key-text);
 }
 
 .special-key:active:not(:disabled) {
@@ -216,8 +216,8 @@ const emit = defineEmits<{
 
 .backspace-key {
   width: 3rem;
-  background: #adb5bd;
-  color: #000000;
+  background: var(--key-special-bg);
+  color: var(--key-text);
   font-size: 1.2rem;
 }
 
@@ -227,8 +227,8 @@ const emit = defineEmits<{
 
 .space-key {
   flex: 3;
-  background: #ffffff;
-  color: #000000;
+  background: var(--key-bg);
+  color: var(--key-text);
   font-size: 0.9rem;
 }
 
@@ -271,7 +271,7 @@ const emit = defineEmits<{
 }
 
 .enter-key:disabled {
-  background: #94d3a2;
+  background: var(--key-confirm-disabled-bg);
   opacity: 0.5;
 }
 

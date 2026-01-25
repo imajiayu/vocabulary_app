@@ -308,8 +308,8 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
   align-items: center;
   justify-content: center;
   border: none;
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--alert-error-bg);
+  color: var(--color-danger);
   border-radius: 0.375rem;
   cursor: pointer;
   flex-shrink: 0;
@@ -323,7 +323,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 }
 
 .remove-button:hover {
-  background: #fee2e2;
+  background: var(--primitive-brick-100);
 }
 
 .remove-icon {

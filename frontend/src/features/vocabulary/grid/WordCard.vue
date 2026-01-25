@@ -10,7 +10,7 @@
       }"
       :style="{
         backgroundColor: isRemembered ? 'var(--color-success)' : backgroundColor,
-        color: '#374151'
+        color: 'var(--primitive-ink-600)'
       }"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"

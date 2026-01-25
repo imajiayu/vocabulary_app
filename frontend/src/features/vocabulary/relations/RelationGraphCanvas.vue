@@ -18,6 +18,7 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import type { GraphData, GraphNode } from '@/shared/api'
 import { relationColors } from './useRelationGraph'
+import { palette, textColors } from '@/shared/config/chartColors'
 
 interface ContextMenuData {
   type: 'node' | 'edge'
@@ -61,7 +62,7 @@ function renderGraph() {
         top: 'center',
         textStyle: {
           fontSize: 18,
-          color: '#94a3b8',
+          color: textColors.muted,
           fontWeight: 'normal'
         }
       }
@@ -83,7 +84,7 @@ function renderGraph() {
       symbol: 'rect',
       symbolSize: [width, height],
       itemStyle: {
-        color: isCenterNode ? '#996B3D' : '#91cc75',
+        color: isCenterNode ? palette.primary : palette.success,
         borderRadius: 4
       },
       label: {

@@ -1,6 +1,7 @@
 // Base Components - 基础组件库
 // Editorial Study 风格设计系统
 
+export { default as BaseAlert } from './BaseAlert.vue'
 export { default as BaseButton } from './BaseButton.vue'
 export { default as BaseCard } from './BaseCard.vue'
 export { default as BaseIcon } from './BaseIcon.vue'

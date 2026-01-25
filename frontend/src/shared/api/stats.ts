@@ -1,38 +1,15 @@
 /**
  * 统计相关的API接口
+ * 重构后直接使用Supabase查询，不再通过Flask后端
  */
 
 import { get } from './client'
-
-// 单词统计接口
-export interface WordStats {
-  total: number
-  new: number
-  review: number
-  lapse: number
-  spelling: number
-  mastered: number
-}
-
-// 学习统计接口
-export interface LearningStats {
-  daily_reviews: Array<{
-    date: string
-    count: number
-    accuracy: number
-  }>
-  weekly_progress: Array<{
-    week: string
-    reviews: number
-    new_words: number
-  }>
-  monthly_summary: {
-    total_reviews: number
-    total_new_words: number
-    avg_accuracy: number
-    streak_days: number
-  }
-}
+import { supabase } from '@/shared/config/supabase'
+import {
+  generateSpellHeatmapCell,
+  generateEfHeatmapCell,
+  type HeatmapCell
+} from '@/shared/utils/statsColors'
 
 // 每个 source 的 counts
 export interface SourceCounts {
@@ -89,22 +66,116 @@ export interface IndexSummary {
   }
 }
 
-// 进度图表数据接口
-export interface ProgressChartData {
-  labels: string[]
-  datasets: Array<{
-    label: string
-    data: number[]
-    backgroundColor?: string
-    borderColor?: string
-  }>
+// Supabase VIEW 返回的原始数据类型
+interface StatsWordRaw {
+  word: string
+  ease_factor: number | string | null
+  ef_rounded: number | string | null
+  elapsed_time_rounded: number | string | null
+  spell_strength: number | string | null
+  spell_strength_rounded: number | string | null
+  repetition: number | string | null
+  spell_available: boolean | string
 }
 
-// 热力图数据接口
-export interface HeatmapData {
+interface DistributionRow {
   date: string
-  count: number
-  level: number
+  count: number | string
+}
+
+interface ElapsedTimeRow {
+  elapsed_time: number | string
+  count: number | string
+}
+
+interface ReviewCountRow {
+  review_count: number | string
+  count: number | string
+}
+
+// getStats 返回类型
+export interface StatsResponse {
+  ef_dict: Array<{ word: string; ef: number }>
+  next_review_dict: Record<string, number>
+  spell_next_review_dict: Record<string, number>
+  elapse_time_dict: Record<string, number>
+  spell_strength_dict: Array<{ word: string; strength: number | null; available: boolean }>
+  added_date_count_dict: Record<string, number>
+  review_count_dict: Record<number, number>
+  spell_heatmap_cells: HeatmapCell[]
+  ef_heatmap_cells: HeatmapCell[]
+}
+
+// 辅助函数：安全转换为数字
+function toNumber(value: number | string | null | undefined): number | null {
+  if (value === null || value === undefined) return null
+  const num = typeof value === 'string' ? parseFloat(value) : value
+  return isNaN(num) ? null : num
+}
+
+// 辅助函数：安全转换为整数
+function toInt(value: number | string | null | undefined): number {
+  if (value === null || value === undefined) return 0
+  const num = typeof value === 'string' ? parseInt(value, 10) : Math.round(value)
+  return isNaN(num) ? 0 : num
+}
+
+// 辅助函数：安全转换为布尔值
+function toBool(value: boolean | string | null | undefined): boolean {
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'string') return value.toLowerCase() === 'true'
+  return false
+}
+
+// 辅助函数：四舍五入到指定小数位（与Python round一致）
+function roundTo(value: number | null, decimals: number): number | null {
+  if (value === null) return null
+  const factor = Math.pow(10, decimals)
+  return Math.round(value * factor) / factor
+}
+
+/**
+ * 分页获取所有数据（绕过 Supabase 1000 行限制）
+ */
+async function fetchAllRows<T>(
+  tableName: string,
+  selectFields: string,
+  filters: { column: string; value: string }[],
+  orderBy?: string
+): Promise<T[]> {
+  const PAGE_SIZE = 1000
+  const allRows: T[] = []
+  let offset = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let query = supabase
+      .from(tableName)
+      .select(selectFields)
+      .range(offset, offset + PAGE_SIZE - 1)
+
+    for (const filter of filters) {
+      query = query.eq(filter.column, filter.value)
+    }
+
+    if (orderBy) {
+      query = query.order(orderBy)
+    }
+
+    const { data, error } = await query
+
+    if (error) throw new Error(`Failed to fetch ${tableName}: ${error.message}`)
+
+    if (data && data.length > 0) {
+      allRows.push(...(data as T[]))
+      offset += PAGE_SIZE
+      hasMore = data.length === PAGE_SIZE
+    } else {
+      hasMore = false
+    }
+  }
+
+  return allRows
 }
 
 /**
@@ -113,6 +184,7 @@ export interface HeatmapData {
 export class StatsApi {
   /**
    * 获取首页摘要数据
+   * 仍使用Flask后端（涉及session和复杂的progress_restore逻辑）
    */
   static async getIndexSummary(): Promise<IndexSummary> {
     return get<IndexSummary>('/api/index_summary')
@@ -120,113 +192,143 @@ export class StatsApi {
 
   /**
    * 获取详细统计数据
+   * 重构：直接从Supabase VIEW查询，使用分页获取所有数据
    */
-  static async getStats(params?: { source?: string }): Promise<{
-    ef_dict: Array<{ word: string; ef: number }>
-    next_review_dict: Record<string, number>
-    spell_next_review_dict: Record<string, number>
-    elapse_time_dict: Record<string, number>
-    spell_strength_dict: Array<{ word: string; strength: number | null; available: boolean }>
-    added_date_count_dict: Record<string, number>
-    review_count_dict: Record<number, number>
-    spell_heatmap_cells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
-    ef_heatmap_cells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
-  }> {
-    const urlParams = new URLSearchParams()
-    if (params?.source) {
-      urlParams.append('source', params.source)
+  static async getStats(params?: { source?: string }): Promise<StatsResponse> {
+    const source = params?.source || 'IELTS'
+    const sourceFilter = [{ column: 'source', value: source }]
+
+    // 并行查询所有VIEW（使用分页获取完整数据）
+    const [
+      rawData,
+      nextReviewData,
+      spellNextReviewData,
+      elapsedTimeData,
+      reviewCountData,
+      addedDateData
+    ] = await Promise.all([
+      // 原始单词数据（用于ef_dict, spell_strength_dict, 热力图）
+      fetchAllRows<StatsWordRaw>(
+        'stats_words_raw',
+        'word, ease_factor, ef_rounded, elapsed_time_rounded, spell_strength, spell_strength_rounded, repetition, spell_available',
+        sourceFilter
+      ),
+      // 复习日期分布（聚合后行数较少，通常不需要分页）
+      fetchAllRows<DistributionRow>(
+        'stats_next_review_distribution',
+        'date, count',
+        sourceFilter,
+        'date'
+      ),
+      // 拼写日期分布
+      fetchAllRows<DistributionRow>(
+        'stats_spell_next_review_distribution',
+        'date, count',
+        sourceFilter,
+        'date'
+      ),
+      // 反应时间分布
+      fetchAllRows<ElapsedTimeRow>(
+        'stats_elapsed_time_distribution',
+        'elapsed_time, count',
+        sourceFilter,
+        'elapsed_time'
+      ),
+      // 复习次数分布
+      fetchAllRows<ReviewCountRow>(
+        'stats_review_count_distribution',
+        'review_count, count',
+        sourceFilter,
+        'review_count'
+      ),
+      // 添加日期分布
+      fetchAllRows<DistributionRow>(
+        'stats_added_date_distribution',
+        'date, count',
+        sourceFilter,
+        'date'
+      )
+    ])
+
+    // 转换为API响应格式（确保数据类型正确）
+    // ef_dict: 与后端一致，使用 round(ease_factor, 2)
+    const ef_dict: Array<{ word: string; ef: number }> = []
+    for (const row of rawData) {
+      const ef = toNumber(row.ease_factor)
+      if (ef !== null) {
+        ef_dict.push({ word: row.word, ef: roundTo(ef, 2)! })
+      }
     }
 
-    const url = urlParams.toString()
-      ? `/api/stats?${urlParams.toString()}`
-      : '/api/stats'
-
-    return get(url)
-  }
-
-  /**
-   * 获取单词统计数据
-   */
-  static async getWordStats(source?: 'IELTS' | 'GRE'): Promise<WordStats> {
-    const url = source ? `/api/stats/words?source=${source}` : '/api/stats/words'
-    return get<WordStats>(url)
-  }
-
-  /**
-   * 获取学习进度数据
-   */
-  static async getLearningProgress(
-    startDate?: string,
-    endDate?: string
-  ): Promise<ProgressChartData> {
-    const params = new URLSearchParams()
-    if (startDate) params.append('start_date', startDate)
-    if (endDate) params.append('end_date', endDate)
-
-    const url = params.toString()
-      ? `/api/stats/progress?${params.toString()}`
-      : '/api/stats/progress'
-
-    return get<ProgressChartData>(url)
-  }
-
-  /**
-   * 获取学习热力图数据
-   */
-  static async getHeatmapData(year?: number): Promise<HeatmapData[]> {
-    const url = year ? `/api/stats/heatmap?year=${year}` : '/api/stats/heatmap'
-    return get<HeatmapData[]>(url)
-  }
-
-  /**
-   * 获取准确率统计
-   */
-  static async getAccuracyStats(
-    mode?: 'review' | 'spelling',
-    days?: number
-  ): Promise<{
-    overall_accuracy: number
-    daily_accuracy: Array<{
-      date: string
-      accuracy: number
-      total_attempts: number
-    }>
-  }> {
-    const params = new URLSearchParams()
-    if (mode) params.append('mode', mode)
-    if (days) params.append('days', String(days))
-
-    const url = params.toString()
-      ? `/api/stats/accuracy?${params.toString()}`
-      : '/api/stats/accuracy'
-
-    return get(url)
-  }
-
-  /**
-   * 获取学习连续天数
-   */
-  static async getStreakStats(): Promise<{
-    current_streak: number
-    longest_streak: number
-    total_days: number
-  }> {
-    return get('/api/stats/streak')
-  }
-
-  /**
-   * 导出学习数据
-   */
-  static async exportData(
-    format: 'json' | 'csv' = 'json',
-    dataType: 'words' | 'reviews' | 'all' = 'all'
-  ): Promise<Blob> {
-    const params = new URLSearchParams({
-      format,
-      type: dataType
+    // spell_strength_dict: 与后端一致
+    const spell_strength_dict = rawData.map(row => {
+      const repetition = toInt(row.repetition)
+      const available = repetition >= 3
+      const strength = toNumber(row.spell_strength)
+      return {
+        word: row.word,
+        strength: strength !== null ? roundTo(strength, 2) : null,
+        available
+      }
     })
 
-    return get(`/api/stats/export?${params.toString()}`)
+    // 生成热力图单元格（在前端计算颜色，使用原始值）
+    const spell_heatmap_cells = rawData.map(row => {
+      const repetition = toInt(row.repetition)
+      const available = repetition >= 3
+      const spellStrength = toNumber(row.spell_strength)
+      return generateSpellHeatmapCell({
+        word: row.word,
+        spell_strength: spellStrength,
+        spell_available: available
+      })
+    })
+
+    const ef_heatmap_cells = rawData.map(row => {
+      const easeFactorNum = toNumber(row.ease_factor)
+      return generateEfHeatmapCell({
+        word: row.word,
+        ease_factor: easeFactorNum
+      })
+    })
+
+    // 分布数据转换为字典格式
+    const next_review_dict: Record<string, number> = {}
+    for (const row of nextReviewData) {
+      next_review_dict[row.date] = toInt(row.count)
+    }
+
+    const spell_next_review_dict: Record<string, number> = {}
+    for (const row of spellNextReviewData) {
+      spell_next_review_dict[row.date] = toInt(row.count)
+    }
+
+    const elapse_time_dict: Record<string, number> = {}
+    for (const row of elapsedTimeData) {
+      elapse_time_dict[String(toInt(row.elapsed_time))] = toInt(row.count)
+    }
+
+    const review_count_dict: Record<number, number> = {}
+    for (const row of reviewCountData) {
+      review_count_dict[toInt(row.review_count)] = toInt(row.count)
+    }
+
+    const added_date_count_dict: Record<string, number> = {}
+    for (const row of addedDateData) {
+      added_date_count_dict[row.date] = toInt(row.count)
+    }
+
+    return {
+      ef_dict,
+      next_review_dict,
+      spell_next_review_dict,
+      elapse_time_dict,
+      spell_strength_dict,
+      added_date_count_dict,
+      review_count_dict,
+      spell_heatmap_cells,
+      ef_heatmap_cells
+    }
   }
 }
 

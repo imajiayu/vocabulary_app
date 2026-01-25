@@ -91,11 +91,8 @@ const feedback = await api.speaking.getAiFeedback(
 // 获取首页摘要
 const summary = await api.stats.getIndexSummary()
 
-// 获取详细统计数据
-const stats = await api.stats.getStats()
-
-// 获取学习进度数据
-const progress = await api.stats.getLearningProgress('2024-01-01', '2024-12-31')
+// 获取详细统计数据（支持按source过滤）
+const stats = await api.stats.getStats({ source: 'IELTS' })
 ```
 
 ### 配置API使用示例

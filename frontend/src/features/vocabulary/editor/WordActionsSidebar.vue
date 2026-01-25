@@ -127,7 +127,7 @@ const handleSave = async () => {
 }
 
 .status-section {
-  background-color: #f9fafb;
+  background-color: var(--color-bg-secondary);
   border-radius: 0.5rem;
   padding: 1rem;
   display: flex;
@@ -155,13 +155,13 @@ const handleSave = async () => {
 }
 
 .status-remembered {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: var(--alert-success-bg);
+  color: var(--alert-success-text);
 }
 
 .status-learning {
-  background-color: #fef3c7;
-  color: #92400e;
+  background-color: var(--alert-warning-bg);
+  color: var(--alert-warning-text);
 }
 
 .status-value {
@@ -242,7 +242,7 @@ const handleSave = async () => {
 }
 
 .reset-btn:hover {
-  background-color: #d97706;
+  background-color: var(--primitive-gold-600);
 }
 
 .edit-btn {
@@ -255,12 +255,12 @@ const handleSave = async () => {
 }
 
 .delete-btn {
-  background-color: #dc2626;
+  background-color: var(--color-danger);
   color: white;
 }
 
 .delete-btn:hover {
-  background-color: #b91c1c;
+  background-color: var(--primitive-brick-600);
 }
 
 /* 移动端布局优化 */

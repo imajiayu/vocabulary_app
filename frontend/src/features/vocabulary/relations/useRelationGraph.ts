@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { api } from '@/shared/api'
 import type { GraphNode, GraphEdge, GraphData } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
+import { palette } from '@/shared/config/chartColors'
 
 export interface RelationFilters {
   synonym: boolean
@@ -12,19 +13,19 @@ export interface RelationFilters {
 }
 
 export const relationColors: Record<string, string> = {
-  synonym: '#5D7A5D',   // 橄榄绿
-  antonym: '#9B3B3B',   // 砖红
-  root: '#6B4F0F',      // 深赭石
-  confused: '#B87333',  // 铜橙
-  topic: '#996B3D'      // 铜褐
+  synonym: palette.success,   // 橄榄绿
+  antonym: palette.danger,    // 砖红
+  root: palette.purple,       // 深赭石
+  confused: palette.orange,   // 铜橙
+  topic: palette.primary      // 铜褐
 }
 
 export const relationTypeOptions = [
-  { value: 'synonym', label: '同义词', color: '#5D7A5D' },
-  { value: 'antonym', label: '反义词', color: '#9B3B3B' },
-  { value: 'root', label: '词根', color: '#6B4F0F' },
-  { value: 'confused', label: '易混淆', color: '#B87333' },
-  { value: 'topic', label: '主题', color: '#996B3D' }
+  { value: 'synonym', label: '同义词', color: palette.success },
+  { value: 'antonym', label: '反义词', color: palette.danger },
+  { value: 'root', label: '词根', color: palette.purple },
+  { value: 'confused', label: '易混淆', color: palette.orange },
+  { value: 'topic', label: '主题', color: palette.primary }
 ]
 
 export function useRelationGraph() {

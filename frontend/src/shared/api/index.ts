@@ -41,11 +41,10 @@ export type {
 
 export { StatsApi } from './stats'
 export type {
-  WordStats,
-  LearningStats,
   IndexSummary,
-  ProgressChartData,
-  HeatmapData
+  SourceCounts,
+  SourceStats,
+  SourceStatsResponse
 } from './stats'
 
 export { ConfigApi } from './config'

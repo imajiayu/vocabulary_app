@@ -161,7 +161,7 @@ onUnmounted(() => {
 }
 
 .separator {
-  color: #cbd5e1;
+  color: var(--color-text-muted);
 }
 
 .eta-value {

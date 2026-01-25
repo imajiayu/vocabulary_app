@@ -354,9 +354,9 @@ onMounted(async () => {
     border: none;
     border-radius: var(--radius-default);
     cursor: pointer;
-    background-color: #f0f0f0;
+    background-color: var(--control-bg-neutral);
     transition: all 0.2s ease;
-    color: #333;
+    color: var(--color-text-primary);
     touch-action: manipulation;
 }
 
@@ -369,7 +369,7 @@ onMounted(async () => {
 }
 
 .button:hover:not(:disabled) {
-    background-color: #e0e0e0;
+    background-color: var(--control-bg-hover);
     transform: translateY(-1px);
 }
 

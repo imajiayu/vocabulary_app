@@ -67,7 +67,7 @@ const handleChange = (event: Event) => {
   display: block;
   width: 48px;
   height: 28px;
-  background: #cbd5e1;
+  background: var(--primitive-ink-200);
   border-radius: var(--radius-full);
   transition: background .2s ease;
   /* 防止点击时出现边框 */

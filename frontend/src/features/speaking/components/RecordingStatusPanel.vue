@@ -144,17 +144,17 @@ const secondaryText = computed(() => {
 }
 
 .status-indicator.recording .status-icon {
-  background: linear-gradient(135deg, var(--color-delete), #dc2626);
+  background: linear-gradient(135deg, var(--color-delete), var(--primitive-brick-500));
 }
 
 .status-indicator.transcribing .status-icon,
 .status-indicator.analyzing .status-icon {
-  background: linear-gradient(135deg, var(--color-edit), #d97706);
+  background: linear-gradient(135deg, var(--color-edit), var(--primitive-gold-600));
   animation: rotate 2s linear infinite;
 }
 
 .status-indicator.completed .status-icon {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: linear-gradient(135deg, var(--primitive-olive-500), var(--primitive-olive-600));
 }
 
 .status-time {

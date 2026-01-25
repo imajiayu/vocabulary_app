@@ -439,7 +439,7 @@ onUnmounted(() => {
 .info-mode::before {
   content: '·';
   margin-right: 6px;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
 }
 
 /* 信息顺序（橙色） */
@@ -451,7 +451,7 @@ onUnmounted(() => {
 .info-shuffle::before {
   content: '·';
   margin-right: 6px;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
 }
 
 /* 进度条包装器 */
@@ -526,7 +526,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #B8860B 0%, #996B3D 100%);
+  background: var(--gradient-primary);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;

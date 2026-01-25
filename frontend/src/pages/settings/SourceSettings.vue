@@ -46,18 +46,16 @@
         </BaseButton>
       </div>
 
-      <div class="hint">
-        <BaseIcon name="AlertTriangle" size="sm" color="warning" />
-        <span>提示：删除来源会同时删除该来源的所有单词及相关记录，操作不可撤销！</span>
-      </div>
+      <BaseAlert type="warning">
+        提示：删除来源会同时删除该来源的所有单词及相关记录，操作不可撤销！
+      </BaseAlert>
     </div>
 
     <!-- 成功提示 -->
     <transition name="fade">
-      <div v-if="successMessage" class="save-success">
-        <BaseIcon name="CheckCircle" size="sm" color="success" />
-        <span>{{ successMessage }}</span>
-      </div>
+      <BaseAlert v-if="successMessage" type="success" class="save-alert">
+        {{ successMessage }}
+      </BaseAlert>
     </transition>
   </section>
 </template>
@@ -67,7 +65,7 @@ import { ref, computed, onMounted } from 'vue'
 import { api } from '@/shared/api'
 import { useSettings } from '@/shared/composables/useSettings'
 import { logger } from '@/shared/utils/logger'
-import { BaseButton, BaseInput, BaseIcon } from '@/shared/components/base'
+import { BaseAlert, BaseButton, BaseInput, BaseIcon } from '@/shared/components/base'
 
 interface Emits {
   (e: 'save-success'): void
@@ -253,31 +251,9 @@ onMounted(async () => {
   flex: 1;
 }
 
-.hint {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: 13px;
-  color: #92400e;
-  margin: 0;
-  padding: 12px;
-  background: #fef3c7;
-  border: 1px solid #fde047;
-  border-radius: var(--radius-default);
-}
 
-.save-success {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: 16px;
-  padding: 12px 16px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: var(--radius-default);
-  color: #15803d;
-  font-size: 14px;
-  font-weight: 500;
+.save-alert {
+  margin-top: var(--space-4);
 }
 
 .fade-enter-active,

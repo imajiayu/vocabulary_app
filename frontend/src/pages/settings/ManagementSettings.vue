@@ -56,9 +56,9 @@
 
     <!-- 保存成功提示 -->
     <transition name="fade">
-      <div v-if="saveSuccess" class="save-success">
-        ✅ 管理设置已保存
-      </div>
+      <BaseAlert v-if="saveSuccess" type="success" class="save-alert">
+        管理设置已保存
+      </BaseAlert>
     </transition>
 
   </section>
@@ -70,6 +70,7 @@ import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
+import { BaseAlert } from '@/shared/components/base'
 
 interface Props {
   modelValue: UserSettings['management']
@@ -290,15 +291,8 @@ const resetSettings = async () => {
   border-color: var(--color-border-medium);
 }
 
-.save-success {
-  margin-top: 16px;
-  padding: 12px 16px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: var(--radius-default);
-  color: #15803d;
-  font-size: 14px;
-  font-weight: 500;
+.save-alert {
+  margin-top: var(--space-4);
 }
 
 .fade-enter-active,

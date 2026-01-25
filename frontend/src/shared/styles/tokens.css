@@ -232,6 +232,8 @@
 
   /* ── 渐变（温暖纸质渐变） ── */
   --gradient-primary: linear-gradient(135deg, var(--primitive-copper-500), var(--primitive-gold-500));
+  --gradient-primary-dark: linear-gradient(135deg, var(--primitive-gold-600), var(--primitive-gold-700));
+  --gradient-primary-active: linear-gradient(135deg, var(--primitive-copper-500), var(--primitive-gold-600));
   --gradient-background: var(--primitive-paper-200);
   --gradient-success: linear-gradient(90deg, var(--primitive-olive-500), var(--primitive-olive-400));
   --gradient-primary-bar: linear-gradient(90deg, var(--primitive-copper-500), var(--primitive-gold-500));
@@ -250,7 +252,39 @@
   --chart-color-warning: var(--primitive-gold-500);
   --chart-color-danger: var(--primitive-brick-500);
   --chart-color-purple: var(--primitive-gold-700);
-  --chart-color-cyan: #4A7A7A;
+  --chart-color-cyan: var(--primitive-olive-600);
+
+  /* ── 提示框/Alert 令牌 ── */
+  --alert-success-bg: var(--primitive-olive-50);
+  --alert-success-border: var(--primitive-olive-200);
+  --alert-success-text: var(--primitive-olive-700);
+  --alert-warning-bg: var(--primitive-gold-100);
+  --alert-warning-border: var(--primitive-gold-300);
+  --alert-warning-text: var(--primitive-gold-700);
+  --alert-error-bg: var(--primitive-brick-50);
+  --alert-error-border: var(--primitive-brick-200);
+  --alert-error-text: var(--primitive-brick-600);
+  --alert-info-bg: var(--primitive-ink-50);
+  --alert-info-border: var(--primitive-ink-200);
+  --alert-info-text: var(--primitive-ink-600);
+
+  /* ── 键盘组件令牌 ── */
+  --key-bg: var(--primitive-paper-50);
+  --key-text: var(--primitive-ink-900);
+  --key-special-bg: var(--primitive-ink-300);
+  --key-confirm-bg: var(--primitive-olive-400);
+  --key-confirm-disabled-bg: var(--primitive-olive-300);
+
+  /* ── 图表/数据可视化令牌 ── */
+  --chart-text-muted: var(--primitive-ink-200);
+  --chart-grid-line: var(--primitive-paper-400);
+  --chart-node-default: var(--primitive-olive-400);
+  --chart-placeholder: var(--primitive-ink-200);
+
+  /* ── 通用控件令牌 ── */
+  --control-bg-neutral: var(--primitive-paper-300);
+  --control-bg-hover: var(--primitive-paper-400);
+  --control-border-light: var(--primitive-paper-50);
 
   /* ═══════════════════════════════════════════════════════════════════════════
      间距系统（8px 网格）

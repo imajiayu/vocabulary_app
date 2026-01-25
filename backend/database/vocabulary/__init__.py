@@ -49,7 +49,6 @@ from .word_review import (
 from .word_stats import (
     db_get_source_statistics,
     db_get_source_stats_from_view,
-    db_get_comprehensive_stats,
     get_daily_review_loads_by_source,
     get_daily_spell_loads_by_source,
 )
@@ -86,7 +85,6 @@ __all__ = [
     # Stats
     "db_get_source_statistics",
     "db_get_source_stats_from_view",
-    "db_get_comprehensive_stats",
     "get_daily_review_loads_by_source",
     "get_daily_spell_loads_by_source",
 ]

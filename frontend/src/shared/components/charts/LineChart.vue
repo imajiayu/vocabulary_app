@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { watch, computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import * as echarts from 'echarts'
+import { palette, textColors, borderColors } from '@/shared/config/chartColors'
 
 interface LineSeries {
   name?: string
@@ -54,14 +55,14 @@ const render = () => {
       smooth: true,
       showSymbol: true,
       connectNulls: true,
-      lineStyle: { color: s.lineColor ?? '#996B3D', width: 3 },
+      lineStyle: { color: s.lineColor ?? palette.primary, width: 3 },
       areaStyle: {
         color: {
           type: 'linear',
           x: 0, y: 0, x2: 0, y2: 1,
           colorStops: [
-            { offset: 0, color: (s.areaColor ?? '#996B3D') + '66' },
-            { offset: 1, color: (s.areaColor ?? '#996B3D') + '11' }
+            { offset: 0, color: (s.areaColor ?? palette.primary) + '66' },
+            { offset: 1, color: (s.areaColor ?? palette.primary) + '11' }
           ]
         }
       },
@@ -130,7 +131,7 @@ const render = () => {
       type: 'value',
       min: 0,
       axisLabel: { fontSize: 11 },
-      splitLine: { lineStyle: { type: 'dashed', color: '#e0e0e0' } }
+      splitLine: { lineStyle: { type: 'dashed', color: borderColors.light } }
     },
     legend: finalSeries.length > 1 ? {
       data: finalSeries.map(s => s.name).filter((n): n is string => !!n),

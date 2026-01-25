@@ -300,6 +300,7 @@ const formattedDate = computed(() => {
   grid-template-columns: repeat(2, 1fr);
   gap: 4px 8px;
   font-size: 11px;
+  width: 100%;
 }
 
 .stat-item {
@@ -324,6 +325,7 @@ const formattedDate = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
 }
 
 .score-item {

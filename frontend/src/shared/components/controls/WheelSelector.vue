@@ -397,7 +397,7 @@ onUnmounted(() => {
 }
 
 .wheel-item.disabled {
-  color: #fca5a5;
+  color: var(--primitive-brick-300);
 }
 
 .wheel-mask {

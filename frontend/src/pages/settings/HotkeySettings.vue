@@ -117,10 +117,9 @@
 
     <!-- 保存成功提示 -->
     <transition name="fade">
-      <div v-if="saveSuccess" class="save-success">
-        <BaseIcon name="CheckCircle" size="sm" color="success" />
-        <span>快捷键设置已保存</span>
-      </div>
+      <BaseAlert v-if="saveSuccess" type="success" class="save-alert">
+        快捷键设置已保存
+      </BaseAlert>
     </transition>
   </section>
 </template>
@@ -131,7 +130,7 @@ import KeySelector from '@/shared/components/controls/KeySelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings, HotkeySettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
-import { BaseButton, BaseIcon } from '@/shared/components/base'
+import { BaseAlert, BaseButton, BaseIcon } from '@/shared/components/base'
 
 interface Props {
   modelValue: UserSettings['hotkeys']
@@ -300,18 +299,8 @@ const resetSettings = async () => {
   flex: 1;
 }
 
-.save-success {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+.save-alert {
   margin-top: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: var(--radius-default);
-  color: #15803d;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
 }
 
 .fade-enter-active,

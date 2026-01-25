@@ -310,7 +310,7 @@ const goStats = () => {
 .home-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #B8860B 0%, #996B3D 100%);
+  background: var(--gradient-primary);
 }
 
 .home-button:active:not(:disabled) {
@@ -461,12 +461,12 @@ const goStats = () => {
 /* 深色主题适配 */
 @media (prefers-color-scheme: dark) {
   .home-button {
-    background: linear-gradient(135deg, #8B6914 0%, #6B4F0F 100%);
+    background: var(--gradient-primary-dark);
     box-shadow: 0 2px 8px rgba(76, 99, 210, 0.3);
   }
 
   .home-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #996B3D 0%, #B8860B 100%);
+    background: var(--gradient-primary);
     box-shadow: 0 4px 16px rgba(76, 99, 210, 0.4);
   }
 }
@@ -495,7 +495,7 @@ const goStats = () => {
   }
 
   .home-button:active {
-    background: linear-gradient(135deg, #996B3D 0%, #8B6914 100%);
+    background: var(--gradient-primary-active);
     transform: scale(0.98);
     box-shadow: 0 1px 4px rgba(102, 126, 234, 0.2);
   }
@@ -576,7 +576,7 @@ const goStats = () => {
 @media (prefers-contrast: high) {
   .home-button {
     background: var(--color-primary);
-    border: 2px solid #ffffff;
+    border: 2px solid var(--primitive-paper-50);
   }
 
   .home-button:hover:not(:disabled) {
