@@ -11,7 +11,7 @@
       </div>
 
       <div class="part-content">
-        <h3 class="part-title">Part {{ part.number }}</h3>
+        <h3 class="part-title">{{ part.number === 2 ? 'Part 2 & Part 3' : `Part ${part.number}` }}</h3>
         <span class="part-count">{{ part.topics.length }} 个主题</span>
       </div>
 
@@ -162,7 +162,8 @@ onUnmounted(cleanup)
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════════════════════════
-   Part Section - Book Chapter Style
+   Part Section - Dark Studio Console Style (Level 1)
+   深色主题下的顶级分组 - 半透明金色边框玻璃态
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .part-section {
@@ -176,34 +177,35 @@ onUnmounted(cleanup)
   gap: 12px;
   padding: 14px 16px;
 
+  /* 深色玻璃态背景 */
   background: linear-gradient(
     135deg,
-    var(--primitive-paper-50) 0%,
-    var(--primitive-paper-100) 100%
+    rgba(45, 52, 70, 0.85) 0%,
+    rgba(38, 44, 60, 0.9) 100%
   );
-  border: 1px solid var(--primitive-paper-400);
+  border: 1px solid rgba(184, 134, 11, 0.25);
   border-radius: 12px;
 
   cursor: pointer;
   user-select: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Subtle inner shadow for depth */
+  /* 微妙的内发光 */
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 2px 12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .part-header:hover {
   background: linear-gradient(
     135deg,
-    var(--primitive-paper-100) 0%,
-    var(--primitive-paper-200) 100%
+    rgba(55, 62, 82, 0.9) 0%,
+    rgba(45, 52, 70, 0.95) 100%
   );
-  border-color: var(--primitive-copper-200);
+  border-color: rgba(184, 134, 11, 0.4);
   box-shadow:
-    0 4px 16px rgba(139, 105, 20, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    0 4px 20px rgba(184, 134, 11, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transform: translateY(-1px);
 }
 
@@ -214,10 +216,13 @@ onUnmounted(cleanup)
 .part-header.is-expanded {
   background: linear-gradient(
     135deg,
-    rgba(139, 105, 20, 0.08) 0%,
-    rgba(184, 134, 11, 0.06) 100%
+    rgba(184, 134, 11, 0.12) 0%,
+    rgba(139, 105, 20, 0.08) 100%
   );
-  border-color: var(--primitive-copper-300);
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow:
+    0 4px 16px rgba(184, 134, 11, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* ── Part Marker (Chapter number badge) ── */
@@ -231,14 +236,14 @@ onUnmounted(cleanup)
 
   background: linear-gradient(
     135deg,
-    var(--primitive-copper-500),
-    var(--primitive-gold-600)
+    var(--primitive-gold-500),
+    var(--primitive-copper-500)
   );
   border-radius: 10px;
 
   box-shadow:
-    0 2px 8px rgba(139, 105, 20, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 2px 10px rgba(184, 134, 11, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .marker-number {
@@ -246,7 +251,7 @@ onUnmounted(cleanup)
   font-size: 16px;
   font-weight: 700;
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* ── Part Content ── */
@@ -260,13 +265,13 @@ onUnmounted(cleanup)
   font-family: var(--font-serif);
   font-size: 15px;
   font-weight: 600;
-  color: var(--primitive-ink-800);
+  color: var(--primitive-paper-200);
   letter-spacing: 0.01em;
 }
 
 .part-count {
   font-size: 12px;
-  color: var(--primitive-ink-400);
+  color: var(--primitive-paper-500);
 }
 
 /* ── Part Controls ── */
@@ -283,10 +288,10 @@ onUnmounted(cleanup)
   width: 28px;
   height: 28px;
 
-  background: transparent;
-  border: 1px solid var(--primitive-paper-400);
+  background: rgba(184, 134, 11, 0.1);
+  border: 1px solid rgba(184, 134, 11, 0.25);
   border-radius: 8px;
-  color: var(--primitive-copper-500);
+  color: var(--primitive-gold-400);
 
   cursor: pointer;
   opacity: 0;
@@ -300,34 +305,34 @@ onUnmounted(cleanup)
 }
 
 .part-action-btn:hover {
-  background: var(--primitive-copper-50);
-  border-color: var(--primitive-copper-200);
-  color: var(--primitive-copper-600);
+  background: rgba(184, 134, 11, 0.2);
+  border-color: rgba(184, 134, 11, 0.4);
+  color: var(--primitive-gold-300);
 }
 
 .expand-chevron {
   width: 18px;
   height: 18px;
-  color: var(--primitive-ink-400);
+  color: var(--primitive-paper-500);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .expand-chevron.is-rotated {
   transform: rotate(90deg);
-  color: var(--primitive-copper-500);
+  color: var(--primitive-gold-400);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Add Topic Form
+   Add Topic Form - 深色主题
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .add-topic-form {
   padding: 12px 16px;
   margin-top: 8px;
-  background: var(--primitive-paper-50);
-  border: 1px solid var(--primitive-copper-200);
+  background: rgba(30, 35, 50, 0.95);
+  border: 1px solid rgba(184, 134, 11, 0.3);
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(139, 105, 20, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .topic-input {
@@ -336,10 +341,10 @@ onUnmounted(cleanup)
 
   font-family: var(--font-sans);
   font-size: 14px;
-  color: var(--primitive-ink-800);
+  color: var(--primitive-paper-200);
 
-  background: white;
-  border: 2px solid var(--primitive-paper-400);
+  background: rgba(20, 24, 36, 0.8);
+  border: 1px solid rgba(250, 247, 242, 0.15);
   border-radius: 8px;
 
   transition: all 0.2s ease;
@@ -348,18 +353,19 @@ onUnmounted(cleanup)
 
 .topic-input:focus {
   outline: none;
-  border-color: var(--primitive-copper-500);
-  box-shadow: 0 0 0 3px rgba(139, 105, 20, 0.12);
+  border-color: var(--primitive-gold-500);
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2);
+  background: rgba(25, 30, 42, 0.9);
 }
 
 .topic-input::placeholder {
-  color: var(--primitive-ink-300);
+  color: var(--primitive-paper-600);
 }
 
 .input-hint {
   margin-top: 8px;
   font-size: 11px;
-  color: var(--primitive-ink-400);
+  color: var(--primitive-paper-600);
   text-align: right;
 }
 
@@ -383,12 +389,12 @@ onUnmounted(cleanup)
 .topics-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 
   max-height: 0;
   overflow: hidden;
   opacity: 0;
-  padding-left: 24px;
+  padding-left: 20px;
   margin-top: 0;
 
   transform: translateY(-8px);
@@ -403,7 +409,7 @@ onUnmounted(cleanup)
 
 .topics-list.is-expanded {
   max-height: var(--estimated-height, 10000px);
-  margin-top: 12px;
+  margin-top: 10px;
   opacity: 1;
   transform: translateY(0);
 }
@@ -425,19 +431,20 @@ onUnmounted(cleanup)
   }
 }
 
-/* Left border decoration */
+/* Left border decoration - 金色渐变线 */
 .topics-list::before {
   content: '';
   position: absolute;
-  left: 18px;
+  left: 14px;
   top: 0;
   bottom: 0;
   width: 2px;
   background: linear-gradient(
     180deg,
-    var(--primitive-copper-200) 0%,
-    transparent 100%
+    rgba(184, 134, 11, 0.5) 0%,
+    rgba(184, 134, 11, 0.1) 100%
   );
+  border-radius: 1px;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -452,12 +459,13 @@ onUnmounted(cleanup)
   align-items: center;
   gap: 8px;
   padding: 16px 12px;
-  color: var(--primitive-ink-400);
+  color: var(--primitive-paper-600);
 }
 
 .empty-dash {
   font-size: 14px;
   opacity: 0.5;
+  color: var(--primitive-gold-500);
 }
 
 .empty-text {
@@ -503,27 +511,27 @@ onUnmounted(cleanup)
   .part-header:hover {
     background: linear-gradient(
       135deg,
-      var(--primitive-paper-50) 0%,
-      var(--primitive-paper-100) 100%
+      rgba(45, 52, 70, 0.85) 0%,
+      rgba(38, 44, 60, 0.9) 100%
     );
-    border-color: var(--primitive-paper-400);
+    border-color: rgba(184, 134, 11, 0.25);
     box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      0 2px 12px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
     transform: none;
   }
 
   .part-header:active {
-    background: var(--primitive-paper-200);
+    background: rgba(184, 134, 11, 0.15);
     transform: scale(0.98);
   }
 
   .topics-list {
-    padding-left: 20px;
+    padding-left: 16px;
   }
 
   .topics-list::before {
-    left: 14px;
+    left: 10px;
   }
 }
 </style>

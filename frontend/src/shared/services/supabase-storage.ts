@@ -60,17 +60,20 @@ export async function deleteAudio(url: string): Promise<void> {
 }
 
 /**
- * 从 Supabase Storage URL 提取文件名
+ * 从 Supabase Storage URL 提取文件路径
  * @param url 完整的 URL
- * @returns 文件名，如果无法解析则返回 null
+ * @returns 相对于 bucket 的文件路径，如果无法解析则返回 null
  */
 export function extractFilename(url: string): string | null {
   if (!url) return null
 
   try {
-    // URL 格式: https://xxx.supabase.co/storage/v1/object/public/speaking-audios/filename.wav
-    const parts = url.split('/')
-    return parts[parts.length - 1] || null
+    // URL 格式: https://xxx.supabase.co/storage/v1/object/public/speaking-audios/user_1/recording_xxx.wav
+    // 需要提取 bucket 名称之后的完整路径: user_1/recording_xxx.wav
+    const bucketMarker = `/${AUDIO_BUCKET}/`
+    const index = url.indexOf(bucketMarker)
+    if (index === -1) return null
+    return url.slice(index + bucketMarker.length) || null
   } catch {
     return null
   }

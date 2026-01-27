@@ -68,7 +68,7 @@
       <!-- 右侧：操作区 -->
       <div class="notification-actions">
         <button class="action-btn action-btn--primary" @click="$emit('resume')">
-          <span class="btn-icon">▶</span>
+          <AppIcon name="play" class="btn-icon" />
           <span class="btn-text">继续</span>
         </button>
         <button class="action-btn action-btn--ghost" @click="$emit('dismiss')">
@@ -400,7 +400,9 @@ const progressPercent = computed(() => {
 }
 
 .btn-icon {
-  font-size: 0.625rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: currentColor;
 }
 
 .btn-text {

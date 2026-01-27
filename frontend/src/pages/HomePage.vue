@@ -4,7 +4,8 @@
     :class="{
       'nav-expanded': navExpanded && !isMobile,
       'sidebar-expanded': sidebarExpanded && activeTab === 'speaking' && !isMobile,
-      'is-mobile': isMobile
+      'is-mobile': isMobile,
+      'is-speaking': activeTab === 'speaking'
     }"
   >
     <!-- 桌面端主导航栏 -->
@@ -272,6 +273,16 @@ onUnmounted(() => {
   position: relative;
 }
 
+/* 桌面端 Speaking 模式深色背景 - 侧边栏动画时不会露出白色 */
+.app-container.is-speaking:not(.is-mobile) {
+  background: linear-gradient(
+    135deg,
+    var(--primitive-ink-900) 0%,
+    var(--primitive-ink-800) 50%,
+    #1a1f2e 100%
+  );
+}
+
 /* 导航栏展开时 */
 .app-container.nav-expanded {
   --current-nav-width: var(--nav-width-expanded);
@@ -445,12 +456,11 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-/* 移动端主内容区域 */
+/* 移动端主内容区域 - 统一 padding 为 0，由各页面组件自己处理内边距 */
 .app-container.is-mobile .main-container {
   margin-left: 0;
-  padding: 0.75rem;
-  padding-top: 0.75rem;
-  padding-bottom: calc(88px + env(safe-area-inset-bottom) + 0.75rem);
+  padding: 0;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
   min-height: 100vh;
   min-height: 100dvh;
   align-items: stretch;

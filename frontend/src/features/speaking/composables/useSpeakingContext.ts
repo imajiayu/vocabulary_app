@@ -67,10 +67,16 @@ export function createSpeakingContext(options: CreateSpeakingContextOptions = {}
     }
   }
 
-  // 包装选中操作，通知外部
+  // 包装选中操作，支持 toggle（再次点击取消选中）
   function handleSelectQuestion(question: Question) {
-    data.selectQuestion(question)
-    options.onQuestionSelected?.(question)
+    const isAlreadySelected = data.selectedQuestion.value?.id === question.id
+    if (isAlreadySelected) {
+      data.selectQuestion(null)
+      options.onQuestionSelected?.(null)
+    } else {
+      data.selectQuestion(question)
+      options.onQuestionSelected?.(question)
+    }
   }
 
   const context: SpeakingContext = {

@@ -1,41 +1,54 @@
 <template>
   <div class="records-list">
-    <div v-if="loading" class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>正在加载记录...</p>
+    <!-- 加载状态 -->
+    <div v-if="loading" class="state-container loading-state">
+      <div class="loading-visual">
+        <div class="loading-ring"></div>
+        <div class="loading-ring"></div>
+        <div class="loading-ring"></div>
+      </div>
+      <p class="state-text">加载中...</p>
     </div>
 
-    <div v-else-if="records.length === 0 && !temporaryRecord" class="empty-state">
-      <div class="empty-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 15L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M12 9L12 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12 C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+    <!-- 空状态 -->
+    <div v-else-if="records.length === 0 && !temporaryRecord" class="state-container empty-state">
+      <div class="empty-visual">
+        <svg viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="36" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
+          <circle cx="40" cy="40" r="8" fill="currentColor" opacity="0.3"/>
+          <path d="M40 24V32M40 48V56M24 40H32M48 40H56" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
-      <p>暂无练习记录</p>
-      <span>开始你的第一次练习吧！</span>
+      <p class="state-title">暂无录音</p>
+      <p class="state-hint">你的练习记录将显示在这里</p>
     </div>
 
-    <div v-else class="records-container">
-      <div class="records-scroll scrollbar-gradient" ref="scrollContainer">
-        <!-- 临时记录 (置顶) -->
-        <RecordItem
-          v-if="temporaryRecord"
-          key="temporary-record"
-          :record="temporaryRecord as SpeakingRecord"
-          :is-temporary="true"
-          @delete="() => {}"
-        />
-        <!-- 正式记录 -->
-        <RecordItem
-          v-for="record in records"
-          :key="record.id || `record-${record.created_at}`"
-          :record="record"
-          :is-temporary="false"
-          @delete="$emit('deleteRecord', record.id)"
-        />
+    <!-- 记录列表 -->
+    <div v-else class="records-scroll" ref="scrollContainer">
+      <!-- 临时记录 (置顶) -->
+      <RecordItem
+        v-if="temporaryRecord"
+        key="temporary-record"
+        :record="temporaryRecord as SpeakingRecord"
+        :is-temporary="true"
+        @delete="() => {}"
+      />
+
+      <!-- 分隔线 -->
+      <div v-if="temporaryRecord && records.length > 0" class="records-divider">
+        <span class="divider-line"></span>
+        <span class="divider-text">历史记录</span>
+        <span class="divider-line"></span>
       </div>
+
+      <!-- 正式记录 -->
+      <RecordItem
+        v-for="record in records"
+        :key="record.id || `record-${record.created_at}`"
+        :record="record"
+        :is-temporary="false"
+        @delete="$emit('deleteRecord', record.id)"
+      />
     </div>
   </div>
 </template>
@@ -57,7 +70,7 @@ const emit = defineEmits<{
 
 const scrollContainer = ref<HTMLElement>()
 
-// 当有新记录时滚动到底部（新记录会被添加到数组末尾）
+// 当有新记录时滚动到底部
 watch(() => props.records.length, async (newLength, oldLength) => {
   if (newLength > oldLength && scrollContainer.value) {
     await nextTick()
@@ -77,56 +90,213 @@ watch(() => props.records.length, async (newLength, oldLength) => {
   min-height: 0;
 }
 
-.loading-state, .empty-state {
+/* ═══════════════════════════════════════════════════════════════════════════
+   状态容器
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.state-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--color-text-secondary);
+  padding: 40px 20px;
   gap: 16px;
 }
 
-.loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--color-border-medium);
-  border-top: 3px solid var(--color-primary);
-  border-radius: var(--radius-full);
-  animation: spin 1s linear infinite;
+/* 加载状态 */
+.loading-visual {
+  position: relative;
+  width: 60px;
+  height: 60px;
 }
 
-.empty-icon {
-  color: var(--color-border-strong);
-  opacity: 0.7;
+.loading-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 2px solid transparent;
+  border-top-color: var(--primitive-gold-500);
+  border-radius: 50%;
+  animation: loadingSpin 1.2s linear infinite;
 }
 
-.empty-state p {
-  font-size: 18px;
-  font-weight: 600;
+.loading-ring:nth-child(2) {
+  width: 50px;
+  height: 50px;
+  margin: -25px 0 0 -25px;
+  animation-delay: 0.15s;
+  opacity: 0.6;
+}
+
+.loading-ring:nth-child(3) {
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  animation-delay: 0.3s;
+  opacity: 0.3;
+}
+
+@keyframes loadingSpin {
+  to { transform: rotate(360deg); }
+}
+
+.state-text {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--primitive-ink-400);
   margin: 0;
 }
 
-.empty-state span {
-  font-size: 14px;
-  opacity: 0.8;
+/* 空状态 */
+.empty-visual {
+  width: 80px;
+  height: 80px;
+  color: var(--primitive-ink-500);
+  opacity: 0.6;
 }
 
-.records-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
+.empty-visual svg {
+  width: 100%;
+  height: 100%;
 }
+
+.state-title {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primitive-paper-300);
+  margin: 0;
+}
+
+.state-hint {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--primitive-ink-400);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   记录滚动区域
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .records-scroll {
   flex: 1;
   overflow-y: auto;
-  padding-right: 4px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-right: 4px;
 }
 
+/* 自定义滚动条 */
+.records-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.records-scroll::-webkit-scrollbar-track {
+  background: rgba(250, 247, 242, 0.05);
+  border-radius: 3px;
+}
+
+.records-scroll::-webkit-scrollbar-thumb {
+  background: rgba(250, 247, 242, 0.2);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.records-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(250, 247, 242, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   分隔线
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.records-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(250, 247, 242, 0.15) 50%,
+    transparent 100%
+  );
+}
+
+.divider-text {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primitive-ink-400);
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .state-container {
+    padding: 30px 16px;
+  }
+
+  .loading-visual {
+    width: 50px;
+    height: 50px;
+  }
+
+  .empty-visual {
+    width: 64px;
+    height: 64px;
+  }
+
+  .state-title {
+    font-size: 15px;
+  }
+
+  .state-hint {
+    font-size: 13px;
+  }
+
+  .records-scroll {
+    gap: 12px;
+    /* 移动端：取消独立滚动，让内容撑开页面 */
+    overflow-y: visible;
+    flex: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .state-container {
+    padding: 24px 12px;
+  }
+
+  .empty-visual {
+    width: 56px;
+    height: 56px;
+  }
+
+  .records-scroll {
+    gap: 10px;
+    overflow-y: visible;
+  }
+
+  .divider-text {
+    font-size: 10px;
+  }
+}
 </style>

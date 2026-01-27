@@ -12,7 +12,7 @@
 
       <div class="hotkey-grid">
         <div class="hotkey-item">
-          <label class="hotkey-label">记住 ✅</label>
+          <label class="hotkey-label">记住 <BaseIcon name="Check" size="xs" color="success" /></label>
           <KeySelector
             v-model="hotkeys.reviewInitial.remembered"
             :used-keys="[hotkeys.reviewInitial.notRemembered, hotkeys.reviewInitial.stopReview]"
@@ -28,7 +28,7 @@
         </div>
 
         <div class="hotkey-item">
-          <label class="hotkey-label">不再复习 🚫</label>
+          <label class="hotkey-label">不再复习 <BaseIcon name="Ban" size="xs" /></label>
           <KeySelector
             v-model="hotkeys.reviewInitial.stopReview"
             :used-keys="[hotkeys.reviewInitial.remembered, hotkeys.reviewInitial.notRemembered]"
@@ -54,7 +54,7 @@
         </div>
 
         <div class="hotkey-item">
-          <label class="hotkey-label">下一个 ➡️</label>
+          <label class="hotkey-label">下一个 <BaseIcon name="ArrowRight" size="xs" /></label>
           <KeySelector
             v-model="hotkeys.reviewAfter.next"
             :used-keys="[hotkeys.reviewAfter.wrong]"
@@ -88,7 +88,7 @@
         </div>
 
         <div class="hotkey-item">
-          <label class="hotkey-label">下一个 ➡️</label>
+          <label class="hotkey-label">下一个 <BaseIcon name="ArrowRight" size="xs" /></label>
           <KeySelector
             v-model="hotkeys.spelling.next"
             :used-keys="[hotkeys.spelling.playAudio, hotkeys.spelling.forgot]"

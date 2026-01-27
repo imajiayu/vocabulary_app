@@ -79,7 +79,7 @@
       <div v-else class="completion-screen">
         <div class="completion-card">
           <div class="completion-icon">
-            <span class="icon-emoji">🎉</span>
+            <BaseIcon name="PartyPopper" size="xl" color="warning" />
             <div class="confetti"></div>
           </div>
           <h2 class="completion-title">恭喜完成！</h2>
@@ -119,6 +119,7 @@ import ReviewCard from '@/features/vocabulary/review/ReviewCard.vue'
 import SpellingCard from '@/features/vocabulary/spelling/SpellingCard.vue'
 import TopBar from '@/shared/components/layout/TopBar.vue'
 import LoadingComponent from '@/shared/components/feedback/Loading.vue'
+import { BaseIcon } from '@/shared/components/base'
 import ProgressBar from '@/shared/components/feedback/ProgressBar.vue'
 import WordSideBar from '@/features/vocabulary/sidebar/WordSideBar.vue'
 import ReviewParamsNotification from '@/features/vocabulary/review/ReviewParamsNotification.vue'

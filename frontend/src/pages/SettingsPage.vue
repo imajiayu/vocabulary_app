@@ -463,7 +463,7 @@
               <h3 class="hotkey-group-title">复习 · 初始状态</h3>
               <div class="hotkey-grid">
                 <div class="hotkey-row">
-                  <span class="hotkey-label">记住 ✅</span>
+                  <span class="hotkey-label">记住 <BaseIcon name="Check" size="xs" color="success" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.reviewInitial.remembered"
                     :used-keys="[settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.stopReview]"
@@ -477,7 +477,7 @@
                   />
                 </div>
                 <div class="hotkey-row">
-                  <span class="hotkey-label">不再复习 🚫</span>
+                  <span class="hotkey-label">不再复习 <BaseIcon name="Ban" size="xs" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.reviewInitial.stopReview"
                     :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.notRemembered]"
@@ -498,7 +498,7 @@
                   />
                 </div>
                 <div class="hotkey-row">
-                  <span class="hotkey-label">下一个 ➡️</span>
+                  <span class="hotkey-label">下一个 <BaseIcon name="ArrowRight" size="xs" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.reviewAfter.next"
                     :used-keys="[settings.hotkeys.reviewAfter.wrong]"
@@ -526,7 +526,7 @@
                   />
                 </div>
                 <div class="hotkey-row">
-                  <span class="hotkey-label">下一个 ➡️</span>
+                  <span class="hotkey-label">下一个 <BaseIcon name="ArrowRight" size="xs" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.next"
                     :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot]"
@@ -627,6 +627,7 @@ import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { UserSettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
+import { BaseIcon } from '@/shared/components/base'
 
 // 搜索和导航
 const searchQuery = ref('')
@@ -1572,6 +1573,15 @@ onMounted(async () => {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
+  .settings-page {
+    /* 外边距由组件自己控制，与 HomePage main-container 解耦 */
+    margin: 0.75rem;
+    width: calc(100% - 1.5rem);
+    min-height: auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
   .settings-header {
     padding: 10px 16px;
   }
@@ -1595,6 +1605,13 @@ onMounted(async () => {
   .settings-content {
     padding: 12px 16px 80px;
     max-height: none;
+    /* 隐藏滚动条但保持滚动功能 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .settings-content::-webkit-scrollbar {
+    display: none;
   }
 
   .settings-section {

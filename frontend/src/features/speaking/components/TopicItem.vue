@@ -244,33 +244,38 @@ watch(() => props.topic.title, (newTitle) => {
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════════════════════════
-   Topic Card - Index Card Style
+   Topic Card - Dark Studio Style (Level 2)
+   中间层级 - 更深的半透明背景，收敛的边框
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .topic-card {
   position: relative;
-  background: var(--primitive-paper-50);
-  border: 1px solid var(--primitive-paper-300);
-  border-radius: 10px;
+  background: rgba(28, 33, 48, 0.7);
+  border: 1px solid rgba(250, 247, 242, 0.08);
+  border-radius: 8px;
   overflow: hidden;
   transition: all 0.25s ease;
 
-  /* Subtle card shadow */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  /* 微妙的立体感 */
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .topic-card:hover {
-  border-color: var(--primitive-paper-400);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-color: rgba(250, 247, 242, 0.12);
+  background: rgba(32, 38, 54, 0.8);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .topic-card.is-expanded {
-  background: linear-gradient(
-    180deg,
-    var(--primitive-paper-50) 0%,
-    var(--primitive-paper-100) 100%
-  );
-  border-color: var(--primitive-copper-200);
+  background: rgba(184, 134, 11, 0.06);
+  border-color: rgba(184, 134, 11, 0.2);
+  box-shadow:
+    0 2px 12px rgba(184, 134, 11, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* ── Topic Header ── */
@@ -279,18 +284,18 @@ watch(() => props.topic.title, (newTitle) => {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 10px 12px;
   cursor: pointer;
   user-select: none;
   transition: background 0.15s ease;
 }
 
 .topic-header:hover {
-  background: rgba(139, 105, 20, 0.04);
+  background: rgba(250, 247, 242, 0.03);
 }
 
 .topic-header:active {
-  background: rgba(139, 105, 20, 0.08);
+  background: rgba(184, 134, 11, 0.08);
 }
 
 .topic-main {
@@ -303,24 +308,28 @@ watch(() => props.topic.title, (newTitle) => {
 
 .expand-icon {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  margin-top: 2px;
-  color: var(--primitive-ink-400);
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+  color: var(--primitive-paper-600);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .expand-icon.is-rotated {
   transform: rotate(90deg);
-  color: var(--primitive-copper-500);
+  color: var(--primitive-gold-400);
 }
 
 .topic-title {
   font-size: 13px;
   font-weight: 500;
-  color: var(--primitive-ink-700);
+  color: var(--primitive-paper-300);
   line-height: 1.5;
   word-break: break-word;
+}
+
+.topic-card.is-expanded .topic-title {
+  color: var(--primitive-paper-200);
 }
 
 /* ── Topic Meta ── */
@@ -335,16 +344,16 @@ watch(() => props.topic.title, (newTitle) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 22px;
-  height: 22px;
+  min-width: 20px;
+  height: 20px;
   padding: 0 6px;
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  color: var(--primitive-copper-600);
+  color: var(--primitive-gold-400);
 
-  background: var(--primitive-copper-100);
-  border-radius: 6px;
+  background: rgba(184, 134, 11, 0.15);
+  border-radius: 5px;
 }
 
 /* ── Topic Actions ── */
@@ -365,12 +374,12 @@ watch(() => props.topic.title, (newTitle) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 
-  background: white;
-  border: 1px solid var(--primitive-paper-300);
-  border-radius: 6px;
+  background: rgba(250, 247, 242, 0.05);
+  border: 1px solid rgba(250, 247, 242, 0.1);
+  border-radius: 5px;
 
   cursor: pointer;
   transition: all 0.15s ease;
@@ -381,21 +390,23 @@ watch(() => props.topic.title, (newTitle) => {
 }
 
 .action-btn--add {
-  color: var(--primitive-olive-500);
+  color: var(--primitive-olive-400);
 }
 
 .action-btn--add:hover {
-  background: var(--primitive-olive-50);
-  border-color: var(--primitive-olive-200);
+  background: rgba(93, 122, 93, 0.15);
+  border-color: rgba(93, 122, 93, 0.3);
+  color: var(--primitive-olive-300);
 }
 
 .action-btn--edit {
-  color: var(--primitive-copper-500);
+  color: var(--primitive-gold-400);
 }
 
 .action-btn--edit:hover {
-  background: var(--primitive-copper-50);
-  border-color: var(--primitive-copper-200);
+  background: rgba(184, 134, 11, 0.15);
+  border-color: rgba(184, 134, 11, 0.3);
+  color: var(--primitive-gold-300);
 }
 
 .action-btn--delete {
@@ -403,18 +414,19 @@ watch(() => props.topic.title, (newTitle) => {
 }
 
 .action-btn--delete:hover {
-  background: var(--primitive-brick-50);
-  border-color: var(--primitive-brick-200);
+  background: rgba(155, 59, 59, 0.15);
+  border-color: rgba(155, 59, 59, 0.3);
+  color: var(--primitive-brick-300);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Inline Forms
+   Inline Forms - 深色主题
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .inline-form {
-  padding: 8px 14px 12px;
-  background: var(--primitive-paper-100);
-  border-top: 1px solid var(--primitive-paper-300);
+  padding: 8px 12px 10px;
+  background: rgba(20, 24, 36, 0.6);
+  border-top: 1px solid rgba(250, 247, 242, 0.06);
 }
 
 .form-input {
@@ -423,10 +435,10 @@ watch(() => props.topic.title, (newTitle) => {
 
   font-family: var(--font-sans);
   font-size: 13px;
-  color: var(--primitive-ink-800);
+  color: var(--primitive-paper-200);
 
-  background: white;
-  border: 1px solid var(--primitive-paper-400);
+  background: rgba(15, 18, 28, 0.8);
+  border: 1px solid rgba(250, 247, 242, 0.12);
   border-radius: 6px;
 
   transition: all 0.15s ease;
@@ -435,12 +447,13 @@ watch(() => props.topic.title, (newTitle) => {
 
 .form-input:focus {
   outline: none;
-  border-color: var(--primitive-copper-400);
-  box-shadow: 0 0 0 2px rgba(139, 105, 20, 0.1);
+  border-color: var(--primitive-gold-500);
+  box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.15);
+  background: rgba(18, 22, 32, 0.9);
 }
 
 .form-input::placeholder {
-  color: var(--primitive-ink-300);
+  color: var(--primitive-paper-600);
 }
 
 .form-textarea {
@@ -469,12 +482,12 @@ watch(() => props.topic.title, (newTitle) => {
 .questions-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 
   max-height: 0;
   overflow: hidden;
   opacity: 0;
-  padding: 0 12px;
+  padding: 0 10px;
   margin: 0;
 
   transform: translateY(-4px);
@@ -491,7 +504,7 @@ watch(() => props.topic.title, (newTitle) => {
   max-height: var(--estimated-questions-height, 2000px);
   opacity: 1;
   transform: translateY(0);
-  padding: 8px 12px 12px;
+  padding: 6px 10px 10px;
 }
 
 /* Staggered animation for questions */
@@ -518,12 +531,13 @@ watch(() => props.topic.title, (newTitle) => {
   gap: 6px;
   padding: 12px 8px;
   font-size: 12px;
-  color: var(--primitive-ink-400);
+  color: var(--primitive-paper-600);
   font-style: italic;
 }
 
 .empty-bullet {
   opacity: 0.5;
+  color: var(--primitive-gold-500);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -541,9 +555,9 @@ watch(() => props.topic.title, (newTitle) => {
   }
 
   .question-badge {
-    min-width: 20px;
-    height: 20px;
-    font-size: 10px;
+    min-width: 18px;
+    height: 18px;
+    font-size: 9px;
   }
 
   /* Always show actions on mobile */
@@ -553,8 +567,8 @@ watch(() => props.topic.title, (newTitle) => {
   }
 
   .action-btn {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
   }
 
   /* Disable hover effects on mobile */
@@ -563,12 +577,15 @@ watch(() => props.topic.title, (newTitle) => {
   }
 
   .topic-header:active {
-    background: rgba(139, 105, 20, 0.08);
+    background: rgba(184, 134, 11, 0.1);
   }
 
   .topic-card:hover {
-    border-color: var(--primitive-paper-300);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    border-color: rgba(250, 247, 242, 0.08);
+    background: rgba(28, 33, 48, 0.7);
+    box-shadow:
+      0 1px 4px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 }
 </style>

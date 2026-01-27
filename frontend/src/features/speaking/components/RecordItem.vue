@@ -1,37 +1,46 @@
-<!-- RecordItem.vue -->
 <template>
-  <div class="record-item" :class="{ 'temporary': isTemporary }">
+  <div class="record-item" :class="{ 'is-temporary': isTemporary }">
+    <!-- 记录头部 -->
     <div class="record-header">
-      <div class="record-time">
-        {{ isTemporary ? '当前练习' : formatTime(record.created_at) }}
-      </div>
-      <div class="header-badges">
-        <div v-if="isTemporary" class="temporary-badge">
-          临时记录
+      <div class="header-left">
+        <div class="time-indicator" :class="{ active: isTemporary }">
+          <svg v-if="isTemporary" class="live-icon" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+          </svg>
+          <svg v-else class="clock-icon" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </div>
+        <span class="record-time">{{ isTemporary ? '当前会话' : formatTime(record.created_at) }}</span>
       </div>
-      <button
-        v-if="!isTemporary"
-        class="delete-btn"
-        @click="$emit('delete')"
-        :disabled="!record.id"
-        title="删除记录"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
+
+      <div class="header-right">
+        <span v-if="isTemporary" class="live-badge">
+          <span class="badge-dot"></span>
+          实时
+        </span>
+        <button
+          v-if="!isTemporary"
+          class="delete-btn"
+          @click="$emit('delete')"
+          :disabled="!record.id"
+          title="Delete record"
+        >
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M3 6H5H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6M19 6V20C19 20.5523 18.5523 21 18 21H6C5.44772 21 5 20.5523 5 20V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <!-- 显示音频、转录和AI反馈 -->
+    <!-- 记录内容 -->
     <RecordContent :record="record" :is-practicing="false" />
-
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { SpeakingRecord } from '@/shared/types'
 import RecordContent from './RecordContent.vue'
 
@@ -44,18 +53,17 @@ defineEmits<{
   delete: []
 }>()
 
-
 const formatTime = (timeStr: string) => {
   const date = new Date(timeStr)
   const now = new Date()
   const diff = now.getTime() - date.getTime()
-  
+
   if (diff < 60000) return '刚刚'
   if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
-  
-  return date.toLocaleDateString('zh-CN', { 
-    month: 'numeric', 
+
+  return date.toLocaleDateString('zh-CN', {
+    month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
@@ -65,69 +73,149 @@ const formatTime = (timeStr: string) => {
 
 <style scoped>
 .record-item {
-  position: relative;
+  background: rgba(250, 247, 242, 0.03);
+  border: 1px solid rgba(250, 247, 242, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
-.record-item.temporary {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), rgba(59, 130, 246, 0.05));
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  border-radius: var(--radius-md);
-  padding: 12px;
-  margin-bottom: 8px;
+.record-item:hover:not(.is-temporary) {
+  background: rgba(250, 247, 242, 0.05);
+  border-color: rgba(250, 247, 242, 0.12);
 }
+
+.record-item.is-temporary {
+  background: linear-gradient(
+    135deg,
+    rgba(184, 134, 11, 0.08) 0%,
+    rgba(153, 107, 61, 0.04) 100%
+  );
+  border-color: rgba(184, 134, 11, 0.25);
+  box-shadow: 0 0 30px rgba(184, 134, 11, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   记录头部
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .record-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding: 0 4px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(250, 247, 242, 0.06);
 }
 
-.header-badges {
+.header-left {
   display: flex;
-  gap: 6px;
   align-items: center;
+  gap: 10px;
 }
 
-.record-time {
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-}
-
-.record-item.temporary .record-time {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.temporary-badge {
-  font-size: 10px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
-  color: white;
-  padding: 2px 8px;
-  border-radius: var(--radius-default);
-  font-weight: 600;
-}
-
-.delete-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: var(--radius-xs);
-  transition: all 0.2s ease;
+.time-indicator {
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.6;
+  color: var(--primitive-ink-400);
+}
+
+.time-indicator.active {
+  color: var(--primitive-gold-500);
+}
+
+.live-icon {
+  width: 14px;
+  height: 14px;
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+.clock-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.record-time {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primitive-ink-400);
+}
+
+.is-temporary .record-time {
+  color: var(--primitive-gold-400);
+  font-weight: 600;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(184, 134, 11, 0.2);
+  border-radius: var(--radius-full);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primitive-gold-400);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--primitive-gold-500);
+  border-radius: 50%;
+  animation: badgePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.delete-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--primitive-ink-500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.record-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .delete-btn:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--color-delete);
-  opacity: 1;
+  background: rgba(155, 59, 59, 0.15);
+  color: var(--primitive-brick-400);
 }
 
 .delete-btn:disabled {
@@ -135,4 +223,51 @@ const formatTime = (timeStr: string) => {
   cursor: not-allowed;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .record-header {
+    padding: 10px 14px;
+  }
+
+  .time-indicator {
+    width: 22px;
+    height: 22px;
+  }
+
+  .record-time {
+    font-size: 11px;
+  }
+
+  .live-badge {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  .delete-btn {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .record-header {
+    padding: 8px 12px;
+  }
+
+  .header-left {
+    gap: 8px;
+  }
+
+  .time-indicator {
+    width: 20px;
+    height: 20px;
+  }
+
+  .clock-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
 </style>

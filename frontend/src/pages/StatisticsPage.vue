@@ -59,7 +59,7 @@
           <h2 class="chart-title">
             EF 阶段占比
             <button @click="openEFSettings" class="settings-btn" title="配置区间">
-              ⚙
+              <BaseIcon name="Settings" size="xs" />
             </button>
           </h2>
           <PieChart :labels="efPie.labels" :values="efPie.values"
@@ -136,7 +136,7 @@
               />
             </div>
             <div v-if="tempEFRangeConfig.lowMax > tempEFRangeConfig.mediumMax" class="error-message">
-              ⚠️ 低 EF 上限必须小于等于中 EF 上限
+              <BaseIcon name="AlertTriangle" size="xs" color="warning" /> 低 EF 上限必须小于等于中 EF 上限
             </div>
             <div class="preview">
               <p>预览:</p>
@@ -178,6 +178,7 @@ import LineChart from '@/shared/components/charts/LineChart.vue'
 import HeatMap from '@/shared/components/charts/HeatMap.vue'
 import Loading from '@/shared/components/feedback/Loading.vue'
 import SwitchTab from '@/shared/components/controls/SwitchTab.vue'
+import { BaseIcon } from '@/shared/components/base'
 import { api } from '@/shared/api'
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
 import { palette as chartPalette, heatmapColors } from '@/shared/config/chartColors'

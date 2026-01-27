@@ -1,30 +1,43 @@
 <template>
   <div class="audio-player">
-    <button 
+    <!-- 播放按钮 -->
+    <button
       class="play-btn"
       @click="togglePlay"
       :disabled="!audioFile"
+      :class="{ playing: isPlaying }"
     >
-      <svg v-if="!isPlaying" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg v-if="!isPlaying" class="play-icon" viewBox="0 0 24 24" fill="none">
         <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
       </svg>
-      <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 4H10V20H6V4Z" fill="currentColor"/>
-        <path d="M14 4H18V20H14V4Z" fill="currentColor"/>
+      <svg v-else class="pause-icon" viewBox="0 0 24 24" fill="none">
+        <rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+        <rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/>
       </svg>
     </button>
-    
-    <div class="audio-info">
-      <div class="duration">{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</div>
-      <div class="progress-bar" @click="seekTo">
-        <div class="progress-track"></div>
-        <div 
-          class="progress-fill" 
-          :style="{ width: progressPercent + '%' }"
-        ></div>
+
+    <!-- 进度和波形 -->
+    <div class="audio-track">
+      <div class="waveform-bg">
+        <div class="waveform-bars">
+          <span v-for="i in 24" :key="i" :style="{ height: getBarHeight(i) + '%' }"></span>
+        </div>
+        <div class="waveform-progress" :style="{ width: progressPercent + '%' }">
+          <div class="waveform-bars">
+            <span v-for="i in 24" :key="i" :style="{ height: getBarHeight(i) + '%' }"></span>
+          </div>
+        </div>
       </div>
+      <div class="progress-overlay" @click="seekTo"></div>
     </div>
-    
+
+    <!-- 时间显示 -->
+    <div class="time-display">
+      <span class="current-time">{{ formatDuration(currentTime) }}</span>
+      <span class="time-separator">/</span>
+      <span class="total-time">{{ formatDuration(duration) }}</span>
+    </div>
+
     <audio
       ref="audioElement"
       :src="audioSrc"
@@ -53,29 +66,32 @@ const isPlaying = ref(false)
 const currentTime = ref(0)
 const duration = ref(0)
 
+// 伪波形高度（基于位置生成）
+const getBarHeight = (index: number) => {
+  const seed = index * 7
+  return 30 + Math.sin(seed) * 25 + Math.cos(seed * 0.5) * 20
+}
+
 const audioSrc = computed(() => {
   if (!props.audioFile) return ''
 
   if (typeof props.audioFile === 'string') {
     return getStaticUrl(props.audioFile)
   } else if (props.audioFile instanceof File) {
-    // File 对象，创建 Object URL
     return URL.createObjectURL(props.audioFile)
   }
 
   return ''
 })
 
-// 计算进度百分比
 const progressPercent = computed(() => {
   if (duration.value === 0) return 0
   return (currentTime.value / duration.value) * 100
 })
 
-// 切换播放/暂停
 const togglePlay = async () => {
   if (!audioElement.value || !props.audioFile) return
-  
+
   if (isPlaying.value) {
     audioElement.value.pause()
   } else {
@@ -87,51 +103,39 @@ const togglePlay = async () => {
   }
 }
 
-// 跳转到指定位置
 const seekTo = (event: MouseEvent) => {
   if (!audioElement.value || duration.value === 0) return
-  
+
   const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
   const percent = (event.clientX - rect.left) / rect.width
   const newTime = percent * duration.value
-  
+
   audioElement.value.currentTime = newTime
 }
 
-// 格式化时间
 const formatDuration = (seconds: number) => {
   if (isNaN(seconds) || seconds === 0) return '0:00'
-  
+
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
   return `${mins}:${secs.toString().padStart(2, '0')}`
 }
 
-// 音频事件处理
 const onLoadedMetadata = () => {
   if (audioElement.value) {
     duration.value = audioElement.value.duration || 0
   }
 }
 
-// 更新时长的通用函数
 const updateDuration = () => {
   if (audioElement.value && audioElement.value.duration && !isNaN(audioElement.value.duration)) {
     duration.value = audioElement.value.duration
   }
 }
 
-const onLoadedData = () => {
-  updateDuration()
-}
-
-const onCanPlay = () => {
-  updateDuration()
-}
-
-const onDurationChange = () => {
-  updateDuration()
-}
+const onLoadedData = () => updateDuration()
+const onCanPlay = () => updateDuration()
+const onDurationChange = () => updateDuration()
 
 const onTimeUpdate = () => {
   if (audioElement.value) {
@@ -144,17 +148,16 @@ const onEnded = () => {
   currentTime.value = 0
 }
 
-// 监听播放状态变化
 watch(() => audioElement.value, (audio) => {
   if (audio) {
     const updatePlayingState = () => {
       isPlaying.value = !audio.paused && !audio.ended
     }
-    
+
     audio.addEventListener('play', updatePlayingState)
     audio.addEventListener('pause', updatePlayingState)
     audio.addEventListener('ended', updatePlayingState)
-    
+
     return () => {
       audio.removeEventListener('play', updatePlayingState)
       audio.removeEventListener('pause', updatePlayingState)
@@ -163,7 +166,6 @@ watch(() => audioElement.value, (audio) => {
   }
 })
 
-// 清理资源
 onUnmounted(() => {
   if (props.audioFile instanceof File && audioSrc.value) {
     URL.revokeObjectURL(audioSrc.value)
@@ -176,82 +178,202 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-default);
-  backdrop-filter: blur(5px);
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(250, 247, 242, 0.08);
+  border-radius: var(--radius-md);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   播放按钮
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .play-btn {
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-  color: white;
-  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, var(--primitive-olive-500), var(--primitive-olive-600));
+  border: none;
+  border-radius: 50%;
+  color: var(--primitive-paper-100);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .play-btn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 16px rgba(93, 122, 93, 0.4);
 }
 
 .play-btn:disabled {
-  background: var(--color-border-strong);
+  background: var(--primitive-ink-600);
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  opacity: 0.5;
 }
 
-.audio-info {
+.play-btn.playing {
+  background: linear-gradient(135deg, var(--primitive-gold-500), var(--primitive-copper-500));
+}
+
+.play-btn.playing:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.4);
+}
+
+.play-icon,
+.pause-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.play-icon {
+  margin-left: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   音频轨道
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.audio-track {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.duration {
-  font-size: 12px;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.progress-bar {
   position: relative;
-  height: 4px;
+  height: 32px;
   cursor: pointer;
-  border-radius: 2px;
-  overflow: hidden;
 }
 
-.progress-track {
+.waveform-bg {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: var(--radius-sm);
 }
 
-.progress-fill {
+.waveform-bars {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 4px 0;
+}
+
+.waveform-bars span {
+  width: 2px;
+  background: var(--primitive-ink-600);
+  border-radius: 1px;
+  transition: background 0.15s ease;
+}
+
+.waveform-progress {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  background: var(--gradient-primary);
-  transition: width 0.1s ease;
+  overflow: hidden;
+}
+
+.waveform-progress .waveform-bars span {
+  background: var(--primitive-olive-400);
+}
+
+.progress-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   时间显示
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.time-display {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  font-family: var(--font-data);
+  font-size: 12px;
+  min-width: 70px;
+  justify-content: flex-end;
+}
+
+.current-time {
+  color: var(--primitive-paper-300);
+  font-weight: 600;
+}
+
+.time-separator {
+  color: var(--primitive-ink-500);
+}
+
+.total-time {
+  color: var(--primitive-ink-400);
 }
 
 audio {
   display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .audio-player {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .play-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .play-icon,
+  .pause-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .audio-track {
+    height: 28px;
+  }
+
+  .time-display {
+    font-size: 11px;
+    min-width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .audio-player {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+
+  .play-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .audio-track {
+    height: 24px;
+  }
+
+  .waveform-bars span {
+    width: 1.5px;
+  }
+
+  .time-display {
+    font-size: 10px;
+    min-width: 55px;
+  }
 }
 </style>

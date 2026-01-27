@@ -120,38 +120,40 @@ watch(() => props.question.question_text, (newText) => {
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════════════════════════
-   Question Row - Minimal List Item Style
+   Question Row - Dark Studio Style (Level 3)
+   最深层级 - 极简深色行，微妙边框
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .question-row {
   position: relative;
-  background: white;
-  border: 1px solid var(--primitive-paper-300);
-  border-radius: 8px;
+  background: rgba(22, 26, 38, 0.6);
+  border: 1px solid rgba(250, 247, 242, 0.05);
+  border-radius: 6px;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.2s ease;
 }
 
 .question-row:hover {
-  border-color: var(--primitive-paper-400);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: rgba(26, 30, 44, 0.75);
+  border-color: rgba(250, 247, 242, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .question-row.is-active {
   background: linear-gradient(
     135deg,
-    rgba(139, 105, 20, 0.06) 0%,
-    rgba(184, 134, 11, 0.04) 100%
+    rgba(184, 134, 11, 0.12) 0%,
+    rgba(139, 105, 20, 0.08) 100%
   );
-  border-color: var(--primitive-copper-400);
+  border-color: rgba(184, 134, 11, 0.35);
   box-shadow:
-    0 2px 12px rgba(139, 105, 20, 0.12),
-    inset 0 0 0 1px rgba(139, 105, 20, 0.08);
+    0 2px 12px rgba(184, 134, 11, 0.15),
+    inset 0 0 0 1px rgba(184, 134, 11, 0.1);
 }
 
 .question-row.is-active:hover {
-  border-color: var(--primitive-copper-500);
+  border-color: rgba(184, 134, 11, 0.45);
 }
 
 /* ── Question Content ── */
@@ -159,7 +161,7 @@ watch(() => props.question.question_text, (newText) => {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 8px 10px;
 }
 
 .question-indicator {
@@ -167,37 +169,46 @@ watch(() => props.question.question_text, (newText) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 
   font-family: var(--font-serif);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  color: var(--primitive-ink-400);
+  color: var(--primitive-paper-600);
 
-  background: var(--primitive-paper-200);
+  background: rgba(250, 247, 242, 0.08);
   border-radius: 4px;
 
   transition: all 0.2s ease;
 }
 
 .question-row.is-active .question-indicator {
-  background: var(--primitive-copper-500);
+  background: linear-gradient(
+    135deg,
+    var(--primitive-gold-500),
+    var(--primitive-copper-500)
+  );
   color: white;
+  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.3);
 }
 
 .question-text {
   flex: 1;
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.55;
-  color: var(--primitive-ink-600);
+  color: var(--primitive-paper-400);
   word-break: break-word;
   white-space: pre-line;
 }
 
+.question-row:hover .question-text {
+  color: var(--primitive-paper-300);
+}
+
 .question-row.is-active .question-text {
-  color: var(--primitive-ink-800);
+  color: var(--primitive-paper-200);
   font-weight: 500;
 }
 
@@ -221,12 +232,12 @@ watch(() => props.question.question_text, (newText) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
 
-  background: white;
-  border: 1px solid var(--primitive-paper-300);
-  border-radius: 5px;
+  background: rgba(250, 247, 242, 0.05);
+  border: 1px solid rgba(250, 247, 242, 0.08);
+  border-radius: 4px;
 
   cursor: pointer;
   transition: all 0.15s ease;
@@ -237,12 +248,13 @@ watch(() => props.question.question_text, (newText) => {
 }
 
 .mini-btn--edit {
-  color: var(--primitive-copper-500);
+  color: var(--primitive-gold-400);
 }
 
 .mini-btn--edit:hover {
-  background: var(--primitive-copper-50);
-  border-color: var(--primitive-copper-200);
+  background: rgba(184, 134, 11, 0.15);
+  border-color: rgba(184, 134, 11, 0.25);
+  color: var(--primitive-gold-300);
 }
 
 .mini-btn--delete {
@@ -250,18 +262,19 @@ watch(() => props.question.question_text, (newText) => {
 }
 
 .mini-btn--delete:hover {
-  background: var(--primitive-brick-50);
-  border-color: var(--primitive-brick-200);
+  background: rgba(155, 59, 59, 0.15);
+  border-color: rgba(155, 59, 59, 0.25);
+  color: var(--primitive-brick-300);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Edit Form
+   Edit Form - 深色主题
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .edit-form {
-  padding: 12px;
-  background: var(--primitive-paper-50);
-  border-top: 1px solid var(--primitive-paper-200);
+  padding: 10px;
+  background: rgba(18, 22, 32, 0.8);
+  border-top: 1px solid rgba(250, 247, 242, 0.05);
 }
 
 .edit-textarea {
@@ -269,28 +282,29 @@ watch(() => props.question.question_text, (newText) => {
   padding: 10px 12px;
 
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
-  color: var(--primitive-ink-800);
+  color: var(--primitive-paper-200);
 
-  background: white;
-  border: 1px solid var(--primitive-paper-400);
+  background: rgba(15, 18, 26, 0.9);
+  border: 1px solid rgba(250, 247, 242, 0.1);
   border-radius: 6px;
 
   resize: vertical;
-  min-height: 70px;
+  min-height: 60px;
   box-sizing: border-box;
   transition: all 0.15s ease;
 }
 
 .edit-textarea:focus {
   outline: none;
-  border-color: var(--primitive-copper-400);
-  box-shadow: 0 0 0 2px rgba(139, 105, 20, 0.1);
+  border-color: var(--primitive-gold-500);
+  box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.15);
+  background: rgba(18, 22, 32, 0.95);
 }
 
 .edit-textarea::placeholder {
-  color: var(--primitive-ink-300);
+  color: var(--primitive-paper-600);
 }
 
 .edit-toolbar {
@@ -306,11 +320,11 @@ watch(() => props.question.question_text, (newText) => {
   gap: 4px;
   padding: 6px 12px;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
 
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -322,22 +336,23 @@ watch(() => props.question.question_text, (newText) => {
     var(--primitive-olive-600)
   );
   color: white;
-  box-shadow: 0 2px 6px rgba(93, 122, 93, 0.25);
+  box-shadow: 0 2px 8px rgba(93, 122, 93, 0.3);
 }
 
 .toolbar-btn--confirm:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(93, 122, 93, 0.3);
+  box-shadow: 0 4px 12px rgba(93, 122, 93, 0.35);
 }
 
 .toolbar-btn--cancel {
-  background: var(--primitive-paper-200);
-  color: var(--primitive-ink-600);
+  background: rgba(250, 247, 242, 0.08);
+  color: var(--primitive-paper-400);
+  border: 1px solid rgba(250, 247, 242, 0.1);
 }
 
 .toolbar-btn--cancel:hover {
-  background: var(--primitive-paper-300);
-  color: var(--primitive-ink-800);
+  background: rgba(250, 247, 242, 0.12);
+  color: var(--primitive-paper-300);
 }
 
 /* Edit slide transition */
@@ -364,13 +379,13 @@ watch(() => props.question.question_text, (newText) => {
   }
 
   .question-indicator {
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
   }
 
   .question-text {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   /* Always show actions on mobile */
@@ -380,37 +395,38 @@ watch(() => props.question.question_text, (newText) => {
   }
 
   .mini-btn {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 
   /* Disable hover effects on mobile */
   .question-row:hover {
-    border-color: var(--primitive-paper-300);
+    background: rgba(22, 26, 38, 0.6);
+    border-color: rgba(250, 247, 242, 0.05);
     box-shadow: none;
   }
 
   .question-row:active {
-    background: var(--primitive-paper-100);
+    background: rgba(184, 134, 11, 0.08);
   }
 
   .question-row.is-active:hover {
-    border-color: var(--primitive-copper-400);
+    border-color: rgba(184, 134, 11, 0.35);
   }
 
   .edit-form {
-    padding: 10px;
+    padding: 8px;
   }
 
   .edit-textarea {
-    min-height: 60px;
+    min-height: 50px;
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .toolbar-btn {
     padding: 5px 10px;
-    font-size: 11px;
+    font-size: 10px;
   }
 }
 </style>

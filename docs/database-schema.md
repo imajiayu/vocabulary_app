@@ -182,7 +182,7 @@ User practice recordings with AI feedback.
 | user_answer | text | YES | - |
 | audio_file | text | YES | - |
 | ai_feedback | text | YES | - |
-| score | integer | YES | 0 |
+| score | numeric(3,1) | YES | 0 | AI score (1-9, step 0.5) |
 | created_at | timestamp | YES | CURRENT_TIMESTAMP |
 
 **Constraints:**
@@ -324,6 +324,33 @@ GROUP BY user_id, relation_type
 | Bucket | Purpose |
 |--------|---------|
 | speaking-audios | Audio recordings for speaking practice |
+
+### speaking-audios RLS Policies
+
+Files are organized by user folder: `user_{id}/recording_{timestamp}.wav`
+
+```sql
+-- Allow users to upload to their folder
+CREATE POLICY "Users can upload to their folder"
+ON storage.objects FOR INSERT TO anon, authenticated
+WITH CHECK (
+  bucket_id = 'speaking-audios'
+  AND (storage.foldername(name))[1] LIKE 'user_%'
+);
+
+-- Allow public read access
+CREATE POLICY "Public read access for speaking audios"
+ON storage.objects FOR SELECT TO anon, authenticated
+USING (bucket_id = 'speaking-audios');
+
+-- Allow users to delete from their folder
+CREATE POLICY "Users can delete from their folder"
+ON storage.objects FOR DELETE TO anon, authenticated
+USING (
+  bucket_id = 'speaking-audios'
+  AND (storage.foldername(name))[1] LIKE 'user_%'
+);
+```
 
 ---
 

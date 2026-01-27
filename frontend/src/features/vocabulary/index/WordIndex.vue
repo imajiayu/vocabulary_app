@@ -956,12 +956,14 @@ const resumeProgress = () => {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  padding: 0;
+  /* 外边距由组件自己控制，与 HomePage main-container 解耦 */
+  padding: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* ── 移动端头部 ── */
 .mobile-header {
-  padding: 1rem 1rem 0;
+  padding: 0.25rem 0.25rem 0;
 }
 
 .header-top {
@@ -993,7 +995,7 @@ const resumeProgress = () => {
 
 /* 移动端通知包装 */
 .mobile-notification-wrapper {
-  padding: 0 1rem;
+  padding: 0 0.25rem;
 }
 
 /* 来源横向滚动 */
@@ -1049,7 +1051,7 @@ const resumeProgress = () => {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.25rem;
 }
 
 .mobile-card {
@@ -1142,7 +1144,7 @@ const resumeProgress = () => {
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 0.25rem;
   margin-top: 0.25rem;
   border-top: 1px dashed var(--primitive-paper-400);
 }
@@ -1248,8 +1250,12 @@ const resumeProgress = () => {
 
 /* 小屏手机 */
 @media (max-width: 480px) {
+  .mobile-layout {
+    padding: 0.75rem;
+  }
+
   .mobile-header {
-    padding: 0.5rem 0.75rem 0;
+    padding: 0;
   }
 
   .mobile-title {
@@ -1267,7 +1273,7 @@ const resumeProgress = () => {
 
   .mobile-cards {
     gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0;
   }
 
   .mobile-card {
@@ -1292,7 +1298,7 @@ const resumeProgress = () => {
   }
 
   .mobile-quick-links {
-    padding: 0.75rem;
+    padding: 0.75rem 0;
     gap: 1rem;
     margin-top: 0.125rem;
   }
@@ -1306,7 +1312,7 @@ const resumeProgress = () => {
   }
 
   .mobile-notification-wrapper {
-    padding: 0 0.75rem;
+    padding: 0;
   }
 }
 
@@ -1315,11 +1321,12 @@ const resumeProgress = () => {
   .mobile-layout {
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 0.75rem;
   }
 
   .mobile-header {
     width: 100%;
-    padding: 0.375rem 1rem 0;
+    padding: 0;
   }
 
   .header-top {
@@ -1336,13 +1343,14 @@ const resumeProgress = () => {
 
   .mobile-notification-wrapper {
     width: 100%;
+    padding: 0;
   }
 
   .mobile-cards {
     flex: 1;
     flex-direction: row;
     gap: 0.5rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -1369,7 +1377,7 @@ const resumeProgress = () => {
 
   .mobile-quick-links {
     width: 100%;
-    padding: 0.375rem 1rem;
+    padding: 0.375rem 0;
   }
 }
 
