@@ -2,12 +2,11 @@
 import datetime
 import logging
 import math
-from backend.database.vocabulary_dao import (
+from backend.database.vocabulary import (
     db_get_word_elapse_info,
     get_daily_review_loads_by_source,
 )
 from backend.config import LOW_EF_THRESHOLD, ReviewLoadLimits, UserConfig
-from backend.config import UserConfig as Config
 
 logger = logging.getLogger(__name__)
 
@@ -131,7 +130,7 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         remember_inc, forget_inc, lapse
     """
     today = datetime.date.today()
-    config = Config()  # 创建实例以访问属性
+    config = UserConfig()  # 创建实例以访问属性
 
     # 1️⃣ 更新 EF
     ease_factor_new = sm2_update_ease_factor(ease_factor, score)

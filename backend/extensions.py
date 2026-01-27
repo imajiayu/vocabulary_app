@@ -2,12 +2,11 @@
 """
 数据库扩展模块
 - 数据库引擎和 session 管理
-- 事务装饰器
+- 事务上下文管理器
 """
 import os
 import logging
 from pathlib import Path
-from functools import wraps
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -71,43 +70,3 @@ def transaction():
         raise
     finally:
         session.close()
-
-
-def transactional(func):
-    """
-    事务装饰器
-    将函数包装在事务中，自动提交/回滚
-
-    被装饰的函数第一个参数必须是 session
-
-    用法:
-        @transactional
-        def create_word(session, word_data):
-            word = Word(**word_data)
-            session.add(word)
-            return word
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        with transaction() as session:
-            return func(session, *args, **kwargs)
-    return wrapper
-
-
-def with_session(func):
-    """
-    Session 装饰器（只读操作）
-    将函数包装在 session 中，不自动提交
-
-    被装饰的函数第一个参数必须是 session
-
-    用法:
-        @with_session
-        def get_word(session, word_id):
-            return session.query(Word).get(word_id)
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        with get_session() as session:
-            return func(session, *args, **kwargs)
-    return wrapper

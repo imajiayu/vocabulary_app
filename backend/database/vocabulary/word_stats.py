@@ -58,43 +58,6 @@ def db_get_source_stats_from_view(source: str, user_id: int = 1):
         }
 
 
-def db_get_source_statistics(user_id: int = 1):
-    """Get statistics for each source
-
-    优化：使用单次分组查询代替 N×2 次循环查询
-    """
-    from sqlalchemy import case
-    from backend.config import UserConfig
-
-    with get_session() as db:
-        # 单次分组查询获取所有 source 的统计（按用户过滤）
-        results = (
-            db.query(
-                Word.source,
-                func.count(Word.id).label("total"),
-                func.sum(case((Word.stop_review == 1, 1), else_=0)).label("remembered"),
-            )
-            .filter(Word.user_id == user_id)
-            .group_by(Word.source)
-            .all()
-        )
-
-        # 构建结果映射
-        stats_map = {r.source: {"total": r.total, "remembered": r.remembered} for r in results}
-
-        # 确保所有配置的 source 都有数据（即使为空）
-        stats = {}
-        for source in UserConfig(user_id).CUSTOM_SOURCES:
-            data = stats_map.get(source, {"total": 0, "remembered": 0})
-            stats[source] = {
-                "total": data["total"],
-                "remembered": data["remembered"],
-                "unremembered": data["total"] - data["remembered"],
-            }
-
-        return stats
-
-
 def get_daily_review_loads_by_source(source, base_date, days_ahead=45, user_id=1):
     """获取指定source未来每日的复习负荷
 

@@ -21,9 +21,6 @@ from .word_query import (
     db_get_word_text_only,
     db_get_word_review_info,
     db_get_words_review_info_batch,
-    db_fetch_word_info_for_insert_page,
-    db_fetch_words_without_definition,
-    db_fetch_word_info_paginated,
     db_get_word_elapse_info,
 )
 
@@ -38,17 +35,13 @@ from .word_review import (
     db_fetch_review_word_ids,
     db_fetch_lapse_word_ids,
     db_fetch_spelled_word_ids,
-    db_fetch_today_spell,
     db_update_word_for_review,
     db_update_word_for_lapse,
     db_update_word_for_spelling,
-    db_get_total_lapse_count,
-    adjust_words_for_max_prep_days,
 )
 
 # Stats
 from .word_stats import (
-    db_get_source_statistics,
     db_get_source_stats_from_view,
     get_daily_review_loads_by_source,
     get_daily_spell_loads_by_source,
@@ -67,9 +60,6 @@ __all__ = [
     "db_get_word_text_only",
     "db_get_word_review_info",
     "db_get_words_review_info_batch",
-    "db_fetch_word_info_for_insert_page",
-    "db_fetch_words_without_definition",
-    "db_fetch_word_info_paginated",
     "db_get_word_elapse_info",
     # Batch
     "db_batch_delete_words",
@@ -78,14 +68,10 @@ __all__ = [
     "db_fetch_review_word_ids",
     "db_fetch_lapse_word_ids",
     "db_fetch_spelled_word_ids",
-    "db_fetch_today_spell",
     "db_update_word_for_review",
     "db_update_word_for_lapse",
     "db_update_word_for_spelling",
-    "db_get_total_lapse_count",
-    "adjust_words_for_max_prep_days",
     # Stats
-    "db_get_source_statistics",
     "db_get_source_stats_from_view",
     "get_daily_review_loads_by_source",
     "get_daily_spell_loads_by_source",

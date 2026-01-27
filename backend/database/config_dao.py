@@ -63,26 +63,3 @@ def db_save_user_config(config_data: dict, user_id: int = 1) -> bool:
     except Exception as e:
         logger.error(f"Failed to save user config: {e}")
         return False
-
-
-def db_ensure_user_config_exists(default_config: dict, user_id: int = 1) -> None:
-    """
-    确保用户配置表中有数据，如果没有则插入默认配置
-
-    参数:
-    - default_config: 默认配置字典
-    - user_id: 用户ID
-    """
-    with get_session() as session:
-        config = session.query(UserConfigDB).filter(UserConfigDB.user_id == user_id).first()
-        if config is None:
-            try:
-                with transaction() as tx_session:
-                    new_config = UserConfigDB(
-                        user_id=user_id,
-                        config_json=json.dumps(default_config, ensure_ascii=False)
-                    )
-                    tx_session.add(new_config)
-                logger.info(f"Initialized default user config in database for user_id={user_id}")
-            except Exception as e:
-                logger.error(f"Failed to initialize user config: {e}")

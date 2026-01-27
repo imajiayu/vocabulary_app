@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-import logging
 import re
 import requests
 from flask import json
 from bs4 import BeautifulSoup
-
-logger = logging.getLogger(__name__)
 
 
 def get_bold_definition(word, jsonStr):

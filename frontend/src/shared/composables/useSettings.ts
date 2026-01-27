@@ -1,9 +1,9 @@
 /**
  * 全局设置管理 - 统一加载和缓存用户设置
- * 避免多个组件重复请求 /api/settings
+ * 使用 Supabase 直连，不经过后端 API
  */
 import { ref } from 'vue'
-import { api } from '@/shared/api'
+import { SettingsSupabaseApi } from '@/shared/api/settings-supabase'
 import type { UserSettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
 
@@ -39,8 +39,8 @@ export function useSettings() {
       return loadingPromise
     }
 
-    // 创建新的加载 Promise
-    loadingPromise = api.settings.getSettings()
+    // 创建新的加载 Promise（使用 Supabase 直连）
+    loadingPromise = SettingsSupabaseApi.getSettings()
       .then((data) => {
         settings.value = data
         isLoaded.value = true
@@ -58,9 +58,14 @@ export function useSettings() {
 
   /**
    * 更新设置并刷新缓存
+   * 如果 maxPrepDays 变小，会自动调用 Edge Function 调整单词复习时间
    */
   const updateSettings = async (newSettings: Partial<UserSettings>): Promise<UserSettings> => {
-    const updatedSettings = await api.settings.updateSettings(newSettings)
+    // 获取旧的 maxPrepDays 用于比较
+    const oldMaxPrepDays = settings.value?.learning?.maxPrepDays
+
+    // 使用 Supabase 直连更新设置
+    const updatedSettings = await SettingsSupabaseApi.updateSettings(newSettings, oldMaxPrepDays)
     settings.value = updatedSettings
     return updatedSettings
   }

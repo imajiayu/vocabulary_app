@@ -38,60 +38,6 @@ textarea:focus-visible,
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   跳过链接（Skip Link）
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-brand-primary);
-  color: var(--color-text-inverse);
-  border-radius: var(--radius-default);
-  font-family: var(--font-ui);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  text-decoration: none;
-  z-index: 9999;
-  transition: top var(--duration-fast) var(--ease-default);
-}
-
-.skip-link:focus {
-  top: var(--space-4);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   屏幕阅读器专用内容
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* 仅对屏幕阅读器可见的内容 */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* 聚焦时可见（用于跳过链接等） */
-.sr-only-focusable:focus,
-.sr-only-focusable:focus-within {
-  position: static;
-  width: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  clip: auto;
-  white-space: normal;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
    高对比度模式支持
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -155,11 +101,6 @@ textarea:focus-visible,
     min-width: 44px;
   }
 
-  /* 紧凑模式下的触摸目标 */
-  .touch-target-compact {
-    min-height: 36px;
-    min-width: 36px;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

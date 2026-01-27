@@ -49,25 +49,6 @@ export interface IndexSummary {
     count: number
     date: string
   }>
-  /**
-   * @deprecated 前端现在直接从 Supabase 获取进度，此字段将被后端移除
-   */
-  progress_restore?: {
-    has_progress: boolean
-    summary?: {
-      total_words: number
-      current_index: number
-      remaining_words: number
-      initial_lapse_count: number
-      initial_lapse_word_count: number
-    }
-    progress_basic?: {
-      mode: string
-      source: string
-      shuffle: boolean
-      current_index: number
-    }
-  }
 }
 
 // Supabase VIEW 返回的原始数据类型
@@ -339,6 +320,3 @@ export class StatsApi {
     }
   }
 }
-
-// 导出便捷方法
-export const statsApi = StatsApi

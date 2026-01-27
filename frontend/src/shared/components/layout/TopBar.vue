@@ -2,6 +2,7 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import TopBarDropdown, { type DropdownItem } from './TopBarDropdown.vue'
+import AppIcon from '@/shared/components/controls/Icons.vue'
 
 interface Props {
   background?: string
@@ -165,7 +166,7 @@ const goStats = () => {
               class="action-chip"
               title="管理单词"
             >
-              <span class="chip-icon">✦</span>
+              <AppIcon name="plus-circle" class="chip-icon-svg" />
               <span class="chip-text">管理</span>
             </button>
 
@@ -175,7 +176,7 @@ const goStats = () => {
               class="action-chip"
               title="查看统计"
             >
-              <span class="chip-icon">◈</span>
+              <AppIcon name="chart" class="chip-icon-svg" />
               <span class="chip-text">统计</span>
             </button>
           </div>
@@ -460,13 +461,15 @@ const goStats = () => {
   transform: scale(0.96);
 }
 
-.chip-icon {
-  font-size: 0.625rem;
+.chip-icon-svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: currentColor;
   opacity: 0.7;
   transition: opacity 0.2s, transform 0.2s;
 }
 
-.action-chip:hover .chip-icon {
+.action-chip:hover .chip-icon-svg {
   opacity: 1;
   transform: rotate(15deg);
 }

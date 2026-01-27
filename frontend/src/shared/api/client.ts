@@ -142,25 +142,6 @@ class HttpClient {
     return this.handleResponse<T>(response)
   }
 
-  async put<T = unknown>(
-    url: string,
-    data?: unknown,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const response = await fetch(`${this.baseURL}${url}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...this.getUserIdHeader(),
-        ...options.headers,
-      },
-      body: JSON.stringify(data),
-      ...options,
-    })
-
-    return this.handleResponse<T>(response)
-  }
-
   async patch<T = unknown>(
     url: string,
     data?: unknown,
@@ -204,6 +185,5 @@ export const httpClient = new HttpClient()
 // 导出便捷的请求方法（保持this上下文）
 export const get = <T = unknown>(url: string, options?: RequestInit) => httpClient.get<T>(url, options)
 export const post = <T = unknown>(url: string, data?: unknown, options?: RequestInit) => httpClient.post<T>(url, data, options)
-export const put = <T = unknown>(url: string, data?: unknown, options?: RequestInit) => httpClient.put<T>(url, data, options)
 export const patch = <T = unknown>(url: string, data?: unknown, options?: RequestInit) => httpClient.patch<T>(url, data, options)
 export const del = <T = unknown>(url: string, options?: RequestInit) => httpClient.delete<T>(url, options)

@@ -131,31 +131,6 @@ export interface BatchImportResult {
  */
 export class WordsApi {
   /**
-   * 获取单词详情
-   */
-  static async getWord(wordId: number): Promise<Word> {
-    return get<Word>(`/api/word/${wordId}`)
-  }
-
-  /**
-   * 获取单词列表
-   */
-  static async getWords(): Promise<Word[]> {
-    return get<Word[]>('/api/words')
-  }
-
-  /**
-   * 分页获取单词列表
-   */
-  static async getWordsPaginated(limit: number = 50, offset: number = 0): Promise<{ words: Word[], total: number, has_more: boolean, counts?: SourceCounts }> {
-    const searchParams = new URLSearchParams()
-    searchParams.append('limit', String(limit))
-    searchParams.append('offset', String(offset))
-
-    return get<{ words: Word[], total: number, has_more: boolean, counts?: SourceCounts }>(`/api/words/paginated?${searchParams.toString()}`)
-  }
-
-  /**
    * 获取复习单词列表
    * 支持 word_ids 参数用于恢复进度时直接传递快照
    */
@@ -282,45 +257,6 @@ export class WordsApi {
     }
 
     return this.transformWord(data)
-  }
-
-  /**
-   * 直接从 Supabase 获取所有单词（分页处理大数据集）
-   * 替代 getWords()
-   */
-  static async getWordsDirect(source?: string): Promise<Word[]> {
-    const PAGE_SIZE = 1000
-    const userId = getCurrentUserId()
-    const allWords: Word[] = []
-    let offset = 0
-    let hasMore = true
-
-    while (hasMore) {
-      let query = supabase
-        .from('words')
-        .select('*')
-        .eq('user_id', userId)
-        .order('word')
-        .range(offset, offset + PAGE_SIZE - 1)
-
-      if (source) {
-        query = query.eq('source', source)
-      }
-
-      const { data, error } = await query
-
-      if (error) throw new Error(error.message)
-
-      if (data && data.length > 0) {
-        allWords.push(...data.map(row => this.transformWord(row)))
-        offset += PAGE_SIZE
-        hasMore = data.length === PAGE_SIZE
-      } else {
-        hasMore = false
-      }
-    }
-
-    return allWords
   }
 
   /**

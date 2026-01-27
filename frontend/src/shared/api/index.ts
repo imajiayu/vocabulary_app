@@ -3,7 +3,7 @@
  */
 
 // 导出HTTP客户端
-export { httpClient, get, post, put, patch, del, ApiError } from './client'
+export { httpClient, get, post, patch, del, ApiError } from './client'
 export type { ApiResponse } from './client'
 
 // 导入所有API类
@@ -11,11 +11,10 @@ import { WordsApi } from './words'
 import { SpeakingApi } from './speaking'
 import { StatsApi } from './stats'
 import { ConfigApi } from './config'
-import { SettingsApi } from './settings'
+import { SettingsSupabaseApi } from './settings-supabase'
 import { RelationsApi } from './relations'
 import { VocabularyAssistanceApi } from './vocabulary-assistance'
-import { get, post } from './client'
-import type { Word, Progress, SaveProgressPayload, RestoreData } from '@/shared/types'
+import type { Progress, SaveProgressPayload, RestoreData } from '@/shared/types'
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useUserSelection'
 
@@ -45,13 +44,7 @@ export type {
 } from './stats'
 
 export { ConfigApi } from './config'
-export type {
-  SourceSwitchResponse,
-  AppSettings,
-  BackupData
-} from './config'
-
-export { SettingsApi } from './settings'
+export { SettingsSupabaseApi } from './settings-supabase'
 
 export { RelationsApi } from './relations'
 export type {
@@ -289,34 +282,6 @@ export class ProgressApi {
     }
   }
 
-  // ============================================================================
-  // 后端 API 方法（兼容保留，将逐步废弃）
-  // ============================================================================
-
-  /**
-   * @deprecated 使用 getRestoreDataDirect() 代替
-   */
-  static async getRestoreData(): Promise<{
-    progress: {
-      mode: string
-      source: string
-      shuffle: boolean
-      current_index: number
-      word_ids: number[]
-      initial_lapse_count: number
-      initial_lapse_word_count: number
-    }
-    total: number
-  }> {
-    return get('/api/progress/restore')
-  }
-
-  /**
-   * @deprecated 使用 clearProgressDirect() 代替
-   */
-  static async clearProgress(): Promise<void> {
-    return post('/api/progress/clear', {})
-  }
 }
 
 // 创建统一的API对象，便于使用
@@ -325,7 +290,7 @@ export const api = {
   speaking: SpeakingApi,
   stats: StatsApi,
   config: ConfigApi,
-  settings: SettingsApi,
+  settings: SettingsSupabaseApi,
   relations: RelationsApi,
   progress: ProgressApi,
   vocabularyAssistance: VocabularyAssistanceApi

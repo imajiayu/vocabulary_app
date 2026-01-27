@@ -2,13 +2,11 @@ import json
 import logging
 import random
 from flask import Blueprint, jsonify, request, session, g
-from flask_cors import CORS
 
 logger = logging.getLogger(__name__)
 
-from backend.database.vocabulary_dao import (
+from backend.database.vocabulary import (
     db_delete_word,
-    db_fetch_today_spell,
     db_get_word_review_info,
     db_get_words_review_info_batch,
     db_insert_word,
@@ -18,10 +16,6 @@ from backend.database.vocabulary_dao import (
     db_fetch_spelled_word_ids,
     db_get_source_stats_from_view,
 )
-# 已迁移到前端 Supabase 查询（不再需要）:
-# - db_fetch_word_info
-# - db_fetch_word_info_for_insert_page
-# - db_fetch_word_info_paginated
 from backend.services.vocabulary_service import get_bold_definition
 from backend.const import (
     MODE_REVIEW,
@@ -33,25 +27,13 @@ from backend.services.word_update_service import (
     update_word_info_lapse,
     update_word_info_review,
     update_word_info_spelling,
-    # 分离式 API（计算与持久化解耦）
     calculate_review_result,
     persist_review_result,
     calculate_spelling_result,
     persist_spelling_result,
 )
-# 进度管理已迁移到前端直连 Supabase，以下导入不再需要:
-# from backend.services.progress_service import (
-#     save_word_ids_snapshot,
-#     update_current_progress_index,
-#     get_progress_info,
-#     update_lapse_progress_after_word_update,
-#     get_progress_restore_data,
-#     clear_progress,
-# )
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
-
-CORS(api_bp, origins="*")
 
 
 def create_response(success=True, data=None, message=""):
@@ -108,9 +90,6 @@ def set_source():
     return create_response(True, {"current_source": source}, "Source set successfully")
 
 
-# Shuffle API已移除 - shuffle现在是config.py中的设置项
-# 通过 /api/settings 接口进行修改
-
 @api_bp.route("/index_summary", methods=["GET"])
 def get_index_summary():
     """Simple summary for the modern index page.
@@ -149,14 +128,6 @@ def get_index_summary():
         },
         "Index summary retrieved successfully",
     )
-
-
-# ============================================================================
-# 已迁移到前端 Supabase 直接查询的端点（已删除）:
-# - GET /words - 使用 WordsApi.getWordsDirect()
-# - GET /words/paginated - 使用 WordsApi.getWordsPaginatedDirect()
-# - GET /word/<id> - 使用 WordsApi.getWordDirect()
-# ============================================================================
 
 
 @api_bp.route("/word", methods=["POST"])
@@ -286,7 +257,7 @@ def batch_delete_words():
         if not all(isinstance(wid, int) for wid in word_ids):
             return create_response(False, None, "所有 word_ids 必须是整数"), 400
 
-        from backend.database.vocabulary_dao import db_batch_delete_words
+        from backend.database.vocabulary import db_batch_delete_words
 
         deleted_count = db_batch_delete_words(word_ids, g.user_id)
 
@@ -349,7 +320,7 @@ def batch_update_words():
             return create_response(False, None, "未提供有效的更新字段"), 400
 
         # 6. 调用批量更新函数
-        from backend.database.vocabulary_dao import db_batch_update_words
+        from backend.database.vocabulary import db_batch_update_words
 
         updated_count, updated_words = db_batch_update_words(word_ids, update_data, g.user_id)
 
@@ -659,13 +630,6 @@ def persist_word_result(word_id):
     except Exception as e:
         logger.error(f"Failed to persist word result: {e}")
         return create_response(False, None, f"Failed to persist: {str(e)}"), 500
-
-
-# ============================================================================
-# 已迁移到前端直连 Supabase 的端点（已删除）:
-# - GET /progress/restore - 使用 ProgressApi.getRestoreDataDirect()
-# - POST /progress/clear - 使用 ProgressApi.clearProgressDirect()
-# ============================================================================
 
 
 @api_bp.route("/words/<int:word_id>/fetch-definition", methods=["POST"])

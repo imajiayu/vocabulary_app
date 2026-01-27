@@ -30,7 +30,7 @@
           :class="['mobile-nav-item', { active: activeTab === tab.value }]"
           @click="handleTabChange(tab.value)"
         >
-          <span class="nav-icon">{{ tab.icon }}</span>
+          <AppIcon :name="tab.icon" class="nav-icon-svg" />
           <span class="nav-label">{{ tab.label }}</span>
           <span v-if="activeTab === tab.value" class="nav-indicator"></span>
         </button>
@@ -81,6 +81,7 @@ import SettingsPage from '@/pages/SettingsPage.vue'
 import SpeakingSidebar from '@/features/speaking/components/SpeakingSidebar.vue'
 import MainNavigation from '@/shared/components/layout/MainNavigation.vue'
 import UserSelector from '@/shared/components/layout/UserSelector.vue'
+import AppIcon from '@/shared/components/controls/Icons.vue'
 import { Question } from '@/shared/types'
 import { api } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
@@ -92,10 +93,10 @@ const navExpanded = ref(false)
 const isMobile = ref(false)
 
 // Tab 数据
-const tabs = [
-  { value: 'words', label: '单词', icon: '§' },
-  { value: 'speaking', label: '口语', icon: '♫' },
-  { value: 'settings', label: '设置', icon: '⚙' }
+const tabs: Array<{ value: string, label: string, icon: 'book' | 'mic' | 'settings' }> = [
+  { value: 'words', label: '单词', icon: 'book' },
+  { value: 'speaking', label: '口语', icon: 'mic' },
+  { value: 'settings', label: '设置', icon: 'settings' }
 ]
 
 // localStorage键名
@@ -341,9 +342,10 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
-.mobile-nav-item .nav-icon {
-  font-size: 18px;
-  line-height: 1;
+.mobile-nav-item .nav-icon-svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -361,7 +363,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 8px rgba(153, 107, 61, 0.25);
 }
 
-.mobile-nav-item.active .nav-icon {
+.mobile-nav-item.active .nav-icon-svg {
   transform: scale(1.05);
 }
 
@@ -554,8 +556,9 @@ onUnmounted(() => {
     gap: 3px;
   }
 
-  .mobile-nav-item .nav-icon {
-    font-size: 16px;
+  .mobile-nav-item .nav-icon-svg {
+    width: 16px;
+    height: 16px;
   }
 
   .mobile-nav-item .nav-label {

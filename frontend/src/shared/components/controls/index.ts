@@ -1,6 +1,5 @@
 // shared/components/controls/index.ts
 export { default as AppIcon } from './Icons.vue'
-export { default as ButtonGrid } from './ButtonGrid.vue'
 export { default as IndexButton } from './IndexButton.vue'
 export { default as IOSSwitch } from './IOSSwitch.vue'
 export { default as KeySelector } from './KeySelector.vue'

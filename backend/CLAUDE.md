@@ -2,11 +2,19 @@
 
 Flask 后端，部署于 Vercel Serverless Functions。
 
-## 架构
+## 职责范围
 
-**数据库**: Supabase PostgreSQL (环境变量 `DATABASE_URL`)
-**存储**: Supabase Storage (音频文件)
-**部署**: Vercel Python Runtime (`api/index.py`)
+**后端负责：**
+- 单词 CRUD（含释义爬取、验证）
+- 复习/拼写结果计算（SM-2 算法）
+- 关系图递归查询
+
+**后端不处理：**
+- 设置读写（前端直连 Supabase）
+- 口语模块（前端直连 Supabase + Storage）
+- 进度追踪（前端直连 Supabase）
+- 统计数据（前端直接查询 Supabase Views）
+- 关系 CRUD（前端直连 Supabase 双向写入）
 
 ## 目录结构
 
@@ -22,24 +30,21 @@ Flask 后端，部署于 Vercel Serverless Functions。
 
 | 文件 | 前缀 | 功能 |
 |------|------|------|
-| `vocabulary.py` | `/api` | 单词 CRUD、复习、进度 |
-| `speaking.py` | `/api/speaking` | 话题/问题/录音管理 |
-| `settings.py` | `/api/settings` | 用户设置 |
-| `relations.py` | `/api/relations` | 词汇关系 |
-
-## 数据模型
-
-**words**: 单词表 (SRS字段、拼写字段、source)
-**words_relations**: 词汇关系表
-**current_progress**: 学习进度 (单行表)
-**user_config**: 用户配置 (JSON存储)
-**speaking_topics/questions/records**: 口语练习
+| `vocabulary.py` | `/api` | 单词 CRUD、复习结果提交 |
+| `relations.py` | `/api/relations` | 关系图查询 |
 
 ## 关键服务
 
-- `storage_service.py`: Supabase Storage 音频上传/删除
-- `word_update_service.py`: 复习/Lapse/拼写更新
-- `progress_service.py`: 学习进度管理
+- `word_update_service.py`: 复习/Lapse/拼写更新（SM-2 算法）
+- `vocabulary_service.py`: 释义格式化等工具函数
+
+## 数据模型
+
+详见 [docs/database-schema.md](../docs/database-schema.md)
+
+后端操作的主要表：
+- `words`: 单词表（SRS 字段、拼写字段、source）
+- `words_relations`: 词汇关系表（仅读取用于图查询）
 
 ## 环境变量
 
@@ -48,7 +53,6 @@ DATABASE_URL=postgresql://...  # Supabase 连接串
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_SERVICE_KEY=...
 SECRET_KEY=...
-OPENAI_API_KEY=...
 ```
 
 ## 本地运行

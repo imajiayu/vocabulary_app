@@ -2,19 +2,13 @@
 """
 单词关系API路由
 
-注意：add_relation 和 delete_relation 已迁移到前端 Supabase 直接写入
-- RelationsApi.addDirect() / RelationsApi.deleteDirect()
+注意：add_relation、delete_relation、stats 已迁移到前端 Supabase 直接操作
+- RelationsApi.addDirect() / RelationsApi.deleteDirect() / RelationsApi.getStatsDirect()
 """
 from flask import Blueprint, jsonify, request, g
-from flask_cors import CORS
-from backend.database.relation_dao import (
-    db_get_relations_graph,
-    db_get_relation_stats
-)
+from backend.database.relation_dao import db_get_relations_graph
 
 relations_bp = Blueprint("relations", __name__, url_prefix="/api/relations")
-
-CORS(relations_bp, origins="*")
 
 
 def create_response(success=True, data=None, message=""):
@@ -79,23 +73,5 @@ def get_relations_graph():
     except Exception as e:
         return (
             create_response(False, None, f"Failed to get relations graph: {str(e)}"),
-            500,
-        )
-
-
-@relations_bp.route("/stats", methods=["GET"])
-def get_relation_stats():
-    """获取关系统计信息
-
-    已迁移到前端 Supabase 直接查询 (RelationsApi.getStatsDirect)
-    保留此端点以兼容旧版本客户端
-    """
-    try:
-        stats = db_get_relation_stats(g.user_id)
-        return create_response(True, stats, "Stats retrieved successfully")
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to get stats: {str(e)}"),
             500,
         )

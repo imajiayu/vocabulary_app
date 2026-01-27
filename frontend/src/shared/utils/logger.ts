@@ -36,7 +36,5 @@ export const logger = {
 }
 
 // 预定义的上下文 logger
-export const wsLogger = logger.create('WebSocket')
-export const apiLogger = logger.create('API')
 export const reviewLogger = logger.create('Review')
 export const speakingLogger = logger.create('Speaking')

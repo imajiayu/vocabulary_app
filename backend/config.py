@@ -2,17 +2,11 @@
 """
 配置模块 - 从数据库加载用户配置
 """
-import os
 import json
 import logging
 import threading
 
 logger = logging.getLogger(__name__)
-
-# 项目根目录（和 backend 同级）
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 
 # 默认配置（用于初始化和回退）
 DEFAULT_CONFIG = {
@@ -28,33 +22,8 @@ DEFAULT_CONFIG = {
         "defaultShuffle": True,
         "lowEfExtraCount": 0,
     },
-    "management": {
-        "wordsLoadBatchSize": 200,
-        "definitionFetchThreads": 3,
-    },
     "sources": {
         "customSources": ["IELTS", "GRE"],
-    },
-    "audio": {
-        "accent": "us",
-        "autoPlayOnWordChange": True,
-        "autoPlayAfterAnswer": True,
-    },
-    "hotkeys": {
-        "reviewInitial": {
-            "remembered": "ArrowLeft",
-            "notRemembered": "ArrowRight",
-            "stopReview": "ArrowDown",
-        },
-        "reviewAfter": {
-            "wrong": "ArrowLeft",
-            "next": "ArrowRight",
-        },
-        "spelling": {
-            "playAudio": "ArrowLeft",
-            "forgot": "ArrowRight",
-            "next": "Enter",
-        },
     },
 }
 
@@ -189,65 +158,10 @@ class UserConfig:
     def LOW_EF_EXTRA_COUNT(self) -> int:
         return self._config["learning"]["lowEfExtraCount"]
 
-    # ========== 单词管理设置 ==========
-    @property
-    def WORDS_LOAD_BATCH_SIZE(self) -> int:
-        return self._config["management"]["wordsLoadBatchSize"]
-
-    @property
-    def DEFINITION_FETCH_THREADS(self) -> int:
-        return self._config["management"]["definitionFetchThreads"]
-
     # ========== Source 设置 ==========
     @property
     def CUSTOM_SOURCES(self) -> list:
         return self._config["sources"]["customSources"]
-
-    # ========== 音频设置 ==========
-    @property
-    def AUDIO_ACCENT(self) -> str:
-        return self._config["audio"]["accent"]
-
-    @property
-    def AUDIO_AUTO_PLAY_ON_WORD_CHANGE(self) -> bool:
-        return self._config["audio"]["autoPlayOnWordChange"]
-
-    @property
-    def AUDIO_AUTO_PLAY_AFTER_ANSWER(self) -> bool:
-        return self._config["audio"]["autoPlayAfterAnswer"]
-
-    # ========== 快捷键设置 ==========
-    @property
-    def HOTKEY_REVIEW_INITIAL_REMEMBERED(self) -> str:
-        return self._config["hotkeys"]["reviewInitial"]["remembered"]
-
-    @property
-    def HOTKEY_REVIEW_INITIAL_NOT_REMEMBERED(self) -> str:
-        return self._config["hotkeys"]["reviewInitial"]["notRemembered"]
-
-    @property
-    def HOTKEY_REVIEW_INITIAL_STOP_REVIEW(self) -> str:
-        return self._config["hotkeys"]["reviewInitial"]["stopReview"]
-
-    @property
-    def HOTKEY_REVIEW_AFTER_WRONG(self) -> str:
-        return self._config["hotkeys"]["reviewAfter"]["wrong"]
-
-    @property
-    def HOTKEY_REVIEW_AFTER_NEXT(self) -> str:
-        return self._config["hotkeys"]["reviewAfter"]["next"]
-
-    @property
-    def HOTKEY_SPELLING_PLAY_AUDIO(self) -> str:
-        return self._config["hotkeys"]["spelling"]["playAudio"]
-
-    @property
-    def HOTKEY_SPELLING_FORGOT(self) -> str:
-        return self._config["hotkeys"]["spelling"]["forgot"]
-
-    @property
-    def HOTKEY_SPELLING_NEXT(self) -> str:
-        return self._config["hotkeys"]["spelling"]["next"]
 
     # ========== API方法 ==========
     @classmethod

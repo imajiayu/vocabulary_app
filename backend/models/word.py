@@ -11,13 +11,10 @@ from sqlalchemy import (
     Float,
     Date,
     DateTime,
-    Boolean,
-    Text,
-    CheckConstraint,
     UniqueConstraint,
     Enum,
 )
-from sqlalchemy.orm import relationship, declarative_base, Session
+from sqlalchemy.orm import relationship, declarative_base
 
 
 Base = declarative_base()
@@ -82,30 +79,6 @@ class Word(Base):
         cascade="all, delete-orphan",
     )
 
-    def get_all_related_words(self, session: Session):
-        """
-        返回当前单词的所有关联词（简化版 - 双向存储实现）
-
-        由于关系已双向存储，只需查询 word_id == self.id 的关系即可
-        不再需要额外查询反向关系
-
-        :param session: SQLAlchemy session
-        :return: List[Dict]，格式：
-        {"id": int, "word": str, "relation_type": str, "confidence": float}
-        """
-        results = []
-
-        # 只查询正向关联（双向存储下已包含所有关系）
-        for rel in self.related_words:
-            results.append({
-                "id": rel.related_word.id,
-                "word": rel.related_word.word,
-                "relation_type": rel.relation_type.value,
-                "confidence": rel.confidence,
-            })
-
-        return results
-
 
 class RelationType(enum.Enum):
     synonym = "synonym"
@@ -158,48 +131,3 @@ class RelationGenerationLog(Base):
             name="uq_word_relation_log",
         ),
     )
-
-
-class Progress(Base):
-    __tablename__ = "current_progress"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, nullable=False, default=1)
-    mode = Column(String(20), nullable=False)
-    source = Column(String(10), nullable=False)
-    shuffle = Column(Boolean, default=False)
-    word_ids_snapshot = Column(Text, nullable=False)  # JSON数组存储
-    current_index = Column(Integer, default=0)
-    initial_lapse_count = Column(Integer, default=0)  # lapse模式的初始总lapse数
-    initial_lapse_word_count = Column(Integer, default=0)  # lapse模式的初始单词数量
-
-    # 多用户：每个用户一行记录，取消 id=1 约束
-    __table_args__ = (UniqueConstraint("user_id", name="unique_progress_per_user"),)
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "mode": self.mode,
-            "source": self.source,
-            "shuffle": self.shuffle,
-            "word_ids_snapshot": json.loads(self.word_ids_snapshot)
-            if self.word_ids_snapshot
-            else [],
-            "current_index": self.current_index,
-            "initial_lapse_count": self.initial_lapse_count,
-            "initial_lapse_word_count": self.initial_lapse_word_count,
-        }
-
-    @staticmethod
-    def from_dict(data, user_id=1):
-        """从字典创建Progress对象"""
-        return Progress(
-            user_id=user_id,
-            mode=data.get("mode"),
-            source=data.get("source"),
-            shuffle=data.get("shuffle", False),
-            word_ids_snapshot=json.dumps(data.get("word_ids_snapshot", [])),
-            current_index=data.get("current_index", 0),
-            initial_lapse_count=data.get("initial_lapse_count", 0),
-            initial_lapse_word_count=data.get("initial_lapse_word_count", 0),
-        )

@@ -3,9 +3,9 @@
 复习相关操作
 """
 import datetime
-from datetime import date, timedelta
+from datetime import date
 
-from sqlalchemy import func, or_, update, and_
+from sqlalchemy import func, or_, update
 
 from backend.extensions import get_session
 from backend.models.word import Word
@@ -130,32 +130,6 @@ def db_fetch_spelled_word_ids(limit=None, user_id=1):
         return [row[0] for row in rows]
 
 
-def db_fetch_today_spell(user_id=1):
-    """获取今天需要拼写的单词ID列表"""
-    current_source = get_current_source()
-    today = date.today()
-
-    with get_session() as db:
-        rows = (
-            db.query(Word.id)
-            .filter(
-                Word.user_id == user_id,
-                Word.stop_review == 0,
-                or_(
-                    Word.repetition >= 3,
-                    Word.spell_strength.isnot(None),
-                ),
-                Word.source == current_source,
-                (Word.spell_next_review.is_(None)) | (Word.spell_next_review <= today),
-            )
-            .order_by(
-                (Word.spell_next_review == None).asc(),
-                Word.spell_next_review.asc(),
-            )
-        )
-        return [row[0] for row in rows]
-
-
 def db_update_word_for_review(
     id,
     last_remembered,
@@ -212,78 +186,3 @@ def db_update_word_for_spelling(id, newStrength, nextReview=None, user_id=1):
             values["spell_next_review"] = nextReview
         db.execute(update(Word).where(Word.id == id, Word.user_id == user_id).values(**values))
         db.commit()
-
-
-def db_get_total_lapse_count(user_id=1):
-    """获取总lapse数"""
-    current_source = get_current_source()
-    with get_session() as db:
-        total_lapse = (
-            db.query(Word)
-            .filter(Word.user_id == user_id, Word.source == current_source)
-            .with_entities(func.sum(Word.lapse))
-            .scalar()
-        )
-        return total_lapse if total_lapse is not None else 0
-
-
-def adjust_words_for_max_prep_days(max_prep_days, user_id=1):
-    """
-    当 maxPrepDays 变小时，调整超出范围的单词
-
-    Args:
-        max_prep_days: 最大准备天数
-        user_id: 用户ID
-    """
-    import logging
-    logger = logging.getLogger(__name__)
-
-    today = datetime.date.today()
-    max_date = today + timedelta(days=max_prep_days)
-
-    with get_session() as db:
-        # 1. 调整 interval 超过 max_prep_days 的单词
-        affected_interval = db.execute(
-            update(Word)
-            .where(
-                Word.user_id == user_id,
-                Word.stop_review == 0,
-                Word.interval > max_prep_days
-            )
-            .values(
-                interval=max_prep_days,
-                next_review=max_date
-            )
-        ).rowcount
-
-        # 2. 调整 next_review 超出范围的单词
-        affected_next_review = db.execute(
-            update(Word)
-            .where(
-                and_(
-                    Word.user_id == user_id,
-                    Word.stop_review == 0,
-                    Word.next_review != None,
-                    Word.next_review > max_date
-                )
-            )
-            .values(next_review=max_date)
-        ).rowcount
-
-        # 3. 调整 spell_next_review 超出范围的单词
-        affected_spell_next_review = db.execute(
-            update(Word)
-            .where(
-                and_(
-                    Word.user_id == user_id,
-                    Word.stop_review == 0,
-                    Word.spell_next_review != None,
-                    Word.spell_next_review > max_date
-                )
-            )
-            .values(spell_next_review=max_date)
-        ).rowcount
-
-        db.commit()
-
-        logger.info(f"调整完成: interval={affected_interval}, next_review={affected_next_review}, spell_next_review={affected_spell_next_review}")

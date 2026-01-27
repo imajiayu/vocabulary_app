@@ -15,11 +15,8 @@ sys.path.insert(0, ROOT_DIR)
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-from backend.api.speaking import speaking_api_bp
 from backend.api.vocabulary import api_bp
-from backend.api.settings import settings_bp
 from backend.api.relations import relations_bp
-from backend.api.vocabulary_assistance import vocabulary_assistance_bp
 
 app = Flask(__name__)
 
@@ -28,10 +25,7 @@ app.config.from_pyfile(os.path.join(ROOT_DIR, "backend/config.py"))
 app.secret_key = os.environ.get("SECRET_KEY", "your-secret-key")
 
 app.register_blueprint(api_bp)
-app.register_blueprint(speaking_api_bp)
-app.register_blueprint(settings_bp, url_prefix="/api")
 app.register_blueprint(relations_bp)
-app.register_blueprint(vocabulary_assistance_bp)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 

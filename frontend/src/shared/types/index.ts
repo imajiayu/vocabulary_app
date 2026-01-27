@@ -49,13 +49,6 @@ export interface SpellingMetrics {
   backspace_count: number     // 用户退格次数
 }
 
-export interface WordResult {
-  type: 'review' | 'spelling'
-  remembered: boolean
-  elapsed_time: number
-  spelling_data?: SpellingMetrics
-}
-
 export interface WordsApiResponse {
   words: Word[]
   total: number
@@ -157,14 +150,6 @@ export interface SourcesSettings {
 }
 
 export interface UserSettings {
-  learning: LearningSettings;
-  management: ManagementSettings;
-  audio: AudioSettings;
-  hotkeys: HotkeySettings;
-  sources: SourcesSettings;
-}
-
-export interface SettingsApiResponse {
   learning: LearningSettings;
   management: ManagementSettings;
   audio: AudioSettings;

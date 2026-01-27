@@ -12,7 +12,7 @@ from backend.core.review_repetition import (
 from backend.core.spell_repetition import (
     calculate_spell_strength_with_load_balancing,
 )
-from backend.database.vocabulary_dao import (
+from backend.database.vocabulary import (
     db_fetch_word_info,
     db_update_word_for_lapse,
     db_update_word_for_review,

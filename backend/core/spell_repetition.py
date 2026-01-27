@@ -6,7 +6,7 @@
 """
 import logging
 from backend.config import ReviewLoadLimits
-from backend.database.vocabulary_dao import get_daily_spell_loads_by_source
+from backend.database.vocabulary import get_daily_spell_loads_by_source
 
 logger = logging.getLogger(__name__)
 

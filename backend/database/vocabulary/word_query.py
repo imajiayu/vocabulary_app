@@ -4,7 +4,6 @@
 
 注意：所有函数需要 user_id 参数进行用户数据隔离
 """
-from sqlalchemy import func, case
 from sqlalchemy.orm import joinedload
 
 from backend.extensions import get_session
@@ -105,104 +104,6 @@ def db_get_words_review_info_batch(word_ids, user_id):
                 result.append(res)
 
         return result
-
-
-def db_fetch_word_info_for_insert_page(user_id):
-    """获取所有单词（用于插入页面）"""
-    with get_session() as db:
-        words = db.query(Word).filter(Word.user_id == user_id).order_by(Word.word.asc()).all()
-    return [w.to_dict() for w in words]
-
-
-def db_fetch_words_without_definition(user_id):
-    """获取所有无释义的单词"""
-    invalid_definition = '{"phonetic": {"us": "", "uk": ""}, "definitions": ["暂无释义"], "examples": []}'
-
-    with get_session() as db:
-        words = (
-            db.query(Word)
-            .filter(
-                Word.user_id == user_id,
-                (Word.definition == None)
-                | (Word.definition == "")
-                | (Word.definition == "{}")
-                | (Word.definition == invalid_definition)
-            )
-            .all()
-        )
-        return [{"id": w.id, "word": w.word} for w in words]
-
-
-def db_fetch_word_info_paginated(user_id, limit=50, offset=0):
-    """分页获取单词列表
-
-    优化：使用单次分组查询代替 2+2×N 次循环查询
-    """
-    with get_session() as db:
-        # 分页查询（按用户过滤）
-        words = (
-            db.query(Word)
-            .filter(Word.user_id == user_id)
-            .order_by(Word.word.asc())
-            .offset(offset)
-            .limit(limit)
-            .all()
-        )
-
-        # 仅首次请求时计算统计
-        counts = None
-        if offset == 0:
-            from backend.config import UserConfig
-
-            # 单次分组查询获取所有 source 的统计（按用户过滤）
-            results = (
-                db.query(
-                    Word.source,
-                    func.count(Word.id).label("total"),
-                    func.sum(case((Word.stop_review == 1, 1), else_=0)).label("remembered"),
-                )
-                .filter(Word.user_id == user_id)
-                .group_by(Word.source)
-                .all()
-            )
-
-            # 构建 source 统计映射
-            stats_map = {r.source: {"total": r.total, "remembered": int(r.remembered or 0)} for r in results}
-
-            # 计算全局统计
-            total_count = sum(s["total"] for s in stats_map.values())
-            remembered_total = sum(s["remembered"] for s in stats_map.values())
-
-            source_counts = {
-                "all": {
-                    "total": total_count,
-                    "remembered": remembered_total,
-                    "unremembered": total_count - remembered_total,
-                }
-            }
-
-            # 确保所有配置的 source 都有数据
-            for source in UserConfig(user_id).CUSTOM_SOURCES:
-                data = stats_map.get(source, {"total": 0, "remembered": 0})
-                source_counts[source] = {
-                    "total": data["total"],
-                    "remembered": data["remembered"],
-                    "unremembered": data["total"] - data["remembered"],
-                }
-
-            counts = {"source_counts": source_counts}
-            has_more = (offset + limit) < total_count
-        else:
-            # 非首次请求时需要单独获取总数（按用户过滤）
-            total_count = db.query(func.count(Word.id)).filter(Word.user_id == user_id).scalar()
-            has_more = (offset + limit) < total_count
-
-        return {
-            "words": [w.to_dict() for w in words],
-            "total": total_count,
-            "has_more": has_more,
-            "counts": counts,
-        }
 
 
 def db_get_word_elapse_info(id, user_id):

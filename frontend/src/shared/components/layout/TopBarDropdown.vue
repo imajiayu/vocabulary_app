@@ -45,7 +45,7 @@ import AppIcon from '@/shared/components/controls/Icons.vue'
 export interface DropdownItem {
   key: string
   label: string
-  icon?: 'home' | 'plus-circle' | 'chart' | 'menu' | 'plus' | 'expand' | 'close' | 'delete' | 'check' | 'edit' | 'trash' | 'upload' | 'file' | 'volume' | 'eye' | 'backspace' | 'refresh' | 'alert' | 'keyboard' | 'book' | 'bookmark' | 'lightbulb' | 'shuffle' | 'pen' | 'link' | 'zap' | 'tag' | 'book-open'
+  icon?: 'menu' | 'home' | 'plus-circle' | 'chart' | 'plus' | 'expand' | 'close' | 'delete' | 'check' | 'edit' | 'trash' | 'upload' | 'file' | 'volume' | 'eye' | 'backspace' | 'refresh' | 'alert' | 'keyboard' | 'book' | 'lightbulb' | 'shuffle' | 'pen' | 'book-open' | 'mic' | 'settings'
   disabled?: boolean
   action: () => void
 }

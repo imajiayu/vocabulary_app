@@ -33,11 +33,9 @@ def create_app():
 
     # 注册蓝图
     from backend.api.vocabulary import api_bp
-    from backend.api.settings import settings_bp
     from backend.api.relations import relations_bp
 
     app.register_blueprint(api_bp)
-    app.register_blueprint(settings_bp, url_prefix="/api")
     app.register_blueprint(relations_bp)
 
     # CORS

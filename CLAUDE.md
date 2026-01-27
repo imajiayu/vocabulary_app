@@ -8,6 +8,21 @@ IELTS词汇学习应用 - Flask后端 + Vue3前端，实现间隔重复记忆和
 - **后端**: Vercel Python Serverless (`api/index.py`)
 - **数据库**: Supabase PostgreSQL
 - **存储**: Supabase Storage (音频文件)
+- **Edge Functions**: Supabase Edge Functions
+
+## 前后端职责划分
+
+| 功能 | 位置 | 原因 |
+|------|------|------|
+| 单词 CRUD | Backend | 需验证、爬取释义 |
+| 复习/拼写结果提交 | Backend | SM-2 算法计算 |
+| 关系图查询 | Backend | 递归深度查询 |
+| 关系 CRUD | Frontend → Supabase | 双向插入/删除 |
+| 统计数据 | Frontend → Supabase Views | 直接查询视图 |
+| 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
+| 设置读写 | Frontend → Supabase | 简单读写 |
+| 设置复杂操作 | Frontend → Edge Functions | 级联删除、批量调整 |
+| 进度追踪 | Frontend → Supabase | 简单 CRUD |
 
 ## 本地开发
 
@@ -25,14 +40,12 @@ cd frontend && npm run dev
 
 ```
 app.py              # Flask 入口
-api/                # 蓝图 (vocabulary, settings, relations)
+api/                # 蓝图 (vocabulary, relations)
 core/               # SM-2 算法、拼写强度算法
 database/           # DAO 层
-services/           # 业务逻辑 (progress_service, word_update_service)
+services/           # 业务逻辑
 models/             # SQLAlchemy 模型
 ```
-
-> 注：口语模块已迁移到前端直连 Supabase，不再经过后端
 
 ### 前端 `frontend/src/` (Feature-Sliced Design)
 
@@ -41,6 +54,15 @@ pages/              # 页面组件
 features/           # 功能模块 (vocabulary, speaking, statistics)
 shared/             # 公共资源 (api, types, composables, components, styles)
 ```
+
+## 数据库
+
+详见 **[docs/database-schema.md](docs/database-schema.md)**
+
+- 8 张表：words, words_relations, current_progress, user_config, relation_generation_log, speaking_topics, speaking_questions, speaking_records
+- 8 个视图：stats_* 系列 + word_source_stats + relation_stats
+- 1 个 Storage Bucket：speaking-audios
+- 2 个 Edge Functions：adjust-max-prep-days, delete-source
 
 ## 状态管理
 
@@ -79,13 +101,12 @@ VITE_OPENAI_API_KEY=...  # 可选，用于语音转录
 
 ## 核心文档
 
-- **[复习系统深度分析](docs/review-system-analysis.md)** - SM-2算法、错题处理、拼写评分的完整逻辑
-- **[口语模块架构](docs/speaking-module.md)** - 前端直连架构、在线转录 API 接入计划
+- **[数据库 Schema](docs/database-schema.md)** - 表、视图、Edge Functions 完整定义
+- **[复习系统分析](docs/review-system-analysis.md)** - SM-2算法、错题处理、拼写评分
+- **[口语模块架构](docs/speaking-module.md)** - 前端直连架构
 
 ## 注意事项
 
 - Vercel Serverless 不支持后台线程
 - 词汇关系生成改为本地脚本 (`scripts/generate_relations_local.py`)
 - 释义获取改为前端同步调用
-- 口语模块前端直连 Supabase（DB + Storage）和 DeepSeek（AI 评分）
-- 语音转录待接入在线 API（推荐 gpt-4o-mini-transcribe，$0.003/分钟）

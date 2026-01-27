@@ -410,6 +410,3 @@ export class SpeakingApi {
     if (error) throw new Error(error.message)
   }
 }
-
-// 导出便捷方法
-export const speakingApi = SpeakingApi
