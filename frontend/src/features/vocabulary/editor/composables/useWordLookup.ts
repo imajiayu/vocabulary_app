@@ -22,9 +22,10 @@ export function useWordLookup() {
 
     isLookupLoading.value = true
     try {
-      const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${lookupWord.value.trim()}`
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`
-      const response = await fetch(proxyUrl)
+      // dictionaryapi.dev supports CORS, no proxy needed
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lookupWord.value.trim())}`
+      )
 
       if (response.ok) {
         const data = await response.json()

@@ -242,21 +242,20 @@ export class SettingsSupabaseApi {
   static async getSourcesStats(): Promise<Record<string, number>> {
     const userId = getCurrentUserId()
 
-    // 直接查询 words 表，按 source 分组统计
+    // 使用 word_source_stats 视图获取统计
     const { data, error } = await supabase
-      .from('words')
-      .select('source')
+      .from('word_source_stats')
+      .select('source, total')
       .eq('user_id', userId)
 
     if (error) {
       throw new Error(`获取 source 统计失败: ${error.message}`)
     }
 
-    // 统计每个 source 的单词数
+    // 构建统计对象
     const stats: Record<string, number> = {}
     for (const row of data || []) {
-      const source = row.source as string
-      stats[source] = (stats[source] || 0) + 1
+      stats[row.source] = row.total || 0
     }
 
     // 获取用户配置的 customSources，确保所有配置的 source 都有统计

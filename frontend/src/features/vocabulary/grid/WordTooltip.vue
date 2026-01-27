@@ -389,6 +389,11 @@ onUnmounted(() => {
   margin-bottom: 0.25rem;
 }
 
+.example-en :deep(strong) {
+  font-weight: 700;
+  font-style: normal;
+}
+
 .example-zh {
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -611,6 +616,11 @@ onUnmounted(() => {
   color: var(--primitive-ink-600);
   line-height: 1.6;
   margin-bottom: 0.375rem;
+}
+
+.example-english :deep(strong) {
+  font-weight: 700;
+  font-style: normal;
 }
 
 .example-chinese {

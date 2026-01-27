@@ -11,25 +11,23 @@
 
     <!-- 搜索框 -->
     <div class="search-box">
-      <BaseInput
-        :model-value="searchQuery"
-        @update:model-value="$emit('searchChange', $event)"
-        placeholder="输入单词或中文释义..."
-      >
-        <template #prefix>
-          <BaseIcon name="Search" size="sm" color="muted" />
-        </template>
-        <template #suffix>
-          <button
-            v-if="searchQuery.trim()"
-            @click="$emit('searchChange', '')"
-            class="clear-button"
-            type="button"
-          >
-            <BaseIcon name="X" size="xs" />
-          </button>
-        </template>
-      </BaseInput>
+      <div class="input-with-clear">
+        <input
+          :value="searchQuery"
+          @input="$emit('searchChange', ($event.target as HTMLInputElement).value)"
+          type="text"
+          placeholder="输入单词或中文释义..."
+          class="search-input"
+        />
+        <button
+          v-if="searchQuery.trim()"
+          @click="$emit('searchChange', '')"
+          class="clear-button"
+          type="button"
+        >
+          ×
+        </button>
+      </div>
     </div>
 
     <!-- 筛选按钮 -->
@@ -49,7 +47,6 @@ import { useWordStats, type Word } from '@/shared/composables/useWordStats';
 import SwitchTab from '@/shared/components/controls/SwitchTab.vue';
 import type { SourceCounts } from '@/shared/types';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
-import { BaseInput, BaseIcon } from '@/shared/components/base';
 
 interface Stats {
   total: number;
@@ -199,17 +196,52 @@ const handleFilterChange = (status: string) => {
   flex: 1;
 }
 
+.input-with-clear {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 2.75rem;
+}
+
+.search-input {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid var(--color-border-medium);
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  height: 100%;
+  font-size: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+  border-color: transparent;
+}
+
 .clear-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: var(--color-text-muted);
-  padding: var(--space-1);
+  font-size: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s;
+  line-height: 1;
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -228,7 +260,19 @@ const handleFilterChange = (status: string) => {
     gap: var(--space-3);
   }
 
+  .input-with-clear {
+    height: 48px;
+  }
+
+  .search-input {
+    height: 48px;
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+  }
+
   .clear-button {
+    right: 0.25rem;
+    width: 2rem;
+    height: 2rem;
     min-width: 44px;
     min-height: 44px;
   }
@@ -239,6 +283,23 @@ const handleFilterChange = (status: string) => {
   .search-filter-container {
     padding: var(--space-3);
     gap: var(--space-2);
+  }
+
+  .input-with-clear {
+    height: 36px;
+  }
+
+  .search-input {
+    height: 36px;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+  }
+
+  .clear-button {
+    right: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
   }
 }
 </style>
