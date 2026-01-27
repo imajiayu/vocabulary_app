@@ -71,12 +71,19 @@ CREATE INDEX IF NOT EXISTS idx_words_relations_user_id ON words_relations(user_i
 -- =============================================
 -- Table: current_progress
 -- Learning session progress (one row per user)
+-- Used by frontend for progress restore
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS current_progress (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL DEFAULT 1,
+    mode VARCHAR(20),
     source VARCHAR(20),
+    shuffle BOOLEAN,
+    word_ids_snapshot TEXT,
+    current_index INTEGER,
+    initial_lapse_count INTEGER DEFAULT 0,
+    initial_lapse_word_count INTEGER DEFAULT 0,
     CONSTRAINT unique_progress_per_user UNIQUE(user_id)
 );
 

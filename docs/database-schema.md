@@ -77,17 +77,25 @@ Bidirectional word relationships (synonym, antonym, root, confused, topic).
 
 ### current_progress
 
-Learning session progress per user (one row per user).
+Learning session progress per user (one row per user). Used by frontend for progress restore.
 
-| Column | Type | Nullable | Default |
-|--------|------|----------|---------|
-| id | serial | NO | - |
-| user_id | integer | NO | 1 |
-| source | varchar(20) | YES | - |
+| Column | Type | Nullable | Default | Description |
+|--------|------|----------|---------|-------------|
+| id | serial | NO | - | Primary key |
+| user_id | integer | NO | 1 | User identifier |
+| mode | varchar | YES | - | Review mode (mode_review, mode_lapse, mode_spelling) |
+| source | varchar(20) | YES | - | Current word source |
+| shuffle | boolean | YES | - | Shuffle enabled |
+| word_ids_snapshot | text | YES | - | JSON array of word IDs |
+| current_index | integer | YES | - | Current position in queue |
+| initial_lapse_count | integer | YES | 0 | Initial total lapse count |
+| initial_lapse_word_count | integer | YES | 0 | Initial word count with lapse |
 
 **Constraints:**
 - PK: `id`
 - UNIQUE: `(user_id)` — unique_progress_per_user
+
+**Note:** This table is accessed directly by frontend via Supabase, not through backend API.
 
 ---
 
