@@ -20,7 +20,7 @@
         </div>
 
         <div class="hotkey-item">
-          <label class="hotkey-label">没记住 ❌</label>
+          <label class="hotkey-label">没记住</label>
           <KeySelector
             v-model="hotkeys.reviewInitial.notRemembered"
             :used-keys="[hotkeys.reviewInitial.remembered, hotkeys.reviewInitial.stopReview]"
@@ -46,7 +46,7 @@
 
       <div class="hotkey-grid">
         <div class="hotkey-item">
-          <label class="hotkey-label">记错了 ❌</label>
+          <label class="hotkey-label">记错了</label>
           <KeySelector
             v-model="hotkeys.reviewAfter.wrong"
             :used-keys="[hotkeys.reviewAfter.next]"
@@ -72,7 +72,7 @@
 
       <div class="hotkey-grid">
         <div class="hotkey-item">
-          <label class="hotkey-label">播放发音 🔊</label>
+          <label class="hotkey-label">播放发音</label>
           <KeySelector
             v-model="hotkeys.spelling.playAudio"
             :used-keys="[hotkeys.spelling.forgot, hotkeys.spelling.next]"

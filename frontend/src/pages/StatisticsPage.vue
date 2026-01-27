@@ -59,7 +59,7 @@
           <h2 class="chart-title">
             EF 阶段占比
             <button @click="openEFSettings" class="settings-btn" title="配置区间">
-              ⚙️
+              ⚙
             </button>
           </h2>
           <PieChart :labels="efPie.labels" :values="efPie.values"

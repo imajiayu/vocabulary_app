@@ -1,50 +1,94 @@
 <template>
-  <div class="topic-item">
-    <div class="topic-header">
-      <div class="topic-title-row" @click="handleToggle">
-        <AppIcon name="expand" :class="{ expanded: isExpanded }" class="expand-icon" />
+  <div class="topic-card" :class="{ 'is-expanded': isExpanded }">
+    <!-- Topic Header -->
+    <div class="topic-header" @click="handleToggle">
+      <div class="topic-main">
+        <AppIcon
+          name="expand"
+          class="expand-icon"
+          :class="{ 'is-rotated': isExpanded }"
+        />
         <span class="topic-title">{{ topic.title }}</span>
       </div>
-      <div class="topic-controls" :class="{ editing: showAddQuestionInput || showEditInput }">
-        <span class="count">{{ topic.questions.length }}</span>
-        <div class="topic-actions action-btn-group">
-          <button class="icon-action-btn icon-action-btn--md icon-action-btn--add" @click.stop="showAddQuestionInput = true" title="添加问题">
+
+      <div class="topic-meta">
+        <span class="question-badge">{{ topic.questions.length }}</span>
+
+        <div class="topic-actions">
+          <button
+            class="action-btn action-btn--add"
+            @click.stop="showAddQuestionInput = true"
+            title="添加问题"
+          >
             <AppIcon name="plus" />
           </button>
-          <button class="icon-action-btn icon-action-btn--md icon-action-btn--edit" @click.stop="showEditInput = true" title="编辑主题">
+          <button
+            class="action-btn action-btn--edit"
+            @click.stop="showEditInput = true"
+            title="编辑主题"
+          >
             <AppIcon name="edit" />
           </button>
-          <button class="icon-action-btn icon-action-btn--md icon-action-btn--delete" @click.stop="handleDelete" title="删除主题">
+          <button
+            class="action-btn action-btn--delete"
+            @click.stop="handleDelete"
+            title="删除主题"
+          >
             <AppIcon name="delete" />
           </button>
         </div>
       </div>
     </div>
 
-    <!-- 编辑主题输入框 -->
-    <div v-if="showEditInput" class="input-container">
-      <input v-model="editTitle" ref="editInputRef" placeholder="输入主题标题" @keyup.enter="submitEdit"
-        @keyup.escape="cancelEdit" @blur="submitEdit" />
-    </div>
+    <!-- Edit Topic Input -->
+    <Transition name="form-slide">
+      <div v-if="showEditInput" class="inline-form" @click.stop>
+        <input
+          v-model="editTitle"
+          ref="editInputRef"
+          class="form-input"
+          placeholder="输入主题标题"
+          @keyup.enter="submitEdit"
+          @keyup.escape="cancelEdit"
+          @blur="submitEdit"
+        />
+      </div>
+    </Transition>
 
-    <!-- 新增问题输入框 -->
-    <div v-if="showAddQuestionInput" class="input-container">
-      <textarea v-model="newQuestionText" ref="addInputRef" placeholder="输入问题内容" rows="3"
-        @keyup.enter="submitNewQuestion" @keyup.escape="cancelAddQuestion" @blur="cancelAddQuestion" />
-    </div>
+    <!-- Add Question Input -->
+    <Transition name="form-slide">
+      <div v-if="showAddQuestionInput" class="inline-form" @click.stop>
+        <textarea
+          v-model="newQuestionText"
+          ref="addInputRef"
+          class="form-input form-textarea"
+          placeholder="输入问题内容..."
+          rows="3"
+          @keyup.enter.exact="submitNewQuestion"
+          @keyup.escape="cancelAddQuestion"
+          @blur="cancelAddQuestion"
+        />
+      </div>
+    </Transition>
 
-    <!-- 问题列表 -->
+    <!-- Questions List -->
     <div
       ref="questionsContainer"
-      class="questions-container"
-      :class="{ expanded: isExpanded }"
+      class="questions-list"
+      :class="{ 'is-expanded': isExpanded }"
       :style="{ '--estimated-questions-height': estimatedQuestionsHeight }"
     >
       <QuestionItem
-        v-for="question in topic.questions"
+        v-for="(question, index) in topic.questions"
         :key="`question-${question.id}`"
         :question="question"
+        :style="{ '--question-index': index }"
       />
+
+      <div v-if="topic.questions.length === 0 && isExpanded" class="questions-empty">
+        <span class="empty-bullet">•</span>
+        <span>暂无问题</span>
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +104,7 @@ const props = defineProps<{
   topic: TopicGroup
 }>()
 
-// 从 context 获取状态和方法
+// Context state and methods
 const {
   expandedTopics,
   toggleTopic,
@@ -69,7 +113,7 @@ const {
   addQuestion
 } = useSpeakingContext()
 
-// 计算当前 Topic 是否展开
+// Computed expansion state
 const isExpanded = computed(() => expandedTopics.value.has(props.topic.id))
 
 const handleToggle = () => {
@@ -80,12 +124,12 @@ const handleDelete = () => {
   deleteTopic(props.topic.id)
 }
 
-// 编辑主题状态
+// Edit topic state
 const showEditInput = ref(false)
 const editTitle = ref(props.topic.title)
 const editInputRef = ref<HTMLInputElement | null>(null)
 
-// 新增问题状态
+// Add question state
 const showAddQuestionInput = ref(false)
 const newQuestionText = ref('')
 const addInputRef = ref<HTMLTextAreaElement | null>(null)
@@ -110,7 +154,6 @@ const submitNewQuestion = async () => {
     newQuestionText.value = ''
   }
   showAddQuestionInput.value = false
-  // 确保 topic 展开以显示新添加的问题
   if (!isExpanded.value) {
     toggleTopic(props.topic.id)
   }
@@ -121,26 +164,22 @@ const cancelAddQuestion = () => {
   newQuestionText.value = ''
 }
 
-
-// 实际内容高度的响应式引用
+// Height estimation
 const actualContentHeight = ref(0)
 const questionsContainer = ref<HTMLElement | null>(null)
 
-// 计算问题容器所需的高度
 const estimatedQuestionsHeight = computed(() => {
   if (!props.topic.questions || props.topic.questions.length === 0) return '100px'
 
   const questionCount = props.topic.questions.length
 
-  // 如果已经测量到实际高度且展开，使用实际高度加缓冲
   if (actualContentHeight.value > 0 && isExpanded.value) {
     const heightWithBuffer = actualContentHeight.value + 20
     return `${heightWithBuffer}px`
   }
 
-  // 否则使用估算高度，现在更加保守
-  const baseQuestionHeight = 100  // 进一步增加基础高度以适应长文本
-  const extraSpacing = 50         // 增加更多缓冲空间
+  const baseQuestionHeight = 100
+  const extraSpacing = 50
   const totalHeight = questionCount * baseQuestionHeight + extraSpacing
 
   const minHeight = 150
@@ -149,14 +188,12 @@ const estimatedQuestionsHeight = computed(() => {
   return `${finalHeight}px`
 })
 
-// 测量实际内容高度
 const measureContentHeight = () => {
   if (!questionsContainer.value || !isExpanded.value) return
 
   nextTick(() => {
     const container = questionsContainer.value
     if (container) {
-      // 临时移除高度限制以测量真实高度
       const originalMaxHeight = container.style.maxHeight
       const originalOverflow = container.style.overflow
 
@@ -166,14 +203,13 @@ const measureContentHeight = () => {
       const scrollHeight = container.scrollHeight
       actualContentHeight.value = scrollHeight
 
-      // 恢复原有样式
       container.style.maxHeight = originalMaxHeight
       container.style.overflow = originalOverflow
     }
   })
 }
 
-// 自动 focus 输入框
+// Watchers
 watch(showEditInput, val => {
   if (val) {
     nextTick(() => {
@@ -187,228 +223,352 @@ watch(showAddQuestionInput, val => {
   if (val) nextTick(() => addInputRef.value?.focus())
 })
 
-// 监听展开状态变化，展开时测量高度
-watch(() => isExpanded.value, (isExpanded) => {
-  if (isExpanded) {
-    // 延迟测量，等待动画和DOM更新完成
+watch(() => isExpanded.value, (expanded) => {
+  if (expanded) {
     setTimeout(measureContentHeight, 350)
   } else {
-    // 折叠时重置实际高度
     actualContentHeight.value = 0
   }
 })
 
-// 监听问题数量变化，重新测量高度
 watch(() => props.topic.questions?.length, () => {
   if (isExpanded.value) {
     setTimeout(measureContentHeight, 100)
   }
 })
 
-// 监听 topic 变化更新编辑标题
 watch(() => props.topic.title, (newTitle) => {
   editTitle.value = newTitle
 })
 </script>
 
 <style scoped>
-.topic-item {
-  margin-bottom: 12px;
+/* ═══════════════════════════════════════════════════════════════════════════
+   Topic Card - Index Card Style
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.topic-card {
+  position: relative;
+  background: var(--primitive-paper-50);
+  border: 1px solid var(--primitive-paper-300);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+
+  /* Subtle card shadow */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
+.topic-card:hover {
+  border-color: var(--primitive-paper-400);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.topic-card.is-expanded {
+  background: linear-gradient(
+    180deg,
+    var(--primitive-paper-50) 0%,
+    var(--primitive-paper-100) 100%
+  );
+  border-color: var(--primitive-copper-200);
+}
+
+/* ── Topic Header ── */
 .topic-header {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 14px;
-  background: var(--color-bg-glass-light);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--color-purple-light);
-  border-radius: var(--radius-default);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
   cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
 }
 
 .topic-header:hover {
-  background: var(--color-bg-glass-strong);
-  border-color: var(--color-purple-border);
-  box-shadow: 0 6px 16px var(--color-purple-light);
+  background: rgba(139, 105, 20, 0.04);
 }
 
-/* 添加点击反馈动画 */
 .topic-header:active {
-  transform: translateY(0) scale(0.99);
-  transition: all 0.1s ease;
+  background: rgba(139, 105, 20, 0.08);
 }
 
-.topic-title-row {
+.topic-main {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  user-select: none;
-}
-
-.topic-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.topic-title {
-  font-weight: 500;
-  color: var(--color-purple-dark);
-  font-size: 14px;
+  align-items: flex-start;
+  gap: 8px;
   flex: 1;
-  line-height: 1.4;
-}
-
-.count {
-  background: var(--color-purple-light);
-  color: var(--color-purple);
-  padding: 3px 8px;
-  border-radius: var(--radius-md);
-  font-size: 11px;
-  font-weight: 600;
-  min-width: 20px;
-  text-align: center;
-  border: 1px solid var(--color-purple-border);
+  min-width: 0;
 }
 
 .expand-icon {
-  color: var(--color-purple);
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-origin: center;
-  will-change: transform;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--primitive-ink-400);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.expand-icon.expanded {
+.expand-icon.is-rotated {
   transform: rotate(90deg);
-  color: var(--color-purple-dark);
+  color: var(--primitive-copper-500);
 }
 
-/* 非编辑状态，hover 显示按钮组 */
-.topic-header:hover .topic-controls .topic-actions {
+.topic-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--primitive-ink-700);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ── Topic Meta ── */
+.topic-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.question-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primitive-copper-600);
+
+  background: var(--primitive-copper-100);
+  border-radius: 6px;
+}
+
+/* ── Topic Actions ── */
+.topic-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: all 0.2s ease;
+}
+
+.topic-header:hover .topic-actions {
   opacity: 1;
-  pointer-events: auto;
   transform: translateX(0);
 }
 
-/* 编辑状态禁用 hover */
-.topic-controls.editing .topic-actions {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateX(8px) !important;
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+
+  background: white;
+  border: 1px solid var(--primitive-paper-300);
+  border-radius: 6px;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.input-container {
-  padding: 6px 14px;
-  animation: slideIn 0.2s ease-out;
-
-  /* 添加这些 */
-  overflow: hidden;
-  margin: 0 -1px;
+.action-btn:hover {
+  transform: translateY(-1px);
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.action-btn--add {
+  color: var(--primitive-olive-500);
 }
 
-.input-container input,
-.input-container textarea {
+.action-btn--add:hover {
+  background: var(--primitive-olive-50);
+  border-color: var(--primitive-olive-200);
+}
+
+.action-btn--edit {
+  color: var(--primitive-copper-500);
+}
+
+.action-btn--edit:hover {
+  background: var(--primitive-copper-50);
+  border-color: var(--primitive-copper-200);
+}
+
+.action-btn--delete {
+  color: var(--primitive-brick-400);
+}
+
+.action-btn--delete:hover {
+  background: var(--primitive-brick-50);
+  border-color: var(--primitive-brick-200);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Inline Forms
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.inline-form {
+  padding: 8px 14px 12px;
+  background: var(--primitive-paper-100);
+  border-top: 1px solid var(--primitive-paper-300);
+}
+
+.form-input {
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
   padding: 8px 10px;
-  border: 2px solid var(--color-purple);
-  border-radius: var(--radius-sm);
+
+  font-family: var(--font-sans);
   font-size: 13px;
-  background: var(--color-bg-primary);
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px var(--color-purple-light);
-  font-family: inherit;
-  resize: vertical;
-  min-height: 36px;
+  color: var(--primitive-ink-800);
+
+  background: white;
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: 6px;
+
+  transition: all 0.15s ease;
+  box-sizing: border-box;
 }
 
-.input-container input:focus,
-.input-container textarea:focus {
+.form-input:focus {
   outline: none;
-  border-color: var(--color-purple-dark);
-  box-shadow: 0 0 0 3px var(--color-purple-light);
-  transform: scale(1.01);
+  border-color: var(--primitive-copper-400);
+  box-shadow: 0 0 0 2px rgba(139, 105, 20, 0.1);
 }
 
-.questions-container {
+.form-input::placeholder {
+  color: var(--primitive-ink-300);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.5;
+}
+
+/* Form slide transition */
+.form-slide-enter-active,
+.form-slide-leave-active {
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.form-slide-enter-from,
+.form-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Questions List
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              margin-top 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              opacity 0.25s ease,
-              transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  padding-left: 12px;
-  margin-top: 0;
   opacity: 0;
-  transform: translateY(-6px);
-  will-change: max-height, margin-top, opacity, transform;
+  padding: 0 12px;
+  margin: 0;
+
+  transform: translateY(-4px);
+  transition:
+    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    padding 0.35s ease;
+
+  will-change: max-height, opacity, transform;
 }
 
-.questions-container.expanded {
+.questions-list.is-expanded {
   max-height: var(--estimated-questions-height, 2000px);
-  margin-top: 8px;
   opacity: 1;
   transform: translateY(0);
+  padding: 8px 12px 12px;
 }
 
-/* 问题项的错列动画效果 */
-.questions-container.expanded > * {
-  animation: slideInStaggered 0.25s ease forwards;
+/* Staggered animation for questions */
+.questions-list.is-expanded > :deep(*) {
+  animation: questionSlideIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--question-index, 0) * 0.04s);
 }
 
-.questions-container.expanded > *:nth-child(1) { animation-delay: 0ms; }
-.questions-container.expanded > *:nth-child(2) { animation-delay: 40ms; }
-.questions-container.expanded > *:nth-child(3) { animation-delay: 80ms; }
-.questions-container.expanded > *:nth-child(4) { animation-delay: 120ms; }
-.questions-container.expanded > *:nth-child(5) { animation-delay: 160ms; }
-.questions-container.expanded > *:nth-child(n+6) { animation-delay: 200ms; }
-
-@keyframes slideInStaggered {
+@keyframes questionSlideIn {
   from {
     opacity: 0;
-    transform: translateX(-12px) translateY(-4px);
+    transform: translateX(-8px);
   }
   to {
     opacity: 1;
-    transform: translateX(0) translateY(0);
+    transform: translateX(0);
   }
 }
+
+/* ── Empty State ── */
+.questions-empty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  font-size: 12px;
+  color: var(--primitive-ink-400);
+  font-style: italic;
+}
+
+.empty-bullet {
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Mobile Adjustments
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 480px) {
   .topic-header {
-    padding: 8px 10px;
+    padding: 10px 12px;
+    gap: 10px;
   }
 
   .topic-title {
-    font-size: 13px;
+    font-size: 12px;
   }
 
-  /* 移动端禁用hover效果，使用触摸反馈 */
+  .question-badge {
+    min-width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  /* Always show actions on mobile */
+  .topic-actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .action-btn {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Disable hover effects on mobile */
   .topic-header:hover {
-    background: var(--color-bg-glass-light);
-    border-color: var(--color-purple-light);
-    box-shadow: none;
+    background: transparent;
   }
 
   .topic-header:active {
-    background: var(--color-bg-glass-hover);
-    transform: scale(0.98);
+    background: rgba(139, 105, 20, 0.08);
+  }
+
+  .topic-card:hover {
+    border-color: var(--primitive-paper-300);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   }
 }
 </style>

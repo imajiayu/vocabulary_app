@@ -21,11 +21,11 @@ export function useSpeakingData() {
     }))
   })
 
-  // Load topics from API
+  // Load topics from API (使用 Supabase 直接查询)
   async function loadTopics() {
     loading.value = true
     try {
-      const data = await api.speaking.getTopics()
+      const data = await api.speaking.getTopicsDirect()
       if (Array.isArray(data)) {
         topics.value = JSON.parse(JSON.stringify(data))
       } else {
@@ -82,11 +82,11 @@ export function useSpeakingData() {
     return null
   }
 
-  // Add topic
+  // Add topic (使用 Supabase 直接写入)
   async function addTopic(partNumber: number, title: string) {
     loading.value = true
     try {
-      const newTopic = await api.speaking.createTopic({ part: partNumber, title })
+      const newTopic = await api.speaking.createTopicDirect({ part: partNumber, title })
       topics.value = [...topics.value, { ...newTopic }]
       expandedTopics.value.add(newTopic.id)
       return newTopic
@@ -98,13 +98,15 @@ export function useSpeakingData() {
     }
   }
 
-  // Edit topic
+  // Edit topic (使用 Supabase 直接写入)
   async function editTopic(topicId: number, newTitle: string) {
     loading.value = true
     try {
-      const updatedTopic = await api.speaking.updateTopic(topicId, { title: newTitle })
+      const updatedTopic = await api.speaking.updateTopicDirect(topicId, { title: newTitle })
+      // 保留原有 questions，因为 Direct 方法不返回嵌套数据
+      const originalTopic = topics.value.find(t => t.id === topicId)
       topics.value = topics.value.map(topic =>
-        topic.id === topicId ? { ...updatedTopic } : topic
+        topic.id === topicId ? { ...updatedTopic, questions: originalTopic?.questions || [] } : topic
       )
       return updatedTopic
     } catch (e) {
@@ -115,7 +117,7 @@ export function useSpeakingData() {
     }
   }
 
-  // Delete topic
+  // Delete topic (使用 Supabase 直接写入，依赖 DB 级联删除)
   async function deleteTopic(topicId: number) {
     loading.value = true
     try {
@@ -124,7 +126,7 @@ export function useSpeakingData() {
         q => q.id === selectedQuestion.value?.id
       )
 
-      await api.speaking.deleteTopic(topicId)
+      await api.speaking.deleteTopicDirect(topicId)
       topics.value = topics.value.filter(t => t.id !== topicId)
       expandedTopics.value = new Set(
         [...expandedTopics.value].filter(id => id !== topicId)
@@ -143,11 +145,11 @@ export function useSpeakingData() {
     }
   }
 
-  // Add question
+  // Add question (使用 Supabase 直接写入)
   async function addQuestion(topicId: number, questionText: string) {
     loading.value = true
     try {
-      const newQuestion = await api.speaking.createQuestion({
+      const newQuestion = await api.speaking.createQuestionDirect({
         topic_id: topicId,
         question_text: questionText
       })
@@ -169,11 +171,11 @@ export function useSpeakingData() {
     }
   }
 
-  // Edit question
+  // Edit question (使用 Supabase 直接写入)
   async function editQuestion(questionId: number, newText: string) {
     loading.value = true
     try {
-      const updatedQuestion = await api.speaking.updateQuestion(questionId, {
+      const updatedQuestion = await api.speaking.updateQuestionDirect(questionId, {
         question_text: newText
       })
       topics.value = topics.value.map(topic => {
@@ -196,11 +198,11 @@ export function useSpeakingData() {
     }
   }
 
-  // Delete question
+  // Delete question (使用 Supabase 直接写入，依赖 DB 级联删除)
   async function deleteQuestion(questionId: number) {
     loading.value = true
     try {
-      await api.speaking.deleteQuestion(questionId)
+      await api.speaking.deleteQuestionDirect(questionId)
       topics.value = topics.value.map(topic => ({
         ...topic,
         questions: topic.questions.filter(q => q.id !== questionId)
@@ -220,11 +222,11 @@ export function useSpeakingData() {
     }
   }
 
-  // Clear all questions
+  // Clear all questions (直接使用 Supabase)
   async function clearAllQuestions() {
     loading.value = true
     try {
-      await api.speaking.clearAllQuestions()
+      await api.speaking.clearAllData()
       clearData()
     } catch (e) {
       speakingLogger.error('清除题目失败:', e)

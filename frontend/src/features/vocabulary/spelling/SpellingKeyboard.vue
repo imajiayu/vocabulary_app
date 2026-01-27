@@ -1,106 +1,112 @@
 <template>
-  <div class="custom-keyboard">
-    <!-- 第一行: QWERTYUIOP -->
-    <div class="keyboard-row">
-      <button
-        v-for="letter in ROW_1"
-        :key="letter"
-        class="key-btn letter-key"
-        :disabled="disabled"
-        @click="emit('key', letter.toLowerCase())"
-      >
-        {{ letter }}
-      </button>
-    </div>
-
-    <!-- 第二行: ASDFGHJKL -->
-    <div class="keyboard-row">
-      <button
-        v-for="letter in ROW_2"
-        :key="letter"
-        class="key-btn letter-key"
-        :disabled="disabled"
-        @click="emit('key', letter.toLowerCase())"
-      >
-        {{ letter }}
-      </button>
-    </div>
-
-    <!-- 第三行: ZXCVBNM + 退格键 -->
-    <div class="keyboard-row third-row">
-      <div class="letters-centered">
+  <div class="spelling-keyboard">
+    <!-- 字母键盘区域 -->
+    <div class="keyboard-rows">
+      <!-- 第一行: QWERTYUIOP -->
+      <div class="keyboard-row">
         <button
-          v-for="letter in ROW_3"
+          v-for="letter in ROW_1"
           :key="letter"
-          class="key-btn letter-key third-row-letter"
+          class="key letter-key"
           :disabled="disabled"
           @click="emit('key', letter.toLowerCase())"
         >
           {{ letter }}
         </button>
       </div>
-      <button
-        class="key-btn backspace-key backspace-absolute"
-        :disabled="disabled"
-        @click="emit('backspace')"
-      >
-        ⌫
-      </button>
+
+      <!-- 第二行: ASDFGHJKL -->
+      <div class="keyboard-row">
+        <button
+          v-for="letter in ROW_2"
+          :key="letter"
+          class="key letter-key"
+          :disabled="disabled"
+          @click="emit('key', letter.toLowerCase())"
+        >
+          {{ letter }}
+        </button>
+      </div>
+
+      <!-- 第三行: ZXCVBNM + 退格 -->
+      <div class="keyboard-row row-with-special">
+        <div class="letter-group">
+          <button
+            v-for="letter in ROW_3"
+            :key="letter"
+            class="key letter-key"
+            :disabled="disabled"
+            @click="emit('key', letter.toLowerCase())"
+          >
+            {{ letter }}
+          </button>
+        </div>
+        <button
+          class="key special-key backspace"
+          :disabled="disabled"
+          @click="emit('backspace')"
+        >
+          <AppIcon name="backspace" class="key-icon-svg" />
+        </button>
+      </div>
     </div>
 
-    <!-- 底部行: 连字符、播放、空格、忘记、确认 -->
-    <div class="keyboard-row bottom-row">
+    <!-- 功能键区域 -->
+    <div class="action-row">
       <button
-        class="key-btn special-key"
+        class="key action-key hyphen"
         :disabled="disabled"
         @click="emit('key', '-')"
       >
-        -
+        <span class="key-symbol">-</span>
       </button>
+
       <button
-        class="key-btn play-key"
+        class="key action-key play"
         :disabled="disabled"
         @click="emit('playAudio')"
       >
-        🔊
+        <AppIcon name="volume" class="key-icon-svg" />
       </button>
+
       <button
-        class="key-btn space-key"
+        class="key action-key space"
         :disabled="disabled"
         @click="emit('key', ' ')"
       >
-        空格
+        <span class="key-label">空格</span>
       </button>
+
       <button
-        class="key-btn forgot-key"
+        class="key action-key hint"
         :disabled="forgotDisabled"
         @click="emit('forgot')"
       >
-        😵
+        <AppIcon name="eye" class="key-icon-svg" />
       </button>
+
       <button
-        class="key-btn enter-key"
+        class="key action-key enter"
+        :class="{ 'ready': !enterDisabled }"
         :disabled="enterDisabled"
         @click="emit('enter')"
       >
-        ✓
+        <AppIcon name="check" class="key-icon-svg" />
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// 键盘行定义
+import AppIcon from '@/shared/components/controls/Icons.vue'
+
 const ROW_1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'] as const
 const ROW_2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'] as const
 const ROW_3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'] as const
 
 interface Props {
-  /** 是否禁用所有按键（提交中） */
   disabled?: boolean
-  /** 是否禁用"忘记"按钮（已正确时禁用） */
   forgotDisabled?: boolean
-  /** 是否禁用"确认"按钮（未完成时禁用） */
   enterDisabled?: boolean
 }
 
@@ -111,186 +117,381 @@ withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  /** 字母/符号按键 */
   key: [value: string]
-  /** 退格键 */
   backspace: []
-  /** 确认键 */
   enter: []
-  /** 播放音频 */
   playAudio: []
-  /** 忘记按钮 */
   forgot: []
 }>()
 </script>
 
 <style scoped>
-.custom-keyboard {
+/* ═══════════════════════════════════════════════════════════════════════════
+   Neo-Editorial Spelling Keyboard - 精致移动端键盘
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.spelling-keyboard {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--color-border-strong);
-  padding: 0.5rem 0.25rem;
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to bottom,
+    var(--color-bg-tertiary) 0%,
+    var(--primitive-paper-400) 100%
+  );
+  padding: 0.625rem 0.375rem;
+  padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
   z-index: 1000;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* ── 键盘行 ── */
+.keyboard-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
 }
 
 .keyboard-row {
   display: flex;
   justify-content: center;
   gap: 0.25rem;
-  margin-bottom: 0.4rem;
 }
 
-.keyboard-row:last-child {
-  margin-bottom: 0;
-}
-
-.keyboard-row.third-row {
-  position: relative;
-  justify-content: center;
-}
-
-.letters-centered {
+.row-with-special {
   display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  position: relative;
+}
+
+.letter-group {
+  display: flex;
+  justify-content: center;
   gap: 0.25rem;
 }
 
-.third-row-letter {
-  width: 2.5rem;
-  flex: 0 0 2.5rem;
-}
-
-.backspace-absolute {
-  position: absolute;
-  right: 0.25rem;
-}
-
-/* 按键基础样式 */
-.key-btn {
-  min-width: 2rem;
-  height: 3rem;
-  padding: 0.25rem 0.5rem;
+/* ── 按键基础样式 ── */
+.key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  border-radius: var(--radius-xs);
-  background: var(--key-bg);
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: var(--key-text);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.1s ease;
-  touch-action: manipulation;
+  transition: all 0.12s ease;
+  font-family: var(--font-ui);
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-.key-btn:active:not(:disabled) {
-  background: var(--color-border-strong);
-  transform: scale(0.97);
+.key::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.05) 100%);
+  pointer-events: none;
+}
+
+.key:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.key:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── 字母键 ── */
+.letter-key {
+  flex: 1;
+  max-width: 2.25rem;
+  height: 2.75rem;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: 1.05rem;
+  font-weight: 500;
+  box-shadow:
+    0 1px 0 var(--color-border-medium),
+    0 2px 3px rgba(0, 0, 0, 0.06);
+}
+
+.letter-key:active:not(:disabled) {
+  background: var(--color-bg-tertiary);
   box-shadow: none;
 }
 
-.key-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.letter-key {
-  flex: 1;
-  max-width: 2.5rem;
-}
-
-/* 特殊键样式 */
+/* ── 特殊键（退格） ── */
 .special-key {
-  flex: 1.5;
-  background: var(--key-special-bg);
-  color: var(--key-text);
+  width: 3rem;
+  height: 2.75rem;
+  background: var(--primitive-ink-200);
+  color: var(--color-text-primary);
+  font-size: 1.2rem;
+  box-shadow:
+    0 1px 0 var(--primitive-ink-300),
+    0 2px 3px rgba(0, 0, 0, 0.08);
 }
 
 .special-key:active:not(:disabled) {
-  background: var(--color-text-muted);
+  background: var(--primitive-ink-300);
+  box-shadow: none;
 }
 
-.backspace-key {
+/* ── 功能键区域 ── */
+.action-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0 0.25rem;
+}
+
+.action-key {
+  height: 2.75rem;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.action-key:active:not(:disabled) {
+  box-shadow: none;
+}
+
+/* 连字符键 */
+.action-key.hyphen {
+  width: 2.5rem;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.action-key.hyphen:active:not(:disabled) {
+  background: var(--color-bg-tertiary);
+}
+
+/* 播放键 */
+.action-key.play {
   width: 3rem;
-  background: var(--key-special-bg);
-  color: var(--key-text);
-  font-size: 1.2rem;
-}
-
-.backspace-key:active:not(:disabled) {
-  background: var(--color-text-muted);
-}
-
-.space-key {
-  flex: 3;
-  background: var(--key-bg);
-  color: var(--key-text);
-  font-size: 0.9rem;
-}
-
-.space-key:active:not(:disabled) {
-  background: var(--color-border-strong);
-}
-
-/* 功能键样式 */
-.play-key {
-  flex: 1.5;
   background: var(--color-primary);
   color: white;
   font-size: 1.2rem;
 }
 
-.play-key:active:not(:disabled) {
+.action-key.play:active:not(:disabled) {
   background: var(--color-primary-hover);
 }
 
-.forgot-key {
-  flex: 1.5;
-  background: var(--color-primary);
+/* 空格键 */
+.action-key.space {
+  flex: 1;
+  max-width: 10rem;
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.action-key.space:active:not(:disabled) {
+  background: var(--color-bg-tertiary);
+}
+
+/* 提示键 */
+.action-key.hint {
+  width: 3rem;
+  background: var(--color-warning);
   color: white;
   font-size: 1.2rem;
 }
 
-.forgot-key:active:not(:disabled) {
-  background: var(--color-primary-hover);
+.action-key.hint:active:not(:disabled) {
+  background: var(--primitive-gold-600);
 }
 
-.enter-key {
-  flex: 1.5;
+/* 确认键 */
+.action-key.enter {
+  width: 3rem;
+  background: var(--primitive-ink-200);
+  color: var(--color-text-tertiary);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.action-key.enter.ready {
   background: var(--color-success);
   color: white;
-  font-size: 1.2rem;
+  animation: readyPulse 1.5s ease-in-out infinite;
 }
 
-.enter-key:active:not(:disabled) {
+.action-key.enter.ready:active:not(:disabled) {
   background: var(--color-success-hover);
+  animation: none;
 }
 
-.enter-key:disabled {
-  background: var(--key-confirm-disabled-bg);
-  opacity: 0.5;
+.action-key.enter:disabled {
+  background: var(--primitive-ink-200);
+  color: var(--color-text-muted);
 }
 
-/* 小屏幕适配 */
-@media (max-width: 480px) {
-  .custom-keyboard {
-    padding: 0.4rem 0.2rem;
-    padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
+/* ── 图标和文字样式 ── */
+.key-icon-svg {
+  width: 1.2em;
+  height: 1.2em;
+  fill: currentColor;
+}
+
+.key-symbol {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.key-label {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   动画
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes readyPulse {
+  0%, 100% {
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.08),
+      0 0 0 0 rgba(93, 122, 93, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.08),
+      0 0 0 6px rgba(93, 122, 93, 0);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   屏幕尺寸适配
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 360px) {
+  .spelling-keyboard {
+    padding: 0.5rem 0.25rem;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
   }
 
-  .key-btn {
-    min-width: 1.8rem;
-    height: 2.8rem;
-    font-size: 1rem;
+  .keyboard-rows {
+    gap: 0.3rem;
+    margin-bottom: 0.4rem;
   }
 
   .keyboard-row {
     gap: 0.2rem;
-    margin-bottom: 0.35rem;
+  }
+
+  .letter-key {
+    max-width: 2rem;
+    height: 2.5rem;
+    font-size: 0.95rem;
+  }
+
+  .special-key {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  .action-row {
+    gap: 0.3rem;
+  }
+
+  .action-key {
+    height: 2.5rem;
+  }
+
+  .action-key.hyphen {
+    width: 2.25rem;
+    font-size: 1.1rem;
+  }
+
+  .action-key.play,
+  .action-key.hint,
+  .action-key.enter {
+    width: 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  .action-key.space {
+    max-width: 8rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* 大屏幕手机优化 */
+@media (min-width: 414px) {
+  .letter-key {
+    max-width: 2.5rem;
+    height: 3rem;
+    font-size: 1.15rem;
+  }
+
+  .special-key {
+    width: 3.25rem;
+    height: 3rem;
+    font-size: 1.3rem;
+  }
+
+  .action-key {
+    height: 3rem;
+  }
+
+  .action-key.hyphen {
+    width: 2.75rem;
+  }
+
+  .action-key.play,
+  .action-key.hint,
+  .action-key.enter {
+    width: 3.25rem;
+    font-size: 1.3rem;
+  }
+
+  .action-key.space {
+    max-width: 11rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* 横屏优化 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .spelling-keyboard {
+    padding: 0.375rem 0.5rem;
+    padding-bottom: calc(0.375rem + env(safe-area-inset-bottom));
+  }
+
+  .keyboard-rows {
+    gap: 0.25rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .letter-key {
+    height: 2.25rem;
+    font-size: 0.95rem;
+  }
+
+  .special-key {
+    height: 2.25rem;
+    font-size: 1.05rem;
+  }
+
+  .action-key {
+    height: 2.25rem;
   }
 }
 </style>

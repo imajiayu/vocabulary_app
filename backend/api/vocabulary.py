@@ -1,7 +1,7 @@
 import json
 import logging
 import random
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request, session, g
 from flask_cors import CORS
 
 logger = logging.getLogger(__name__)
@@ -9,9 +9,6 @@ logger = logging.getLogger(__name__)
 from backend.database.vocabulary_dao import (
     db_delete_word,
     db_fetch_today_spell,
-    db_fetch_word_info,
-    db_fetch_word_info_for_insert_page,
-    db_fetch_word_info_paginated,
     db_get_word_review_info,
     db_get_words_review_info_batch,
     db_insert_word,
@@ -21,6 +18,10 @@ from backend.database.vocabulary_dao import (
     db_fetch_spelled_word_ids,
     db_get_source_stats_from_view,
 )
+# 已迁移到前端 Supabase 查询（不再需要）:
+# - db_fetch_word_info
+# - db_fetch_word_info_for_insert_page
+# - db_fetch_word_info_paginated
 from backend.services.vocabulary_service import get_bold_definition
 from backend.const import (
     MODE_REVIEW,
@@ -38,14 +39,15 @@ from backend.services.word_update_service import (
     calculate_spelling_result,
     persist_spelling_result,
 )
-from backend.services.progress_service import (
-    save_word_ids_snapshot,
-    update_current_progress_index,
-    get_progress_info,
-    update_lapse_progress_after_word_update,
-    get_progress_restore_data,
-    clear_progress,
-)
+# 进度管理已迁移到前端直连 Supabase，以下导入不再需要:
+# from backend.services.progress_service import (
+#     save_word_ids_snapshot,
+#     update_current_progress_index,
+#     get_progress_info,
+#     update_lapse_progress_after_word_update,
+#     get_progress_restore_data,
+#     clear_progress,
+# )
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -57,14 +59,14 @@ def create_response(success=True, data=None, message=""):
     return jsonify({"success": success, "data": data, "message": message})
 
 
-def fetch_word_ids_by_mode(mode=MODE_REVIEW, limit=None):
+def fetch_word_ids_by_mode(mode=MODE_REVIEW, limit=None, user_id=1):
     """Simplified word ID fetching by mode"""
     if mode == MODE_REVIEW:
-        return db_fetch_review_word_ids(limit)
+        return db_fetch_review_word_ids(limit, user_id=user_id)
     elif mode == MODE_LAPSE:
-        return db_fetch_lapse_word_ids(limit)
+        return db_fetch_lapse_word_ids(limit, user_id=user_id)
     elif mode == MODE_SPELLING:
-        return db_fetch_spelled_word_ids(limit)
+        return db_fetch_spelled_word_ids(limit, user_id=user_id)
     else:
         return []
 
@@ -74,7 +76,7 @@ def get_source():
     """Get the current source filter from session."""
     from backend.config import UserConfig
 
-    config = UserConfig()
+    config = UserConfig(g.user_id)
     # 默认使用第一个可用的 source
     default_source = config.CUSTOM_SOURCES[0] if config.CUSTOM_SOURCES else "IELTS"
     current_source = session.get("current_source", default_source)
@@ -90,7 +92,7 @@ def set_source():
     """Set the current source filter and save to session."""
     from backend.config import UserConfig
 
-    config = UserConfig()
+    config = UserConfig(g.user_id)
     data = request.get_json()
     if not data or "source" not in data:
         return create_response(False, None, "Missing source parameter"), 400
@@ -115,21 +117,21 @@ def get_index_summary():
 
     Uses word_source_stats view for efficient single-query statistics.
     Only returns current source data - use /source_stats/<source> for other sources.
+
+    Note: progress_restore 已迁移到前端直连 Supabase，此端点不再返回进度信息。
     """
     try:
         from backend.config import UserConfig
 
-        config = UserConfig()
+        user_id = g.user_id
+        config = UserConfig(user_id)
         available_sources = config.CUSTOM_SOURCES or ["IELTS", "GRE"]
 
         # 获取当前 source
         current_source = session.get("current_source", available_sources[0])
 
-        # 从 view 获取当前 source 的统计数据
-        stats = db_get_source_stats_from_view(current_source)
-
-        # 获取进度恢复信息
-        progress_info = get_progress_info()
+        # 从 view 获取当前 source 的统计数据（按用户过滤）
+        stats = db_get_source_stats_from_view(current_source, user_id)
 
     except Exception as e:
         return (
@@ -143,71 +145,18 @@ def get_index_summary():
             "counts": stats["counts"],
             "source_stats": {current_source: stats["source_stats"]},
             "current_source": current_source,
-            "progress_restore": {
-                "has_progress": progress_info.get("has_progress", False),
-                "summary": progress_info.get("summary", None),
-                "progress_basic": (
-                    {
-                        "mode": progress_info.get("progress", {}).get("mode"),
-                        "source": progress_info.get("progress", {}).get("source"),
-                        "shuffle": progress_info.get("progress", {}).get("shuffle"),
-                        "current_index": progress_info.get("progress", {}).get(
-                            "current_index"
-                        ),
-                    }
-                    if progress_info.get("has_progress")
-                    else None
-                ),
-            },
+            # progress_restore 已迁移到前端直连 Supabase
         },
         "Index summary retrieved successfully",
     )
 
 
-@api_bp.route("/words", methods=["GET"])
-def get_words():
-    try:
-        words = db_fetch_word_info_for_insert_page()
-        return create_response(True, words, "Words retrieved successfully")
-    except Exception as e:
-        return create_response(False, None, f"Failed to retrieve words: {str(e)}"), 500
-
-
-@api_bp.route("/words/paginated", methods=["GET"])
-def get_words_paginated():
-    try:
-        limit = int(request.args.get("limit", 50))
-        offset = int(request.args.get("offset", 0))
-
-        # Validate parameters
-        if limit <= 0 or limit > 500:
-            return create_response(False, None, "Limit must be between 1 and 500"), 400
-        if offset < 0:
-            return create_response(False, None, "Offset must be non-negative"), 400
-
-        result = db_fetch_word_info_paginated(limit, offset)
-        return create_response(True, result, "Paginated words retrieved successfully")
-    except ValueError:
-        return create_response(False, None, "Invalid limit or offset parameter"), 400
-    except Exception as e:
-        return (
-            create_response(
-                False, None, f"Failed to retrieve paginated words: {str(e)}"
-            ),
-            500,
-        )
-
-
-@api_bp.route("/word/<int:word_id>", methods=["GET"])
-def get_word(word_id):
-    try:
-        word = db_fetch_word_info(word_id)
-        if word:
-            return create_response(True, word, "Word retrieved successfully")
-        else:
-            return create_response(False, None, f"Word not found (id={word_id})"), 404
-    except Exception as e:
-        return create_response(False, None, f"Failed to retrieve word: {str(e)}"), 500
+# ============================================================================
+# 已迁移到前端 Supabase 直接查询的端点（已删除）:
+# - GET /words - 使用 WordsApi.getWordsDirect()
+# - GET /words/paginated - 使用 WordsApi.getWordsPaginatedDirect()
+# - GET /word/<id> - 使用 WordsApi.getWordDirect()
+# ============================================================================
 
 
 @api_bp.route("/word", methods=["POST"])
@@ -218,11 +167,12 @@ def insert_words():
 
     word = data["word"].strip().lower()
     source = data["source"]
+    user_id = g.user_id
     if not word or not source:
         return create_response(False, None, "单词不能为空"), 400
 
     try:
-        new_word = db_insert_word(word, source)
+        new_word = db_insert_word(word, source, user_id)
         if new_word is None:
             return create_response(False, None, f"单词 '{word}' 已存在"), 400
 
@@ -238,7 +188,7 @@ def batch_insert_words():
     """批量导入单词"""
     from backend.config import UserConfig
 
-    config = UserConfig()
+    config = UserConfig(g.user_id)
     data = request.get_json()
     if not data or "words" not in data or "source" not in data:
         return create_response(False, None, "缺少参数 words 或 source"), 400
@@ -269,7 +219,7 @@ def batch_insert_words():
             continue
 
         try:
-            new_word = db_insert_word(word_text, source)
+            new_word = db_insert_word(word_text, source, g.user_id)
             if new_word:
                 success_count += 1
                 inserted_words.append(new_word)
@@ -313,7 +263,7 @@ def batch_insert_words():
 @api_bp.route("/word/<int:word_id>", methods=["DELETE"])
 def delete_word(word_id):
     try:
-        if not db_delete_word(word_id):
+        if not db_delete_word(word_id, g.user_id):
             return create_response(False, None, f"未找到单词 (id={word_id})"), 404
         return create_response(True, None, f"单词已删除 (id={word_id})")
     except Exception as e:
@@ -338,7 +288,7 @@ def batch_delete_words():
 
         from backend.database.vocabulary_dao import db_batch_delete_words
 
-        deleted_count = db_batch_delete_words(word_ids)
+        deleted_count = db_batch_delete_words(word_ids, g.user_id)
 
         return create_response(
             True,
@@ -401,7 +351,7 @@ def batch_update_words():
         # 6. 调用批量更新函数
         from backend.database.vocabulary_dao import db_batch_update_words
 
-        updated_count, updated_words = db_batch_update_words(word_ids, update_data)
+        updated_count, updated_words = db_batch_update_words(word_ids, update_data, g.user_id)
 
         return create_response(
             True,
@@ -460,72 +410,10 @@ def update_word(word_id):
             )
 
         # 5. 调用数据库更新函数，并获取完整的更新后对象
-        message, code, updated_word = db_update_word(word_id, update_data)
+        message, code, updated_word = db_update_word(word_id, update_data, g.user_id)
 
         if code == 200:
-            # 如果将stop_review设置为1，也需要更新进度索引
-            if update_data.get("stop_review") == 1:
-                # 从请求数据中获取mode，只有在复习时才传递mode参数
-                mode = data.get("mode")
-
-                # 只在mode存在时才执行进度更新逻辑
-                if mode:
-                    # lapse模式特殊处理：将stop_review设置为1时，无条件从快照中移出，同时从session中移出
-                    if mode == MODE_LAPSE:
-                        try:
-                            from backend.database.progress_dao import (
-                                db_get_progress,
-                                db_save_progress,
-                            )
-
-                            # 从数据库快照中移除
-                            progress = db_get_progress()
-                            if progress and progress.get("mode") == "mode_lapse":
-                                word_ids = progress.get("word_ids_snapshot", [])
-                                if word_id in word_ids:
-                                    new_word_ids = [
-                                        wid for wid in word_ids if wid != word_id
-                                    ]
-                                    db_save_progress(
-                                        progress["mode"],
-                                        progress["source"],
-                                        progress["shuffle"],
-                                        new_word_ids,
-                                        progress.get("initial_lapse_count", 0),
-                                        progress.get("initial_lapse_word_count", 0),
-                                    )
-
-                            # 从session快照中移除
-                            session_ids = session.get(SESSION_KEY_SNAPSHOT, [])
-                            if word_id in session_ids:
-                                session[SESSION_KEY_SNAPSHOT] = [
-                                    wid for wid in session_ids if wid != word_id
-                                ]
-
-                            # lapse模式索引始终为0（循环队列）
-                            update_current_progress_index(0)
-                        except Exception as e:
-                            logger.error(f"Failed to update lapse progress snapshot: {e}")
-                    else:
-                        # 非lapse模式：直接从数据库获取和更新快照，确保多设备同步
-                        try:
-                            from backend.services.progress_service import (
-                                try_restore_from_progress,
-                            )
-
-                            success, word_ids, progress_mode = (
-                                try_restore_from_progress()
-                            )
-
-                            if success and progress_mode == mode and word_ids:
-                                all_ids = word_ids
-                                if word_id in all_ids:
-                                    current_index = (
-                                        all_ids.index(word_id) + 1
-                                    )  # +1 因为已完成当前单词
-                                    update_current_progress_index(current_index)
-                        except Exception as e:
-                            logger.error(f"Failed to update progress index: {e}")
+            # 进度索引更新已迁移到前端直连 Supabase
 
             # 6. 将完整的 updated_word 对象作为响应返回
             return create_response(True, updated_word, "Word updated successfully")
@@ -555,6 +443,11 @@ def apply_shuffle_logic(word_ids, mode, shuffle_enabled):
 
 @api_bp.route("/words/review", methods=["GET"])
 def get_review_words():
+    """获取复习单词列表
+
+    进度保存已迁移到前端直连 Supabase，此端点仅负责获取单词数据。
+    支持 word_ids 参数用于恢复进度时直接传递快照 ID。
+    """
     try:
         # 获取参数
         mode = request.args.get("mode", "mode_review")
@@ -562,23 +455,32 @@ def get_review_words():
         offset = int(request.args.get("offset", 0))
         batch_id = int(request.args.get("batch_id", 0))
         limit = request.args.get("limit", None)
+        # 新增：支持前端传递 word_ids（用于恢复进度）
+        word_ids_param = request.args.get("word_ids", None)
 
         # 获取shuffle设置
         from backend.config import get_shuffle_setting
 
         shuffle_enabled = get_shuffle_setting()
 
-        # 第一次请求，batch_id=0 - 总是创建新的进度
+        user_id = g.user_id
+
+        # 第一次请求，batch_id=0 - 创建新的快照
         if batch_id == 0:
-            all_ids = fetch_word_ids_by_mode(mode, limit)  # 获取所有单词ID
+            all_ids = fetch_word_ids_by_mode(mode, limit, user_id)  # 获取所有单词ID
 
             # Apply shuffle logic
             all_ids = apply_shuffle_logic(all_ids, mode, shuffle_enabled)
 
-            # 保存进度快照（新建）
-            save_word_ids_snapshot(mode, all_ids, shuffle_enabled, limit)
-
-            session[SESSION_KEY_SNAPSHOT] = all_ids  # 存到 session (保持兼容)
+            # 进度保存已迁移到前端，只保存到 session（用于当前请求分页）
+            session[SESSION_KEY_SNAPSHOT] = all_ids
+        elif word_ids_param:
+            # 前端传递了 word_ids（恢复进度场景）
+            try:
+                all_ids = json.loads(word_ids_param)
+                session[SESSION_KEY_SNAPSHOT] = all_ids
+            except json.JSONDecodeError:
+                all_ids = session.get(SESSION_KEY_SNAPSHOT, [])
         else:
             # 从 session 获取快照
             all_ids = session.get(SESSION_KEY_SNAPSHOT, [])
@@ -587,7 +489,7 @@ def get_review_words():
         paginated_ids = all_ids[offset : offset + batch_size]
 
         # 批量获取单词数据 - 解决N+1查询问题
-        words = db_get_words_review_info_batch(paginated_ids)
+        words = db_get_words_review_info_batch(paginated_ids, user_id)
 
         # 是否有更多
         has_more = offset + batch_size < len(all_ids)
@@ -606,6 +508,10 @@ def get_review_words():
 
 @api_bp.route("/words/<int:word_id>/result", methods=["PATCH"])
 def update_review_word(word_id):
+    """更新单词复习结果
+
+    进度索引更新已迁移到前端直连 Supabase。
+    """
     try:
         data = request.get_json()
         if not data:
@@ -620,44 +526,21 @@ def update_review_word(word_id):
 
         # 通知数据（复习/拼写模式会返回，lapse模式不返回）
         notification_data = None
+        user_id = g.user_id
 
         if not is_spelling:
             # 根据模式更新
             if mode == MODE_REVIEW:
-                notification_data = update_word_info_review(word_id, remembered, elapsed_time)
+                notification_data = update_word_info_review(word_id, remembered, elapsed_time, user_id)
             elif mode == MODE_LAPSE:
-                update_word_info_lapse(word_id, remembered)
+                update_word_info_lapse(word_id, remembered, user_id)
         else:
             if mode == MODE_SPELLING:
-                notification_data = update_word_info_spelling(word_id, remembered, spelling_data)
+                notification_data = update_word_info_spelling(word_id, remembered, spelling_data, user_id)
 
-        updated_word = db_get_word_review_info(word_id)
+        updated_word = db_get_word_review_info(word_id, user_id)
 
-        # lapse模式特殊处理：同步进度快照，索引始终为0
-        if mode == MODE_LAPSE:
-            try:
-                update_lapse_progress_after_word_update(word_id, updated_word)
-                # lapse模式索引始终为0（循环队列）
-                update_current_progress_index(0)
-
-            except Exception as e:
-                logger.error(f"Failed to update lapse progress snapshot: {e}")
-        else:
-            # 其他模式（包括拼写）：直接从数据库恢复快照，确保多设备同步
-            try:
-                from backend.services.progress_service import try_restore_from_progress
-
-                success, word_ids, progress_mode = try_restore_from_progress()
-
-                if success and progress_mode == mode and word_ids:
-                    all_ids = word_ids
-                    if word_id in all_ids:
-                        current_index = (
-                            all_ids.index(word_id) + 1
-                        )  # +1 因为已完成当前单词
-                        update_current_progress_index(current_index)
-            except Exception as e:
-                logger.error(f"Failed to update progress index: {e}")
+        # 进度索引更新已迁移到前端直连 Supabase
 
         # 构建响应数据，包含更新后的单词和通知数据
         response_data = {
@@ -707,15 +590,16 @@ def calculate_word_result(word_id):
         is_spelling = bool(data.get("is_spelling", False))
         mode = data.get("mode", MODE_REVIEW)
         word_data = data.get("word_data")  # 前端传来的完整 word 数据
+        user_id = g.user_id
 
         result = None
 
         if not is_spelling and mode == MODE_REVIEW:
             elapsed_time = data.get("elapsed_time")
-            result = calculate_review_result(word_id, remembered, elapsed_time, word_data)
+            result = calculate_review_result(word_id, remembered, elapsed_time, word_data, user_id)
         elif is_spelling and mode == MODE_SPELLING:
             spelling_data = data.get("spelling_data")
-            result = calculate_spelling_result(word_id, remembered, spelling_data, word_data)
+            result = calculate_spelling_result(word_id, remembered, spelling_data, word_data, user_id)
         else:
             # lapse 模式不支持分离式 API（无 notification）
             return create_response(False, None, "Mode not supported for calculate-result"), 400
@@ -736,6 +620,8 @@ def persist_word_result(word_id):
     持久化复习/拼写结果到数据库。
     由前端在显示 notification 后异步调用（fire-and-forget）。
 
+    进度索引更新已迁移到前端直连 Supabase。
+
     Request body:
         - persist_data: calculate-result 返回的 persist_data
         - mode: str
@@ -753,30 +639,20 @@ def persist_word_result(word_id):
         if not persist_data:
             return create_response(False, None, "Missing persist_data"), 400
 
+        user_id = g.user_id
+
         # 执行持久化
         if not is_spelling and mode == MODE_REVIEW:
-            persist_review_result(persist_data)
+            persist_review_result(persist_data, user_id)
         elif is_spelling and mode == MODE_SPELLING:
-            persist_spelling_result(persist_data)
+            persist_spelling_result(persist_data, user_id)
         else:
             return create_response(False, None, "Mode not supported"), 400
 
-        # 更新进度索引（与原 API 保持一致）
-        try:
-            from backend.services.progress_service import try_restore_from_progress
-
-            success, word_ids, progress_mode = try_restore_from_progress()
-
-            if success and progress_mode == mode and word_ids:
-                all_ids = word_ids
-                if word_id in all_ids:
-                    current_index = all_ids.index(word_id) + 1
-                    update_current_progress_index(current_index)
-        except Exception as e:
-            logger.error(f"Failed to update progress index: {e}")
+        # 进度索引更新已迁移到前端直连 Supabase
 
         # 获取更新后的单词信息
-        updated_word = db_get_word_review_info(word_id)
+        updated_word = db_get_word_review_info(word_id, user_id)
 
         return create_response(True, {"word": updated_word}, "Persisted successfully")
 
@@ -785,63 +661,11 @@ def persist_word_result(word_id):
         return create_response(False, None, f"Failed to persist: {str(e)}"), 500
 
 
-@api_bp.route("/progress/restore", methods=["GET"])
-def get_progress_restore():
-    """获取可恢复的进度详情，用于前端恢复复习状态
-
-    统一逻辑：
-    - 所有模式都只恢复session快照，不返回单词数据
-    - 前端调用分页API获取单词数据
-      - lapse模式：调用 /api/words/paginated，offset=0, limit=快照长度
-      - 非lapse模式：调用 /api/words/review，分批加载
-    """
-    try:
-        # 使用service层获取进度恢复数据
-        success, progress_data = get_progress_restore_data()
-
-        if not success:
-            return create_response(False, None, "No progress to restore"), 404
-
-        word_ids = progress_data.get("word_ids", [])
-        if not word_ids:
-            return create_response(False, None, "No words in progress snapshot"), 400
-
-        # 恢复session快照（对于后续分页请求）
-        session[SESSION_KEY_SNAPSHOT] = word_ids
-
-        # 统一返回进度信息，前端将调用 /api/words/review 加载单词
-        return create_response(
-            True,
-            {
-                "progress": progress_data,
-                "total": len(word_ids),
-            },
-            "Progress initialized, use pagination to load words",
-        )
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to get restore data: {str(e)}"),
-            500,
-        )
-
-
-@api_bp.route("/progress/clear", methods=["POST"])
-def clear_progress_route():
-    """清除当前保存的进度"""
-    try:
-        success = clear_progress()
-
-        if not success:
-            return create_response(False, None, "Failed to clear progress"), 500
-
-        return create_response(True, None, "Progress cleared successfully")
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to clear progress: {str(e)}"),
-            500,
-        )
+# ============================================================================
+# 已迁移到前端直连 Supabase 的端点（已删除）:
+# - GET /progress/restore - 使用 ProgressApi.getRestoreDataDirect()
+# - POST /progress/clear - 使用 ProgressApi.clearProgressDirect()
+# ============================================================================
 
 
 @api_bp.route("/words/<int:word_id>/fetch-definition", methods=["POST"])
@@ -860,9 +684,11 @@ def fetch_word_definition(word_id):
     from backend.database.vocabulary.word_crud import db_update_word_definition_only
     from backend.database.vocabulary.word_query import db_get_word_review_info, db_get_word_text_only
 
+    user_id = g.user_id
+
     try:
         # 1. 轻量查询验证存在性并获取单词文本
-        word_basic = db_get_word_text_only(word_id)
+        word_basic = db_get_word_text_only(word_id, user_id)
         if not word_basic:
             return create_response(False, None, "Word not found"), 404
 
@@ -872,12 +698,12 @@ def fetch_word_definition(word_id):
             return create_response(False, None, "Failed to fetch definition from web"), 500
 
         # 3. 更新数据库
-        success = db_update_word_definition_only(word_id, definition)
+        success = db_update_word_definition_only(word_id, definition, user_id)
         if not success:
             return create_response(False, None, "Failed to update definition in database"), 500
 
         # 4. 返回更新后的完整单词
-        updated_word = db_get_word_review_info(word_id)
+        updated_word = db_get_word_review_info(word_id, user_id)
         return create_response(True, updated_word, "Definition fetched successfully")
 
     except Exception as e:

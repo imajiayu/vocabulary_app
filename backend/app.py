@@ -12,6 +12,7 @@ from flask_cors import CORS
 from sqlalchemy.exc import SQLAlchemyError
 
 from backend.exceptions import AppError
+from backend.middleware.user_context import init_user_context
 
 # 日志配置
 logging.basicConfig(
@@ -32,19 +33,20 @@ def create_app():
 
     # 注册蓝图
     from backend.api.vocabulary import api_bp
-    from backend.api.speaking import speaking_api_bp
     from backend.api.settings import settings_bp
     from backend.api.relations import relations_bp
-    from backend.api.vocabulary_assistance import vocabulary_assistance_bp
 
     app.register_blueprint(api_bp)
-    app.register_blueprint(speaking_api_bp)
     app.register_blueprint(settings_bp, url_prefix="/api")
     app.register_blueprint(relations_bp)
-    app.register_blueprint(vocabulary_assistance_bp)
 
     # CORS
     CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+    # 注册用户上下文中间件
+    @app.before_request
+    def before_request():
+        init_user_context()
 
     # 注册全局错误处理器
     register_error_handlers(app)

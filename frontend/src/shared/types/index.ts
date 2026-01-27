@@ -60,6 +60,7 @@ export interface WordsApiResponse {
   words: Word[]
   total: number
   has_more: boolean
+  counts?: SourceCounts  // 首次加载时返回的来源计数
 }
 
 export interface Question {
@@ -169,4 +170,40 @@ export interface SettingsApiResponse {
   audio: AudioSettings;
   hotkeys: HotkeySettings;
   sources: SourcesSettings;
+}
+
+// ========== 学习进度相关类型 ==========
+
+export interface Progress {
+  id: number;
+  user_id: number;
+  mode: string;
+  source: string;
+  shuffle: boolean;
+  word_ids_snapshot: number[];
+  current_index: number;
+  initial_lapse_count: number;
+  initial_lapse_word_count: number;
+}
+
+export interface SaveProgressPayload {
+  mode: string;
+  source: string;
+  shuffle: boolean;
+  word_ids: number[];
+  initial_lapse_count?: number;
+  initial_lapse_word_count?: number;
+}
+
+export interface RestoreData {
+  progress: {
+    mode: string;
+    source: string;
+    shuffle: boolean;
+    current_index: number;
+    word_ids: number[];
+    initial_lapse_count: number;
+    initial_lapse_word_count: number;
+  };
+  total: number;
 }

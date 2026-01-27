@@ -1,18 +1,50 @@
 <template>
-  <div class="word-spelling-container">
-    <!-- 释义固定容器 -->
-    <div class="definition-container">
-      <ReviewResult :word="word" :only-show-definitions="true" />
+  <div class="spelling-card">
+    <!-- 释义展示区 -->
+    <div class="definition-area">
+      <div class="definition-scroll">
+        <div
+          v-for="(def, i) in word.definition?.definitions || []"
+          :key="i"
+          class="definition-item"
+          :style="{ animationDelay: `${i * 0.1}s` }"
+        >
+          <span class="def-number">{{ i + 1 }}</span>
+          <span class="def-content">{{ def }}</span>
+        </div>
+      </div>
     </div>
 
-    <!-- 输入框固定在按钮栏上方 -->
-    <div class="spelling-input-container">
-      <input ref="inputRef" v-model="userInput" type="text" class="spelling-input" :class="inputClass"
-        placeholder="输入单词拼写..." autocomplete="off" @keydown="handleKeydown" :disabled="isSubmitting"
-        :readonly="isMobile" @focus="handleInputFocus" />
+    <!-- 输入区域 -->
+    <div class="input-area">
+      <div class="input-wrapper" :class="inputStateClass">
+        <input
+          ref="inputRef"
+          v-model="userInput"
+          type="text"
+          class="spelling-input"
+          placeholder="输入单词拼写..."
+          autocomplete="off"
+          :disabled="isSubmitting"
+          :readonly="isMobile"
+          @keydown="handleKeydown"
+          @focus="handleInputFocus"
+        />
+        <div class="input-indicator">
+          <span v-if="isCorrect" class="indicator-icon correct">✓</span>
+          <span v-else-if="userInput && !isCorrect" class="indicator-icon incorrect">✗</span>
+        </div>
+      </div>
+
+      <!-- 进度提示 -->
+      <div class="input-hint">
+        <span v-if="!userInput">听音频，输入正确拼写</span>
+        <span v-else-if="isCorrect" class="hint-success">正确！按 Enter 继续</span>
+        <span v-else class="hint-progress">{{ userInput.length }} / {{ word.word.length }} 字母</span>
+      </div>
     </div>
 
-    <!-- 移动端自定义键盘 -->
+    <!-- 移动端键盘 -->
     <SpellingKeyboard
       v-if="isMobile"
       :disabled="isSubmitting"
@@ -25,35 +57,47 @@
       @forgot="handleForgot"
     />
 
-    <!-- 按钮栏固定在底部 - 仅桌面端显示 -->
-    <div v-if="!isMobile" class="button-bar">
-      <div class="button-group">
-        <div class="row-buttons">
-          <button class="button play-btn" @click="handlePlayAudio" :disabled="isSubmitting">
-            🔊 播放音频
-          </button>
-          <button class="button forgot-btn" @click="handleForgot" :disabled="isCorrect || isSubmitting">
-            😵 没记住
-          </button>
-        </div>
+    <!-- 桌面端操作栏 -->
+    <div v-if="!isMobile" class="action-bar">
+      <div class="action-group">
+        <button
+          class="action-btn play"
+          :disabled="isSubmitting"
+          @click="handlePlayAudio"
+        >
+          <AppIcon name="volume" class="btn-icon-svg" />
+          <span class="btn-label">播放</span>
+        </button>
 
-        <div class="row-buttons">
-          <button class="button next-btn full-width" @click="handleNext" :disabled="!canProceed || isSubmitting" :class="{ hidden: !canProceed }">
-            下一个 ➡️
-          </button>
-        </div>
+        <button
+          class="action-btn reveal"
+          :disabled="isCorrect || isSubmitting"
+          @click="handleForgot"
+        >
+          <AppIcon name="eye" class="btn-icon-svg" />
+          <span class="btn-label">提示</span>
+        </button>
+
+        <button
+          class="action-btn next"
+          :class="{ 'ready': canProceed }"
+          :disabled="!canProceed || isSubmitting"
+          @click="handleNext"
+        >
+          <span class="btn-icon-arrow">→</span>
+          <span class="btn-label">下一个</span>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
-import ReviewResult from '../review/ReviewResult.vue'
 import SpellingKeyboard from './SpellingKeyboard.vue'
+import AppIcon from '@/shared/components/controls/Icons.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
@@ -61,7 +105,7 @@ import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('Spelling')
 
-// 检测是否为移动端
+// 移动端检测
 const isMobile = ref(false)
 const checkMobile = () => {
   isMobile.value = window.innerWidth <= 768 || ('ontouchstart' in window)
@@ -86,7 +130,7 @@ interface BackspaceSequence {
 interface DetailedSpellingData {
   keyEvents: KeyEvent[]
   interactions: {
-    audioRequestCount: number    // 音频播放请求次数（按钮+快捷键）
+    audioRequestCount: number
   }
   inputAnalysis: {
     totalTypingTime: number
@@ -107,7 +151,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
 
 const inputRef = ref<HTMLInputElement>()
@@ -115,19 +158,20 @@ const userInput = ref('')
 const forgotClicked = ref(false)
 const isSubmitting = ref(false)
 
-// 详细输入数据记录
+// 详细输入数据
 const startTime = ref<number>(0)
 const keyEvents = ref<KeyEvent[]>([])
-const interactions = ref({
-  audioRequestCount: 0
-})
+const interactions = ref({ audioRequestCount: 0 })
 const backspaceSequences = ref<BackspaceSequence[]>([])
 const currentBackspaceSequence = ref<BackspaceSequence | null>(null)
 
-
 const isCorrect = computed(() => userInput.value.trim().toLowerCase() === props.word.word.toLowerCase())
 const canProceed = computed(() => isCorrect.value)
-const inputClass = computed(() => (!userInput.value ? '' : isCorrect.value ? 'correct' : 'incorrect'))
+
+const inputStateClass = computed(() => {
+  if (!userInput.value) return ''
+  return isCorrect.value ? 'correct' : 'incorrect'
+})
 
 const { audioAccent, loadAudioAccent } = useAudioAccent()
 
@@ -185,63 +229,54 @@ const finishBackspaceSequence = () => {
 const handleKeydown = (event: KeyboardEvent) => {
   if (isSubmitting.value) return
 
-  // 移动端阻止物理键盘输入
   if (isMobile.value) {
     event.preventDefault()
     return
   }
 
-  // 获取自定义快捷键
   const spellingKeys = hotkeys.value.spelling
 
-  // 处理自定义的下一个快捷键（不记录事件）
   if (event.key === spellingKeys.next) {
     if (canProceed.value) {
       event.preventDefault()
       handleNext()
     }
-    return // 直接返回，不记录此快捷键事件
+    return
   }
 
-  // 使用自定义快捷键
   if (event.key === spellingKeys.playAudio) {
     event.preventDefault()
     handlePlayAudio()
-    return // 不记录快捷键事件
+    return
   } else if (event.key === spellingKeys.forgot) {
     event.preventDefault()
     handleForgot()
-    return // 不记录快捷键事件
+    return
   }
 
-  // 下面是普通输入键的处理（非快捷键）
   recordKeyEvent(event)
 
-  // 统计普通按键
   if (!['ArrowLeft', 'ArrowRight', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Escape', 'Backspace'].includes(event.key)) {
-    finishBackspaceSequence() // 开始正常输入时结束退格序列
+    finishBackspaceSequence()
   }
 
-  // 处理退格键
   if (event.key === 'Backspace') {
     handleBackspace(event)
   } else {
-    finishBackspaceSequence() // 非退格键时结束退格序列
+    finishBackspaceSequence()
   }
 }
 
-// 阻止移动端输入框聚焦时弹出键盘
 const handleInputFocus = (event: FocusEvent) => {
   if (isMobile.value) {
     (event.target as HTMLInputElement).blur()
   }
 }
 
-// 虚拟键盘按键处理
+// 虚拟键盘处理
 const handleVirtualKey = (key: string) => {
   if (isSubmitting.value) return
 
-  // 模拟KeyEvent结构记录虚拟按键
   const virtualKeyEvent: KeyEvent = {
     timestamp: Date.now() - startTime.value,
     key: key,
@@ -252,21 +287,15 @@ const handleVirtualKey = (key: string) => {
     inputValue: userInput.value + key
   }
   keyEvents.value.push(virtualKeyEvent)
-
-  // 结束退格序列（开始正常输入）
   finishBackspaceSequence()
-
-  // 更新输入值
   userInput.value += key
 }
 
-// 虚拟键盘退格键处理
 const handleVirtualBackspace = () => {
   if (isSubmitting.value || userInput.value.length === 0) return
 
   const cursorPos = userInput.value.length
 
-  // 记录退格事件
   const virtualKeyEvent: KeyEvent = {
     timestamp: Date.now() - startTime.value,
     key: 'Backspace',
@@ -278,7 +307,6 @@ const handleVirtualBackspace = () => {
   }
   keyEvents.value.push(virtualKeyEvent)
 
-  // 处理退格序列
   if (!currentBackspaceSequence.value) {
     currentBackspaceSequence.value = {
       startPos: cursorPos,
@@ -287,18 +315,14 @@ const handleVirtualBackspace = () => {
     }
   }
   currentBackspaceSequence.value.deletedChars++
-
-  // 更新输入值
   userInput.value = userInput.value.slice(0, -1)
 }
 
-// 虚拟键盘回车键处理
 const handleVirtualEnter = () => {
   if (canProceed.value && !isSubmitting.value) {
     handleNext()
   }
 }
-
 
 const calculateInputAnalysis = (): DetailedSpellingData['inputAnalysis'] => {
   const totalTime = keyEvents.value.length > 1
@@ -330,7 +354,7 @@ const handleNext = async () => {
   if (!canProceed.value || isSubmitting.value) return
   isSubmitting.value = true
   try {
-    finishBackspaceSequence() // 确保最后的退格序列被记录
+    finishBackspaceSequence()
 
     const remembered = !forgotClicked.value && isCorrect.value
 
@@ -341,9 +365,6 @@ const handleNext = async () => {
     }
 
     await props.onResult({ remembered, spellingData })
-
-    // 不需要手动 resetState()，watch 会在单词变化时自动调用
-    // 不需要手动播放音频，watch 会在单词变化时自动播放
   } catch (error) {
     log.error('Submit spelling result failed:', error)
   } finally {
@@ -354,27 +375,17 @@ const handleNext = async () => {
 const resetState = () => {
   userInput.value = ''
   forgotClicked.value = false
-
-  // 重置详细记录
   startTime.value = Date.now()
   keyEvents.value = []
-  interactions.value = {
-    audioRequestCount: 0
-  }
+  interactions.value = { audioRequestCount: 0 }
   backspaceSequences.value = []
   currentBackspaceSequence.value = null
 }
 
-// 监听单词变化，自动重置状态和播放音频
 watch(() => props.word, (newWord, oldWord) => {
   if (newWord && newWord !== oldWord) {
-    // 重置状态
     resetState()
-
-    // 播放新单词音频（非阻塞）
     playWordAudio(newWord.word, audioAccent.value)
-
-    // 聚焦输入框
     if (!isMobile.value) {
       setTimeout(() => inputRef.value?.focus(), 50)
     }
@@ -384,11 +395,7 @@ watch(() => props.word, (newWord, oldWord) => {
 onMounted(async () => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
-  await Promise.all([
-        loadAudioAccent(),
-        loadHotkeys()
-    ])
-
+  await Promise.all([loadAudioAccent(), loadHotkeys()])
   resetState()
   await nextTick()
   playWordAudio(props.word.word, audioAccent.value)
@@ -400,112 +407,126 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile)
 })
-
 </script>
 
 <style scoped>
-.definition-container {
-  position: fixed;
-  top: calc(48px + 1.5rem); /* TopBar 高度 + 间距 */
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 2rem);
-  max-width: 600px;
-  min-height: auto;
-  max-height: calc(100vh - 48px - 2 * 3.5rem - 0.75rem - 2rem - 1rem - 4rem - 3rem); /* 屏幕高度 - TopBar - 按钮栏 - 输入框 - 间距 */
-  overflow-y: auto;
-  font-weight: 600;
-  font-size: 1.3em;
+/* ═══════════════════════════════════════════════════════════════════════════
+   Neo-Editorial Spelling Card - 沉浸式拼写练习
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.spelling-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── 释义展示区 ── */
+.definition-area {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.definition-scroll {
+  /* 桌面端不限制高度，自然撑开 */
+}
+
+.definition-item {
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
-  text-align: left;
-  padding: 1em;
-  box-sizing: border-box;
-  background: transparent;
-  z-index: 500;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--color-primary);
+  animation: slideInFromLeft 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* 输入框容器 - 固定在按钮栏上方 */
-.spelling-input-container {
-  position: fixed;
-  bottom: calc(2 * 3.5rem + 0.75rem + 2rem + 1rem); /* 按钮栏高度 + padding + 间距 */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 400px;
-  z-index: 999;
+.definition-item:last-child {
+  margin-bottom: 0;
 }
 
-/* 按钮栏 - 固定在底部 */
-.button-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  padding: 1rem;
-  background: var(--color-bg-overlay);
-  border-top: 1px solid var(--color-border-medium);
-  box-shadow: 0 -2px 12px rgba(45, 55, 72, 0.06);
-  z-index: 1000;
-  box-sizing: border-box;
-  /* 设置最小高度防止布局跳动 */
-  min-height: calc(2 * 2.8rem + 0.75rem + 2rem); /* 按钮高度 + 间距 + padding */
+.def-number {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  color: white;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+}
+
+.def-content {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--color-text-primary);
+}
+
+/* ── 输入区域 ── */
+.input-area {
+  flex-shrink: 0;
+  padding: 1rem 0;
+  padding-bottom: calc(var(--button-bar-height) + 1rem);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-border-medium);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+
+.input-wrapper.correct {
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 4px var(--color-success-light);
+}
+
+.input-wrapper.incorrect {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 4px var(--color-danger-light);
 }
 
 .spelling-input {
-  width: 100%;
-  font-size: 1.6em;
+  flex: 1;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-align: center;
-  padding: 0.5em;
-  border-radius: var(--radius-default);
-  border: 2px solid var(--color-border-medium);
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
   outline: none;
-  background: var(--color-bg-primary);
-  box-sizing: border-box;
 }
 
-/* 按钮组 */
-.button-group {
-  max-width: 600px;
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.word-spelling-container {
-  max-width: 600px;
-  margin: 2em auto;
-  padding: 0 1em;
-  padding-bottom: 8em;
-}
-
-.control-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2em;
-  margin-top: 2em;
-}
-
-.spelling-input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
-}
-
-.spelling-input.correct {
-  color: var(--color-success);
-  border-color: var(--color-success);
-  box-shadow: 0 0 0 3px var(--color-success-light);
-}
-
-.spelling-input.incorrect {
-  color: var(--color-danger);
-  border-color: var(--color-danger);
-  box-shadow: 0 0 0 3px var(--color-danger-light);
+.spelling-input::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 .spelling-input:disabled {
@@ -513,166 +534,313 @@ onBeforeUnmount(() => {
   cursor: not-allowed;
 }
 
-/* 移除重复的button-group定义 */
-
-.row-buttons {
+.input-indicator {
+  position: absolute;
+  right: 1rem;
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.row-buttons:last-child {
-  margin-bottom: 0;
+.indicator-icon {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  font-size: 1.25rem;
+  font-weight: 700;
+  animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 隐藏按钮样式 */
-.button.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.1s ease;
+.indicator-icon.correct {
+  background: var(--color-success);
+  color: white;
 }
 
-/* 确保移动端和桌面端按钮状态显示一致 */
-@media (hover: none) and (pointer: coarse) {
-  .button.hidden {
-    opacity: 0;
-    pointer-events: none;
-    /* 移动端禁用任何触摸反馈 */
-    -webkit-tap-highlight-color: transparent;
-    touch-action: none;
-  }
-
-  .button:not(.hidden):not(:disabled) {
-    /* 移动端可用按钮的触摸优化 */
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-
-  .button:active:not(.hidden):not(:disabled) {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
+.indicator-icon.incorrect {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
 }
 
-/* 桌面端保持原有行为 */
-@media (hover: hover) and (pointer: fine) {
-  .button.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
+.input-hint {
+  text-align: center;
+  margin-top: 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  transition: color 0.2s ease;
 }
 
-/* 按钮基础样式 - 完全采用WordReview的样式 */
-.button {
-  flex: 1;
-  font-size: 1.1em;
-  padding: 0.8em;
+.input-hint .hint-success {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.input-hint .hint-progress {
+  color: var(--color-text-secondary);
+}
+
+/* ── 桌面端操作栏 ── */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem 1rem;
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg-page) 80%, transparent);
+  z-index: 100;
+}
+
+.action-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.875rem 2rem;
+  min-width: 100px;
   border: none;
-  border-radius: var(--radius-default);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  background-color: var(--control-bg-neutral);
-  transition: all 0.2s ease;
-  color: var(--color-text-primary);
-  touch-action: manipulation;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: var(--font-ui);
+  flex: 1;
 }
 
-.button:hover:not(:disabled):not(.hidden) {
-  background-color: var(--control-bg-hover);
-  transform: translateY(-1px);
+.action-btn:active {
+  transform: scale(0.96);
 }
 
-/* 按钮禁用状态 - 与WordReview一致 */
-.button:disabled {
-  opacity: 0.6;
+.action-btn:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
 }
 
-.full-width {
-  width: 100%;
+.btn-icon-svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
 }
 
-.play-btn {
-  background-color: var(--color-primary);
+.btn-icon-arrow {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.btn-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* 播放按钮 */
+.action-btn.play {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.action-btn.play:hover {
+  background: var(--color-primary);
   color: white;
 }
 
-.play-btn:hover:not(:disabled):not(.hidden) {
-  background-color: var(--color-primary-hover);
+/* 提示按钮 */
+.action-btn.reveal {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
 }
 
-.forgot-btn {
-  background-color: var(--color-primary);
+.action-btn.reveal:hover:not(:disabled) {
+  background: var(--color-warning);
   color: white;
 }
 
-.forgot-btn:hover:not(:disabled):not(.hidden) {
-  background-color: var(--color-primary-hover);
+/* 下一个按钮 */
+.action-btn.next {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
 }
 
-.next-btn {
-  background-color: var(--color-success);
+.action-btn.next.ready {
+  background: var(--color-success);
   color: white;
-  font-size: 1.1em;
+  animation: pulse 2s infinite;
 }
 
-.next-btn:hover:not(:disabled):not(.hidden) {
-  background-color: var(--color-success-hover);
+.action-btn.next.ready:hover {
+  animation: none;
+  background: var(--color-success-hover);
 }
 
-/* 移动端适配 */
-@media (max-width: 480px) {
-  .word-spelling-container {
-    padding-bottom: 2em;
-    margin: 1em auto;
+/* ══════════════════════════════════════════════════════════════════════════
+   动画
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(93, 122, 93, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(93, 122, 93, 0);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .spelling-card {
+    padding: 0 1rem;
   }
 
-  .definition-container {
-    position: fixed;
-    top: calc(44px + 1rem); /* TopBar 高度 + 间距 */
-    bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 2rem);
-    max-width: 600px;
-    min-height: auto;
-    max-height: calc(100vh - 44px - 14rem - 3rem - 2rem); /* 屏幕高度 - TopBar - 键盘高度(4行*3rem+间距) - 输入框 - 间距 */
-    overflow-y: auto;
-    font-weight: 600;
-    font-size: 1.1em;
-    padding: 1em;
-    z-index: 500;
+  .definition-area {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
   }
 
-  .spelling-input-container {
-    bottom: calc(14rem + 1rem); /* 键盘高度(4行*3rem+间距+padding) + 间距 */
+  .definition-item {
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .def-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.7rem;
+  }
+
+  .def-content {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .input-area {
+    padding: 1rem 0;
+    padding-bottom: calc(13rem + 1rem);
   }
 
   .spelling-input {
-    font-size: 1.4em;
-    padding: 0.6em;
+    font-size: 1.3rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .indicator-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .input-hint {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .definition-container {
-    top: calc(48px + 0.75rem); /* TopBar 高度 + 间距 */
-    max-height: calc(100vh - 48px - 13rem - 3rem - 1.5rem); /* 屏幕高度 - TopBar - 键盘(4行*2.8rem+间距) - 输入框 - 间距 */
-    font-size: 1em;
-    padding: 0.75em;
+  .definition-item {
+    padding: 0.75rem 0.875rem;
+    margin-bottom: 0.5rem;
   }
 
-  .spelling-input-container {
-    bottom: calc(13rem + 0.75rem); /* 键盘高度(4行*2.8rem+间距+padding) + 间距 */
+  .def-content {
+    font-size: 0.9rem;
+  }
+
+  .input-area {
+    padding-bottom: calc(12.5rem + 0.75rem);
   }
 
   .spelling-input {
-    font-size: 1.2em;
-    padding: 0.5em;
+    font-size: 1.2rem;
+    padding: 0.625rem 0.75rem;
   }
 
-  .word-spelling-container {
-    padding-bottom: 2em;
+  .input-wrapper {
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* 横屏适配 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .definition-area {
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .definition-item {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .def-content {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .input-area {
+    padding: 0.5rem 0;
+    padding-bottom: 75px;
+  }
+
+  .spelling-input {
+    font-size: 1.1rem;
+    padding: 0.4rem 0.625rem;
+  }
+
+  .action-bar {
+    padding: 0.5rem;
+  }
+
+  .action-btn {
+    padding: 0.4rem 1rem;
+    flex-direction: row;
+    gap: 0.4rem;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+  }
+
+  .btn-label {
+    font-size: 0.7rem;
   }
 }
 </style>

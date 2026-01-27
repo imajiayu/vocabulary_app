@@ -30,7 +30,7 @@ def _extract_definitions(definition_json: str) -> str:
         return ""
 
 
-def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: Optional[int] = None, max_depth: int = 2):
+def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: Optional[int] = None, max_depth: int = 2, user_id: int = 1):
     """
     获取单词关系图数据（双向存储下的去重实现）
 
@@ -38,6 +38,7 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
     - relation_types: 关系类型列表 (None表示全部)
     - word_id: 中心单词ID (None表示全部单词)
     - max_depth: 关系深度 (1-3)
+    - user_id: 用户ID
 
     返回:
     {
@@ -63,8 +64,8 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
             while queue:
                 current_id, depth = queue.pop(0)
 
-                # 获取当前单词信息
-                word = db.query(Word).filter(Word.id == current_id).first()
+                # 获取当前单词信息（按用户过滤）
+                word = db.query(Word).filter(Word.id == current_id, Word.user_id == user_id).first()
                 if not word:
                     continue
 
@@ -78,7 +79,8 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
                 if depth < max_depth:
                     # 只查询正向关系（因为双向存储，只需查一个方向即可）
                     relations_query = db.query(WordRelation).filter(
-                        WordRelation.word_id == current_id
+                        WordRelation.word_id == current_id,
+                        WordRelation.user_id == user_id
                     )
 
                     # 过滤关系类型
@@ -105,8 +107,8 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
 
                         edge_set.add(edge_key)
 
-                        # 获取关联单词
-                        related_word = db.query(Word).filter(Word.id == target_id).first()
+                        # 获取关联单词（按用户过滤）
+                        related_word = db.query(Word).filter(Word.id == target_id, Word.user_id == user_id).first()
                         if not related_word:
                             continue
 
@@ -123,8 +125,8 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
                             visited_words.add(target_id)
                             queue.append((target_id, depth + 1))
         else:
-            # 获取所有单词
-            words = db.query(Word).all()
+            # 获取当前用户的所有单词
+            words = db.query(Word).filter(Word.user_id == user_id).all()
 
             # 构建nodes
             word_id_set = {w.id for w in words}
@@ -138,6 +140,7 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
 
             # 获取所有关系（只查询 word_id < related_word_id 的记录，自然去重）
             relations_query = db.query(WordRelation).filter(
+                WordRelation.user_id == user_id,
                 WordRelation.word_id < WordRelation.related_word_id
             )
 
@@ -165,15 +168,23 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
         }
 
 
-def db_add_relation(word_id: int, related_word_id: int, relation_type: str, confidence: float = 1.0):
+def db_add_relation(word_id: int, related_word_id: int, relation_type: str, confidence: float = 1.0, user_id: int = 1):
     """
     添加单条关系（双向存储实现）
     - 同时创建正向和反向两条记录
     - 实现无向图语义
+
+    Args:
+        word_id: 单词ID
+        related_word_id: 关联单词ID
+        relation_type: 关系类型
+        confidence: 置信度
+        user_id: 用户ID
     """
     with get_session() as db:
-        # 检查是否已存在（正向或反向都检查）
+        # 检查是否已存在（正向或反向都检查，按用户过滤）
         existing = db.query(WordRelation).filter(
+            WordRelation.user_id == user_id,
             or_(
                 and_(
                     WordRelation.word_id == word_id,
@@ -191,9 +202,9 @@ def db_add_relation(word_id: int, related_word_id: int, relation_type: str, conf
         if existing:
             return {"success": False, "message": "关系已存在"}
 
-        # 检查单词是否存在
-        word = db.query(Word).filter(Word.id == word_id).first()
-        related_word = db.query(Word).filter(Word.id == related_word_id).first()
+        # 检查单词是否存在（按用户过滤）
+        word = db.query(Word).filter(Word.id == word_id, Word.user_id == user_id).first()
+        related_word = db.query(Word).filter(Word.id == related_word_id, Word.user_id == user_id).first()
 
         if not word or not related_word:
             return {"success": False, "message": "单词不存在"}
@@ -204,7 +215,8 @@ def db_add_relation(word_id: int, related_word_id: int, relation_type: str, conf
             word_id=word_id,
             related_word_id=related_word_id,
             relation_type=RelationType[relation_type],
-            confidence=confidence
+            confidence=confidence,
+            user_id=user_id
         )
 
         # 反向关系
@@ -212,7 +224,8 @@ def db_add_relation(word_id: int, related_word_id: int, relation_type: str, conf
             word_id=related_word_id,
             related_word_id=word_id,
             relation_type=RelationType[relation_type],
-            confidence=confidence
+            confidence=confidence,
+            user_id=user_id
         )
 
         db.add(relation_forward)
@@ -231,15 +244,22 @@ def db_add_relation(word_id: int, related_word_id: int, relation_type: str, conf
         }
 
 
-def db_delete_relation(word_id: int, related_word_id: int, relation_type: str):
+def db_delete_relation(word_id: int, related_word_id: int, relation_type: str, user_id: int = 1):
     """
     删除单条关系（双向删除实现）
     - 同时删除正向和反向两条记录
     - 实现无向图语义
+
+    Args:
+        word_id: 单词ID
+        related_word_id: 关联单词ID
+        relation_type: 关系类型
+        user_id: 用户ID
     """
     with get_session() as db:
-        # 查找正向和反向关系
+        # 查找正向和反向关系（按用户过滤）
         relations = db.query(WordRelation).filter(
+            WordRelation.user_id == user_id,
             or_(
                 and_(
                     WordRelation.word_id == word_id,
@@ -266,7 +286,7 @@ def db_delete_relation(word_id: int, related_word_id: int, relation_type: str):
         return {"success": True, "message": f"关系已删除（删除了 {len(relations)} 条数据库记录）"}
 
 
-def db_get_relation_stats():
+def db_get_relation_stats(user_id: int = 1):
     """
     获取关系统计信息（去重后的实际关系数）
 
@@ -277,21 +297,22 @@ def db_get_relation_stats():
         stats = {}
 
         for rel_type in RelationType:
-            # 统计数据库记录数
+            # 统计数据库记录数（按用户过滤）
             db_count = db.query(WordRelation).filter(
+                WordRelation.user_id == user_id,
                 WordRelation.relation_type == rel_type
             ).count()
             # 除以2得到实际关系数（因为每条关系存储了正向+反向）
             stats[rel_type.value] = db_count // 2
 
         # 总数也需要除以2
-        total_db_count = db.query(WordRelation).count()
+        total_db_count = db.query(WordRelation).filter(WordRelation.user_id == user_id).count()
         stats['total'] = total_db_count // 2
 
         return stats
 
 
-def db_get_all_words():
+def db_get_all_words(user_id: int = 1):
     """
     获取所有单词列表（用于关系生成）
 
@@ -299,7 +320,7 @@ def db_get_all_words():
     - List[Word]: 单词对象列表
     """
     with get_session() as db:
-        words = db.query(Word).all()
+        words = db.query(Word).filter(Word.user_id == user_id).all()
         # 返回副本，避免session关闭后访问问题
         return [
             {
@@ -313,12 +334,13 @@ def db_get_all_words():
 
 
 
-def db_get_unprocessed_word_ids(relation_type: RelationType) -> List[int]:
+def db_get_unprocessed_word_ids(relation_type: RelationType, user_id: int = 1) -> List[int]:
     """
     获取指定关系类型中尚未处理的单词ID列表
 
     参数:
     - relation_type: 关系类型
+    - user_id: 用户ID
 
     返回:
     - List[int]: 未处理的word_id列表
@@ -327,20 +349,22 @@ def db_get_unprocessed_word_ids(relation_type: RelationType) -> List[int]:
     from sqlalchemy import select
 
     with get_session() as db:
-        # 子查询：已处理的word_id
+        # 子查询：该用户已处理的word_id
         processed_subquery = select(RelationGenerationLog.word_id).filter(
-            RelationGenerationLog.relation_type == relation_type
+            RelationGenerationLog.relation_type == relation_type,
+            RelationGenerationLog.user_id == user_id
         ).scalar_subquery()
 
-        # 主查询：找出所有未在日志中的单词
+        # 主查询：找出该用户所有未在日志中的单词
         unprocessed_words = db.query(Word.id).filter(
+            Word.user_id == user_id,
             ~Word.id.in_(processed_subquery)
         ).all()
 
         return [w[0] for w in unprocessed_words]
 
 
-def db_mark_words_processed(word_ids: List[int], relation_type: RelationType, found_counts: Dict[int, int] = None):
+def db_mark_words_processed(word_ids: List[int], relation_type: RelationType, found_counts: Dict[int, int] = None, user_id: int = 1):
     """
     标记单词为已处理状态
 
@@ -348,6 +372,7 @@ def db_mark_words_processed(word_ids: List[int], relation_type: RelationType, fo
     - word_ids: 单词ID列表
     - relation_type: 关系类型
     - found_counts: 每个单词找到的关系数 {word_id: count}
+    - user_id: 用户ID
     """
     from backend.models.word import RelationGenerationLog
     from datetime import datetime
@@ -360,6 +385,7 @@ def db_mark_words_processed(word_ids: List[int], relation_type: RelationType, fo
         logs = []
         for word_id in word_ids:
             logs.append({
+                'user_id': user_id,
                 'word_id': word_id,
                 'relation_type': relation_type,
                 'processed_at': datetime.now(),
@@ -372,7 +398,7 @@ def db_mark_words_processed(word_ids: List[int], relation_type: RelationType, fo
         db.commit()
 
 
-def db_check_relation_exists(word_id: int, related_word_id: int, relation_type: RelationType) -> bool:
+def db_check_relation_exists(word_id: int, related_word_id: int, relation_type: RelationType, user_id: int = 1) -> bool:
     """
     检查关系是否已存在（检查正向或反向任一方向）
 
@@ -380,12 +406,14 @@ def db_check_relation_exists(word_id: int, related_word_id: int, relation_type: 
     - word_id: 单词ID
     - related_word_id: 关联单词ID
     - relation_type: 关系类型
+    - user_id: 用户ID
 
     返回:
     - bool: 关系是否存在
     """
     with get_session() as db:
         exists = db.query(WordRelation).filter(
+            WordRelation.user_id == user_id,
             or_(
                 and_(
                     WordRelation.word_id == word_id,
@@ -402,7 +430,7 @@ def db_check_relation_exists(word_id: int, related_word_id: int, relation_type: 
         return exists is not None
 
 
-def db_batch_check_relations_exist(relations_data: List[Dict]) -> Dict:
+def db_batch_check_relations_exist(relations_data: List[Dict], user_id: int = 1) -> Dict:
     """
     批量检查关系是否存在（分批处理以避免SQL表达式树过深）
 
@@ -413,6 +441,7 @@ def db_batch_check_relations_exist(relations_data: List[Dict]) -> Dict:
           'related_word_id': int,
           'relation_type': RelationType
       }
+    - user_id: 用户ID
 
     返回:
     - Dict: 键为 (word_id, related_word_id, relation_type)，值为 bool
@@ -453,7 +482,10 @@ def db_batch_check_relations_exist(relations_data: List[Dict]) -> Dict:
                     WordRelation.word_id,
                     WordRelation.related_word_id,
                     WordRelation.relation_type
-                ).filter(or_(*conditions)).all()
+                ).filter(
+                    WordRelation.user_id == user_id,
+                    or_(*conditions)
+                ).all()
 
                 # 构建存在性字典
                 exists_dict = {}

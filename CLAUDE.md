@@ -25,12 +25,14 @@ cd frontend && npm run dev
 
 ```
 app.py              # Flask 入口
-api/                # 蓝图 (vocabulary, speaking, settings, relations)
+api/                # 蓝图 (vocabulary, settings, relations)
 core/               # SM-2 算法、拼写强度算法
 database/           # DAO 层
-services/           # 业务逻辑 (storage_service, progress_service)
+services/           # 业务逻辑 (progress_service, word_update_service)
 models/             # SQLAlchemy 模型
 ```
+
+> 注：口语模块已迁移到前端直连 Supabase，不再经过后端
 
 ### 前端 `frontend/src/` (Feature-Sliced Design)
 
@@ -53,12 +55,20 @@ CSS 变量定义在 `shared/styles/tokens.css`：颜色、圆角、间距
 
 ## 环境变量
 
+**后端 (.env)**
 ```
 DATABASE_URL=postgresql://...
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_SERVICE_KEY=...
 SECRET_KEY=...
-OPENAI_API_KEY=...
+```
+
+**前端 (.env.local)**
+```
+VITE_SUPABASE_URL=https://xxx.supabase.co
+VITE_SUPABASE_ANON_KEY=...
+VITE_DEEPSEEK_API_KEY=...
+VITE_OPENAI_API_KEY=...  # 可选，用于语音转录
 ```
 
 ## 开发规范
@@ -67,8 +77,15 @@ OPENAI_API_KEY=...
 - 组件通信：浅层用 Props/Emit，深层用 Context，跨模块用 Pinia
 - 样式优先使用 CSS 变量
 
+## 核心文档
+
+- **[复习系统深度分析](docs/review-system-analysis.md)** - SM-2算法、错题处理、拼写评分的完整逻辑
+- **[口语模块架构](docs/speaking-module.md)** - 前端直连架构、在线转录 API 接入计划
+
 ## 注意事项
 
 - Vercel Serverless 不支持后台线程
 - 词汇关系生成改为本地脚本 (`scripts/generate_relations_local.py`)
 - 释义获取改为前端同步调用
+- 口语模块前端直连 Supabase（DB + Storage）和 DeepSeek（AI 评分）
+- 语音转录待接入在线 API（推荐 gpt-4o-mini-transcribe，$0.003/分钟）

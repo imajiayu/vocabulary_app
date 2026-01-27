@@ -10,7 +10,7 @@ from backend.extensions import get_session
 from backend.models.word import Word
 
 
-def db_get_source_stats_from_view(source: str):
+def db_get_source_stats_from_view(source: str, user_id: int = 1):
     """
     从 word_source_stats view 获取单个 source 的统计数据
 
@@ -18,6 +18,7 @@ def db_get_source_stats_from_view(source: str):
 
     Args:
         source: 单词来源 (如 "IELTS", "GRE")
+        user_id: 用户ID
 
     Returns:
         dict: {
@@ -27,13 +28,13 @@ def db_get_source_stats_from_view(source: str):
     """
     from backend.config import UserConfig
 
-    config = UserConfig()
+    config = UserConfig(user_id)
     low_ef_extra_count = config.LOW_EF_EXTRA_COUNT
 
     with get_session() as db:
         result = db.execute(
-            text("SELECT * FROM word_source_stats WHERE source = :source"),
-            {"source": source}
+            text("SELECT * FROM word_source_stats WHERE source = :source AND user_id = :user_id"),
+            {"source": source, "user_id": user_id}
         ).fetchone()
 
         if result is None:
@@ -57,7 +58,7 @@ def db_get_source_stats_from_view(source: str):
         }
 
 
-def db_get_source_statistics():
+def db_get_source_statistics(user_id: int = 1):
     """Get statistics for each source
 
     优化：使用单次分组查询代替 N×2 次循环查询
@@ -66,13 +67,14 @@ def db_get_source_statistics():
     from backend.config import UserConfig
 
     with get_session() as db:
-        # 单次分组查询获取所有 source 的统计
+        # 单次分组查询获取所有 source 的统计（按用户过滤）
         results = (
             db.query(
                 Word.source,
                 func.count(Word.id).label("total"),
                 func.sum(case((Word.stop_review == 1, 1), else_=0)).label("remembered"),
             )
+            .filter(Word.user_id == user_id)
             .group_by(Word.source)
             .all()
         )
@@ -82,7 +84,7 @@ def db_get_source_statistics():
 
         # 确保所有配置的 source 都有数据（即使为空）
         stats = {}
-        for source in UserConfig().CUSTOM_SOURCES:
+        for source in UserConfig(user_id).CUSTOM_SOURCES:
             data = stats_map.get(source, {"total": 0, "remembered": 0})
             stats[source] = {
                 "total": data["total"],
@@ -93,7 +95,7 @@ def db_get_source_statistics():
         return stats
 
 
-def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
+def get_daily_review_loads_by_source(source, base_date, days_ahead=45, user_id=1):
     """获取指定source未来每日的复习负荷
 
     优化：使用单次分组查询代替 45-90 次循环查询
@@ -102,10 +104,11 @@ def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
         # 计算日期范围
         future_dates = [base_date + timedelta(days=i) for i in range(1, days_ahead + 1)]
 
-        # 单次分组查询获取所有日期的计数
+        # 单次分组查询获取所有日期的计数（按用户过滤）
         results = (
             db.query(Word.next_review, func.count(Word.id))
             .filter(
+                Word.user_id == user_id,
                 Word.source == source,
                 Word.stop_review == 0,
                 Word.next_review.in_(future_dates),
@@ -121,7 +124,7 @@ def get_daily_review_loads_by_source(source, base_date, days_ahead=45):
         return [date_counts.get(date, 0) for date in future_dates]
 
 
-def get_daily_spell_loads_by_source(source, base_date, days_ahead=45):
+def get_daily_spell_loads_by_source(source, base_date, days_ahead=45, user_id=1):
     """获取指定source未来每日的拼写负荷
 
     优化：使用单次分组查询代替 45-90 次循环查询
@@ -130,10 +133,11 @@ def get_daily_spell_loads_by_source(source, base_date, days_ahead=45):
         # 计算日期范围
         future_dates = [base_date + timedelta(days=i) for i in range(1, days_ahead + 1)]
 
-        # 单次分组查询获取所有日期的计数
+        # 单次分组查询获取所有日期的计数（按用户过滤）
         results = (
             db.query(Word.spell_next_review, func.count(Word.id))
             .filter(
+                Word.user_id == user_id,
                 Word.source == source,
                 Word.stop_review == 0,
                 Word.spell_next_review.in_(future_dates),

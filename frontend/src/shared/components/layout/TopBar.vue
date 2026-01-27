@@ -18,10 +18,10 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  background: '#fff',
+  background: 'transparent',
   height: 'var(--topbar-height)',
   sticky: true,
-  border: '1px solid var(--color-border-medium)',
+  border: 'none',
   padding: '0 var(--spacing-md)',
   showHomeButton: false,
   homeButtonText: '返回首页',
@@ -57,7 +57,7 @@ const dropdownItems = computed<DropdownItem[]>(() => {
     items.push({
       key: 'home',
       label: props.homeButtonText,
-      icon: '🏠',
+      icon: 'home',
       disabled: isNavigating.value,
       action: goHome
     })
@@ -66,7 +66,7 @@ const dropdownItems = computed<DropdownItem[]>(() => {
     items.push({
       key: 'management',
       label: '管理单词',
-      icon: '➕',
+      icon: 'plus-circle',
       action: goManagement
     })
   }
@@ -74,7 +74,7 @@ const dropdownItems = computed<DropdownItem[]>(() => {
     items.push({
       key: 'stats',
       label: '查看统计',
-      icon: '📈',
+      icon: 'chart',
       action: goStats
     })
   }
@@ -129,282 +129,407 @@ const goStats = () => {
     class="top-bar"
     :class="{ sticky: props.sticky }"
     :style="{
-      background: props.background,
-      height: computedHeight,
-      borderBottom: props.border,
+      '--bar-height': computedHeight,
       padding: props.padding
     }"
   >
-    <!-- 左侧区域 -->
-    <div class="top-bar-section left">
-      <!-- 桌面端：独立按钮 -->
-      <template v-if="!isMobile">
-        <!-- 内置返回首页按钮 -->
-        <button
-          v-if="props.showHomeButton"
-          @click="goHome"
-          class="home-button"
-          :disabled="isNavigating"
-        >
-          <span v-if="!isNavigating">{{ props.homeButtonText }}</span>
-          <span v-else class="loading-text">
-            <span class="loading-dot"></span>
-            返回中...
-          </span>
-        </button>
+    <!-- 装饰性墨水线 -->
+    <div class="ink-line ink-line--top"></div>
 
-        <!-- 管理单词按钮 -->
-        <button
-          v-if="props.showManagementButton"
-          @click="goManagement"
-          class="icon-button"
-          title="管理单词"
-        >
-          ➕
-        </button>
+    <!-- 主内容容器 -->
+    <div class="bar-content">
+      <!-- 左侧区域 -->
+      <div class="bar-section bar-section--left">
+        <!-- 桌面端：优雅的导航按钮 -->
+        <template v-if="!isMobile">
+          <!-- 返回首页按钮 -->
+          <button
+            v-if="props.showHomeButton"
+            @click="goHome"
+            class="nav-button nav-button--primary"
+            :disabled="isNavigating"
+          >
+            <span class="button-icon">←</span>
+            <span v-if="!isNavigating" class="button-label">{{ props.homeButtonText }}</span>
+            <span v-else class="button-label loading">
+              <span class="loading-dot"></span>
+              返回中
+            </span>
+          </button>
 
-        <!-- 查看统计按钮 -->
-        <button
-          v-if="props.showStatsButton"
-          @click="goStats"
-          class="icon-button"
-          title="查看统计"
-        >
-          📈
-        </button>
-      </template>
+          <!-- 快捷操作按钮组 -->
+          <div v-if="props.showManagementButton || props.showStatsButton" class="quick-actions">
+            <button
+              v-if="props.showManagementButton"
+              @click="goManagement"
+              class="action-chip"
+              title="管理单词"
+            >
+              <span class="chip-icon">✦</span>
+              <span class="chip-text">管理</span>
+            </button>
 
-      <!-- 移动端：下拉菜单 -->
-      <template v-else>
-        <TopBarDropdown
-          v-if="dropdownItems.length > 0"
-          :items="dropdownItems"
-        />
-      </template>
+            <button
+              v-if="props.showStatsButton"
+              @click="goStats"
+              class="action-chip"
+              title="查看统计"
+            >
+              <span class="chip-icon">◈</span>
+              <span class="chip-text">统计</span>
+            </button>
+          </div>
+        </template>
 
-      <slot name="left" />
+        <!-- 移动端：下拉菜单 -->
+        <template v-else>
+          <TopBarDropdown
+            v-if="dropdownItems.length > 0"
+            :items="dropdownItems"
+          />
+        </template>
+
+        <slot name="left" />
+      </div>
+
+      <!-- 中间区域 - 标题/信息展示 -->
+      <div class="bar-section bar-section--center">
+        <slot name="center" />
+        <slot v-if="!$slots.center" />
+      </div>
+
+      <!-- 右侧区域 -->
+      <div class="bar-section bar-section--right">
+        <slot name="right" />
+      </div>
     </div>
 
-    <!-- 中间区域 -->
-    <div class="top-bar-section center">
-      <slot name="center" />
-      <slot v-if="!$slots.center" />
-    </div>
-
-    <!-- 右侧区域 -->
-    <div class="top-bar-section right">
-      <slot name="right" />
-    </div>
+    <!-- 底部装饰线 -->
+    <div class="ink-line ink-line--bottom"></div>
   </header>
 </template>
 
 <style scoped>
+/* ═══════════════════════════════════════════════════════════════════════════
+   TopBar - 浮动编辑台风格
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .top-bar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 三等分布局确保居中 */
-  align-items: center;
-  z-index: 10;
+  --bar-height: 56px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  min-height: var(--bar-height);
+  background: linear-gradient(
+    180deg,
+    var(--primitive-paper-100) 0%,
+    var(--primitive-paper-200) 100%
+  );
   box-sizing: border-box;
-  background: var(--color-bg-primary);
-  border-bottom: 1px solid var(--color-border-medium);
-  box-shadow: 0 1px 4px rgba(45, 55, 72, 0.04);
+  z-index: 10;
 }
 
 .top-bar.sticky {
-  position: fixed;  /* 改为固定定位 */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;   /* 提高层级确保在最上层 */
+  z-index: 1000;
+  box-shadow:
+    0 4px 20px rgba(139, 105, 20, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* 左中右 */
-.top-bar-section.left {
+/* ── 装饰性墨水线 ── */
+.ink-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.ink-line--top {
+  top: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--primitive-copper-200) 20%,
+    var(--primitive-copper-300) 50%,
+    var(--primitive-copper-200) 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+.ink-line--bottom {
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--primitive-paper-400) 15%,
+    var(--primitive-paper-500) 50%,
+    var(--primitive-paper-400) 85%,
+    transparent 100%
+  );
+}
+
+/* ── 主内容容器 ── */
+.bar-content {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+}
+
+/* ── 区块布局 ── */
+.bar-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.bar-section--left {
   justify-self: start;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0; /* 允许收缩 */
-  overflow: visible; /* 允许内容溢出 */
 }
 
-.top-bar-section.center {
+.bar-section--center {
   justify-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* 确保内容居中 */
-  gap: 8px;
-  min-width: 0; /* 允许收缩 */
-  overflow: hidden; /* 防止标题溢出 */
+  justify-content: center;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.top-bar-section.right {
+.bar-section--right {
   justify-self: end;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0; /* 允许收缩 */
-  overflow: visible; /* 允许内容溢出 */
+  justify-content: flex-end;
 }
 
-/* 内置返回首页按钮样式 */
-.home-button {
-  background: var(--gradient-primary);
-  border: none;
-  color: var(--color-text-inverse);
-  font: inherit;
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ═══════════════════════════════════════════════════════════════════════════
+   导航按钮 - 主按钮
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.nav-button {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-width: 76px;
-  justify-content: center;
-  font-size: 13px;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-full);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
   font-weight: 500;
-  box-shadow: 0 2px 6px rgba(153, 107, 61, 0.2);
-  /* 触摸优化 */
-  touch-action: manipulation; /* 防止双击缩放 */
-  user-select: none; /* 防止文本选择 */
-  -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
-}
-
-/* 图标按钮样式 */
-.icon-button {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border-light);
-  color: var(--color-text-secondary);
-  font-size: 16px;
   cursor: pointer;
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  min-height: 32px;
-  /* 触摸优化 */
-  touch-action: manipulation;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
 }
 
-.icon-button:hover {
-  background: rgba(255, 255, 255, 1);
-  border-color: rgba(102, 126, 234, 0.3);
+.nav-button--primary {
+  background: var(--primitive-paper-50);
+  color: var(--primitive-copper-600);
+  box-shadow:
+    0 1px 3px rgba(139, 105, 20, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--primitive-copper-200);
+}
+
+/* 墨水晕染效果 */
+.nav-button--primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    var(--primitive-copper-100) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-button--primary:hover::before {
+  opacity: 1;
+}
+
+.nav-button--primary:hover {
+  background: var(--primitive-paper-50);
+  border-color: var(--primitive-copper-300);
+  color: var(--primitive-copper-700);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 4px 12px rgba(139, 105, 20, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.icon-button:active {
+.nav-button--primary:active {
   transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 1px 2px rgba(139, 105, 20, 0.1),
+    inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.home-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-  background: var(--gradient-primary);
-}
-
-.home-button:active:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}
-
-.home-button:disabled {
-  opacity: 0.7;
+.nav-button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
 
-.loading-text {
+.button-icon {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.nav-button:hover .button-icon {
+  transform: translateX(-2px);
+}
+
+.button-label {
+  position: relative;
+  z-index: 1;
+}
+
+.button-label.loading {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 0.375rem;
 }
 
 .loading-dot {
   width: 4px;
   height: 4px;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
   background: currentColor;
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse-dot 1.2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.8);
-  }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
 }
 
-/* 工具类样式 */
-:deep(.nav-link) {
+/* ═══════════════════════════════════════════════════════════════════════════
+   快捷操作按钮组
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.quick-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: var(--color-primary);
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  transition: color 0.2s ease;
-  /* 移动端文本优化 */
+  gap: 0.375rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--primitive-paper-400);
+}
+
+.action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.625rem;
+  border: none;
+  background: transparent;
+  color: var(--primitive-ink-500);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-chip:hover {
+  background: var(--primitive-paper-300);
+  color: var(--primitive-copper-600);
+}
+
+.action-chip:active {
+  background: var(--primitive-paper-400);
+  transform: scale(0.96);
+}
+
+.chip-icon {
+  font-size: 0.625rem;
+  opacity: 0.7;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.action-chip:hover .chip-icon {
+  opacity: 1;
+  transform: rotate(15deg);
+}
+
+.chip-text {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   插槽内容样式
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:deep(.title) {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--primitive-ink-700);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+:deep(.subtitle) {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--primitive-ink-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:deep(.nav-link) {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--primitive-copper-600);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  white-space: nowrap;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
 :deep(.nav-link:hover) {
-  color: var(--color-primary-hover);
-}
-
-:deep(.title) {
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--color-text-primary);
-  /* 移动端文本优化 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%; /* 充分利用可用宽度 */
-  text-align: center; /* 居中对齐 */
-}
-
-:deep(.subtitle) {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  /* 移动端文本优化 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%; /* 充分利用可用宽度 */
-  text-align: center; /* 居中对齐 */
+  color: var(--primitive-copper-700);
 }
 
 :deep(.button) {
-  padding: 4px 12px;
+  padding: 0.375rem 0.75rem;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border-medium);
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  font-size: 14px;
+  border: 1px solid var(--primitive-paper-400);
+  background: var(--primitive-paper-50);
+  color: var(--primitive-ink-600);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  /* 移动端按钮优化 */
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -416,149 +541,138 @@ const goStats = () => {
 }
 
 :deep(.button:hover) {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--primitive-copper-300);
+  color: var(--primitive-copper-600);
+  background: var(--primitive-paper-100);
 }
 
 :deep(.button.primary) {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--primitive-paper-50);
+  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.2);
 }
 
 :deep(.button.primary:hover) {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.3);
+  transform: translateY(-1px);
 }
 
-/* 手机端工具类样式适配 */
-@media (max-width: 480px) {
-  :deep(.nav-link) {
-    font-size: 13px;
-    gap: 2px;
+/* ═══════════════════════════════════════════════════════════════════════════
+   进度文本
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:deep(.progress-text) {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primitive-ink-600);
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0.625rem;
+  background: var(--primitive-paper-300);
+  border-radius: var(--radius-full);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .top-bar {
+    --bar-height: 52px;
+  }
+
+  .bar-content {
+    padding: 0.375rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .ink-line {
+    width: calc(100% - 1.5rem);
+  }
+
+  .nav-button--primary {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .button-icon {
+    font-size: 0.875rem;
+  }
+
+  .quick-actions {
+    display: none;
   }
 
   :deep(.title) {
-    font-size: 14px;
+    font-size: 0.9375rem;
   }
 
   :deep(.subtitle) {
-    font-size: 12px;
-  }
-
-  :deep(.button) {
-    padding: 6px 8px;
-    font-size: 12px;
-    min-height: 32px;
+    font-size: 0.75rem;
   }
 
   :deep(.progress-text) {
-    font-size: 11px;
-    white-space: nowrap;
+    font-size: 0.6875rem;
+    padding: 0.1875rem 0.5rem;
   }
 }
 
-/* 深色主题适配 */
-@media (prefers-color-scheme: dark) {
-  .home-button {
-    background: var(--gradient-primary-dark);
-    box-shadow: 0 2px 8px rgba(76, 99, 210, 0.3);
-  }
-
-  .home-button:hover:not(:disabled) {
-    background: var(--gradient-primary);
-    box-shadow: 0 4px 16px rgba(76, 99, 210, 0.4);
-  }
-}
-
-/* 手机端适配 */
 @media (max-width: 480px) {
   .top-bar {
-    padding: 0 8px;
-    height: auto !important;
-    min-height: 48px;
-    grid-template-columns: 1fr 1fr 1fr;
+    --bar-height: 48px;
   }
 
-  .home-button {
-    padding: 6px 8px;
-    font-size: 11px;
-    min-width: 64px;
-    min-height: 32px;
+  .bar-content {
+    padding: 0.25rem 0.5rem;
   }
 
-  .icon-button {
-    padding: 5px 7px;
-    font-size: 14px;
-    min-width: 30px;
-    min-height: 30px;
+  .bar-section {
+    gap: 0.5rem;
   }
 
-  .home-button:active {
-    background: var(--gradient-primary-active);
-    transform: scale(0.98);
-    box-shadow: 0 1px 4px rgba(102, 126, 234, 0.2);
+  :deep(.title) {
+    font-size: 0.875rem;
   }
 
-  .icon-button:active {
-    transform: scale(0.95);
-  }
-
-  .top-bar-section.left,
-  .top-bar-section.center,
-  .top-bar-section.right {
-    gap: 4px;
-  }
-
-  .top-bar-section.center {
-    justify-content: center;
-  }
-
-  /* SwitchTab 在 TopBar 右侧区域的紧凑样式 */
-  .top-bar-section.right :deep(.switch-tab-container) {
-    padding: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  .top-bar-section.right :deep(.switch-tab) {
-    padding: 4px 8px;
-    font-size: 11px;
-    min-height: auto;
-  }
-
-  .top-bar-section.right :deep(.tab-indicator) {
-    top: 2px;
-    height: calc(100% - 4px);
-  }
-}
-
-/* 横屏手机适配 */
-@media (max-height: 500px) and (orientation: landscape) {
-  .top-bar {
-    min-height: 40px;
-    padding: 0 16px;
-  }
-
-  .home-button {
-    padding: 6px 14px;
-    font-size: 13px;
+  :deep(.button) {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
     min-height: 28px;
   }
+}
 
-  .top-bar-section.left,
-  .top-bar-section.center,
-  .top-bar-section.right {
-    gap: 6px;
+/* ═══════════════════════════════════════════════════════════════════════════
+   横屏适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .top-bar {
+    --bar-height: 44px;
+  }
+
+  .bar-content {
+    padding: 0.25rem 1rem;
+  }
+
+  .nav-button--primary {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
   }
 }
 
-/* 无障碍支持 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   无障碍支持
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @media (prefers-reduced-motion: reduce) {
-  .home-button {
+  .nav-button,
+  .action-chip,
+  .ink-line {
     transition: none;
   }
 
-  .home-button:hover:not(:disabled) {
+  .nav-button:hover {
     transform: none;
   }
 
@@ -566,21 +680,26 @@ const goStats = () => {
     animation: none;
   }
 
-  .top-bar {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+  .nav-button::before {
+    display: none;
   }
 }
 
-/* 高对比度模式支持 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   高对比度模式
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @media (prefers-contrast: high) {
-  .home-button {
-    background: var(--color-primary);
-    border: 2px solid var(--primitive-paper-50);
+  .nav-button--primary {
+    border: 2px solid var(--primitive-copper-600);
+    background: var(--primitive-paper-50);
   }
 
-  .home-button:hover:not(:disabled) {
-    background: var(--color-primary-hover);
+  .ink-line--top,
+  .ink-line--bottom {
+    height: 2px;
+    background: var(--primitive-ink-400);
+    opacity: 1;
   }
 }
 </style>

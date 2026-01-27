@@ -27,6 +27,7 @@ class Word(Base):
     __tablename__ = "words"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, default=1)
     word = Column(String, nullable=False)
     definition = Column(String)
     date_added = Column(Date, default=date.today)
@@ -119,6 +120,7 @@ class WordRelation(Base):
     __tablename__ = "words_relations"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, default=1)
     word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     related_word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     relation_type = Column(Enum(RelationType, name="relation_type_enum", create_constraint=True), nullable=False)
@@ -143,6 +145,7 @@ class RelationGenerationLog(Base):
     __tablename__ = "relation_generation_log"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, default=1)
     word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     relation_type = Column(Enum(RelationType, name="relation_type_enum", create_constraint=True), nullable=False)
     processed_at = Column(DateTime, nullable=False)  # 处理时间
@@ -160,7 +163,8 @@ class RelationGenerationLog(Base):
 class Progress(Base):
     __tablename__ = "current_progress"
 
-    id = Column(Integer, primary_key=True, default=1)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, default=1)
     mode = Column(String(20), nullable=False)
     source = Column(String(10), nullable=False)
     shuffle = Column(Boolean, default=False)
@@ -169,7 +173,8 @@ class Progress(Base):
     initial_lapse_count = Column(Integer, default=0)  # lapse模式的初始总lapse数
     initial_lapse_word_count = Column(Integer, default=0)  # lapse模式的初始单词数量
 
-    __table_args__ = (CheckConstraint("id = 1", name="single_row_constraint"),)
+    # 多用户：每个用户一行记录，取消 id=1 约束
+    __table_args__ = (UniqueConstraint("user_id", name="unique_progress_per_user"),)
 
     def to_dict(self):
         return {
@@ -186,10 +191,10 @@ class Progress(Base):
         }
 
     @staticmethod
-    def from_dict(data):
+    def from_dict(data, user_id=1):
         """从字典创建Progress对象"""
         return Progress(
-            id=1,  # 固定为1
+            user_id=user_id,
             mode=data.get("mode"),
             source=data.get("source"),
             shuffle=data.get("shuffle", False),

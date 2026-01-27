@@ -1,103 +1,313 @@
 <template>
   <Loading v-if="loading" text="连接中..." />
-  <div v-else class="glass-card w-full word-index-container">
-    <!-- 进度恢复通知条 -->
-    <ProgressNotification
-      :show="showProgressNotification"
-      :progress-info="progressInfo"
-      @resume="resumeProgress"
-      @dismiss="dismissProgressNotification"
-    />
+  <div v-else class="word-index">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         桌面端布局
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div v-if="!isMobile" class="desktop-layout">
+      <!-- 左侧：来源切换竖排标签 -->
+      <aside class="source-rail">
+        <div class="rail-header">
+          <span class="rail-label">词库</span>
+        </div>
+        <div class="rail-tabs">
+          <button
+            v-for="source in availableSources"
+            :key="source"
+            :class="['rail-tab', { active: currentSource === source }]"
+            @click="handleSourceChange(source)"
+          >
+            <span class="tab-name">{{ source }}</span>
+            <span class="tab-count">{{ sourceStatsMap[source]?.total || 0 }}</span>
+          </button>
+        </div>
+      </aside>
 
-    <header class="text-center header-section">
-      <div class="header-with-switch">
-        <h1 class="text-3xl font-bold text-primary m-0 main-title">单词复习</h1>
-        <IOSSwitch v-model="shuffleModel" label="打乱顺序" class="shuffle-switch" />
+      <!-- 中央：主内容区 -->
+      <main class="main-content">
+        <!-- 进度恢复通知条 - 桌面端 -->
+        <ProgressNotification
+          :show="showProgressNotification"
+          :progress-info="progressInfo"
+          @resume="resumeProgress"
+          @dismiss="dismissProgressNotification"
+        />
+
+        <!-- 顶部标题栏 -->
+        <header class="title-bar">
+          <div class="title-group">
+            <h1 class="page-title">复习</h1>
+            <span class="title-divider"></span>
+            <span class="current-source">{{ currentSource }}</span>
+          </div>
+          <div class="title-actions">
+            <label class="shuffle-toggle">
+              <IOSSwitch v-model="shuffleModel" />
+              <span class="shuffle-label">打乱</span>
+            </label>
+          </div>
+        </header>
+
+        <!-- 英雄区：主复习按钮 -->
+        <section class="hero-section">
+          <Transition name="hero-card" mode="out-in">
+            <div :key="`hero-${currentSource}`" class="hero-card" @click="goto('mode_review')">
+              <!-- 装饰性背景 -->
+              <div class="hero-decoration">
+                <svg class="ink-splash" viewBox="0 0 200 200" preserveAspectRatio="none">
+                  <circle cx="100" cy="100" r="80" fill="url(#inkGradient)" opacity="0.08"/>
+                  <defs>
+                    <radialGradient id="inkGradient">
+                      <stop offset="0%" stop-color="var(--primitive-copper-500)"/>
+                      <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                  </defs>
+                </svg>
+              </div>
+
+              <!-- 弧形进度指示器 -->
+              <div class="arc-progress">
+                <svg viewBox="0 0 120 120" class="progress-ring">
+                  <circle
+                    class="progress-track"
+                    cx="60" cy="60" r="54"
+                    stroke-width="6"
+                    fill="none"
+                  />
+                  <circle
+                    class="progress-fill"
+                    cx="60" cy="60" r="54"
+                    stroke-width="6"
+                    fill="none"
+                    :stroke-dasharray="339.29"
+                    :stroke-dashoffset="339.29 * (1 - (reviewLimit / Math.max(counts.review, 1)))"
+                  />
+                </svg>
+                <div class="progress-center">
+                  <span class="progress-value">{{ reviewLimit }}</span>
+                  <span class="progress-total">/{{ counts.review }}</span>
+                </div>
+              </div>
+
+              <!-- 内容 -->
+              <div class="hero-content">
+                <div class="hero-icon">
+                  <AppIcon name="refresh" class="hero-icon-svg" />
+                </div>
+                <div class="hero-text">
+                  <h2 class="hero-title">复习已有</h2>
+                  <p class="hero-desc">继续巩固已学单词</p>
+                </div>
+              </div>
+
+              <!-- 滚轮选择器 -->
+              <div class="hero-wheel" @click.stop>
+                <WheelSelector
+                  :model-value="reviewLimit"
+                  :max="Math.min(counts.review, 500)"
+                  :display-max="counts.review"
+                  :min="0"
+                  @update:model-value="(v: number) => reviewLimit = Math.min(v, counts.review)"
+                />
+              </div>
+            </div>
+          </Transition>
+        </section>
+
+        <!-- 次要按钮网格 -->
+        <section class="secondary-grid">
+          <Transition name="card-slide" mode="out-in">
+            <div :key="`lapse-${currentSource}`" class="action-card action-card--lapse" @click="goto('mode_lapse')">
+              <div class="card-icon">
+                <AppIcon name="alert" class="card-icon-svg" />
+              </div>
+              <div class="card-body">
+                <span class="card-title">复习错题</span>
+                <span class="card-stats">{{ lapseLimit }}/{{ counts.lapse }}</span>
+              </div>
+              <div class="card-wheel" @click.stop>
+                <WheelSelector
+                  :model-value="lapseLimit"
+                  :max="Math.min(counts.lapse, 500)"
+                  :display-max="counts.lapse"
+                  :min="0"
+                  @update:model-value="(v: number) => lapseLimit = Math.min(v, counts.lapse)"
+                />
+              </div>
+            </div>
+          </Transition>
+
+          <Transition name="card-slide" mode="out-in">
+            <div :key="`spelling-${currentSource}`" class="action-card action-card--spelling" @click="goto('mode_spelling')">
+              <div class="card-icon">
+                <AppIcon name="keyboard" class="card-icon-svg" />
+              </div>
+              <div class="card-body">
+                <span class="card-title">拼写熟练</span>
+                <span class="card-stats">{{ spellingLimit }}/{{ counts.spelling }}</span>
+              </div>
+              <div class="card-wheel" @click.stop>
+                <WheelSelector
+                  :model-value="spellingLimit"
+                  :max="Math.min(counts.spelling, 500)"
+                  :display-max="counts.spelling"
+                  :min="0"
+                  @update:model-value="(v: number) => spellingLimit = Math.min(v, counts.spelling)"
+                />
+              </div>
+            </div>
+          </Transition>
+        </section>
+
+        <!-- 快捷入口 -->
+        <section class="quick-links">
+          <button class="quick-link" @click="goManagement">
+            <AppIcon name="plus-circle" class="link-icon-svg" />
+            <span class="link-text">管理单词</span>
+          </button>
+          <span class="link-separator">·</span>
+          <button class="quick-link" @click="goStats">
+            <AppIcon name="chart" class="link-icon-svg" />
+            <span class="link-text">查看统计</span>
+          </button>
+        </section>
+      </main>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         移动端布局
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div v-else class="mobile-layout">
+      <!-- 顶部区域 -->
+      <header class="mobile-header">
+        <div class="header-top">
+          <h1 class="mobile-title">复习</h1>
+          <label class="mobile-shuffle">
+            <span class="shuffle-text">打乱</span>
+            <IOSSwitch v-model="shuffleModel" />
+          </label>
+        </div>
+        <!-- 来源横向滚动 -->
+        <div class="source-scroll">
+          <button
+            v-for="source in availableSources"
+            :key="source"
+            :class="['source-chip', { active: currentSource === source }]"
+            @click="handleSourceChange(source)"
+          >
+            {{ source }}
+            <span class="chip-count">{{ sourceStatsMap[source]?.total || 0 }}</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 进度恢复通知条 - 移动端 -->
+      <div v-if="showProgressNotification" class="mobile-notification-wrapper">
+        <ProgressNotification
+          :show="showProgressNotification"
+          :progress-info="progressInfo"
+          @resume="resumeProgress"
+          @dismiss="dismissProgressNotification"
+        />
       </div>
-      <p class="text-sm text-secondary m-0 subtitle">选择一个模式开始练习，支持打乱顺序与单词数量设置</p>
-    </header>
 
-    <!-- 来源切换 tabs -->
-    <SwitchTab
-      v-model="currentSource"
-      :tabs="sourceTabs"
-      container-class="secondary-theme"
-      :show-indicator="true"
-      @change="handleSourceChange"
-      class="source-tabs"
-    />
+      <!-- 三个复习模式卡片 -->
+      <section class="mobile-cards">
+        <!-- 复习已有 -->
+        <Transition name="card-fade" mode="out-in">
+          <div :key="`m-review-${currentSource}`" class="mobile-card mobile-card--review" @click="goto('mode_review')">
+            <div class="card-left">
+              <span class="card-icon">
+                <AppIcon name="refresh" class="card-icon-svg" />
+              </span>
+              <div class="card-info">
+                <span class="card-title">复习已有</span>
+                <span class="card-count">{{ reviewLimit }}/{{ counts.review }}</span>
+              </div>
+            </div>
+            <div class="card-wheel" @click.stop>
+              <WheelSelector
+                :model-value="reviewLimit"
+                :max="Math.min(counts.review, 500)"
+                :display-max="counts.review"
+                :min="0"
+                @update:model-value="(v: number) => reviewLimit = Math.min(v, counts.review)"
+              />
+            </div>
+          </div>
+        </Transition>
 
-    <ButtonGrid>
-      <!-- Compact按钮容器 -->
-      <div class="compact-buttons-container">
-        <IndexButton
-          icon="➕"
-          title="管理单词"
-          variant="compact"
-          border-color="rgba(100, 149, 237, 0.2)"
-          background="transparent"
-          @click="goManagement"
-        />
+        <!-- 复习错题 -->
+        <Transition name="card-fade" mode="out-in">
+          <div :key="`m-lapse-${currentSource}`" class="mobile-card mobile-card--lapse" @click="goto('mode_lapse')">
+            <div class="card-left">
+              <span class="card-icon">
+                <AppIcon name="alert" class="card-icon-svg" />
+              </span>
+              <div class="card-info">
+                <span class="card-title">复习错题</span>
+                <span class="card-count">{{ lapseLimit }}/{{ counts.lapse }}</span>
+              </div>
+            </div>
+            <div class="card-wheel" @click.stop>
+              <WheelSelector
+                :model-value="lapseLimit"
+                :max="Math.min(counts.lapse, 500)"
+                :display-max="counts.lapse"
+                :min="0"
+                @update:model-value="(v: number) => lapseLimit = Math.min(v, counts.lapse)"
+              />
+            </div>
+          </div>
+        </Transition>
 
-        <IndexButton
-          icon="📈"
-          title="查看统计"
-          variant="compact"
-          border-color="rgba(112, 128, 144, 0.2)"
-          background="transparent"
-          @click="goStats"
-        />
-      </div>
+        <!-- 拼写熟练 -->
+        <Transition name="card-fade" mode="out-in">
+          <div :key="`m-spell-${currentSource}`" class="mobile-card mobile-card--spelling" @click="goto('mode_spelling')">
+            <div class="card-left">
+              <span class="card-icon">
+                <AppIcon name="keyboard" class="card-icon-svg" />
+              </span>
+              <div class="card-info">
+                <span class="card-title">拼写熟练</span>
+                <span class="card-count">{{ spellingLimit }}/{{ counts.spelling }}</span>
+              </div>
+            </div>
+            <div class="card-wheel" @click.stop>
+              <WheelSelector
+                :model-value="spellingLimit"
+                :max="Math.min(counts.spelling, 500)"
+                :display-max="counts.spelling"
+                :min="0"
+                @update:model-value="(v: number) => spellingLimit = Math.min(v, counts.spelling)"
+              />
+            </div>
+          </div>
+        </Transition>
+      </section>
 
-      <Transition name="review-button" mode="out-in">
-        <IndexButton
-          :key="`review-${currentSource}`"
-          icon="🔁"
-          title="复习已有"
-          v-model:wheelValue="reviewLimit"
-          :count="counts.review"
-          border-color="rgba(107, 142, 35, 0.2)"
-          background="transparent"
-          @click="goto('mode_review')"
-        />
-      </Transition>
-
-      <Transition name="review-button" mode="out-in">
-        <IndexButton
-          :key="`lapse-${currentSource}`"
-          icon="❗"
-          title="复习错题"
-          v-model:wheelValue="lapseLimit"
-          :count="counts.lapse"
-          border-color="rgba(165, 42, 42, 0.2)"
-          background="transparent"
-          @click="goto('mode_lapse')"
-        />
-      </Transition>
-
-      <Transition name="review-button" mode="out-in">
-        <IndexButton
-          :key="`spelling-${currentSource}`"
-          icon="⌨️"
-          title="拼写熟练"
-          v-model:wheelValue="spellingLimit"
-          :count="counts.spelling"
-          border-color="rgba(138, 43, 226, 0.2)"
-          background="transparent"
-          @click="goto('mode_spelling')"
-        />
-      </Transition>
-    </ButtonGrid>
+      <!-- 底部快捷入口 -->
+      <section class="mobile-quick-links">
+        <button class="quick-btn" @click="goManagement">
+          <AppIcon name="plus-circle" class="quick-icon-svg" />
+          <span class="quick-text">管理单词</span>
+        </button>
+        <span class="quick-divider">·</span>
+        <button class="quick-btn" @click="goStats">
+          <AppIcon name="chart" class="quick-icon-svg" />
+          <span class="quick-text">查看统计</span>
+        </button>
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive, computed } from 'vue'
-import IndexButton from '@/shared/components/controls/IndexButton.vue'
-import ButtonGrid from '@/shared/components/controls/ButtonGrid.vue'
+import { onMounted, ref, reactive, computed, onUnmounted } from 'vue'
 import IOSSwitch from '@/shared/components/controls/IOSSwitch.vue'
-import SwitchTab from '@/shared/components/controls/SwitchTab.vue'
+import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import ProgressNotification from '@/shared/components/feedback/ProgressNotification.vue'
+import AppIcon from '@/shared/components/controls/Icons.vue'
 import { useRouter } from 'vue-router'
 import Loading from '@/shared/components/feedback/Loading.vue'
 import { useSourceSelection } from '@/shared/composables/useSourceSelection'
@@ -112,11 +322,12 @@ type Counts = { review: number; lapse: number; spelling: number; today_spell: nu
 
 const loading = ref(true)
 const error = ref<string | null>(null)
-const retryDelay = 1000 // 1秒
+const retryDelay = 1000
 const counts = reactive<Counts>({ review: 0, lapse: 0, spelling: 0, today_spell: 0 })
 const spellingLimit = ref(50)
 const reviewLimit = ref(0)
 const lapseLimit = ref(0)
+const isMobile = ref(false)
 
 // 进度恢复通知相关
 const showProgressNotification = ref(false)
@@ -150,21 +361,11 @@ const { loadSettings } = useSettings()
 const {
   shuffle,
   setShuffle,
-  initializeFromData: initializeShuffleFromData
 } = useShuffleSelection()
 
 const router = useRouter()
 
-// 构建选项卡数据 - 动态生成
-const sourceTabs = computed(() => {
-  return availableSources.value.map(source => ({
-    value: source,
-    label: `${source} ${sourceStatsMap[source]?.total || 0}`,
-    disabled: availableSources.value.length === 1  // 只有1个source时禁用
-  }))
-})
-
-// 处理来源切换 - 直接从 Supabase 获取最新数据（不显示整页 loading，保留卡片动画）
+// 处理来源切换
 const handleSourceChange = async (source: string) => {
   try {
     const sourceCounts = await switchSourceComposable(source)
@@ -175,16 +376,19 @@ const handleSourceChange = async (source: string) => {
   }
 }
 
+// 滚轮选择器的最大可选值
+const WHEEL_MAX = 500
+
 // 更新滚轮值的辅助函数
 const updateWheelValues = async () => {
   try {
     const settings = await loadSettings()
-    lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize)
+    lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize, WHEEL_MAX)
   } catch {
-    lapseLimit.value = Math.min(counts.lapse, 25)
+    lapseLimit.value = Math.min(counts.lapse, 25, WHEEL_MAX)
   }
-  reviewLimit.value = counts.review > 0 ? counts.review : 0
-  spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
+  reviewLimit.value = Math.min(counts.review, WHEEL_MAX)
+  spellingLimit.value = Math.min(counts.today_spell, WHEEL_MAX)
 }
 
 // 创建双向绑定的shuffle computed
@@ -201,78 +405,83 @@ const fetchSummary = async (isRetry = false) => {
       loading.value = true
     }
 
-    // 并行获取：后端 index_summary + Supabase 所有 source 统计
     const [data, allStats] = await Promise.all([
       api.stats.getIndexSummary(),
       fetchAllSourcesStats()
     ])
 
-    // 设置当前 source（从后端获取）
     initializeFromData({ current_source: data.current_source })
-
-    // 更新所有缓存（sourceStatsMap 和 allCountsMap）
     updateAllCaches(allStats)
 
-    // 使用当前 source 的 counts
     const currentCounts = allCountsMap[data.current_source] || data.counts
     Object.assign(counts, currentCounts)
 
-    // 从settings获取配置并初始化shuffle状态（使用缓存）
     try {
       const settings = await loadSettings()
-      // 初始化shuffle默认值（直接设置，不触发POST）
       shuffle.value = settings.learning.defaultShuffle
-      // 设置lapse队列大小（从30改为配置值）
       lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize)
     } catch (e) {
       log.error('Failed to load settings:', e)
-      // 如果获取settings失败，使用默认值
       shuffle.value = false
     }
 
-    // 检查进度恢复信息
-    if (data.progress_restore?.has_progress && data.progress_restore?.progress_basic) {
-      const basic = data.progress_restore.progress_basic
-      const summary = data.progress_restore.summary
-
-      progressInfo.value = {
-        mode: basic.mode,
-        source: basic.source,
-        shuffle: basic.shuffle,
-        current_index: basic.current_index,
-        total_words: summary?.total_words || 0,
-        remaining_words: summary?.remaining_words || 0,
-        initial_lapse_word_count: summary?.initial_lapse_word_count || 0
+    // 直接从 Supabase 获取进度信息（不再依赖后端 progress_restore 字段）
+    try {
+      const progressData = await api.progress.getProgressDirect()
+      if (progressData && progressData.word_ids_snapshot?.length > 0) {
+        const totalWords = progressData.word_ids_snapshot.length
+        const currentIndex = progressData.current_index || 0
+        // 验证进度有效性
+        if (currentIndex >= 0 && currentIndex < totalWords) {
+          progressInfo.value = {
+            mode: progressData.mode,
+            source: progressData.source,
+            shuffle: progressData.shuffle,
+            current_index: currentIndex,
+            total_words: totalWords,
+            remaining_words: totalWords - currentIndex,
+            initial_lapse_word_count: progressData.initial_lapse_word_count || 0
+          }
+          showProgressNotification.value = true
+        }
       }
-      showProgressNotification.value = true
+    } catch (e) {
+      log.warn('Failed to get progress from Supabase:', e)
+      // 进度获取失败不影响主流程
     }
 
-    // 设置默认滚轮值（lapseLimit已在settings中设置）
-    reviewLimit.value = counts.review > 0 ? counts.review : 0
-    spellingLimit.value = counts.today_spell > 0 ? counts.today_spell : 0
-
-    // 成功后清除错误
+    reviewLimit.value = Math.min(counts.review, WHEEL_MAX)
+    spellingLimit.value = Math.min(counts.today_spell, WHEEL_MAX)
     error.value = null
   } catch (e: unknown) {
     log.error('Failed to fetch summary:', e)
     error.value = e instanceof Error ? e.message : String(e)
 
-    // 无限重试
     log.log(`Retrying in ${retryDelay}ms...`)
     setTimeout(() => {
       fetchSummary(true)
     }, retryDelay)
   } finally {
-    // 只有在成功时才停止loading
     if (!error.value) {
       loading.value = false
     }
   }
 }
 
+// 检测移动端
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
 onMounted(async () => {
-  await loadAvailableSources()  // 先加载可用的 sources
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+  await loadAvailableSources()
   await fetchSummary()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 
 const goto = (mode: string) => {
@@ -310,12 +519,11 @@ const goManagement = () => {
 
 const dismissProgressNotification = async () => {
   try {
-    // 调用 API 清除进度
-    await api.progress.clearProgress()
+    // 直接清除 Supabase 中的进度
+    await api.progress.clearProgressDirect()
     showProgressNotification.value = false
   } catch (e) {
     log.error('Failed to clear progress:', e)
-    // 即使 API 调用失败，也隐藏通知条
     showProgressNotification.value = false
   }
 }
@@ -328,121 +536,856 @@ const resumeProgress = () => {
     }
   })
 }
-
 </script>
 
 <style scoped>
-.word-index-container {
-  padding: 2rem;
-  max-width: 720px;
-  margin: 0 auto;
+/* ═══════════════════════════════════════════════════════════════════════════
+   基础容器
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.word-index {
   width: 100%;
-  box-sizing: border-box;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.header-section {
-  margin-bottom: 2rem;
+/* ═══════════════════════════════════════════════════════════════════════════
+   桌面端布局
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.desktop-layout {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  align-items: flex-start;
 }
 
-.header-with-switch {
+/* ── 左侧来源导航轨道 ── */
+.source-rail {
+  width: 140px;
+  flex-shrink: 0;
+  padding-top: 4rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.rail-header {
+  padding: 0 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.rail-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primitive-ink-400);
+}
+
+.rail-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rail-tab {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 6px;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
 }
 
-.shuffle-switch {
-  flex-shrink: 0;
+.rail-tab:hover {
+  background: var(--primitive-paper-300);
 }
 
-.source-tabs {
-  margin-bottom: 1.5rem;
+.rail-tab.active {
+  background: var(--gradient-primary);
+  box-shadow: 0 4px 16px rgba(153, 107, 61, 0.25);
 }
 
-/* Compact按钮容器 */
-.compact-buttons-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.rail-tab .tab-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primitive-ink-700);
+  transition: color 0.2s;
+}
+
+.rail-tab.active .tab-name {
+  color: var(--primitive-paper-50);
+  font-weight: 600;
+}
+
+.rail-tab .tab-count {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--primitive-ink-400);
+  transition: color 0.2s;
+}
+
+.rail-tab.active .tab-count {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── 主内容区 ── */
+.main-content {
+  flex: 1;
+  max-width: 600px;
+  padding-left: 2rem;
+}
+
+/* ── 标题栏 ── */
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--primitive-paper-400);
+}
+
+.title-group {
+  display: flex;
+  align-items: baseline;
   gap: 1rem;
 }
 
-
-/* 移动端全面适配 */
-@media (max-width: 480px) {
-  .word-index-container {
-    padding: 1.5rem;
-    max-width: 100%;
-    min-height: auto; /* 让高度由内容决定 */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  .header-section {
-    margin-bottom: 1.5rem;
-  }
-
-  .compact-buttons-container {
-    gap: 0.875rem;
-  }
-
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primitive-ink-800);
+  margin: 0;
+  letter-spacing: -0.02em;
 }
 
-/* 小屏手机进一步优化 */
+.title-divider {
+  width: 2px;
+  height: 1.5rem;
+  background: var(--primitive-paper-500);
+  transform: translateY(2px);
+}
+
+.current-source {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primitive-ink-500);
+}
+
+.title-actions {
+  display: flex;
+  align-items: center;
+}
+
+.shuffle-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.shuffle-label {
+  font-size: 13px;
+  color: var(--primitive-ink-500);
+  font-weight: 500;
+}
+
+/* ── 英雄区：主复习按钮 ── */
+.hero-section {
+  margin-bottom: 1.5rem;
+}
+
+.hero-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: var(--primitive-paper-100);
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(153, 107, 61, 0.15);
+  border-color: var(--primitive-copper-300);
+}
+
+.hero-decoration {
+  position: absolute;
+  right: -50px;
+  top: -50px;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+}
+
+.ink-splash {
+  width: 100%;
+  height: 100%;
+}
+
+/* 弧形进度 */
+.arc-progress {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-track {
+  stroke: var(--primitive-paper-400);
+}
+
+.progress-fill {
+  stroke: var(--primitive-copper-500);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primitive-copper-600);
+  line-height: 1;
+}
+
+.progress-total {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--primitive-ink-400);
+}
+
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hero-icon {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.hero-icon-svg {
+  width: 2rem;
+  height: 2rem;
+  fill: var(--primitive-copper-500);
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primitive-ink-800);
+  margin: 0;
+}
+
+.hero-desc {
+  font-size: 0.875rem;
+  color: var(--primitive-ink-500);
+  margin: 0;
+}
+
+.hero-wheel {
+  position: relative;
+  width: 60px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+/* ── 次要按钮网格 ── */
+.secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--primitive-paper-100);
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.action-card--lapse {
+  border-left: 3px solid var(--primitive-brick-400);
+}
+
+.action-card--spelling {
+  border-left: 3px solid var(--primitive-olive-400);
+}
+
+.card-icon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--primitive-ink-600);
+}
+
+.action-card--lapse .card-icon-svg {
+  fill: var(--primitive-brick-500);
+}
+
+.action-card--spelling .card-icon-svg {
+  fill: var(--primitive-olive-500);
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--primitive-ink-700);
+}
+
+.card-stats {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--primitive-ink-400);
+}
+
+.card-wheel {
+  position: relative;
+  width: 60px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+/* ── 快捷入口 ── */
+.quick-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--primitive-paper-400);
+}
+
+.quick-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-link:hover {
+  background: var(--primitive-paper-300);
+}
+
+.link-icon-svg {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--primitive-ink-500);
+}
+
+.link-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primitive-ink-600);
+}
+
+.link-separator {
+  color: var(--primitive-ink-300);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端布局
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.mobile-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0;
+}
+
+/* ── 移动端头部 ── */
+.mobile-header {
+  padding: 1rem 1rem 0;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.mobile-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primitive-ink-800);
+  margin: 0;
+}
+
+.mobile-shuffle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shuffle-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primitive-ink-500);
+}
+
+/* 移动端通知包装 */
+.mobile-notification-wrapper {
+  padding: 0 1rem;
+}
+
+/* 来源横向滚动 */
+.source-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.source-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.source-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--primitive-paper-400);
+  background: var(--primitive-paper-100);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--primitive-ink-600);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.source-chip:active {
+  transform: scale(0.96);
+}
+
+.source-chip.active {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--primitive-paper-50);
+}
+
+.chip-count {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  opacity: 0.8;
+}
+
+/* ── 移动端卡片区 ── */
+.mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+}
+
+.mobile-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  background: var(--primitive-paper-100);
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-card:active {
+  transform: scale(0.98);
+  background: var(--primitive-paper-200);
+}
+
+.mobile-card--review {
+  border-left: 3px solid var(--primitive-copper-400);
+}
+
+.mobile-card--lapse {
+  border-left: 3px solid var(--primitive-brick-400);
+}
+
+.mobile-card--spelling {
+  border-left: 3px solid var(--primitive-olive-400);
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-card .card-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-card .card-icon-svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.mobile-card--review .card-icon-svg {
+  fill: var(--primitive-copper-500);
+}
+
+.mobile-card--lapse .card-icon-svg {
+  fill: var(--primitive-brick-500);
+}
+
+.mobile-card--spelling .card-icon-svg {
+  fill: var(--primitive-olive-500);
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-card .card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primitive-ink-800);
+}
+
+.mobile-card .card-count {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--primitive-ink-400);
+}
+
+.mobile-card .card-wheel {
+  position: relative;
+  width: 60px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+/* ── 移动端快捷入口 ── */
+.mobile-quick-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 0.875rem 1rem;
+  margin-top: 0.25rem;
+  border-top: 1px dashed var(--primitive-paper-400);
+}
+
+.quick-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-btn:active {
+  background: var(--primitive-paper-300);
+  transform: scale(0.96);
+}
+
+.quick-icon-svg {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--primitive-ink-500);
+}
+
+.quick-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primitive-ink-600);
+}
+
+.quick-divider {
+  color: var(--primitive-ink-300);
+  font-size: 1.25rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 英雄卡片切换 - 桌面端 */
+.hero-card-enter-active {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-card-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-card-enter-from {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+}
+
+.hero-card-leave-to {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.98);
+}
+
+/* 次要卡片切换 - 桌面端 */
+.card-slide-enter-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-slide-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-slide-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.card-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+/* 移动端卡片淡入 */
+.card-fade-enter-active {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-fade-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-fade-enter-from {
+  opacity: 0;
+  transform: translateX(15px);
+}
+
+.card-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   响应式调整
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 小屏手机 */
 @media (max-width: 480px) {
-  .word-index-container {
-    padding: 1rem;
-    min-height: auto; /* 让高度由内容决定 */
+  .mobile-header {
+    padding: 0.5rem 0.75rem 0;
   }
 
-  .header-section {
-    margin-bottom: 1.25rem;
+  .mobile-title {
+    font-size: 1.25rem;
   }
 
-  .compact-buttons-container {
-    gap: 0.75rem;
+  .shuffle-text {
+    font-size: 0.75rem;
   }
 
+  .source-chip {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .mobile-cards {
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .mobile-card {
+    padding: 0.75rem 0.875rem;
+  }
+
+  .mobile-card .card-icon {
+    font-size: 1.25rem;
+  }
+
+  .mobile-card .card-title {
+    font-size: 0.875rem;
+  }
+
+  .mobile-card .card-count {
+    font-size: 0.75rem;
+  }
+
+  .mobile-card .card-wheel {
+    width: 55px;
+    height: 70px;
+  }
+
+  .mobile-quick-links {
+    padding: 0.75rem;
+    gap: 1rem;
+    margin-top: 0.125rem;
+  }
+
+  .quick-icon {
+    font-size: 0.875rem;
+  }
+
+  .quick-text {
+    font-size: 0.8125rem;
+  }
+
+  .mobile-notification-wrapper {
+    padding: 0 0.75rem;
+  }
 }
 
 /* 横屏适配 */
 @media (max-height: 500px) and (orientation: landscape) {
-  .word-index-container {
-    padding: 1rem;
+  .mobile-layout {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
-  .header-section {
-    margin-bottom: 1rem;
+  .mobile-header {
+    width: 100%;
+    padding: 0.375rem 1rem 0;
   }
 
+  .header-top {
+    margin-bottom: 0.375rem;
+  }
+
+  .mobile-title {
+    font-size: 1.125rem;
+  }
+
+  .source-scroll {
+    padding-bottom: 0.25rem;
+  }
+
+  .mobile-notification-wrapper {
+    width: 100%;
+  }
+
+  .mobile-cards {
+    flex: 1;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .mobile-card {
+    flex: 1;
+    min-width: 180px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .card-left {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .mobile-card .card-wheel {
+    width: 50px;
+    height: 65px;
+    align-self: center;
+  }
+
+  .mobile-quick-links {
+    width: 100%;
+    padding: 0.375rem 1rem;
+  }
 }
 
-/* 超宽屏适配 */
+/* 超宽屏 */
 @media (min-width: 1440px) {
-  .word-index-container {
+  .desktop-layout {
+    max-width: 1100px;
     padding: 3rem;
-    max-width: 800px;
   }
 
-}
+  .source-rail {
+    width: 160px;
+  }
 
-/* 复习按钮过渡动画 */
-.review-button-enter-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.review-button-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.review-button-enter-from {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-}
-
-.review-button-leave-to {
-  opacity: 0;
-  transform: translateY(-10px) scale(0.98);
+  .main-content {
+    max-width: 700px;
+  }
 }
 </style>

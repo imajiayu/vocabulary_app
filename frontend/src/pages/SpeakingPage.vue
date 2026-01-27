@@ -1,5 +1,5 @@
 <template>
-  <div class="speaking-index">
+  <div class="speaking-index" :class="{ 'has-question': selectQuestion != null }">
     <!-- 欢迎页面 -->
     <div v-if="selectQuestion == null" class="welcome-message">
       <h1 class="title">你好！</h1>
@@ -22,36 +22,17 @@
 
 <script setup lang="ts">
 import { Question } from '@/shared/types'
-import { ref, PropType, onMounted, onUnmounted } from 'vue'
+import { PropType } from 'vue'
 import QuestionPractice from '@/features/speaking/components/QuestionPractice.vue'
 
-const subtitle = ref('选择题目开始练习。')
-const subtitleChars = subtitle.value.split('')
-const isMobile = ref(false)
+const subtitle = '选择题目开始练习。'
+const subtitleChars = subtitle.split('')
 
-const props = defineProps({
+defineProps({
   selectQuestion: {
     type: Object as PropType<Question | null>,
     required: false
   }
-})
-
-const emit = defineEmits<{
-  'sidebar-toggle': [expanded: boolean]
-}>()
-
-// 检测移动端
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 </script>
 
@@ -65,6 +46,14 @@ onUnmounted(() => {
   justify-content: center;
   padding: 0 1rem;
   box-sizing: border-box;
+}
+
+/* 选中题目后，取消居中，让内容铺满 */
+.speaking-index.has-question {
+  max-width: none;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
 }
 
 .welcome-message {
@@ -99,11 +88,11 @@ onUnmounted(() => {
 /* fadeIn animation defined in animations.css */
 
 /* 移动端响应式适配 */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .speaking-index {
     padding: 0 1rem;
-    align-items: flex-start;
-    padding-top: 0; /* 去掉上部分padding */
+    align-items: center;
+    justify-content: center;
   }
 
   .welcome-message {
@@ -121,14 +110,12 @@ onUnmounted(() => {
     white-space: normal;
     line-height: 1.5;
   }
-
 }
 
 /* 小屏手机进一步优化 */
 @media (max-width: 480px) {
   .speaking-index {
     padding: 0 0.75rem;
-    padding-top: 0; /* 去掉上部分padding */
   }
 
   .welcome-message {
@@ -148,7 +135,6 @@ onUnmounted(() => {
     /* 小屏幕上减少动画复杂度 */
     animation-duration: 0.3s;
   }
-
 }
 
 /* 横屏适配 */

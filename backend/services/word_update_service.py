@@ -25,7 +25,7 @@ from backend.database.vocabulary_dao import (
 # ============================================================================
 
 
-def calculate_review_result(word_id, remembered, elapsed_time, word_data=None):
+def calculate_review_result(word_id, remembered, elapsed_time, word_data=None, user_id=None):
     """
     只计算复习结果，不写数据库。返回 notification 数据和需要持久化的参数。
 
@@ -34,6 +34,7 @@ def calculate_review_result(word_id, remembered, elapsed_time, word_data=None):
         remembered: 是否记住
         elapsed_time: 反应时间
         word_data: 前端传来的完整 word 数据（可选，用于跳过数据库查询）
+        user_id: 用户ID（当 word_data 为空时需要）
 
     Returns:
         dict: {
@@ -46,7 +47,7 @@ def calculate_review_result(word_id, remembered, elapsed_time, word_data=None):
     if word_data:
         word_info = word_data
     else:
-        word_info = db_fetch_word_info(word_id)
+        word_info = db_fetch_word_info(word_id, user_id)
         if not word_info:
             return None
 
@@ -87,7 +88,7 @@ def calculate_review_result(word_id, remembered, elapsed_time, word_data=None):
         lapse,
         word_source,
         today,
-        UserConfig().MAX_PREP_DAYS,
+        UserConfig(user_id).MAX_PREP_DAYS,
     )
 
     next_review = today + datetime.timedelta(days=interval)
@@ -131,12 +132,13 @@ def calculate_review_result(word_id, remembered, elapsed_time, word_data=None):
     }
 
 
-def persist_review_result(persist_data):
+def persist_review_result(persist_data, user_id=1):
     """
     持久化复习结果到数据库。
 
     Args:
         persist_data: calculate_review_result 返回的 persist_data
+        user_id: 用户ID
     """
     next_review = datetime.date.fromisoformat(persist_data["next_review"])
     db_update_word_for_review(
@@ -153,10 +155,11 @@ def persist_review_result(persist_data):
         persist_data["lapse"],
         persist_data["avg_elapsed_time"],
         persist_data["should_stop_review"],
+        user_id,
     )
 
 
-def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None):
+def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None, user_id=None):
     """
     只计算拼写结果，不写数据库。返回 notification 数据和需要持久化的参数。
 
@@ -165,6 +168,7 @@ def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None
         remembered: 是否记住
         spelling_data: 拼写数据
         word_data: 前端传来的完整 word 数据（可选，用于跳过数据库查询）
+        user_id: 用户ID（当 word_data 为空时需要）
 
     Returns:
         dict: {
@@ -177,7 +181,7 @@ def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None
     if word_data:
         word_info = word_data
     else:
-        word_info = db_fetch_word_info(word_id)
+        word_info = db_fetch_word_info(word_id, user_id)
         if not word_info:
             return None
 
@@ -196,7 +200,7 @@ def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None
         word_source,
         today,
         current_strength,
-        max_prep_days=UserConfig().MAX_PREP_DAYS,
+        max_prep_days=UserConfig(user_id).MAX_PREP_DAYS,
     )
 
     new_strength = max(0, min(5.0, (current_strength or 0) + strength_change))
@@ -219,18 +223,20 @@ def calculate_spelling_result(word_id, remembered, spelling_data, word_data=None
     }
 
 
-def persist_spelling_result(persist_data):
+def persist_spelling_result(persist_data, user_id=1):
     """
     持久化拼写结果到数据库。
 
     Args:
         persist_data: calculate_spelling_result 返回的 persist_data
+        user_id: 用户ID
     """
     next_review = datetime.date.fromisoformat(persist_data["next_review"])
     db_update_word_for_spelling(
         persist_data["word_id"],
         persist_data["new_strength"],
         next_review,
+        user_id,
     )
 
 
@@ -239,14 +245,20 @@ def persist_spelling_result(persist_data):
 # ============================================================================
 
 
-def update_word_info_review(word_id, remembered, elapsed_time):
+def update_word_info_review(word_id, remembered, elapsed_time, user_id=None):
     """
     更新已有单词的复习信息（MODE_REVIEW）
+
+    Args:
+        word_id: 单词ID
+        remembered: 是否记住
+        elapsed_time: 反应时间
+        user_id: 用户ID
 
     Returns:
         dict: 通知数据，包含复习参数变化信息，用于前端显示通知
     """
-    word_info = db_fetch_word_info(word_id)
+    word_info = db_fetch_word_info(word_id, user_id)
     if not word_info:
         return None  # 单词不存在
 
@@ -283,7 +295,7 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         lapse,
         word_source,
         today,  # 使用今天的日期作为基准
-        UserConfig().MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
+        UserConfig(user_id).MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
     )
 
     # 5️⃣ 计算下次复习日期（从今天开始计算）
@@ -307,6 +319,7 @@ def update_word_info_review(word_id, remembered, elapsed_time):
         lapse,
         avg_elapsed_time,
         should_stop_review,
+        user_id,
     )
 
     # 7️⃣ 构建并返回通知数据（带回忆时间信息）
@@ -332,7 +345,7 @@ def update_word_info_review(word_id, remembered, elapsed_time):
     }
 
 
-def update_word_info_lapse(word_id, remembered):
+def update_word_info_lapse(word_id, remembered, user_id=None):
     """
     更新错题集单词信息（MODE_LAPSE）
     仅更新 SRS 核心参数和 lapse，不修改长期统计字段
@@ -341,15 +354,20 @@ def update_word_info_lapse(word_id, remembered):
     - 答错：lapse+1，最大为LAPSE_MAX_VALUE（默认4）
     - 答对：lapse-1（基础）
     - 答对且启用加速退出：lapse≥阈值时（默认≥2），lapse-2（加速）
+
+    Args:
+        word_id: 单词ID
+        remembered: 是否记住
+        user_id: 用户ID
     """
     from backend.config import UserConfig
 
-    word_info = db_fetch_word_info(word_id)
+    word_info = db_fetch_word_info(word_id, user_id)
     if not word_info:
         return
 
     lapse = word_info.get("lapse", 0)
-    config = UserConfig()  # 创建实例以访问属性
+    config = UserConfig(user_id)  # 创建实例以访问属性
 
     if not remembered:
         # 答错：渐进增加，上限为配置值
@@ -363,17 +381,23 @@ def update_word_info_lapse(word_id, remembered):
             # 正常退出：lapse<阈值时，答对一次-1
             lapse = max(0, lapse - 1)
 
-    db_update_word_for_lapse(word_id, lapse)
+    db_update_word_for_lapse(word_id, lapse, user_id)
 
 
-def update_word_info_spelling(word_id, remembered, spelling_data):
+def update_word_info_spelling(word_id, remembered, spelling_data, user_id=None):
     """
     更新单词拼写信息（MODE_SPELLING）
+
+    Args:
+        word_id: 单词ID
+        remembered: 是否记住
+        spelling_data: 拼写数据
+        user_id: 用户ID
 
     Returns:
         dict: 通知数据，包含拼写强度变化信息，用于前端显示通知
     """
-    word_info = db_fetch_word_info(word_id)
+    word_info = db_fetch_word_info(word_id, user_id)
     if not word_info:
         return None
 
@@ -395,7 +419,7 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
         word_source,
         today,
         current_strength,
-        max_prep_days=UserConfig().MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
+        max_prep_days=UserConfig(user_id).MAX_PREP_DAYS,  # 使用用户配置的最大准备天数
     )
 
     # 计算新的强度 (ensure current_strength is not None, and cap at 5.0)
@@ -404,7 +428,7 @@ def update_word_info_spelling(word_id, remembered, spelling_data):
     # 计算下次拼写复习时间（从今天开始计算）
     next_review = today + datetime.timedelta(days=interval_days)
 
-    db_update_word_for_spelling(word_id, round(new_strength, 2), next_review)
+    db_update_word_for_spelling(word_id, round(new_strength, 2), next_review, user_id)
 
     # 返回通知数据（带详细评分信息）
     return {

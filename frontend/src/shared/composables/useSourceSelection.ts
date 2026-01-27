@@ -2,6 +2,7 @@ import { ref, reactive, readonly } from 'vue'
 import { api } from '@/shared/api'
 import type { SourceStats, SourceCounts } from '@/shared/api/stats'
 import { supabase } from '@/shared/config/supabase'
+import { getCurrentUserId } from '@/shared/composables/useUserSelection'
 import { logger } from '@/shared/utils/logger'
 
 export type Source = string  // 改为动态字符串
@@ -36,9 +37,11 @@ export function useSourceSelection() {
     counts: SourceCounts
     source_stats: SourceStats
   }>> => {
+    const userId = getCurrentUserId()
     const { data, error: supabaseError } = await supabase
       .from('word_source_stats')
       .select('*')
+      .eq('user_id', userId)
 
     if (supabaseError) {
       throw new Error(`Supabase query failed: ${supabaseError.message}`)

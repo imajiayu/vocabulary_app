@@ -18,6 +18,7 @@ from .word_crud import (
 # Query
 from .word_query import (
     db_fetch_word_info,
+    db_get_word_text_only,
     db_get_word_review_info,
     db_get_words_review_info_batch,
     db_fetch_word_info_for_insert_page,
@@ -63,6 +64,7 @@ __all__ = [
     "db_update_word_definition_only",
     # Query
     "db_fetch_word_info",
+    "db_get_word_text_only",
     "db_get_word_review_info",
     "db_get_words_review_info_batch",
     "db_fetch_word_info_for_insert_page",

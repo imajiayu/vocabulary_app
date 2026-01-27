@@ -2,8 +2,6 @@
   <div class="voice-practice-control-panel">
     <!-- 开始练习按钮 -->
     <div v-if="!isRecording && !isProcessing && !currentRecord.user_answer" class="practice-start">
-      <!-- TODO: 后续实现在线 API 实时转录后，可以在这里添加转录模式选择器 -->
-
       <button class="start-btn" @click="startPractice" :disabled="!question">
         <div class="btn-content">
           <div class="siri-circles">
@@ -75,6 +73,8 @@ import { api } from '@/shared/api'
 import type { CreateRecordPayload } from '@/shared/api/speaking'
 import RecordingStatusPanel from './RecordingStatusPanel.vue'
 import { useAudioRecording } from '../composables/useAudioRecording'
+import { transcribeAudio, getTranscriptionProvider } from '@/shared/services/transcription'
+import { useWebSpeechRecognition } from '@/shared/services/webSpeechRecognition'
 
 const props = defineProps<{ question: Question | null }>()
 const emit = defineEmits<{
@@ -152,6 +152,9 @@ const machine = ref<StateMachine>(createStateMachine())
 // 使用录音 composable
 const audioRecording = useAudioRecording()
 
+// 使用 Web Speech API 语音识别（英语）
+const webSpeech = useWebSpeechRecognition({ lang: 'en-US' })
+
 // 状态机操作
 const transition = (event: Event): void => {
   const currentState = machine.value.state
@@ -214,6 +217,16 @@ watch(() => props.question, (newQuestion, oldQuestion) => {
   }
 }, { immediate: false })
 
+// 监听 Web Speech 识别结果变化，实时更新显示
+watch(
+  [() => webSpeech.transcript.value, () => webSpeech.interimTranscript.value],
+  () => {
+    if (machine.value.state === 'RECORDING') {
+      updateTemporaryRecord()
+    }
+  }
+)
+
 // 组件卸载时清理资源
 onUnmounted(() => {
   handleIdleEntry()
@@ -224,6 +237,7 @@ onUnmounted(() => {
 // =========================
 const handleIdleEntry = (): void => {
   audioRecording.resetRecording()
+  webSpeech.abort() // 中止语音识别
   machine.value.context.record = {}
   machine.value.context.error = undefined
   emit('temporaryRecord', null)
@@ -241,11 +255,16 @@ const handleRecordingStart = async (): Promise<void> => {
       created_at: new Date().toISOString()
     }
 
-    // 设置音频录制（批处理模式：只录音，不实时转录）
+    // 如果使用 Web Speech API，同步启动语音识别
+    if (getTranscriptionProvider() === 'web-speech' && webSpeech.isSupported.value) {
+      webSpeech.start()
+      speakingLogger.log('Web Speech API 已启动')
+    }
+
+    // 设置音频录制
     await audioRecording.setupAudioRecording(
-      // 音频处理回调（批处理模式不需要实时处理）
+      // 音频处理回调
       (_pcm16Data: Int16Array) => {
-        // TODO: 后续如果实现在线 API 实时转录，可以在这里发送音频数据
         updateTemporaryRecord()
       },
       // 录音停止回调
@@ -301,13 +320,25 @@ const currentStatus = computed(() => {
 const updateTemporaryRecord = () => {
   if (!props.question) return
 
-  const displayText = machine.value.state === 'RECORDING' ? '正在录音中...' : '请开始说话...'
+  // 如果使用 Web Speech API，显示实时识别的文字
+  let displayText = '请开始说话...'
+  let feedbackText = '录音完成后将自动转录...'
+
+  if (machine.value.state === 'RECORDING') {
+    if (getTranscriptionProvider() === 'web-speech' && webSpeech.isListening.value) {
+      const currentText = webSpeech.getCurrentText()
+      displayText = currentText || '正在录音，请说话...'
+      feedbackText = currentText ? '实时识别中...' : '等待语音输入...'
+    } else {
+      displayText = '正在录音中...'
+    }
+  }
 
   const tempRecord: Partial<SpeakingRecord> = {
     question_id: props.question.id,
     user_answer: displayText,
     audio_file: '',
-    ai_feedback: '录音完成后将自动转录...',
+    ai_feedback: feedbackText,
     score: undefined
   }
 
@@ -324,24 +355,39 @@ const processTranscription = async (): Promise<void> => {
     machine.value.context.record.audio_file = audioFile
     machine.value.context.record.question_id = props.question?.id
 
-    // 使用 API 转录（批处理模式）
-    // TODO: 后续可以改为调用在线转录 API（如 OpenAI Whisper API）
-    speakingLogger.log('使用 API 转录音频...')
-    const transcriptText = await speechToText(audioFile)
-    machine.value.context.record.user_answer = transcriptText
+    // 根据转录提供者处理
+    const provider = getTranscriptionProvider()
 
-    emit('temporaryRecord', { ...machine.value.context.record })
+    if (provider === 'web-speech') {
+      // 停止 Web Speech API 并获取结果
+      const webSpeechText = webSpeech.stop()
+      speakingLogger.log('Web Speech API 结果:', webSpeechText)
 
-    if (!transcriptText.trim()) {
-      machine.value.context.error = '转录失败，请重新录音'
-      transition('TRANSCRIPTION_ERROR')
-      return
+      if (webSpeechText.trim()) {
+        machine.value.context.record.user_answer = webSpeechText
+        emit('temporaryRecord', { ...machine.value.context.record })
+        transition('TRANSCRIPTION_SUCCESS')
+      } else {
+        machine.value.context.error = '未识别到语音内容，请重试'
+        transition('TRANSCRIPTION_ERROR')
+      }
+    } else {
+      // 其他转录服务（Whisper 等）
+      speakingLogger.log('尝试转录音频...')
+      const result = await transcribeAudio(audioFile)
+
+      if (result.success && result.text.trim()) {
+        machine.value.context.record.user_answer = result.text
+        emit('temporaryRecord', { ...machine.value.context.record })
+        transition('TRANSCRIPTION_SUCCESS')
+      } else {
+        machine.value.context.error = result.error || '转录失败，请重试'
+        transition('TRANSCRIPTION_ERROR')
+      }
     }
-
-    transition('TRANSCRIPTION_SUCCESS')
   } catch (error) {
     speakingLogger.error('转录错误:', error)
-    machine.value.context.error = '转录失败，请重试'
+    machine.value.context.error = '转录出错，请重试'
     transition('TRANSCRIPTION_ERROR')
   }
 }
@@ -425,16 +471,6 @@ const submitPractice = async () => {
 // =========================
 // API函数
 // =========================
-const speechToText = async (audioFile: File): Promise<string> => {
-  try {
-    const result = await api.speaking.speechToText(audioFile)
-    return result.text || ''
-  } catch (e) {
-    speakingLogger.error('语音转文字失败:', e)
-    return ''
-  }
-}
-
 const getAIFeedback = async (userAnswer: string) => {
   try {
     const result = await api.speaking.getAiFeedback(
@@ -635,10 +671,16 @@ const saveRecordToBackend = async (record: CreateRecordPayload): Promise<Speakin
   box-shadow: 0 4px 12px var(--color-purple-vivid-light);
 }
 
-.control-btn.primary:hover {
+.control-btn.primary:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px var(--color-purple-vivid-light);
   border-color: var(--color-purple-vivid);
+}
+
+.control-btn.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .control-btn.secondary {

@@ -15,18 +15,27 @@
       @nav-toggle="handleNavToggle"
     />
 
-    <!-- 移动端顶部Tab导航 -->
-    <div v-if="isMobile" class="mobile-tab-nav">
-      <div class="mobile-switch-wrapper">
-        <SwitchTab
-          v-model="activeTab"
-          :tabs="tabs"
-          container-class="mobile-theme"
-          :show-indicator="true"
-          @change="handleTabChange"
-        />
+    <!-- 移动端底部浮动导航 -->
+    <nav v-if="isMobile" class="mobile-bottom-nav">
+      <div class="mobile-nav-container">
+        <!-- 用户切换（印章） -->
+        <div class="mobile-user-selector">
+          <UserSelector :expanded="true" />
+        </div>
+
+        <!-- 导航按钮 -->
+        <button
+          v-for="tab in tabs"
+          :key="tab.value"
+          :class="['mobile-nav-item', { active: activeTab === tab.value }]"
+          @click="handleTabChange(tab.value)"
+        >
+          <span class="nav-icon">{{ tab.icon }}</span>
+          <span class="nav-label">{{ tab.label }}</span>
+          <span v-if="activeTab === tab.value" class="nav-indicator"></span>
+        </button>
       </div>
-    </div>
+    </nav>
 
     <!-- 侧边栏（在桌面端和移动端口语练习时都显示）-->
     <transition name="sidebar-slide" mode="out-in">
@@ -45,7 +54,7 @@
     <main class="main-container">
       <!-- 内容切换动画 -->
       <transition name="fade-slide" mode="out-in">
-        <WordIndex v-if="activeTab === 'words'" key="words" class="word-index" />
+        <WordIndex v-if="activeTab === 'words'" key="words" />
         <SpeakingIndex
           v-else-if="activeTab === 'speaking'"
           key="speaking"
@@ -71,7 +80,7 @@ import SpeakingIndex from '@/pages/SpeakingPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 import SpeakingSidebar from '@/features/speaking/components/SpeakingSidebar.vue'
 import MainNavigation from '@/shared/components/layout/MainNavigation.vue'
-import SwitchTab from '@/shared/components/controls/SwitchTab.vue'
+import UserSelector from '@/shared/components/layout/UserSelector.vue'
 import { Question } from '@/shared/types'
 import { api } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
@@ -84,9 +93,9 @@ const isMobile = ref(false)
 
 // Tab 数据
 const tabs = [
-  { value: 'words', label: '单词', icon: '📚' },
-  { value: 'speaking', label: '口语', icon: '🎤' },
-  { value: 'settings', label: '设置', icon: '⚙️' }
+  { value: 'words', label: '单词', icon: '§' },
+  { value: 'speaking', label: '口语', icon: '♫' },
+  { value: 'settings', label: '设置', icon: '⚙' }
 ]
 
 // localStorage键名
@@ -97,8 +106,8 @@ const restoreSelectedQuestion = async () => {
   const savedQuestionId = localStorage.getItem(SELECTED_QUESTION_KEY)
   if (savedQuestionId && activeTab.value === 'speaking') {
     try {
-      // 获取所有topics来查找对应的question
-      const topics = await api.speaking.getTopics()
+      // 获取所有topics来查找对应的question（使用 Supabase 直接查询）
+      const topics = await api.speaking.getTopicsDirect()
 
       // 在所有topic中查找对应的question
       for (const topic of topics) {
@@ -281,24 +290,137 @@ onUnmounted(() => {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   移动端顶部 Tab 导航
+   移动端底部浮动导航
    ══════════════════════════════════════════════════════════════════════════════ */
 
-.mobile-tab-nav {
+.mobile-bottom-nav {
   position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 56px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
+  padding: 0 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.mobile-nav-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none; /* 只让 SwitchTab 本身阻止点击穿透 */
+  gap: 4px;
+  background: var(--primitive-paper-50);
+  border-radius: 16px;
+  padding: 6px 10px;
+  box-shadow:
+    0 -2px 20px rgba(0, 0, 0, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--primitive-paper-300);
+  pointer-events: auto;
+  margin: 0 auto;
 }
 
-.mobile-switch-wrapper {
-  pointer-events: auto;
+.mobile-nav-item {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  outline: none;
+  white-space: nowrap;
+}
+
+.mobile-nav-item .nav-icon {
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mobile-nav-item .nav-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primitive-ink-500);
+  letter-spacing: -0.01em;
+  transition: all 0.25s ease;
+}
+
+/* Active state */
+.mobile-nav-item.active {
+  background: var(--gradient-primary);
+  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.25);
+}
+
+.mobile-nav-item.active .nav-icon {
+  transform: scale(1.05);
+}
+
+.mobile-nav-item.active .nav-label {
+  color: var(--primitive-paper-50);
+  font-weight: 700;
+}
+
+/* Indicator dot - 移到标签下方小圆点 */
+.nav-indicator {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  background: var(--primitive-paper-50);
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+/* Press effect */
+.mobile-nav-item:active {
+  transform: scale(0.96);
+}
+
+.mobile-nav-item.active:active {
+  transform: scale(0.98);
+}
+
+/* ── 移动端用户选择器（印章） ── */
+.mobile-user-selector {
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+  margin-right: 2px;
+  border-right: 1px solid var(--primitive-paper-300);
+}
+
+/* 调整 UserSelector 在移动端底部导航中的样式 */
+.mobile-user-selector :deep(.user-stamps) {
+  padding: 4px 0;
+}
+
+.mobile-user-selector :deep(.stamps-row) {
+  gap: 4px;
+}
+
+.mobile-user-selector :deep(.stamp-seal) {
+  width: 28px;
+  height: 28px;
+}
+
+.mobile-user-selector :deep(.seal-character) {
+  font-size: 15px;
+}
+
+.mobile-user-selector :deep(.seal-border) {
+  border-width: 1.5px;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -325,8 +447,8 @@ onUnmounted(() => {
 .app-container.is-mobile .main-container {
   margin-left: 0;
   padding: 0.75rem;
-  padding-top: calc(56px + 0.75rem);
-  padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
+  padding-top: 0.75rem;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom) + 0.75rem);
   min-height: 100vh;
   min-height: 100dvh;
   align-items: stretch;
@@ -368,8 +490,8 @@ onUnmounted(() => {
   transform: translateX(-100%);
 }
 
-/* 移动端：只使用opacity动画，避免与sidebar内部的translateY动画冲突 */
-@media (max-width: 480px) {
+/* 移动端：侧边栏从右侧滑入，使用opacity动画避免与内部动画冲突 */
+@media (max-width: 768px) {
   .sidebar-slide-enter-active,
   .sidebar-slide-leave-active {
     transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -412,12 +534,46 @@ onUnmounted(() => {
 @media (max-height: 500px) and (orientation: landscape) {
   .app-container.is-mobile .main-container {
     padding: 0.5rem;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom) + 0.5rem);
     align-items: center;
   }
 
-  .mobile-tab-nav {
-    height: var(--topbar-height);
-    padding: 0 0.5rem;
+  .mobile-bottom-nav {
+    padding: 0 24px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-nav-container {
+    padding: 4px 8px;
+    border-radius: 14px;
+    gap: 2px;
+  }
+
+  .mobile-nav-item {
+    padding: 6px 10px;
+    gap: 3px;
+  }
+
+  .mobile-nav-item .nav-icon {
+    font-size: 16px;
+  }
+
+  .mobile-nav-item .nav-label {
+    font-size: 11px;
+  }
+
+  .mobile-user-selector {
+    padding-right: 4px;
+    margin-right: 2px;
+  }
+
+  .mobile-user-selector :deep(.stamp-seal) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mobile-user-selector :deep(.seal-character) {
+    font-size: 13px;
   }
 
   .fade-slide-enter-active,

@@ -59,22 +59,22 @@ DEFAULT_CONFIG = {
 }
 
 
-def _load_config_from_db() -> dict:
+def _load_config_from_db(user_id: int = 1) -> dict:
     """从数据库加载配置，失败时返回空字典"""
     try:
         from backend.database.config_dao import db_get_user_config
-        config = db_get_user_config()
+        config = db_get_user_config(user_id)
         return config if config else {}
     except Exception as e:
         logger.warning(f"Failed to load config from database: {e}")
         return {}
 
 
-def _save_config_to_db(config: dict) -> bool:
+def _save_config_to_db(config: dict, user_id: int = 1) -> bool:
     """保存配置到数据库"""
     try:
         from backend.database.config_dao import db_save_user_config
-        return db_save_user_config(config)
+        return db_save_user_config(config, user_id)
     except Exception as e:
         logger.error(f"Failed to save config to database: {e}")
         return False
@@ -93,40 +93,59 @@ def _deep_merge(base: dict, override: dict) -> dict:
 
 class UserConfig:
     """
-    用户配置类 - 单例模式
-    配置持久化在数据库 user_config 表中
+    用户配置类 - 多用户支持
+    配置持久化在数据库 user_config 表中，按 user_id 隔离
     """
     _instance = None
     _lock = threading.Lock()
-    _config: dict = None
+    _configs: dict = {}  # user_id -> config dict
+    _current_user_id: int = 1  # 当前用户ID
 
-    def __new__(cls):
+    def __new__(cls, user_id: int = None):
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
                     cls._instance = super().__new__(cls)
-                    cls._instance._load()
         return cls._instance
 
-    def _load(self):
+    def __init__(self, user_id: int = None):
+        """初始化或切换用户配置"""
+        if user_id is not None:
+            self._current_user_id = user_id
+        # 确保当前用户配置已加载
+        if self._current_user_id not in self._configs:
+            self._load(self._current_user_id)
+
+    @property
+    def _config(self) -> dict:
+        """获取当前用户的配置"""
+        if self._current_user_id not in self._configs:
+            self._load(self._current_user_id)
+        return self._configs[self._current_user_id]
+
+    def _load(self, user_id: int = None):
         """从数据库加载配置"""
-        db_config = _load_config_from_db()
+        uid = user_id if user_id is not None else self._current_user_id
+        db_config = _load_config_from_db(uid)
 
         if db_config:
             # 数据库有配置，与默认配置合并确保所有字段存在
-            self._config = _deep_merge(DEFAULT_CONFIG, db_config)
+            self._configs[uid] = _deep_merge(DEFAULT_CONFIG, db_config)
         else:
             # 数据库无配置，使用默认配置
-            self._config = DEFAULT_CONFIG.copy()
+            self._configs[uid] = DEFAULT_CONFIG.copy()
 
-    def reload(self):
+    def reload(self, user_id: int = None):
         """重新从数据库加载配置"""
-        self._load()
+        uid = user_id if user_id is not None else self._current_user_id
+        self._load(uid)
 
-    def save(self):
+    def save(self, user_id: int = None):
         """保存配置到数据库"""
+        uid = user_id if user_id is not None else self._current_user_id
         with self._lock:
-            if not _save_config_to_db(self._config):
+            config = self._configs.get(uid, DEFAULT_CONFIG.copy())
+            if not _save_config_to_db(config, uid):
                 raise IOError("Failed to save config to database")
 
     # ========== 学习设置 ==========
@@ -232,35 +251,38 @@ class UserConfig:
 
     # ========== API方法 ==========
     @classmethod
-    def to_dict(cls) -> dict:
+    def to_dict(cls, user_id: int = 1) -> dict:
         """转换为字典用于API传输"""
-        instance = cls()
+        instance = cls(user_id)
         return instance._config.copy()
 
     @classmethod
-    def update_from_dict(cls, data: dict):
+    def update_from_dict(cls, data: dict, user_id: int = 1):
         """从字典更新配置"""
-        instance = cls()
+        instance = cls(user_id)
         with cls._lock:
             # 深度合并更新
-            instance._config = _deep_merge(instance._config, data)
+            instance._configs[user_id] = _deep_merge(instance._config, data)
 
     @classmethod
-    def update_custom_sources(cls, sources: list):
+    def update_custom_sources(cls, sources: list, user_id: int = 1):
         """更新自定义源（带验证）"""
         if not isinstance(sources, list) or not (1 <= len(sources) <= 3):
             raise ValueError("customSources必须是1-3个元素的列表")
         if len(sources) != len(set(sources)):
             raise ValueError("customSources不能有重复值")
-        instance = cls()
+        instance = cls(user_id)
         with cls._lock:
-            instance._config["sources"]["customSources"] = sources
+            instance._configs[user_id]["sources"]["customSources"] = sources
 
 
 # --- 工具函数（向后兼容） ---
-def get_shuffle_setting() -> bool:
+def get_shuffle_setting(user_id: int = None) -> bool:
     """获取shuffle设置"""
-    return UserConfig().DEFAULT_SHUFFLE
+    from flask import g
+    if user_id is None:
+        user_id = getattr(g, 'user_id', 1)
+    return UserConfig(user_id).DEFAULT_SHUFFLE
 
 
 # --- 常量定义 ---
@@ -272,13 +294,22 @@ class ReviewLoadLimits:
     """每日复习负荷限制配置"""
 
     @staticmethod
-    def get_daily_review_limit() -> int:
-        return UserConfig().DAILY_REVIEW_LIMIT
+    def get_daily_review_limit(user_id: int = None) -> int:
+        from flask import g
+        if user_id is None:
+            user_id = getattr(g, 'user_id', 1)
+        return UserConfig(user_id).DAILY_REVIEW_LIMIT
 
     @staticmethod
-    def get_daily_spell_limit() -> int:
-        return UserConfig().DAILY_SPELL_LIMIT
+    def get_daily_spell_limit(user_id: int = None) -> int:
+        from flask import g
+        if user_id is None:
+            user_id = getattr(g, 'user_id', 1)
+        return UserConfig(user_id).DAILY_SPELL_LIMIT
 
     @staticmethod
-    def get_max_prep_days() -> int:
-        return UserConfig().MAX_PREP_DAYS
+    def get_max_prep_days(user_id: int = None) -> int:
+        from flask import g
+        if user_id is None:
+            user_id = getattr(g, 'user_id', 1)
+        return UserConfig(user_id).MAX_PREP_DAYS

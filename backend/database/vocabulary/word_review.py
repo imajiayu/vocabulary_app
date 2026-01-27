@@ -12,13 +12,14 @@ from backend.models.word import Word
 from .common import get_current_source
 
 
-def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
+def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None, user_id=1):
     """
     获取需要复习的单词ID列表
 
     Args:
         limit: 总数限制（可选）
         low_ef_extra_count: 额外拉取的低EF单词数量（可选）
+        user_id: 用户ID
 
     Returns:
         list: 单词ID列表（到期单词 + 低EF单词，已去重）
@@ -27,11 +28,12 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
 
     if low_ef_extra_count is None:
         from backend.config import UserConfig
-        low_ef_extra_count = UserConfig().LOW_EF_EXTRA_COUNT
+        low_ef_extra_count = UserConfig(user_id).LOW_EF_EXTRA_COUNT
 
     with get_session() as db:
         # 1. 查询到期的单词
         due_rows = db.query(Word.id).filter(
+            Word.user_id == user_id,
             Word.stop_review == 0,
             Word.next_review != None,
             Word.next_review <= datetime.date.today(),
@@ -49,6 +51,7 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
             low_ef_rows = (
                 db.query(Word.id)
                 .filter(
+                    Word.user_id == user_id,
                     Word.stop_review == 0,
                     Word.source == current_source,
                     ~Word.id.in_(due_ids) if due_ids else True,
@@ -70,7 +73,7 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None):
         return all_ids
 
 
-def db_fetch_lapse_word_ids(limit=None):
+def db_fetch_lapse_word_ids(limit=None, user_id=1):
     """获取错题集单词ID列表"""
     from backend.config import get_shuffle_setting
 
@@ -79,7 +82,10 @@ def db_fetch_lapse_word_ids(limit=None):
 
     with get_session() as db:
         query = db.query(Word.id).filter(
-            Word.stop_review == 0, Word.lapse > 0, Word.source == current_source
+            Word.user_id == user_id,
+            Word.stop_review == 0,
+            Word.lapse > 0,
+            Word.source == current_source
         )
 
         if shuffle:
@@ -94,7 +100,7 @@ def db_fetch_lapse_word_ids(limit=None):
         return [row[0] for row in rows]
 
 
-def db_fetch_spelled_word_ids(limit=None):
+def db_fetch_spelled_word_ids(limit=None, user_id=1):
     """获取需要拼写练习的单词ID列表"""
     current_source = get_current_source()
 
@@ -102,6 +108,7 @@ def db_fetch_spelled_word_ids(limit=None):
         rows = (
             db.query(Word.id)
             .filter(
+                Word.user_id == user_id,
                 Word.stop_review == 0,
                 Word.source == current_source,
                 or_(
@@ -123,7 +130,7 @@ def db_fetch_spelled_word_ids(limit=None):
         return [row[0] for row in rows]
 
 
-def db_fetch_today_spell():
+def db_fetch_today_spell(user_id=1):
     """获取今天需要拼写的单词ID列表"""
     current_source = get_current_source()
     today = date.today()
@@ -132,6 +139,7 @@ def db_fetch_today_spell():
         rows = (
             db.query(Word.id)
             .filter(
+                Word.user_id == user_id,
                 Word.stop_review == 0,
                 or_(
                     Word.repetition >= 3,
@@ -162,6 +170,7 @@ def db_update_word_for_review(
     lapse,
     avg_elapsed_time,
     should_stop_review=False,
+    user_id=1,
 ):
     """更新复习后的单词状态"""
     with get_session() as db:
@@ -183,44 +192,48 @@ def db_update_word_for_review(
             values_dict["stop_review"] = 1
 
         db.execute(
-            update(Word).where(Word.id == id).values(**values_dict)
+            update(Word).where(Word.id == id, Word.user_id == user_id).values(**values_dict)
         )
         db.commit()
 
 
-def db_update_word_for_lapse(id, lapse):
+def db_update_word_for_lapse(id, lapse, user_id=1):
     """更新lapse值"""
     with get_session() as db:
-        db.execute(update(Word).where(Word.id == id).values(lapse=lapse))
+        db.execute(update(Word).where(Word.id == id, Word.user_id == user_id).values(lapse=lapse))
         db.commit()
 
 
-def db_update_word_for_spelling(id, newStrength, nextReview=None):
+def db_update_word_for_spelling(id, newStrength, nextReview=None, user_id=1):
     """更新拼写强度"""
     with get_session() as db:
         values = {"spell_strength": newStrength}
         if nextReview is not None:
             values["spell_next_review"] = nextReview
-        db.execute(update(Word).where(Word.id == id).values(**values))
+        db.execute(update(Word).where(Word.id == id, Word.user_id == user_id).values(**values))
         db.commit()
 
 
-def db_get_total_lapse_count():
+def db_get_total_lapse_count(user_id=1):
     """获取总lapse数"""
     current_source = get_current_source()
     with get_session() as db:
         total_lapse = (
             db.query(Word)
-            .filter(Word.source == current_source)
+            .filter(Word.user_id == user_id, Word.source == current_source)
             .with_entities(func.sum(Word.lapse))
             .scalar()
         )
         return total_lapse if total_lapse is not None else 0
 
 
-def adjust_words_for_max_prep_days(max_prep_days):
+def adjust_words_for_max_prep_days(max_prep_days, user_id=1):
     """
     当 maxPrepDays 变小时，调整超出范围的单词
+
+    Args:
+        max_prep_days: 最大准备天数
+        user_id: 用户ID
     """
     import logging
     logger = logging.getLogger(__name__)
@@ -233,6 +246,7 @@ def adjust_words_for_max_prep_days(max_prep_days):
         affected_interval = db.execute(
             update(Word)
             .where(
+                Word.user_id == user_id,
                 Word.stop_review == 0,
                 Word.interval > max_prep_days
             )
@@ -247,6 +261,7 @@ def adjust_words_for_max_prep_days(max_prep_days):
             update(Word)
             .where(
                 and_(
+                    Word.user_id == user_id,
                     Word.stop_review == 0,
                     Word.next_review != None,
                     Word.next_review > max_date
@@ -260,6 +275,7 @@ def adjust_words_for_max_prep_days(max_prep_days):
             update(Word)
             .where(
                 and_(
+                    Word.user_id == user_id,
                     Word.stop_review == 0,
                     Word.spell_next_review != None,
                     Word.spell_next_review > max_date

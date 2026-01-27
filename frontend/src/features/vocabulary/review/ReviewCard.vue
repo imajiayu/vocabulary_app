@@ -1,70 +1,156 @@
 <template>
-    <div class="word-review-container" :class="{ 'phase-one': !showDefinition }">
-        <div class="content-area">
-            <ReviewResult :word="word" :only-show-word="!showDefinition" :horizontal="true" />
-            <RelatedWordsPanel v-if="word.related_words && word.related_words.length > 0 && showDefinition"
-                :relatedWords="word.related_words" />
+  <div class="review-card" :class="{ 'revealed': showDefinition }">
+    <!-- 卡片主体 -->
+    <div class="card-body">
+      <!-- 单词展示区域 - 使用动态定位实现平滑过渡 -->
+      <div class="word-presenter" :class="{ 'to-header': showDefinition }">
+        <span class="word-text" @click="playAudio">{{ word.word }}</span>
+        <div class="word-hint" :class="{ 'hidden': showDefinition }">点击播放发音</div>
+      </div>
+
+      <!-- 阶段二：显示完整内容 -->
+      <Transition name="reveal" :css="false" @enter="onRevealEnter" @leave="onRevealLeave">
+        <div v-if="showDefinition" class="content-stage">
+          <!-- 音标区域 -->
+          <div class="phonetics-bar">
+            <div v-if="displayWord.definition?.phonetic" class="phonetics">
+              <span
+                v-if="displayWord.definition.phonetic.us"
+                class="phonetic-tag"
+                @click="playWordAudio(displayWord.word, 'us')"
+              >
+                <span class="accent">US</span>
+                <span class="ipa">{{ displayWord.definition.phonetic.us }}</span>
+              </span>
+              <span
+                v-if="displayWord.definition.phonetic.uk"
+                class="phonetic-tag"
+                @click="playWordAudio(displayWord.word, 'uk')"
+              >
+                <span class="accent">UK</span>
+                <span class="ipa">{{ displayWord.definition.phonetic.uk }}</span>
+              </span>
+            </div>
+            <!-- 装饰线 -->
+            <div class="divider-line"></div>
+          </div>
+
+          <!-- 释义列表 -->
+          <div class="definitions-section">
+            <div
+              v-for="(def, i) in displayWord.definition?.definitions || []"
+              :key="i"
+              class="definition-card"
+              :style="{ '--stagger-index': i }"
+            >
+              <span class="def-marker">{{ i + 1 }}</span>
+              <span class="def-text">{{ def }}</span>
+            </div>
+          </div>
+
+          <!-- 例句 -->
+          <div v-if="displayWord.definition?.examples?.length" class="examples-section">
+            <div class="section-label">例句</div>
+            <div
+              v-for="(ex, i) in displayWord.definition.examples"
+              :key="i"
+              class="example-card"
+              :style="{ '--stagger-index': (displayWord.definition?.definitions?.length || 0) + i }"
+            >
+              <div class="example-en" v-html="ex.en"></div>
+              <div class="example-zh">{{ ex.zh }}</div>
+            </div>
+          </div>
+
+          <!-- 相关词汇 -->
+          <RelatedWordsPanel
+            v-if="displayWord.related_words?.length"
+            :relatedWords="displayWord.related_words"
+            class="related-section"
+          />
         </div>
-
-        <div class="button-bar">
-            <div v-show="!showDefinition" class="button-group">
-                <div class="row-buttons first-row" :class="{ 'lapse-mode': isLapseMode }">
-                    <button class="button yes-button" @click="handleChoice('yes')" :disabled="isSubmitting">
-                        <span class="button-text-desktop">记住 ✅</span>
-                        <span class="button-text-mobile">✅</span>
-                    </button>
-                    <button class="button no-button" @click="handleChoice('no')" :disabled="isSubmitting">
-                        <span class="button-text-desktop">没记住 ❌</span>
-                        <span class="button-text-mobile">❌</span>
-                    </button>
-                    <!-- 移动端：重置计时器按钮放在第一行 -->
-                    <button v-if="!isLapseMode" class="button reset-timer-button-mobile" @click="handleResetTimer" title="重置计时器">
-                        🔄
-                    </button>
-                </div>
-                <div class="row-buttons">
-                    <button class="button full-width stop-button" @click="handleChoice('stop')"
-                        :disabled="isSubmitting">
-                        不再复习 🚫
-                    </button>
-                </div>
-            </div>
-
-            <div v-show="showDefinition" class="button-group">
-                <div class="row-buttons">
-                    <button class="button correction-button" @click="handleCorrection" :disabled="isSubmitting">
-                        记错了 ❌
-                    </button>
-                    <button class="button next-button" @click="handleNext" :disabled="isSubmitting" :class="{
-                        'next-yes': pendingChoice === 'yes',
-                        'next-no': pendingChoice === 'no'
-                    }">
-                        下一个 ➡️
-                    </button>
-                </div>
-            </div>
-
-            <!-- 重置计时器按钮 - 只在第一阶段显示，且不在错题模式 -->
-            <div v-show="!showDefinition && !isLapseMode" class="reset-timer-wrapper">
-                <button class="reset-timer-button" @click="handleResetTimer" @mouseenter="showResetTooltip = true"
-                    @mouseleave="showResetTooltip = false" title="重置计时器">
-                    🔄
-                </button>
-                <div v-show="showResetTooltip" class="reset-timer-tooltip">
-                    重置计时器
-                </div>
-            </div>
-        </div>
+      </Transition>
     </div>
+
+    <!-- 底部操作栏 -->
+    <div class="action-bar">
+      <Transition name="action-switch" mode="out-in">
+        <!-- 阶段一按钮 -->
+        <div v-if="!showDefinition" class="action-group initial" key="initial">
+          <button
+            class="action-btn remembered"
+            :disabled="isSubmitting"
+            @click="handleChoice('yes')"
+          >
+            <span class="btn-icon">✓</span>
+            <span class="btn-label">记住了</span>
+          </button>
+
+          <button
+            class="action-btn forgot"
+            :disabled="isSubmitting"
+            @click="handleChoice('no')"
+          >
+            <span class="btn-icon">✗</span>
+            <span class="btn-label">没记住</span>
+          </button>
+
+          <button
+            v-if="!isLapseMode"
+            class="action-btn skip"
+            :disabled="isSubmitting"
+            @click="handleChoice('stop')"
+          >
+            <span class="btn-icon">⊘</span>
+            <span class="btn-label">不再复习</span>
+          </button>
+
+          <!-- 重置计时器 -->
+          <button
+            v-if="!isLapseMode"
+            class="action-btn timer-reset"
+            @click="handleResetTimer"
+            title="重置计时器"
+          >
+            <span class="btn-icon">↻</span>
+          </button>
+        </div>
+
+        <!-- 阶段二按钮 -->
+        <div v-else class="action-group confirmed" key="confirmed">
+          <button
+            class="action-btn correction"
+            :disabled="isSubmitting"
+            @click="handleCorrection"
+          >
+            <span class="btn-icon">↩</span>
+            <span class="btn-label">记错了</span>
+          </button>
+
+          <button
+            class="action-btn next"
+            :class="{
+              'next-success': pendingChoice === 'yes',
+              'next-error': pendingChoice === 'no'
+            }"
+            :disabled="isSubmitting"
+            @click="handleNext"
+          >
+            <span class="btn-icon">→</span>
+            <span class="btn-label">下一个</span>
+          </button>
+        </div>
+      </Transition>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
-import ReviewResult from './ReviewResult.vue'
-import { playWordAudio } from '@/shared/utils/playWordAudio'
 import RelatedWordsPanel from '@/features/vocabulary/relations/RelatedWordsPanel.vue'
+import { playWordAudio } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
@@ -73,21 +159,17 @@ import { useTimer } from '@/shared/composables/useTimer'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { reviewLogger as log } from '@/shared/utils/logger'
 
-
 interface Props {
-    word: Word
-    audioType: AudioType
-    onResult: (result: {
-        remembered: boolean
-        elapsedTime: number
-    }) => Promise<void>
-    onSkip: () => Promise<void>
+  word: Word
+  audioType: AudioType
+  onResult: (result: { remembered: boolean; elapsedTime: number }) => Promise<void>
+  onSkip: () => Promise<void>
 }
 
 interface Emits {
-    (e: 'result', result: { remembered: boolean; elapsedTime: number }): void
-    (e: 'skip'): void
-    (e: 'audioTypeChange', type: AudioType): void
+  (e: 'result', result: { remembered: boolean; elapsedTime: number }): void
+  (e: 'skip'): void
+  (e: 'audioTypeChange', type: AudioType): void
 }
 
 const props = defineProps<Props>()
@@ -97,7 +179,9 @@ const emit = defineEmits<Emits>()
 const showDefinition = ref(false)
 const pendingChoice = ref<string | null>(null)
 const isSubmitting = ref(false)
-const showResetTooltip = ref(false)
+
+// 缓存用于显示释义的单词数据（避免 Transition leave 动画期间内容跳变）
+const displayWord = ref<Word>(props.word)
 
 // 使用计时器
 const timer = useTimer()
@@ -111,561 +195,849 @@ const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent 
 // 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
 
-// 🔧 使用全局键盘管理器
+// 使用全局键盘管理器
 const { setContext, registerKeys, cleanup } = useKeyboardManager()
 
-// 获取当前复习模式，用于判断是否需要缓存兜底音频
+// 获取当前复习模式
 const reviewStore = useReviewStore()
 const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
 
-// 监听全局暂停状态，控制计时器
+// 播放音频
+const playAudio = () => {
+  playWordAudio(props.word.word, audioAccent.value)
+}
+
+// 监听全局暂停状态
 watch(pauseCount, (newCount, oldCount) => {
   if (newCount > 0 && oldCount === 0) {
-    // 从运行状态变为暂停状态
     if (timer.isRunning.value) {
       timer.pause()
     }
   } else if (newCount === 0 && oldCount > 0) {
-    // 从暂停状态变为运行状态
     if (!timer.isRunning.value && !showDefinition.value) {
-      // 只有在第一阶段（未显示释义）时才恢复计时
       timer.resume()
     }
   }
 })
 
 const handleChoice = (choice: string) => {
-    if (isSubmitting.value) return
+  if (isSubmitting.value) return
 
-    // 暂停计时器
-    timer.pause()
+  timer.pause()
+  pendingChoice.value = choice
+  // 锁定当前单词数据，避免 leave 动画期间内容跳变
+  displayWord.value = props.word
+  showDefinition.value = true
 
-    pendingChoice.value = choice
-
-    // 立即显示释义和后续按钮，触发快捷键重新注册
-    showDefinition.value = true
-
-    // 在上下文切换后播放音频（非阻塞，不影响快捷键）
-    if (autoPlayAfterAnswer.value) {
-        // 使用 setTimeout 确保完全不阻塞
-        setTimeout(() => {
-            playWordAudio(props.word.word, audioAccent.value, 5, 300, isLapseMode.value)
-        }, 0)
-    }
+  if (autoPlayAfterAnswer.value) {
+    setTimeout(() => playAudio(), 0)
+  }
 }
 
 const handleCorrection = async () => {
-    // "记错了"按钮应该覆盖之前的选择，强制设置为"没记住"
-    // 即使之前选了"不再复习"，也要改为提交学习结果
-    await submitResult(false, true) // 第二个参数表示强制提交结果
+  await submitResult(false, true)
 }
 
 const handleNext = async () => {
-    const unRemembered = pendingChoice.value === 'no'
-    await submitResult(!unRemembered, false)
+  const unRemembered = pendingChoice.value === 'no'
+  await submitResult(!unRemembered, false)
 }
 
 const handleSkip = async () => {
-    try {
-        await props.onSkip()
-    } catch (error) {
-        log.error('Skip failed:', error)
-    } finally {
-    }
+  try {
+    await props.onSkip()
+  } catch (error) {
+    log.error('Skip failed:', error)
+  }
 }
 
 const handleResetTimer = () => {
-    // 重置并重新启动计时器
-    timer.reset()
-    timer.start()
+  timer.reset()
+  timer.start()
 }
 
 const submitResult = async (remembered: boolean, forceResult: boolean = false) => {
-    if (isSubmitting.value) {
-        return
-    }
+  if (isSubmitting.value) return
 
-    isSubmitting.value = true
-    try {
-        // 读取并清空计时器，返回经过的时间（秒）
-        const elapsedTime = timer.readAndReset(10.0)
+  isSubmitting.value = true
+  try {
+    const elapsedTime = timer.readAndReset(10.0)
+    const isStop = pendingChoice.value === 'stop'
 
-        // 如果强制提交结果（来自"记错了"按钮），或者不是"不再复习"，则提交学习结果
-        if (forceResult || pendingChoice.value !== 'stop') {
-            await props.onResult({
-                remembered,
-                elapsedTime
-            })
-        } else {
-            // 只有在非强制且选择了"不再复习"时才跳过
-            await handleSkip()
-        }
+    // 先隐藏释义，避免新单词到来时旧释义闪现
+    showDefinition.value = false
+    pendingChoice.value = null
 
-        // 👉 提交成功后，重置状态
-        showDefinition.value = false
-        pendingChoice.value = null
-
-    } catch (error) {
-        log.error('Submit result failed:', error)
-    } finally {
-        isSubmitting.value = false
-    }
-}
-
-// 🔧 使用全局键盘管理器注册快捷键
-const setupKeyboardShortcuts = () => {
-    // 先清理旧的快捷键，避免重复注册
-    cleanup()
-
-    if (!showDefinition.value) {
-        // 初始选择状态 - 注册初始快捷键
-        setContext('review-initial')
-        const initialKeys = hotkeys.value.reviewInitial
-        registerKeys({
-            [initialKeys.remembered]: () => handleChoice('yes'),
-            [initialKeys.notRemembered]: () => handleChoice('no'),
-            [initialKeys.stopReview]: () => handleChoice('stop')
-        })
+    if (forceResult || !isStop) {
+      await props.onResult({ remembered, elapsedTime })
     } else {
-        // 显示释义状态 - 注册显示释义后的快捷键
-        setContext('review-after')
-        const afterKeys = hotkeys.value.reviewAfter
-        registerKeys({
-            [afterKeys.wrong]: async () => await handleCorrection(),
-            [afterKeys.next]: async () => await handleNext()
-        })
+      await handleSkip()
     }
+  } catch (error) {
+    log.error('Submit result failed:', error)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
-// 监听showDefinition变化，更新快捷键注册
-// 注意：不使用 immediate，避免与 onMounted 中的调用冲突
+// 键盘快捷键
+const setupKeyboardShortcuts = () => {
+  cleanup()
+
+  if (!showDefinition.value) {
+    setContext('review-initial')
+    const initialKeys = hotkeys.value.reviewInitial
+    registerKeys({
+      [initialKeys.remembered]: () => handleChoice('yes'),
+      [initialKeys.notRemembered]: () => handleChoice('no'),
+      [initialKeys.stopReview]: () => handleChoice('stop')
+    })
+  } else {
+    setContext('review-after')
+    const afterKeys = hotkeys.value.reviewAfter
+    registerKeys({
+      [afterKeys.wrong]: async () => await handleCorrection(),
+      [afterKeys.next]: async () => await handleNext()
+    })
+  }
+}
+
 watch(showDefinition, () => {
-    setupKeyboardShortcuts()
+  setupKeyboardShortcuts()
 }, { flush: 'post' })
 
-// 监听单词变化，自动播放新单词的音频
+// Transition 钩子：enter 有精心编排的动画，leave 立即完成
+const onRevealEnter = (el: Element, done: () => void) => {
+  const htmlEl = el as HTMLElement
+  // 使用更优雅的展开动画
+  htmlEl.style.animation = 'contentReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards'
+  htmlEl.addEventListener('animationend', done, { once: true })
+}
+
+const onRevealLeave = (_el: Element, done: () => void) => {
+  // 立即完成，不要 leave 动画
+  done()
+}
+
+// 监听单词变化
 watch(() => props.word?.id, (newWordId, oldWordId) => {
-    if (newWordId && newWordId !== oldWordId) {
-        // 重置状态
-        showDefinition.value = false
-        pendingChoice.value = null
+  if (newWordId && newWordId !== oldWordId) {
+    showDefinition.value = false
+    pendingChoice.value = null
+    // 注意：不在这里更新 displayWord，等 @after-leave 动画完成后再更新
+    // 这样可以避免 leave 动画期间内容跳变
+    timer.reset()
+    timer.start()
 
-        // 重置并启动计时器
-        timer.reset()
-        timer.start()
-
-        // 播放新单词音频（根据设置决定是否自动播放）
-        if (autoPlayOnWordChange.value && props.word) {
-            playWordAudio(props.word.word, audioAccent.value, 5, 300, isLapseMode.value)
-        }
+    if (autoPlayOnWordChange.value && props.word) {
+      playWordAudio(props.word.word, audioAccent.value)
     }
+  }
 }, { immediate: false })
 
 onMounted(async () => {
-    // 加载音频设置和快捷键设置
-    await Promise.all([
-        loadAudioAccent(),
-        loadHotkeys()
-    ])
+  await Promise.all([loadAudioAccent(), loadHotkeys()])
+  setupKeyboardShortcuts()
+  timer.start()
 
-    // 🔧 注册快捷键到全局键盘管理器
-    setupKeyboardShortcuts()
-
-    // 启动计时器
-    timer.start()
-
-    // 初始播放音频（根据设置决定是否自动播放）
-    if (props.word && autoPlayOnWordChange.value) {
-        playWordAudio(props.word.word, audioAccent.value, 5, 300, isLapseMode.value)
-    }
+  if (props.word && autoPlayOnWordChange.value) {
+    playWordAudio(props.word.word, audioAccent.value)
+  }
 })
 </script>
 
 <style scoped>
-/* 主容器 */
-.word-review-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    position: relative;
+/* ═══════════════════════════════════════════════════════════════════════════
+   Neo-Editorial Flash Card - 沉浸式复习卡片
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.review-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-/* 内容区域 - 移除滚动容器设置 */
-.content-area {
-    padding: 1rem;
-    /* 底部间距 = 按钮栏高度 + 额外空间 */
-    padding-bottom: calc(2 * 2.8rem + 0.75rem + 2rem + 1.5rem);
-    max-width: 900px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
-    /* 移除滚动设置，使用页面自然滚动 */
-    flex: 1;
+/* ── 卡片主体 ── */
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 2rem;
+  padding-bottom: calc(var(--button-bar-height) + 1.5rem);
+  position: relative;
 }
 
-/* 固定底部按钮栏 */
-.button-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100vw; /* 使用视口宽度而非百分比 */
-    padding: 1rem;
-    background: var(--color-bg-overlay);
-    border-top: 1px solid var(--color-border-medium);
-    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    box-sizing: border-box;
-    /* 设置固定高度防止布局跳动 */
-    height: calc(2 * 2.8rem + 0.75rem + 2rem); /* 按钮高度 + 间距 + padding */
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+/* ══════════════════════════════════════════════════════════════════════════
+   单词展示器 - 聚光灯式过渡
+   从舞台中央平滑移动到页眉位置
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.word-presenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* 初始状态：垂直居中在可视区域 */
+  min-height: 180px;
+  justify-content: center;
+  /* 平滑过渡所有属性 */
+  transition:
+    min-height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 按钮组 */
-.button-group {
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+.word-presenter.to-header {
+  /* 过渡后：收缩到页眉 */
+  min-height: auto;
+  margin-bottom: 0.75rem;
 }
 
-/* 按钮行 */
-.row-buttons {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
+.word-text {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.2;
+  /* 字体大小平滑过渡 */
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  transition:
+    font-size 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.2s ease;
 }
 
-.row-buttons:last-child {
-    margin-bottom: 0;
+.word-presenter.to-header .word-text {
+  /* 过渡后：缩小为页眉大小，变为主题色 */
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  color: var(--color-primary);
 }
 
-/* 按钮基础样式 */
-.button {
-    flex: 1;
-    font-size: 1.1em;
-    padding: 0.8em;
-    border: none;
-    border-radius: var(--radius-default);
-    cursor: pointer;
-    background-color: var(--control-bg-neutral);
-    transition: all 0.2s ease;
-    color: var(--color-text-primary);
-    touch-action: manipulation;
+.word-text:hover {
+  transform: scale(1.02);
 }
 
-.next-yes {
-    background-color: rgba(82, 196, 26, 0.3);
+.word-text:active {
+  transform: scale(0.98);
 }
 
-.next-no {
-    background-color: rgba(255, 77, 79, 0.3);
+.word-hint {
+  margin-top: 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  animation: hintFadeIn 0.6s ease 0.5s forwards;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.button:hover:not(:disabled) {
-    background-color: var(--control-bg-hover);
-    transform: translateY(-1px);
+.word-hint.hidden {
+  opacity: 0 !important;
+  transform: translateY(-8px);
+  animation: none;
 }
 
-.next-yes:hover:not(:disabled) {
-    background-color: rgba(82, 196, 26, 0.5) !important;
+/* ══════════════════════════════════════════════════════════════════════════
+   内容展示阶段 - 墨水晕染展开
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.content-stage {
+  /* enter 动画由 JS 钩子控制 */
+  transform-origin: top center;
 }
 
-.next-no:hover:not(:disabled) {
-    background-color: rgba(255, 77, 79, 0.5) !important;
+/* 音标栏 - 作为单词和释义之间的过渡 */
+.phonetics-bar {
+  text-align: center;
+  margin-bottom: 1.75rem;
 }
 
-/* 按钮禁用状态 */
-.button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
+.phonetics {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: phoneticsReveal 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
 }
 
-/* 全宽按钮 */
-.full-width {
-    width: 100%;
+/* 装饰分隔线 - 墨水扩散效果 */
+.divider-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-border-light) 15%,
+    var(--color-primary) 50%,
+    var(--color-border-light) 85%,
+    transparent 100%
+  );
+  margin-top: 1.25rem;
+  transform: scaleX(0);
+  animation: lineExpand 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
 }
 
-/* 移动端重置计时器按钮（在第一行） */
-.reset-timer-button-mobile {
-    display: none; /* 桌面端隐藏 */
+.phonetic-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--color-border-light);
 }
 
-/* 桌面端重置计时器容器 - 固定在右下角 */
-.reset-timer-wrapper {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    z-index: 10;
+.phonetic-tag:hover {
+  background: var(--color-bg-tertiary);
+  transform: translateY(-1px);
 }
 
-/* 桌面端重置计时器按钮 */
-.reset-timer-button {
-    width: 2.5rem;
-    height: 2.5rem;
-    border: none;
-    border-radius: var(--radius-full);
-    background-color: rgba(240, 240, 240, 0.9);
-    cursor: pointer;
-    font-size: 1.2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    touch-action: manipulation;
+.phonetic-tag .accent {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.reset-timer-button:hover {
-    background-color: rgba(220, 220, 220, 0.95);
-    transform: rotate(180deg) scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.phonetic-tag .ipa {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
 }
 
-.reset-timer-button:active {
-    transform: rotate(180deg) scale(0.95);
+/* ── 释义区域 ── */
+.definitions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
 }
 
-/* 重置计时器提示 - 只在桌面端显示 */
-.reset-timer-tooltip {
-    position: absolute;
-    right: calc(100% + 0.75rem);
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.85);
-    color: white;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    white-space: nowrap;
-    pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    animation: tooltipFadeIn 0.2s ease;
+.definition-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  /* 交错动画：基于 CSS 变量的延迟 */
+  animation: cardSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.3s + var(--stagger-index, 0) * 0.07s);
 }
 
-.reset-timer-tooltip::after {
-    content: '';
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 0.375rem solid transparent;
-    border-left-color: rgba(0, 0, 0, 0.85);
+.def-marker {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  color: white;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
 }
 
-@keyframes tooltipFadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.def-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
 }
 
-/* 手机端隐藏提示 */
+/* ── 例句区域 ── */
+.examples-section {
+  margin-bottom: 2rem;
+}
+
+.section-label {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.example-card {
+  padding: 1rem 1.25rem;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+  border-left: 3px solid var(--color-success);
+  /* 交错动画：延续释义卡片的节奏 */
+  animation: cardSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.3s + var(--stagger-index, 0) * 0.07s);
+}
+
+.example-card:last-child {
+  margin-bottom: 0;
+}
+
+.example-en {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.example-zh {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* ── 相关词汇 ── */
+.related-section {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   操作栏
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem 1rem;
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg-page) 80%, transparent);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+}
+
+.action-group {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* ── 按钮基础样式 ── */
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.875rem 1.5rem;
+  min-width: 90px;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: var(--font-ui);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.action-btn:hover::before {
+  opacity: 0.08;
+}
+
+.action-btn:active {
+  transform: scale(0.96);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.btn-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ── 记住按钮 ── */
+.action-btn.remembered {
+  background: var(--color-success-light);
+  color: var(--color-success);
+  flex: 1.2;
+}
+
+.action-btn.remembered:hover {
+  background: var(--color-success);
+  color: white;
+}
+
+/* ── 没记住按钮 ── */
+.action-btn.forgot {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+  flex: 1.2;
+}
+
+.action-btn.forgot:hover {
+  background: var(--color-danger);
+  color: white;
+}
+
+/* ── 不再复习按钮 ── */
+.action-btn.skip {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  flex: 1;
+}
+
+.action-btn.skip:hover {
+  background: var(--color-text-tertiary);
+  color: white;
+}
+
+/* ── 重置计时器按钮 ── */
+.action-btn.timer-reset {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-tertiary);
+  min-width: 52px;
+  padding: 0.875rem;
+}
+
+.action-btn.timer-reset:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.action-btn.timer-reset .btn-icon {
+  font-size: 1.25rem;
+}
+
+/* ── 记错了按钮 ── */
+.action-btn.correction {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+  flex: 1;
+}
+
+.action-btn.correction:hover {
+  background: var(--color-warning);
+  color: white;
+}
+
+/* ── 下一个按钮 ── */
+.action-btn.next {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  flex: 1.5;
+}
+
+.action-btn.next:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.action-btn.next.next-success {
+  background: var(--color-success);
+  color: white;
+}
+
+.action-btn.next.next-error {
+  background: var(--color-danger);
+  color: white;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   动画系统 - 墨水晕染主题
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* 提示文字淡入 */
+@keyframes hintFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 内容区域整体展开 */
+@keyframes contentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 音标标签浮现 */
+@keyframes phoneticsReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 装饰线扩展 - 墨水扩散 */
+@keyframes lineExpand {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* 卡片滑入 - 统一的交错动画 */
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 兼容旧动画名称 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Reveal 过渡（由 JS 钩子控制，leave 立即完成无动画） */
+
+/* Action Switch 过渡 (mode="out-in") */
+.action-switch-enter-active,
+.action-switch-leave-active {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.action-switch-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.action-switch-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ══════════════════════════════════════════════════════════════════════════ */
+
 @media (max-width: 480px) {
-    .reset-timer-tooltip {
-        display: none;
-    }
+  .review-card {
+    padding: 0 1rem;
+  }
+
+  .card-body {
+    padding-top: 1.5rem;
+    padding-bottom: calc(var(--button-bar-height-mobile) + 1rem);
+  }
+
+  .word-presenter {
+    min-height: 140px;
+  }
+
+  .word-text {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .word-presenter.to-header .word-text {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .word-hint {
+    font-size: 0.8rem;
+  }
+
+  .phonetics-bar {
+    margin-bottom: 1.25rem;
+  }
+
+  .phonetic-tag {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .phonetic-tag .ipa {
+    font-size: 0.85rem;
+  }
+
+  .divider-line {
+    margin-top: 1rem;
+  }
+
+  .definition-card {
+    padding: 0.875rem 1rem;
+  }
+
+  .def-text {
+    font-size: 0.95rem;
+  }
+
+  .example-card {
+    padding: 0.875rem 1rem;
+  }
+
+  .example-en {
+    font-size: 0.9rem;
+  }
+
+  .example-zh {
+    font-size: 0.8rem;
+  }
+
+  /* 移动端按钮 */
+  .action-bar {
+    padding: 1rem 0.75rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .action-group {
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    padding: 0.75rem 0.5rem;
+    min-width: 70px;
+    border-radius: var(--radius-md);
+  }
+
+  .btn-icon {
+    font-size: 1.3rem;
+  }
+
+  .btn-label {
+    font-size: 0.7rem;
+  }
+
+  .action-btn.timer-reset {
+    min-width: 48px;
+  }
 }
 
-/* 桌面端优化 */
-@media (min-width: 481px) {
-    .content-area {
-        padding-bottom: 8rem;
-    }
-}
+/* 小屏幕 */
+@media (max-width: 360px) {
+  .action-btn {
+    min-width: 60px;
+    padding: 0.625rem 0.375rem;
+  }
 
-/* 桌面端显示完整文本，隐藏简短文本 */
-.button-text-mobile {
-    display: none;
-}
+  .btn-icon {
+    font-size: 1.2rem;
+  }
 
-.button-text-desktop {
-    display: inline;
-}
-
-/* 移动端适配 - 强制覆盖 */
-@media (max-width: 480px) {
-    .word-review-container .content-area {
-        padding-top: 0.5rem !important;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-        /* 底部间距 = 按钮栏高度 + 额外空间 */
-        padding-bottom: calc(2 * 3.5rem + 0.75rem + 2rem + env(safe-area-inset-bottom) + 1rem) !important;
-    }
-
-    .button-bar {
-        padding: 1rem 0.75rem;
-        padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-        /* 确保固定在底部 */
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100vw; /* 使用视口宽度 */
-        background: rgba(255, 255, 255, 0.9); /* 确保有背景色 */
-        z-index: 1001;
-        /* 使用固定高度防止跳动 */
-        height: calc(2 * 3.5rem + 0.75rem + 2rem + env(safe-area-inset-bottom));
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    .row-buttons {
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
-
-    /* 第一行按钮（包含重置计时器） */
-    .row-buttons.first-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr 0.6fr;
-        gap: 0.5rem;
-    }
-
-    /* lapse 模式：两个按钮平分空间 */
-    .row-buttons.first-row.lapse-mode {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .button {
-        min-height: 3.5rem;
-        padding: 0.875rem;
-        font-size: 1rem;
-    }
-
-    /* 移动端显示简短文本，隐藏完整文本 */
-    .button-text-desktop {
-        display: none;
-    }
-
-    .button-text-mobile {
-        display: inline;
-        font-size: 1.5rem;
-    }
-
-    /* 移动端重置计时器按钮显示 */
-    .reset-timer-button-mobile {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        background-color: rgba(240, 240, 240, 0.9);
-    }
-
-    .reset-timer-button-mobile:active {
-        transform: rotate(180deg) scale(0.95);
-    }
-
-    /* 桌面端重置计时器隐藏 */
-    .reset-timer-wrapper {
-        display: none;
-    }
-}
-
-/* 小屏幕手机适配 - 强制覆盖 */
-@media (max-width: 480px) {
-    .word-review-container .content-area {
-        padding-top: 0.25rem !important;
-        padding-left: 0.25rem !important;
-        padding-right: 0.25rem !important;
-        /* 底部间距 = 按钮栏高度 + 额外空间 */
-        padding-bottom: calc(2 * 3.25rem + 0.625rem + 1.75rem + env(safe-area-inset-bottom) + 1rem) !important;
-    }
-
-    .button-bar {
-        padding: 0.875rem 0.5rem;
-        padding-bottom: calc(0.875rem + env(safe-area-inset-bottom));
-        width: 100vw; /* 使用视口宽度 */
-        background: rgba(255, 255, 255, 0.9); /* 确保有背景色 */
-        /* 使用固定高度防止跳动 */
-        height: calc(2 * 3.25rem + 0.625rem + 1.75rem + env(safe-area-inset-bottom));
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    .row-buttons {
-        gap: 0.375rem;
-        margin-bottom: 0.625rem;
-    }
-
-    .button {
-        min-height: 3.25rem;
-        padding: 0.75rem;
-        font-size: 0.95rem;
-    }
-
-    .reset-timer-wrapper {
-        bottom: calc(0.875rem + env(safe-area-inset-bottom));
-        right: 0.5rem;
-    }
-
-    .reset-timer-button {
-        width: 2.75rem;
-        height: 2.75rem;
-        font-size: 1.2em;
-    }
+  .btn-label {
+    font-size: 0.65rem;
+  }
 }
 
 /* 横屏适配 */
-@media (max-height: 600px) and (orientation: landscape) {
-    .content-area {
-        padding-bottom: 5rem;
-    }
+@media (max-height: 500px) and (orientation: landscape) {
+  .card-body {
+    padding-top: 0.75rem;
+    padding-bottom: 75px;
+  }
 
-    .button-bar {
-        padding: 0.75rem;
-        /* 使用固定高度防止跳动 */
-        height: calc(2 * 2.5rem + 0.75rem + 1.5rem);
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-    }
+  .word-presenter {
+    min-height: 70px;
+  }
 
-    .button {
-        min-height: 2.5rem;
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
+  .word-text {
+    font-size: 1.75rem;
+  }
 
-    .reset-timer-wrapper {
-        bottom: 0.75rem;
-        right: 0.75rem;
-    }
+  .word-presenter.to-header .word-text {
+    font-size: 1.5rem;
+  }
 
-    .reset-timer-button {
-        width: 2.5rem;
-        height: 2.5rem;
-        font-size: 1.1em;
-    }
-}
+  .phonetics-bar {
+    margin-bottom: 1rem;
+  }
 
-/* iOS Safari 特定修复 - 移除强制高度设置 */
-@supports (-webkit-touch-callout: none) {
-    /* 不再强制设置容器高度，让内容自然流动 */
-}
+  .divider-line {
+    margin-top: 0.75rem;
+  }
 
-/* 支持安全区域 */
-@supports (padding: max(0px)) {
-    .button-bar {
-        padding-left: max(1rem, env(safe-area-inset-left));
-        padding-right: max(1rem, env(safe-area-inset-right));
-        padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    }
+  .action-bar {
+    padding: 0.5rem;
+  }
 
-    .reset-timer-wrapper {
-        right: max(1rem, env(safe-area-inset-right));
-        bottom: max(1rem, env(safe-area-inset-bottom));
-    }
+  .action-btn {
+    padding: 0.4rem 0.75rem;
+    flex-direction: row;
+    gap: 0.4rem;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+  }
+
+  .btn-label {
+    font-size: 0.7rem;
+  }
 }
 </style>

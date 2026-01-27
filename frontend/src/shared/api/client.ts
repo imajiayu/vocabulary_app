@@ -3,6 +3,7 @@
  */
 
 import { API_BASE_URL } from '@/shared/config/env'
+import { getCurrentUserId } from '@/shared/composables/useUserSelection'
 
 export interface ApiResponse<T = unknown> {
   success: boolean
@@ -99,6 +100,10 @@ class HttpClient {
     return response.text() as unknown as T
   }
 
+  private getUserIdHeader(): Record<string, string> {
+    return { 'X-User-ID': String(getCurrentUserId()) }
+  }
+
   async get<T = unknown>(
     url: string,
     options: RequestInit = {}
@@ -107,6 +112,7 @@ class HttpClient {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getUserIdHeader(),
         ...options.headers,
       },
       ...options,
@@ -124,8 +130,9 @@ class HttpClient {
 
     const response = await fetch(`${this.baseURL}${url}`, {
       method: 'POST',
-      headers: isFormData ? {} : {
+      headers: isFormData ? { ...this.getUserIdHeader() } : {
         'Content-Type': 'application/json',
+        ...this.getUserIdHeader(),
         ...options.headers,
       },
       body: isFormData ? data : JSON.stringify(data),
@@ -144,6 +151,7 @@ class HttpClient {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getUserIdHeader(),
         ...options.headers,
       },
       body: JSON.stringify(data),
@@ -162,6 +170,7 @@ class HttpClient {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getUserIdHeader(),
         ...options.headers,
       },
       body: JSON.stringify(data),
@@ -179,6 +188,7 @@ class HttpClient {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getUserIdHeader(),
         ...options.headers,
       },
       ...options,

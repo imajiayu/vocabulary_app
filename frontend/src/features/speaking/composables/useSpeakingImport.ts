@@ -87,8 +87,8 @@ export function useSpeakingImport() {
         return { success: false, message: '文件中没有找到有效的题目' }
       }
 
-      // Call import API
-      const result = await api.speaking.importQuestionsFromData(
+      // Call import API (直接使用 Supabase)
+      const result = await api.speaking.importQuestions(
         topicsData,
         selectedPart.value
       )

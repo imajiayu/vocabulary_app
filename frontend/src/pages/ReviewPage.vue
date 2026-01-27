@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container flex-layout">
+  <div class="review-page">
     <!-- 复习参数更新通知 -->
     <ReviewParamsNotification
       v-if="notification.data"
@@ -13,37 +13,49 @@
       @close="handleCloseNotification"
     />
 
-    <WordSideBar v-if="displayIndex <= displayTotal" :words="sidebarWords"
-      :remember-history="wordResults" :mode="mode" @sidebar-word-change="sidebarWordChange" @word-deleted="handleSidebarWordDeleted"
-      @word-forgot="handleWordForgot" @word-mastered="handleWordMastered" />
+    <!-- 侧边栏 -->
+    <WordSideBar
+      v-if="displayIndex <= displayTotal"
+      :words="sidebarWords"
+      :remember-history="wordResults"
+      :mode="mode"
+      @sidebar-word-change="sidebarWordChange"
+      @word-deleted="handleSidebarWordDeleted"
+      @word-forgot="handleWordForgot"
+      @word-mastered="handleWordMastered"
+    />
 
     <!-- 顶部栏 -->
     <TopBar show-home-button show-management-button show-stats-button>
-
       <template #center>
-        <div class="center-info-container">
-          <!-- 复习信息 -->
-          <div v-if="reviewInfo" class="review-info-text">
-            <span class="info-source">{{ reviewStore.wordQueue[0]?.source || '' }}</span>
-            <span class="info-mode">{{ mode === 'mode_lapse' ? '复习错题' : mode === 'mode_spelling' ? '拼写熟练' : '复习已有' }}</span>
-            <span class="info-shuffle">{{ shuffle ? '随机' : '顺序' }}</span>
+        <div class="header-info">
+          <!-- 模式标签 -->
+          <div v-if="reviewInfo" class="mode-badges">
+            <span class="badge source">{{ reviewStore.wordQueue[0]?.source || '' }}</span>
+            <span class="badge mode" :class="modeClass">{{ modeLabel }}</span>
+            <span class="badge shuffle">{{ shuffle ? '随机' : '顺序' }}</span>
           </div>
 
-          <!-- 复习速度和预估时间 - 非lapse模式 -->
+          <!-- 复习速度指示器 -->
           <ReviewSpeedIndicator />
 
-          <!-- lapse模式进度条 -->
-          <div v-if="mode === 'mode_lapse'" class="progress-bar-wrapper">
-            <ProgressBar :progress="Math.abs(progress)" :fill-color="progress < 0 ? 'var(--color-danger)' : 'var(--color-success)'"
-              :text="`${Math.round(progress)}%`" />
+          <!-- Lapse 模式进度条 -->
+          <div v-if="mode === 'mode_lapse'" class="lapse-progress">
+            <ProgressBar
+              :progress="Math.abs(progress)"
+              :fill-color="progress < 0 ? 'var(--color-danger)' : 'var(--color-success)'"
+              :text="`${Math.round(progress)}%`"
+            />
           </div>
         </div>
       </template>
 
       <template #right>
-        <span v-if="displayIndex <= displayTotal && displayIndex > 0 && displayTotal > 0" class="progress-text">
-          {{ displayIndex }} / {{ displayTotal }}
-        </span>
+        <div v-if="displayIndex <= displayTotal && displayIndex > 0" class="progress-counter">
+          <span class="current">{{ displayIndex }}</span>
+          <span class="separator">/</span>
+          <span class="total">{{ displayTotal }}</span>
+        </div>
       </template>
     </TopBar>
 
@@ -53,25 +65,36 @@
       <LoadingComponent v-if="isLoading || isInitializing" :text="loadingText" />
 
       <!-- 复习/拼写组件 -->
-      <component v-else-if="currentWord" :is="currentComponent" :key="mode" :word="currentWord" :audio-type="audioType"
-        @result="handleResult" @skip="handleSkip" />
+      <component
+        v-else-if="currentWord"
+        :is="currentComponent"
+        :key="mode"
+        :word="currentWord"
+        :audio-type="audioType"
+        @result="handleResult"
+        @skip="handleSkip"
+      />
 
       <!-- 复习完成 -->
-      <div v-else class="completion-message">
-        <div class="completion-content">
-          <div class="icon">🎉</div>
-          <h2>恭喜完成！</h2>
-          <p v-if="mode === 'mode_lapse'">所有遗忘单词已复习完成</p>
-          <p v-else>当前批次复习完成</p>
-          <button @click="goHome" class="home-action-button">
-            <span class="button-icon">🏠</span>
-            <span class="button-text">回到首页</span>
+      <div v-else class="completion-screen">
+        <div class="completion-card">
+          <div class="completion-icon">
+            <span class="icon-emoji">🎉</span>
+            <div class="confetti"></div>
+          </div>
+          <h2 class="completion-title">恭喜完成！</h2>
+          <p class="completion-message">
+            {{ mode === 'mode_lapse' ? '所有遗忘单词已复习完成' : '当前批次复习完成' }}
+          </p>
+          <button @click="goHome" class="home-btn">
+            <span class="btn-icon">←</span>
+            <span class="btn-text">回到首页</span>
           </button>
         </div>
       </div>
     </main>
 
-    <!-- AI词汇助手 -->
+    <!-- AI 词汇助手 -->
     <VocabularyAIChat :current-word="currentWord" />
   </div>
 </template>
@@ -84,14 +107,13 @@ import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
 import type { Word, SpellingMetrics } from '@/shared/types'
 
-// 来自 ReviewCard/SpellingCard 的结果事件类型
 interface CardResultEvent {
   remembered: boolean
   elapsedTime?: number
   spellingData?: SpellingMetrics
 }
-// WebSocket 已移除，单词更新通过直接刷新数据实现
-import { clearPreloadCache } from '@/shared/utils/playWordAudio'
+
+import { clearPreloadCache, stopWordAudio } from '@/shared/utils/playWordAudio'
 import { initChatHistoryStorage } from '@/shared/utils/chatHistoryStorage'
 import ReviewCard from '@/features/vocabulary/review/ReviewCard.vue'
 import SpellingCard from '@/features/vocabulary/spelling/SpellingCard.vue'
@@ -106,7 +128,6 @@ import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { provideReviewContext } from '@/features/vocabulary/review/context'
 import { logger } from '@/shared/utils/logger'
 
-// Props
 interface RouteProps {
   mode?: string
   limit?: number
@@ -118,71 +139,56 @@ const props = withDefaults(defineProps<RouteProps>(), {
 })
 
 const sidebarWordChange = (finalWord: Word) => {
-  // 直接使用modal返回的最终数据更新队列
-  // 使用splice方法触发Vue的响应式更新
-  const index = reviewStore.wordQueue.findIndex(w => w.id === finalWord.id);
+  const index = reviewStore.wordQueue.findIndex(w => w.id === finalWord.id)
   if (index !== -1) {
-    reviewStore.wordQueue.splice(index, 1, finalWord);
+    reviewStore.wordQueue.splice(index, 1, finalWord)
   }
-};
+}
 
 const handleWordForgot = (wordId: number) => {
-  // 单词被设为忘记，更新wordResults为未记住（红色）
-  wordResults.value.set(wordId, false);
-};
+  wordResults.value.set(wordId, false)
+}
 
 const handleSidebarWordDeleted = (wordId: number) => {
-  // 从wordQueue中移除被删除的单词
-  const index = reviewStore.wordQueue.findIndex(w => w.id === wordId);
+  const index = reviewStore.wordQueue.findIndex(w => w.id === wordId)
   if (index !== -1) {
-    reviewStore.wordQueue.splice(index, 1);
-    // 从wordResults中移除记录
-    wordResults.value.delete(wordId);
-    // 如果删除的是当前索引之前的单词，需要调整currentIndex
+    reviewStore.wordQueue.splice(index, 1)
+    wordResults.value.delete(wordId)
     if (index < currentIndex.value) {
-      reviewStore.currentIndex = Math.max(0, currentIndex.value - 1);
+      reviewStore.currentIndex = Math.max(0, currentIndex.value - 1)
     }
   }
-};
+}
 
 const handleWordMastered = (wordId: number) => {
-  // 如果是lapse模式，从队列中移除单词
   if (mode.value === 'mode_lapse') {
-    if (reviewStore.wordQueue.length === 0) return;
+    if (reviewStore.wordQueue.length === 0) return
 
-    const wordIndex = reviewStore.wordQueue.findIndex(w => w.id === wordId);
+    const wordIndex = reviewStore.wordQueue.findIndex(w => w.id === wordId)
 
     if (wordIndex !== -1) {
-      reviewStore.wordQueue.splice(wordIndex, 1);
+      reviewStore.wordQueue.splice(wordIndex, 1)
 
-      // 如果删除的单词在当前索引之前（即从sidebar标记已复习过的单词）
-      // 需要调整currentIndex，使其仍然指向相同的单词
       if (wordIndex < currentIndex.value) {
-        reviewStore.currentIndex = Math.max(0, currentIndex.value - 1);
+        reviewStore.currentIndex = Math.max(0, currentIndex.value - 1)
       }
 
-      // 如果队列还有单词且当前索引超出范围，重置索引并重新排序
       if (reviewStore.wordQueue.length > 0 && currentIndex.value >= reviewStore.wordQueue.length) {
-        reviewStore.currentIndex = 0;
-        // 重新排序队列（根据shuffle状态）
-        reviewStore.wordQueue = reviewStore.sortByLapse(reviewStore.wordQueue, shuffle.value);
+        reviewStore.currentIndex = 0
+        reviewStore.wordQueue = reviewStore.sortByLapse(reviewStore.wordQueue, shuffle.value)
       }
 
-      // 标记单词为已记住（绿色）
-      wordResults.value.set(wordId, true);
+      wordResults.value.set(wordId, true)
     }
   } else {
-    // 非lapse模式，只标记为已记住
-    wordResults.value.set(wordId, true);
+    wordResults.value.set(wordId, true)
   }
-};
+}
 
-// 路由和存储
 const route = useRoute()
 const router = useRouter()
 const reviewStore = useReviewStore()
 
-// 从store解构响应式状态
 const {
   currentWord,
   mode,
@@ -193,11 +199,10 @@ const {
   progress,
   wordResults,
   shuffle,
-  globalIndex,  // 添加globalIndex
-  notification  // 通知状态
+  globalIndex,
+  notification
 } = storeToRefs(reviewStore)
 
-// 提供 Review Context 给所有子组件（避免 props drilling）
 provideReviewContext({
   mode,
   audioType,
@@ -207,11 +212,9 @@ provideReviewContext({
   stopReviewWord: reviewStore.stopReviewWord,
 })
 
-// 本地状态
 const loadingText = ref('加载中...')
-const isInitializing = ref(true) // 初始化加载状态
+const isInitializing = ref(true)
 
-// 使用全局计时器暂停管理
 const { requestPause, releasePause } = useTimerPause()
 
 // 计算属性
@@ -219,7 +222,6 @@ const displayIndex = computed(() => {
   if (mode.value === 'mode_lapse') {
     return reviewStore.wordQueue.length === 0 ? 0 : (currentIndex.value % reviewStore.wordQueue.length) + 1
   }
-  // 修复：使用globalIndex来显示正确的进度
   return currentWord.value ? globalIndex.value + 1 : 0
 })
 
@@ -227,7 +229,6 @@ const displayTotal = computed(() => {
   if (mode.value === 'mode_lapse') {
     return reviewStore.wordQueue.length
   }
-  // For non-lapse modes, only show total if we have a current word
   return currentWord.value ? totalWords.value : 0
 })
 
@@ -235,25 +236,30 @@ const currentComponent = computed(() => {
   return mode.value === 'mode_spelling' ? SpellingCard : ReviewCard
 })
 
-// 导航栏中间显示的信息
+const modeLabel = computed(() => {
+  switch (mode.value) {
+    case 'mode_lapse': return '复习错题'
+    case 'mode_spelling': return '拼写熟练'
+    default: return '复习已有'
+  }
+})
+
+const modeClass = computed(() => {
+  switch (mode.value) {
+    case 'mode_lapse': return 'lapse'
+    case 'mode_spelling': return 'spelling'
+    default: return 'review'
+  }
+})
+
 const reviewInfo = computed(() => {
   if (reviewStore.wordQueue.length === 0) return ''
-
-  // 获取source（所有单词都是同一种source）
   const source = reviewStore.wordQueue[0]?.source || ''
-
-  // 模式描述
-  const modeText = mode.value === 'mode_lapse' ? '复习错题'
-    : mode.value === 'mode_spelling' ? '拼写熟练'
-    : '复习已有'
-
-  // 随机状态
+  const modeText = modeLabel.value
   const shuffleText = shuffle.value ? '随机' : '顺序'
-
   return `${source} ${modeText} ${shuffleText}`
 })
 
-// 为WordSidebar准备的单词列表（确保响应式更新）
 const sidebarWords = computed(() => {
   return reviewStore.wordQueue.slice(0, currentIndex.value)
 })
@@ -261,31 +267,27 @@ const sidebarWords = computed(() => {
 // 方法
 const initializeFromRoute = async () => {
   try {
+    stopWordAudio()
     loadingText.value = '初始化复习...'
 
-    // 检查是否需要恢复进度
     const shouldResume = route.query.resume === 'true'
 
     if (shouldResume) {
       loadingText.value = '恢复学习进度...'
-
       reviewStore.reset()
       const restored = await reviewStore.restoreFromProgress()
 
       if (restored) {
         logger.log('Progress restored successfully')
         isInitializing.value = false
-        return // 恢复成功，直接返回
+        return
       } else {
         logger.log('Failed to restore progress, falling back to normal initialization')
-        // 恢复失败，继续正常初始化流程
       }
     } else {
       reviewStore.reset()
     }
 
-    // 正常初始化流程
-    // 解析路由模式
     const routeMode = props.mode || 'mode_review'
     let reviewMode: ReviewMode = 'mode_review'
 
@@ -293,21 +295,16 @@ const initializeFromRoute = async () => {
       reviewMode = routeMode as ReviewMode
     }
 
-    // 设置参数
     reviewStore.settings.totalLimit = props.limit
 
-    // 切换模式并加载数据
     if (mode.value !== reviewMode) {
       await reviewStore.switchMode(reviewMode)
     } else if (reviewStore.wordQueue.length === 0) {
-      // 即使是同一模式，也要确保 shuffle 状态是最新的（特别是 lapse 模式）
       await reviewStore.initializeShuffle()
       await reviewStore.loadWords(true)
     }
 
-    // 初始化完成
     isInitializing.value = false
-
   } catch (error) {
     logger.error('初始化失败:', error)
     loadingText.value = '加载失败，请重试'
@@ -344,23 +341,19 @@ const handleSkip = async () => {
   }
 }
 
-// 关闭通知
 const handleCloseNotification = () => {
   reviewStore.closeNotification()
 }
 
-// 回到首页
 const goHome = async () => {
   try {
     await router.push('/')
   } catch (error) {
     logger.error('导航失败:', error)
-    // 备选方案：使用原生跳转
     window.location.href = '/'
   }
 }
 
-// 监听路由变化
 watch(() => route.query, async () => {
   if (route.name === 'review') {
     isInitializing.value = true
@@ -368,243 +361,324 @@ watch(() => route.query, async () => {
   }
 })
 
-// 生命周期
 onMounted(async () => {
-  // 初始化聊天历史存储并清理过期记录
   initChatHistoryStorage()
-
   await initializeFromRoute()
 })
 
 onUnmounted(() => {
-  // 清理音频预加载缓存
-  if (mode.value === 'mode_lapse') {
-    clearPreloadCache(0) // lapse 模式下清空所有缓存
-  }
+  stopWordAudio()
+  clearPreloadCache(0)
 })
 </script>
 
 <style scoped>
-/* ══════════════════════════════════════════════════════════════════════════════
-   ReviewPage 样式 - 基础布局由 base.css .flex-layout 提供
-   ══════════════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Review Page - Neo-Editorial 风格
+   ═══════════════════════════════════════════════════════════════════════════ */
 
+.review-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-bg-page);
+}
+
+/* ── 主内容区域 ── */
 .main-content {
-  max-width: 72rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  background: transparent;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  padding-top: var(--topbar-height);
+  /* Loading 居中需要的最小高度 */
+  min-height: calc(100vh - var(--topbar-height));
+  min-height: calc(100dvh - var(--topbar-height));
 }
 
-/* 桌面端 WordReview 组件顶部额外间距 */
-@media (min-width: 481px) {
-  .main-content :deep(.word-review-container .content-area) {
-    padding-top: 4rem;
-  }
-}
-
-/* TopBar中的中心信息容器 */
-.center-info-container {
+/* ── 顶部栏信息 ── */
+.header-info {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 1rem;
 }
 
-/* 复习信息文本 */
-.review-info-text {
+.mode-badges {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-full);
   white-space: nowrap;
 }
 
-/* 信息来源（蓝色） */
-.info-source {
+.badge.source {
+  background: var(--color-primary-light);
   color: var(--color-primary);
 }
 
-/* 信息模式（绿色） */
-.info-mode {
+.badge.mode {
+  background: var(--color-success-light);
   color: var(--color-success);
 }
 
-/* 信息模式分隔符 */
-.info-mode::before {
-  content: '·';
-  margin-right: 6px;
+.badge.mode.lapse {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.badge.mode.spelling {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.badge.shuffle {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+/* Lapse 进度条 */
+.lapse-progress {
+  min-width: 120px;
+}
+
+/* ── 进度计数器 ── */
+.progress-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-counter .current {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.progress-counter .separator {
+  font-size: 0.875rem;
   color: var(--color-text-muted);
 }
 
-/* 信息顺序（橙色） */
-.info-shuffle {
-  color: var(--color-edit);
+.progress-counter .total {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
 }
 
-/* 信息顺序分隔符 */
-.info-shuffle::before {
-  content: '·';
-  margin-right: 6px;
-  color: var(--color-text-muted);
-}
+/* ══════════════════════════════════════════════════════════════════════════
+   完成页面
+   ══════════════════════════════════════════════════════════════════════════ */
 
-/* 进度条包装器 */
-.progress-bar-wrapper {
+.completion-screen {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
 }
 
-.progress-text {
-  font-size: 12px;
-  font-weight: 600;
-  color: #000;
+.completion-card {
+  text-align: center;
+  max-width: 400px;
+  padding: 3rem 2rem;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.completion-icon {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.icon-emoji {
+  font-size: 4rem;
+  line-height: 1;
+  display: block;
+  animation: bounce 1s ease infinite;
+}
+
+.completion-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
 }
 
 .completion-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  padding: 2em;
-}
-
-.completion-content {
-  text-align: center;
-  max-width: 400px;
-}
-
-.completion-content .icon {
-  font-size: 4em;
-  margin-bottom: 0.5em;
-}
-
-.completion-content h2 {
-  color: #333;
-  margin-bottom: 0.5em;
-}
-
-.completion-content p {
-  color: #666;
-  margin-bottom: 1.5em;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-secondary);
   line-height: 1.6;
+  margin-bottom: 2rem;
 }
 
-/* 回到首页按钮 */
-.home-action-button {
+.home-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 14px 32px;
-  font-size: 16px;
+  gap: 0.625rem;
+  padding: 0.875rem 2rem;
+  font-family: var(--font-ui);
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--color-text-inverse);
+  color: white;
   background: var(--gradient-primary);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.25);
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.3);
 }
 
-/* 按钮背景动画层 */
-.home-action-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 0;
-}
-
-.home-action-button:hover::before {
-  opacity: 1;
-}
-
-.home-action-button:hover {
+.home-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(153, 107, 61, 0.3);
+  box-shadow: 0 6px 20px rgba(153, 107, 61, 0.4);
 }
 
-.home-action-button:active {
+.home-btn:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.25);
 }
 
-.button-icon {
-  font-size: 20px;
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.home-btn .btn-icon {
+  font-size: 1.2rem;
 }
 
-.button-text {
-  position: relative;
-  z-index: 1;
-  letter-spacing: 0.5px;
+.home-btn .btn-text {
+  letter-spacing: 0.02em;
 }
 
-/* 移动端适配 - 布局由 base.css .flex-layout 处理，这里只处理组件样式 */
+/* ══════════════════════════════════════════════════════════════════════════
+   动画
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ══════════════════════════════════════════════════════════════════════════ */
+
 @media (max-width: 480px) {
   .main-content {
-    padding: 1rem 0.75rem;
+    padding: 0 0.75rem;
+    padding-top: var(--topbar-height);
+    min-height: calc(100vh - var(--topbar-height));
+    min-height: calc(100dvh - var(--topbar-height));
   }
 
-  .progress-text {
-    font-size: 11px;
+  .header-info {
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
-  .center-info-container {
-    gap: 6px;
+  .mode-badges {
+    gap: 0.375rem;
   }
 
-  .review-info-text {
-    font-size: 12px;
-    gap: 4px;
+  .badge {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
   }
 
-  .home-action-button {
-    padding: 12px 28px;
-    font-size: 15px;
-    gap: 8px;
+  .lapse-progress {
+    min-width: 80px;
   }
 
-  .button-icon {
-    font-size: 18px;
+  .progress-counter .current {
+    font-size: 0.9rem;
+  }
+
+  .progress-counter .separator,
+  .progress-counter .total {
+    font-size: 0.8rem;
+  }
+
+  /* 完成页面移动端 */
+  .completion-screen {
+    padding: 1rem;
+  }
+
+  .completion-card {
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .icon-emoji {
+    font-size: 3rem;
+  }
+
+  .completion-title {
+    font-size: 1.5rem;
+  }
+
+  .completion-message {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .home-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
   }
 }
-</style>
 
-<!-- 移动端隐藏滚动条但保持滚动功能 -->
-<style>
-@media (max-width: 480px) {
-  /* 隐藏页面滚动条但保持滚动 */
-  html,
-  body {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+/* 横屏适配 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .completion-screen {
+    padding: 0.75rem;
   }
 
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+  .completion-card {
+    padding: 1rem 1.5rem;
+    max-width: 450px;
+  }
+
+  .completion-icon {
+    margin-bottom: 0.75rem;
+  }
+
+  .icon-emoji {
+    font-size: 2rem;
+  }
+
+  .completion-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .completion-message {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .home-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
   }
 }
+
 </style>

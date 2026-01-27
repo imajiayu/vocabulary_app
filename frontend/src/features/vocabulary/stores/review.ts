@@ -5,7 +5,8 @@ import type { SpellingMetrics, Word, WordsApiResponse } from '@/shared/types'
 import type { ReviewNotificationData } from '@/shared/api/words'
 import { api } from '@/shared/api'
 import { useShuffleSelectionReadOnly } from '@/shared/composables/useShuffleSelection'
-import { preloadMultipleWordAudio, clearPreloadCache, clearCacheNotInWords } from '@/shared/utils/playWordAudio'
+import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
+import { preloadMultipleWordAudio, clearPreloadCache } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useSettings } from '@/shared/composables/useSettings'
 import { reviewLogger as log } from '@/shared/utils/logger'
@@ -30,6 +31,9 @@ export interface ReviewNotificationState {
 export const useReviewStore = defineStore('review', () => {
   // Shuffle状态管理
   const { shuffle, initializeFromData: initializeShuffle } = useShuffleSelectionReadOnly()
+
+  // Source状态管理 - 用于保存进度时获取当前source
+  const { currentSource, initializeFromData: initializeSource } = useSourceSelectionReadOnly()
 
   // 音频口音状态管理 - 与全局设置同步
   const { audioAccent } = useAudioAccent()
@@ -169,6 +173,11 @@ export const useReviewStore = defineStore('review', () => {
       isLoading.value = true
     }
     try {
+      // 确保 source 已初始化（用于保存进度）
+      if (!currentSource.value) {
+        await initializeSource()
+      }
+
       if (mode.value === 'mode_lapse') {
         // lapse模式：一次性加载所有单词，使用从WordIndex传入的limit
         const lapseLimit = settings.value.totalLimit
@@ -185,6 +194,17 @@ export const useReviewStore = defineStore('review', () => {
         totalWords.value = data.total
         initialLapseCount.value = totalLapseSum.value
         hasMore.value = false
+
+        // 新增：前端直接保存进度快照到 Supabase
+        const allWordIds = newWords.map(w => w.id)
+        api.progress.saveProgressDirect({
+          mode: mode.value,
+          source: currentSource.value || 'IELTS',
+          shuffle: shuffle.value,
+          word_ids: allWordIds,
+          initial_lapse_count: initialLapseCount.value,
+          initial_lapse_word_count: allWordIds.length
+        }).catch(err => log.warn('Failed to save progress snapshot:', err))
 
       } else {
         // 其他模式：分页加载
@@ -204,6 +224,19 @@ export const useReviewStore = defineStore('review', () => {
           wordQueue.value = newWords
           currentIndex.value = 0
           initialOffset.value = 0  // 重置初始偏移量
+
+          // 新增：前端直接保存进度快照到 Supabase（非 lapse 模式）
+          // 注意：这里只保存第一批数据的 ID，后端仍需要知道完整快照
+          // 但因为后端 batch_id=0 会创建快照，这里只是为了前端恢复使用
+          // 实际上，后端已经创建了快照，前端这里也保存一份到 current_progress
+          api.progress.saveProgressDirect({
+            mode: mode.value,
+            source: currentSource.value || 'IELTS',
+            shuffle: shuffle.value,
+            word_ids: newWords.map(w => w.id),
+            initial_lapse_count: 0,
+            initial_lapse_word_count: 0
+          }).catch(err => log.warn('Failed to save progress snapshot:', err))
         } else {
           wordQueue.value.push(...newWords)
         }
@@ -249,7 +282,7 @@ export const useReviewStore = defineStore('review', () => {
       if (word && word.id === wordId) {
         // 更新 lapse，与后端逻辑保持一致（使用配置值）
         const LAPSE_MAX_VALUE = userSettings.value?.learning.lapseMaxValue ?? 4
-        const LAPSE_FAST_EXIT_THRESHOLD = userSettings.value?.learning.lapseConsecutiveThreshold ?? 2
+        const LAPSE_FAST_EXIT_THRESHOLD = userSettings.value?.learning.lapseConsecutiveThreshold ?? 4
         const LAPSE_FAST_EXIT_ENABLED = userSettings.value?.learning.lapseFastExitEnabled ?? true
 
         if (!result.remembered) {
@@ -302,6 +335,9 @@ export const useReviewStore = defineStore('review', () => {
           if (index !== -1) {
             wordQueue.value[index] = updatedWord
           }
+          // 新增：更新进度索引到 Supabase（lapse 模式始终为 0）
+          api.progress.updateProgressIndexDirect(0)
+            .catch(err => log.warn('Failed to update progress index:', err))
         })
         .catch(log.error)
       return
@@ -334,6 +370,9 @@ export const useReviewStore = defineStore('review', () => {
             if (index !== -1) {
               wordQueue.value[index] = updatedWord
             }
+            // 新增：更新进度索引到 Supabase（非 lapse 模式）
+            api.progress.updateProgressIndexDirect(globalIndex.value)
+              .catch(err => log.warn('Failed to update progress index:', err))
           })
           .catch((err) => {
             log.error('Failed to persist word result:', err)
@@ -380,6 +419,10 @@ export const useReviewStore = defineStore('review', () => {
         if (index !== -1) {
           wordQueue.value[index] = updatedWord
         }
+        // 新增：更新进度索引到 Supabase
+        const indexToUpdate = mode.value === 'mode_lapse' ? 0 : globalIndex.value
+        api.progress.updateProgressIndexDirect(indexToUpdate)
+          .catch(err => log.warn('Failed to update progress index:', err))
       })
       .catch(log.error)
   }
@@ -406,6 +449,8 @@ export const useReviewStore = defineStore('review', () => {
     initialLapseCount.value = 0
     initialOffset.value = 0  // 重置初始偏移量
     wordResults.value.clear()
+    // 清理 notification，避免进入新复习时显示上次的通知
+    notification.value = { show: false, data: null }
   }
 
   const restoreFromProgress = async (): Promise<boolean> => {
@@ -415,9 +460,10 @@ export const useReviewStore = defineStore('review', () => {
       // 确保设置已加载
       await loadSettings()
 
-      const data = await api.progress.getRestoreData()
+      // 使用直连 Supabase 获取进度数据
+      const data = await api.progress.getRestoreDataDirect()
 
-      if (!data.progress) {
+      if (!data || !data.progress) {
         log.log('No valid progress data to restore')
         return false
       }
@@ -428,17 +474,18 @@ export const useReviewStore = defineStore('review', () => {
       mode.value = progress.mode as ReviewMode
       totalWords.value = data.total
 
-      // 后端已恢复session快照，现在使用 /api/words/review 加载单词
-      // 关键：使用 batch_id >= 1 避免覆盖快照
+      // 使用 word_ids 参数直接传递快照（不再依赖后端 session）
+      const wordIds = progress.word_ids
 
       if (progress.mode === 'mode_lapse') {
         // Lapse模式：一次性加载所有单词
         const restoreData: WordsApiResponse = await api.words.getReviewWords({
           mode: mode.value,
-          limit: data.total,  // 使用快照总长度
-          batch_id: 1,  // 非0，使用session快照
-          batch_size: data.total,  // 一次性加载全部
-          offset: 0
+          limit: data.total,
+          batch_id: 1,  // 非0，不创建新快照
+          batch_size: data.total,
+          offset: 0,
+          word_ids: wordIds  // 直接传递 word_ids
         })
 
         // 重新排序单词并恢复队列
@@ -459,14 +506,15 @@ export const useReviewStore = defineStore('review', () => {
         const restoreData: WordsApiResponse = await api.words.getReviewWords({
           mode: mode.value,
           limit: settings.value.totalLimit,
-          batch_id: 1,  // >= 1，使用session快照
+          batch_id: 1,  // 非0，不创建新快照
           batch_size: batchSize,
-          offset: savedIndex
+          offset: savedIndex,
+          word_ids: wordIds  // 直接传递 word_ids
         })
 
         wordQueue.value = restoreData.words as Word[]
         currentIndex.value = 0  // 队列第一个就是当前单词
-        initialOffset.value = savedIndex  // 设置初始偏移量（关键修复！）
+        initialOffset.value = savedIndex  // 设置初始偏移量
         hasMore.value = savedIndex + batchSize < data.total
       }
 
@@ -480,80 +528,48 @@ export const useReviewStore = defineStore('review', () => {
     }
   }
 
-  // 预加载接下来的单词音频
+  // 预加载接下来的单词音频（统一逻辑，所有模式相同）
   const preloadUpcomingAudio = async (
     audioAccent: 'us' | 'uk' = 'us',
     preloadCount: number = 5,
-    includeCurrent: boolean = false  // 是否包含当前单词
+    includeCurrent: boolean = false
   ): Promise<void> => {
     if (wordQueue.value.length === 0) return
 
-    if (mode.value === 'mode_lapse') {
-      // lapse 模式：一次性预加载所有单词的音频
-      const allWords = wordQueue.value.map(w => w.word)
-      if (allWords.length > 0) {
-        // 异步预加载所有单词，不阻塞主流程
-        preloadMultipleWordAudio(allWords, audioAccent, 5).catch(err => {
-          log.warn('Lapse模式预加载所有音频失败:', err)
-        })
-      }
-      return
-    }
-
-    // 其他模式：只预加载接下来的几个单词
-    // 如果 includeCurrent 为 true，从当前索引开始；否则从下一个开始
+    // 统一逻辑：预加载接下来的 N 个单词
     const startIndex = includeCurrent ? currentIndex.value : currentIndex.value + 1
-    const endIndex = Math.min(startIndex + preloadCount, wordQueue.value.length)
+    const effectiveIndex = mode.value === 'mode_lapse'
+      ? startIndex % wordQueue.value.length  // lapse 模式循环队列
+      : startIndex
 
-    // 确保 startIndex 不超出范围
-    if (startIndex >= wordQueue.value.length) return
+    if (effectiveIndex >= wordQueue.value.length && mode.value !== 'mode_lapse') return
 
-    const wordsToPreload = wordQueue.value.slice(startIndex, endIndex).map(w => w.word)
+    const endIndex = Math.min(effectiveIndex + preloadCount, wordQueue.value.length)
+    const wordsToPreload = wordQueue.value.slice(effectiveIndex, endIndex).map(w => w.word)
 
     if (wordsToPreload.length > 0) {
-      // 异步预加载，不阻塞主流程
-      preloadMultipleWordAudio(wordsToPreload, audioAccent, 3).catch(err => {
+      preloadMultipleWordAudio(wordsToPreload, audioAccent).catch(err => {
         log.warn('预加载音频失败:', err)
       })
     }
   }
 
-  // 监听单词队列变化，自动预加载
+  // 监听单词队列变化，自动预加载（统一逻辑）
   watch([wordQueue, currentIndex, audioType], ([newQueue, newIndex], [oldQueue, oldIndex]) => {
-    // 队列首次加载或队列内容变化时，包含当前单词立即预加载
     const isQueueChanged = newQueue.length !== oldQueue?.length || newQueue !== oldQueue
     const isInitialLoad = oldQueue === undefined || oldQueue.length === 0
 
-    if (mode.value === 'mode_lapse') {
-      // lapse 模式：只在初始加载时预加载一次所有音频
-      if (isInitialLoad && newQueue.length > 0) {
-        preloadUpcomingAudio(audioType.value, 0, true)
-      } else if (isQueueChanged && !isInitialLoad && oldQueue && oldQueue.length > 0) {
-        // 队列变化时（单词被移除/重排），清理不在队列中的单词的音频缓存
-        const currentWords = newQueue.map(w => w.word)
-        clearCacheNotInWords(currentWords, audioType.value)
-      }
-      return
-    }
-
-    // 其他模式的预加载逻辑
     if (isQueueChanged || isInitialLoad) {
-      // 队列变化时，立即预加载包括当前单词在内的前5个
+      // 队列变化时，预加载包括当前单词在内的前5个
       preloadUpcomingAudio(audioType.value, 5, true)
     } else if (newIndex !== oldIndex) {
-      // 只是索引变化时，预加载接下来的单词（不包含当前）
-      setTimeout(() => {
-        preloadUpcomingAudio(audioType.value, 5, false)
-      }, 100)
+      // 索引变化时，预加载接下来的单词
+      setTimeout(() => preloadUpcomingAudio(audioType.value, 5, false), 100)
     }
   }, { deep: false })
 
-  // 监听索引变化，定期清理缓存
+  // 定期清理缓存（所有模式统一）
   watch(currentIndex, (newIndex) => {
-    // lapse 模式不清理缓存，保留所有音频直到组件卸载
-    if (mode.value === 'mode_lapse') return
-
-    // 其他模式：每复习10个单词，清理一次缓存，保留最近15个
     if (newIndex > 0 && newIndex % 10 === 0) {
       clearPreloadCache(15)
     }

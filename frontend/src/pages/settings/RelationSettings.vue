@@ -41,7 +41,7 @@
           <span class="relation-count">{{ relationStats.total || 0 }} 条</span>
           <div class="relation-actions">
             <button class="btn-relation-action btn-view-graph desktop-only" @click="viewRelationGraph">
-              🕸️ 查看关系图
+              ◈ 查看关系图
             </button>
           </div>
         </div>
@@ -72,7 +72,8 @@ const relationStats = ref({
 
 const loadRelationStats = async () => {
   try {
-    const data = await api.relations.getStats()
+    // 使用 Supabase 直接查询，绕过 Flask 后端
+    const data = await api.relations.getStatsDirect()
     relationStats.value = data
   } catch (e: unknown) {
     logger.error('Failed to load relation stats:', e)

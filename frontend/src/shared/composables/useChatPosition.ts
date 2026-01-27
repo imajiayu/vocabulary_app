@@ -36,8 +36,8 @@ export function useChatPosition(isExpanded: { value: boolean }) {
     // Use default position
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
-    const widgetWidth = 120
-    const defaultRight = 16
+    const widgetWidth = 100
+    const defaultRight = 20
     const isMobile = viewportWidth <= 768
 
     if (isMobile) {
@@ -81,8 +81,8 @@ export function useChatPosition(isExpanded: { value: boolean }) {
 
   // Adjust position to stay within viewport
   function adjustPositionWithinBounds() {
-    const widgetWidth = isExpanded.value ? 380 : 120
-    const widgetHeight = isExpanded.value ? 600 : 50
+    const widgetWidth = isExpanded.value ? 400 : 100
+    const widgetHeight = isExpanded.value ? 620 : 48
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
 
@@ -138,8 +138,8 @@ export function useChatPosition(isExpanded: { value: boolean }) {
       let newX = initialX.value + deltaX
       let newY = initialY.value + deltaY
 
-      const widgetWidth = isExpanded.value ? 380 : 120
-      const widgetHeight = isExpanded.value ? 600 : 50
+      const widgetWidth = isExpanded.value ? 400 : 100
+      const widgetHeight = isExpanded.value ? 620 : 48
       const viewportWidth = window.innerWidth
       const viewportHeight = window.innerHeight
 

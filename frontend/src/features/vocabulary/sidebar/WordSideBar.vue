@@ -1,35 +1,114 @@
 <template>
-  <div class="sidebar-container">
-    <div class="word-list">
-      <div class="word-list-inner scrollbar-light" ref="wordListInnerRef">
-        <transition-group name="word-list" tag="div">
-          <div
-            v-for="(w, index) in displayedWords"
-            :key="w.id"
-            class="word-item"
-            :style="{ color: getWordColor(index) }"
-            @click="() => openModal(w)"
-            @mouseenter="(e) => handleMouseEnter(e, w)"
-            @mouseleave="handleMouseLeave"
-            @mousemove="handleMouseMove"
-          >
-            {{ w.word }}
-          </div>
-        </transition-group>
+  <div
+    :class="['word-sidebar', { 'is-mobile': isMobile, 'is-collapsed': isCollapsed }]"
+    @mouseenter="handleSidebarEnter"
+    @mouseleave="handleSidebarLeave"
+  >
+    <!-- 桌面端：墨迹瀑布流 -->
+    <div v-if="!isMobile" class="desktop-sidebar">
+      <!-- 装饰性墨迹滴落效果 -->
+      <div class="ink-drip-decoration">
+        <div class="drip drip-1"></div>
+        <div class="drip drip-2"></div>
+        <div class="drip drip-3"></div>
+      </div>
+
+      <!-- 标题区域 -->
+      <div class="sidebar-header">
+        <div class="header-line"></div>
+        <span class="header-title">复习轨迹</span>
+        <span class="word-count">{{ displayedWords.length }}</span>
+      </div>
+
+      <!-- 单词列表 -->
+      <div class="word-stream" ref="wordListRef">
+        <div class="stream-inner scrollbar-ink" ref="wordListInnerRef">
+          <TransitionGroup name="ink-flow" tag="div" class="word-flow">
+            <div
+              v-for="(w, index) in displayedWords"
+              :key="w.id"
+              :class="['word-drop', getWordStatus(w.id)]"
+              :style="getWordStyle(index)"
+              @click="() => openModal(w)"
+              @mouseenter="(e) => handleMouseEnter(e, w)"
+              @mouseleave="handleMouseLeave"
+            >
+              <span class="word-text">{{ w.word }}</span>
+              <span class="word-indicator"></span>
+            </div>
+          </TransitionGroup>
+        </div>
+
+        <!-- 底部渐隐遮罩 -->
+        <div class="stream-fade-bottom"></div>
       </div>
     </div>
 
+    <!-- 移动端：浮动气泡列表 -->
+    <div v-else class="mobile-sidebar">
+      <!-- 展开/收起按钮 -->
+      <button
+        class="mobile-toggle"
+        @click="toggleCollapse"
+        :aria-label="isCollapsed ? '展开单词列表' : '收起单词列表'"
+      >
+        <span class="toggle-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path v-if="isCollapsed" d="M4 6h16M4 12h16M4 18h16" />
+            <path v-else d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </span>
+        <span class="toggle-count">{{ displayedWords.length }}</span>
+      </button>
+
+      <!-- 单词列表面板 -->
+      <Transition name="slide-up">
+        <div v-show="!isCollapsed" class="mobile-panel">
+          <div class="panel-header">
+            <span class="panel-title">复习轨迹</span>
+            <span class="panel-hint">长按查看释义</span>
+            <div class="panel-stats">
+              <span class="stat remembered">{{ rememberedCount }}</span>
+              <span class="stat-divider">/</span>
+              <span class="stat forgot">{{ forgotCount }}</span>
+            </div>
+          </div>
+
+          <div class="word-chips" ref="mobileWordListRef">
+            <TransitionGroup name="chip-pop" tag="div" class="chips-container">
+              <button
+                v-for="(w, index) in displayedWords"
+                :key="w.id"
+                :class="['word-chip', getWordStatus(w.id)]"
+                :style="getChipDelay(index)"
+                @click="() => openModal(w)"
+                @touchstart.passive="(e) => handleTouchStart(e, w)"
+                @touchend="handleTouchEnd"
+                @touchcancel="handleTouchEnd"
+                @contextmenu.prevent
+              >
+                {{ w.word }}
+              </button>
+            </TransitionGroup>
+          </div>
+        </div>
+      </Transition>
+    </div>
+
+    <!-- Tooltip - 桌面端 hover / 移动端长按 -->
     <WordTooltip
-      v-if="!isMobile && tooltipWord"
+      v-if="tooltipWord"
       :word="tooltipWord"
       :visible="showTooltip"
       :position="tooltipPosition"
+      :is-mobile="isMobile"
+      @close="handleTooltipClose"
     />
 
-    <teleport to="body">
+    <!-- Modal -->
+    <Teleport to="body">
       <WordEditorModal />
-      <div v-if="wordEditorStore.isOpen" class="modal-overlay" @click="wordEditorStore.close()"></div>
-    </teleport>
+    </Teleport>
   </div>
 </template>
 
@@ -41,43 +120,156 @@ import WordTooltip from '@/features/vocabulary/grid/WordTooltip.vue'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
-const wordListInnerRef = ref<HTMLDivElement | null>(null)
-
 interface Props {
-  words: Word[],
-  rememberHistory: Map<number, boolean>,
-  mode?: string // 复习模式，如 'mode_lapse', 'mode_review', 'mode_spelling'
+  words: Word[]
+  rememberHistory: Map<number, boolean>
+  mode?: string
 }
-
-const emit = defineEmits<{
-  sidebarWordChange: [finalWord: Word];
-  wordDeleted: [wordId: number];
-  wordForgot: [wordId: number];
-  wordMastered: [wordId: number];
-}>();
 
 const props = defineProps<Props>()
 
-// Word Editor Store
-const wordEditorStore = useWordEditorStore()
+const emit = defineEmits<{
+  sidebarWordChange: [finalWord: Word]
+  wordDeleted: [wordId: number]
+  wordForgot: [wordId: number]
+  wordMastered: [wordId: number]
+}>()
 
-// 使用全局计时器暂停管理
-const { requestPause, releasePause } = useTimerPause()
+// Refs
+const wordListRef = ref<HTMLDivElement | null>(null)
+const wordListInnerRef = ref<HTMLDivElement | null>(null)
+const mobileWordListRef = ref<HTMLDivElement | null>(null)
 
-// Tooltip 相关状态
+// State
+const isMobile = ref(false)
+const isCollapsed = ref(true)
 const showTooltip = ref(false)
 const tooltipPosition = ref({ x: 0, y: 0 })
 const tooltipWord = ref<Word | undefined>(undefined)
-const isMobile = ref(false)
+const isHovering = ref(false)
+
+// 长按相关
+const longPressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+const longPressTriggered = ref(false)
+const LONG_PRESS_DURATION = 500 // 500ms 触发长按
+
+// Store
+const wordEditorStore = useWordEditorStore()
+const { requestPause, releasePause } = useTimerPause()
+
+// Computed
+const displayedWords = computed(() => {
+  return props.words.filter(word => props.rememberHistory.has(word.id))
+})
+
+const rememberedCount = computed(() => {
+  return displayedWords.value.filter(w => props.rememberHistory.get(w.id) === true).length
+})
+
+const forgotCount = computed(() => {
+  return displayedWords.value.filter(w => props.rememberHistory.get(w.id) === false).length
+})
+
+// Methods
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768 ||
+    !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+}
+
+const getWordStatus = (wordId: number): string => {
+  const remembered = props.rememberHistory.get(wordId)
+  return remembered === true ? 'remembered' : remembered === false ? 'forgot' : ''
+}
+
+const getWordStyle = (index: number) => {
+  const total = displayedWords.value.length
+  const position = index / Math.max(total - 1, 1)
+
+  // 越新的单词越明显
+  const opacity = 0.4 + position * 0.6
+  const scale = 0.92 + position * 0.08
+
+  return {
+    '--word-opacity': opacity,
+    '--word-scale': scale,
+    '--animation-delay': `${index * 0.03}s`
+  }
+}
+
+const getChipDelay = (index: number) => {
+  return {
+    '--chip-delay': `${index * 0.05}s`
+  }
+}
+
+const toggleCollapse = () => {
+  isCollapsed.value = !isCollapsed.value
+}
+
+const handleSidebarEnter = () => {
+  if (!isMobile.value) {
+    isHovering.value = true
+  }
+}
+
+const handleSidebarLeave = () => {
+  if (!isMobile.value) {
+    isHovering.value = false
+    showTooltip.value = false
+    tooltipWord.value = undefined
+  }
+}
+
+const handleMouseEnter = (e: MouseEvent, word: Word) => {
+  if (isMobile.value) return
+  tooltipWord.value = word
+  tooltipPosition.value = { x: e.clientX, y: e.clientY }
+  showTooltip.value = true
+}
+
+const handleMouseLeave = () => {
+  showTooltip.value = false
+  tooltipWord.value = undefined
+}
+
+// 移动端长按处理
+const handleTouchStart = (e: TouchEvent, word: Word) => {
+  longPressTriggered.value = false
+
+  longPressTimer.value = setTimeout(() => {
+    longPressTriggered.value = true
+    tooltipWord.value = word
+    tooltipPosition.value = { x: 0, y: 0 } // 移动端不需要位置
+    showTooltip.value = true
+
+    // 触觉反馈（如果支持）
+    if (navigator.vibrate) {
+      navigator.vibrate(10)
+    }
+  }, LONG_PRESS_DURATION)
+}
+
+const handleTouchEnd = () => {
+  if (longPressTimer.value) {
+    clearTimeout(longPressTimer.value)
+    longPressTimer.value = null
+  }
+}
+
+const handleTooltipClose = () => {
+  showTooltip.value = false
+  tooltipWord.value = undefined
+}
 
 const openModal = (word: Word) => {
-  // 打开 modal 时请求暂停计时器
+  // 如果是长按触发的，不打开 modal
+  if (longPressTriggered.value) {
+    longPressTriggered.value = false
+    return
+  }
   requestPause()
-
-  // 使用 store 打开模态框，传入 mode
   wordEditorStore.open(word, false, props.mode || '')
 
-  // 注册回调：模态框关闭时
   wordEditorStore.onClose((finalWord: Word | undefined) => {
     if (finalWord) {
       emit('sidebarWordChange', finalWord)
@@ -85,64 +277,28 @@ const openModal = (word: Word) => {
     releasePause()
   })
 
-  // 注册回调：单词删除时
   wordEditorStore.onWordDeleted((wordId: number) => {
     emit('wordDeleted', wordId)
   })
 
-  // 注册回调：单词被标记为忘记
   wordEditorStore.onWordForgot((wordId: number) => {
     emit('wordForgot', wordId)
   })
 
-  // 注册回调：单词被标记为掌握
   wordEditorStore.onWordMastered((wordId: number) => {
     emit('wordMastered', wordId)
   })
 }
 
-const wordHeight = 40
-const maxVisible = ref(0)
-const containerHeight = ref(0)
-
-// 可见单词索引
-const visibleStartIndex = ref(0)
-const visibleEndIndex = ref(0)
-
-const displayedWords = computed(() => {
-  return props.words.filter(word => props.rememberHistory.has(word.id))
-})
-
-const updateMaxVisible = () => {
-  containerHeight.value = window.innerHeight * 0.5
-  maxVisible.value = Math.floor(containerHeight.value / wordHeight)
-}
-
-// 监听滚动，实时计算可视区索引
-const onScroll = () => {
-  const el = wordListInnerRef.value
-  if (!el) return
-
-  const scrollTop = el.scrollTop
-  const viewHeight = el.clientHeight
-
-  visibleStartIndex.value = Math.floor(scrollTop / wordHeight)
-  visibleEndIndex.value = Math.min(
-    displayedWords.value.length - 1,
-    Math.floor((scrollTop + viewHeight) / wordHeight) - 1
-  )
-}
-
-// 滚动到底部
 const scrollToBottom = async () => {
   await nextTick()
-  const el = wordListInnerRef.value
+  const el = isMobile.value ? mobileWordListRef.value : wordListInnerRef.value
   if (el) {
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
   }
 }
 
-// 监听 displayedWords
+// Watchers
 watch(
   displayedWords,
   async (newWords, oldWords) => {
@@ -153,7 +309,6 @@ watch(
   { flush: 'post' }
 )
 
-// 监听 rememberHistory
 watch(
   () => props.rememberHistory,
   async (newHistory, oldHistory) => {
@@ -164,209 +319,675 @@ watch(
   { deep: true, flush: 'post' }
 )
 
-// 检测是否为移动端
-const checkMobile = () => {
-  isMobile.value = !window.matchMedia('(hover: hover) and (pointer: fine)').matches
-}
-
-// 处理鼠标进入事件
-const handleMouseEnter = (e: MouseEvent, word: Word) => {
-  if (isMobile.value) return
-
-  tooltipWord.value = word
-  tooltipPosition.value = { x: e.clientX, y: e.clientY }
-  showTooltip.value = true
-}
-
-// 处理鼠标移动事件
-const handleMouseMove = (e: MouseEvent) => {
-  if (isMobile.value) return
-
-  tooltipPosition.value = { x: e.clientX, y: e.clientY }
-}
-
-// 处理鼠标离开事件
-const handleMouseLeave = () => {
-  showTooltip.value = false
-  tooltipWord.value = undefined
-}
-
+// Lifecycle
 onMounted(() => {
-  updateMaxVisible()
-  setTimeout(() => scrollToBottom(), 100)
-  wordListInnerRef.value?.addEventListener('scroll', onScroll)
-  window.addEventListener('resize', updateMaxVisible)
   checkMobile()
   window.addEventListener('resize', checkMobile)
+  setTimeout(() => scrollToBottom(), 100)
 })
 
 onUnmounted(() => {
-  wordListInnerRef.value?.removeEventListener('scroll', onScroll)
-  window.removeEventListener('resize', updateMaxVisible)
   window.removeEventListener('resize', checkMobile)
+  // 清理长按定时器
+  if (longPressTimer.value) {
+    clearTimeout(longPressTimer.value)
+  }
 })
-
-const getWordColor = (index: number) => {
-  const remembered = props.rememberHistory.get(displayedWords.value[index].id)
-
-  let start = visibleStartIndex.value
-  let end = visibleEndIndex.value
-
-  if (displayedWords.value.length <= maxVisible.value) {
-    start = 0
-    end = displayedWords.value.length - 1
-  }
-
-  let opacity = 0.5
-
-  if (displayedWords.value.length < end - start + 1)
-    return `rgba(0, 128, 0, 1)`;
-  if (index >= start && index <= end) {
-    const visibleCount = end - start + 1
-    const relativeIndex = index - start
-    opacity = visibleCount > 1
-      ? 0.5 + 0.5 * (relativeIndex / (visibleCount - 1))
-      : 1
-  }
-
-  return remembered
-    ? `rgba(0, 128, 0, ${opacity})`
-    : `rgba(255, 0, 0, ${opacity})`
-}
 </script>
 
-
-
 <style scoped>
-.sidebar-container {
+/* ═══════════════════════════════════════════════════════════════════════════
+   Word Sidebar - Ink Flow Design
+   墨迹流动设计 - 灵感来自古典书法与墨水渗透
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.word-sidebar {
+  --sidebar-width: 180px;
+  --ink-primary: var(--primitive-ink-700);
+  --ink-secondary: var(--primitive-ink-500);
+  --ink-muted: var(--primitive-ink-300);
+  --paper-warm: var(--primitive-paper-100);
+  --success-ink: var(--primitive-olive-600);
+  --danger-ink: var(--primitive-brick-500);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   桌面端：墨迹瀑布流
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.desktop-sidebar {
   position: fixed;
-  top: 48px;
-  /* 从 TopBar 下面开始 */
+  top: var(--topbar-height);
   left: 0;
-  width: 150px;
-  height: calc(50vh - 48px);
-  /* 高度减去 TopBar */
-  background-color: rgba(255, 255, 255, 0.1);
-  border: none;
-  overflow: hidden;
-  padding: 1rem;
+  width: var(--sidebar-width);
+  height: calc(60vh - var(--topbar-height));
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  z-index: 999;
+  z-index: 100;
+  padding: 1rem 0.75rem;
+
+  /* 纸张纹理背景 */
+  background:
+    linear-gradient(180deg,
+      rgba(255, 253, 247, 0.95) 0%,
+      rgba(250, 247, 242, 0.85) 100%
+    );
+
+  /* 右侧墨迹边缘 */
+  border-right: 1px solid var(--primitive-paper-400);
+  box-shadow:
+    2px 0 20px rgba(0, 0, 0, 0.03),
+    inset -1px 0 0 rgba(255, 255, 255, 0.5);
 }
 
-.word-list {
-  flex: 1;
+/* 墨迹滴落装饰 */
+.ink-drip-decoration {
+  position: absolute;
+  top: 0;
+  right: -1px;
+  width: 4px;
+  height: 100%;
+  pointer-events: none;
   overflow: hidden;
-  /* 外层不滚动 */
-  display: flex;
-  flex-direction: column;
 }
 
-.word-list-inner {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 8px;
+.drip {
+  position: absolute;
+  right: 0;
+  width: 3px;
+  background: linear-gradient(180deg,
+    var(--primitive-copper-400) 0%,
+    transparent 100%
+  );
+  border-radius: 0 0 2px 2px;
+  opacity: 0.3;
+  animation: drip-flow 8s ease-in-out infinite;
 }
 
-/* 每个单词元素 */
-.word-item {
-  cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1rem;
-  user-select: none;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  min-height: 40px;
-  /* 确保最小高度 */
+.drip-1 {
+  top: 10%;
+  height: 40px;
+  animation-delay: 0s;
+}
+
+.drip-2 {
+  top: 35%;
+  height: 25px;
+  animation-delay: 2.5s;
+}
+
+.drip-3 {
+  top: 60%;
+  height: 55px;
+  animation-delay: 5s;
+}
+
+@keyframes drip-flow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(20px) scaleY(1.2);
+  }
+}
+
+/* 头部区域 */
+.sidebar-header {
   display: flex;
   align-items: center;
-  border-radius: var(--radius-xs);
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--primitive-paper-400);
+  flex-shrink: 0;
 }
 
-/* hover效果 */
-.word-item:hover {
-  transform: scale(1.05);
+.header-line {
+  width: 3px;
+  height: 14px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.header-title {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  letter-spacing: 0.05em;
+}
+
+.word-count {
+  margin-left: auto;
+  font-family: var(--font-data);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--primitive-copper-500);
+  background: var(--primitive-copper-100);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-full);
+}
+
+/* 单词流容器 */
+.word-stream {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.stream-inner {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+/* 自定义滚动条 - 墨迹风格 */
+.scrollbar-ink::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-ink::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-ink::-webkit-scrollbar-thumb {
+  background: var(--primitive-copper-300);
+  border-radius: 2px;
+}
+
+.scrollbar-ink::-webkit-scrollbar-thumb:hover {
+  background: var(--primitive-copper-400);
+}
+
+.word-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
+}
+
+/* 单词条目 - 墨滴效果 */
+.word-drop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+  opacity: var(--word-opacity, 0.7);
+  transform: scale(var(--word-scale, 0.95));
+  animation: ink-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+@keyframes ink-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  to {
+    opacity: var(--word-opacity, 0.7);
+    transform: translateY(0) scale(var(--word-scale, 0.95));
+  }
+}
+
+.word-drop:hover {
   opacity: 1 !important;
-  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1) translateX(4px) !important;
+  background: rgba(153, 107, 61, 0.08);
 }
 
-/* 动画 */
-.word-list-enter-from,
-.word-list-leave-to {
-  transform: translateY(20px);
-  opacity: 0;
+.word-text {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-primary);
+  transition: color 0.2s;
 }
 
-.word-list-enter-active,
-.word-list-leave-active {
-  transition: all 0.3s ease;
+.word-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: all 0.2s;
 }
 
-.word-list-move {
+/* 记忆状态样式 */
+.word-drop.remembered .word-text {
+  color: var(--success-ink);
+}
+
+.word-drop.remembered .word-indicator {
+  background: var(--success-ink);
+  box-shadow: 0 0 8px rgba(93, 122, 93, 0.4);
+}
+
+.word-drop.forgot .word-text {
+  color: var(--danger-ink);
+}
+
+.word-drop.forgot .word-indicator {
+  background: var(--danger-ink);
+  box-shadow: 0 0 8px rgba(155, 59, 59, 0.4);
+}
+
+/* 列表过渡动画 */
+.ink-flow-enter-active {
+  animation: ink-drop-in 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ink-flow-leave-active {
+  animation: ink-fade-out 0.3s ease-out forwards;
+}
+
+.ink-flow-move {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes ink-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.8);
+    filter: blur(2px);
+  }
+  to {
+    opacity: var(--word-opacity, 1);
+    transform: translateY(0) scale(var(--word-scale, 1));
+    filter: blur(0);
+  }
+}
+
+@keyframes ink-fade-out {
+  to {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.8);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端：浮动气泡列表
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.mobile-sidebar {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  right: 12px;
+  z-index: 100;
+}
+
+/* 切换按钮 */
+.mobile-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  width: auto;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 1rem;
+  background: var(--paper-warm);
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: var(--radius-full);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* 触摸优化 */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-toggle:active {
+  transform: scale(0.95);
+}
+
+.toggle-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--ink-secondary);
+}
+
+.toggle-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.toggle-count {
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primitive-copper-600);
+}
+
+/* 收起状态时只显示数字 */
+.is-collapsed .mobile-toggle {
+  padding: 0 0.875rem;
+}
+
+/* 面板 */
+.mobile-panel {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  width: min(85vw, 320px);
+  max-height: 50vh;
+  background: var(--paper-warm);
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 面板头部 */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--primitive-paper-400);
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.panel-hint {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--ink-muted);
+  margin-left: auto;
+  margin-right: 0.75rem;
+}
+
+.panel-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+}
+
+.stat {
+  font-weight: 700;
+}
+
+.stat.remembered {
+  color: var(--success-ink);
+}
+
+.stat.forgot {
+  color: var(--danger-ink);
+}
+
+.stat-divider {
+  color: var(--ink-muted);
+}
+
+/* 单词气泡区域 */
+.word-chips {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* 单词气泡 */
+.word-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-primary);
+  background: var(--primitive-paper-200);
+  border: 1px solid var(--primitive-paper-400);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  animation: chip-appear 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--chip-delay, 0s);
+
+  /* 触摸优化 */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes chip-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.word-chip:active {
+  transform: scale(0.95);
+  /* 长按视觉反馈 */
+  animation: chip-press 0.5s ease forwards;
+}
+
+@keyframes chip-press {
+  0% {
+    box-shadow: none;
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(153, 107, 61, 0.2);
+  }
+}
+
+.word-chip.remembered {
+  color: var(--success-ink);
+  background: var(--primitive-olive-50);
+  border-color: var(--primitive-olive-200);
+}
+
+.word-chip.forgot {
+  color: var(--danger-ink);
+  background: var(--primitive-brick-50);
+  border-color: var(--primitive-brick-200);
+}
+
+/* 气泡过渡动画 */
+.chip-pop-enter-active {
+  animation: chip-pop-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chip-pop-leave-active {
+  animation: chip-pop-out 0.25s ease-out forwards;
+}
+
+.chip-pop-move {
   transition: transform 0.3s ease;
 }
 
-/* 移动端适配 */
+@keyframes chip-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0) rotate(-10deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes chip-pop-out {
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* 面板滑入动画 */
+.slide-up-enter-active {
+  animation: slide-up-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slide-up-leave-active {
+  animation: slide-up-out 0.25s ease-out forwards;
+}
+
+@keyframes slide-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slide-up-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   响应式调整
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 大屏桌面 */
+@media (min-width: 1400px) {
+  .word-sidebar {
+    --sidebar-width: 200px;
+  }
+
+  .word-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* 平板 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .word-sidebar {
+    --sidebar-width: 160px;
+  }
+
+  .desktop-sidebar {
+    height: calc(50vh - var(--topbar-height));
+  }
+
+  .word-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* 小屏手机 */
 @media (max-width: 480px) {
-  .sidebar-container {
-    left: auto;
-    right: 0;
-    width: 50vw;
-    height: calc(30vh - 48px); /* 缩短高度：50vh -> 30vh */
-    background-color: transparent;
-    border: none;
+  .mobile-sidebar {
+    bottom: calc(env(safe-area-inset-bottom) + 8px);
+    right: 8px;
+  }
+
+  .mobile-toggle {
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .mobile-panel {
+    width: min(90vw, 300px);
+    max-height: 45vh;
+    bottom: 56px;
+  }
+
+  .word-chip {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* 横屏手机 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-panel {
+    max-height: 60vh;
+    width: min(50vw, 280px);
+  }
+
+  .panel-header {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .word-chips {
     padding: 0.5rem;
   }
 
-  .word-list {
-    width: 100%;
-    height: 100%;
-  }
-
-  .word-list-inner {
-    width: 100%;
-    height: 100%;
-    padding-right: 4px;
-  }
-
-  .word-item {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.6rem;
-    text-align: right;
-    justify-content: flex-end;
-    width: auto; /* 改为auto，让宽度自适应文字 */
-    align-self: flex-end; /* 靠右对齐 */
-    box-sizing: border-box;
-  }
-
-  .word-list-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* 确保子元素靠右 */
+  .word-chip {
+    padding: 0.35rem 0.625rem;
+    font-size: 0.75rem;
   }
 }
 
-/* Modal wrapper & overlay */
-.modal-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  /* 保证在最顶层 */
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   减少动画（辅助功能）
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+@media (prefers-reduced-motion: reduce) {
+  .drip {
+    animation: none;
+  }
+
+  .word-drop,
+  .word-chip {
+    animation: none;
+  }
+
+  .ink-flow-enter-active,
+  .ink-flow-leave-active,
+  .chip-pop-enter-active,
+  .chip-pop-leave-active,
+  .slide-up-enter-active,
+  .slide-up-leave-active {
+    animation: none;
+    transition: opacity 0.15s ease;
+  }
 }
 </style>

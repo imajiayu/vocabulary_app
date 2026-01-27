@@ -69,18 +69,16 @@ const sortedRecords = computed(() => {
   )
 })
 
-// 获取记录列表
+// 获取记录列表（使用 Supabase 直接查询）
 const fetchRecords = async () => {
   if (!props.selectQuestion?.id) return
 
   loadingRecords.value = true
   try {
-    const result = await api.speaking.getRecords(props.selectQuestion.id)
-    // 处理API返回的数据格式 {records: [...], total: number}
+    const result = await api.speaking.getRecordsDirect(props.selectQuestion.id)
+    // Supabase 直接查询返回 {records: [...], total: number}
     if (result && typeof result === 'object' && 'records' in result && Array.isArray(result.records)) {
       records.value = result.records
-    } else if (Array.isArray(result)) {
-      records.value = result
     } else {
       speakingLogger.error('API返回的记录数据格式不正确:', result)
       records.value = []
@@ -93,17 +91,17 @@ const fetchRecords = async () => {
   }
 }
 
-// 删除记录
+// 删除记录 (使用 Supabase 直接写入)
 const handleDeleteRecord = async (recordId: number) => {
   try {
-    // 先从UI中移除
+    // 先从UI中移除（乐观更新）
     const recordIndex = records.value.findIndex(r => r.id === recordId)
     if (recordIndex > -1) {
       records.value.splice(recordIndex, 1)
     }
 
-    // 调用删除API
-    await api.speaking.deleteRecord(recordId)
+    // 直接通过 Supabase 删除
+    await api.speaking.deleteRecordDirect(recordId)
   } catch (error) {
     speakingLogger.error('删除记录失败:', error)
     // 如果删除失败，重新获取记录列表
@@ -271,16 +269,30 @@ watch(() => props.selectQuestion, (newQuestion) => {
 }
 
 /* 手机端适配 */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .question-practice {
-    padding: 4px; /* 进一步减少padding */
-    gap: 8px; /* 进一步减少gap */
-    min-height: calc(100vh - 120px); /* 统一减去的空间 */
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    padding: 8px;
+    gap: 8px;
+    overflow: visible;
+  }
+
+  .left-panel {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .right-panel {
+    width: 100%;
+    flex: none;
+    max-height: 50vh;
   }
 
   .question-header,
   .notes-container {
-    padding: 16px;
+    padding: 12px;
     border-radius: var(--radius-md);
   }
 
@@ -288,8 +300,13 @@ watch(() => props.selectQuestion, (newQuestion) => {
     font-size: 15px;
   }
 
+  .notes-input {
+    min-height: 80px;
+    max-height: 120px;
+  }
+
   .records-header {
-    padding: 16px;
+    padding: 12px;
   }
 
   .records-title {
@@ -297,15 +314,14 @@ watch(() => props.selectQuestion, (newQuestion) => {
   }
 
   .records-content {
-    padding: 16px;
+    padding: 12px;
   }
 }
 
 @media (max-width: 480px) {
   .question-practice {
-    padding: 2px; /* 小屏幕更少的padding */
+    padding: 4px;
     gap: 6px;
-    min-height: calc(100vh - 100px); /* 小屏幕优化空间使用 */
   }
 
   .notes-input {
@@ -315,8 +331,20 @@ watch(() => props.selectQuestion, (newQuestion) => {
 
   .question-header,
   .notes-container {
-    padding: 12px; /* 小屏幕减少内部padding */
-    border-radius: var(--radius-md);
+    padding: 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .right-panel {
+    max-height: 40vh;
+  }
+
+  .records-header {
+    padding: 10px;
+  }
+
+  .records-content {
+    padding: 10px;
   }
 }
 </style>

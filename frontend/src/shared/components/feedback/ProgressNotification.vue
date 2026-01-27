@@ -1,28 +1,94 @@
 <template>
-  <div v-if="show" class="progress-notification">
-    <div class="progress-notification-content" @click="$emit('resume')">
-      <div class="progress-notification-icon">📚</div>
-      <div class="progress-notification-text">
-        <div class="progress-notification-title">发现未完成的学习进度</div>
-        <div class="progress-notification-details">
-          <span class="progress-source">{{ progressInfo.source }}</span>
-          <span class="progress-mode">{{ getModeDisplayName(progressInfo.mode) }}</span>
-          <span class="progress-shuffle">{{ progressInfo.shuffle ? '随机' : '顺序' }}</span>
-          <span class="progress-stats">
-            已完成 <span class="progress-number">{{ completedCount }}/{{ totalCount }}</span> 个单词，
-            还剩 <span class="progress-remaining">{{ remainingCount }}</span> 个
+  <Transition name="notification">
+    <div v-if="show" class="progress-notification">
+      <!-- 装饰性背景 -->
+      <div class="notification-decoration">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <circle cx="80" cy="20" r="40" fill="url(#notifGradient)" opacity="0.15"/>
+          <defs>
+            <radialGradient id="notifGradient">
+              <stop offset="0%" stop-color="var(--primitive-olive-400)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- 左侧：进度环 -->
+      <div class="notification-progress">
+        <svg viewBox="0 0 60 60" class="progress-ring">
+          <circle
+            class="ring-track"
+            cx="30" cy="30" r="24"
+            stroke-width="5"
+            fill="none"
+          />
+          <circle
+            class="ring-fill"
+            cx="30" cy="30" r="24"
+            stroke-width="5"
+            fill="none"
+            :stroke-dasharray="150.8"
+            :stroke-dashoffset="150.8 * (1 - progressPercent)"
+          />
+        </svg>
+        <div class="progress-percent">{{ Math.round(progressPercent * 100) }}%</div>
+      </div>
+
+      <!-- 中间：信息区 -->
+      <div class="notification-body">
+        <div class="notification-header">
+          <span class="notification-badge" :class="modeClass">
+            <AppIcon :name="getModeIcon(progressInfo.mode)" class="badge-icon" />
+            {{ getModeDisplayName(progressInfo.mode) }}
           </span>
+          <span class="notification-source">{{ progressInfo.source }}</span>
+        </div>
+
+        <div class="notification-title">继续上次的学习？</div>
+
+        <div class="notification-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ completedCount }}</span>
+            <span class="stat-label">已完成</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value stat-value--remaining">{{ remainingCount }}</span>
+            <span class="stat-label">剩余</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value stat-value--muted">{{ progressInfo.shuffle ? '随机' : '顺序' }}</span>
+            <span class="stat-label">模式</span>
+          </div>
         </div>
       </div>
-      <button @click.stop="$emit('dismiss')" class="progress-notification-close">
-        ✕
+
+      <!-- 右侧：操作区 -->
+      <div class="notification-actions">
+        <button class="action-btn action-btn--primary" @click="$emit('resume')">
+          <span class="btn-icon">▶</span>
+          <span class="btn-text">继续</span>
+        </button>
+        <button class="action-btn action-btn--ghost" @click="$emit('dismiss')">
+          <span class="btn-text">放弃</span>
+        </button>
+      </div>
+
+      <!-- 移动端关闭按钮 -->
+      <button class="mobile-close" @click="$emit('dismiss')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
       </button>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import AppIcon from '@/shared/components/controls/Icons.vue'
 
 interface ProgressInfo {
   mode: string
@@ -48,12 +114,30 @@ defineEmits<{
 
 const getModeDisplayName = (mode: string) => {
   const modeMap: Record<string, string> = {
-    'mode_review': '复习已有',
-    'mode_lapse': '复习错题',
-    'mode_spelling': '拼写熟练'
+    'mode_review': '复习',
+    'mode_lapse': '错题',
+    'mode_spelling': '拼写'
   }
   return modeMap[mode] || mode
 }
+
+const getModeIcon = (mode: string) => {
+  const iconMap: Record<string, 'refresh' | 'alert' | 'keyboard' | 'book'> = {
+    'mode_review': 'refresh',
+    'mode_lapse': 'alert',
+    'mode_spelling': 'keyboard'
+  }
+  return iconMap[mode] || 'book'
+}
+
+const modeClass = computed(() => {
+  const classMap: Record<string, string> = {
+    'mode_review': 'badge--review',
+    'mode_lapse': 'badge--lapse',
+    'mode_spelling': 'badge--spelling'
+  }
+  return classMap[props.progressInfo.mode] || ''
+})
 
 // 根据模式计算已完成单词数
 const completedCount = computed(() => {
@@ -78,170 +162,485 @@ const remainingCount = computed(() => {
   }
   return props.progressInfo.remaining_words
 })
+
+// 计算进度百分比
+const progressPercent = computed(() => {
+  if (totalCount.value === 0) return 0
+  return completedCount.value / totalCount.value
+})
 </script>
 
 <style scoped>
-/* 进度恢复通知条样式 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   进度恢复通知 - 重新设计
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .progress-notification {
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.progress-notification-content {
+  position: relative;
   display: flex;
-  align-items: flex-start;
-  padding: 1rem;
-  gap: 0.75rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--primitive-paper-100);
+  border: 1px solid var(--primitive-olive-200);
+  border-left: 4px solid var(--primitive-olive-400);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(93, 122, 93, 0.12);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
 }
 
-.progress-notification-content:hover {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+/* 装饰性背景 */
+.notification-decoration {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.8;
 }
 
-.progress-notification-icon {
-  font-size: 1.25rem;
+.notification-decoration svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── 进度环 ── */
+.notification-progress {
+  position: relative;
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
-  margin-top: 0.125rem;
 }
 
-.progress-notification-text {
-  flex: 1;
-  min-width: 0;
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
-.progress-notification-title {
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
+.ring-track {
+  stroke: var(--primitive-paper-400);
 }
 
-.progress-notification-details {
-  color: var(--color-text-secondary);
-  font-size: 0.8rem;
-  line-height: 1.4;
+.ring-fill {
+  stroke: var(--primitive-olive-500);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 进度通知高亮元素 */
-.progress-source {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.progress-mode {
-  color: var(--color-success);
-  font-weight: 600;
-}
-
-.progress-mode::before {
-  content: '·';
-  margin: 0 0.25rem;
-  color: var(--color-text-tertiary);
-}
-
-.progress-shuffle {
-  color: var(--color-edit);
-  font-weight: 600;
-  margin-right: 0.5rem;
-}
-
-.progress-shuffle::before {
-  content: '·';
-  margin: 0 0.25rem;
-  color: var(--color-text-tertiary);
-}
-
-.progress-stats {
-  color: var(--color-text-secondary);
-}
-
-.progress-number {
-  color: var(--color-primary);
-  font-weight: 600;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-}
-
-.progress-remaining {
-  color: var(--color-delete);
-  font-weight: 600;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-}
-
-.progress-notification-close {
-  background: none;
-  border: none;
-  color: var(--color-text-tertiary);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: var(--radius-xs);
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-  font-size: 1rem;
-  line-height: 1;
-  width: 24px;
-  height: 24px;
+.progress-percent {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primitive-olive-600);
 }
 
-.progress-notification-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--color-text-primary);
+/* ── 信息区 ── */
+.notification-body {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
-/* 移动端通知条适配 */
-@media (max-width: 480px) {
+.notification-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+.notification-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentColor;
+}
+
+.badge--review {
+  background: var(--primitive-copper-100);
+  color: var(--primitive-copper-600);
+}
+
+.badge--lapse {
+  background: var(--primitive-brick-100);
+  color: var(--primitive-brick-600);
+}
+
+.badge--spelling {
+  background: var(--primitive-olive-100);
+  color: var(--primitive-olive-600);
+}
+
+.notification-source {
+  font-size: 0.75rem;
+  color: var(--primitive-ink-400);
+  font-weight: 500;
+}
+
+.notification-title {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primitive-ink-800);
+  margin-bottom: 0.625rem;
+}
+
+.notification-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primitive-olive-600);
+  line-height: 1;
+}
+
+.stat-value--remaining {
+  color: var(--primitive-copper-500);
+}
+
+.stat-value--muted {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--primitive-ink-500);
+}
+
+.stat-label {
+  font-size: 0.625rem;
+  color: var(--primitive-ink-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--primitive-paper-400);
+}
+
+/* ── 操作区 ── */
+.notification-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.action-btn--primary {
+  background: var(--gradient-primary);
+  color: var(--primitive-paper-50);
+  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.25);
+}
+
+.action-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.35);
+}
+
+.action-btn--primary:active {
+  transform: translateY(0);
+}
+
+.action-btn--ghost {
+  background: transparent;
+  color: var(--primitive-ink-500);
+}
+
+.action-btn--ghost:hover {
+  background: var(--primitive-paper-300);
+  color: var(--primitive-ink-700);
+}
+
+.btn-icon {
+  font-size: 0.625rem;
+}
+
+.btn-text {
+  line-height: 1;
+}
+
+/* 移动端关闭按钮 - 默认隐藏 */
+.mobile-close {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.notification-enter-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.notification-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-enter-from {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+}
+
+.notification-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
   .progress-notification {
-    margin-bottom: 1.25rem;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 0 0 0.5rem;
+    border-radius: var(--radius-md);
   }
 
-  .progress-notification-content {
-    padding: 0.875rem;
-    gap: 0.625rem;
+  .notification-progress {
+    width: 44px;
+    height: 44px;
   }
 
-  .progress-notification-icon {
-    font-size: 1.125rem;
+  .progress-percent {
+    font-size: 0.625rem;
   }
 
-  .progress-notification-title {
-    font-size: 0.85rem;
+  .notification-body {
+    flex: 1;
+    min-width: 0;
   }
 
-  .progress-notification-details {
-    font-size: 0.75rem;
+  .notification-header {
+    margin-bottom: 0.25rem;
   }
-}
 
-/* 小屏手机通知条优化 */
-@media (max-width: 480px) {
-  .progress-notification-content {
-    padding: 0.75rem;
+  .notification-title {
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .notification-stats {
     gap: 0.5rem;
   }
 
-  .progress-notification-icon {
-    font-size: 1rem;
+  .stat-value {
+    font-size: 0.8125rem;
   }
 
-  .progress-notification-title {
-    font-size: 0.8rem;
+  .stat-label {
+    font-size: 0.5625rem;
   }
 
-  .progress-notification-details {
-    font-size: 0.7rem;
+  .stat-divider {
+    height: 18px;
   }
 
-  .progress-notification-close {
+  .notification-actions {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .action-btn {
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .mobile-close {
+    display: flex;
+    position: absolute;
+    top: 0.375rem;
+    right: 0.375rem;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: var(--primitive-ink-400);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-close:active {
+    background: var(--primitive-paper-300);
+    transform: scale(0.95);
+  }
+
+  .notification-decoration {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .progress-notification {
+    gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    margin: 0 0 0.375rem;
+  }
+
+  .notification-progress {
+    width: 38px;
+    height: 38px;
+  }
+
+  .progress-percent {
+    font-size: 0.5625rem;
+  }
+
+  .notification-header {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .notification-badge {
+    font-size: 0.5625rem;
+    padding: 0.0625rem 0.3125rem;
+  }
+
+  .notification-source {
+    font-size: 0.625rem;
+  }
+
+  .notification-title {
+    font-size: 0.8125rem;
+    margin-bottom: 0.25rem;
+    padding-right: 1rem;
+  }
+
+  .notification-stats {
+    gap: 0.25rem;
+  }
+
+  .stat-item {
+    gap: 0;
+  }
+
+  .stat-value {
+    font-size: 0.75rem;
+  }
+
+  .stat-value--muted {
+    font-size: 0.6875rem;
+  }
+
+  .stat-label {
+    font-size: 0.5rem;
+  }
+
+  .stat-divider {
+    height: 16px;
+  }
+
+  .notification-actions {
+    gap: 0.25rem;
+  }
+
+  .action-btn {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.6875rem;
+  }
+
+  .mobile-close {
+    top: 0.25rem;
+    right: 0.25rem;
     width: 20px;
     height: 20px;
-    font-size: 0.9rem;
+  }
+
+  .mobile-close svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* 横屏适配 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .progress-notification {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .notification-progress {
+    width: 40px;
+    height: 40px;
+  }
+
+  .notification-title {
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .notification-stats {
+    gap: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 0.8125rem;
+  }
+
+  .notification-actions {
+    flex-direction: column;
+    width: auto;
+    gap: 0.375rem;
+  }
+
+  .action-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
   }
 }
 </style>

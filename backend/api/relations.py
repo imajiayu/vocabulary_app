@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 单词关系API路由
+
+注意：add_relation 和 delete_relation 已迁移到前端 Supabase 直接写入
+- RelationsApi.addDirect() / RelationsApi.deleteDirect()
 """
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from flask_cors import CORS
 from backend.database.relation_dao import (
     db_get_relations_graph,
-    db_add_relation,
-    db_delete_relation,
     db_get_relation_stats
 )
 
@@ -61,11 +62,12 @@ def get_relations_graph():
                         f"Invalid relation_type: {rt}. Must be one of: {', '.join(valid_types)}"
                     ), 400
 
-        # 调用数据库函数获取图数据
+        # 调用数据库函数获取图数据（按用户过滤）
         graph_data = db_get_relations_graph(
             relation_types=relation_types,
             word_id=word_id,
-            max_depth=max_depth
+            max_depth=max_depth,
+            user_id=g.user_id
         )
 
         return create_response(
@@ -81,107 +83,15 @@ def get_relations_graph():
         )
 
 
-@relations_bp.route("", methods=["POST"])
-def add_relation():
-    """
-    添加单条关系
-
-    请求体:
-    {
-      "word_id": 1,
-      "related_word_id": 2,
-      "relation_type": "synonym",
-      "confidence": 0.95
-    }
-    """
-    try:
-        data = request.get_json()
-
-        if not data:
-            return create_response(False, None, "Missing request body"), 400
-
-        word_id = data.get("word_id")
-        related_word_id = data.get("related_word_id")
-        relation_type = data.get("relation_type")
-        confidence = data.get("confidence", 1.0)
-
-        if not all([word_id, related_word_id, relation_type]):
-            return create_response(
-                False,
-                None,
-                "Missing required fields: word_id, related_word_id, relation_type"
-            ), 400
-
-        valid_types = ["synonym", "antonym", "root", "confused", "topic"]
-        if relation_type not in valid_types:
-            return create_response(
-                False,
-                None,
-                f"Invalid relation_type. Must be one of: {', '.join(valid_types)}"
-            ), 400
-
-        result = db_add_relation(word_id, related_word_id, relation_type, confidence)
-
-        if result["success"]:
-            return create_response(True, result["data"], "Relation added successfully")
-        else:
-            return create_response(False, None, result["message"]), 400
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to add relation: {str(e)}"),
-            500,
-        )
-
-
-@relations_bp.route("", methods=["DELETE"])
-def delete_relation():
-    """
-    删除单条关系
-
-    请求体:
-    {
-      "word_id": 1,
-      "related_word_id": 2,
-      "relation_type": "synonym"
-    }
-    """
-    try:
-        data = request.get_json()
-
-        if not data:
-            return create_response(False, None, "Missing request body"), 400
-
-        word_id = data.get("word_id")
-        related_word_id = data.get("related_word_id")
-        relation_type = data.get("relation_type")
-
-        if not all([word_id, related_word_id, relation_type]):
-            return create_response(
-                False,
-                None,
-                "Missing required fields: word_id, related_word_id, relation_type"
-            ), 400
-
-        result = db_delete_relation(word_id, related_word_id, relation_type)
-
-        if result["success"]:
-            return create_response(True, None, result["message"])
-        else:
-            return create_response(False, None, result["message"]), 404
-
-    except Exception as e:
-        return (
-            create_response(False, None, f"Failed to delete relation: {str(e)}"),
-            500,
-        )
-
-
 @relations_bp.route("/stats", methods=["GET"])
 def get_relation_stats():
-    """获取关系统计信息"""
+    """获取关系统计信息
+
+    已迁移到前端 Supabase 直接查询 (RelationsApi.getStatsDirect)
+    保留此端点以兼容旧版本客户端
+    """
     try:
-        stats = db_get_relation_stats()
+        stats = db_get_relation_stats(g.user_id)
         return create_response(True, stats, "Stats retrieved successfully")
 
     except Exception as e:

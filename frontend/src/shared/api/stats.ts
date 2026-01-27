@@ -5,6 +5,7 @@
 
 import { get } from './client'
 import { supabase } from '@/shared/config/supabase'
+import { getCurrentUserId } from '@/shared/composables/useUserSelection'
 import {
   generateSpellHeatmapCell,
   generateEfHeatmapCell,
@@ -48,6 +49,9 @@ export interface IndexSummary {
     count: number
     date: string
   }>
+  /**
+   * @deprecated 前端现在直接从 Supabase 获取进度，此字段将被后端移除
+   */
   progress_restore?: {
     has_progress: boolean
     summary?: {
@@ -196,7 +200,11 @@ export class StatsApi {
    */
   static async getStats(params?: { source?: string }): Promise<StatsResponse> {
     const source = params?.source || 'IELTS'
-    const sourceFilter = [{ column: 'source', value: source }]
+    const userId = getCurrentUserId()
+    const sourceFilter = [
+      { column: 'source', value: source },
+      { column: 'user_id', value: String(userId) }
+    ]
 
     // 并行查询所有VIEW（使用分页获取完整数据）
     const [

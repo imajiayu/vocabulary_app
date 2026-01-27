@@ -1,22 +1,34 @@
 <template>
-  <div v-if="relatedWords && relatedWords.length" class="related-words">
-    <div class="relation-columns">
-      <div v-for="type in relationTypes" :key="type" class="relation-column">
-        <h5>{{ typeLabels[type] }}</h5>
-        <ul>
-          <li
+  <div v-if="relatedWords && relatedWords.length" class="related-words-panel">
+    <div class="panel-header">
+      <span class="header-label">相关词汇</span>
+      <span class="header-count">{{ relatedWords.length }}</span>
+    </div>
+
+    <div class="relation-grid">
+      <div
+        v-for="type in activeTypes"
+        :key="type"
+        class="relation-group"
+      >
+        <div class="group-label" :class="type">
+          <span class="label-icon">{{ typeIcons[type] }}</span>
+          <span class="label-text">{{ typeLabels[type] }}</span>
+        </div>
+        <div class="word-list">
+          <button
             v-for="rel in groupedWords[type]"
             :key="rel.id"
-            class="related-word-item"
+            class="word-chip"
             @click="handleClickWord(rel.id)"
           >
-            <span class="word">{{ rel.word }}</span>
-          </li>
-        </ul>
+            {{ rel.word }}
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- modal - 使用 store 管理状态 -->
+    <!-- Modal -->
     <teleport to="body">
       <div v-if="wordEditorStore.isOpen" class="modal-wrapper">
         <div class="modal-overlay" @click="wordEditorStore.close()"></div>
@@ -43,16 +55,22 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const relationTypes = ['synonym', 'antonym', 'root', 'confused', 'topic']
+const relationTypes = ['synonym', 'antonym', 'root', 'confused', 'topic'] as const
 const typeLabels: Record<string, string> = {
-  synonym: '同义词',
-  antonym: '反义词',
-  root: '同词根',
-  confused: '易混淆',
-  topic: '同主题',
+  synonym: '同义',
+  antonym: '反义',
+  root: '词根',
+  confused: '易混',
+  topic: '主题',
+}
+const typeIcons: Record<string, string> = {
+  synonym: '≈',
+  antonym: '≠',
+  root: '√',
+  confused: '⚡',
+  topic: '§',
 }
 
-// 分组
 const groupedWords = computed(() => {
   const map: Record<string, RelatedWord[]> = {}
   relationTypes.forEach((t) => (map[t] = []))
@@ -62,21 +80,24 @@ const groupedWords = computed(() => {
   return map
 })
 
-// Word Editor Store
-const wordEditorStore = useWordEditorStore()
+const activeTypes = computed(() => {
+  return relationTypes.filter(type => groupedWords.value[type].length > 0)
+})
 
-// 使用全局计时器暂停管理
+const wordEditorStore = useWordEditorStore()
 const { requestPause, releasePause } = useTimerPause()
 
 const handleClickWord = async (wordId: number) => {
-  // 打开 modal 时请求暂停计时器
   requestPause()
 
   try {
-    const data = await api.words.getWord(wordId)
+    const data = await api.words.getWordDirect(wordId)
+    if (!data) {
+      log.error('Word not found:', wordId)
+      releasePause()
+      return
+    }
     wordEditorStore.open(data)
-
-    // 注册关闭回调
     wordEditorStore.onClose(() => {
       releasePause()
     })
@@ -88,41 +109,140 @@ const handleClickWord = async (wordId: number) => {
 </script>
 
 <style scoped>
-.relation-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* ═══════════════════════════════════════════════════════════════════════════
+   Related Words Panel - Neo-Editorial 风格
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.related-words-panel {
+  padding: 1.25rem 0;
 }
 
-.related-words {
-  margin-top: 1em;
-  padding: 0.5em;
-  border-top: 1px solid #ccc;
-}
-
-.relation-columns {
+.panel-header {
   display: flex;
-  gap: 0.5em;
-  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.relation-column {
+.header-label {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.header-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  font-family: var(--font-data);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ── 关系分组网格 ── */
+.relation-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.relation-group {
   flex: 1;
-  min-width: 0;
-  width: 20%;
+  min-width: 120px;
+  max-width: 200px;
 }
 
-.related-word-item {
-  margin: 0.25em 0;
-  font-size: 0.9em;
+.group-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.group-label.synonym {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.group-label.antonym {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.group-label.root {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.group-label.confused {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.group-label.topic {
+  background: var(--color-secondary-light);
+  color: var(--color-secondary);
+}
+
+.label-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.label-text {
+  letter-spacing: 0.02em;
+}
+
+/* ── 单词列表 ── */
+.word-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.word-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.625rem;
+  font-family: var(--font-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.word {
-  font-weight: bold;
+.word-chip:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
 }
 
-/* Modal wrapper & overlay */
+.word-chip:active {
+  transform: translateY(0);
+}
+
+/* ── Modal ── */
 .modal-wrapper {
   position: fixed;
   top: 0;
@@ -141,68 +261,57 @@ const handleClickWord = async (wordId: number) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
 
-/* 移动端适配 - 保持水平布局且字体更大 */
+/* ══════════════════════════════════════════════════════════════════════════
+   移动端适配
+   ══════════════════════════════════════════════════════════════════════════ */
+
 @media (max-width: 480px) {
-  .relation-columns {
-    gap: 0.25em;
+  .related-words-panel {
+    padding: 1rem 0;
   }
 
-  .related-words {
-    padding: 0.75em 0.125em;
+  .panel-header {
+    margin-bottom: 0.75rem;
   }
 
-  .relation-column {
-    width: 20%;
-    min-width: 0;
+  .relation-grid {
+    gap: 0.75rem;
   }
 
-  .related-word-item {
-    margin: 0.3em 0;
-    font-size: 0.95em;
-    word-break: break-word;
+  .relation-group {
+    min-width: 100px;
+    max-width: none;
+    flex: 1 1 calc(50% - 0.375rem);
   }
 
-  .word {
-    font-size: 0.95em;
-    font-weight: bold;
+  .group-label {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .word-list {
+    gap: 0.25rem;
+  }
+
+  .word-chip {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
   }
 }
 
-/* 小屏幕适配 - 专门优化字体大小 */
-@media (max-width: 480px) {
-  .relation-columns {
-    gap: 0.125em;
+@media (max-width: 360px) {
+  .relation-group {
+    flex: 1 1 100%;
+    max-width: none;
   }
 
-  .related-words {
-    padding: 0.5em 0.05em;
-  }
-
-  .relation-column {
-    width: 20%;
-    min-width: 0;
-    text-align: center;
-  }
-
-  .related-word-item {
-    margin: 0.25em 0;
-    font-size: 0.9em;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.125em;
-    word-break: break-word;
-    hyphens: auto;
-  }
-
-  .word {
-    font-size: 0.9em;
-    font-weight: bold;
-    line-height: 1.2;
+  .word-chip {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
   }
 }
 </style>

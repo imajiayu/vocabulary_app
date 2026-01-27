@@ -46,11 +46,11 @@
     <!-- 管理设置保存按钮 -->
     <div class="settings-actions">
       <button class="btn-save" @click="saveSettings" :disabled="isSaving">
-        <span v-if="!isSaving">💾 保存管理设置</span>
-        <span v-else>⏳ 保存中...</span>
+        <span v-if="!isSaving">保存管理设置</span>
+        <span v-else>保存中...</span>
       </button>
       <button class="btn-reset" @click="resetSettings">
-        🔄 恢复默认
+        恢复默认
       </button>
     </div>
 

@@ -1,56 +1,102 @@
 <template>
-  <nav class="main-nav" :class="{ expanded: expanded }">
-    <!-- 顶部区域：展开/收起按钮和Logo -->
+  <nav class="spine-nav" :class="{ expanded: expanded }">
+    <!-- 书脊顶部装饰 -->
+    <div class="spine-cap spine-cap--top">
+      <div class="cap-detail"></div>
+    </div>
+
+    <!-- 展开控制区 -->
     <div class="nav-header">
-      <button class="nav-toggle" @click="toggleNav">
-        <span class="toggle-icon" :class="{ rotated: expanded }">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18l6-6-6-6" />
+      <button class="nav-toggle" @click="toggleNav" :aria-label="expanded ? '收起导航' : '展开导航'">
+        <span class="toggle-mark" :class="{ rotated: expanded }">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M9 6l6 6-6 6" />
           </svg>
         </span>
       </button>
 
-      <div class="logo-container">
-        <transition name="logo-fade">
-          <h1 v-show="expanded" class="app-title">IELTS</h1>
+      <!-- 展开时的标题 -->
+      <transition name="title-reveal">
+        <div v-show="expanded" class="brand-title">
+          <span class="title-text">IELTS</span>
+          <span class="title-accent">Study</span>
+        </div>
+      </transition>
+    </div>
+
+    <!-- 主导航区域 -->
+    <div class="nav-chapters">
+      <button
+        v-for="(tab, index) in tabs"
+        :key="tab.id"
+        :class="['chapter-tab', { active: activeTab === tab.id }]"
+        @click="switchTab(tab.id)"
+        :style="{ '--tab-index': index }"
+      >
+        <!-- 章节标记/书签 -->
+        <span class="chapter-mark">
+          <component :is="tab.iconComponent" class="mark-icon" />
+        </span>
+
+        <!-- 章节标签 -->
+        <transition name="label-slide">
+          <span v-show="expanded" class="chapter-label">
+            <span class="label-chinese">{{ tab.label }}</span>
+            <span class="label-english">{{ tab.english }}</span>
+          </span>
         </transition>
-      </div>
-    </div>
 
-    <!-- Tab 按钮区域 -->
-    <div class="nav-tabs">
-      <button v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { active: activeTab === tab.id }]"
-        @click="switchTab(tab.id)">
-        <span class="tab-icon">{{ tab.icon }}</span>
-        <div class="label-container">
-          <transition name="label-fade">
-            <span v-show="expanded" class="tab-label">{{ tab.label }}</span>
-          </transition>
-        </div>
+        <!-- 活动状态的书签丝带 -->
+        <span v-if="activeTab === tab.id" class="ribbon-marker"></span>
       </button>
     </div>
 
-    <!-- 底部设置按钮 -->
-    <div class="nav-footer">
-      <button :class="['nav-tab', { active: activeTab === 'settings' }]" @click="switchTab('settings')">
-        <span class="tab-icon">⚙️</span>
-        <div class="label-container">
-          <transition name="label-fade">
-            <span v-show="expanded" class="tab-label">设置</span>
-          </transition>
-        </div>
+    <!-- 用户选择（藏书票） -->
+    <div class="nav-stamps">
+      <UserSelector :expanded="expanded" />
+    </div>
+
+    <!-- 底部设置 -->
+    <div class="nav-colophon">
+      <button
+        :class="['chapter-tab chapter-tab--settings', { active: activeTab === 'settings' }]"
+        @click="switchTab('settings')"
+      >
+        <span class="chapter-mark">
+          <svg class="mark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+        </span>
+        <transition name="label-slide">
+          <span v-show="expanded" class="chapter-label">
+            <span class="label-chinese">设置</span>
+            <span class="label-english">Settings</span>
+          </span>
+        </transition>
+        <span v-if="activeTab === 'settings'" class="ribbon-marker"></span>
       </button>
     </div>
+
+    <!-- 书脊底部装饰 -->
+    <div class="spine-cap spine-cap--bottom">
+      <div class="cap-detail"></div>
+    </div>
+
+    <!-- 书脊边缘装饰线 -->
+    <div class="spine-edge"></div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, h, type FunctionalComponent } from 'vue'
+import UserSelector from './UserSelector.vue'
 
 interface Tab {
   id: string
   label: string
-  icon: string
+  english: string
+  iconComponent: FunctionalComponent
 }
 
 interface Props {
@@ -65,9 +111,33 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+// 自定义 SVG 图标组件
+const BookIcon: FunctionalComponent = () => h('svg', {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': '1.75'
+}, [
+  h('path', { d: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20' }),
+  h('path', { d: 'M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z' }),
+  h('path', { d: 'M8 7h8' }),
+  h('path', { d: 'M8 11h5' })
+])
+
+const MicIcon: FunctionalComponent = () => h('svg', {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': '1.75'
+}, [
+  h('rect', { x: '9', y: '2', width: '6', height: '11', rx: '3' }),
+  h('path', { d: 'M5 10a7 7 0 0 0 14 0' }),
+  h('line', { x1: '12', y1: '19', x2: '12', y2: '22' })
+])
+
 const tabs: Tab[] = [
-  { id: 'words', label: '单词复习', icon: '📚' },
-  { id: 'speaking', label: '口语练习', icon: '🎤' }
+  { id: 'words', label: '单词复习', english: 'Vocabulary', iconComponent: BookIcon },
+  { id: 'speaking', label: '口语练习', english: 'Speaking', iconComponent: MicIcon }
 ]
 
 const expanded = ref(false)
@@ -84,33 +154,122 @@ const switchTab = (tabId: string) => {
 </script>
 
 <style scoped>
-.main-nav {
+/* ═══════════════════════════════════════════════════════════════════════════
+   书脊式导航 - Editorial Study 风格
+   灵感：精装书书脊、古典图书馆、手工装帧
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.spine-nav {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: var(--nav-width);
-  background: var(--color-bg-primary);
-  border-right: 1px solid var(--color-border-medium);
+  /* 书脊背景：渐变 + 纸张纹理叠加 */
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 1px,
+      rgba(139, 105, 20, 0.015) 1px,
+      rgba(139, 105, 20, 0.015) 2px
+    ),
+    linear-gradient(
+      90deg,
+      var(--primitive-paper-100) 0%,
+      var(--primitive-paper-200) 60%,
+      var(--primitive-paper-300) 100%
+    );
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 12px rgba(45, 55, 72, 0.04);
-  transition: width var(--transition-slow);
   z-index: 101;
   overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.main-nav.expanded {
+.spine-nav.expanded {
   width: var(--nav-width-expanded);
 }
+
+/* ── 书脊边缘装饰 ── */
+.spine-edge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    var(--primitive-copper-200) 0%,
+    var(--primitive-copper-300) 20%,
+    var(--primitive-paper-500) 50%,
+    var(--primitive-copper-300) 80%,
+    var(--primitive-copper-200) 100%
+  );
+  box-shadow:
+    -1px 0 0 var(--primitive-paper-400),
+    1px 0 3px rgba(139, 105, 20, 0.08);
+}
+
+/* ── 书脊顶部/底部装饰（头带/脚带） ── */
+.spine-cap {
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--primitive-copper-300) 0%,
+    var(--primitive-copper-400) 30%,
+    var(--primitive-gold-400) 50%,
+    var(--primitive-copper-400) 70%,
+    var(--primitive-copper-300) 100%
+  );
+  position: relative;
+  flex-shrink: 0;
+}
+
+.spine-cap--top {
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 2px 4px rgba(139, 105, 20, 0.1);
+}
+
+.spine-cap--bottom {
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 -2px 4px rgba(139, 105, 20, 0.1);
+  margin-top: auto;
+}
+
+.cap-detail {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+}
+
+.spine-cap--top .cap-detail {
+  bottom: 1px;
+}
+
+.spine-cap--bottom .cap-detail {
+  top: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   顶部区域
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .nav-header {
   display: flex;
   align-items: center;
-  height: var(--nav-width); /* 与导航栏宽度保持一致 */
+  height: 56px;
   padding: 0;
-  border-bottom: 1px solid var(--color-border-light);
   position: relative;
+  border-bottom: 1px solid var(--primitive-paper-400);
 }
 
 .nav-toggle {
@@ -118,351 +277,455 @@ const switchTab = (tabId: string) => {
   align-items: center;
   justify-content: center;
   width: var(--nav-width);
-  height: var(--nav-width);
-  min-width: var(--nav-width-mobile);
+  height: 56px;
+  min-width: var(--nav-width);
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--color-text-secondary);
-  transition: all var(--transition-normal);
+  color: var(--primitive-copper-500);
+  transition: all 0.25s ease;
   flex-shrink: 0;
-  /* 移动端触摸优化 */
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 .nav-toggle:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--color-text-primary);
+  color: var(--primitive-copper-600);
 }
 
-.toggle-icon {
+.nav-toggle:hover .toggle-mark {
+  background: var(--primitive-paper-300);
+  border-color: var(--primitive-copper-300);
+}
+
+.toggle-mark {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  transform-origin: center;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--primitive-paper-500);
+  background: var(--primitive-paper-50);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.toggle-icon.rotated {
+.toggle-mark.rotated {
   transform: rotate(180deg);
 }
 
-.logo-container {
-  position: relative;
-  height: var(--nav-width);
+/* 品牌标题 */
+.brand-title {
   display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-.main-nav.expanded .logo-container {
-  flex: 1;
-}
-
-.app-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin: 0;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 4px;
   white-space: nowrap;
-  position: absolute;
-  left: 16px;
-  letter-spacing: 0.05em;
 }
 
-.nav-tabs {
+.title-text {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primitive-copper-600);
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+}
+
+.title-accent {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--primitive-ink-400);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   章节导航
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.nav-chapters {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px 0;
+  gap: 4px;
+  padding: 16px 0;
 }
 
-.nav-footer {
+/* ── 用户选择区域（藏书票） ── */
+.nav-stamps {
+  padding: 8px 0;
+  border-top: 1px solid var(--primitive-paper-400);
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  height: var(--nav-width);
-  border-top: 1px solid var(--color-border-light);
-  margin-top: auto;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.nav-tab {
+.nav-colophon {
+  padding: 8px 0 16px;
+  border-top: 1px solid var(--primitive-paper-400);
+}
+
+.chapter-tab {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0;
   padding: 0;
+  margin: 0 6px;
   border: none;
   background: transparent;
-  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  transition: all 0.2s ease;
-  text-align: left;
-  width: 100%;
-  min-height: 48px;
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  justify-content: flex-start;
-  /* 移动端触摸优化 */
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  overflow: visible;
   touch-action: manipulation;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.nav-tab:hover {
-  background: var(--color-bg-tertiary);
+.chapter-tab:hover {
+  background: var(--primitive-paper-300);
 }
 
-/* 收起状态下的样式 */
-.main-nav:not(.expanded) .nav-tab {
-  width: 36px;
-  /* 缩小按钮宽度 */
-  height: 36px;
-  /* 缩小按钮高度 */
-  min-height: 36px;
-  margin: 0 6px;
-  /* 左右居中 */
-  justify-content: center;
-  border-radius: var(--radius-default);
-}
-
-.main-nav:not(.expanded) .nav-tab:hover {
-  transform: none;
-  /* 收起状态不要左右移动效果 */
-}
-
-.main-nav:not(.expanded) .nav-tab.active {
-  background: var(--gradient-primary);
-  color: var(--color-text-inverse);
-  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.25);
-  width: 36px;
-  /* 保持较小宽度 */
-  height: 36px;
-  border-radius: var(--radius-default);
-}
-
-/* 展开状态下的样式 */
-.main-nav.expanded .nav-tab {
-  width: calc(100% - 16px);
-  margin: 0 8px;
-  justify-content: flex-start;
-  min-height: 36px;
-  height: 36px;
-}
-
-.main-nav.expanded .nav-tab:hover {
-  transform: translateX(2px);
-}
-
-.main-nav.expanded .nav-tab.active {
-  background: var(--gradient-primary);
-  color: var(--color-text-inverse);
-  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.2);
-  border-radius: 22px;
-}
-
-.main-nav.expanded .nav-tab.active::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: var(--radius-2xl);
-  background: var(--gradient-primary);
-  z-index: -1;
-  opacity: 0.08;
-}
-
-.tab-icon {
-  font-size: 18px;
-  width: 36px;
-  /* 统一图标容器宽度 */
-  min-width: 36px;
-  height: 36px;
-  /* 统一图标容器高度 */
+/* ── 章节标记（图标容器） ── */
+.chapter-mark {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 40px;
+  min-width: 36px;
+  color: var(--primitive-ink-500);
+  transition: all 0.25s ease;
   flex-shrink: 0;
-  text-align: center;
 }
 
-/* 展开状态下图标容器调整 */
-.main-nav.expanded .tab-icon {
-  width: 36px;
-  min-width: 36px;
-  height: 36px;
+.mark-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.25s ease;
 }
 
-.label-container {
-  position: relative;
-  height: 44px;
+.chapter-tab:hover .mark-icon {
+  transform: scale(1.05);
+}
+
+/* ── 章节标签 ── */
+.chapter-label {
   display: flex;
-  align-items: center;
-  overflow: hidden;
-  flex: 1;
-}
-
-.tab-label {
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 4px;
   white-space: nowrap;
+  min-width: 0;
+}
+
+.label-chinese {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primitive-ink-700);
+  line-height: 1.2;
+}
+
+.label-english {
+  font-family: var(--font-serif);
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--primitive-ink-400);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+/* ── 书签丝带效果 ── */
+.ribbon-marker {
   position: absolute;
-  left: 12px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 24px;
+  background: linear-gradient(
+    180deg,
+    var(--primitive-copper-400) 0%,
+    var(--primitive-gold-500) 50%,
+    var(--primitive-copper-400) 100%
+  );
+  border-radius: 0 2px 2px 0;
+  box-shadow:
+    1px 0 3px rgba(139, 105, 20, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.3);
 }
 
-.logo-fade-enter-active {
-  transition: opacity 0.25s ease 0.1s, transform 0.25s ease 0.1s;
+/* ═══════════════════════════════════════════════════════════════════════════
+   活动状态
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.chapter-tab.active {
+  background: linear-gradient(
+    90deg,
+    rgba(153, 107, 61, 0.08) 0%,
+    rgba(153, 107, 61, 0.04) 100%
+  );
 }
 
-.logo-fade-leave-active {
+.chapter-tab.active .chapter-mark {
+  color: var(--primitive-copper-600);
+}
+
+.chapter-tab.active .label-chinese {
+  color: var(--primitive-copper-700);
+  font-weight: 600;
+}
+
+.chapter-tab.active .label-english {
+  color: var(--primitive-copper-500);
+}
+
+/* 展开状态下的活动样式增强 */
+.spine-nav.expanded .chapter-tab.active {
+  background: linear-gradient(
+    90deg,
+    rgba(153, 107, 61, 0.1) 0%,
+    rgba(153, 107, 61, 0.05) 70%,
+    transparent 100%
+  );
+  border-radius: 0 20px 20px 0;
+  margin-left: 0;
+  padding-left: 6px;
+}
+
+.spine-nav.expanded .chapter-tab.active .ribbon-marker {
+  height: 100%;
+  border-radius: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   动画
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.title-reveal-enter-active {
+  transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
+}
+
+.title-reveal-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.title-reveal-enter-from {
+  opacity: 0;
+  transform: translateX(-12px);
+}
+
+.title-reveal-leave-to {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.label-slide-enter-active {
+  transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s;
+  transition-delay: calc(var(--tab-index, 0) * 0.03s + 0.05s);
+}
+
+.label-slide-leave-active {
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-.logo-fade-enter-from {
+.label-slide-enter-from {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(-16px);
 }
 
-.logo-fade-leave-to {
+.label-slide-leave-to {
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-8px);
 }
 
-.label-fade-enter-active {
-  transition: opacity 0.25s ease 0.1s, transform 0.25s ease 0.1s;
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   移动端响应式 (小屏幕)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-.label-fade-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.label-fade-enter-from {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-.label-fade-leave-to {
-  opacity: 0;
-  transform: translateX(-10px);
-}
-
-/* 移动端响应式适配 - 使用 CSS 变量 */
 @media (max-width: 480px) {
-  .main-nav {
+  .spine-nav {
     width: var(--nav-width-small-mobile);
   }
 
-  .main-nav.expanded {
+  .spine-nav.expanded {
     width: var(--nav-width-expanded-small-mobile);
   }
 
   .nav-header {
-    height: var(--nav-width-small-mobile);
+    height: 48px;
   }
 
   .nav-toggle {
     width: var(--nav-width-small-mobile);
-    height: var(--nav-width-small-mobile);
+    height: 48px;
     min-width: var(--nav-width-small-mobile);
   }
 
-  /* 移动端禁用 hover 效果，使用 active 替代 */
-  .nav-toggle:hover {
+  .toggle-mark {
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+  }
+
+  .toggle-mark svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .title-text {
+    font-size: 18px;
+  }
+
+  .title-accent {
+    font-size: 9px;
+  }
+
+  .chapter-mark {
+    width: 28px;
+    height: 34px;
+    min-width: 28px;
+  }
+
+  .mark-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .chapter-tab {
+    margin: 0 6px;
+    border-radius: 6px;
+  }
+
+  .ribbon-marker {
+    width: 2px;
+    height: 20px;
+  }
+
+  .label-chinese {
+    font-size: 13px;
+  }
+
+  .label-english {
+    font-size: 9px;
+  }
+
+  /* 移动端触摸反馈 */
+  .chapter-tab:hover {
     background: transparent;
   }
 
-  .nav-toggle:active {
-    background: var(--color-border-light);
-    transform: scale(0.95);
-  }
-
-  .nav-tab:hover {
-    background: transparent;
-    transform: none;
-  }
-
-  .nav-tab:active {
-    background: var(--color-purple-light);
+  .chapter-tab:active {
+    background: var(--primitive-paper-300);
     transform: scale(0.98);
   }
 
-  .main-nav:not(.expanded) .nav-tab {
-    width: 28px;
-    height: 28px;
-    min-height: 28px;
-    margin: 0 6px;
-    border-radius: var(--radius-sm);
+  .nav-toggle:hover .toggle-mark {
+    background: var(--primitive-paper-50);
+    border-color: var(--primitive-paper-500);
   }
 
-  .main-nav:not(.expanded) .nav-tab.active {
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-sm);
-  }
-
-  .main-nav:not(.expanded) .tab-icon {
-    width: 28px;
-    min-width: 28px;
-    height: 28px;
-    font-size: var(--font-size-base);
-  }
-
-  .main-nav.expanded .tab-icon {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-  }
-
-  .main-nav.expanded .nav-tab {
-    min-height: 36px;
-    height: 36px;
-    border-radius: 18px;
-  }
-
-  .main-nav.expanded .nav-tab:hover {
-    transform: none;
-  }
-
-  .app-title {
-    font-size: var(--font-size-xl);
-    left: 10px;
-  }
-
-  .nav-tabs {
-    padding: var(--spacing-md) 0;
-    gap: var(--spacing-xs);
-  }
-
-  .tab-label {
-    font-size: var(--font-size-sm);
-    left: var(--spacing-sm);
+  .nav-toggle:active .toggle-mark {
+    background: var(--primitive-paper-300);
+    transform: scale(0.95);
   }
 }
 
-/* 横屏适配 */
+/* ═══════════════════════════════════════════════════════════════════════════
+   横屏适配
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @media (max-height: 500px) and (orientation: landscape) {
-  .nav-tabs {
-    padding: 8px 0;
-    gap: 4px;
+  .spine-cap {
+    height: 4px;
   }
 
-  .main-nav.expanded .nav-tab {
-    min-height: 32px;
+  .nav-header {
+    height: 44px;
+  }
+
+  .nav-toggle {
+    height: 44px;
+  }
+
+  .nav-chapters {
+    padding: 8px 0;
+    gap: 2px;
+  }
+
+  .chapter-mark {
     height: 32px;
   }
 
-  .main-nav:not(.expanded) .nav-tab {
-    height: 28px;
-    min-height: 28px;
+  .nav-colophon {
+    padding: 4px 0 8px;
   }
 
-  .app-title {
+  .title-text {
     font-size: 18px;
+  }
+
+  .title-accent {
+    font-size: 9px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   减少动画偏好
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .spine-nav,
+  .toggle-mark,
+  .chapter-tab,
+  .mark-icon {
+    transition: none;
+  }
+
+  .title-reveal-enter-active,
+  .title-reveal-leave-active,
+  .label-slide-enter-active,
+  .label-slide-leave-active {
+    transition: opacity 0.1s ease;
+  }
+
+  .title-reveal-enter-from,
+  .title-reveal-leave-to,
+  .label-slide-enter-from,
+  .label-slide-leave-to {
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   高对比度模式
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-contrast: high) {
+  .spine-edge {
+    width: 2px;
+    background: var(--primitive-copper-500);
+  }
+
+  .ribbon-marker {
+    width: 4px;
+    background: var(--primitive-copper-600);
+  }
+
+  .chapter-tab.active {
+    background: rgba(153, 107, 61, 0.15);
+  }
+
+  .toggle-mark {
+    border-width: 2px;
   }
 }
 </style>

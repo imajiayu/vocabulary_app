@@ -165,7 +165,7 @@ const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
     try {
         isLoadingMore.value = offset > 0; // 只有加载后续批次时才显示加载更多状态
 
-        const response = await api.words.getWordsPaginated(batchSize.value, offset);
+        const response = await api.words.getWordsPaginatedDirect(batchSize.value, offset);
 
         if (offset === 0) {
             // 首次加载，替换所有数据
@@ -227,7 +227,7 @@ const loadRemainingBatches = async () => {
         // 并发请求，完成时按顺序插入
         await Promise.all(
             offsets.map(async (offset) => {
-                const response = await api.words.getWordsPaginated(batchSize.value, offset);
+                const response = await api.words.getWordsPaginatedDirect(batchSize.value, offset);
 
                 if (shouldStopLoading.value) return;
 

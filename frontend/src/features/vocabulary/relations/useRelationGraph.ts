@@ -157,7 +157,7 @@ export function useRelationGraph() {
     }
   }
 
-  // Add relation (optimistic update)
+  // Add relation (optimistic update, 使用 Supabase 直接写入)
   async function addRelation(
     sourceId: number,
     targetId: number,
@@ -172,9 +172,9 @@ export function useRelationGraph() {
     })
     applyFilters()
 
-    // Sync with backend
+    // 直接通过 Supabase 写入（双向插入）
     try {
-      await api.relations.add({
+      await api.relations.addDirect({
         word_id: sourceId,
         related_word_id: targetId,
         relation_type: relationType,
@@ -188,7 +188,7 @@ export function useRelationGraph() {
     }
   }
 
-  // Delete relation (optimistic update)
+  // Delete relation (optimistic update, 使用 Supabase 直接写入)
   async function deleteRelation(
     sourceId: number,
     targetId: number,
@@ -204,9 +204,9 @@ export function useRelationGraph() {
     )
     applyFilters()
 
-    // Sync with backend
+    // 直接通过 Supabase 删除（双向删除）
     try {
-      await api.relations.delete({
+      await api.relations.deleteDirect({
         word_id: sourceId,
         related_word_id: targetId,
         relation_type: relationType
