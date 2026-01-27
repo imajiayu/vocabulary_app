@@ -4,7 +4,6 @@
 
 提供用户配置的数据库操作接口
 """
-import json
 import logging
 from datetime import datetime
 from typing import Optional
@@ -26,13 +25,10 @@ def db_get_user_config(user_id: int = 1) -> Optional[dict]:
     - dict: 配置字典，如果不存在返回 None
     """
     with get_session() as session:
-        config = session.query(UserConfigDB).filter(UserConfigDB.user_id == user_id).first()
-        if config:
-            try:
-                return json.loads(config.config_json)
-            except json.JSONDecodeError:
-                logger.error("Failed to parse user config JSON")
-                return None
+        row = session.query(UserConfigDB).filter(UserConfigDB.user_id == user_id).first()
+        if row and row.config:
+            # JSONB 类型自动反序列化为 dict
+            return row.config
     return None
 
 
@@ -49,15 +45,15 @@ def db_save_user_config(config_data: dict, user_id: int = 1) -> bool:
     """
     try:
         with transaction() as session:
-            config = session.query(UserConfigDB).filter(UserConfigDB.user_id == user_id).first()
-            config_json = json.dumps(config_data, ensure_ascii=False)
+            row = session.query(UserConfigDB).filter(UserConfigDB.user_id == user_id).first()
 
-            if config:
-                config.config_json = config_json
-                config.updated_at = datetime.utcnow()
+            if row:
+                # JSONB 类型自动序列化 dict
+                row.config = config_data
+                row.updated_at = datetime.utcnow()
             else:
-                config = UserConfigDB(user_id=user_id, config_json=config_json)
-                session.add(config)
+                row = UserConfigDB(user_id=user_id, config=config_data)
+                session.add(row)
 
         return True
     except Exception as e:

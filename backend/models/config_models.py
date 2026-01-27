@@ -6,7 +6,8 @@
 - UserConfigDB - 用户配置存储（原 user_config.json）
 """
 from datetime import datetime
-from sqlalchemy import Column, Integer, Text, DateTime, UniqueConstraint
+from sqlalchemy import Column, Integer, DateTime, UniqueConstraint
+from sqlalchemy.dialects.postgresql import JSONB
 
 from backend.models.word import Base
 
@@ -25,7 +26,7 @@ class UserConfigDB(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, nullable=False, default=1)
-    config_json = Column(Text, nullable=False)  # 存储完整配置 JSON
+    config = Column(JSONB, nullable=True)  # JSONB 类型，与 migration 一致
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # 多用户：每个用户一行配置

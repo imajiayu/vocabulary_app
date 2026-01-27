@@ -17,6 +17,7 @@ from flask_cors import CORS
 
 from backend.api.vocabulary import api_bp
 from backend.api.relations import relations_bp
+from backend.middleware.user_context import init_user_context
 
 app = Flask(__name__)
 
@@ -28,6 +29,12 @@ app.register_blueprint(api_bp)
 app.register_blueprint(relations_bp)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
+@app.before_request
+def before_request():
+    """初始化用户上下文"""
+    init_user_context()
 
 
 @app.route("/api/health")
