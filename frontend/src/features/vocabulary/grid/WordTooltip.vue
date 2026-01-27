@@ -45,7 +45,7 @@
         <!-- 例句（最多显示1条） -->
         <div v-if="examples.length" class="tooltip-example">
           <div class="example-label">例句</div>
-          <div class="example-en">{{ examples[0].en }}</div>
+          <div class="example-en" v-html="examples[0].en"></div>
           <div class="example-zh">{{ examples[0].zh }}</div>
         </div>
       </div>
@@ -108,7 +108,7 @@
                 :key="index"
                 class="mobile-example-item"
               >
-                <div class="example-english">{{ ex.en }}</div>
+                <div class="example-english" v-html="ex.en"></div>
                 <div class="example-chinese">{{ ex.zh }}</div>
               </div>
             </div>
