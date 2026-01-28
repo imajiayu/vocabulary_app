@@ -84,6 +84,12 @@
           >
             <span class="btn-icon">✓</span>
             <span class="btn-label">记住了</span>
+            <KeyHint
+              v-if="!isMobile"
+              :key-value="hotkeys.reviewInitial.remembered"
+              variant="success"
+              class="btn-key-hint"
+            />
           </button>
 
           <button
@@ -93,6 +99,12 @@
           >
             <span class="btn-icon">✗</span>
             <span class="btn-label">没记住</span>
+            <KeyHint
+              v-if="!isMobile"
+              :key-value="hotkeys.reviewInitial.notRemembered"
+              variant="danger"
+              class="btn-key-hint"
+            />
           </button>
 
           <button
@@ -103,6 +115,12 @@
           >
             <span class="btn-icon">⊘</span>
             <span class="btn-label">不再复习</span>
+            <KeyHint
+              v-if="!isMobile"
+              :key-value="hotkeys.reviewInitial.stopReview"
+              variant="default"
+              class="btn-key-hint"
+            />
           </button>
 
           <!-- 重置计时器 -->
@@ -125,6 +143,12 @@
           >
             <span class="btn-icon">↩</span>
             <span class="btn-label">记错了</span>
+            <KeyHint
+              v-if="!isMobile"
+              :key-value="hotkeys.reviewAfter.wrong"
+              variant="warning"
+              class="btn-key-hint"
+            />
           </button>
 
           <button
@@ -138,6 +162,12 @@
           >
             <span class="btn-icon">→</span>
             <span class="btn-label">下一个</span>
+            <KeyHint
+              v-if="!isMobile"
+              :key-value="hotkeys.reviewAfter.next"
+              :variant="pendingChoice === 'yes' ? 'success' : pendingChoice === 'no' ? 'danger' : 'default'"
+              class="btn-key-hint"
+            />
           </button>
         </div>
       </Transition>
@@ -146,10 +176,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import RelatedWordsPanel from '@/features/vocabulary/relations/RelatedWordsPanel.vue'
+import KeyHint from '@/shared/components/controls/KeyHint.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
@@ -179,6 +210,12 @@ const emit = defineEmits<Emits>()
 const showDefinition = ref(false)
 const pendingChoice = ref<string | null>(null)
 const isSubmitting = ref(false)
+
+// 移动端检测（快捷键提示只在桌面端显示）
+const isMobile = ref(false)
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768 || ('ontouchstart' in window)
+}
 
 // 缓存用于显示释义的单词数据（避免 Transition leave 动画期间内容跳变）
 const displayWord = ref<Word>(props.word)
@@ -336,6 +373,8 @@ watch(() => props.word?.id, (newWordId, oldWordId) => {
 }, { immediate: false })
 
 onMounted(async () => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
   await Promise.all([loadAudioAccent(), loadHotkeys()])
   setupKeyboardShortcuts()
   timer.start()
@@ -343,6 +382,10 @@ onMounted(async () => {
   if (props.word && autoPlayOnWordChange.value) {
     playWordAudio(props.word.word, audioAccent.value)
   }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 </script>
 
@@ -685,6 +728,18 @@ onMounted(async () => {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.02em;
+}
+
+/* ── 快捷键提示 ── */
+.btn-key-hint {
+  position: absolute;
+  bottom: 0.35rem;
+  right: 0.35rem;
+  font-size: 1rem;
+}
+
+.action-btn:hover .btn-key-hint {
+  opacity: 1;
 }
 
 /* ── 记住按钮 ── */

@@ -67,6 +67,11 @@
         >
           <AppIcon name="volume" class="btn-icon-svg" />
           <span class="btn-label">播放</span>
+          <KeyHint
+            :key-value="hotkeys.spelling.playAudio"
+            variant="light"
+            class="btn-key-hint"
+          />
         </button>
 
         <button
@@ -76,6 +81,11 @@
         >
           <AppIcon name="eye" class="btn-icon-svg" />
           <span class="btn-label">提示</span>
+          <KeyHint
+            :key-value="hotkeys.spelling.forgot"
+            variant="warning"
+            class="btn-key-hint"
+          />
         </button>
 
         <button
@@ -86,6 +96,11 @@
         >
           <span class="btn-icon-arrow">→</span>
           <span class="btn-label">下一个</span>
+          <KeyHint
+            :key-value="hotkeys.spelling.next"
+            :variant="canProceed ? 'success' : 'default'"
+            class="btn-key-hint"
+          />
         </button>
       </div>
     </div>
@@ -98,6 +113,7 @@ import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import SpellingKeyboard from './SpellingKeyboard.vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
+import KeyHint from '@/shared/components/controls/KeyHint.vue'
 import { playWordAudio } from '@/shared/utils/playWordAudio'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
@@ -643,6 +659,18 @@ onBeforeUnmount(() => {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.02em;
+}
+
+/* ── 快捷键提示 ── */
+.btn-key-hint {
+  position: absolute;
+  bottom: 0.35rem;
+  right: 0.35rem;
+  font-size: 1rem;
+}
+
+.action-btn:hover .btn-key-hint {
+  opacity: 1;
 }
 
 /* 播放按钮 */
