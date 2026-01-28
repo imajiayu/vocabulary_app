@@ -3,9 +3,10 @@
     class="app-container"
     :class="{
       'nav-expanded': navExpanded && !isMobile,
-      'sidebar-expanded': sidebarExpanded && activeTab === 'speaking' && !isMobile,
+      'sidebar-expanded': ((sidebarExpanded && activeTab === 'speaking') || (writingSidebarExpanded && activeTab === 'writing')) && !isMobile,
       'is-mobile': isMobile,
-      'is-speaking': activeTab === 'speaking'
+      'is-speaking': activeTab === 'speaking',
+      'is-writing': activeTab === 'writing'
     }"
   >
     <!-- 桌面端主导航栏 -->
@@ -38,7 +39,7 @@
       </div>
     </nav>
 
-    <!-- 侧边栏（在桌面端和移动端口语练习时都显示）-->
+    <!-- 口语侧边栏 -->
     <transition name="sidebar-slide" mode="out-in">
       <SpeakingSidebar
         v-if="activeTab === 'speaking'"
@@ -48,6 +49,18 @@
         :select-question-id="selectedQuestion?.id"
         :is-disappearing="sidebarDisappearing"
         @sidebar-expanded="handleSidebarToggle"
+      />
+    </transition>
+
+    <!-- 写作侧边栏 -->
+    <transition name="sidebar-slide" mode="out-in">
+      <WritingSidebar
+        v-if="activeTab === 'writing'"
+        ref="writingSidebarRef"
+        :expanded="writingSidebarExpanded"
+        :nav-expanded="navExpanded"
+        @prompt-selected="onPromptSelected"
+        @sidebar-expanded="handleWritingSidebarToggle"
       />
     </transition>
 
@@ -62,6 +75,12 @@
           class="speaking-index"
           :select-question="selectedQuestion"
           @sidebar-toggle="handleSidebarToggle"
+        />
+        <WritingIndex
+          v-else-if="activeTab === 'writing'"
+          key="writing"
+          class="writing-index"
+          :selected-prompt="selectedPrompt"
         />
         <SettingsPage
           v-else-if="activeTab === 'settings'"
@@ -78,25 +97,33 @@
 import { ref, computed, watch, onMounted, nextTick, onUnmounted } from 'vue'
 import WordIndex from '@/features/vocabulary/index/WordIndex.vue'
 import SpeakingIndex from '@/pages/SpeakingPage.vue'
+import WritingIndex from '@/pages/WritingPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 import SpeakingSidebar from '@/features/speaking/components/SpeakingSidebar.vue'
+import WritingSidebar from '@/features/writing/components/WritingSidebar.vue'
 import MainNavigation from '@/shared/components/layout/MainNavigation.vue'
 import UserSelector from '@/shared/components/layout/UserSelector.vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 import { Question } from '@/shared/types'
+import type { WritingPrompt } from '@/shared/types/writing'
+import { createWritingContext } from '@/features/writing/composables'
 import { api } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
 
 const activeTab = ref(localStorage.getItem('activeTab') || 'words')
 const sidebarExpanded = ref(localStorage.getItem('sidebarExpanded') === "true")
+const writingSidebarExpanded = ref(localStorage.getItem('writingSidebarExpanded') === "true")
 const selectedQuestion = ref<Question | null>(null)
+const selectedPrompt = ref<WritingPrompt | null>(null)
 const navExpanded = ref(false)
 const isMobile = ref(false)
+const writingSidebarRef = ref<InstanceType<typeof WritingSidebar> | null>(null)
 
 // Tab 数据
-const tabs: Array<{ value: string, label: string, icon: 'book' | 'mic' | 'settings' }> = [
+const tabs: Array<{ value: string, label: string, icon: 'book' | 'mic' | 'writing' | 'settings' }> = [
   { value: 'words', label: '单词', icon: 'book' },
   { value: 'speaking', label: '口语', icon: 'mic' },
+  { value: 'writing', label: '写作', icon: 'writing' },
   { value: 'settings', label: '设置', icon: 'settings' }
 ]
 
@@ -170,6 +197,10 @@ const handleTabChange = (tabId: string) => {
     nextTick(() => {
       restoreSelectedQuestion()
     })
+  } else if (tabId === 'writing') {
+    // 进入写作练习时，重置侧边栏状态
+    writingSidebarExpanded.value = false
+    localStorage.setItem('writingSidebarExpanded', "false")
   } else if (tabId === 'words') {
     // 切换到单词模式时清空选中的问题（非延迟情况）
     if (!sidebarExpanded.value) {
@@ -185,6 +216,22 @@ const handleNavToggle = (expanded: boolean) => {
 const handleSidebarToggle = (expanded: boolean) => {
   sidebarExpanded.value = expanded
   localStorage.setItem('sidebarExpanded', expanded ? "true" : "false")
+}
+
+const handleWritingSidebarToggle = (expanded: boolean) => {
+  writingSidebarExpanded.value = expanded
+  localStorage.setItem('writingSidebarExpanded', expanded ? "true" : "false")
+}
+
+// Writing Context - 在 HomePage 层级创建，供 WritingSidebar 和 WritingWorkspace 共享
+const { data: writingData } = createWritingContext({
+  onPromptSelected: (prompt) => {
+    selectedPrompt.value = prompt
+  }
+})
+
+const onPromptSelected = (prompt: WritingPrompt | null) => {
+  selectedPrompt.value = prompt
 }
 
 const onQuestionSelected = (question: Question | null) => {
@@ -207,6 +254,7 @@ watch(selectedQuestion, (newQuestion) => {
 
 // 监听 activeTab 变化，拦截需要延迟的切换
 watch(activeTab, (newTab, oldTab) => {
+  // 从口语模式切换到单词模式时的延迟处理
   if (newTab === 'words' && oldTab === 'speaking' && sidebarExpanded.value && !isDelayingSwitchToWords.value) {
     // 需要延迟切换的情况：立即恢复到之前的状态
     activeTab.value = oldTab
@@ -229,6 +277,13 @@ watch(activeTab, (newTab, oldTab) => {
       isDelayingSwitchToWords.value = false // 清除延迟标志
       sidebarDisappearing.value = false // 清除消失标志
     }, animationDelay)
+  }
+
+  // 从写作模式切换时，清理选中的题目
+  if (oldTab === 'writing') {
+    selectedPrompt.value = null
+    writingSidebarExpanded.value = false
+    localStorage.setItem('writingSidebarExpanded', "false")
   }
 })
 
@@ -273,13 +328,25 @@ onUnmounted(() => {
   position: relative;
 }
 
-/* 桌面端 Speaking 模式深色背景 - 侧边栏动画时不会露出白色 */
+/* 桌面端 Speaking 模式深色背景 - 温暖琥珀色调录音棚风格 */
 .app-container.is-speaking:not(.is-mobile) {
   background: linear-gradient(
-    135deg,
-    var(--primitive-ink-900) 0%,
-    var(--primitive-ink-800) 50%,
-    #1a1f2e 100%
+    145deg,
+    #1a1510 0%,
+    #1f1a14 25%,
+    #2a2218 50%,
+    #1a1510 100%
+  );
+}
+
+/* 桌面端 Writing 模式深色背景 - 深邃蓝色午夜写作台风格 */
+.app-container.is-writing:not(.is-mobile) {
+  background: linear-gradient(
+    155deg,
+    #0f172a 0%,
+    #1e293b 30%,
+    #1e3a5f 60%,
+    #0f172a 100%
   );
 }
 

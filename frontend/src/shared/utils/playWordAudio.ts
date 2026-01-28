@@ -2,6 +2,9 @@
 
 let currentAudio: HTMLAudioElement | null = null
 
+// 播放版本号：用于解决竞态条件，确保只有最新的播放请求能真正播放
+let playId = 0
+
 // 预加载缓存：存储已预加载的 Audio 对象
 const preloadCache = new Map<string, HTMLAudioElement>()
 
@@ -16,6 +19,9 @@ export async function playWordAudio(
   region: 'us' | 'uk' = 'us'
 ): Promise<void> {
   if (!word) return
+
+  // 递增播放版本号，使之前的播放请求失效
+  const currentPlayId = ++playId
 
   // 停止上一个音频
   if (currentAudio) {
@@ -47,13 +53,20 @@ export async function playWordAudio(
   audio.onpause = cleanup
 
   // 尝试播放，失败则静默处理
-  await audio.play().catch(() => {
+  try {
+    await audio.play()
+    // 播放成功后检查：如果已经有更新的播放请求，停止当前音频
+    if (playId !== currentPlayId) {
+      audio.pause()
+      audio.currentTime = 0
+    }
+  } catch {
     // 静默失败：Youdao CDN 很稳定，失败时不阻塞用户操作
     if (cachedAudio) {
       preloadCache.delete(cacheKey)
     }
     cleanup()
-  })
+  }
 }
 
 /**

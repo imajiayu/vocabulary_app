@@ -7,6 +7,7 @@ const StatisticsPage = () => import('@/pages/StatisticsPage.vue')
 const VocabularyManagementPage = () => import('@/pages/VocabularyManagementPage.vue')
 const ReviewPage = () => import('@/pages/ReviewPage.vue')
 const SpeakingPage = () => import('@/pages/SpeakingPage.vue')
+const WritingPage = () => import('@/pages/WritingPage.vue')
 const SettingsPage = () => import('@/pages/SettingsPage.vue')
 
 const routes = [
@@ -44,6 +45,12 @@ const routes = [
     name: 'speaking',
     component: SpeakingPage,
     meta: { title: 'IELTS 口语练习', depth: 1 }
+  },
+  {
+    path: '/writing',
+    name: 'writing',
+    component: WritingPage,
+    meta: { title: 'IELTS 写作练习', depth: 1 }
   },
   {
     path: '/settings',

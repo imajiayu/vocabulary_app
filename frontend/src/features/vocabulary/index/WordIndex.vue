@@ -500,6 +500,11 @@ const goto = (mode: string) => {
       limit = 50
   }
 
+  // 如果选择数量为 0，不执行任何操作
+  if (limit === 0) {
+    return
+  }
+
   router.push({
     path: '/review',
     query: {
@@ -548,6 +553,26 @@ const resumeProgress = () => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+
+  /* 温暖的象牙纸质背景 - 如同翻阅古典词典 */
+  background:
+    /* 微妙的纸张纹理 */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 105, 20, 0.008) 2px,
+      rgba(139, 105, 20, 0.008) 4px
+    ),
+    /* 主渐变：温暖的羊皮纸色调 */
+    linear-gradient(
+      165deg,
+      var(--primitive-paper-100) 0%,
+      var(--primitive-paper-200) 35%,
+      #F8F3E8 70%,
+      var(--primitive-paper-300) 100%
+    );
+  min-height: 100vh;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

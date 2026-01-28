@@ -135,9 +135,22 @@ const MicIcon: FunctionalComponent = () => h('svg', {
   h('line', { x1: '12', y1: '19', x2: '12', y2: '22' })
 ])
 
+const PenIcon: FunctionalComponent = () => h('svg', {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': '1.75'
+}, [
+  h('path', { d: 'M12 19L19 12L22 15L15 22L12 19Z', 'stroke-linejoin': 'round' }),
+  h('path', { d: 'M18 13L16.5 5.5L2 2L5.5 16.5L13 18L18 13Z', 'stroke-linejoin': 'round' }),
+  h('path', { d: 'M2 2L9.586 9.586', 'stroke-linecap': 'round' }),
+  h('circle', { cx: '11', cy: '11', r: '2' })
+])
+
 const tabs: Tab[] = [
   { id: 'words', label: '单词复习', english: 'Vocabulary', iconComponent: BookIcon },
-  { id: 'speaking', label: '口语练习', english: 'Speaking', iconComponent: MicIcon }
+  { id: 'speaking', label: '口语练习', english: 'Speaking', iconComponent: MicIcon },
+  { id: 'writing', label: '写作练习', english: 'Writing', iconComponent: PenIcon }
 ]
 
 const expanded = ref(false)

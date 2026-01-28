@@ -11,9 +11,13 @@
         <span class="topic-title">{{ topic.title }}</span>
       </div>
 
-      <div class="topic-meta">
-        <span class="question-badge">{{ topic.questions.length }}</span>
+      <div class="topic-right">
+        <!-- Default: badge -->
+        <div class="topic-meta">
+          <span class="question-badge">{{ topic.questions.length }}</span>
+        </div>
 
+        <!-- Hover: action buttons -->
         <div class="topic-actions">
           <button
             class="action-btn action-btn--add"
@@ -332,20 +336,27 @@ watch(() => props.topic.title, (newTitle) => {
   color: var(--primitive-paper-200);
 }
 
-/* ── Topic Meta ── */
+/* ── Right side container ── */
+.topic-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 22px; /* Fixed height to prevent jump */
+}
+
 .topic-meta {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
+  height: 100%;
 }
 
 .question-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
+  min-width: 22px;
+  height: 22px;
   padding: 0 6px;
 
   font-size: 10px;
@@ -356,18 +367,21 @@ watch(() => props.topic.title, (newTitle) => {
   border-radius: 5px;
 }
 
-/* ── Topic Actions ── */
+/* ── Topic Actions - same position as meta ── */
 .topic-actions {
-  display: flex;
+  display: none;
+  align-items: center;
   gap: 4px;
-  opacity: 0;
-  transform: translateX(8px);
-  transition: all 0.2s ease;
+  height: 100%;
+}
+
+/* Hover: hide meta, show actions */
+.topic-header:hover .topic-meta {
+  display: none;
 }
 
 .topic-header:hover .topic-actions {
-  opacity: 1;
-  transform: translateX(0);
+  display: flex;
 }
 
 .action-btn {
@@ -546,7 +560,7 @@ watch(() => props.topic.title, (newTitle) => {
 
 @media (max-width: 480px) {
   .topic-header {
-    padding: 10px 12px;
+    padding: 12px;
     gap: 10px;
   }
 
@@ -554,21 +568,36 @@ watch(() => props.topic.title, (newTitle) => {
     font-size: 12px;
   }
 
+  /* On mobile: show count badge inline, actions at end */
+  .topic-right {
+    gap: 8px;
+    height: auto;
+  }
+
+  .topic-meta {
+    display: flex;
+  }
+
   .question-badge {
-    min-width: 18px;
-    height: 18px;
+    min-width: 20px;
+    height: 20px;
     font-size: 9px;
   }
 
-  /* Always show actions on mobile */
+  /* Show compact actions on mobile */
   .topic-actions {
-    opacity: 1;
-    transform: translateX(0);
+    display: flex;
+  }
+
+  .topic-header:hover .topic-meta {
+    display: flex; /* Keep meta visible on mobile */
   }
 
   .action-btn {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
   }
 
   /* Disable hover effects on mobile */

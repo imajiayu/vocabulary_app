@@ -214,18 +214,14 @@ watch(() => props.question.question_text, (newText) => {
 
 /* ── Question Actions ── */
 .question-actions {
-  display: flex;
+  display: none;
   gap: 4px;
   flex-shrink: 0;
-  opacity: 0;
-  transform: translateX(6px);
-  transition: all 0.15s ease;
 }
 
 .question-row:hover .question-actions,
 .question-row.is-active .question-actions {
-  opacity: 1;
-  transform: translateX(0);
+  display: flex;
 }
 
 .mini-btn {
@@ -374,29 +370,35 @@ watch(() => props.question.question_text, (newText) => {
 
 @media (max-width: 480px) {
   .question-content {
-    padding: 8px 10px;
+    padding: 10px;
     gap: 8px;
   }
 
   .question-indicator {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     font-size: 9px;
   }
 
   .question-text {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   /* Always show actions on mobile */
   .question-actions {
-    opacity: 1;
-    transform: translateX(0);
+    display: flex;
   }
 
   .mini-btn {
-    width: 18px;
-    height: 18px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+  }
+
+  .mini-btn svg {
+    width: 14px;
+    height: 14px;
   }
 
   /* Disable hover effects on mobile */
@@ -415,18 +417,18 @@ watch(() => props.question.question_text, (newText) => {
   }
 
   .edit-form {
-    padding: 8px;
+    padding: 10px;
   }
 
   .edit-textarea {
-    min-height: 50px;
-    padding: 8px 10px;
-    font-size: 11px;
+    min-height: 60px;
+    padding: 10px;
+    font-size: 12px;
   }
 
   .toolbar-btn {
-    padding: 5px 10px;
-    font-size: 10px;
+    padding: 8px 14px;
+    font-size: 11px;
   }
 }
 </style>

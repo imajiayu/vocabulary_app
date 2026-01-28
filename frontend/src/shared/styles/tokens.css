@@ -59,6 +59,18 @@
   --primitive-gold-800: #4A370A;
   --primitive-gold-900: #2A1F06;
 
+  /* ── 色板 - 天蓝色系（Writing模块） ── */
+  --primitive-azure-50: #F0F9FF;
+  --primitive-azure-100: #E0F2FE;
+  --primitive-azure-200: #BAE6FD;
+  --primitive-azure-300: #7DD3FC;
+  --primitive-azure-400: #38BDF8;
+  --primitive-azure-500: #3B82F6;
+  --primitive-azure-600: #2563EB;
+  --primitive-azure-700: #1D4ED8;
+  --primitive-azure-800: #1E40AF;
+  --primitive-azure-900: #1E3A8A;
+
   /* ── 色板 - 墨水灰色系 ── */
   --primitive-ink-50: #F7F8FA;
   --primitive-ink-100: #E8EBF0;

@@ -25,10 +25,9 @@
         <div class="stream-inner scrollbar-ink" ref="wordListInnerRef">
           <TransitionGroup name="ink-flow" tag="div" class="word-flow">
             <div
-              v-for="(w, index) in displayedWords"
+              v-for="w in displayedWords"
               :key="w.id"
               :class="['word-drop', getWordStatus(w.id)]"
-              :style="getWordStyle(index)"
               @click="() => openModal(w)"
               @mouseenter="(e) => handleMouseEnter(e, w)"
               @mouseleave="handleMouseLeave"
@@ -38,9 +37,6 @@
             </div>
           </TransitionGroup>
         </div>
-
-        <!-- 底部渐隐遮罩 -->
-        <div class="stream-fade-bottom"></div>
       </div>
     </div>
 
@@ -179,21 +175,6 @@ const checkMobile = () => {
 const getWordStatus = (wordId: number): string => {
   const remembered = props.rememberHistory.get(wordId)
   return remembered === true ? 'remembered' : remembered === false ? 'forgot' : ''
-}
-
-const getWordStyle = (index: number) => {
-  const total = displayedWords.value.length
-  const position = index / Math.max(total - 1, 1)
-
-  // 越新的单词越明显
-  const opacity = 0.4 + position * 0.6
-  const scale = 0.92 + position * 0.08
-
-  return {
-    '--word-opacity': opacity,
-    '--word-scale': scale,
-    '--animation-delay': `${index * 0.03}s`
-  }
 }
 
 const getChipDelay = (index: number) => {
@@ -360,10 +341,10 @@ onUnmounted(() => {
   top: var(--topbar-height);
   left: 0;
   width: var(--sidebar-width);
-  height: calc(60vh - var(--topbar-height));
+  height: calc(100vh - var(--topbar-height));
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: 150;
   padding: 1rem 0.75rem;
 
   /* 纸张纹理背景 */
@@ -486,15 +467,13 @@ onUnmounted(() => {
     to bottom,
     transparent 0%,
     black 5%,
-    black 90%,
-    transparent 100%
+    black 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
     black 5%,
-    black 90%,
-    transparent 100%
+    black 100%
   );
 }
 
@@ -533,27 +512,10 @@ onUnmounted(() => {
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-
-  opacity: var(--word-opacity, 0.7);
-  transform: scale(var(--word-scale, 0.95));
-  animation: ink-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-  animation-delay: var(--animation-delay, 0s);
-}
-
-@keyframes ink-appear {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.9);
-  }
-  to {
-    opacity: var(--word-opacity, 0.7);
-    transform: translateY(0) scale(var(--word-scale, 0.95));
-  }
 }
 
 .word-drop:hover {
-  opacity: 1 !important;
-  transform: scale(1) translateX(4px) !important;
+  transform: translateX(4px);
   background: rgba(153, 107, 61, 0.08);
 }
 
@@ -609,12 +571,12 @@ onUnmounted(() => {
 @keyframes ink-drop-in {
   from {
     opacity: 0;
-    transform: translateY(-15px) scale(0.8);
+    transform: translateY(-15px);
     filter: blur(2px);
   }
   to {
-    opacity: var(--word-opacity, 1);
-    transform: translateY(0) scale(var(--word-scale, 1));
+    opacity: 1;
+    transform: translateY(0);
     filter: blur(0);
   }
 }
@@ -632,9 +594,10 @@ onUnmounted(() => {
 
 .mobile-sidebar {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  /* 定位在按钮栏上方 */
+  bottom: calc(var(--button-bar-height-mobile) + env(safe-area-inset-bottom) + 12px);
   right: 12px;
-  z-index: 100;
+  z-index: 150;
 }
 
 /* 切换按钮 */
@@ -912,10 +875,6 @@ onUnmounted(() => {
     --sidebar-width: 160px;
   }
 
-  .desktop-sidebar {
-    height: calc(50vh - var(--topbar-height));
-  }
-
   .word-text {
     font-size: 0.85rem;
   }
@@ -924,7 +883,7 @@ onUnmounted(() => {
 /* 小屏手机 */
 @media (max-width: 480px) {
   .mobile-sidebar {
-    bottom: calc(env(safe-area-inset-bottom) + 8px);
+    bottom: calc(var(--button-bar-height-mobile) + env(safe-area-inset-bottom) + 8px);
     right: 8px;
   }
 

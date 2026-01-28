@@ -216,12 +216,12 @@ const goStats = () => {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .top-bar {
-  --bar-height: 56px;
+  --bar-height: var(--topbar-height, 48px);
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: var(--bar-height);
+  height: var(--bar-height);
   background: linear-gradient(
     180deg,
     var(--primitive-paper-100) 0%,
@@ -284,9 +284,10 @@ const goStats = () => {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   width: 100%;
+  height: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   gap: 1rem;
 }
 
@@ -582,11 +583,11 @@ const goStats = () => {
 
 @media (max-width: 768px) {
   .top-bar {
-    --bar-height: 52px;
+    --bar-height: 48px;
   }
 
   .bar-content {
-    padding: 0.375rem 0.75rem;
+    padding: 0 0.75rem;
     gap: 0.5rem;
   }
 
@@ -623,11 +624,11 @@ const goStats = () => {
 
 @media (max-width: 480px) {
   .top-bar {
-    --bar-height: 48px;
+    --bar-height: 44px;
   }
 
   .bar-content {
-    padding: 0.25rem 0.5rem;
+    padding: 0 0.5rem;
   }
 
   .bar-section {
@@ -651,11 +652,11 @@ const goStats = () => {
 
 @media (max-height: 500px) and (orientation: landscape) {
   .top-bar {
-    --bar-height: 44px;
+    --bar-height: 40px;
   }
 
   .bar-content {
-    padding: 0.25rem 1rem;
+    padding: 0 1rem;
   }
 
   .nav-button--primary {

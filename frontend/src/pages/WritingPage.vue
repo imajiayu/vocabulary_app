@@ -1,22 +1,22 @@
 <template>
-  <div class="speaking-studio" :class="{ 'has-question': selectQuestion != null }">
+  <div class="writing-studio" :class="{ 'has-prompt': selectedPrompt != null }">
     <!-- 欢迎页面 - 深色主题 -->
-    <div v-if="selectQuestion == null" class="welcome-stage">
+    <div v-if="selectedPrompt == null" class="welcome-stage">
       <div class="welcome-content">
-        <!-- 装饰性麦克风图标 -->
-        <div class="mic-visual">
-          <div class="mic-glow"></div>
-          <svg class="mic-icon" viewBox="0 0 24 24" fill="none">
-            <rect x="9" y="2" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M5 10V11C5 14.866 8.13401 18 12 18C15.866 18 19 14.866 19 11V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M12 18V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M8 22H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- 装饰性钢笔图标 -->
+        <div class="pen-visual">
+          <div class="pen-glow"></div>
+          <svg class="pen-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 19L19 12L22 15L15 22L12 19Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M18 13L16.5 5.5L2 2L5.5 16.5L13 18L18 13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M2 2L9.586 9.586" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="2" stroke="currentColor" stroke-width="1.5"/>
           </svg>
         </div>
 
         <!-- 标题组 -->
         <div class="title-group">
-          <h1 class="welcome-title">口语练习</h1>
+          <h1 class="welcome-title">写作练习</h1>
           <div class="title-accent"></div>
         </div>
 
@@ -47,82 +47,85 @@
       </div>
     </div>
 
-    <!-- 练习页面 -->
-    <QuestionPractice v-else :select-question="selectQuestion" />
+    <!-- 写作工作区 -->
+    <WritingWorkspace
+      v-else
+      :prompt="selectedPrompt"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Question } from '@/shared/types'
+import type { WritingPrompt } from '@/shared/types/writing'
 import { PropType } from 'vue'
-import QuestionPractice from '@/features/speaking/components/QuestionPractice.vue'
+import WritingWorkspace from '@/features/writing/components/WritingWorkspace.vue'
 
-const subtitle = '选择一个话题开始你的练习'
+const subtitle = '选择一个题目开始你的写作练习'
 const subtitleChars = subtitle.split('')
 
 defineProps({
-  selectQuestion: {
-    type: Object as PropType<Question | null>,
-    required: false
+  selectedPrompt: {
+    type: Object as PropType<WritingPrompt | null>,
+    required: false,
+    default: null
   }
 })
 </script>
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════════════════════════
-   Speaking Studio - 深色工作室主题
+   Writing Studio - 深色工作室主题
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.speaking-studio {
+.writing-studio {
   width: 100%;
   height: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 温暖深色背景 - 如同专业录音棚 */
+  /* 深邃蓝色背景 - 如同午夜写作台 */
   background:
-    /* 微妙的水平线纹理（声波效果） */
+    /* 微妙的对角线纹理 */
     repeating-linear-gradient(
-      0deg,
+      -45deg,
       transparent,
-      transparent 3px,
-      rgba(184, 134, 11, 0.012) 3px,
-      rgba(184, 134, 11, 0.012) 4px
+      transparent 1px,
+      rgba(59, 130, 246, 0.015) 1px,
+      rgba(59, 130, 246, 0.015) 2px
     ),
-    /* 主渐变：深琥珀/金色调 */
+    /* 主渐变：深蓝墨水色调 */
     linear-gradient(
-      145deg,
-      #1a1510 0%,
-      #1f1a14 25%,
-      #2a2218 50%,
-      #1a1510 100%
+      155deg,
+      #0f172a 0%,
+      #1e293b 30%,
+      #1e3a5f 60%,
+      #0f172a 100%
     );
   position: relative;
   overflow: hidden;
-  /* 隐藏滚动条 */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.speaking-studio::-webkit-scrollbar {
+.writing-studio::-webkit-scrollbar {
   display: none;
 }
 
 /* 选中题目后，取消居中，让内容铺满 */
-.speaking-studio.has-question {
+.writing-studio.has-prompt {
   align-items: stretch;
   justify-content: flex-start;
 }
 
 /* 移动端：用负边距覆盖 main-container 的底部 padding，确保深色背景延伸到底部 */
 @media (max-width: 768px) {
-  .speaking-studio {
+  .writing-studio {
     margin-bottom: calc(-88px - env(safe-area-inset-bottom));
     padding-bottom: calc(88px + env(safe-area-inset-bottom));
   }
 
-  .speaking-studio.has-question {
+  .writing-studio.has-prompt {
     overflow-y: auto;
     height: auto;
   }
@@ -151,13 +154,13 @@ defineProps({
   max-width: 600px;
 }
 
-/* ── 麦克风视觉 ── */
-.mic-visual {
+/* ── 钢笔视觉 ── */
+.pen-visual {
   position: relative;
   margin-bottom: 40px;
 }
 
-.mic-glow {
+.pen-glow {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -166,8 +169,8 @@ defineProps({
   height: 160px;
   background: radial-gradient(
     circle,
-    rgba(184, 134, 11, 0.15) 0%,
-    rgba(184, 134, 11, 0.05) 40%,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(59, 130, 246, 0.05) 40%,
     transparent 70%
   );
   border-radius: 50%;
@@ -179,12 +182,12 @@ defineProps({
   50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
 }
 
-.mic-icon {
+.pen-icon {
   position: relative;
   width: 80px;
   height: 80px;
-  color: var(--primitive-gold-400);
-  filter: drop-shadow(0 4px 20px rgba(184, 134, 11, 0.3));
+  color: var(--primitive-azure-400);
+  filter: drop-shadow(0 4px 20px rgba(59, 130, 246, 0.3));
 }
 
 /* ── 标题组 ── */
@@ -203,14 +206,14 @@ defineProps({
   letter-spacing: -0.02em;
   background: linear-gradient(
     135deg,
-    var(--primitive-gold-400) 0%,
-    var(--primitive-copper-400) 50%,
-    var(--primitive-gold-500) 100%
+    var(--primitive-azure-400) 0%,
+    var(--primitive-azure-500) 50%,
+    var(--primitive-azure-600) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 4px 30px rgba(184, 134, 11, 0.2);
+  text-shadow: 0 4px 30px rgba(59, 130, 246, 0.2);
 }
 
 .title-accent {
@@ -220,7 +223,7 @@ defineProps({
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--primitive-gold-500) 50%,
+    var(--primitive-azure-500) 50%,
     transparent 100%
   );
   border-radius: 2px;
@@ -259,8 +262,8 @@ defineProps({
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: rgba(184, 134, 11, 0.1);
-  border: 1px solid rgba(184, 134, 11, 0.2);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
   border-radius: var(--radius-full);
   animation: hintFadeIn 0.6s ease-out 1.5s forwards;
   opacity: 0;
@@ -273,7 +276,7 @@ defineProps({
 .hint-icon {
   width: 16px;
   height: 16px;
-  color: var(--primitive-gold-500);
+  color: var(--primitive-azure-500);
   animation: hintArrow 1.5s ease-in-out infinite;
 }
 
@@ -286,7 +289,7 @@ defineProps({
   font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 500;
-  color: var(--primitive-gold-400);
+  color: var(--primitive-azure-400);
   letter-spacing: 0.02em;
 }
 
@@ -304,7 +307,7 @@ defineProps({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(184, 134, 11, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.08);
   border-radius: 50%;
 }
 
@@ -340,16 +343,16 @@ defineProps({
     padding: 24px;
   }
 
-  .mic-visual {
+  .pen-visual {
     margin-bottom: 32px;
   }
 
-  .mic-glow {
+  .pen-glow {
     width: 120px;
     height: 120px;
   }
 
-  .mic-icon {
+  .pen-icon {
     width: 60px;
     height: 60px;
   }
@@ -386,16 +389,16 @@ defineProps({
     padding: 20px;
   }
 
-  .mic-visual {
+  .pen-visual {
     margin-bottom: 24px;
   }
 
-  .mic-glow {
+  .pen-glow {
     width: 100px;
     height: 100px;
   }
 
-  .mic-icon {
+  .pen-icon {
     width: 48px;
     height: 48px;
   }
@@ -439,16 +442,16 @@ defineProps({
     padding: 16px;
   }
 
-  .mic-visual {
+  .pen-visual {
     margin-bottom: 16px;
   }
 
-  .mic-glow {
+  .pen-glow {
     width: 80px;
     height: 80px;
   }
 
-  .mic-icon {
+  .pen-icon {
     width: 40px;
     height: 40px;
   }

@@ -121,10 +121,10 @@ import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('Spelling')
 
-// 移动端检测
+// 移动端检测：需同时满足小屏幕和触控支持
 const isMobile = ref(false)
 const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768 || ('ontouchstart' in window)
+  isMobile.value = window.innerWidth <= 768 && ('ontouchstart' in window)
 }
 
 interface KeyEvent {
@@ -631,6 +631,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   font-family: var(--font-ui);
+  position: relative;
   flex: 1;
 }
 
@@ -667,6 +668,8 @@ onBeforeUnmount(() => {
   bottom: 0.35rem;
   right: 0.35rem;
   font-size: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
 }
 
 .action-btn:hover .btn-key-hint {

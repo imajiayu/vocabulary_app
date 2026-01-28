@@ -9,6 +9,7 @@ export type { ApiResponse } from './client'
 // 导入所有API类
 import { WordsApi } from './words'
 import { SpeakingApi } from './speaking'
+import { WritingApi } from './writing'
 import { StatsApi } from './stats'
 import { ConfigApi } from './config'
 import { SettingsSupabaseApi } from './settings-supabase'
@@ -34,6 +35,8 @@ export type {
   AiFeedbackResponse,
   CreateRecordPayload
 } from './speaking'
+
+export { WritingApi } from './writing'
 
 export { StatsApi } from './stats'
 export type {
@@ -288,6 +291,7 @@ export class ProgressApi {
 export const api = {
   words: WordsApi,
   speaking: SpeakingApi,
+  writing: WritingApi,
   stats: StatsApi,
   config: ConfigApi,
   settings: SettingsSupabaseApi,

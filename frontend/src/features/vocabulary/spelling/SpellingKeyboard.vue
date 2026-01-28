@@ -144,6 +144,8 @@ const emit = defineEmits<{
   z-index: 1000;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
   border-top: 1px solid var(--color-border-light);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* ── 键盘行 ── */
@@ -152,12 +154,15 @@ const emit = defineEmits<{
   flex-direction: column;
   gap: 0.375rem;
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .keyboard-row {
   display: flex;
   justify-content: center;
   gap: 0.25rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .row-with-special {
@@ -165,12 +170,16 @@ const emit = defineEmits<{
   justify-content: center;
   gap: 0.25rem;
   position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .letter-group {
   display: flex;
   justify-content: center;
   gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
 }
 
 /* ── 按键基础样式 ── */
@@ -210,6 +219,7 @@ const emit = defineEmits<{
 /* ── 字母键 ── */
 .letter-key {
   flex: 1;
+  min-width: 0;
   max-width: 2.25rem;
   height: 2.75rem;
   background: var(--color-bg-primary);
@@ -228,6 +238,7 @@ const emit = defineEmits<{
 
 /* ── 特殊键（退格） ── */
 .special-key {
+  flex-shrink: 0;
   width: 3rem;
   height: 2.75rem;
   background: var(--primitive-ink-200);
@@ -249,9 +260,13 @@ const emit = defineEmits<{
   justify-content: center;
   gap: 0.375rem;
   padding: 0 0.25rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .action-key {
+  flex-shrink: 0;
   height: 2.75rem;
   box-shadow:
     0 1px 0 rgba(0, 0, 0, 0.1),
@@ -290,6 +305,8 @@ const emit = defineEmits<{
 /* 空格键 */
 .action-key.space {
   flex: 1;
+  flex-shrink: 1;
+  min-width: 3rem;
   max-width: 10rem;
   background: var(--color-bg-primary);
   color: var(--color-text-secondary);

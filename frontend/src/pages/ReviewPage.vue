@@ -1,16 +1,9 @@
 <template>
   <div class="review-page">
-    <!-- 复习参数更新通知 -->
-    <ReviewParamsNotification
-      v-if="notification.data"
-      :show="notification.show"
-      :word="notification.data.word"
-      :param-type="notification.data.param_type"
-      :param-change="notification.data.param_change"
-      :new-param-value="notification.data.new_param_value"
-      :next-review-date="notification.data.next_review_date"
-      :breakdown="notification.data.breakdown"
-      @close="handleCloseNotification"
+    <!-- 右侧面板（通知 + AI 助手）- 桌面端固定 / 移动端浮动 -->
+    <ReviewRightPanel
+      :notification-data="notification.data"
+      :current-word="currentWord"
     />
 
     <!-- 侧边栏 -->
@@ -29,23 +22,24 @@
     <TopBar show-home-button show-management-button show-stats-button>
       <template #center>
         <div class="header-info">
-          <!-- 模式标签 -->
-          <div v-if="reviewInfo" class="mode-badges">
-            <span class="badge source">{{ reviewStore.wordQueue[0]?.source || '' }}</span>
-            <span class="badge mode" :class="modeClass">{{ modeLabel }}</span>
-            <span class="badge shuffle">{{ shuffle ? '随机' : '顺序' }}</span>
-          </div>
+          <!-- 单行布局：模式标签 + 速度/进度指示器 -->
+          <div class="header-main-row">
+            <!-- 模式标签 -->
+            <div v-if="reviewInfo" class="mode-badges">
+              <span class="badge source">{{ reviewStore.wordQueue[0]?.source || '' }}</span>
+              <span class="badge mode" :class="modeClass">{{ modeLabel }}</span>
+              <span class="badge shuffle">{{ shuffle ? '随机' : '顺序' }}</span>
+            </div>
 
-          <!-- 复习速度指示器 -->
-          <ReviewSpeedIndicator />
+            <!-- 复习速度指示器（非lapse模式） -->
+            <ReviewSpeedIndicator v-if="mode !== 'mode_lapse'" />
 
-          <!-- Lapse 模式进度条 -->
-          <div v-if="mode === 'mode_lapse'" class="lapse-progress">
-            <ProgressBar
-              :progress="Math.abs(progress)"
-              :fill-color="progress < 0 ? 'var(--color-danger)' : 'var(--color-success)'"
-              :text="`${Math.round(progress)}%`"
-            />
+            <!-- Lapse 模式：进度指示器（同一行） -->
+            <div v-if="mode === 'mode_lapse'" class="lapse-progress-inline">
+              <span class="lapse-progress-value" :class="{ negative: progress < 0 }">
+                {{ progress >= 0 ? '+' : '' }}{{ Math.round(progress) }}%
+              </span>
+            </div>
           </div>
         </div>
       </template>
@@ -93,9 +87,6 @@
         </div>
       </div>
     </main>
-
-    <!-- AI 词汇助手 -->
-    <VocabularyAIChat :current-word="currentWord" />
   </div>
 </template>
 
@@ -120,10 +111,8 @@ import SpellingCard from '@/features/vocabulary/spelling/SpellingCard.vue'
 import TopBar from '@/shared/components/layout/TopBar.vue'
 import LoadingComponent from '@/shared/components/feedback/Loading.vue'
 import { BaseIcon } from '@/shared/components/base'
-import ProgressBar from '@/shared/components/feedback/ProgressBar.vue'
 import WordSideBar from '@/features/vocabulary/sidebar/WordSideBar.vue'
-import ReviewParamsNotification from '@/features/vocabulary/review/ReviewParamsNotification.vue'
-import VocabularyAIChat from '@/shared/components/overlay/VocabularyAIChat.vue'
+import ReviewRightPanel from '@/features/vocabulary/review/ReviewRightPanel.vue'
 import ReviewSpeedIndicator from '@/features/vocabulary/review/ReviewSpeedIndicator.vue'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { provideReviewContext } from '@/features/vocabulary/review/context'
@@ -342,10 +331,6 @@ const handleSkip = async () => {
   }
 }
 
-const handleCloseNotification = () => {
-  reviewStore.closeNotification()
-}
-
 const goHome = async () => {
   try {
     await router.push('/')
@@ -384,6 +369,21 @@ onUnmounted(() => {
   background: var(--color-bg-page);
 }
 
+/* 桌面端：为左侧 WordSidebar 和右侧 RightPanel 留出空间 */
+@media (min-width: 769px) {
+  .review-page {
+    padding-left: 180px;
+    padding-right: 220px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .review-page {
+    padding-left: 200px;
+    padding-right: 260px;
+  }
+}
+
 /* ── 主内容区域 ── */
 .main-content {
   display: flex;
@@ -403,7 +403,13 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+}
+
+.header-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .mode-badges {
@@ -450,9 +456,28 @@ onUnmounted(() => {
   color: var(--color-text-secondary);
 }
 
-/* Lapse 进度条 */
-.lapse-progress {
-  min-width: 120px;
+/* ══════════════════════════════════════════════════════════════════════════
+   Lapse 进度指示器 - 内联紧凑设计
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.lapse-progress-inline {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  background: var(--primitive-paper-300);
+  border-radius: var(--radius-full);
+}
+
+.lapse-progress-value {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primitive-olive-600);
+  letter-spacing: 0.02em;
+}
+
+.lapse-progress-value.negative {
+  color: var(--primitive-brick-600);
 }
 
 /* ── 进度计数器 ── */
@@ -590,22 +615,25 @@ onUnmounted(() => {
     min-height: calc(100dvh - var(--topbar-height));
   }
 
-  .header-info {
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .mode-badges {
+  .header-main-row {
     gap: 0.375rem;
   }
 
-  .badge {
-    padding: 0.2rem 0.5rem;
-    font-size: 0.65rem;
+  .mode-badges {
+    gap: 0.25rem;
   }
 
-  .lapse-progress {
-    min-width: 80px;
+  .badge {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.6rem;
+  }
+
+  .lapse-progress-inline {
+    padding: 0.15rem 0.4rem;
+  }
+
+  .lapse-progress-value {
+    font-size: 0.65rem;
   }
 
   .progress-counter .current {

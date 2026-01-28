@@ -11,7 +11,7 @@
       </div>
 
       <div class="part-content">
-        <h3 class="part-title">{{ part.number === 2 ? 'Part 2 & Part 3' : `Part ${part.number}` }}</h3>
+        <h3 class="part-title">{{ part.number === 2 ? 'Part 2 & 3' : `Part ${part.number}` }}</h3>
         <span class="part-count">{{ part.topics.length }} 个主题</span>
       </div>
 

@@ -69,12 +69,11 @@ const displayKey = computed(() => {
   font-weight: 600;
   line-height: 1;
   border-radius: var(--radius-xs);
-  background: rgba(0, 0, 0, 0.12);
-  color: var(--primitive-ink-600);
-  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--primitive-ink-700);
   box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+    0 1px 0 rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   transition: all 0.15s ease;
 }
 
@@ -92,22 +91,10 @@ const displayKey = computed(() => {
 .key-hint--success .key-hint__key,
 .key-hint--warning .key-hint__key,
 .key-hint--danger .key-hint__key {
-  background: rgba(0, 0, 0, 0.12);
-  color: var(--primitive-ink-600);
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--primitive-ink-700);
   box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
-}
-
-/* 悬停时更明显 */
-:deep(.action-btn:hover) .key-hint__key,
-:deep(button:hover) .key-hint__key {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.12);
-}
-
-.key-hint--light:deep(.action-btn:hover) .key-hint__key,
-.key-hint--light:deep(button:hover) .key-hint__key {
-  background: rgba(255, 255, 255, 0.35);
+    0 1px 0 rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 </style>

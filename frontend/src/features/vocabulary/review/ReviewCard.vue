@@ -693,20 +693,6 @@ onBeforeUnmount(() => {
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   font-family: var(--font-ui);
   position: relative;
-  overflow: hidden;
-}
-
-.action-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: currentColor;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.action-btn:hover::before {
-  opacity: 0.08;
 }
 
 .action-btn:active {
@@ -736,6 +722,8 @@ onBeforeUnmount(() => {
   bottom: 0.35rem;
   right: 0.35rem;
   font-size: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
 }
 
 .action-btn:hover .btn-key-hint {
