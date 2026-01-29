@@ -1097,21 +1097,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 小屏幕 */
-@media (max-width: 360px) {
-  .action-btn {
-    min-width: 60px;
-    padding: 0.625rem 0.375rem;
-  }
-
-  .btn-icon {
-    font-size: 1.2rem;
-  }
-
-  .btn-label {
-    font-size: 0.65rem;
-  }
-}
 
 /* 横屏适配 */
 @media (max-height: 500px) and (orientation: landscape) {

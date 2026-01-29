@@ -98,8 +98,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: 1px solid var(--primitive-paper-400);
   background: var(--primitive-paper-50);
@@ -126,9 +126,9 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 4px;
-  width: 16px;
-  height: 16px;
+  gap: 3px;
+  width: 14px;
+  height: 14px;
 }
 
 .icon-line {
@@ -141,7 +141,7 @@ onUnmounted(() => {
 }
 
 .icon-line.rotated {
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(5px) rotate(45deg);
 }
 
 .icon-line.hidden {
@@ -150,7 +150,7 @@ onUnmounted(() => {
 }
 
 .icon-line.rotated-reverse {
-  transform: translateY(-6px) rotate(-45deg);
+  transform: translateY(-5px) rotate(-45deg);
 }
 
 /* ── 下拉菜单 ── */
@@ -297,29 +297,6 @@ onUnmounted(() => {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 480px) {
-  .dropdown-toggle {
-    width: 32px;
-    height: 32px;
-  }
-
-  .toggle-icon {
-    width: 14px;
-    height: 14px;
-    gap: 3px;
-  }
-
-  .icon-line {
-    height: 1.5px;
-  }
-
-  .icon-line.rotated {
-    transform: translateY(4.5px) rotate(45deg);
-  }
-
-  .icon-line.rotated-reverse {
-    transform: translateY(-4.5px) rotate(-45deg);
-  }
-
   .dropdown-menu {
     min-width: 140px;
   }

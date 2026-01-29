@@ -1667,46 +1667,4 @@ onMounted(async () => {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   小屏手机
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-@media (max-width: 380px) {
-  .settings-header {
-    padding: 8px 12px;
-  }
-
-  .settings-title {
-    font-size: 16px;
-  }
-
-  .search-box {
-    min-width: 120px;
-    padding: 5px 10px;
-  }
-
-  .settings-content {
-    padding: 8px 12px 60px;
-  }
-
-  .section-header {
-    padding: 8px 10px;
-  }
-
-  .section-title {
-    font-size: 13px;
-  }
-
-  .section-icon {
-    font-size: 14px;
-  }
-
-  .setting-label {
-    font-size: 12px;
-  }
-
-  .setting-value {
-    font-size: 14px;
-  }
-}
 </style>

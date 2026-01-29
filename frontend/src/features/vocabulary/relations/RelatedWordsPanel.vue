@@ -347,15 +347,4 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 360px) {
-  .relation-group {
-    flex: 1 1 100%;
-    max-width: none;
-  }
-
-  .word-chip {
-    padding: 0.25rem 0.4rem;
-    font-size: 0.75rem;
-  }
-}
 </style>
