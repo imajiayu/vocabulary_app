@@ -1,10 +1,14 @@
-import { ref } from 'vue'
+/**
+ * 快捷键全局状态管理
+ * 直接使用 useSettings() 的状态，不维护独立的状态
+ * 这样可以确保设置更新后立即在所有组件中生效，无需重启
+ */
+import { computed } from 'vue'
 import type { HotkeySettings } from '@/shared/types'
 import { useSettings } from './useSettings'
 import { logger } from '@/shared/utils/logger'
 
-// 全局状态 - 快捷键设置
-const hotkeys = ref<HotkeySettings>({
+const DEFAULT_HOTKEYS: HotkeySettings = {
   reviewInitial: {
     remembered: 'ArrowLeft',
     notRemembered: 'ArrowRight',
@@ -19,35 +23,27 @@ const hotkeys = ref<HotkeySettings>({
     forgot: 'ArrowRight',
     next: 'Enter'
   }
-})
+}
 
-const isLoaded = ref(false)
-
-/**
- * 快捷键全局状态管理
- * 提供加载、更新快捷键设置的功能
- */
 export function useHotkeys() {
-  const { loadSettings, updateSettings } = useSettings()
+  const { settings, loadSettings, updateSettings } = useSettings()
+
+  /**
+   * 快捷键设置（计算属性，直接从全局设置中获取）
+   */
+  const hotkeys = computed<HotkeySettings>(() => settings.value?.hotkeys ?? DEFAULT_HOTKEYS)
+
+  /**
+   * 是否已加载设置
+   */
+  const isLoaded = computed<boolean>(() => settings.value !== null)
 
   /**
    * 从后端加载快捷键设置
+   * 实际上是调用全局设置加载器
    */
   const loadHotkeys = async () => {
-    // 如果已经加载过，直接返回，避免重复请求
-    if (isLoaded.value) {
-      return
-    }
-
-    try {
-      // 使用统一的 settings 加载器，避免重复请求
-      const settings = await loadSettings()
-      hotkeys.value = settings.hotkeys
-      isLoaded.value = true
-    } catch (error) {
-      logger.error('[useHotkeys] 加载快捷键设置失败:', error)
-      // 保持默认值
-    }
+    await loadSettings()
   }
 
   /**
@@ -55,9 +51,7 @@ export function useHotkeys() {
    */
   const updateHotkeys = async (newHotkeys: HotkeySettings) => {
     try {
-      // 使用全局设置管理器更新（自动更新缓存）
-      const updatedSettings = await updateSettings({ hotkeys: newHotkeys })
-      hotkeys.value = updatedSettings.hotkeys
+      await updateSettings({ hotkeys: newHotkeys })
     } catch (error) {
       logger.error('[useHotkeys] 更新快捷键设置失败:', error)
       throw error

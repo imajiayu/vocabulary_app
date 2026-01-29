@@ -69,11 +69,11 @@ const displayKey = computed(() => {
   font-weight: 600;
   line-height: 1;
   border-radius: var(--radius-xs);
-  background: rgba(0, 0, 0, 0.15);
-  color: var(--primitive-ink-700);
+  color: inherit;
+  background: color-mix(in srgb, currentColor 15%, transparent);
   box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    0 1px 0 color-mix(in srgb, currentColor 20%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, currentColor 10%, transparent);
   transition: all 0.15s ease;
 }
 

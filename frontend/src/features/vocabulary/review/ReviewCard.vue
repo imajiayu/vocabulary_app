@@ -76,100 +76,107 @@
     <div class="action-bar">
       <Transition name="action-switch" mode="out-in">
         <!-- 阶段一按钮 -->
-        <div v-if="!showDefinition" class="action-group initial" key="initial">
-          <button
-            class="action-btn forgot"
-            :disabled="isSubmitting"
-            @click="handleChoice('no')"
-          >
-            <span class="btn-icon">✗</span>
-            <span class="btn-label">没记住</span>
-            <KeyHint
-              v-if="!isMobile"
-              :key-value="hotkeys.reviewInitial.notRemembered"
-              variant="danger"
-              class="btn-key-hint"
-            />
-          </button>
+        <div v-if="!showDefinition" class="action-stage stage-initial" key="initial">
+          <!-- 主按钮：没记住 + 记住了 -->
+          <div class="primary-actions">
+            <button
+              class="action-btn forgot"
+              :disabled="isSubmitting"
+              @click="handleChoice('no')"
+            >
+              <span class="btn-icon">✗</span>
+              <span class="btn-label">没记住</span>
+              <KeyHint
+                v-if="!isMobile"
+                :key-value="hotkeys.reviewInitial.notRemembered"
+                variant="danger"
+                class="btn-key-hint"
+              />
+            </button>
 
-          <button
-            class="action-btn remembered"
-            :disabled="isSubmitting"
-            @click="handleChoice('yes')"
-          >
-            <span class="btn-icon">✓</span>
-            <span class="btn-label">记住了</span>
-            <KeyHint
-              v-if="!isMobile"
-              :key-value="hotkeys.reviewInitial.remembered"
-              variant="success"
-              class="btn-key-hint"
-            />
-          </button>
+            <button
+              class="action-btn remembered"
+              :disabled="isSubmitting"
+              @click="handleChoice('yes')"
+            >
+              <span class="btn-icon">✓</span>
+              <span class="btn-label">记住了</span>
+              <KeyHint
+                v-if="!isMobile"
+                :key-value="hotkeys.reviewInitial.remembered"
+                variant="success"
+                class="btn-key-hint"
+              />
+            </button>
+          </div>
 
-          <button
-            v-if="!isLapseMode"
-            class="action-btn skip"
-            :disabled="isSubmitting"
-            @click="handleChoice('stop')"
-          >
-            <span class="btn-icon">⊘</span>
-            <span class="btn-label">不再复习</span>
-            <KeyHint
-              v-if="!isMobile"
-              :key-value="hotkeys.reviewInitial.stopReview"
-              variant="default"
-              class="btn-key-hint"
-            />
-          </button>
+          <!-- 辅助按钮：右侧竖排 -->
+          <div v-if="!isLapseMode" class="secondary-actions">
+            <button
+              class="action-btn-sm skip"
+              :disabled="isSubmitting"
+              @click="handleChoice('stop')"
+            >
+              <span class="btn-sm-icon">⊘</span>
+              <span class="btn-sm-label">不再复习</span>
+              <KeyHint
+                v-if="!isMobile"
+                :key-value="hotkeys.reviewInitial.stopReview"
+                variant="default"
+                class="btn-key-hint-sm"
+              />
+            </button>
 
-          <!-- 重置计时器 -->
-          <button
-            v-if="!isLapseMode"
-            class="action-btn timer-reset"
-            @click="handleResetTimer"
-            title="重置计时器"
-          >
-            <span class="btn-icon">↻</span>
-          </button>
+            <button
+              class="action-btn-sm timer-reset"
+              @click="handleResetTimer"
+              title="重置计时器"
+            >
+              <span class="btn-sm-icon">↻</span>
+              <span class="btn-sm-label">重置计时器</span>
+            </button>
+          </div>
         </div>
 
         <!-- 阶段二按钮 -->
-        <div v-else class="action-group confirmed" key="confirmed">
-          <button
-            v-if="pendingChoice === 'yes'"
-            class="action-btn correction"
-            :disabled="isSubmitting"
-            @click="handleCorrection"
-          >
-            <span class="btn-icon">↩︎</span>
-            <span class="btn-label">记错了</span>
-            <KeyHint
-              v-if="!isMobile"
-              :key-value="hotkeys.reviewAfter.wrong"
-              variant="warning"
-              class="btn-key-hint"
-            />
-          </button>
+        <div v-else class="action-stage stage-confirmed" key="confirmed">
+          <div class="primary-actions">
+            <button
+              v-if="pendingChoice === 'yes'"
+              class="action-btn correction"
+              :disabled="isSubmitting"
+              @click="handleCorrection"
+            >
+              <span class="btn-icon">↩︎</span>
+              <span class="btn-label">记错了</span>
+              <KeyHint
+                v-if="!isMobile"
+                :key-value="hotkeys.reviewAfter.wrong"
+                variant="warning"
+                class="btn-key-hint"
+              />
+            </button>
 
-          <button
-            class="action-btn next"
-            :class="{
-              'next-success': pendingChoice === 'yes',
-              'next-error': pendingChoice === 'no'
-            }"
-            :disabled="isSubmitting"
-            @click="handleNext"
-          >
-            <span class="btn-icon">→</span>
-            <span class="btn-label">下一个</span>
-            <KeyHint
-              v-if="!isMobile"
-              :key-value="hotkeys.reviewAfter.next"
-              :variant="pendingChoice === 'yes' ? 'success' : pendingChoice === 'no' ? 'danger' : 'default'"
-              class="btn-key-hint"
-            />
-          </button>
+            <button
+              class="action-btn next"
+              :class="{
+                'next-success': pendingChoice === 'yes',
+                'next-error': pendingChoice === 'no',
+                'next-full': pendingChoice === 'no'
+              }"
+              :disabled="isSubmitting"
+              @click="handleNext"
+            >
+              <span class="btn-icon">→</span>
+              <span class="btn-label">下一个</span>
+              <KeyHint
+                v-if="!isMobile"
+                :key-value="hotkeys.reviewAfter.next"
+                :variant="pendingChoice === 'yes' ? 'success' : pendingChoice === 'no' ? 'danger' : 'default'"
+                class="btn-key-hint"
+              />
+            </button>
+          </div>
         </div>
       </Transition>
     </div>
@@ -215,7 +222,7 @@ const isSubmitting = ref(false)
 // 移动端检测（快捷键提示只在桌面端显示）
 const isMobile = ref(false)
 const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768 || ('ontouchstart' in window)
+  isMobile.value = window.innerWidth <= 768
 }
 
 // 缓存用于显示释义的单词数据（避免 Transition leave 动画期间内容跳变）
@@ -659,7 +666,7 @@ onBeforeUnmount(() => {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   操作栏
+   操作栏 - 分层按钮布局
    ══════════════════════════════════════════════════════════════════════════ */
 
 .action-bar {
@@ -667,22 +674,40 @@ onBeforeUnmount(() => {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1.25rem 1rem;
-  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  padding: 0.75rem 1rem;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   z-index: 100;
   display: flex;
   justify-content: center;
 }
 
-.action-group {
+.action-stage {
   display: flex;
-  justify-content: center;
-  gap: 0.75rem;
+  align-items: stretch;
+  gap: 0.5rem;
   width: 100%;
   max-width: 600px;
 }
 
-/* ── 按钮基础样式 ── */
+/* ── 主按钮区 ── */
+.primary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── 辅助按钮区：右侧竖排 ── */
+.secondary-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* ── 主按钮基础样式 ── */
 .action-btn {
   display: flex;
   flex-direction: column;
@@ -720,6 +745,47 @@ onBeforeUnmount(() => {
   letter-spacing: 0.02em;
 }
 
+/* ── 辅助小按钮样式 ── */
+.action-btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-ui);
+  position: relative;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
+}
+
+.action-btn-sm:hover {
+  background: var(--color-bg-glass-hover);
+  color: var(--color-text-secondary);
+}
+
+.action-btn-sm:active {
+  transform: scale(0.95);
+}
+
+.action-btn-sm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-sm-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.btn-sm-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 /* ── 快捷键提示 ── */
 .btn-key-hint {
   position: absolute;
@@ -734,11 +800,21 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 
+.btn-key-hint-sm {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  margin-left: 0.15rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   阶段一 - 主操作按钮
+   ══════════════════════════════════════════════════════════════════════════ */
+
 /* ── 记住按钮 ── */
 .action-btn.remembered {
   background: var(--color-success-light);
   color: var(--color-success);
-  flex: 1.2;
+  flex: 1;
 }
 
 .action-btn.remembered:hover {
@@ -750,7 +826,7 @@ onBeforeUnmount(() => {
 .action-btn.forgot {
   background: var(--color-danger-light);
   color: var(--color-danger);
-  flex: 1.2;
+  flex: 1;
 }
 
 .action-btn.forgot:hover {
@@ -758,52 +834,37 @@ onBeforeUnmount(() => {
   color: white;
 }
 
-/* ── 不再复习按钮 ── */
-.action-btn.skip {
-  background: var(--color-bg-tertiary);
-  color: var(--color-text-secondary);
-  flex: 1;
-}
+/* ══════════════════════════════════════════════════════════════════════════
+   阶段二 - 确认/纠正按钮
+   ══════════════════════════════════════════════════════════════════════════ */
 
-.action-btn.skip:hover {
-  background: var(--color-text-tertiary);
-  color: white;
-}
-
-/* ── 重置计时器按钮 ── */
-.action-btn.timer-reset {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-tertiary);
-  min-width: 52px;
-  padding: 0.875rem;
-}
-
-.action-btn.timer-reset:hover {
-  background: var(--color-bg-tertiary);
-  color: var(--color-text-secondary);
-}
-
-.action-btn.timer-reset .btn-icon {
-  font-size: 1.25rem;
-}
-
-/* ── 记错了按钮 ── */
+/* ── 记错了按钮（弱化） ── */
 .action-btn.correction {
-  background: var(--color-warning-light);
-  color: var(--color-warning);
-  flex: 1;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
+  flex: 0 0 auto;
+  min-width: 72px;
+  padding: 0.75rem 1rem;
+}
+
+.action-btn.correction .btn-icon {
+  font-size: 1.1rem;
+}
+
+.action-btn.correction .btn-label {
+  font-size: 0.65rem;
 }
 
 .action-btn.correction:hover {
-  background: var(--color-warning);
-  color: white;
+  background: var(--color-warning-light);
+  color: var(--color-warning);
 }
 
 /* ── 下一个按钮 ── */
 .action-btn.next {
   background: var(--color-bg-tertiary);
   color: var(--color-text-secondary);
-  flex: 1.5;
+  flex: 1;
 }
 
 .action-btn.next:hover {
@@ -819,6 +880,11 @@ onBeforeUnmount(() => {
 .action-btn.next.next-error {
   background: var(--color-danger);
   color: white;
+}
+
+/* 前一阶段选了"没记住"时，下一个按钮占满宽度 */
+.action-btn.next.next-full {
+  min-width: 100%;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -999,11 +1065,15 @@ onBeforeUnmount(() => {
 
   /* 移动端按钮 */
   .action-bar {
-    padding: 1rem 0.75rem;
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    padding: 0.625rem 0.75rem;
+    padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
   }
 
-  .action-group {
+  .action-stage {
+    gap: 0.375rem;
+  }
+
+  .primary-actions {
     gap: 0.5rem;
   }
 
@@ -1021,8 +1091,9 @@ onBeforeUnmount(() => {
     font-size: 0.7rem;
   }
 
-  .action-btn.timer-reset {
-    min-width: 48px;
+  .action-btn.correction {
+    min-width: 60px;
+    padding: 0.625rem 0.5rem;
   }
 }
 
@@ -1070,7 +1141,12 @@ onBeforeUnmount(() => {
   }
 
   .action-bar {
-    padding: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    padding-bottom: calc(0.375rem + env(safe-area-inset-bottom));
+  }
+
+  .action-stage {
+    gap: 0.25rem;
   }
 
   .action-btn {
@@ -1085,6 +1161,14 @@ onBeforeUnmount(() => {
 
   .btn-label {
     font-size: 0.7rem;
+  }
+
+  .secondary-actions {
+    gap: 0.375rem;
+  }
+
+  .action-btn-sm {
+    padding: 0.2rem 0.5rem;
   }
 }
 </style>

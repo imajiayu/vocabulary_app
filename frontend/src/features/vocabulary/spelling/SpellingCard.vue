@@ -121,10 +121,10 @@ import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('Spelling')
 
-// 移动端检测：需同时满足小屏幕和触控支持
+// 移动端检测（快捷键提示只在桌面端显示）
 const isMobile = ref(false)
 const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768 && ('ontouchstart' in window)
+  isMobile.value = window.innerWidth <= 768
 }
 
 interface KeyEvent {

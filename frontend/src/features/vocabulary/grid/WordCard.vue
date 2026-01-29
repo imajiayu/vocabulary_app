@@ -79,8 +79,7 @@ const backgroundColor = computed(() => {
 
 // 检测是否为移动端
 const checkMobile = () => {
-  // 使用 hover 媒体查询检测是否支持 hover
-  isMobile.value = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  isMobile.value = window.innerWidth <= 768;
 };
 
 const handleMouseEnter = (e: MouseEvent) => {
