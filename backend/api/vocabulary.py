@@ -465,9 +465,13 @@ def get_review_words():
         # 是否有更多
         has_more = offset + batch_size < len(all_ids)
 
+        response_data = {"words": words, "total": len(all_ids), "has_more": has_more}
+        if batch_id == 0:
+            response_data["all_ids"] = all_ids
+
         return create_response(
             True,
-            {"words": words, "total": len(all_ids), "has_more": has_more},
+            response_data,
             "Review words retrieved successfully",
         )
     except Exception as e:

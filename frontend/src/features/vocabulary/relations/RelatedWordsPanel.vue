@@ -16,35 +16,40 @@
           <span class="label-text">{{ typeLabels[type] }}</span>
         </div>
         <div class="word-list">
-          <button
+          <span
             v-for="rel in groupedWords[type]"
             :key="rel.id"
             class="word-chip"
-            @click="handleClickWord(rel.id)"
+            @mouseenter="(e) => handleMouseEnter(e, rel)"
+            @mouseleave="handleMouseLeave"
+            @touchstart.passive="(e) => handleTouchStart(e, rel)"
+            @touchend="handleTouchEnd"
+            @touchcancel="handleTouchEnd"
+            @contextmenu.prevent
           >
             {{ rel.word }}
-          </button>
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- Modal -->
-    <teleport to="body">
-      <div v-if="wordEditorStore.isOpen" class="modal-wrapper">
-        <div class="modal-overlay" @click="wordEditorStore.close()"></div>
-        <WordEditorModal />
-      </div>
-    </teleport>
+    <!-- Tooltip - 桌面端 hover / 移动端长按 -->
+    <WordTooltip
+      v-if="tooltipWord"
+      :word="tooltipWord"
+      :visible="showTooltip"
+      :position="tooltipPosition"
+      :is-mobile="isMobile"
+      @close="handleTooltipClose"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { RelatedWord } from '@/shared/types'
-import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
+import type { Word, RelatedWord } from '@/shared/types'
+import WordTooltip from '@/features/vocabulary/grid/WordTooltip.vue'
 import { api } from '@/shared/api'
-import { useTimerPause } from '@/shared/composables/useTimerPause'
-import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('RelatedWords')
@@ -84,28 +89,88 @@ const activeTypes = computed(() => {
   return relationTypes.filter(type => groupedWords.value[type].length > 0)
 })
 
-const wordEditorStore = useWordEditorStore()
-const { requestPause, releasePause } = useTimerPause()
+// Tooltip 状态
+const isMobile = ref(false)
+const showTooltip = ref(false)
+const tooltipPosition = ref({ x: 0, y: 0 })
+const tooltipWord = ref<Word | undefined>(undefined)
 
-const handleClickWord = async (wordId: number) => {
-  requestPause()
+// 缓存已获取的单词数据，避免重复请求
+const wordCache = new Map<number, Word>()
 
+// 定时器
+const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+const longPressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+const HOVER_DELAY = 300
+const LONG_PRESS_DURATION = 500
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+const fetchAndShowTooltip = async (wordId: number, position: { x: number; y: number }) => {
   try {
-    const data = await api.words.getWordDirect(wordId)
-    if (!data) {
-      log.error('Word not found:', wordId)
-      releasePause()
-      return
+    let word = wordCache.get(wordId)
+    if (!word) {
+      word = (await api.words.getWordDirect(wordId)) ?? undefined
+      if (word) wordCache.set(wordId, word)
     }
-    wordEditorStore.open(data)
-    wordEditorStore.onClose(() => {
-      releasePause()
-    })
+    if (!word) return
+    tooltipWord.value = word
+    tooltipPosition.value = position
+    showTooltip.value = true
   } catch (err) {
-    log.error(err)
-    releasePause()
+    log.error('Failed to fetch word for tooltip:', err)
   }
 }
+
+// 桌面端 hover
+const handleMouseEnter = (e: MouseEvent, rel: RelatedWord) => {
+  if (isMobile.value) return
+  hoverTimer.value = setTimeout(() => {
+    fetchAndShowTooltip(rel.id, { x: e.clientX, y: e.clientY })
+  }, HOVER_DELAY)
+}
+
+const handleMouseLeave = () => {
+  if (hoverTimer.value) {
+    clearTimeout(hoverTimer.value)
+    hoverTimer.value = null
+  }
+  showTooltip.value = false
+  tooltipWord.value = undefined
+}
+
+// 移动端长按
+const handleTouchStart = (e: TouchEvent, rel: RelatedWord) => {
+  longPressTimer.value = setTimeout(() => {
+    fetchAndShowTooltip(rel.id, { x: 0, y: 0 })
+    if (navigator.vibrate) navigator.vibrate(10)
+  }, LONG_PRESS_DURATION)
+}
+
+const handleTouchEnd = () => {
+  if (longPressTimer.value) {
+    clearTimeout(longPressTimer.value)
+    longPressTimer.value = null
+  }
+}
+
+const handleTooltipClose = () => {
+  showTooltip.value = false
+  tooltipWord.value = undefined
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+  if (hoverTimer.value) clearTimeout(hoverTimer.value)
+  if (longPressTimer.value) clearTimeout(longPressTimer.value)
+})
 </script>
 
 <style scoped>
@@ -227,8 +292,10 @@ const handleClickWord = async (wordId: number) => {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-sm);
-  cursor: pointer;
+  cursor: default;
   transition: all 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .word-chip:hover {
@@ -240,29 +307,6 @@ const handleClickWord = async (wordId: number) => {
 
 .word-chip:active {
   transform: translateY(0);
-}
-
-/* ── Modal ── */
-.modal-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

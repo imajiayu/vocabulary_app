@@ -97,6 +97,7 @@ import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
 import type { Word, SpellingMetrics } from '@/shared/types'
+import { api } from '@/shared/api'
 
 interface CardResultEvent {
   remembered: boolean
@@ -147,32 +148,17 @@ const handleSidebarWordDeleted = (wordId: number) => {
     if (index < currentIndex.value) {
       reviewStore.currentIndex = Math.max(0, currentIndex.value - 1)
     }
+    // 同步 current_progress：快照 + 索引
+    api.progress.updateProgressSnapshotDirect(reviewStore.wordQueue.map(w => w.id))
+      .catch(err => logger.warn('Failed to update snapshot after sidebar delete:', err))
+    const indexToUpdate = mode.value === 'mode_lapse' ? 0 : globalIndex.value
+    api.progress.updateProgressIndexDirect(indexToUpdate)
+      .catch(err => logger.warn('Failed to update index after sidebar delete:', err))
   }
 }
 
 const handleWordMastered = (wordId: number) => {
-  if (mode.value === 'mode_lapse') {
-    if (reviewStore.wordQueue.length === 0) return
-
-    const wordIndex = reviewStore.wordQueue.findIndex(w => w.id === wordId)
-
-    if (wordIndex !== -1) {
-      reviewStore.wordQueue.splice(wordIndex, 1)
-
-      if (wordIndex < currentIndex.value) {
-        reviewStore.currentIndex = Math.max(0, currentIndex.value - 1)
-      }
-
-      if (reviewStore.wordQueue.length > 0 && currentIndex.value >= reviewStore.wordQueue.length) {
-        reviewStore.currentIndex = 0
-        reviewStore.wordQueue = reviewStore.sortByLapse(reviewStore.wordQueue, shuffle.value)
-      }
-
-      wordResults.value.set(wordId, true)
-    }
-  } else {
-    wordResults.value.set(wordId, true)
-  }
+  wordResults.value.set(wordId, true)
 }
 
 const route = useRoute()

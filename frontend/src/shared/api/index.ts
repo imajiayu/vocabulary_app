@@ -189,6 +189,25 @@ export class ProgressApi {
   }
 
   /**
+   * 更新进度快照（仅更新 word_ids_snapshot，用于 lapse 模式移除单词后同步）
+   */
+  static async updateProgressSnapshotDirect(wordIds: number[]): Promise<boolean> {
+    const userId = getCurrentUserId()
+
+    const { error } = await supabase
+      .from('current_progress')
+      .update({ word_ids_snapshot: JSON.stringify(wordIds) })
+      .eq('user_id', userId)
+
+    if (error) {
+      console.error('更新快照失败:', error)
+      return false
+    }
+
+    return true
+  }
+
+  /**
    * 清除进度（重置为初始状态，直连 Supabase）
    */
   static async clearProgressDirect(): Promise<boolean> {

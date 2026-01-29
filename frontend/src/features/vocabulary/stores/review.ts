@@ -225,15 +225,13 @@ export const useReviewStore = defineStore('review', () => {
           currentIndex.value = 0
           initialOffset.value = 0  // 重置初始偏移量
 
-          // 新增：前端直接保存进度快照到 Supabase（非 lapse 模式）
-          // 注意：这里只保存第一批数据的 ID，后端仍需要知道完整快照
-          // 但因为后端 batch_id=0 会创建快照，这里只是为了前端恢复使用
-          // 实际上，后端已经创建了快照，前端这里也保存一份到 current_progress
+          // 保存完整快照到 Supabase（使用后端返回的 all_ids，包含所有单词 ID）
+          const snapshotIds = data.all_ids || newWords.map(w => w.id)
           api.progress.saveProgressDirect({
             mode: mode.value,
             source: currentSource.value || 'IELTS',
             shuffle: shuffle.value,
-            word_ids: newWords.map(w => w.id),
+            word_ids: snapshotIds,
             initial_lapse_count: 0,
             initial_lapse_word_count: 0
           }).catch(err => log.warn('Failed to save progress snapshot:', err))
@@ -301,6 +299,9 @@ export const useReviewStore = defineStore('review', () => {
 
         if (word.lapse === 0) {
           wordQueue.value.splice(currentWordIndex, 1)
+          // 同步更新快照，使首页"剩余"计数正确
+          api.progress.updateProgressSnapshotDirect(wordQueue.value.map(w => w.id))
+            .catch(err => log.warn('Failed to update lapse snapshot:', err))
           if (wordQueue.value.length === 0) {
             currentIndex.value = 0
           } else if (currentIndex.value >= wordQueue.value.length) {
@@ -399,6 +400,9 @@ export const useReviewStore = defineStore('review', () => {
 
       const currentWordIndex = currentIndex.value % wordQueue.value.length
       wordQueue.value.splice(currentWordIndex, 1)
+      // 同步更新快照，使首页"剩余"计数正确
+      api.progress.updateProgressSnapshotDirect(wordQueue.value.map(w => w.id))
+        .catch(err => log.warn('Failed to update lapse snapshot:', err))
 
       if (wordQueue.value.length > 0 && currentIndex.value >= wordQueue.value.length) {
         currentIndex.value = 0

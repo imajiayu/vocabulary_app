@@ -50,7 +50,7 @@
       </template>
 
       <template v-else>
-        <button @click="toggleReview" :class="['action-btn', isRemembered ? 'restore-btn' : 'master-btn']">
+        <button v-if="store.mode !== 'mode_lapse'" @click="toggleReview" :class="['action-btn', isRemembered ? 'restore-btn' : 'master-btn']">
           {{ isRemembered ? '恢复复习' : '标记掌握' }}
         </button>
         <button @click="handleMarkForgot" :disabled="isForgetButtonUsed" class="action-btn reset-btn">

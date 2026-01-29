@@ -53,7 +53,8 @@ export interface WordsApiResponse {
   words: Word[]
   total: number
   has_more: boolean
-  counts?: SourceCounts  // 首次加载时返回的来源计数
+  all_ids?: number[]      // batch_id=0 时返回完整快照 ID 列表
+  counts?: SourceCounts   // 首次加载时返回的来源计数
 }
 
 export interface Question {
