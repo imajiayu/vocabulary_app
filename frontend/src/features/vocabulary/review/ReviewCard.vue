@@ -78,21 +78,6 @@
         <!-- 阶段一按钮 -->
         <div v-if="!showDefinition" class="action-group initial" key="initial">
           <button
-            class="action-btn remembered"
-            :disabled="isSubmitting"
-            @click="handleChoice('yes')"
-          >
-            <span class="btn-icon">✓</span>
-            <span class="btn-label">记住了</span>
-            <KeyHint
-              v-if="!isMobile"
-              :key-value="hotkeys.reviewInitial.remembered"
-              variant="success"
-              class="btn-key-hint"
-            />
-          </button>
-
-          <button
             class="action-btn forgot"
             :disabled="isSubmitting"
             @click="handleChoice('no')"
@@ -103,6 +88,21 @@
               v-if="!isMobile"
               :key-value="hotkeys.reviewInitial.notRemembered"
               variant="danger"
+              class="btn-key-hint"
+            />
+          </button>
+
+          <button
+            class="action-btn remembered"
+            :disabled="isSubmitting"
+            @click="handleChoice('yes')"
+          >
+            <span class="btn-icon">✓</span>
+            <span class="btn-label">记住了</span>
+            <KeyHint
+              v-if="!isMobile"
+              :key-value="hotkeys.reviewInitial.remembered"
+              variant="success"
               class="btn-key-hint"
             />
           </button>
@@ -137,11 +137,12 @@
         <!-- 阶段二按钮 -->
         <div v-else class="action-group confirmed" key="confirmed">
           <button
+            v-if="pendingChoice === 'yes'"
             class="action-btn correction"
             :disabled="isSubmitting"
             @click="handleCorrection"
           >
-            <span class="btn-icon">↩</span>
+            <span class="btn-icon">↩︎</span>
             <span class="btn-label">记错了</span>
             <KeyHint
               v-if="!isMobile"
@@ -332,10 +333,14 @@ const setupKeyboardShortcuts = () => {
   } else {
     setContext('review-after')
     const afterKeys = hotkeys.value.reviewAfter
-    registerKeys({
-      [afterKeys.wrong]: async () => await handleCorrection(),
+    const keys: Record<string, () => void | Promise<void>> = {
       [afterKeys.next]: async () => await handleNext()
-    })
+    }
+    // 只在选择「记住了」时才注册「记错了」快捷键
+    if (pendingChoice.value === 'yes') {
+      keys[afterKeys.wrong] = async () => await handleCorrection()
+    }
+    registerKeys(keys)
   }
 }
 
@@ -664,7 +669,6 @@ onBeforeUnmount(() => {
   right: 0;
   padding: 1.25rem 1rem;
   padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--color-bg-page) 80%, transparent);
   z-index: 100;
   display: flex;
   justify-content: center;

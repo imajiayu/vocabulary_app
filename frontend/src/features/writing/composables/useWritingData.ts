@@ -72,14 +72,15 @@ export function useWritingData() {
    * 当前版本号
    */
   const currentVersionNumber = computed(() => {
-    return versions.value.length as 0 | 1 | 2 | 3
+    return versions.value.length as 0 | 1 | 2
   })
 
   /**
    * 是否可以提交新版本
+   * V2改动：最多2个版本
    */
   const canSubmitVersion = computed(() => {
-    return currentVersionNumber.value < 3
+    return currentVersionNumber.value < 2
   })
 
   // ============================================================================
@@ -255,6 +256,28 @@ export function useWritingData() {
     }
   }
 
+  /**
+   * 更新题目笔记
+   * V2改动：笔记从 session 级别改为 prompt 级别
+   */
+  async function updatePromptNotes(promptId: number, notes: string) {
+    loading.value = true
+    try {
+      const updated = await WritingApi.updatePromptNotes(promptId, notes)
+      // 更新本地 prompts 状态
+      prompts.value = prompts.value.map(p => p.id === promptId ? updated : p)
+      if (selectedPrompt.value?.id === promptId) {
+        selectedPrompt.value = updated
+      }
+      return updated
+    } catch (e) {
+      writingLogger.error('更新笔记失败:', e)
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
   async function selectPrompt(prompt: WritingPrompt | null) {
     if (!prompt) {
       selectedPrompt.value = null
@@ -351,7 +374,7 @@ export function useWritingData() {
 
     loading.value = true
     try {
-      const versionNumber = (currentVersionNumber.value + 1) as 1 | 2 | 3
+      const versionNumber = (currentVersionNumber.value + 1) as 1 | 2
       const version = await WritingApi.createVersion({
         session_id: currentSession.value.id,
         version_number: versionNumber,
@@ -399,6 +422,10 @@ export function useWritingData() {
   // 页面状态管理
   // ============================================================================
 
+  /**
+   * 更新页面状态
+   * V2改动：移除 feedback_2，versionCount >= 2 直接进入 completed
+   */
   function updatePageState() {
     if (!currentSession.value) {
       pageState.value = selectedPrompt.value ? 'prompt_selected' : 'idle'
@@ -416,9 +443,8 @@ export function useWritingData() {
       pageState.value = 'writing'
     } else if (versionCount === 1) {
       pageState.value = 'feedback_1'
-    } else if (versionCount === 2) {
-      pageState.value = 'feedback_2'
     } else {
+      // versionCount >= 2 直接进入 completed
       pageState.value = 'completed'
     }
   }
@@ -437,7 +463,7 @@ export function useWritingData() {
     pageState.value = selectedPrompt.value ? 'prompt_selected' : 'idle'
   }
 
-  function getVersionByNumber(num: 1 | 2 | 3): WritingVersion | undefined {
+  function getVersionByNumber(num: 1 | 2): WritingVersion | undefined {
     return versions.value.find(v => v.version_number === num)
   }
 
@@ -475,6 +501,7 @@ export function useWritingData() {
     // 题目操作
     createPrompt,
     updatePrompt,
+    updatePromptNotes,
     deletePrompt,
     movePrompt,
     selectPrompt,

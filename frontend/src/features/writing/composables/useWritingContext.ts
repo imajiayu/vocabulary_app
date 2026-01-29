@@ -31,7 +31,7 @@ export interface WritingContext {
 
   // 计算属性
   promptsByFolder: ComputedRef<Map<number | null, WritingPrompt[]>>
-  currentVersionNumber: ComputedRef<0 | 1 | 2 | 3>
+  currentVersionNumber: ComputedRef<0 | 1 | 2>
   canSubmitVersion: ComputedRef<boolean>
 
   // 文件夹操作
@@ -43,6 +43,7 @@ export interface WritingContext {
   // 题目操作
   createPrompt: (payload: CreatePromptPayload) => Promise<WritingPrompt>
   updatePrompt: (id: number, payload: Partial<WritingPrompt>) => Promise<WritingPrompt>
+  updatePromptNotes: (promptId: number, notes: string) => Promise<WritingPrompt>
   deletePrompt: (id: number) => Promise<void>
   movePrompt: (id: number, folderId: number | null) => Promise<void>
   selectPrompt: (prompt: WritingPrompt | null) => Promise<void>
@@ -60,7 +61,7 @@ export interface WritingContext {
   // 状态管理
   setPageState: (state: WritingPageState) => void
   clearSession: () => void
-  getVersionByNumber: (num: 1 | 2 | 3) => WritingVersion | undefined
+  getVersionByNumber: (num: 1 | 2) => WritingVersion | undefined
 
   // 数据加载
   loadData: () => Promise<void>
@@ -134,6 +135,7 @@ export function createWritingContext(options: CreateWritingContextOptions = {}) 
     // 题目操作
     createPrompt: data.createPrompt,
     updatePrompt: data.updatePrompt,
+    updatePromptNotes: data.updatePromptNotes,
     deletePrompt: handleDeletePrompt,
     movePrompt: data.movePrompt,
     selectPrompt: handleSelectPrompt,

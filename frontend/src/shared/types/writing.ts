@@ -25,6 +25,7 @@ export interface WritingPrompt {
   task_type: 1 | 2  // Task 1 或 Task 2
   prompt_text: string
   image_url: string | null  // Task 1 图表图片 URL
+  notes: string | null  // 题目级别的笔记
   sort_order: number
   created_at: string
 }
@@ -40,7 +41,6 @@ export interface WritingSession {
   time_limit: number      // 秒
   time_spent: number | null  // 实际用时（秒）
   status: WritingSessionStatus
-  notes: string | null    // 会话级笔记
   created_at: string
   completed_at: string | null
   versions?: WritingVersion[]  // 关联查询时填充
@@ -54,7 +54,7 @@ export type WritingSessionStatus = 'writing' | 'revision' | 'completed'
 export interface WritingVersion {
   id: number
   session_id: number
-  version_number: 1 | 2 | 3
+  version_number: 1 | 2  // V2改动：只有初稿和终稿
   content: string
   word_count: number | null
   feedback: WritingFeedback | null
@@ -144,13 +144,12 @@ export interface CreateSessionPayload {
 export interface UpdateSessionPayload {
   time_spent?: number | null
   status?: WritingSessionStatus
-  notes?: string | null
   completed_at?: string | null
 }
 
 export interface CreateVersionPayload {
   session_id: number
-  version_number: 1 | 2 | 3
+  version_number: 1 | 2
   content: string
   word_count?: number
 }
@@ -166,15 +165,15 @@ export interface UpdateVersionPayload {
 
 /**
  * 页面状态机
+ * V2改动：移除 feedback_2，V2 提交后直接进入 completed
  */
 export type WritingPageState =
   | 'idle'           // 未选择题目，显示欢迎界面
   | 'prompt_selected' // 已选题目，显示"开始练习"按钮
   | 'writing'        // 写作中，显示编辑器+计时器
   | 'feedback_1'     // 第一轮反馈，显示反馈面板
-  | 'revision'       // 修改中
-  | 'feedback_2'     // 第二轮反馈
-  | 'completed'      // 完成，显示评分+笔记+问答
+  | 'revision'       // 修改中（isRevising=true 时的状态）
+  | 'completed'      // V2 提交后直接进入，显示评分+Diff+笔记+问答
 
 /**
  * 高亮区域（用于编辑器）

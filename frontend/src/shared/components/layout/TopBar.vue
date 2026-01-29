@@ -323,12 +323,12 @@ const goStats = () => {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
   border: none;
   border-radius: var(--radius-full);
   font-family: var(--font-ui);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -388,7 +388,7 @@ const goStats = () => {
 }
 
 .button-icon {
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1;
   transition: transform 0.2s ease;
 }
@@ -593,15 +593,6 @@ const goStats = () => {
 
   .ink-line {
     width: calc(100% - 1.5rem);
-  }
-
-  .nav-button--primary {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.75rem;
-  }
-
-  .button-icon {
-    font-size: 0.875rem;
   }
 
   .quick-actions {

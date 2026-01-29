@@ -168,8 +168,7 @@ const forgotCount = computed(() => {
 
 // Methods
 const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768 ||
-    !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  isMobile.value = window.innerWidth <= 768
 }
 
 const getWordStatus = (wordId: number): string => {

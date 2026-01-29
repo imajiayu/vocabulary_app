@@ -181,6 +181,7 @@ export class WritingApi {
       task_type: row.task_type as 1 | 2,
       prompt_text: row.prompt_text as string,
       image_url: row.image_url as string | null,
+      notes: row.notes as string | null,
       sort_order: row.sort_order as number,
       created_at: row.created_at as string
     }))
@@ -215,6 +216,7 @@ export class WritingApi {
       task_type: row.task_type as 1 | 2,
       prompt_text: row.prompt_text as string,
       image_url: row.image_url as string | null,
+      notes: row.notes as string | null,
       sort_order: row.sort_order as number,
       created_at: row.created_at as string
     }))
@@ -260,6 +262,7 @@ export class WritingApi {
       task_type: data.task_type as 1 | 2,
       prompt_text: data.prompt_text as string,
       image_url: data.image_url as string | null,
+      notes: data.notes as string | null,
       sort_order: data.sort_order as number,
       created_at: data.created_at as string
     }
@@ -287,6 +290,35 @@ export class WritingApi {
       task_type: data.task_type as 1 | 2,
       prompt_text: data.prompt_text as string,
       image_url: data.image_url as string | null,
+      notes: data.notes as string | null,
+      sort_order: data.sort_order as number,
+      created_at: data.created_at as string
+    }
+  }
+
+  /**
+   * 更新题目笔记
+   */
+  static async updatePromptNotes(promptId: number, notes: string): Promise<WritingPrompt> {
+    const userId = getCurrentUserId()
+    const { data, error } = await supabase
+      .from('writing_prompts')
+      .update({ notes })
+      .eq('id', promptId)
+      .eq('user_id', userId)
+      .select()
+      .single()
+
+    if (error) throw new Error(`更新笔记失败: ${error.message}`)
+
+    return {
+      id: data.id as number,
+      user_id: data.user_id as number,
+      folder_id: data.folder_id as number | null,
+      task_type: data.task_type as 1 | 2,
+      prompt_text: data.prompt_text as string,
+      image_url: data.image_url as string | null,
+      notes: data.notes as string | null,
       sort_order: data.sort_order as number,
       created_at: data.created_at as string
     }
@@ -443,13 +475,13 @@ export class WritingApi {
         task_type: row.writing_prompts.task_type as 1 | 2,
         prompt_text: row.writing_prompts.prompt_text as string,
         image_url: row.writing_prompts.image_url as string | null,
+        notes: row.writing_prompts.notes as string | null,
         sort_order: row.writing_prompts.sort_order as number,
         created_at: row.writing_prompts.created_at as string
       } : undefined,
       time_limit: row.time_limit as number,
       time_spent: row.time_spent as number | null,
       status: row.status as WritingSession['status'],
-      notes: row.notes as string | null,
       created_at: row.created_at as string,
       completed_at: row.completed_at as string | null
     }))
@@ -485,19 +517,19 @@ export class WritingApi {
         task_type: data.writing_prompts.task_type as 1 | 2,
         prompt_text: data.writing_prompts.prompt_text as string,
         image_url: data.writing_prompts.image_url as string | null,
+        notes: data.writing_prompts.notes as string | null,
         sort_order: data.writing_prompts.sort_order as number,
         created_at: data.writing_prompts.created_at as string
       } : undefined,
       time_limit: data.time_limit as number,
       time_spent: data.time_spent as number | null,
       status: data.status as WritingSession['status'],
-      notes: data.notes as string | null,
       created_at: data.created_at as string,
       completed_at: data.completed_at as string | null,
       versions: (data.writing_versions || []).map((v: Record<string, unknown>) => ({
         id: v.id as number,
         session_id: v.session_id as number,
-        version_number: v.version_number as 1 | 2 | 3,
+        version_number: v.version_number as 1 | 2,
         content: v.content as string,
         word_count: v.word_count as number | null,
         feedback: v.feedback as WritingFeedback | null,
@@ -536,13 +568,13 @@ export class WritingApi {
         task_type: data.writing_prompts.task_type as 1 | 2,
         prompt_text: data.writing_prompts.prompt_text as string,
         image_url: data.writing_prompts.image_url as string | null,
+        notes: data.writing_prompts.notes as string | null,
         sort_order: data.writing_prompts.sort_order as number,
         created_at: data.writing_prompts.created_at as string
       } : undefined,
       time_limit: data.time_limit as number,
       time_spent: data.time_spent as number | null,
       status: data.status as WritingSession['status'],
-      notes: data.notes as string | null,
       created_at: data.created_at as string,
       completed_at: data.completed_at as string | null
     }
@@ -574,13 +606,13 @@ export class WritingApi {
         task_type: data.writing_prompts.task_type as 1 | 2,
         prompt_text: data.writing_prompts.prompt_text as string,
         image_url: data.writing_prompts.image_url as string | null,
+        notes: data.writing_prompts.notes as string | null,
         sort_order: data.writing_prompts.sort_order as number,
         created_at: data.writing_prompts.created_at as string
       } : undefined,
       time_limit: data.time_limit as number,
       time_spent: data.time_spent as number | null,
       status: data.status as WritingSession['status'],
-      notes: data.notes as string | null,
       created_at: data.created_at as string,
       completed_at: data.completed_at as string | null
     }
@@ -619,7 +651,7 @@ export class WritingApi {
     return (data || []).map(row => ({
       id: row.id as number,
       session_id: row.session_id as number,
-      version_number: row.version_number as 1 | 2 | 3,
+      version_number: row.version_number as 1 | 2,
       content: row.content as string,
       word_count: row.word_count as number | null,
       feedback: row.feedback as WritingFeedback | null,
@@ -650,7 +682,7 @@ export class WritingApi {
     return {
       id: data.id as number,
       session_id: data.session_id as number,
-      version_number: data.version_number as 1 | 2 | 3,
+      version_number: data.version_number as 1 | 2,
       content: data.content as string,
       word_count: data.word_count as number | null,
       feedback: data.feedback as WritingFeedback | null,
@@ -675,7 +707,7 @@ export class WritingApi {
     return {
       id: data.id as number,
       session_id: data.session_id as number,
-      version_number: data.version_number as 1 | 2 | 3,
+      version_number: data.version_number as 1 | 2,
       content: data.content as string,
       word_count: data.word_count as number | null,
       feedback: data.feedback as WritingFeedback | null,

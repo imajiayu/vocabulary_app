@@ -11,8 +11,8 @@
         <div class="ink-drip drip-2"></div>
       </div>
 
-      <!-- 参数通知区域 -->
-      <section class="notification-section" :class="{ 'has-data': notificationData }">
+      <!-- 参数通知区域 - 错题模式下隐藏 -->
+      <section v-if="!isLapseMode" class="notification-section" :class="{ 'has-data': notificationData }">
       <header class="section-header">
         <div class="header-accent"></div>
         <span class="header-title">学习反馈</span>
@@ -272,9 +272,9 @@
     <template v-else>
       <!-- 浮动控制栏 -->
       <div class="mobile-control-bar">
-        <!-- 通知徽章（有数据时显示） -->
+        <!-- 通知徽章（有数据时显示，错题模式下隐藏） -->
         <button
-          v-if="notificationData"
+          v-if="notificationData && !isLapseMode"
           class="mobile-notif-badge"
           :class="mobileNotifClass"
           @click="toggleMobileNotif"
@@ -294,10 +294,10 @@
         </button>
       </div>
 
-      <!-- 移动端通知展开面板 -->
+      <!-- 移动端通知展开面板 - 错题模式下隐藏 -->
       <Teleport to="body">
         <Transition name="mobile-notif-slide">
-          <div v-if="isMobileNotifExpanded && notificationData" class="mobile-notif-overlay" @click.self="closeMobileNotif">
+          <div v-if="isMobileNotifExpanded && notificationData && !isLapseMode" class="mobile-notif-overlay" @click.self="closeMobileNotif">
             <div class="mobile-notif-panel">
               <!-- 面板头部 -->
               <div class="mobile-notif-header">
@@ -501,6 +501,7 @@ import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import type { Word } from '@/shared/types'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { useChatMessages } from '@/shared/composables/useChatMessages'
+import { useReviewStore } from '@/features/vocabulary/stores/review'
 
 interface BreakdownData {
   elapsed_time?: number
@@ -544,6 +545,10 @@ const inputRef = ref<HTMLInputElement | null>(null)
 
 // Composables
 const { requestPause, releasePause } = useTimerPause()
+const reviewStore = useReviewStore()
+
+// 错题模式下不显示通知
+const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
 
 const currentWordRef = computed(() => props.currentWord)
 const {
@@ -597,10 +602,10 @@ const formattedDate = computed(() => {
 
 // Suggestions
 const suggestions = [
-  { icon: '📖', label: '常用搭配', text: '这个词有哪些常用搭配？' },
-  { icon: '✏️', label: '造句示例', text: '如何用这个词造句？' },
-  { icon: '💡', label: '记忆方法', text: '有什么好的记忆方法？' },
-  { icon: '🔄', label: '近义反义', text: '它的同义词和反义词是什么？' }
+  { icon: '☰', label: '常用搭配', text: '这个词有哪些常用搭配？' },
+  { icon: '✎', label: '造句示例', text: '如何用这个词造句？' },
+  { icon: '✦', label: '记忆方法', text: '有什么好的记忆方法？' },
+  { icon: '⇄', label: '近义反义', text: '它的同义词和反义词是什么？' }
 ]
 
 // Methods

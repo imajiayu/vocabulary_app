@@ -84,17 +84,4 @@ const displayKey = computed(() => {
   padding: 0 0.25em;
   font-size: 0.6em;
 }
-
-/* 所有变体统一使用灰色，确保可读性 */
-.key-hint--light .key-hint__key,
-.key-hint--dark .key-hint__key,
-.key-hint--success .key-hint__key,
-.key-hint--warning .key-hint__key,
-.key-hint--danger .key-hint__key {
-  background: rgba(0, 0, 0, 0.15);
-  color: var(--primitive-ink-700);
-  box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-}
 </style>

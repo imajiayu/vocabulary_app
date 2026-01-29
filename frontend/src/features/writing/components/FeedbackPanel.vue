@@ -1,9 +1,5 @@
 <template>
   <div class="feedback-panel">
-    <header class="panel-header">
-      <h3 class="panel-title">AI 反馈</h3>
-    </header>
-
     <!-- Loading State -->
     <div v-if="loading" class="loading-state">
       <div class="loading-spinner"></div>
@@ -12,6 +8,48 @@
 
     <!-- Feedback Content -->
     <div v-else-if="feedback" class="panel-content">
+      <!-- IELTS Scores (completed state only) -->
+      <div v-if="showScores && scores" class="scores-section">
+        <div class="scores-header">
+          <h4 class="scores-title">IELTS 评分</h4>
+          <span class="overall-score">{{ scores.overall }}</span>
+        </div>
+        <div class="scores-grid">
+          <div class="score-item">
+            <span class="score-label">任务完成度</span>
+            <span class="score-value">{{ scores.taskAchievement }}</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">连贯与衔接</span>
+            <span class="score-value">{{ scores.coherenceCohesion }}</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">词汇资源</span>
+            <span class="score-value">{{ scores.lexicalResource }}</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">语法范围与准确性</span>
+            <span class="score-value">{{ scores.grammaticalRange }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Version Diff (completed state only) -->
+      <div v-if="showDiff && diffOldText && diffNewText" class="diff-section">
+        <div class="diff-header">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M5 12L12 5L19 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>V1 → V2 改动对比</span>
+        </div>
+        <div class="diff-stats">
+          <span class="diff-stat added">+{{ diffStats.added }} 词</span>
+          <span class="diff-stat removed">-{{ diffStats.removed }} 词</span>
+        </div>
+        <div class="diff-content" v-html="diffHtml"></div>
+      </div>
+
       <!-- Summary -->
       <div class="feedback-summary">
         <p>{{ feedback.summary }}</p>
@@ -30,7 +68,10 @@
       </div>
 
       <!-- Issues by Type -->
-      <div class="issues-section">
+      <div v-if="feedback.issues.length > 0" class="issues-section">
+        <div class="issues-title">
+          {{ showScores ? '剩余问题' : '发现的问题' }}
+        </div>
         <div
           v-for="group in groupedIssues"
           :key="group.type"
@@ -68,7 +109,7 @@
       </div>
 
       <!-- No Issues -->
-      <div v-if="feedback.issues.length === 0" class="no-issues">
+      <div v-if="feedback.issues.length === 0 && !showScores" class="no-issues">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -86,13 +127,18 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { WritingFeedback, WritingIssue, WritingIssueType } from '@/shared/types/writing'
+import type { WritingFeedback, WritingIssue, WritingIssueType, WritingScores } from '@/shared/types/writing'
 import { ISSUE_TYPE_LABELS } from '@/shared/types/writing'
 import FeedbackItem from './FeedbackItem.vue'
 
 const props = defineProps<{
   feedback: WritingFeedback | null
   loading?: boolean
+  scores?: WritingScores | null
+  showScores?: boolean
+  showDiff?: boolean
+  diffOldText?: string
+  diffNewText?: string
 }>()
 
 const emit = defineEmits<{
@@ -101,6 +147,91 @@ const emit = defineEmits<{
 }>()
 
 const expandedGroups = ref(new Set<WritingIssueType>(['grammar', 'vocabulary']))
+
+// Diff 计算
+const diffStats = computed(() => {
+  if (!props.diffOldText || !props.diffNewText) return { added: 0, removed: 0 }
+
+  const oldWords = props.diffOldText.trim().split(/\s+/).filter(w => w.length > 0)
+  const newWords = props.diffNewText.trim().split(/\s+/).filter(w => w.length > 0)
+
+  const oldSet = new Set(oldWords)
+  const newSet = new Set(newWords)
+
+  let added = 0
+  let removed = 0
+
+  for (const word of newWords) {
+    if (!oldSet.has(word)) added++
+  }
+  for (const word of oldWords) {
+    if (!newSet.has(word)) removed++
+  }
+
+  return { added, removed }
+})
+
+// 简单的 word diff
+const diffHtml = computed(() => {
+  if (!props.diffOldText || !props.diffNewText) return ''
+
+  const oldWords = props.diffOldText.split(/(\s+)/)
+  const newWords = props.diffNewText.split(/(\s+)/)
+
+  // 使用 LCS 算法的简化版本
+  const oldFiltered = oldWords.filter(w => w.trim())
+  const newFiltered = newWords.filter(w => w.trim())
+
+  let result = ''
+  let oldIdx = 0
+  let newIdx = 0
+
+  while (oldIdx < oldFiltered.length || newIdx < newFiltered.length) {
+    if (oldIdx >= oldFiltered.length) {
+      // 剩余的 new 都是新增
+      result += `<span class="diff-added">${newFiltered.slice(newIdx).join(' ')}</span> `
+      break
+    }
+    if (newIdx >= newFiltered.length) {
+      // 剩余的 old 都是删除
+      result += `<span class="diff-removed">${oldFiltered.slice(oldIdx).join(' ')}</span> `
+      break
+    }
+
+    if (oldFiltered[oldIdx] === newFiltered[newIdx]) {
+      result += `${oldFiltered[oldIdx]} `
+      oldIdx++
+      newIdx++
+    } else {
+      // 尝试在 new 中查找 old[oldIdx]
+      const foundInNew = newFiltered.indexOf(oldFiltered[oldIdx], newIdx)
+      // 尝试在 old 中查找 new[newIdx]
+      const foundInOld = oldFiltered.indexOf(newFiltered[newIdx], oldIdx)
+
+      if (foundInNew !== -1 && (foundInOld === -1 || foundInNew - newIdx < foundInOld - oldIdx)) {
+        // new 中有新增的词
+        for (let i = newIdx; i < foundInNew; i++) {
+          result += `<span class="diff-added">${newFiltered[i]}</span> `
+        }
+        newIdx = foundInNew
+      } else if (foundInOld !== -1) {
+        // old 中有被删除的词
+        for (let i = oldIdx; i < foundInOld; i++) {
+          result += `<span class="diff-removed">${oldFiltered[i]}</span> `
+        }
+        oldIdx = foundInOld
+      } else {
+        // 替换
+        result += `<span class="diff-removed">${oldFiltered[oldIdx]}</span> `
+        result += `<span class="diff-added">${newFiltered[newIdx]}</span> `
+        oldIdx++
+        newIdx++
+      }
+    }
+  }
+
+  return result.trim()
+})
 
 // Group issues by type
 const groupedIssues = computed(() => {
@@ -153,7 +284,6 @@ function handleRequestSuggestion(issue: WritingIssue) {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.2);
 }
 
 /* 移动端：取消独立滚动 */
@@ -161,20 +291,6 @@ function handleRequestSuggestion(issue: WritingIssue) {
   .feedback-panel {
     height: auto;
   }
-}
-
-/* ── Header ── */
-.panel-header {
-  padding: 16px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-}
-
-.panel-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--primitive-paper-200);
 }
 
 /* ── Loading ── */
@@ -223,6 +339,136 @@ function handleRequestSuggestion(issue: WritingIssue) {
     overflow-y: visible;
     flex: none;
   }
+}
+
+/* ── Scores Section ── */
+.scores-section {
+  padding: 16px;
+  background: rgba(250, 247, 242, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.scores-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.scores-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primitive-paper-200);
+}
+
+.overall-score {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primitive-azure-400);
+}
+
+.scores-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+.score-label {
+  font-size: 12px;
+  color: var(--primitive-ink-400);
+}
+
+.score-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primitive-paper-200);
+}
+
+/* ── Diff Section ── */
+.diff-section {
+  padding: 16px;
+  background: rgba(250, 247, 242, 0.02);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(250, 247, 242, 0.05);
+}
+
+.diff-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.diff-header svg {
+  width: 16px;
+  height: 16px;
+  color: var(--primitive-azure-400);
+}
+
+.diff-header span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primitive-paper-200);
+}
+
+.diff-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.diff-stat {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.diff-stat.added {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.diff-stat.removed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.diff-content {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--primitive-paper-300);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+.diff-content :deep(.diff-added) {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+.diff-content :deep(.diff-removed) {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  text-decoration: line-through;
+  padding: 1px 2px;
+  border-radius: 2px;
 }
 
 /* ── Summary ── */
@@ -279,6 +525,13 @@ function handleRequestSuggestion(issue: WritingIssue) {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.issues-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primitive-paper-300);
+  margin-bottom: 4px;
 }
 
 .issue-group {

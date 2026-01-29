@@ -92,8 +92,8 @@
         </div>
       </div>
 
-      <!-- Feedback State (Version 1 or 2) -->
-      <div v-else-if="pageState === 'feedback_1' || pageState === 'feedback_2'" class="feedback-area">
+      <!-- Feedback / Revision / Completed State - 双栏布局 -->
+      <div v-else-if="showRightPanel" class="feedback-area">
         <!-- 左侧：编辑器（固定，不滚动） -->
         <div class="editor-column">
           <EssayEditor
@@ -103,51 +103,59 @@
             @word-count="handleWordCount"
             @highlight-click="handleHighlightClick"
           />
-          <div v-if="!isRevising" class="revision-bar">
+          <!-- 只在 feedback_1 且非修改模式时显示"开始修改"按钮 -->
+          <div v-if="pageState === 'feedback_1' && !isRevising" class="revision-bar">
             <button class="revision-btn" @click="startRevision">
               开始修改
             </button>
           </div>
-          <div v-else class="submit-bar">
+          <!-- 修改模式时显示提交按钮 -->
+          <div v-else-if="isRevising" class="submit-bar">
             <button
               class="submit-btn"
               :disabled="!canSubmit"
               @click="handleSubmitRevision"
             >
-              {{ isSubmitting ? '提交中...' : '提交修改' }}
+              {{ isSubmitting ? '提交中...' : '提交终稿' }}
             </button>
           </div>
         </div>
-        <!-- 右侧：AI 反馈（独立滚动） -->
-        <div class="feedback-column">
-          <FeedbackPanel
-            :feedback="currentFeedback"
-            :loading="isFeedbackLoading"
-            @issue-click="handleIssueClick"
-            @request-suggestion="handleRequestSuggestion"
-          />
-        </div>
-      </div>
 
-      <!-- Completed State -->
-      <div v-else-if="pageState === 'completed'" class="completed-area">
-        <ScoreSummary
-          v-if="finalScores"
-          :scores="finalScores"
-          :feedback="finalFeedback"
-        />
-        <VersionHistory
-          :versions="versions"
-          @view-version="handleViewVersion"
-        />
-        <SessionNotes
-          :notes="sessionNotes"
-          @save="handleSaveNotes"
-        />
-        <PostFinalChat
-          :essay-context="latestEssay"
-          @ask="handleAskQuestion"
-        />
+        <!-- 右侧：Tab 面板 -->
+        <div class="right-panel-column">
+          <RightPanelTabs
+            v-model="activeTab"
+            :tabs="rightPanelTabs"
+          >
+            <template #feedback>
+              <FeedbackPanel
+                :feedback="currentFeedback"
+                :loading="isFeedbackLoading"
+                :scores="finalScores"
+                :show-scores="pageState === 'completed'"
+                :show-diff="pageState === 'completed' && versions.length >= 2"
+                :diff-old-text="versions.length >= 2 ? versions[0].content : undefined"
+                :diff-new-text="versions.length >= 2 ? versions[1].content : undefined"
+                @issue-click="handleIssueClick"
+                @request-suggestion="handleRequestSuggestion"
+              />
+            </template>
+            <template #notes>
+              <PromptNotes
+                :notes="prompt.notes"
+                :prompt-id="prompt.id"
+                @save="handleSavePromptNotes"
+              />
+            </template>
+            <template #chat>
+              <PostFinalChat
+                ref="chatRef"
+                :essay-context="latestEssay"
+                @ask="handleAskQuestion"
+              />
+            </template>
+          </RightPanelTabs>
+        </div>
       </div>
     </div>
   </div>
@@ -169,9 +177,8 @@ import { TASK_TIME_LIMITS } from '@/shared/types/writing'
 import TimerDisplay from './TimerDisplay.vue'
 import EssayEditor from './EssayEditor.vue'
 import FeedbackPanel from './FeedbackPanel.vue'
-import ScoreSummary from './ScoreSummary.vue'
-import VersionHistory from './VersionHistory.vue'
-import SessionNotes from './SessionNotes.vue'
+import RightPanelTabs, { type TabItem } from './RightPanelTabs.vue'
+import PromptNotes from './PromptNotes.vue'
 import PostFinalChat from './PostFinalChat.vue'
 
 const props = defineProps<{
@@ -197,16 +204,28 @@ const isFeedbackLoading = ref(false)
 const isRevising = ref(false)
 const currentFeedback = ref<WritingFeedback | null>(null)
 const finalScores = ref<WritingScores | null>(null)
-const finalFeedback = ref<WritingFeedback | null>(null)
-const sessionNotes = ref('')
 const highlightedIssueId = ref<string | null>(null)
+const activeTab = ref('feedback')
+const chatRef = ref<InstanceType<typeof PostFinalChat> | null>(null)
+
+// 右侧面板 Tab 配置
+const rightPanelTabs: TabItem[] = [
+  { id: 'feedback', label: '反馈' },
+  { id: 'notes', label: '笔记' },
+  { id: 'chat', label: 'AI 聊天' }
+]
 
 // Computed
 const pageState = computed(() => context.pageState.value)
 const versions = computed(() => context.versions.value)
 
 const isTimerActive = computed(() => {
-  return pageState.value === 'writing' || pageState.value === 'revision'
+  return pageState.value === 'writing' || isRevising.value
+})
+
+// 是否显示右侧面板（feedback_1、revision、completed 状态）
+const showRightPanel = computed(() => {
+  return pageState.value === 'feedback_1' || pageState.value === 'completed'
 })
 
 const canSubmit = computed(() => {
@@ -279,6 +298,10 @@ function startRevision() {
   timer.resume()
 }
 
+/**
+ * 提交终稿 (V2)
+ * V2改动：并行获取修订反馈和最终评分，然后合并
+ */
 async function handleSubmitRevision() {
   if (!canSubmit.value) return
 
@@ -286,49 +309,49 @@ async function handleSubmitRevision() {
   timer.pause()
 
   try {
-    const previousVersion = versions.value[versions.value.length - 1]
+    const previousVersion = versions.value[0] // V1
     const version = await context.submitVersion(essayContent.value)
     if (!version) throw new Error('Failed to create version')
 
     isFeedbackLoading.value = true
+    context.setPageState('completed')
 
-    // Check if this is final version (version 3)
-    if (version.version_number === 3) {
-      context.setPageState('completed')
-
-      // Get final scores
-      const result = await WritingApi.getFinalScores(
-        props.prompt.prompt_text,
-        essayContent.value,
-        props.prompt.task_type
-      )
-
-      finalScores.value = result.scores
-      finalFeedback.value = result.feedback
-      currentFeedback.value = result.feedback
-
-      await context.updateVersionFeedback(version.id, result.feedback)
-      await context.updateVersionScores(version.id, result.scores)
-      await context.completeSession(timer.getElapsedSeconds())
-    } else {
-      context.setPageState('feedback_2')
-
-      // Get revision feedback
-      const feedback = await WritingApi.getRevisionFeedback(
+    // 并行调用：获取修订反馈 + 最终评分
+    const [revisionResult, scoresResult] = await Promise.all([
+      WritingApi.getRevisionFeedback(
         props.prompt.prompt_text,
         previousVersion.content,
         essayContent.value,
         props.prompt.task_type
+      ),
+      WritingApi.getFinalScores(
+        props.prompt.prompt_text,
+        essayContent.value,
+        props.prompt.task_type
       )
+    ])
 
-      currentFeedback.value = feedback
-      await context.updateVersionFeedback(version.id, feedback)
+    // 合并反馈：使用修订反馈的 issues 和 improvement，加上评分反馈的 summary
+    const combinedFeedback: WritingFeedback = {
+      issues: revisionResult.issues,
+      improvement: revisionResult.improvement,
+      summary: scoresResult.feedback.summary
     }
+
+    currentFeedback.value = combinedFeedback
+    finalScores.value = scoresResult.scores
+
+    // 保存到数据库
+    await context.updateVersionFeedback(version.id, combinedFeedback)
+    await context.updateVersionScores(version.id, scoresResult.scores)
+    await context.completeSession(timer.getElapsedSeconds())
 
     isRevising.value = false
   } catch (error) {
     console.error('Submit revision failed:', error)
     alert('提交失败，请重试')
+    // 回退状态
+    context.setPageState('feedback_1')
     timer.resume()
   } finally {
     isSubmitting.value = false
@@ -371,16 +394,12 @@ async function handleRequestSuggestion(issue: WritingIssue) {
   }
 }
 
-function handleViewVersion(version: WritingVersion) {
-  essayContent.value = version.content
-  if (version.feedback) {
-    currentFeedback.value = version.feedback
-  }
-}
-
-async function handleSaveNotes(notes: string) {
-  sessionNotes.value = notes
-  await context.updateSession({ notes })
+/**
+ * 保存题目笔记
+ * V2改动：笔记从 session 级别改为 prompt 级别
+ */
+async function handleSavePromptNotes(promptId: number, notes: string) {
+  await context.updatePromptNotes(promptId, notes)
 }
 
 async function handleAskQuestion(question: string, selectedText?: string) {
@@ -408,8 +427,6 @@ watch(() => context.currentSession.value, (newSession) => {
 function restoreFromSession() {
   if (!context.currentSession.value) return
 
-  sessionNotes.value = context.currentSession.value.notes || ''
-
   if (versions.value.length > 0) {
     const lastVersion = versions.value[versions.value.length - 1]
     essayContent.value = lastVersion.content
@@ -419,7 +436,6 @@ function restoreFromSession() {
     }
     if (lastVersion.scores) {
       finalScores.value = lastVersion.scores
-      finalFeedback.value = lastVersion.feedback
     }
   }
 }
@@ -731,32 +747,14 @@ function restoreFromSession() {
   overflow: hidden;
 }
 
-/* 反馈列 - 独立滚动 */
-.feedback-column {
-  width: 380px;
+/* 右侧面板列 - Tab 面板 */
+.right-panel-column {
+  width: 400px;
   flex-shrink: 0;
   border-left: 1px solid rgba(59, 130, 246, 0.1);
-  overflow-y: auto;
-  /* 自定义滚动条 */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
-}
-
-.feedback-column::-webkit-scrollbar {
-  width: 6px;
-}
-
-.feedback-column::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.feedback-column::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.3);
-  border-radius: 3px;
-}
-
-.feedback-column::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.5);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -810,26 +808,14 @@ function restoreFromSession() {
   background: rgba(250, 247, 242, 0.15);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   Completed Area
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.completed-area {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    平板适配 (768px - 1024px)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 1024px) {
-  .feedback-column {
-    width: 320px;
+  .right-panel-column {
+    width: 340px;
   }
 }
 
@@ -901,11 +887,10 @@ function restoreFromSession() {
     min-height: auto;
   }
 
-  .feedback-column {
+  .right-panel-column {
     width: 100%;
     border-left: none;
     border-top: 1px solid rgba(59, 130, 246, 0.1);
-    overflow-y: visible; /* 取消独立滚动 */
     /* 底部留出导航栏空间 */
     padding-bottom: 80px;
   }
@@ -926,13 +911,6 @@ function restoreFromSession() {
 
   .start-desc {
     font-size: 14px;
-  }
-
-  /* Completed Area */
-  .completed-area {
-    flex: none;
-    padding: 16px;
-    padding-bottom: 96px;
   }
 
   /* Image Modal */
