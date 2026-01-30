@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Word } from '@/shared/types'
 
 interface Position {
@@ -166,12 +166,24 @@ const examples = computed(() => {
   return props.word.definition.examples || []
 })
 
+// 测量实际高度，用于精确的视口边界检测
+const measuredHeight = ref(0)
+
+watch([() => props.visible, () => props.word], async () => {
+  if (props.visible && !isMobileMode.value) {
+    await nextTick()
+    if (tooltipRef.value) {
+      measuredHeight.value = tooltipRef.value.offsetHeight
+    }
+  }
+})
+
 // 计算 tooltip 位置，确保不超出视口
 const tooltipStyle = computed(() => {
   const { x, y } = props.position
   const padding = 16
   const tooltipWidth = 320
-  const tooltipHeight = 200
+  const tooltipHeight = measuredHeight.value || 200
 
   let left = x + 15
   let top = y
@@ -181,7 +193,7 @@ const tooltipStyle = computed(() => {
     left = x - tooltipWidth - 15
   }
 
-  // 检查下边界
+  // 检查下边界（translateY(-50%) 使卡片从 top 向上下各延伸 height/2）
   if (top + tooltipHeight / 2 > window.innerHeight - padding) {
     top = window.innerHeight - tooltipHeight / 2 - padding
   }
