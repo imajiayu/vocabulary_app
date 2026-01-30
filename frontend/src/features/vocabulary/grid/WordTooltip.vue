@@ -169,6 +169,8 @@ const examples = computed(() => {
 // 测量实际高度，用于精确的视口边界检测
 const measuredHeight = ref(0)
 
+// immediate: true 确保组件首次挂载时也触发测量
+// （父组件 v-if="tooltipWord" 每次 hover 都会重建组件实例）
 watch([() => props.visible, () => props.word], async () => {
   if (props.visible && !isMobileMode.value) {
     await nextTick()
@@ -176,36 +178,41 @@ watch([() => props.visible, () => props.word], async () => {
       measuredHeight.value = tooltipRef.value.offsetHeight
     }
   }
-})
+}, { immediate: true })
 
 // 计算 tooltip 位置，确保不超出视口
+// 不使用 CSS translateY(-50%)，直接计算 top 边缘位置
 const tooltipStyle = computed(() => {
   const { x, y } = props.position
   const padding = 16
   const tooltipWidth = 320
-  const tooltipHeight = measuredHeight.value || 200
+  const height = measuredHeight.value || 300
+  const vh = window.innerHeight
 
   let left = x + 15
-  let top = y
 
   // 检查右边界
   if (left + tooltipWidth > window.innerWidth - padding) {
     left = x - tooltipWidth - 15
   }
 
-  // 检查下边界（translateY(-50%) 使卡片从 top 向上下各延伸 height/2）
-  if (top + tooltipHeight / 2 > window.innerHeight - padding) {
-    top = window.innerHeight - tooltipHeight / 2 - padding
+  // 尝试垂直居中于鼠标位置
+  let top = y - height / 2
+
+  // 下边界：确保底部不超出视口
+  if (top + height > vh - padding) {
+    top = vh - height - padding
   }
 
-  // 检查上边界
-  if (top - tooltipHeight / 2 < padding) {
-    top = tooltipHeight / 2 + padding
+  // 上边界：确保顶部不超出视口
+  if (top < padding) {
+    top = padding
   }
 
   return {
     left: `${left}px`,
-    top: `${top}px`
+    top: `${top}px`,
+    maxHeight: `${vh - padding * 2}px`
   }
 })
 
@@ -251,7 +258,7 @@ onUnmounted(() => {
     0 12px 40px rgba(0, 0, 0, 0.12),
     0 4px 12px rgba(0, 0, 0, 0.06);
   pointer-events: none;
-  transform: translateY(-50%);
+  overflow-y: auto;
 
   /* 纸张纹理 */
   background-image:
@@ -425,18 +432,18 @@ onUnmounted(() => {
 @keyframes tooltip-in {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(-8px) scale(0.96);
+    transform: translateX(-8px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) translateX(0) scale(1);
+    transform: translateX(0) scale(1);
   }
 }
 
 @keyframes tooltip-out {
   to {
     opacity: 0;
-    transform: translateY(-50%) scale(0.96);
+    transform: scale(0.96);
   }
 }
 
