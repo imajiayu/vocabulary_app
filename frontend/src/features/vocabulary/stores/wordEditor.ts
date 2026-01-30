@@ -171,12 +171,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     const wordId = currentWord.value.id
     const word = currentWord.value
 
-    // 计算明天的日期
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    const nextReview = tomorrow.getFullYear() + '-' +
-      String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
-      String(tomorrow.getDate()).padStart(2, '0')
+    // 计算明天的日期（UTC，与后端和 Supabase 视图保持一致）
+    const tomorrow = new Date(Date.now() + 86400000)
+    const nextReview = tomorrow.toISOString().split('T')[0]
 
     try {
       const updatedWord = await api.words.updateWord(wordId, {
