@@ -383,11 +383,26 @@ onUnmounted(() => {
   margin: 0 auto;
   padding: 0 1rem;
   padding-top: var(--topbar-height);
-  /* 补偿左右 sidebar 宽度差异，使内容相对视口居中 */
-  transform: translateX(calc((var(--sidebar-right, 0px) - var(--sidebar-left, 0px)) / 2));
   /* Loading 居中需要的最小高度 */
   min-height: calc(100vh - var(--topbar-height));
   min-height: calc(100dvh - var(--topbar-height));
+}
+
+/* ── 桌面端三层居中对齐 ──
+   TopBar 和 action-bar 是 position:fixed 以视口为参考系，
+   main-content 以 sidebar 间可用区域为参考系。
+   通过偏移 TopBar 中间内容和 action-bar 使三者中心对齐。 */
+@media (min-width: 769px) {
+  /* TopBar 中间区域：向 sidebar 间中心偏移 */
+  .review-page :deep(.bar-section--center) {
+    transform: translateX(calc((var(--sidebar-left) - var(--sidebar-right)) / 2));
+  }
+
+  /* 底部操作栏：添加 sidebar 偏移使居中对齐 */
+  .review-page :deep(.action-bar) {
+    padding-left: calc(var(--sidebar-left) + 1rem);
+    padding-right: calc(var(--sidebar-right) + 1rem);
+  }
 }
 
 /* ── 顶部栏信息 ── */
