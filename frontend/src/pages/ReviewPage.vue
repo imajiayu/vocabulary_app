@@ -358,15 +358,19 @@ onUnmounted(() => {
 /* 桌面端：为左侧 WordSidebar 和右侧 RightPanel 留出空间 */
 @media (min-width: 769px) {
   .review-page {
-    padding-left: 180px;
-    padding-right: 220px;
+    --sidebar-left: 180px;
+    --sidebar-right: 220px;
+    padding-left: var(--sidebar-left);
+    padding-right: var(--sidebar-right);
   }
 }
 
 @media (min-width: 1400px) {
   .review-page {
-    padding-left: 200px;
-    padding-right: 260px;
+    --sidebar-left: 200px;
+    --sidebar-right: 260px;
+    padding-left: var(--sidebar-left);
+    padding-right: var(--sidebar-right);
   }
 }
 
@@ -379,6 +383,8 @@ onUnmounted(() => {
   margin: 0 auto;
   padding: 0 1rem;
   padding-top: var(--topbar-height);
+  /* 补偿左右 sidebar 宽度差异，使内容相对视口居中 */
+  transform: translateX(calc((var(--sidebar-right, 0px) - var(--sidebar-left, 0px)) / 2));
   /* Loading 居中需要的最小高度 */
   min-height: calc(100vh - var(--topbar-height));
   min-height: calc(100dvh - var(--topbar-height));
