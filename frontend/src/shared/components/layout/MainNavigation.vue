@@ -236,6 +236,7 @@ const switchTab = (tabId: string) => {
     var(--primitive-copper-300) 100%
   );
   position: relative;
+  z-index: 1;
   flex-shrink: 0;
 }
 
