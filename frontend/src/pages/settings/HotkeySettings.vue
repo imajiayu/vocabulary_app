@@ -199,8 +199,8 @@ const resetSettings = async () => {
     try {
       hotkeys.value = {
         reviewInitial: {
-          remembered: 'ArrowLeft',
-          notRemembered: 'ArrowRight',
+          remembered: 'ArrowRight',
+          notRemembered: 'ArrowLeft',
           stopReview: 'ArrowDown'
         },
         reviewAfter: {

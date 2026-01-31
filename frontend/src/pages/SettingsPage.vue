@@ -129,17 +129,9 @@
             </div>
 
             <div class="section-actions">
-              <BaseButton
-                variant="primary"
-                size="sm"
-                :loading="savingSection === 'learning'"
-                @click="saveSection('learning')"
-              >
-                保存学习设置
-              </BaseButton>
-              <BaseButton variant="ghost" size="sm" @click="resetSection('learning')">
+              <button class="reset-link" @click="resetSection('learning')">
                 恢复默认
-              </BaseButton>
+              </button>
             </div>
           </div>
         </section>
@@ -154,7 +146,7 @@
             <div class="section-title-row">
               <span class="section-icon">✗</span>
               <h2 class="section-title">错题集设置</h2>
-              <span class="section-badge">5 项</span>
+              <span class="section-badge">1 项</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.lapse }]">›</span>
           </div>
@@ -178,21 +170,12 @@
                   <span class="setting-unit">词</span>
                 </div>
               </div>
-
             </div>
 
             <div class="section-actions">
-              <BaseButton
-                variant="primary"
-                size="sm"
-                :loading="savingSection === 'lapse'"
-                @click="saveSection('lapse')"
-              >
-                保存错题设置
-              </BaseButton>
-              <BaseButton variant="ghost" size="sm" @click="resetSection('lapse')">
+              <button class="reset-link" @click="resetSection('lapse')">
                 恢复默认
-              </BaseButton>
+              </button>
             </div>
           </div>
         </section>
@@ -252,17 +235,9 @@
             </div>
 
             <div class="section-actions">
-              <BaseButton
-                variant="primary"
-                size="sm"
-                :loading="savingSection === 'management'"
-                @click="saveSection('management')"
-              >
-                保存管理设置
-              </BaseButton>
-              <BaseButton variant="ghost" size="sm" @click="resetSection('management')">
+              <button class="reset-link" @click="resetSection('management')">
                 恢复默认
-              </BaseButton>
+              </button>
             </div>
           </div>
         </section>
@@ -278,6 +253,7 @@
               <span class="section-icon">¶</span>
               <h2 class="section-title">词汇来源</h2>
               <span class="section-badge">{{ localSources.length }}/3</span>
+              <span class="auto-save-tag">自动保存</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.sources }]">›</span>
           </div>
@@ -328,6 +304,7 @@
               <span class="section-icon">♪</span>
               <h2 class="section-title">音频设置</h2>
               <span class="section-badge">3 项</span>
+              <span class="auto-save-tag">自动保存</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.audio }]">›</span>
           </div>
@@ -344,13 +321,13 @@
                     :class="['accent-btn', { active: settings.audio.accent === 'us' }]"
                     @click="setAccent('us')"
                   >
-                    🇺🇸 美音
+                    美音
                   </button>
                   <button
                     :class="['accent-btn', { active: settings.audio.accent === 'uk' }]"
                     @click="setAccent('uk')"
                   >
-                    🇬🇧 英音
+                    英音
                   </button>
                 </div>
               </div>
@@ -453,7 +430,7 @@
                   />
                 </div>
                 <div class="hotkey-row">
-                  <span class="hotkey-label">忘记了 ❓</span>
+                  <span class="hotkey-label">忘记了</span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.forgot"
                     :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next]"
@@ -470,17 +447,9 @@
             </div>
 
             <div class="section-actions">
-              <BaseButton
-                variant="primary"
-                size="sm"
-                :loading="savingSection === 'hotkeys'"
-                @click="saveSection('hotkeys')"
-              >
-                保存快捷键
-              </BaseButton>
-              <BaseButton variant="ghost" size="sm" @click="resetSection('hotkeys')">
+              <button class="reset-link" @click="resetSection('hotkeys')">
                 恢复默认
-              </BaseButton>
+              </button>
             </div>
           </div>
         </section>
@@ -537,6 +506,29 @@
       </div>
     </main>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         统一保存栏 - 有未保存修改时从底部滑入
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <transition name="save-bar">
+      <div v-if="isDirty" class="save-bar">
+        <div class="save-bar-inner">
+          <div class="save-bar-info">
+            <span class="save-bar-dot"></span>
+            <span class="save-bar-text">有未保存的修改</span>
+          </div>
+          <div class="save-bar-actions">
+            <button class="save-bar-discard" @click="discardChanges" :disabled="isSaving">
+              放弃修改
+            </button>
+            <button class="save-bar-save" @click="saveAllSettings" :disabled="isSaving">
+              <span v-if="isSaving" class="save-bar-spinner"></span>
+              {{ isSaving ? '保存中...' : '保存设置' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
     <!-- 全局保存成功提示 -->
     <transition name="toast">
       <div v-if="toastMessage" class="toast">
@@ -582,6 +574,30 @@ const expandedSections = reactive({
 
 // 设置数据
 const { settings: globalSettings, loadSettings, updateSettings } = useSettings()
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 脏状态追踪 - 记录最后保存的快照，与当前值对比
+// ═══════════════════════════════════════════════════════════════════════════
+const savedSnapshot = ref<string>('')
+
+const takeSavableSnapshot = () => {
+  if (!globalSettings.value) return ''
+  const { learning, management, hotkeys } = globalSettings.value
+  return JSON.stringify({ learning, management, hotkeys })
+}
+
+const currentSavableState = computed(() => {
+  if (!globalSettings.value) return ''
+  const { learning, management, hotkeys } = globalSettings.value
+  return JSON.stringify({ learning, management, hotkeys })
+})
+
+const isDirty = computed(() => {
+  if (!savedSnapshot.value || !currentSavableState.value) return false
+  return savedSnapshot.value !== currentSavableState.value
+})
+
+const isSaving = ref(false)
 
 // 搜索关键词映射
 const searchKeywords: Record<string, string[]> = {
@@ -675,8 +691,8 @@ const settings = computed<UserSettings>(() =>
     },
     hotkeys: {
       reviewInitial: {
-        remembered: 'ArrowLeft',
-        notRemembered: 'ArrowRight',
+        remembered: 'ArrowRight',
+        notRemembered: 'ArrowLeft',
         stopReview: 'ArrowDown',
       },
       reviewAfter: {
@@ -709,7 +725,6 @@ const relationStats = ref({
 })
 
 // 保存状态
-const savingSection = ref<string | null>(null)
 const toastMessage = ref('')
 const showGraphModal = ref(false)
 
@@ -752,75 +767,84 @@ const showToast = (message: string) => {
   }, 2000)
 }
 
-// 保存各区块设置
-const saveSection = async (section: string) => {
-  savingSection.value = section
+// ═══════════════════════════════════════════════════════════════════════════
+// 统一保存 - 一次性保存所有需要手动保存的设置
+// ═══════════════════════════════════════════════════════════════════════════
+const saveAllSettings = async () => {
+  isSaving.value = true
   try {
-    if (section === 'learning' || section === 'lapse') {
-      await updateSettings({ learning: settings.value.learning })
-    } else if (section === 'management') {
-      await updateSettings({ management: settings.value.management })
-    } else if (section === 'hotkeys') {
-      await updateSettings({ hotkeys: settings.value.hotkeys })
-    }
+    await updateSettings({
+      learning: settings.value.learning,
+      management: settings.value.management,
+      hotkeys: settings.value.hotkeys,
+    })
+    savedSnapshot.value = takeSavableSnapshot()
     showToast('设置已保存')
   } catch (error) {
-    logger.error(`保存${section}设置失败:`, error)
+    logger.error('保存设置失败:', error)
     alert('保存失败，请重试')
   } finally {
-    savingSection.value = null
+    isSaving.value = false
   }
 }
 
-// 重置各区块
-const resetSection = async (section: string) => {
-  if (!confirm('确定要恢复默认值吗？')) return
-
+// 放弃修改 - 还原到快照状态
+const discardChanges = () => {
+  if (!savedSnapshot.value || !globalSettings.value) return
   try {
-    if (section === 'learning') {
-      settings.value.learning = {
-        ...settings.value.learning,
-        dailyReviewLimit: 300,
-        dailySpellLimit: 200,
-        maxPrepDays: 45,
-        defaultShuffle: false,
-        lowEfExtraCount: 50,
-      }
-    } else if (section === 'lapse') {
-      settings.value.learning = {
-        ...settings.value.learning,
-        lapseQueueSize: 20,
-      }
-    } else if (section === 'management') {
-      settings.value.management = {
-        wordsLoadBatchSize: 200,
-        definitionFetchThreads: 3,
-      }
-    } else if (section === 'hotkeys') {
-      settings.value.hotkeys = {
-        reviewInitial: {
-          remembered: 'ArrowLeft',
-          notRemembered: 'ArrowRight',
-          stopReview: 'ArrowDown',
-        },
-        reviewAfter: {
-          wrong: 'ArrowLeft',
-          next: 'ArrowRight',
-        },
-        spelling: {
-          playAudio: 'ArrowLeft',
-          forgot: 'ArrowRight',
-          next: 'Enter',
-        },
-      }
-    }
-    await saveSection(section)
+    const snapshot = JSON.parse(savedSnapshot.value) as Pick<UserSettings, 'learning' | 'management' | 'hotkeys'>
+    globalSettings.value.learning = { ...snapshot.learning }
+    globalSettings.value.management = { ...snapshot.management }
+    globalSettings.value.hotkeys = JSON.parse(JSON.stringify(snapshot.hotkeys))
   } catch (error) {
-    logger.error(`重置${section}设置失败:`, error)
+    logger.error('放弃修改失败:', error)
   }
 }
 
-// 音频设置自动保存
+// 重置各区块（仅还原本地状态，不立即保存 —— 需要点全局保存）
+const resetSection = (section: string) => {
+  if (!confirm('确定要恢复默认值吗？恢复后需点击"保存设置"生效。')) return
+
+  if (section === 'learning') {
+    settings.value.learning = {
+      ...settings.value.learning,
+      dailyReviewLimit: 300,
+      dailySpellLimit: 200,
+      maxPrepDays: 45,
+      defaultShuffle: false,
+      lowEfExtraCount: 50,
+    }
+  } else if (section === 'lapse') {
+    settings.value.learning = {
+      ...settings.value.learning,
+      lapseQueueSize: 20,
+    }
+  } else if (section === 'management') {
+    settings.value.management = {
+      wordsLoadBatchSize: 200,
+      definitionFetchThreads: 3,
+    }
+  } else if (section === 'hotkeys') {
+    settings.value.hotkeys = {
+      reviewInitial: {
+        remembered: 'ArrowRight',
+        notRemembered: 'ArrowLeft',
+        stopReview: 'ArrowDown',
+      },
+      reviewAfter: {
+        wrong: 'ArrowLeft',
+        next: 'ArrowRight',
+      },
+      spelling: {
+        playAudio: 'ArrowLeft',
+        forgot: 'ArrowRight',
+        next: 'Enter',
+      },
+    }
+  }
+}
+
+// 音频设置自动保存（不受统一保存控制）
 const setAccent = async (accent: 'us' | 'uk') => {
   settings.value.audio.accent = accent
   await saveAudioSettings()
@@ -835,7 +859,7 @@ const saveAudioSettings = async () => {
   }
 }
 
-// 来源管理
+// 来源管理（自动保存，不受统一保存控制）
 const addSource = async () => {
   const name = newSourceName.value.trim()
   if (!name || localSources.value.length >= 3 || localSources.value.includes(name)) return
@@ -900,6 +924,9 @@ const viewRelationGraph = () => {
 // 初始化
 onMounted(async () => {
   await loadSettings({ force: true })
+
+  // 初始化快照
+  savedSnapshot.value = takeSavableSnapshot()
 
   // 加载来源
   const settingsData = await api.settings.getSettings()
@@ -1134,6 +1161,17 @@ onMounted(async () => {
   font-family: var(--font-mono);
 }
 
+/* 自动保存标签 */
+.auto-save-tag {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-state-success);
+  background: var(--color-state-success-light);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+}
+
 .chevron {
   font-size: 18px;
   color: var(--color-text-tertiary);
@@ -1230,6 +1268,32 @@ onMounted(async () => {
 
 .setting-row-accent {
   flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   区块操作 - 仅保留恢复默认（文字链接样式）
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-light);
+  margin-top: 4px;
+}
+
+.reset-link {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+
+.reset-link:hover {
+  color: var(--color-primary);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1366,7 +1430,7 @@ onMounted(async () => {
   border-bottom: 1px solid var(--color-border-light);
 }
 
-.hotkey-group:last-of-type {
+.hotkey-group:has(+ .section-actions) {
   border-bottom: none;
 }
 
@@ -1430,15 +1494,136 @@ onMounted(async () => {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   区块操作按钮
+   统一保存栏 - 底部固定
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.section-actions {
+.save-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: var(--color-bg-primary);
+  border-top: 1px solid var(--color-border-medium);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.save-bar-inner {
   display: flex;
-  gap: 8px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border-light);
-  margin-top: 4px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.save-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.save-bar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-state-warning);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.save-bar-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.save-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.save-bar-discard {
+  padding: 7px 16px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: var(--radius-default);
+  transition: all 0.15s;
+}
+
+.save-bar-discard:hover:not(:disabled) {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.save-bar-discard:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-bar-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 20px;
+  border: none;
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-default);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.save-bar-save:hover:not(:disabled) {
+  background: var(--button-primary-bg-hover);
+  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.25);
+}
+
+.save-bar-save:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.save-bar-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 保存栏动画 */
+.save-bar-enter-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.save-bar-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.save-bar-enter-from {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.save-bar-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1525,7 +1710,7 @@ onMounted(async () => {
   }
 
   .settings-content {
-    padding: 12px 16px 80px;
+    padding: 12px 16px 100px;
     max-height: none;
     /* 隐藏滚动条但保持滚动功能 */
     scrollbar-width: none;
@@ -1587,6 +1772,30 @@ onMounted(async () => {
   .desktop-only {
     display: none !important;
   }
-}
 
+  /* 保存栏移动端适配 */
+  .save-bar {
+    /* 移动端下方有更多空间给 nav bar */
+    bottom: 0;
+  }
+
+  .save-bar-inner {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .save-bar-text {
+    font-size: 12px;
+  }
+
+  .save-bar-discard {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .save-bar-save {
+    padding: 6px 16px;
+    font-size: 12px;
+  }
+}
 </style>
