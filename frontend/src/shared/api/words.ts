@@ -239,6 +239,66 @@ export class WordsApi {
   // ============================================================================
 
   /**
+   * 直接从 Supabase 获取错题集单词（lapse > 0）
+   * 前端直连，不经过后端 API
+   */
+  static async getLapseWordsDirect(source: string, limit?: number): Promise<Word[]> {
+    const userId = getCurrentUserId()
+    let query = supabase
+      .from('words')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('stop_review', 0)
+      .gt('lapse', 0)
+      .eq('source', source)
+      .order('id', { ascending: true })
+
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    const { data, error } = await query
+    if (error) throw new Error(error.message)
+    return (data || []).map(row => this.transformWord(row))
+  }
+
+  /**
+   * 直接通过 Supabase 清除单词的 lapse 标记（fire-and-forget）
+   */
+  static async clearLapseDirect(wordId: number): Promise<void> {
+    const userId = getCurrentUserId()
+    const { error } = await supabase
+      .from('words')
+      .update({ lapse: 0 })
+      .eq('id', wordId)
+      .eq('user_id', userId)
+
+    if (error) throw new Error(error.message)
+  }
+
+  /**
+   * 直接从 Supabase 按 ID 列表批量获取单词
+   * 用于恢复进度时加载快照中的单词
+   */
+  static async getWordsByIdsDirect(wordIds: number[]): Promise<Word[]> {
+    if (wordIds.length === 0) return []
+    const userId = getCurrentUserId()
+    const { data, error } = await supabase
+      .from('words')
+      .select('*')
+      .eq('user_id', userId)
+      .in('id', wordIds)
+
+    if (error) throw new Error(error.message)
+
+    // 按原始 wordIds 顺序排列结果
+    const wordMap = new Map((data || []).map(row => [row.id as number, row]))
+    return wordIds
+      .filter(id => wordMap.has(id))
+      .map(id => this.transformWord(wordMap.get(id)!))
+  }
+
+  /**
    * 直接从 Supabase 获取单词详情
    * 替代 getWord() - 减少 Serverless 冷启动延迟
    */

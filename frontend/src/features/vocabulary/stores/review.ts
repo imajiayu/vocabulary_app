@@ -38,8 +38,11 @@ export const useReviewStore = defineStore('review', () => {
   // 音频口音状态管理 - 与全局设置同步
   const { audioAccent } = useAudioAccent()
 
-  // 设置管理 - 用于获取lapse配置
-  const { settings: userSettings, loadSettings } = useSettings()
+  // 设置管理
+  const { loadSettings } = useSettings()
+
+  // === Expanding Retrieval Practice 常量 ===
+  const GAP_SEQUENCE = [1, 3, 7, 15] as const
 
   // 状态
   const wordQueue = ref<Word[]>([])
@@ -50,9 +53,14 @@ export const useReviewStore = defineStore('review', () => {
   const isBackgroundLoading = ref(false)  // 后台预加载状态（不显示Loading UI）
   const hasMore = ref(true)
   const totalWords = ref(0)
-  const initialLapseCount = ref(0)
   const wordResults = ref<Map<number, boolean>>(new Map())
   const initialOffset = ref(0)  // 初始偏移量（用于恢复进度）
+
+  // Lapse 模式状态（Expanding Retrieval Practice）
+  const wordGapLevels = ref<Map<number, number>>(new Map())  // wordId → gap level index
+  const graduatedCount = ref(0)
+  const initialWordCount = ref(0)
+  const graduatedWords = ref<Word[]>([])  // 已毕业的单词（用于 sidebar 展示）
 
   // 通知状态（复习/拼写完成后显示参数变化）
   const notification = ref<ReviewNotificationState>({
@@ -81,10 +89,10 @@ export const useReviewStore = defineStore('review', () => {
     if (wordQueue.value.length === 0) return null
 
     if (mode.value === 'mode_lapse') {
-      // lapse模式：循环队列
-      return wordQueue.value[currentIndex.value % wordQueue.value.length] || null
+      // lapse模式：线性队列，始终从队首取词
+      return wordQueue.value[0] || null
     } else {
-      // 其他模式：线性队列
+      // 其他模式：线性队列（带索引）
       return currentIndex.value < wordQueue.value.length
         ? wordQueue.value[currentIndex.value]
         : null
@@ -93,8 +101,8 @@ export const useReviewStore = defineStore('review', () => {
 
   const progress = computed(() => {
     if (mode.value === 'mode_lapse') {
-      if (initialLapseCount.value === 0) return 0
-      return Math.round(((initialLapseCount.value - totalLapseSum.value) / initialLapseCount.value) * 100)
+      if (initialWordCount.value === 0) return 0
+      return Math.round((graduatedCount.value / initialWordCount.value) * 100)
     }
     return 0;
   })
@@ -113,53 +121,11 @@ export const useReviewStore = defineStore('review', () => {
     return currentIndex.value >= wordQueue.value.length && !hasMore.value
   })
 
-  const totalLapseSum = computed(() => {
-    return wordQueue.value.reduce((sum, word) => sum + word.lapse, 0)
-  })
-
   // 全局索引：在总队列中的当前位置（用于显示正确的进度）
   const globalIndex = computed(() => {
-    if (mode.value === 'mode_lapse') {
-      return wordQueue.value.length === 0 ? 0 : (currentIndex.value % wordQueue.value.length)
-    }
+    if (mode.value === 'mode_lapse') return 0
     return initialOffset.value + currentIndex.value
   })
-
-  const sortByLapse = (words: Word[], shuffleEnabled: boolean = false): Word[] => {
-    // Group words by lapse value
-    const lapseGroups = new Map<number, Word[]>()
-
-    words.forEach(word => {
-      const lapse = word.lapse || 0
-      if (!lapseGroups.has(lapse)) {
-        lapseGroups.set(lapse, [])
-      }
-      lapseGroups.get(lapse)!.push(word)
-    })
-
-    // Sort groups by lapse value and apply sorting/shuffling within each group
-    const result: Word[] = []
-    const sortedLapseKeys = Array.from(lapseGroups.keys()).sort((a, b) => a - b)
-
-    sortedLapseKeys.forEach(lapse => {
-      const group = lapseGroups.get(lapse)!
-
-      if (shuffleEnabled) {
-        // Shuffle within each lapse group
-        for (let i = group.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1))
-          ;[group[i], group[j]] = [group[j], group[i]]
-        }
-      } else {
-        // Sort by id within each lapse group
-        group.sort((a, b) => a.id - b.id)
-      }
-
-      result.push(...group)
-    })
-
-    return result
-  }
 
   // 主要方法
   const loadWords = async (resetQueue = false, silent = false): Promise<void> => {
@@ -179,31 +145,37 @@ export const useReviewStore = defineStore('review', () => {
       }
 
       if (mode.value === 'mode_lapse') {
-        // lapse模式：一次性加载所有单词，使用从WordIndex传入的limit
+        // lapse模式：从 Supabase 直接加载错题（不经过后端）
         const lapseLimit = settings.value.totalLimit
-        const data: WordsApiResponse = await api.words.getReviewWords({
-          mode: mode.value,
-          limit: lapseLimit,
-          batch_id: 0,  // lapse模式使用batch_id=0获取所有数据
-          batch_size: lapseLimit
-        })
-        const newWords = sortByLapse(data.words as Word[], shuffle.value)
+        const source = currentSource.value || 'IELTS'
+        const newWords = await api.words.getLapseWordsDirect(source, lapseLimit)
+
+        // 如果启用 shuffle，打乱顺序
+        if (shuffle.value) {
+          for (let i = newWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            ;[newWords[i], newWords[j]] = [newWords[j], newWords[i]]
+          }
+        }
 
         wordQueue.value = newWords
         currentIndex.value = 0
-        totalWords.value = data.total
-        initialLapseCount.value = totalLapseSum.value
+        totalWords.value = newWords.length
+        initialWordCount.value = newWords.length
+        graduatedCount.value = 0
+        wordGapLevels.value = new Map()
+        graduatedWords.value = []
         hasMore.value = false
 
-        // 新增：前端直接保存进度快照到 Supabase
+        // 保存进度快照到 Supabase
         const allWordIds = newWords.map(w => w.id)
         api.progress.saveProgressDirect({
           mode: mode.value,
-          source: currentSource.value || 'IELTS',
+          source,
           shuffle: shuffle.value,
           word_ids: allWordIds,
-          initial_lapse_count: initialLapseCount.value,
-          initial_lapse_word_count: allWordIds.length
+          initial_lapse_count: newWords.length,
+          initial_lapse_word_count: newWords.length
         }).catch(err => log.warn('Failed to save progress snapshot:', err))
 
       } else {
@@ -271,81 +243,63 @@ export const useReviewStore = defineStore('review', () => {
       avg_elapsed_time: wordForCalc.avg_elapsed_time,
     } : undefined
 
+    // === Lapse 模式：Expanding Retrieval Practice ===
     if (mode.value === 'mode_lapse') {
       if (wordQueue.value.length === 0) return
 
-      const currentWordIndex = currentIndex.value % wordQueue.value.length
-      const word = wordQueue.value[currentWordIndex]
+      const word = wordQueue.value[0]
+      if (!word || word.id !== wordId) return
 
-      if (word && word.id === wordId) {
-        // 更新 lapse，与后端逻辑保持一致（使用配置值）
-        const LAPSE_MAX_VALUE = userSettings.value?.learning.lapseMaxValue ?? 4
-        const LAPSE_FAST_EXIT_THRESHOLD = userSettings.value?.learning.lapseConsecutiveThreshold ?? 4
-        const LAPSE_FAST_EXIT_ENABLED = userSettings.value?.learning.lapseFastExitEnabled ?? true
+      // 从队首移除
+      wordQueue.value.shift()
 
-        if (!result.remembered) {
-          // 答错：lapse+1，最大为配置的最大值
-          word.lapse = Math.min(word.lapse + 1, LAPSE_MAX_VALUE)
+      const currentLevel = wordGapLevels.value.get(word.id) ?? 0
+
+      let graduated = false
+
+      if (!result.remembered) {
+        // 答错：gap level 重置为 0，始终重新插入（不毕业）
+        wordGapLevels.value.set(word.id, 0)
+        const insertPos = Math.min(GAP_SEQUENCE[0], wordQueue.value.length)
+        wordQueue.value.splice(insertPos, 0, word)
+      } else {
+        // 答对：根据反应时间决定是否提升 gap level
+        const elapsed = result.elapsed_time ?? 3
+        const newLevel = elapsed >= 4 ? currentLevel : currentLevel + 1
+
+        if (newLevel >= GAP_SEQUENCE.length || GAP_SEQUENCE[newLevel] > wordQueue.value.length) {
+          // 已通过所有间隔级别 或 gap 超过队列长度 → 毕业
+          graduated = true
         } else {
-          // 答对：根据配置和lapse值决定是否加速退出
-          if (LAPSE_FAST_EXIT_ENABLED && word.lapse >= LAPSE_FAST_EXIT_THRESHOLD) {
-            // 加速退出：当lapse≥阈值（默认2）时，答对一次-2
-            word.lapse = Math.max(0, word.lapse - 2)
-          } else {
-            // 正常退出：lapse<阈值时，答对一次-1
-            word.lapse = Math.max(0, word.lapse - 1)
-          }
-        }
-
-        if (word.lapse === 0) {
-          wordQueue.value.splice(currentWordIndex, 1)
-          // 同步更新快照，使首页"剩余"计数正确
-          api.progress.updateProgressSnapshotDirect(wordQueue.value.map(w => w.id))
-            .catch(err => log.warn('Failed to update lapse snapshot:', err))
-          if (wordQueue.value.length === 0) {
-            currentIndex.value = 0
-          } else if (currentIndex.value >= wordQueue.value.length) {
-            currentIndex.value = 0
-            wordQueue.value = sortByLapse(wordQueue.value, shuffle.value)
-          }
-        } else {
-          currentIndex.value++
-          if (currentIndex.value >= wordQueue.value.length) {
-            currentIndex.value = 0
-            wordQueue.value = sortByLapse(wordQueue.value, shuffle.value)
-          }
+          // 在 gap 位置重新插入
+          wordGapLevels.value.set(word.id, newLevel)
+          wordQueue.value.splice(GAP_SEQUENCE[newLevel], 0, word)
         }
       }
-    } else {
-      currentIndex.value++
-      // Check if we need to load more data or if we're completed
-      if (shouldLoadMore.value && !isCompleted.value) {
-        loadWords(false, true)  // silent = true，后台静默加载
+
+      if (graduated) {
+        graduatedCount.value++
+        graduatedWords.value.push(word)
+        wordGapLevels.value.delete(word.id)
+        api.words.clearLapseDirect(word.id).catch(log.error)
+        // 同步更新快照，使首页"剩余"计数正确
+        api.progress.updateProgressSnapshotDirect(wordQueue.value.map(w => w.id))
+          .catch(err => log.warn('Failed to update lapse snapshot:', err))
       }
+
+      return
+    }
+
+    // === 非 Lapse 模式 ===
+    currentIndex.value++
+    if (shouldLoadMore.value && !isCompleted.value) {
+      loadWords(false, true)  // silent = true，后台静默加载
     }
 
     // 添加 mode 参数和 word_data 到 result 中
     const resultWithMode = { ...result, mode: mode.value, word_data: wordDataForApi }
 
-    // lapse 模式：使用原同步 API（无 notification）
-    if (mode.value === 'mode_lapse') {
-      api.words.submitWordResult(wordId, resultWithMode)
-        .then((response) => {
-          const { word: updatedWord } = response
-          const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
-          if (index !== -1) {
-            wordQueue.value[index] = updatedWord
-          }
-          // 新增：更新进度索引到 Supabase（lapse 模式始终为 0）
-          api.progress.updateProgressIndexDirect(0)
-            .catch(err => log.warn('Failed to update progress index:', err))
-        })
-        .catch(log.error)
-      return
-    }
-
     // review/spelling 模式：使用分离式 API，先计算立即显示通知，再异步持久化
-    // word_data 已包含在 resultWithMode 中，后端无需查数据库
     api.words.calculateWordResult(wordId, resultWithMode)
       .then((calcResponse) => {
         const { notification: notificationData, persist_data } = calcResponse
@@ -371,13 +325,12 @@ export const useReviewStore = defineStore('review', () => {
             if (index !== -1) {
               wordQueue.value[index] = updatedWord
             }
-            // 新增：更新进度索引到 Supabase（非 lapse 模式）
+            // 更新进度索引到 Supabase
             api.progress.updateProgressIndexDirect(globalIndex.value)
               .catch(err => log.warn('Failed to update progress index:', err))
           })
           .catch((err) => {
             log.error('Failed to persist word result:', err)
-            // 持久化失败不影响用户体验，下次复习会重新计算
           })
       })
       .catch(log.error)
@@ -398,37 +351,37 @@ export const useReviewStore = defineStore('review', () => {
     if (mode.value === 'mode_lapse') {
       if (wordQueue.value.length === 0) return
 
-      const currentWordIndex = currentIndex.value % wordQueue.value.length
-      wordQueue.value.splice(currentWordIndex, 1)
+      // 从队首移除并视为毕业
+      const removedWord = wordQueue.value.shift()
+      graduatedCount.value++
+      if (removedWord) graduatedWords.value.push(removedWord)
+      wordGapLevels.value.delete(wordId)
+
+      // fire-and-forget：清除 lapse 标记
+      api.words.clearLapseDirect(wordId).catch(log.error)
       // 同步更新快照，使首页"剩余"计数正确
       api.progress.updateProgressSnapshotDirect(wordQueue.value.map(w => w.id))
         .catch(err => log.warn('Failed to update lapse snapshot:', err))
-
-      if (wordQueue.value.length > 0 && currentIndex.value >= wordQueue.value.length) {
-        currentIndex.value = 0
-        wordQueue.value = sortByLapse(wordQueue.value, shuffle.value)
-      }
     } else {
       currentIndex.value++
-      // Check if we need to load more data or if we're completed
       if (shouldLoadMore.value && !isCompleted.value) {
-        loadWords(false, true)  // silent = true，后台静默加载
+        loadWords(false, true)
       }
     }
 
-    // 优化：直接使用 stopReview 返回的更新数据，避免额外 getWord 查询
-    api.words.stopReview(wordId, mode.value)
-      .then((updatedWord) => {
-        const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
-        if (index !== -1) {
-          wordQueue.value[index] = updatedWord
-        }
-        // 新增：更新进度索引到 Supabase
-        const indexToUpdate = mode.value === 'mode_lapse' ? 0 : globalIndex.value
-        api.progress.updateProgressIndexDirect(indexToUpdate)
-          .catch(err => log.warn('Failed to update progress index:', err))
-      })
-      .catch(log.error)
+    // 非 lapse 模式：通过后端设置 stop_review
+    if (mode.value !== 'mode_lapse') {
+      api.words.stopReview(wordId, mode.value)
+        .then((updatedWord) => {
+          const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
+          if (index !== -1) {
+            wordQueue.value[index] = updatedWord
+          }
+          api.progress.updateProgressIndexDirect(globalIndex.value)
+            .catch(err => log.warn('Failed to update progress index:', err))
+        })
+        .catch(log.error)
+    }
   }
 
   const switchMode = async (newMode: ReviewMode): Promise<void> => {
@@ -445,14 +398,41 @@ export const useReviewStore = defineStore('review', () => {
     audioType.value = type
   }
 
+  /**
+   * Lapse 模式下从会话中移除单词（sidebar 删除/掌握时调用）
+   * 处理队列和毕业列表两种情况
+   */
+  const removeWordFromLapseSession = (wordId: number): void => {
+    // 先从队列中查找
+    const queueIndex = wordQueue.value.findIndex(w => w.id === wordId)
+    if (queueIndex !== -1) {
+      wordQueue.value.splice(queueIndex, 1)
+      wordGapLevels.value.delete(wordId)
+      graduatedCount.value++
+      // 同步更新快照，使首页"剩余"计数正确
+      api.progress.updateProgressSnapshotDirect(wordQueue.value.map(w => w.id))
+        .catch(err => log.warn('Failed to update lapse snapshot:', err))
+      return
+    }
+    // 再从毕业列表中移除
+    const gradIndex = graduatedWords.value.findIndex(w => w.id === wordId)
+    if (gradIndex !== -1) {
+      graduatedWords.value.splice(gradIndex, 1)
+    }
+  }
+
   const reset = () => {
     wordQueue.value = []
     currentIndex.value = 0
     totalWords.value = 0
     hasMore.value = true
-    initialLapseCount.value = 0
-    initialOffset.value = 0  // 重置初始偏移量
+    initialOffset.value = 0
     wordResults.value.clear()
+    // Expanding Retrieval Practice 状态
+    wordGapLevels.value = new Map()
+    graduatedCount.value = 0
+    initialWordCount.value = 0
+    graduatedWords.value = []
     // 清理 notification，避免进入新复习时显示上次的通知
     notification.value = { show: false, data: null }
   }
@@ -482,24 +462,22 @@ export const useReviewStore = defineStore('review', () => {
       const wordIds = progress.word_ids
 
       if (progress.mode === 'mode_lapse') {
-        // Lapse模式：一次性加载所有单词
-        const restoreData: WordsApiResponse = await api.words.getReviewWords({
-          mode: mode.value,
-          limit: data.total,
-          batch_id: 1,  // 非0，不创建新快照
-          batch_size: data.total,
-          offset: 0,
-          word_ids: wordIds  // 直接传递 word_ids
-        })
+        // Lapse模式：从 Supabase 直接按 ID 加载单词
+        const words = await api.words.getWordsByIdsDirect(wordIds)
 
-        // 重新排序单词并恢复队列
-        const sortedWords = sortByLapse(restoreData.words as Word[], progress.shuffle)
-        wordQueue.value = sortedWords
-        // 恢复initial_lapse_count（使用保存的初始值）
-        initialLapseCount.value = progress.initial_lapse_count || 0
+        // 过滤掉已经不在错题集的单词（lapse 可能已被其他操作清除）
+        const lapseWords = words.filter(w => w.lapse > 0)
+
+        wordQueue.value = lapseWords
+        // 恢复 initialWordCount（使用保存的初始值）
+        initialWordCount.value = progress.initial_lapse_word_count || lapseWords.length
+        // 已毕业数 = 初始数 - 当前剩余数
+        graduatedCount.value = Math.max(0, initialWordCount.value - lapseWords.length)
+        // 已毕业的单词无法恢复（可接受，sidebar 从空开始）
+        graduatedWords.value = []
+        // Gap levels 重置为 0（恢复后重新测试）
+        wordGapLevels.value = new Map()
         hasMore.value = false
-
-        // lapse模式索引始终为0（循环队列）
         currentIndex.value = 0
       } else {
         // 非lapse模式：分页加载
@@ -541,12 +519,12 @@ export const useReviewStore = defineStore('review', () => {
     if (wordQueue.value.length === 0) return
 
     // 统一逻辑：预加载接下来的 N 个单词
-    const startIndex = includeCurrent ? currentIndex.value : currentIndex.value + 1
-    const effectiveIndex = mode.value === 'mode_lapse'
-      ? startIndex % wordQueue.value.length  // lapse 模式循环队列
-      : startIndex
+    const startIndex = mode.value === 'mode_lapse'
+      ? (includeCurrent ? 0 : 1)  // lapse 模式：线性队列，从队首开始
+      : (includeCurrent ? currentIndex.value : currentIndex.value + 1)
+    const effectiveIndex = startIndex
 
-    if (effectiveIndex >= wordQueue.value.length && mode.value !== 'mode_lapse') return
+    if (effectiveIndex >= wordQueue.value.length) return
 
     const endIndex = Math.min(effectiveIndex + preloadCount, wordQueue.value.length)
     const wordsToPreload = wordQueue.value.slice(effectiveIndex, endIndex).map(w => w.word)
@@ -592,6 +570,8 @@ export const useReviewStore = defineStore('review', () => {
     wordResults,
     shuffle, // 暴露shuffle状态
     notification, // 通知状态
+    graduatedWords, // Lapse 模式已毕业单词（sidebar 展示）
+    initialWordCount, // Lapse 模式初始单词数
 
     // 计算属性
     currentWord,
@@ -604,13 +584,13 @@ export const useReviewStore = defineStore('review', () => {
     loadWords,
     submitResult,
     stopReviewWord,
+    removeWordFromLapseSession,
     switchMode,
     setAudioType,
     reset,
     initializeShuffle, // 暴露初始化方法
     restoreFromProgress, // 恢复进度方法
     preloadUpcomingAudio, // 预加载音频方法
-    sortByLapse, // 暴露排序方法
     closeNotification, // 关闭通知方法
   }
 })

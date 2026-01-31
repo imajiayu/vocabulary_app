@@ -45,7 +45,7 @@
       </template>
 
       <template #right>
-        <div v-if="displayIndex <= displayTotal && displayIndex > 0" class="progress-counter">
+        <div v-if="displayTotal > 0 && displayIndex <= displayTotal" class="progress-counter">
           <span class="current">{{ displayIndex }}</span>
           <span class="separator">/</span>
           <span class="total">{{ displayTotal }}</span>
@@ -133,6 +133,14 @@ const sidebarWordChange = (finalWord: Word) => {
   const index = reviewStore.wordQueue.findIndex(w => w.id === finalWord.id)
   if (index !== -1) {
     reviewStore.wordQueue.splice(index, 1, finalWord)
+    return
+  }
+  // Lapse 模式：毕业词在 graduatedWords 中
+  if (mode.value === 'mode_lapse') {
+    const gradIndex = graduatedWords.value.findIndex(w => w.id === finalWord.id)
+    if (gradIndex !== -1) {
+      graduatedWords.value.splice(gradIndex, 1, finalWord)
+    }
   }
 }
 
@@ -141,6 +149,13 @@ const handleWordForgot = (wordId: number) => {
 }
 
 const handleSidebarWordDeleted = (wordId: number) => {
+  if (mode.value === 'mode_lapse') {
+    // Lapse 模式：统一由 store 方法处理（队列 + 毕业列表）
+    reviewStore.removeWordFromLapseSession(wordId)
+    wordResults.value.delete(wordId)
+    return
+  }
+
   const index = reviewStore.wordQueue.findIndex(w => w.id === wordId)
   if (index !== -1) {
     reviewStore.wordQueue.splice(index, 1)
@@ -151,8 +166,7 @@ const handleSidebarWordDeleted = (wordId: number) => {
     // 同步 current_progress：快照 + 索引
     api.progress.updateProgressSnapshotDirect(reviewStore.wordQueue.map(w => w.id))
       .catch(err => logger.warn('Failed to update snapshot after sidebar delete:', err))
-    const indexToUpdate = mode.value === 'mode_lapse' ? 0 : globalIndex.value
-    api.progress.updateProgressIndexDirect(indexToUpdate)
+    api.progress.updateProgressIndexDirect(globalIndex.value)
       .catch(err => logger.warn('Failed to update index after sidebar delete:', err))
   }
 }
@@ -176,7 +190,9 @@ const {
   wordResults,
   shuffle,
   globalIndex,
-  notification
+  notification,
+  graduatedWords,
+  initialWordCount,
 } = storeToRefs(reviewStore)
 
 provideReviewContext({
@@ -196,14 +212,14 @@ const { requestPause, releasePause } = useTimerPause()
 // 计算属性
 const displayIndex = computed(() => {
   if (mode.value === 'mode_lapse') {
-    return reviewStore.wordQueue.length === 0 ? 0 : (currentIndex.value % reviewStore.wordQueue.length) + 1
+    return graduatedWords.value.length
   }
   return currentWord.value ? globalIndex.value + 1 : 0
 })
 
 const displayTotal = computed(() => {
   if (mode.value === 'mode_lapse') {
-    return reviewStore.wordQueue.length
+    return initialWordCount.value
   }
   return currentWord.value ? totalWords.value : 0
 })
@@ -237,6 +253,9 @@ const reviewInfo = computed(() => {
 })
 
 const sidebarWords = computed(() => {
+  if (mode.value === 'mode_lapse') {
+    return graduatedWords.value
+  }
   return reviewStore.wordQueue.slice(0, currentIndex.value)
 })
 

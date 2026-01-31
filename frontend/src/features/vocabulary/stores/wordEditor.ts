@@ -162,10 +162,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
   /**
    * 标记单词为"忘记"（进入错题集）
-   * 重置学习进度，设置 lapse 为初始值
-   * @param lapseInitialValue lapse 初始值，默认为 3
+   * 重置学习进度，设置 lapse = 1（二值标记，前端维护 expanding retrieval）
    */
-  async function markForgot(lapseInitialValue = 3): Promise<boolean> {
+  async function markForgot(): Promise<boolean> {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
@@ -181,7 +180,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
         interval: 1,
         next_review: nextReview,
         ease_factor: parseFloat(Math.max(1.3, word.ease_factor - 0.4).toFixed(2)),
-        lapse: lapseInitialValue,
+        lapse: 1,
         stop_review: 0
       })
 

@@ -33,10 +33,8 @@ from .word_batch import (
 # Review
 from .word_review import (
     db_fetch_review_word_ids,
-    db_fetch_lapse_word_ids,
     db_fetch_spelled_word_ids,
     db_update_word_for_review,
-    db_update_word_for_lapse,
     db_update_word_for_spelling,
 )
 
@@ -66,10 +64,8 @@ __all__ = [
     "db_batch_update_words",
     # Review
     "db_fetch_review_word_ids",
-    "db_fetch_lapse_word_ids",
     "db_fetch_spelled_word_ids",
     "db_update_word_for_review",
-    "db_update_word_for_lapse",
     "db_update_word_for_spelling",
     # Stats
     "db_get_source_stats_from_view",

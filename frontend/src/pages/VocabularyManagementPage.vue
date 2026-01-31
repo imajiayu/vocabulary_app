@@ -86,6 +86,7 @@ import { api } from '@/shared/api';
 import { useSettings } from '@/shared/composables/useSettings';
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor';
 import { logger } from '@/shared/utils/logger';
+import { concurrentMap } from '@/shared/utils/concurrent';
 
 const words = ref<Word[]>([]);
 const searchQuery = ref('');
@@ -361,7 +362,7 @@ const handleWordInserted = async (word: Word) => {
     }
 };
 
-// 批量插入单词后并行获取释义
+// 批量插入单词后并发获取释义（受 definitionFetchThreads 设置限制）
 const handleBatchWordInserted = async (insertedWords: Word[]) => {
     // 先将所有单词添加到列表（无释义状态）
     insertedWords.forEach(word => {
@@ -372,21 +373,24 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
 
     if (insertedWords.length === 0) return;
 
-    // 并行获取所有单词的释义
-    await Promise.all(
-        insertedWords.map(async (word) => {
-            try {
-                const updatedWord = await api.words.fetchDefinition(word.id);
-                // 获取完成后立即更新对应单词
-                const index = words.value.findIndex(w => w.id === word.id);
-                if (index !== -1) {
-                    words.value[index] = updatedWord;
-                }
-            } catch (error) {
-                logger.error(`Failed to fetch definition for word ${word.word}:`, error);
-            }
-        })
-    );
+    // 读取并发数设置（settings 已在 onMounted 中加载并缓存）
+    let threads = 3;
+    try {
+        const settings = await loadSettings();
+        threads = settings.management.definitionFetchThreads;
+    } catch {
+        // 使用默认值
+    }
+
+    // 池模式并发获取释义
+    await concurrentMap(insertedWords, async (word) => {
+        const updatedWord = await api.words.fetchDefinition(word.id);
+        const index = words.value.findIndex(w => w.id === word.id);
+        if (index !== -1) {
+            words.value[index] = updatedWord;
+        }
+        return updatedWord;
+    }, threads);
 };
 
 const handleBatchDelete = (wordIds: number[]) => {

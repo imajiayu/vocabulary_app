@@ -179,72 +179,6 @@
                 </div>
               </div>
 
-              <!-- 答错后需连续答对次数 -->
-              <div class="setting-row" v-show="matchesSearchItem('lapseInitialValue')">
-                <div class="setting-label-group">
-                  <label class="setting-label">答错后需连续答对</label>
-                  <span class="setting-hint">答对此数才能移出错题集</span>
-                </div>
-                <div class="setting-control-row">
-                  <WheelSelector
-                    v-model="settings.learning.lapseInitialValue"
-                    :min="1"
-                    :max="settings.learning.lapseMaxValue"
-                    :step="1"
-                  />
-                  <span class="setting-value">{{ settings.learning.lapseInitialValue }}</span>
-                  <span class="setting-unit">次</span>
-                </div>
-              </div>
-
-              <!-- 最大需要连续答对次数 -->
-              <div class="setting-row" v-show="matchesSearchItem('lapseMaxValue')">
-                <div class="setting-label-group">
-                  <label class="setting-label">最大连续答对次数</label>
-                  <span class="setting-hint">彻底移出错题集的阈值</span>
-                </div>
-                <div class="setting-control-row">
-                  <WheelSelector
-                    v-model="settings.learning.lapseMaxValue"
-                    :min="3"
-                    :max="5"
-                    :step="1"
-                  />
-                  <span class="setting-value">{{ settings.learning.lapseMaxValue }}</span>
-                  <span class="setting-unit">次</span>
-                </div>
-              </div>
-
-              <!-- 加速退出模式 -->
-              <div class="setting-row setting-row-toggle" v-show="matchesSearchItem('lapseFastExitEnabled')">
-                <div class="setting-label-group">
-                  <label class="setting-label">加速退出模式</label>
-                  <span class="setting-hint">高难度错题可更快移出</span>
-                </div>
-                <IOSSwitch v-model="settings.learning.lapseFastExitEnabled" />
-              </div>
-
-              <!-- 快速退出门槛 -->
-              <div
-                v-if="settings.learning.lapseFastExitEnabled"
-                class="setting-row"
-                v-show="matchesSearchItem('lapseConsecutiveThreshold')"
-              >
-                <div class="setting-label-group">
-                  <label class="setting-label">快速退出门槛</label>
-                  <span class="setting-hint">答错次数 ≥ 此值时加速</span>
-                </div>
-                <div class="setting-control-row">
-                  <WheelSelector
-                    v-model="settings.learning.lapseConsecutiveThreshold"
-                    :min="1"
-                    :max="settings.learning.lapseMaxValue"
-                    :step="1"
-                  />
-                  <span class="setting-value">{{ settings.learning.lapseConsecutiveThreshold }}</span>
-                  <span class="setting-unit">次</span>
-                </div>
-              </div>
             </div>
 
             <div class="section-actions">
@@ -656,10 +590,6 @@ const searchKeywords: Record<string, string[]> = {
   maxPrepDays: ['准备', '天数', '考试', 'prep', 'days'],
   lowEfExtraCount: ['低EF', '额外', '难词', 'ef', 'extra'],
   lapseQueueSize: ['错题', '队列', '大小', 'lapse', 'queue'],
-  lapseInitialValue: ['错题', '答对', '次数', 'initial'],
-  lapseMaxValue: ['最大', '答对', '次数', 'max'],
-  lapseFastExitEnabled: ['加速', '退出', 'fast', 'exit'],
-  lapseConsecutiveThreshold: ['快速', '门槛', 'threshold'],
   wordsLoadBatchSize: ['分页', '加载', '批量', 'batch'],
   definitionFetchThreads: ['释义', '线程', '并发', 'threads'],
   accent: ['发音', '口音', '美音', '英音', 'accent'],
@@ -680,7 +610,7 @@ const sectionKeywords: Record<string, string[]> = {
 // 导航数据
 const sections = computed(() => [
   { id: 'learning', title: '学习', icon: '§', itemCount: 4 },
-  { id: 'lapse', title: '错题', icon: '✗', itemCount: 5 },
+  { id: 'lapse', title: '错题', icon: '✗', itemCount: 1 },
   { id: 'management', title: '管理', icon: '✎', itemCount: 2 },
   { id: 'sources', title: '来源', icon: '¶', itemCount: localSources.value.length },
   { id: 'audio', title: '音频', icon: '♪', itemCount: 3 },
@@ -727,11 +657,7 @@ const settings = computed<UserSettings>(() =>
       dailyReviewLimit: 300,
       dailySpellLimit: 200,
       maxPrepDays: 45,
-      lapseQueueSize: 25,
-      lapseMaxValue: 4,
-      lapseInitialValue: 3,
-      lapseFastExitEnabled: true,
-      lapseConsecutiveThreshold: 2,
+      lapseQueueSize: 20,
       defaultShuffle: false,
       lowEfExtraCount: 50,
     },
@@ -863,11 +789,7 @@ const resetSection = async (section: string) => {
     } else if (section === 'lapse') {
       settings.value.learning = {
         ...settings.value.learning,
-        lapseQueueSize: 25,
-        lapseMaxValue: 4,
-        lapseInitialValue: 3,
-        lapseFastExitEnabled: true,
-        lapseConsecutiveThreshold: 2,
+        lapseQueueSize: 20,
       }
     } else if (section === 'management') {
       settings.value.management = {

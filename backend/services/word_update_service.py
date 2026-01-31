@@ -14,7 +14,6 @@ from backend.core.spell_repetition import (
 )
 from backend.database.vocabulary import (
     db_fetch_word_info,
-    db_update_word_for_lapse,
     db_update_word_for_review,
     db_update_word_for_spelling,
 )
@@ -240,11 +239,6 @@ def persist_spelling_result(persist_data, user_id=1):
     )
 
 
-# ============================================================================
-# 原有的同步 API（保持向后兼容，lapse 模式仍使用）
-# ============================================================================
-
-
 def update_word_info_review(word_id, remembered, elapsed_time, user_id=None):
     """
     更新已有单词的复习信息（MODE_REVIEW）
@@ -343,45 +337,6 @@ def update_word_info_review(word_id, remembered, elapsed_time, user_id=None):
         "next_review_date": next_review.isoformat(),
         "breakdown": review_breakdown,
     }
-
-
-def update_word_info_lapse(word_id, remembered, user_id=None):
-    """
-    更新错题集单词信息（MODE_LAPSE）
-    仅更新 SRS 核心参数和 lapse，不修改长期统计字段
-
-    优化策略：
-    - 答错：lapse+1，最大为LAPSE_MAX_VALUE（默认4）
-    - 答对：lapse-1（基础）
-    - 答对且启用加速退出：lapse≥阈值时（默认≥2），lapse-2（加速）
-
-    Args:
-        word_id: 单词ID
-        remembered: 是否记住
-        user_id: 用户ID
-    """
-    from backend.config import UserConfig
-
-    word_info = db_fetch_word_info(word_id, user_id)
-    if not word_info:
-        return
-
-    lapse = word_info.get("lapse", 0)
-    config = UserConfig(user_id)  # 创建实例以访问属性
-
-    if not remembered:
-        # 答错：渐进增加，上限为配置值
-        lapse = min(lapse + 1, config.LAPSE_MAX_VALUE)
-    else:
-        # 答对：根据配置决定是否加速退出
-        if config.LAPSE_FAST_EXIT_ENABLED and lapse >= config.LAPSE_CONSECUTIVE_THRESHOLD:
-            # 加速退出：当lapse≥阈值（默认2）时，答对一次就-2
-            lapse = max(0, lapse - 2)
-        else:
-            # 正常退出：lapse<阈值时，答对一次-1
-            lapse = max(0, lapse - 1)
-
-    db_update_word_for_lapse(word_id, lapse, user_id)
 
 
 def update_word_info_spelling(word_id, remembered, spelling_data, user_id=None):

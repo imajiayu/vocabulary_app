@@ -6,7 +6,7 @@ from backend.database.vocabulary import (
     db_get_word_elapse_info,
     get_daily_review_loads_by_source,
 )
-from backend.config import LOW_EF_THRESHOLD, ReviewLoadLimits, UserConfig
+from backend.config import LOW_EF_THRESHOLD, ReviewLoadLimits
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +130,6 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         remember_inc, forget_inc, lapse
     """
     today = datetime.date.today()
-    config = UserConfig()  # 创建实例以访问属性
 
     # 1️⃣ 更新 EF
     ease_factor_new = sm2_update_ease_factor(ease_factor, score)
@@ -168,8 +167,8 @@ def calculate_srs_parameters(score, interval, repetition, ease_factor, lapse):
         # 忘记（score <= 2）
         repetition_new = 0
         interval_new = 1
-        # 进入错题集：首次设为LAPSE_INITIAL_VALUE，后续不超过LAPSE_MAX_VALUE
-        lapse = max(config.LAPSE_INITIAL_VALUE, min(lapse, config.LAPSE_MAX_VALUE))
+        # 进入错题集：标记为1（前端维护expanding retrieval practice）
+        lapse = 1
         last_remembered = None
         last_forgot = today
         remember_inc = 0

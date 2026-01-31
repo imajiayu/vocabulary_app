@@ -1,7 +1,7 @@
 <template>
   <section class="settings-section">
     <h1 class="section-title">错题集设置</h1>
-    <p class="section-description">自定义错题复习策略和退出机制</p>
+    <p class="section-description">使用 Expanding Retrieval Practice 算法，按递增间隔复习错题</p>
 
     <div class="settings-group">
       <div class="settings-grid">
@@ -20,73 +20,7 @@
               :step="5"
             />
           </div>
-          <p class="setting-hint">基于认知心理学优化<br>推荐20-30个单词</p>
-        </div>
-
-        <!-- 答错后需答对次数 -->
-        <div class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">答错后需连续答对次数</label>
-            <span class="setting-value">{{ learning.lapseInitialValue }}</span>
-            <span class="setting-unit">次</span>
-          </div>
-          <div class="setting-control">
-            <WheelSelector
-              v-model="learning.lapseInitialValue"
-              :min="1"
-              :max="learning.lapseMaxValue"
-              :step="1"
-            />
-          </div>
-          <p class="setting-hint">单词答错进入错题集后<br>需答对的次数才能移出</p>
-        </div>
-
-        <!-- 移出错题所需答对次数 -->
-        <div class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">最大需要连续答对次数</label>
-            <span class="setting-value">{{ learning.lapseMaxValue }}</span>
-            <span class="setting-unit">次</span>
-          </div>
-          <div class="setting-control">
-            <WheelSelector
-              v-model="learning.lapseMaxValue"
-              :min="3"
-              :max="5"
-              :step="1"
-            />
-          </div>
-          <p class="setting-hint">单词需连续答对的次数<br>才能彻底移出错题集</p>
-        </div>
-
-        <!-- 加速退出模式 -->
-        <div class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">加速退出模式</label>
-            <span class="setting-value">{{ learning.lapseFastExitEnabled ? '开启' : '关闭' }}</span>
-          </div>
-          <div class="setting-control">
-            <IOSSwitch v-model="learning.lapseFastExitEnabled" />
-          </div>
-          <p class="setting-hint">启用时，高难度错题<br>可更快移出错题集</p>
-        </div>
-
-        <!-- 快速退出门槛 -->
-        <div v-if="learning.lapseFastExitEnabled" class="setting-card">
-          <div class="setting-info">
-            <label class="setting-label">快速退出门槛</label>
-            <span class="setting-value">{{ learning.lapseConsecutiveThreshold }}</span>
-            <span class="setting-unit">次</span>
-          </div>
-          <div class="setting-control">
-            <WheelSelector
-              v-model="learning.lapseConsecutiveThreshold"
-              :min="1"
-              :max="learning.lapseMaxValue"
-              :step="1"
-            />
-          </div>
-          <p class="setting-hint">答错次数≥此数字时<br>答对一次等于两次（加速）</p>
+          <p class="setting-hint">每次练习加载的错题数<br>推荐 20 个</p>
         </div>
       </div>
     </div>
@@ -121,7 +55,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
-import IOSSwitch from '@/shared/components/controls/IOSSwitch.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import type { UserSettings } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
@@ -194,11 +127,7 @@ const resetSettings = async () => {
     try {
       learning.value = {
         ...learning.value,
-        lapseQueueSize: 25,
-        lapseMaxValue: 4,
-        lapseInitialValue: 3,
-        lapseFastExitEnabled: true,
-        lapseConsecutiveThreshold: 2
+        lapseQueueSize: 20,
       }
       await saveSettings()
     } catch (error) {

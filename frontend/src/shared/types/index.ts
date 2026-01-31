@@ -106,10 +106,6 @@ export interface LearningSettings {
   dailySpellLimit: number;
   maxPrepDays: number;
   lapseQueueSize: number;
-  lapseMaxValue: number;
-  lapseInitialValue: number;
-  lapseFastExitEnabled: boolean;
-  lapseConsecutiveThreshold: number;
   defaultShuffle: boolean;
   lowEfExtraCount: number;
 }

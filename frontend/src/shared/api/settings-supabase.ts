@@ -16,11 +16,7 @@ const DEFAULT_CONFIG: UserSettings = {
     dailyReviewLimit: 300,
     dailySpellLimit: 200,
     maxPrepDays: 30,
-    lapseQueueSize: 25,
-    lapseMaxValue: 4,
-    lapseInitialValue: 3,
-    lapseFastExitEnabled: true,
-    lapseConsecutiveThreshold: 4,
+    lapseQueueSize: 20,
     defaultShuffle: true,
     lowEfExtraCount: 0
   },

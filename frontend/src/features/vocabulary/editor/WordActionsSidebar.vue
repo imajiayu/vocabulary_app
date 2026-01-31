@@ -64,22 +64,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useWordEditorStore } from '../stores/wordEditor';
-import { useSettings } from '@/shared/composables/useSettings';
 
 // 使用 Pinia Store
 const store = useWordEditorStore();
 const { currentWord, isEditing, isSaving } = storeToRefs(store);
-
-// 设置管理 - 用于获取lapse配置
-const { settings: userSettings, loadSettings } = useSettings();
-
-// 组件挂载时加载设置
-onMounted(async () => {
-  await loadSettings();
-});
 
 // Computed property to check if word has been marked as forgotten (lapse > 0)
 const isForgetButtonUsed = computed(() => {
@@ -101,8 +92,7 @@ const toggleReview = async () => {
 
 const handleMarkForgot = async () => {
   if (isForgetButtonUsed.value) return;
-  const lapseInitialValue = userSettings.value?.learning.lapseInitialValue ?? 3;
-  await store.markForgot(lapseInitialValue);
+  await store.markForgot();
 };
 
 const handleDelete = async () => {

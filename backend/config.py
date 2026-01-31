@@ -14,11 +14,7 @@ DEFAULT_CONFIG = {
         "dailyReviewLimit": 300,
         "dailySpellLimit": 200,
         "maxPrepDays": 30,
-        "lapseQueueSize": 25,
-        "lapseMaxValue": 4,
-        "lapseInitialValue": 3,
-        "lapseFastExitEnabled": True,
-        "lapseConsecutiveThreshold": 4,
+        "lapseQueueSize": 20,
         "defaultShuffle": True,
         "lowEfExtraCount": 0,
     },
@@ -133,22 +129,6 @@ class UserConfig:
     @property
     def LAPSE_QUEUE_SIZE(self) -> int:
         return self._config["learning"]["lapseQueueSize"]
-
-    @property
-    def LAPSE_MAX_VALUE(self) -> int:
-        return self._config["learning"]["lapseMaxValue"]
-
-    @property
-    def LAPSE_INITIAL_VALUE(self) -> int:
-        return self._config["learning"]["lapseInitialValue"]
-
-    @property
-    def LAPSE_FAST_EXIT_ENABLED(self) -> bool:
-        return self._config["learning"]["lapseFastExitEnabled"]
-
-    @property
-    def LAPSE_CONSECUTIVE_THRESHOLD(self) -> int:
-        return self._config["learning"]["lapseConsecutiveThreshold"]
 
     @property
     def DEFAULT_SHUFFLE(self) -> bool:

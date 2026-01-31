@@ -5,7 +5,7 @@
 import datetime
 from datetime import date
 
-from sqlalchemy import func, or_, update
+from sqlalchemy import or_, update
 
 from backend.extensions import get_session
 from backend.models.word import Word
@@ -71,33 +71,6 @@ def db_fetch_review_word_ids(limit=None, low_ef_extra_count=None, user_id=1):
             all_ids = due_ids
 
         return all_ids
-
-
-def db_fetch_lapse_word_ids(limit=None, user_id=1):
-    """获取错题集单词ID列表"""
-    from backend.config import get_shuffle_setting
-
-    current_source = get_current_source()
-    shuffle = get_shuffle_setting()
-
-    with get_session() as db:
-        query = db.query(Word.id).filter(
-            Word.user_id == user_id,
-            Word.stop_review == 0,
-            Word.lapse > 0,
-            Word.source == current_source
-        )
-
-        if shuffle:
-            query = query.order_by(func.random())
-        else:
-            query = query.order_by(Word.lapse.asc())
-
-        if limit:
-            rows = query.limit(limit).all()
-        else:
-            rows = query.all()
-        return [row[0] for row in rows]
 
 
 def db_fetch_spelled_word_ids(limit=None, user_id=1):
@@ -168,13 +141,6 @@ def db_update_word_for_review(
         db.execute(
             update(Word).where(Word.id == id, Word.user_id == user_id).values(**values_dict)
         )
-        db.commit()
-
-
-def db_update_word_for_lapse(id, lapse, user_id=1):
-    """更新lapse值"""
-    with get_session() as db:
-        db.execute(update(Word).where(Word.id == id, Word.user_id == user_id).values(lapse=lapse))
         db.commit()
 
 

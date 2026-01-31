@@ -12,19 +12,16 @@ from backend.database.vocabulary import (
     db_insert_word,
     db_update_word,
     db_fetch_review_word_ids,
-    db_fetch_lapse_word_ids,
     db_fetch_spelled_word_ids,
     db_get_source_stats_from_view,
 )
 from backend.services.vocabulary_service import get_bold_definition
 from backend.const import (
     MODE_REVIEW,
-    MODE_LAPSE,
     MODE_SPELLING,
     SESSION_KEY_SNAPSHOT,
 )
 from backend.services.word_update_service import (
-    update_word_info_lapse,
     update_word_info_review,
     update_word_info_spelling,
     calculate_review_result,
@@ -42,11 +39,9 @@ def create_response(success=True, data=None, message=""):
 
 
 def fetch_word_ids_by_mode(mode=MODE_REVIEW, limit=None, user_id=1):
-    """Simplified word ID fetching by mode"""
+    """Simplified word ID fetching by mode (lapse mode handled by frontend via Supabase)"""
     if mode == MODE_REVIEW:
         return db_fetch_review_word_ids(limit, user_id=user_id)
-    elif mode == MODE_LAPSE:
-        return db_fetch_lapse_word_ids(limit, user_id=user_id)
     elif mode == MODE_SPELLING:
         return db_fetch_spelled_word_ids(limit, user_id=user_id)
     else:
@@ -397,11 +392,6 @@ def update_word(word_id):
 
 def apply_shuffle_logic(word_ids, mode, shuffle_enabled):
     """Apply shuffle logic based on mode and shuffle setting."""
-    if mode == MODE_LAPSE:
-        # For lapse mode: no shuffle logic on backend, return original order
-        # Frontend will handle dynamic shuffle logic as words are removed from queue
-        return word_ids
-
     if not shuffle_enabled:
         # No shuffle: sort by id (ascending) for non-lapse modes
         return sorted(word_ids)
@@ -504,11 +494,9 @@ def update_review_word(word_id):
         user_id = g.user_id
 
         if not is_spelling:
-            # 根据模式更新
+            # 根据模式更新（lapse 模式已迁移到前端直连 Supabase）
             if mode == MODE_REVIEW:
                 notification_data = update_word_info_review(word_id, remembered, elapsed_time, user_id)
-            elif mode == MODE_LAPSE:
-                update_word_info_lapse(word_id, remembered, user_id)
         else:
             if mode == MODE_SPELLING:
                 notification_data = update_word_info_spelling(word_id, remembered, spelling_data, user_id)
