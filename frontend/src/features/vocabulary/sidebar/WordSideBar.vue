@@ -16,7 +16,7 @@
       <!-- 标题区域 -->
       <div class="sidebar-header">
         <div class="header-line"></div>
-        <span class="header-title">复习轨迹</span>
+        <span class="header-title">{{ isLapseMode ? '复习队列' : '复习轨迹' }}</span>
         <span class="word-count">{{ displayedWords.length }}</span>
       </div>
 
@@ -61,7 +61,7 @@
       <Transition name="slide-up">
         <div v-show="!isCollapsed" class="mobile-panel">
           <div class="panel-header">
-            <span class="panel-title">复习轨迹</span>
+            <span class="panel-title">{{ isLapseMode ? '复习队列' : '复习轨迹' }}</span>
             <span class="panel-hint">长按查看释义</span>
             <div class="panel-stats">
               <span class="stat remembered">{{ rememberedCount }}</span>
@@ -154,7 +154,12 @@ const wordEditorStore = useWordEditorStore()
 const { requestPause, releasePause } = useTimerPause()
 
 // Computed
+const isLapseMode = computed(() => props.mode === 'mode_lapse')
+
 const displayedWords = computed(() => {
+  if (isLapseMode.value) {
+    return props.words  // Lapse 模式：直接展示全部队列
+  }
   return props.words.filter(word => props.rememberHistory.has(word.id))
 })
 
@@ -172,6 +177,10 @@ const checkMobile = () => {
 }
 
 const getWordStatus = (wordId: number): string => {
+  // Lapse 模式：队首为当前正在复习的单词
+  if (isLapseMode.value && props.words.length > 0 && props.words[0].id === wordId) {
+    return 'current'
+  }
   const remembered = props.rememberHistory.get(wordId)
   return remembered === true ? 'remembered' : remembered === false ? 'forgot' : ''
 }
@@ -278,11 +287,22 @@ const scrollToBottom = async () => {
   }
 }
 
+const scrollToTop = async () => {
+  await nextTick()
+  const el = isMobile.value ? mobileWordListRef.value : wordListInnerRef.value
+  if (el) {
+    el.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
 // Watchers
 watch(
   displayedWords,
   async (newWords, oldWords) => {
-    if (newWords.length > (oldWords?.length || 0)) {
+    if (isLapseMode.value) {
+      // Lapse 模式：每次队列变化都回到顶部（当前词始终在队首）
+      await scrollToTop()
+    } else if (newWords.length > (oldWords?.length || 0)) {
       await scrollToBottom()
     }
   },
@@ -292,6 +312,7 @@ watch(
 watch(
   () => props.rememberHistory,
   async (newHistory, oldHistory) => {
+    if (isLapseMode.value) return  // Lapse 模式由 displayedWords watcher 处理
     if (newHistory.size > (oldHistory?.size || 0)) {
       setTimeout(() => scrollToBottom(), 50)
     }
@@ -303,7 +324,7 @@ watch(
 onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
-  setTimeout(() => scrollToBottom(), 100)
+  setTimeout(() => isLapseMode.value ? scrollToTop() : scrollToBottom(), 100)
 })
 
 onUnmounted(() => {
@@ -462,18 +483,6 @@ onUnmounted(() => {
   height: 100%;
   overflow-y: auto;
   padding-right: 0.5rem;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 5%,
-    black 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 5%,
-    black 100%
-  );
 }
 
 /* 自定义滚动条 - 墨迹风格 */
@@ -552,6 +561,21 @@ onUnmounted(() => {
 .word-drop.forgot .word-indicator {
   background: var(--danger-ink);
   box-shadow: 0 0 8px rgba(155, 59, 59, 0.4);
+}
+
+/* Lapse 模式：当前正在复习的单词 */
+.word-drop.current {
+  background: rgba(153, 107, 61, 0.1);
+}
+
+.word-drop.current .word-text {
+  color: var(--primitive-copper-700);
+  font-weight: 600;
+}
+
+.word-drop.current .word-indicator {
+  background: var(--primitive-copper-500);
+  box-shadow: 0 0 8px rgba(153, 107, 61, 0.4);
 }
 
 /* 列表过渡动画 */
@@ -790,6 +814,14 @@ onUnmounted(() => {
   color: var(--danger-ink);
   background: var(--primitive-brick-50);
   border-color: var(--primitive-brick-200);
+}
+
+/* Lapse 模式：当前正在复习的单词 */
+.word-chip.current {
+  color: var(--primitive-copper-700);
+  background: var(--primitive-copper-100);
+  border-color: var(--primitive-copper-300);
+  font-weight: 600;
 }
 
 /* 气泡过渡动画 */

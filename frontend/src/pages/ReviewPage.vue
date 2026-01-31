@@ -192,6 +192,7 @@ const {
   globalIndex,
   notification,
   graduatedWords,
+  graduatedCount,
   initialWordCount,
 } = storeToRefs(reviewStore)
 
@@ -212,7 +213,7 @@ const { requestPause, releasePause } = useTimerPause()
 // 计算属性
 const displayIndex = computed(() => {
   if (mode.value === 'mode_lapse') {
-    return graduatedWords.value.length
+    return graduatedCount.value
   }
   return currentWord.value ? globalIndex.value + 1 : 0
 })
@@ -254,7 +255,8 @@ const reviewInfo = computed(() => {
 
 const sidebarWords = computed(() => {
   if (mode.value === 'mode_lapse') {
-    return graduatedWords.value
+    // Lapse 模式：展示实时队列（spread 确保每次变化生成新引用触发更新）
+    return [...reviewStore.wordQueue]
   }
   return reviewStore.wordQueue.slice(0, currentIndex.value)
 })

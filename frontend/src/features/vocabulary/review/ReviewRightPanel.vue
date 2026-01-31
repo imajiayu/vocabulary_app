@@ -11,6 +11,81 @@
         <div class="ink-drip drip-2"></div>
       </div>
 
+      <!-- Lapse 模式：错题追踪面板 -->
+      <section v-if="isLapseMode" class="lapse-tracker-section">
+        <header class="section-header">
+          <div class="header-accent"></div>
+          <span class="header-title">错题追踪</span>
+        </header>
+
+        <Transition name="notification-fade" mode="out-in">
+          <div v-if="lastLapseResult" :key="lastLapseResult.word" class="lapse-tracker-card">
+            <!-- 单词名 + 结果指示 -->
+            <div class="lapse-word-row">
+              <span class="lapse-word">{{ lastLapseResult.word }}</span>
+              <span class="lapse-result-badge" :class="lastLapseResult.graduated ? 'badge-graduated' : lastLapseResult.remembered ? 'badge-correct' : 'badge-wrong'">
+                {{ lastLapseResult.graduated ? '毕业' : lastLapseResult.remembered ? '记住' : '忘记' }}
+              </span>
+            </div>
+
+            <!-- 反应时间 -->
+            <div class="lapse-reaction">
+              <div class="reaction-header">
+                <span class="reaction-label">反应时间</span>
+                <span class="reaction-value" :class="lastLapseResult.elapsed_time < 4 ? 'time-fast' : 'time-slow'">
+                  {{ lastLapseResult.elapsed_time.toFixed(1) }}s
+                </span>
+              </div>
+              <div class="reaction-bar-track">
+                <div class="reaction-bar-fill" :style="{ width: `${getReactionPercentage(lastLapseResult.elapsed_time)}%`, background: getReactionColor(lastLapseResult.elapsed_time) }"></div>
+                <div class="reaction-threshold" :style="{ left: '50%' }">
+                  <span class="threshold-label">4s</span>
+                </div>
+              </div>
+              <div class="reaction-hint">
+                {{ lastLapseResult.elapsed_time < 4 ? '快速回忆 → 级别提升' : '回忆较慢 → 级别不变' }}
+              </div>
+            </div>
+
+            <!-- Gap 级别进度 -->
+            <div class="lapse-gap-progress">
+              <div class="gap-header">
+                <span class="gap-label">间隔级别</span>
+                <span class="gap-value">
+                  {{ lastLapseResult.graduated ? '已毕业' : `${Math.min(lastLapseResult.newLevel, 3)} / 4` }}
+                </span>
+              </div>
+              <div class="gap-steps">
+                <template v-for="(gap, i) in [1, 3, 7, 15]" :key="i">
+                  <div
+                    class="gap-step"
+                    :class="{
+                      'step-passed': lastLapseResult.newLevel > i || lastLapseResult.graduated,
+                      'step-current': lastLapseResult.newLevel === i && !lastLapseResult.graduated,
+                      'step-regressed': !lastLapseResult.remembered && i === 0
+                    }"
+                  >
+                    <div class="step-dot"></div>
+                    <span class="step-gap">{{ gap }}</span>
+                  </div>
+                  <div v-if="i < 3" class="gap-segment" :class="{ 'segment-filled': lastLapseResult.newLevel > i || lastLapseResult.graduated }"></div>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- 空状态 -->
+          <div v-else class="lapse-tracker-empty">
+            <div class="empty-illustration">
+              <div class="empty-dots">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <p class="empty-text">答题后<br/>这里会显示错题追踪</p>
+          </div>
+        </Transition>
+      </section>
+
       <!-- 参数通知区域 - 错题模式下隐藏 -->
       <section v-if="!isLapseMode" class="notification-section" :class="{ 'has-data': notificationData }">
       <header class="section-header">
@@ -272,6 +347,19 @@
     <template v-else>
       <!-- 浮动控制栏 -->
       <div class="mobile-control-bar">
+        <!-- Lapse 模式徽章 -->
+        <button
+          v-if="isLapseMode && lastLapseResult"
+          class="mobile-lapse-badge"
+          :class="lastLapseResult.graduated ? 'badge-graduated' : lastLapseResult.remembered ? 'badge-correct' : 'badge-wrong'"
+          @click="toggleMobileLapse"
+        >
+          <span class="badge-word">{{ lastLapseResult.word }}</span>
+          <span class="lapse-badge-level">
+            {{ lastLapseResult.graduated ? '毕业' : `Lv.${Math.min(lastLapseResult.newLevel, 3)}` }}
+          </span>
+        </button>
+
         <!-- 通知徽章（有数据时显示，错题模式下隐藏） -->
         <button
           v-if="notificationData && !isLapseMode"
@@ -368,6 +456,76 @@
               <div v-else-if="breakdown && !breakdown.remembered" class="mobile-notif-forgot">
                 <span class="forgot-icon">○</span>
                 <span class="forgot-text">未记住</span>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
+
+      <!-- 移动端 Lapse 追踪面板 -->
+      <Teleport to="body">
+        <Transition name="mobile-notif-slide">
+          <div v-if="isMobileLapseExpanded && lastLapseResult" class="mobile-notif-overlay" @click.self="closeMobileLapse">
+            <div class="mobile-lapse-panel">
+              <!-- 面板头部 -->
+              <div class="mobile-lapse-header">
+                <span class="lapse-header-word">{{ lastLapseResult.word }}</span>
+                <div class="lapse-header-right">
+                  <span class="lapse-result-badge" :class="lastLapseResult.graduated ? 'badge-graduated' : lastLapseResult.remembered ? 'badge-correct' : 'badge-wrong'">
+                    {{ lastLapseResult.graduated ? '毕业' : lastLapseResult.remembered ? '记住' : '忘记' }}
+                  </span>
+                  <button class="notif-close-btn" @click="closeMobileLapse">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"/>
+                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 反应时间 -->
+              <div class="mobile-lapse-reaction">
+                <div class="reaction-header">
+                  <span class="reaction-label">反应时间</span>
+                  <span class="reaction-value" :class="lastLapseResult.elapsed_time < 4 ? 'time-fast' : 'time-slow'">
+                    {{ lastLapseResult.elapsed_time.toFixed(1) }}s
+                  </span>
+                </div>
+                <div class="reaction-bar-track">
+                  <div class="reaction-bar-fill" :style="{ width: `${getReactionPercentage(lastLapseResult.elapsed_time)}%`, background: getReactionColor(lastLapseResult.elapsed_time) }"></div>
+                  <div class="reaction-threshold" :style="{ left: '50%' }">
+                    <span class="threshold-label">4s</span>
+                  </div>
+                </div>
+                <div class="reaction-hint">
+                  {{ lastLapseResult.elapsed_time < 4 ? '快速回忆 → 级别提升' : '回忆较慢 → 级别不变' }}
+                </div>
+              </div>
+
+              <!-- Gap 级别 -->
+              <div class="mobile-lapse-gap">
+                <div class="gap-header">
+                  <span class="gap-label">间隔级别</span>
+                  <span class="gap-value">
+                    {{ lastLapseResult.graduated ? '已毕业' : `${Math.min(lastLapseResult.newLevel, 3)} / 4` }}
+                  </span>
+                </div>
+                <div class="gap-steps">
+                  <template v-for="(gap, i) in [1, 3, 7, 15]" :key="i">
+                    <div
+                      class="gap-step"
+                      :class="{
+                        'step-passed': lastLapseResult.newLevel > i || lastLapseResult.graduated,
+                        'step-current': lastLapseResult.newLevel === i && !lastLapseResult.graduated,
+                        'step-regressed': !lastLapseResult.remembered && i === 0
+                      }"
+                    >
+                      <div class="step-dot"></div>
+                      <span class="step-gap">{{ gap }}</span>
+                    </div>
+                    <div v-if="i < 3" class="gap-segment" :class="{ 'segment-filled': lastLapseResult.newLevel > i || lastLapseResult.graduated }"></div>
+                  </template>
+                </div>
               </div>
             </div>
           </div>
@@ -541,6 +699,7 @@ const props = withDefaults(defineProps<Props>(), {
 const isMobile = ref(window.innerWidth <= 768)
 const isAIExpanded = ref(false)
 const isMobileNotifExpanded = ref(false)
+const isMobileLapseExpanded = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
 
 // Composables
@@ -549,6 +708,9 @@ const reviewStore = useReviewStore()
 
 // 错题模式下不显示通知
 const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
+
+// Lapse 追踪数据
+const lastLapseResult = computed(() => reviewStore.lastLapseResult)
 
 const currentWordRef = computed(() => props.currentWord)
 const {
@@ -613,6 +775,18 @@ const getTimePercentage = (time: number): number => {
   return Math.min((time / 8) * 100, 100)
 }
 
+const getReactionPercentage = (time: number): number => {
+  return Math.min((time / 8) * 100, 100)
+}
+
+const getReactionColor = (time: number): string => {
+  if (time < 2) return '#7FD17F'
+  if (time < 3) return '#B0D87F'
+  if (time < 4) return '#FFD77A'
+  if (time < 5.5) return '#FFB27A'
+  return '#FF9B9B'
+}
+
 const toggleAI = () => {
   isAIExpanded.value = !isAIExpanded.value
 
@@ -639,6 +813,15 @@ const toggleMobileNotif = () => {
 
 const closeMobileNotif = () => {
   isMobileNotifExpanded.value = false
+}
+
+// 移动端 Lapse 面板方法
+const toggleMobileLapse = () => {
+  isMobileLapseExpanded.value = !isMobileLapseExpanded.value
+}
+
+const closeMobileLapse = () => {
+  isMobileLapseExpanded.value = false
 }
 
 // 移动端通知徽章样式
@@ -1049,6 +1232,289 @@ onUnmounted(() => {
   color: var(--primitive-ink-400);
   line-height: 1.5;
   margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Lapse 错题追踪面板
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.lapse-tracker-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.lapse-tracker-card {
+  background: linear-gradient(145deg,
+    rgba(45, 55, 72, 0.92),
+    rgba(26, 32, 44, 0.88)
+  );
+  border-radius: var(--radius-md);
+  padding: 0.875rem;
+  color: var(--primitive-paper-100);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* 单词名 + 结果 */
+.lapse-word-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.lapse-word {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lapse-result-badge {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.badge-correct {
+  background: rgba(127, 209, 127, 0.2);
+  color: #7FD17F;
+}
+
+.badge-wrong {
+  background: rgba(255, 155, 155, 0.2);
+  color: #FF9B9B;
+}
+
+.badge-graduated {
+  background: rgba(255, 215, 122, 0.2);
+  color: #FFD77A;
+}
+
+/* 反应时间 */
+.lapse-reaction {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.reaction-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.reaction-label {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-ui);
+}
+
+.reaction-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var(--font-data);
+  line-height: 1;
+}
+
+.time-fast {
+  color: #7FD17F;
+}
+
+.time-slow {
+  color: #FFD77A;
+}
+
+.reaction-bar-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: visible;
+  position: relative;
+}
+
+.reaction-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+}
+
+.reaction-threshold {
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1px;
+  transform: translateX(-50%);
+}
+
+.threshold-label {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.55rem;
+  font-family: var(--font-data);
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.reaction-hint {
+  font-size: 0.6rem;
+  opacity: 0.5;
+  font-family: var(--font-ui);
+  text-align: center;
+}
+
+/* Gap 级别步进条 */
+.lapse-gap-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.gap-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.gap-label {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-ui);
+}
+
+.gap-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-data);
+}
+
+.gap-steps {
+  display: flex;
+  align-items: flex-start;
+}
+
+.gap-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.gap-segment {
+  flex: 1;
+  height: 2px;
+  margin-top: 5px; /* dot center: 12px / 2 - line height 2px / 2 = 5px */
+  margin-inline: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  transition: background 0.4s ease;
+}
+
+.gap-segment.segment-filled {
+  background: linear-gradient(90deg, rgba(127, 209, 127, 0.7), rgba(255, 215, 122, 0.7));
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.step-passed .step-dot {
+  background: #7FD17F;
+  border-color: #7FD17F;
+  box-shadow: 0 0 8px rgba(127, 209, 127, 0.4);
+}
+
+.step-current .step-dot {
+  background: #FFD77A;
+  border-color: #FFD77A;
+  box-shadow: 0 0 8px rgba(255, 215, 122, 0.4);
+  animation: currentPulse 2s ease-in-out infinite;
+}
+
+.step-regressed .step-dot {
+  background: #FF9B9B;
+  border-color: #FF9B9B;
+  box-shadow: 0 0 8px rgba(255, 155, 155, 0.4);
+}
+
+@keyframes currentPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 215, 122, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(255, 215, 122, 0.6); }
+}
+
+.step-gap {
+  font-size: 0.55rem;
+  font-family: var(--font-data);
+  opacity: 0.5;
+}
+
+.step-passed .step-gap,
+.step-current .step-gap {
+  opacity: 0.8;
+}
+
+/* Lapse 空状态 */
+.lapse-tracker-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.empty-dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.empty-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primitive-paper-400);
+  opacity: 0.4;
+  animation: emptyDotFloat 2.5s ease-in-out infinite;
+}
+
+.empty-dots span:nth-child(1) { animation-delay: 0s; }
+.empty-dots span:nth-child(2) { animation-delay: 0.3s; }
+.empty-dots span:nth-child(3) { animation-delay: 0.6s; }
+.empty-dots span:nth-child(4) { animation-delay: 0.9s; }
+
+@keyframes emptyDotFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.3; }
+  50% { transform: translateY(-4px); opacity: 0.6; }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -1811,6 +2277,53 @@ onUnmounted(() => {
   color: var(--primitive-gold-600);
 }
 
+/* Lapse 模式徽章 */
+.mobile-lapse-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background: linear-gradient(145deg,
+    rgba(45, 55, 72, 0.95),
+    rgba(26, 32, 44, 0.92)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--primitive-paper-100);
+}
+
+.mobile-lapse-badge:active {
+  transform: scale(0.96);
+}
+
+.mobile-lapse-badge .badge-word {
+  color: var(--primitive-paper-100);
+}
+
+.mobile-lapse-badge.badge-correct {
+  border-color: rgba(127, 209, 127, 0.3);
+}
+
+.mobile-lapse-badge.badge-wrong {
+  border-color: rgba(255, 155, 155, 0.3);
+}
+
+.mobile-lapse-badge.badge-graduated {
+  border-color: rgba(255, 215, 122, 0.3);
+}
+
+.lapse-badge-level {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
 /* AI 助手按钮 */
 .mobile-ai-btn {
   display: flex;
@@ -2048,6 +2561,78 @@ onUnmounted(() => {
   font-size: 0.9rem;
   color: #FF9B9B;
   font-weight: 500;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   移动端 Lapse 追踪面板
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.mobile-lapse-panel {
+  width: 100%;
+  max-width: 400px;
+  background: linear-gradient(145deg,
+    rgba(45, 55, 72, 0.97),
+    rgba(26, 32, 44, 0.95)
+  );
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+  color: var(--primitive-paper-100);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobile-lapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lapse-header-word {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.lapse-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-lapse-header .lapse-result-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.mobile-lapse-reaction,
+.mobile-lapse-gap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mobile-lapse-reaction .reaction-value {
+  font-size: 1.4rem;
+}
+
+.mobile-lapse-reaction .reaction-hint {
+  font-size: 0.7rem;
+}
+
+.mobile-lapse-gap .step-dot {
+  width: 16px;
+  height: 16px;
+}
+
+.mobile-lapse-gap .gap-segment {
+  margin-top: 7px; /* 16px / 2 - 2px / 2 = 7px */
+  margin-inline: 4px;
+}
+
+.mobile-lapse-gap .step-gap {
+  font-size: 0.65rem;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

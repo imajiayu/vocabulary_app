@@ -62,6 +62,16 @@ export const useReviewStore = defineStore('review', () => {
   const initialWordCount = ref(0)
   const graduatedWords = ref<Word[]>([])  // 已毕业的单词（用于 sidebar 展示）
 
+  // Lapse 最近一次作答结果（用于右侧面板展示）
+  const lastLapseResult = ref<{
+    word: string
+    remembered: boolean
+    elapsed_time: number
+    previousLevel: number
+    newLevel: number
+    graduated: boolean
+  } | null>(null)
+
   // 通知状态（复习/拼写完成后显示参数变化）
   const notification = ref<ReviewNotificationState>({
     show: false,
@@ -254,27 +264,41 @@ export const useReviewStore = defineStore('review', () => {
       wordQueue.value.shift()
 
       const currentLevel = wordGapLevels.value.get(word.id) ?? 0
+      const elapsed = result.elapsed_time ?? 3
 
       let graduated = false
+      let newLevelForResult = currentLevel
 
       if (!result.remembered) {
         // 答错：gap level 重置为 0，始终重新插入（不毕业）
+        newLevelForResult = 0
         wordGapLevels.value.set(word.id, 0)
         const insertPos = Math.min(GAP_SEQUENCE[0], wordQueue.value.length)
         wordQueue.value.splice(insertPos, 0, word)
       } else {
         // 答对：根据反应时间决定是否提升 gap level
-        const elapsed = result.elapsed_time ?? 3
         const newLevel = elapsed >= 4 ? currentLevel : currentLevel + 1
+        newLevelForResult = newLevel
 
-        if (newLevel >= GAP_SEQUENCE.length || GAP_SEQUENCE[newLevel] > wordQueue.value.length) {
-          // 已通过所有间隔级别 或 gap 超过队列长度 → 毕业
+        if (newLevel >= GAP_SEQUENCE.length) {
+          // 已通过所有间隔级别 → 毕业
           graduated = true
         } else {
-          // 在 gap 位置重新插入
+          // 在 gap 位置重新插入（gap 超过队列长度时插入末尾）
           wordGapLevels.value.set(word.id, newLevel)
-          wordQueue.value.splice(GAP_SEQUENCE[newLevel], 0, word)
+          const insertPos = Math.min(GAP_SEQUENCE[newLevel], wordQueue.value.length)
+          wordQueue.value.splice(insertPos, 0, word)
         }
+      }
+
+      // 记录最近一次 lapse 作答结果
+      lastLapseResult.value = {
+        word: word.word,
+        remembered: result.remembered,
+        elapsed_time: elapsed,
+        previousLevel: currentLevel,
+        newLevel: newLevelForResult,
+        graduated
       }
 
       if (graduated) {
@@ -433,6 +457,7 @@ export const useReviewStore = defineStore('review', () => {
     graduatedCount.value = 0
     initialWordCount.value = 0
     graduatedWords.value = []
+    lastLapseResult.value = null
     // 清理 notification，避免进入新复习时显示上次的通知
     notification.value = { show: false, data: null }
   }
@@ -572,6 +597,9 @@ export const useReviewStore = defineStore('review', () => {
     notification, // 通知状态
     graduatedWords, // Lapse 模式已毕业单词（sidebar 展示）
     initialWordCount, // Lapse 模式初始单词数
+    wordGapLevels, // Lapse 模式 gap level 映射
+    graduatedCount, // Lapse 模式已毕业数
+    lastLapseResult, // Lapse 模式最近一次作答结果
 
     // 计算属性
     currentWord,
