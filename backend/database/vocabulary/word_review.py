@@ -5,7 +5,7 @@
 import datetime
 from datetime import date
 
-from sqlalchemy import or_, update
+from sqlalchemy import case, func, or_, update
 
 from backend.extensions import get_session
 from backend.models.word import Word
@@ -90,8 +90,12 @@ def db_fetch_spelled_word_ids(limit=None, user_id=1):
                 ),
             )
             .order_by(
+                case(
+                    (Word.spell_next_review <= func.current_date(), 0),  # 到期
+                    (Word.spell_next_review == None, 1),                 # 从未拼写
+                    else_=2,                                             # 未到期
+                ),
                 Word.spell_next_review.asc(),
-                (Word.spell_next_review == None).desc(),
                 (Word.spell_strength == None).desc(),
                 Word.spell_strength.asc(),
             )
