@@ -18,8 +18,8 @@ jobs:
             set -e
 
             cd /opt/vocabulary_app
-            git checkout -- .
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
             # 后端依赖
             source .venv/bin/activate
