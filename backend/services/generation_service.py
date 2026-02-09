@@ -4,6 +4,7 @@
 
 管理生成器的线程生命周期、进度追踪和数据库读写。
 """
+import atexit
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -34,11 +35,12 @@ GENERATOR_MAP = {
 
 @dataclass
 class GenerationTask:
-    """单个生成任务的状态"""
+    """单个生成任务的状态（线程安全）"""
     user_id: str
     relation_type: str
     thread: Thread
     stop_event: Event
+    _lock: Lock = field(default_factory=Lock)
     status: str = "running"     # running | completed | stopped | error
     processed: int = 0
     total: int = 0
@@ -47,6 +49,31 @@ class GenerationTask:
     skipped: int = 0            # 因已生成过该类型关系而跳过的单词数
     error: Optional[str] = None
     started_at: datetime = field(default_factory=datetime.now)
+
+    def update_progress(self, processed: int, total: int, found: int):
+        """线程安全地更新进度"""
+        with self._lock:
+            self.processed = processed
+            self.total = total
+            self.found = found
+
+    def add_saved(self, count: int):
+        """线程安全地累加已保存数"""
+        with self._lock:
+            self.saved += count
+
+    def snapshot(self) -> dict:
+        """线程安全地获取状态快照"""
+        with self._lock:
+            return {
+                "status": self.status,
+                "processed": self.processed,
+                "total": self.total,
+                "found": self.found,
+                "saved": self.saved,
+                "skipped": self.skipped,
+                "error": self.error,
+            }
 
 
 class GenerationService:
@@ -68,6 +95,10 @@ class GenerationService:
             task = self._tasks.get(task_key)
             if task and task.status == "running":
                 return False
+
+            # 清理同 key 的已完成任务
+            if task and task.status != "running":
+                del self._tasks[task_key]
 
             stop_event = Event()
             thread = Thread(
@@ -98,32 +129,54 @@ class GenerationService:
 
     def get_status_for_user(self, user_id: str) -> Dict[str, dict]:
         """获取指定用户的所有任务状态"""
+        with self._lock:
+            tasks_snapshot = {
+                rt: self._tasks.get((user_id, rt))
+                for rt in GENERATOR_MAP
+            }
         result = {}
-        for rt in GENERATOR_MAP:
-            task_key = (user_id, rt)
-            task = self._tasks.get(task_key)
-            if task:
-                result[rt] = {
-                    "status": task.status,
-                    "processed": task.processed,
-                    "total": task.total,
-                    "found": task.found,
-                    "saved": task.saved,
-                    "skipped": task.skipped,
-                    "error": task.error,
-                }
-            else:
-                result[rt] = {"status": "idle"}
+        for rt, task in tasks_snapshot.items():
+            result[rt] = task.snapshot() if task else {"status": "idle"}
         return result
 
     def has_active_tasks_for_user(self, user_id: str) -> bool:
         """指定用户是否有正在运行的任务"""
-        for rt in GENERATOR_MAP:
-            task_key = (user_id, rt)
-            task = self._tasks.get(task_key)
-            if task and task.status == "running":
-                return True
+        with self._lock:
+            for rt in GENERATOR_MAP:
+                task = self._tasks.get((user_id, rt))
+                if task and task.status == "running":
+                    return True
         return False
+
+    def active_task_count(self) -> int:
+        """返回所有用户中正在运行的任务数"""
+        with self._lock:
+            return sum(1 for t in self._tasks.values() if t.status == "running")
+
+    def shutdown(self):
+        """优雅关闭：停止所有运行中的任务并等待线程结束"""
+        with self._lock:
+            running = [
+                t for t in self._tasks.values() if t.status == "running"
+            ]
+
+        if not running:
+            return
+
+        logger.info(f"Shutting down {len(running)} running generation tasks...")
+
+        for task in running:
+            task.stop_event.set()
+
+        for task in running:
+            task.thread.join(timeout=10)
+            if task.thread.is_alive():
+                logger.warning(
+                    f"Generation thread for {task.relation_type} "
+                    f"(user={task.user_id}) did not stop within 10s"
+                )
+
+        logger.info("Generation service shutdown complete")
 
     # ═══════════════════════════════════════════════════════════════════════
     # 内部方法
@@ -141,19 +194,18 @@ class GenerationService:
 
             # 计算跳过数（已在 log 中的单词，取交集防止残留数据）
             word_ids = {w['id'] for w in words}
-            task.skipped = len(processed_ids & word_ids)
-            task.total = len(words) - task.skipped
+            with task._lock:
+                task.skipped = len(processed_ids & word_ids)
+                task.total = len(words) - task.skipped
 
-            # 2. 创建回调
+            # 2. 创建回调（使用线程安全方法）
             def on_progress(processed: int, total: int, found: int):
-                task.processed = processed
-                task.total = total
-                task.found = found
+                task.update_progress(processed, total, found)
 
             def on_save(relations: List[Dict], logs: List[Dict]):
                 self._save_batch(relations, logs, user_id)
                 # 关系双向存储，每对 2 条记录；saved 与 found 同单位（对数）
-                task.saved += len(relations) // 2
+                task.add_saved(len(relations) // 2)
 
             # 3. 创建生成器
             generator_cls = GENERATOR_MAP[relation_type]
@@ -167,17 +219,19 @@ class GenerationService:
             result = generator.generate(words, word_index, existing_relations, processed_ids)
 
             # 5. 更新最终状态
-            task.found = result.stats.get("total_found", 0)
+            with task._lock:
+                task.found = result.stats.get("total_found", 0)
+                task.status = "stopped" if stop_event.is_set() else "completed"
 
-            if stop_event.is_set():
+        except (KeyboardInterrupt, SystemExit):
+            with task._lock:
                 task.status = "stopped"
-            else:
-                task.status = "completed"
-
+            raise
         except Exception as e:
             logger.exception(f"Generation failed for {relation_type}: {e}")
-            task.status = "error"
-            task.error = str(e)
+            with task._lock:
+                task.status = "error"
+                task.error = str(e)
 
     def _load_data(
         self, relation_type: str, user_id: str
@@ -291,3 +345,6 @@ class GenerationService:
 
 # 单例
 generation_service = GenerationService()
+
+# 注册优雅关闭
+atexit.register(generation_service.shutdown)

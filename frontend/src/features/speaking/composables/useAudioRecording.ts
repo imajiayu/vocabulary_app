@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 import { speakingLogger } from '@/shared/utils/logger'
 
 export interface AudioRecordingContext {

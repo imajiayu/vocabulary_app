@@ -11,6 +11,7 @@ import logging
 from flask import Blueprint, Response, g, jsonify, request, stream_with_context
 
 from backend.services.generation_service import generation_service
+from backend.utils.response import api_success, api_error
 
 logger = logging.getLogger(__name__)
 
@@ -24,20 +25,17 @@ def start_generation():
     relation_type = data.get("relation_type")
 
     if not relation_type:
-        return jsonify({"success": False, "error": "relation_type is required"}), 400
+        return api_error("relation_type is required")
 
     try:
         started = generation_service.start(relation_type, g.user_id)
     except ValueError as e:
-        return jsonify({"success": False, "error": str(e)}), 400
+        return api_error(str(e))
 
     if not started:
-        return (
-            jsonify({"success": False, "error": f"{relation_type} is already running"}),
-            409,
-        )
+        return api_error(f"{relation_type} is already running", 409)
 
-    return jsonify({"success": True, "message": "Generation started"})
+    return api_success({"message": "Generation started"})
 
 
 @generation_bp.route("/generate/stop", methods=["POST"])
@@ -47,20 +45,20 @@ def stop_generation():
     relation_type = data.get("relation_type")
 
     if not relation_type:
-        return jsonify({"success": False, "error": "relation_type is required"}), 400
+        return api_error("relation_type is required")
 
     stopped = generation_service.stop(relation_type, g.user_id)
 
     if not stopped:
-        return jsonify({"success": False, "error": f"{relation_type} is not running"}), 400
+        return api_error(f"{relation_type} is not running")
 
-    return jsonify({"success": True, "message": "Stop requested"})
+    return api_success({"message": "Stop requested"})
 
 
 @generation_bp.route("/generate/status", methods=["GET"])
 def get_status():
     """获取当前用户所有生成任务的状态（非 SSE）"""
-    return jsonify({"success": True, "data": generation_service.get_status_for_user(g.user_id)})
+    return api_success(generation_service.get_status_for_user(g.user_id))
 
 
 @generation_bp.route("/generate/progress", methods=["GET"])
@@ -70,7 +68,9 @@ def stream_progress():
     user_id = g.user_id
 
     def event_stream():
+        MAX_IDLE_SECONDS = 300  # 5 分钟无变化则断开
         prev_status = {}
+        idle_seconds = 0
 
         while True:
             current = generation_service.get_status_for_user(user_id)
@@ -82,6 +82,8 @@ def stream_progress():
                     changed[rt] = status
 
             if changed:
+                idle_seconds = 0  # 有变化，重置空闲计时
+
                 # 检查终态事件
                 for rt, status in changed.items():
                     s = status["status"]
@@ -95,12 +97,17 @@ def stream_progress():
                 }
                 if running:
                     yield f"event: progress\ndata: {json.dumps(running)}\n\n"
+            else:
+                idle_seconds += 0.5
 
             prev_status = current
 
+            # 超时断开：客户端断开后 while True 循环继续运行
+            if idle_seconds >= MAX_IDLE_SECONDS:
+                yield f"event: done\ndata: {json.dumps({'message': 'idle timeout'})}\n\n"
+                break
+
             # 用已获取的 current 快照判断是否还有活跃任务
-            # 不能用 has_active_tasks_for_user()：它读取实时状态，与 current 快照存在竞态
-            # 如果 current 仍有 running，下轮循环会捕获 completed 并发送终态事件
             if not any(s["status"] == "running" for s in current.values()):
                 yield f"event: done\ndata: {json.dumps({'message': 'no active tasks'})}\n\n"
                 break

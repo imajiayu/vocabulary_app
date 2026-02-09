@@ -5,7 +5,8 @@ let currentAudio: HTMLAudioElement | null = null
 // 播放版本号：用于解决竞态条件，确保只有最新的播放请求能真正播放
 let playId = 0
 
-// 预加载缓存：存储已预加载的 Audio 对象
+// 预加载缓存：存储已预加载的 Audio 对象（上限 30，超出淘汰最旧一半）
+const MAX_PRELOAD_CACHE_SIZE = 30
 const preloadCache = new Map<string, HTMLAudioElement>()
 
 /**
@@ -132,6 +133,14 @@ export async function preloadWordAudio(
     audio.addEventListener('canplaythrough', () => {
       if (isResolved) return
       isResolved = true
+      // 缓存上限：超出时淘汰最旧的一半
+      if (preloadCache.size >= MAX_PRELOAD_CACHE_SIZE) {
+        const evictCount = Math.floor(MAX_PRELOAD_CACHE_SIZE / 2)
+        const keys = Array.from(preloadCache.keys())
+        for (let i = 0; i < evictCount; i++) {
+          preloadCache.delete(keys[i])
+        }
+      }
       preloadCache.set(cacheKey, audio)
       resolve()
     }, { once: true })

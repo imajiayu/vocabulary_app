@@ -97,7 +97,6 @@ import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { ReviewMode, WordResult } from '@/features/vocabulary/stores/review'
 import type { Word, SpellingData } from '@/shared/types'
-import { api } from '@/shared/api'
 
 interface CardResultEvent {
   remembered: boolean
@@ -204,7 +203,7 @@ provideReviewContext({
 const loadingText = ref('加载中...')
 const isInitializing = ref(true)
 
-const { requestPause, releasePause } = useTimerPause()
+useTimerPause()
 
 // 计算属性
 const displayIndex = computed(() => {

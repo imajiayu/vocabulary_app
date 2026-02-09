@@ -50,8 +50,9 @@ export async function get<T = unknown>(
     let apiMessage = ''
     try {
       const json = await response.json()
-      if (json?.message) {
-        apiMessage = json.message
+      const msg = json?.error || json?.message
+      if (msg) {
+        apiMessage = msg
         errorMessage = apiMessage
       }
     } catch {
@@ -67,7 +68,8 @@ export async function get<T = unknown>(
     if (json.success === true) {
       return json.data as T
     }
-    throw new ApiError(json.message || 'Request failed', response.status, response, json.message)
+    const errMsg = json.error || json.message || 'Request failed'
+    throw new ApiError(errMsg, response.status, response, errMsg)
   }
 
   return json as T
@@ -98,8 +100,9 @@ export async function post<T = unknown>(
     let apiMessage = ''
     try {
       const json = await response.json()
-      if (json?.error) {
-        apiMessage = json.error
+      const msg = json?.error || json?.message
+      if (msg) {
+        apiMessage = msg
         errorMessage = apiMessage
       }
     } catch {
@@ -108,7 +111,18 @@ export async function post<T = unknown>(
     throw new ApiError(errorMessage, response.status, response, apiMessage)
   }
 
-  return (await response.json()) as T
+  const json = await response.json()
+
+  // 统一响应格式: {success: true, data: ...}
+  if (json && typeof json === 'object' && 'success' in json && 'data' in json) {
+    if (json.success === true) {
+      return json.data as T
+    }
+    const errMsg = json.error || json.message || 'Request failed'
+    throw new ApiError(errMsg, response.status, response, errMsg)
+  }
+
+  return json as T
 }
 
 /**

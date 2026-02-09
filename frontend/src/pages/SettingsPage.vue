@@ -639,12 +639,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import IOSSwitch from '@/shared/components/controls/IOSSwitch.vue'
 import KeySelector from '@/shared/components/controls/KeySelector.vue'
 import RelationGraphModal from '@/shared/components/RelationGraphModal.vue'
-import { BaseButton } from '@/shared/components/base'
 import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'

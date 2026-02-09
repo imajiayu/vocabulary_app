@@ -64,7 +64,7 @@ const props = defineProps<{
   temporaryRecord?: Partial<SpeakingRecord> | null
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   deleteRecord: [recordId: number]
 }>()
 

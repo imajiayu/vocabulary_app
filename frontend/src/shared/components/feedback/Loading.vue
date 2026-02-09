@@ -12,7 +12,7 @@ interface Props {
   text?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   text: '加载中...'
 })
 </script>

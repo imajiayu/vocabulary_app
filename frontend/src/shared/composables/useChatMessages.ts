@@ -11,7 +11,7 @@ export interface Message {
 
 export function useChatMessages(
   currentWord: Ref<Word | null | undefined>,
-  isExpanded: Ref<boolean>
+  _isExpanded: Ref<boolean>
 ) {
   const userInput = ref('')
   const messages = ref<Message[]>([])

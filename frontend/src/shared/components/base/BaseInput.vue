@@ -61,7 +61,7 @@ interface Props {
   readonly?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   type: 'text',
   size: 'md',
   modelValue: ''

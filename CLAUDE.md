@@ -64,9 +64,9 @@ cd frontend && npm run dev
 ### 后端 `backend/`（关系专用服务）
 
 ```
-app.py                        # Flask 入口
+app.py                        # Flask 入口（CORS/请求限制/健康检查）
 api/relations.py              # 关系图 BFS 查询 API
-api/generation.py             # 关系生成/停止/进度 API
+api/generation.py             # 关系生成/停止/进度 API（SSE 空闲超时 5min）
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
   data.py                     # 统一数据源（4885行常量 + IELTS主题）
@@ -75,9 +75,10 @@ generators/                   # 5种关系生成器
   root_generator.py           # 词根（拉丁/希腊词根 + 词干）
   confused_generator.py       # 易混淆（编辑距离 + 语义检查）
   topic_generator.py          # 主题（IELTS 预定义主题）
-services/generation_service.py  # 生成任务管理（线程 + 增量批量写入）
+services/generation_service.py  # 生成任务管理（线程安全 + 优雅关闭）
 database/relation_dao.py      # 关系图 DAO
 models/word.py                # SQLAlchemy 模型
+utils/response.py             # 统一 API 响应格式（api_success/api_error）
 ```
 
 ### 前端 `frontend/src/` (Feature-Sliced Design)
@@ -121,19 +122,21 @@ CSS 变量定义在 `shared/styles/tokens.css`，三层架构：Primitives → S
 
 ## 环境变量
 
-**后端 (.env)**
+**后端 (`.env`)**
 ```
 DATABASE_URL=postgresql://...
 SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co
 SUPABASE_JWT_SECRET=...  # 本地开发用 HS256 验证，生产环境用 JWKS
+CORS_ORIGINS=*           # 生产环境设为前端域名（逗号分隔）
+FLASK_DEBUG=0            # 仅开发环境设为 1
 ```
 
-**前端 (.env.local)**
+**前端 (`frontend/.env.local`)**
 ```
 VITE_SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co
 VITE_SUPABASE_ANON_KEY=...
 VITE_DEEPSEEK_API_KEY=...
-VITE_OPENAI_API_KEY=...  # 可选，用于语音转录
+VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
 ```
 
 ## 开发规范

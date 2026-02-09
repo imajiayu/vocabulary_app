@@ -8,7 +8,7 @@ interface Emits {
   (e: 'update:modelValue', value: boolean): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   label: ''
 })
 

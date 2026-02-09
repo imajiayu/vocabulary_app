@@ -7,8 +7,6 @@ import type {
   WritingFolder,
   WritingPrompt,
   WritingSession,
-  ParagraphFeedback,
-  WritingScores,
   WritingPageState,
   CreatePromptPayload,
   UpdateSessionPayload

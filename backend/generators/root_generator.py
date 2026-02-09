@@ -25,6 +25,20 @@ class RootGenerator(BaseGenerator):
 
     relation_type = "root"
 
+    # 预编译词形派生模式（避免 O(n²) 循环中重复编译）
+    _DERIVATION_PATTERNS = [
+        (re.compile(r"(.+)ly$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ness$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ment$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)tion$"), re.compile(r"(.+)t?e?$")),
+        (re.compile(r"(.+)able$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ful$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ity$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ive$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ing$"), re.compile(r"(.+)$")),
+        (re.compile(r"(.+)ed$"), re.compile(r"(.+)$")),
+    ]
+
     def __init__(
         self,
         on_progress: Optional[Callable[[int, int, int], None]] = None,
@@ -159,30 +173,17 @@ class RootGenerator(BaseGenerator):
 
     def _is_derivational_pair(self, word1: str, word2: str) -> bool:
         """检查是否是明确的派生词对"""
-        derivation_patterns = [
-            (r"(.+)ly$", r"(.+)$"),
-            (r"(.+)ness$", r"(.+)$"),
-            (r"(.+)ment$", r"(.+)$"),
-            (r"(.+)tion$", r"(.+)t?e?$"),
-            (r"(.+)able$", r"(.+)$"),
-            (r"(.+)ful$", r"(.+)$"),
-            (r"(.+)ity$", r"(.+)$"),
-            (r"(.+)ive$", r"(.+)$"),
-            (r"(.+)ing$", r"(.+)$"),
-            (r"(.+)ed$", r"(.+)$"),
-        ]
-
-        for pattern1, pattern2 in derivation_patterns:
-            match1 = re.match(pattern1, word1)
-            match2 = re.match(pattern2, word2)
+        for pattern1, pattern2 in self._DERIVATION_PATTERNS:
+            match1 = pattern1.match(word1)
+            match2 = pattern2.match(word2)
 
             if match1 and match2:
                 root1, root2 = match1.group(1), match2.group(1)
                 if self._roots_similar(root1, root2):
                     return True
 
-            match1 = re.match(pattern2, word1)
-            match2 = re.match(pattern1, word2)
+            match1 = pattern2.match(word1)
+            match2 = pattern1.match(word2)
 
             if match1 and match2:
                 root1, root2 = match1.group(1), match2.group(1)

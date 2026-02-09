@@ -41,6 +41,8 @@ vocabulary.db
 
 # Environment variables (contains secrets)
 .env
+.env.local
+*.env.local
 
 # Supabase local temp files
 supabase/.temp/

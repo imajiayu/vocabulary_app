@@ -6,8 +6,11 @@ Vue 3 + TypeScript 前端，使用 Vite 构建，采用 Feature-Sliced Design �
 
 ```bash
 npm install
-npm run dev    # HTTPS 开发服务器
-npm run build  # 生产构建
+npm run dev         # 开发服务器
+npm run build       # 生产构建（type-check + vite build）
+npm run type-check  # 仅 TypeScript 类型检查
+npm run lint        # ESLint（需安装 eslint）
+npm run format      # Prettier（需安装 prettier）
 ```
 
 ## 认证
@@ -64,6 +67,7 @@ src/
 │   │   ├── grid/           # 列表展示
 │   │   ├── relations/      # 词汇关系
 │   │   └── stores/         # Pinia Stores
+│   │       └── review/     # Review Store 子模块（5 个 composable）
 │   ├── speaking/           # 口语练习
 │   ├── writing/            # 写作练习
 │   │   ├── components/     # WritingSidebar, EssayEditor, OutlineEditor 等
@@ -86,8 +90,18 @@ src/
 
 | Store | 文件 | 用途 |
 |-------|------|------|
-| useReviewStore | `vocabulary/stores/review.ts` | 复习会话状态 |
+| useReviewStore | `vocabulary/stores/review.ts` | 复习会话状态（薄编排层） |
 | useWordEditorStore | `vocabulary/stores/wordEditor.ts` | 单词编辑器状态 |
+
+**Review Store 子模块**（`vocabulary/stores/review/`）：
+
+| 模块 | 职责 |
+|------|------|
+| `useReviewQueue.ts` | 队列管理、分页加载、进度恢复 |
+| `useReviewProgress.ts` | debounced index 持久化、beforeunload |
+| `useReviewResult.ts` | 结果计算、通知、负荷缓存 |
+| `useLapseSession.ts` | Expanding Retrieval Practice |
+| `useAudioPreloader.ts` | 音频预加载、缓存清理 |
 
 ### Context (Provide/Inject)
 

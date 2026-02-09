@@ -213,7 +213,7 @@ interface Emits {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+defineEmits<Emits>()
 
 // 状态
 const showDefinition = ref(false)

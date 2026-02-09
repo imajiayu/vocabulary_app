@@ -27,7 +27,7 @@ interface Props {
   className?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   className: ''
 })
 

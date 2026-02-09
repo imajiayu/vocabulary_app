@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { watch, computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import * as echarts from 'echarts'
-import { palette, textColors, borderColors } from '@/shared/config/chartColors'
+import { palette, borderColors } from '@/shared/config/chartColors'
 
 interface LineSeries {
   name?: string
@@ -92,7 +92,7 @@ const render = () => {
       // 关键：添加 confine 属性，将 tooltip 限制在图表区域内
       confine: true,
       // 自定义 position 函数，实现智能定位
-      position: function (point, params, dom, rect, size) {
+      position: function (point, _params, _dom, _rect, size) {
         // point: 鼠标位置 [x, y]
         // size: {contentSize: [width, height], viewSize: [width, height]}
         const [mouseX, mouseY] = point

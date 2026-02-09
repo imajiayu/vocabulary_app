@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 
 const reviewStore = useReviewStore()
-const { currentIndex, mode, globalIndex, totalWords } = storeToRefs(reviewStore)
+const { mode, globalIndex, totalWords } = storeToRefs(reviewStore)
 
 // 复习时间记录：存储每个单词的复习时间（秒）
 const reviewTimes = ref<number[]>([])

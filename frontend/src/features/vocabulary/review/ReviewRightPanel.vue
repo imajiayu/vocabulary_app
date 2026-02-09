@@ -655,7 +655,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Word, ReviewBreakdown, SpellingBreakdown } from '@/shared/types'
 import type { ReviewNotificationData } from '@/shared/api/words'
 import { useTimerPause } from '@/shared/composables/useTimerPause'

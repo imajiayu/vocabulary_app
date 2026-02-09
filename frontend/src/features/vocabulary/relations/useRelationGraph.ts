@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { api } from '@/shared/api'
-import type { GraphNode, GraphEdge, GraphData } from '@/shared/api'
+import type { GraphNode, GraphData } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
 import { palette } from '@/shared/config/chartColors'
 

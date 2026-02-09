@@ -5,15 +5,11 @@
 注意：add_relation、delete_relation、stats 已迁移到前端 Supabase 直接操作
 - RelationsApi.addDirect() / RelationsApi.deleteDirect() / RelationsApi.getStatsDirect()
 """
-from flask import Blueprint, jsonify, request, g
+from flask import Blueprint, request, g
 from backend.database.relation_dao import db_get_relations_graph
+from backend.utils.response import api_success, api_error
 
 relations_bp = Blueprint("relations", __name__, url_prefix="/api/relations")
-
-
-def create_response(success=True, data=None, message=""):
-    """创建统一的API响应格式"""
-    return jsonify({"success": success, "data": data, "message": message})
 
 
 @relations_bp.route("/graph", methods=["GET"])
@@ -40,7 +36,7 @@ def get_relations_graph():
 
         # 验证参数
         if max_depth < 1 or max_depth > 3:
-            return create_response(False, None, "max_depth must be between 1 and 3"), 400
+            return api_error("max_depth must be between 1 and 3")
 
         # 解析关系类型
         relation_types = None
@@ -50,11 +46,9 @@ def get_relations_graph():
             # 验证关系类型
             for rt in relation_types:
                 if rt not in valid_types:
-                    return create_response(
-                        False,
-                        None,
+                    return api_error(
                         f"Invalid relation_type: {rt}. Must be one of: {', '.join(valid_types)}"
-                    ), 400
+                    )
 
         # 调用数据库函数获取图数据（按用户过滤）
         graph_data = db_get_relations_graph(
@@ -64,14 +58,7 @@ def get_relations_graph():
             user_id=g.user_id
         )
 
-        return create_response(
-            True,
-            graph_data,
-            "Relations graph retrieved successfully"
-        )
+        return api_success(graph_data)
 
     except Exception as e:
-        return (
-            create_response(False, None, f"Failed to get relations graph: {str(e)}"),
-            500,
-        )
+        return api_error(f"Failed to get relations graph: {str(e)}", 500)

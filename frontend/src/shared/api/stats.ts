@@ -123,12 +123,6 @@ function toInt(value: number | string | null | undefined): number {
   return isNaN(num) ? 0 : num
 }
 
-// 辅助函数：安全转换为布尔值
-function toBool(value: boolean | string | null | undefined): boolean {
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'string') return value.toLowerCase() === 'true'
-  return false
-}
 
 // 辅助函数：四舍五入到指定小数位（与Python round一致）
 function roundTo(value: number | null, decimals: number): number | null {

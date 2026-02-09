@@ -25,15 +25,17 @@ class BaseGenerator(ABC):
 
     # 子类必须定义关系类型
     relation_type: str = ""
-    # 缓冲区达到此阈值时自动 flush
-    FLUSH_THRESHOLD = 200
+    # 缓冲区达到此阈值时自动 flush（默认值）
+    DEFAULT_FLUSH_THRESHOLD = 200
 
     def __init__(
         self,
         on_progress: Optional[Callable[[int, int, int], None]] = None,
         stop_event: Optional[Event] = None,
         on_save: Optional[Callable[[List[Dict], List[Dict]], None]] = None,
+        flush_threshold: int = DEFAULT_FLUSH_THRESHOLD,
     ):
+        self.flush_threshold = flush_threshold
         self.processed_pairs: Set[Tuple[int, int]] = set()
         self._on_progress = on_progress  # (processed, total, found)
         self._stop_event = stop_event
@@ -130,7 +132,7 @@ class BaseGenerator(ABC):
         """将缓冲区数据刷入数据库（达到阈值或 force=True 时执行）"""
         if not self._on_save:
             return
-        if force or len(self._pending_relations) >= self.FLUSH_THRESHOLD:
+        if force or len(self._pending_relations) >= self.flush_threshold:
             if self._pending_relations or self._pending_logs:
                 self._on_save(self._pending_relations, self._pending_logs)
                 self._pending_relations = []

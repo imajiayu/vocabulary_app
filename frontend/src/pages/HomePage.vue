@@ -229,7 +229,7 @@ const handleWritingSidebarToggle = (expanded: boolean) => {
 }
 
 // Writing Context - 在 HomePage 层级创建，供 WritingSidebar 和 WritingWorkspace 共享
-const { data: writingData } = createWritingContext({
+createWritingContext({
   onPromptSelected: (prompt) => {
     selectedPrompt.value = prompt
   }

@@ -6,7 +6,6 @@
 import os
 import logging
 from typing import Optional
-from functools import lru_cache
 
 import jwt
 from jwt import PyJWKClient
@@ -20,14 +19,19 @@ SUPABASE_JWT_SECRET = os.environ.get("SUPABASE_JWT_SECRET", "")
 # JWKS URL for ECC key verification
 JWKS_URL = f"{SUPABASE_URL}/auth/v1/.well-known/jwks.json" if SUPABASE_URL else ""
 
+# JWKS 客户端：使用内置 lifespan 缓存（1小时），密钥轮换后自动刷新
+_jwks_client: Optional[PyJWKClient] = None
 
-@lru_cache(maxsize=1)
 def _get_jwks_client() -> Optional[PyJWKClient]:
-    """获取 JWKS 客户端（缓存）"""
+    """获取 JWKS 客户端（内置 1 小时缓存 TTL）"""
+    global _jwks_client
+    if _jwks_client is not None:
+        return _jwks_client
     if not JWKS_URL:
         return None
     try:
-        return PyJWKClient(JWKS_URL)
+        _jwks_client = PyJWKClient(JWKS_URL, lifespan=3600)
+        return _jwks_client
     except Exception as e:
         logger.error(f"Failed to create JWKS client: {e}")
         return None

@@ -140,7 +140,7 @@ const handleMouseLeave = () => {
 }
 
 // 移动端点击
-const handleClick = (e: MouseEvent, rel: RelatedWord) => {
+const handleClick = (_e: MouseEvent, rel: RelatedWord) => {
   if (!isMobile.value) return
   fetchAndShowTooltip(rel.id, { x: 0, y: 0 })
 }

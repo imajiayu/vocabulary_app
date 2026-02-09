@@ -116,7 +116,7 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import type { WritingFolder, CreatePromptPayload } from '@/shared/types/writing'
 
-const props = defineProps<{
+defineProps<{
   folders: WritingFolder[]
 }>()
 

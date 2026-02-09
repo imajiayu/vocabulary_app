@@ -28,13 +28,18 @@ def create_app():
     """应用工厂函数"""
     app = Flask(__name__)
 
+    # 请求体大小限制（1MB）
+    app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+
     # 注册蓝图
     from backend.api.relations import relations_bp
     from backend.api.generation import generation_bp
     app.register_blueprint(relations_bp)
     app.register_blueprint(generation_bp)
 
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    cors_origins = os.environ.get("CORS_ORIGINS", "*")
+    origins = [o.strip() for o in cors_origins.split(",")] if cors_origins != "*" else "*"
+    CORS(app, resources={r"/api/*": {"origins": origins}})
 
     @app.before_request
     def before_request():
@@ -53,7 +58,11 @@ def create_app():
 
     @app.route("/api/health")
     def health_check():
-        return jsonify({"status": "healthy"})
+        from backend.services.generation_service import generation_service
+        return jsonify({
+            "status": "healthy",
+            "active_tasks": generation_service.active_task_count(),
+        })
 
     return app
 
@@ -89,4 +98,4 @@ def register_error_handlers(app):
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=os.environ.get("FLASK_DEBUG", "0") == "1")
