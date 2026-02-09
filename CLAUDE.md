@@ -122,7 +122,7 @@ CSS 变量定义在 `shared/styles/tokens.css`，三层架构：Primitives → S
 
 ## 环境变量
 
-**后端 (`.env`)**
+**后端 (`backend/.env`)**
 ```
 DATABASE_URL=postgresql://...
 SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co

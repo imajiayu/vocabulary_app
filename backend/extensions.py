@@ -11,10 +11,9 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# 加载项目根目录的 .env 文件
+# 加载 backend/.env
 from dotenv import load_dotenv
-project_root = Path(__file__).parent.parent
-load_dotenv(project_root / ".env")
+load_dotenv(Path(__file__).parent / ".env")
 
 logger = logging.getLogger(__name__)
 
