@@ -23,6 +23,7 @@ export interface ReviewCalculationResult {
     current_remember_count: number
     current_forget_count: number
   }
+  scheduledDay: number  // 负荷均衡后的实际调度天数，用于缓存更新
 }
 
 /**
@@ -74,7 +75,7 @@ export function calculateReviewResult(
     maxPrepDays
   )
 
-  const nextReviewDate = addDays(today, srs.interval)
+  const nextReviewDate = addDays(today, srs.scheduledDay)
   const shouldStopReview = srs.easeFactor >= 3.0 && srs.repetition >= 6
 
   const easeFactorChange = Math.round((srs.easeFactor - oldEaseFactor) * 100) / 100
@@ -91,7 +92,7 @@ export function calculateReviewResult(
         remembered,
         score,
         repetition: srs.repetition,
-        interval: srs.interval,
+        interval: srs.scheduledDay,
       },
     },
     persistData: {
@@ -111,6 +112,7 @@ export function calculateReviewResult(
       current_remember_count: rememberCount,
       current_forget_count: forgetCount,
     },
+    scheduledDay: srs.scheduledDay,
   }
 }
 

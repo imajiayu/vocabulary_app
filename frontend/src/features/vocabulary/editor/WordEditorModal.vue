@@ -232,6 +232,11 @@ onBeforeUnmount(() => {
   min-height: 0;
   -webkit-overflow-scrolling: touch;
   padding-bottom: var(--space-8);
+  scrollbar-width: none;
+}
+
+.modal-body::-webkit-scrollbar {
+  display: none;
 }
 
 .content-grid {

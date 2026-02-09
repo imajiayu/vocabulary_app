@@ -60,7 +60,7 @@ export function useReviewResult() {
           wordForCalc, result.remembered, result.elapsed_time ?? 3, userSettings, reviewLoadsCache.value
         )
 
-        const chosenIdx = calcResult.persistData.interval - 1
+        const chosenIdx = calcResult.scheduledDay - 1
         if (reviewLoadsCache.value && chosenIdx >= 0 && chosenIdx < reviewLoadsCache.value.length) {
           reviewLoadsCache.value[chosenIdx]++
         }

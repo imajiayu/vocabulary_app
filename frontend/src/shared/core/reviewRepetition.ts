@@ -60,7 +60,8 @@ export function sm2UpdateEaseFactor(
 
 export interface SrsResult {
   repetition: number
-  interval: number
+  interval: number          // 纯 SM-2 计算值（不受负荷均衡影响）
+  scheduledDay: number      // 负荷均衡后的实际调度天数（用于计算 next_review）
   easeFactor: number
   lastRemembered: string | null  // ISO date string
   lastForgot: string | null      // ISO date string
@@ -102,6 +103,7 @@ export function calculateSrsParameters(
     return {
       repetition: repetition + 1,
       interval: intervalNew,
+      scheduledDay: intervalNew,
       easeFactor: easeFactorNew,
       lastRemembered: today,
       lastForgot: null,
@@ -113,6 +115,7 @@ export function calculateSrsParameters(
     return {
       repetition: 0,
       interval: 1,
+      scheduledDay: 1,
       easeFactor: easeFactorNew,
       lastRemembered: null,
       lastForgot: today,
@@ -121,12 +124,6 @@ export function calculateSrsParameters(
       lapse: 1,
     }
   }
-}
-
-export function calculatePriorityWeight(easeFactor: number, score: number): number {
-  const efWeight = Math.max(0.1, 3.0 - easeFactor)
-  const scoreWeight = Math.max(0.1, 4.0 - score)
-  return efWeight * scoreWeight
 }
 
 export function shouldApplyLoadBalancing(
@@ -144,6 +141,9 @@ export function shouldApplyLoadBalancing(
 /**
  * SM-2 参数计算 + 负荷均衡
  *
+ * interval 保持纯 SM-2 值（不被负荷均衡覆盖）
+ * scheduledDay 为负荷均衡后的实际调度天数
+ *
  * @param dailyReviewLimit - 每日复习上限（从 settings 获取）
  * @param currentLoads - 未来每天的复习负荷数组（由调用方传入）
  * @param maxPrepDays - 最大准备天数（从 settings 获取）
@@ -160,38 +160,32 @@ export function calculateSrsParametersWithLoadBalancing(
 ): SrsResult {
   // 1. 基础 SM-2 计算
   const basic = calculateSrsParameters(score, interval, repetition, easeFactor, lapse)
-  let intervalNew = basic.interval
   const easeFactorNew = basic.easeFactor
   const repetitionNew = basic.repetition
 
-  // 2. 备考时间约束
-  if (intervalNew > maxPrepDays) {
-    intervalNew = maxPrepDays
+  // 2. 备考时间约束（仅约束 interval，scheduledDay 后续由负荷均衡决定）
+  let constrainedInterval = basic.interval
+  if (constrainedInterval > maxPrepDays) {
+    constrainedInterval = maxPrepDays
   }
 
   // 3. 低强度单词 → 负荷均衡（填谷策略）
   if (shouldApplyLoadBalancing(easeFactorNew, repetitionNew, score)) {
-    const priorityWeight = calculatePriorityWeight(easeFactorNew, score)
     const params: LoadBalanceParams = {
-      baseInterval: intervalNew,
+      baseInterval: constrainedInterval,
       dailyLimit: dailyReviewLimit,
       currentLoads,
-      priorityWeight,
-      overflowTolerance: 0.3,
     }
     const result = findOptimalDay(params)
-    intervalNew = result.chosenDay
-  } else {
-    // 4. 高强度单词 → 向后搜索，避免峰值堆积
-    const params: LoadBalanceParams = {
-      baseInterval: intervalNew,
-      dailyLimit: dailyReviewLimit,
-      currentLoads,
-      overflowTolerance: 0.3,
-    }
-    const result = findOptimalDayForStrong(params)
-    intervalNew = result.chosenDay
+    return { ...basic, interval: constrainedInterval, scheduledDay: result.chosenDay }
   }
 
-  return { ...basic, interval: intervalNew }
+  // 4. 高强度单词 → 向后搜索，避免峰值堆积
+  const params: LoadBalanceParams = {
+    baseInterval: constrainedInterval,
+    dailyLimit: dailyReviewLimit,
+    currentLoads,
+  }
+  const result = findOptimalDayForStrong(params)
+  return { ...basic, interval: constrainedInterval, scheduledDay: result.chosenDay }
 }

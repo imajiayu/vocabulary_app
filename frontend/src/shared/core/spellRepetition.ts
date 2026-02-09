@@ -253,7 +253,6 @@ export function calculateSpellStrengthWithLoadBalancing(
 
   // 5. 低强度（0.8-2.5）→ 负荷均衡 + 严格推迟上限
   if (newStrength <= 2.5) {
-    const priorityWeight = Math.max(0.5, 3.0 - newStrength)
     let maxDelay: number
     if (newStrength < 1.5) {
       maxDelay = 3
@@ -267,11 +266,9 @@ export function calculateSpellStrengthWithLoadBalancing(
       baseInterval: basicInterval,
       dailyLimit: dailySpellLimit,
       currentLoads: spellLoads,
-      priorityWeight,
       maxDeviationDays: maxDelay,
       maxDeviationRatio: 0.5,
       minDeviationDays: 1,
-      overflowTolerance: 0.3,
     }
     const result = findOptimalDay(params)
     optimizedInterval = result.chosenDay
@@ -281,7 +278,6 @@ export function calculateSpellStrengthWithLoadBalancing(
       baseInterval: basicInterval,
       dailyLimit: dailySpellLimit,
       currentLoads: spellLoads,
-      overflowTolerance: 0.3,
     }
     const result = findOptimalDayForStrong(params)
     optimizedInterval = result.chosenDay
