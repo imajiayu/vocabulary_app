@@ -540,7 +540,7 @@ onBeforeUnmount(() => {
 }
 
 .def-content {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 1.1rem;
   line-height: 1.7;
   color: var(--color-text-primary);

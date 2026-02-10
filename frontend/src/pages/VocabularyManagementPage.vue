@@ -460,7 +460,7 @@ onUnmounted(() => {
 }
 
 .progress-text {
-    font-family: var(--font-sans);
+    font-family: var(--font-ui);
     font-size: var(--font-size-sm);
     color: var(--color-text-primary);
     font-weight: var(--font-weight-medium);

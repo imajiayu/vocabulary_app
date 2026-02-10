@@ -340,12 +340,10 @@
 
   /* ── 字体栈 ── */
   --font-serif: 'Crimson Pro', 'Noto Serif SC', Georgia, serif;
-  --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* ── 语义化字体 ── */
-  --font-body: var(--font-serif);
-  --font-heading: var(--font-serif);
   --font-ui: var(--font-sans);
   --font-data: var(--font-mono);
 

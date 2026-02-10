@@ -578,7 +578,7 @@ const goStats = () => {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :deep(.progress-text) {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--primitive-ink-600);

@@ -508,7 +508,7 @@ function restoreFromSession() {
 }
 
 .word-count {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 12px;
   font-weight: 500;
   color: rgba(250, 247, 242, 0.5);
@@ -672,7 +672,7 @@ function restoreFromSession() {
 
 .start-desc {
   margin: 0 0 36px;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 13px;
   color: rgba(250, 247, 242, 0.4);
   letter-spacing: 0.05em;

@@ -105,7 +105,7 @@ function getScoreClass(score: number): string {
 }
 
 .score-value {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 22px;
   font-weight: 700;
   color: white;
@@ -148,7 +148,7 @@ function getScoreClass(score: number): string {
 }
 
 .score-band {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 13px;
   font-weight: 600;
   color: rgba(250, 247, 242, 0.85);

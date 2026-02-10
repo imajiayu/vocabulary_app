@@ -413,7 +413,7 @@ onUnmounted(() => {
 }
 
 .example-zh {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 0.75rem;
   color: var(--primitive-ink-400);
   line-height: 1.5;
@@ -642,7 +642,7 @@ onUnmounted(() => {
 }
 
 .example-chinese {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 0.8rem;
   color: var(--primitive-ink-400);
   line-height: 1.5;

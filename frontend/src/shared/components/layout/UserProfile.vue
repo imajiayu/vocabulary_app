@@ -252,7 +252,7 @@ onUnmounted(() => {
   justify-content: center;
   width: 100%;
   height: 100%;
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 16px;
   font-weight: 700;
   color: var(--primitive-copper-600);
@@ -411,7 +411,7 @@ onUnmounted(() => {
   justify-content: center;
   width: 100%;
   height: 100%;
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 24px;
   font-weight: 700;
   color: var(--primitive-copper-600);
@@ -419,7 +419,7 @@ onUnmounted(() => {
 }
 
 .user-name {
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 16px;
   font-weight: 600;
   color: var(--primitive-ink-800);

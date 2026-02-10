@@ -151,7 +151,7 @@ const hasDefinition = computed(() => {
 }
 
 .phonetic-flag {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-tertiary);
@@ -181,7 +181,7 @@ const hasDefinition = computed(() => {
 }
 
 .section-label {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-tertiary);
@@ -207,7 +207,7 @@ const hasDefinition = computed(() => {
 }
 
 .def-index {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-brand-primary);
@@ -265,7 +265,7 @@ const hasDefinition = computed(() => {
   padding: var(--space-8) 0;
   gap: var(--space-3);
   color: var(--color-text-tertiary);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-sm);
 }
 

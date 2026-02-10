@@ -87,7 +87,7 @@ const emit = defineEmits<{
 }
 
 .time-limit {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 10px;
   color: rgba(250, 247, 242, 0.35);
   font-weight: 500;

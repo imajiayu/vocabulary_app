@@ -643,7 +643,7 @@ onBeforeUnmount(() => {
 }
 
 .def-text {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-text-primary);
@@ -683,7 +683,7 @@ onBeforeUnmount(() => {
 }
 
 .example-en {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--color-text-primary);
@@ -691,7 +691,7 @@ onBeforeUnmount(() => {
 }
 
 .example-zh {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--color-text-secondary);

@@ -702,7 +702,7 @@ const resetEFRange = () => {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
 }
@@ -847,7 +847,7 @@ const resetEFRange = () => {
 }
 
 .setting-row label {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   font-weight: var(--font-weight-medium);
@@ -858,7 +858,7 @@ const resetEFRange = () => {
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-default);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--font-size-sm);
   transition: all var(--transition-fast);
   background: var(--color-surface-card);
@@ -885,7 +885,7 @@ const resetEFRange = () => {
   color: var(--color-state-error);
   padding: var(--space-3);
   border-radius: var(--radius-default);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-sm);
   display: flex;
   align-items: center;
@@ -901,7 +901,7 @@ const resetEFRange = () => {
 
 .preview p {
   margin: 0 0 var(--space-2) 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-tertiary);
@@ -933,7 +933,7 @@ const resetEFRange = () => {
 .reset-btn, .confirm-btn {
   padding: var(--space-2) var(--space-5);
   border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;

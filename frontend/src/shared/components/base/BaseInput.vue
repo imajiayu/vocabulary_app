@@ -140,7 +140,7 @@ defineExpose({
   border: none;
   background: transparent;
   color: var(--input-text);
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   outline: none;
 }
 

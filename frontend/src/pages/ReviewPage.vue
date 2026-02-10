@@ -574,7 +574,7 @@ onUnmounted(() => {
 }
 
 .completion-message {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 1rem;
   color: var(--color-text-secondary);
   line-height: 1.6;

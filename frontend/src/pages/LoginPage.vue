@@ -410,7 +410,7 @@ async function handleGitHubLogin() {
 }
 
 .brand-title {
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 56px;
   font-weight: 700;
   color: var(--primitive-copper-600);

@@ -437,14 +437,14 @@ onUnmounted(() => {
 .session-date {
   flex: 1;
   font-size: 11px;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   color: rgba(250, 247, 242, 0.4);
 }
 
 .session-score {
   font-size: 11px;
   font-weight: 600;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   color: var(--primitive-gold-400);
 }
 

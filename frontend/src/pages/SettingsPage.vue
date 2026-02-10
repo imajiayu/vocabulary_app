@@ -1254,7 +1254,7 @@ onUnmounted(() => {
   font-weight: 700;
   color: var(--color-text-primary);
   margin: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-serif);
 }
 
 .search-box {
@@ -1375,7 +1375,7 @@ onUnmounted(() => {
 .nav-count {
   font-size: 11px;
   color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1455,7 +1455,7 @@ onUnmounted(() => {
   background: var(--color-bg-tertiary);
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
 }
 
 /* 自动保存标签 */
@@ -1553,7 +1553,7 @@ onUnmounted(() => {
   font-size: 15px;
   font-weight: 600;
   color: var(--color-primary);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   min-width: 40px;
   text-align: right;
 }
@@ -1662,7 +1662,7 @@ onUnmounted(() => {
 .source-count {
   font-size: 11px;
   color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
 }
 
 .source-delete {
@@ -1900,7 +1900,7 @@ onUnmounted(() => {
 .relation-tile__count-value {
   font-size: 24px;
   font-weight: 700;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   color: var(--color-text-primary);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -1926,7 +1926,7 @@ onUnmounted(() => {
 .live-stat__value {
   font-size: 18px;
   font-weight: 700;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   color: var(--color-text-primary);
   line-height: 1;
 }
@@ -1988,14 +1988,14 @@ onUnmounted(() => {
 .progress-percent {
   font-size: 12px;
   font-weight: 600;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   color: var(--color-text-primary);
 }
 
 .progress-detail {
   font-size: 11px;
   color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
 }
 
 /* 结果摘要 */
@@ -2028,7 +2028,7 @@ onUnmounted(() => {
 .result-summary {
   font-size: 11px;
   color: var(--color-text-secondary);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
 }
 
 /* 操作区 */

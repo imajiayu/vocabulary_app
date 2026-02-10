@@ -647,7 +647,7 @@ const resumeProgress = () => {
 
 .rail-tab .tab-count {
   font-size: 12px;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   color: var(--primitive-ink-400);
   transition: color 0.2s;
 }
@@ -792,7 +792,7 @@ const resumeProgress = () => {
 }
 
 .progress-value {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primitive-copper-600);
@@ -800,7 +800,7 @@ const resumeProgress = () => {
 }
 
 .progress-total {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 0.75rem;
   color: var(--primitive-ink-400);
 }
@@ -912,7 +912,7 @@ const resumeProgress = () => {
 }
 
 .card-stats {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 0.75rem;
   color: var(--primitive-ink-400);
 }
@@ -1059,7 +1059,7 @@ const resumeProgress = () => {
 }
 
 .chip-count {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 0.6875rem;
   opacity: 0.8;
 }
@@ -1144,7 +1144,7 @@ const resumeProgress = () => {
 }
 
 .mobile-card .card-count {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 0.8125rem;
   color: var(--primitive-ink-400);
 }

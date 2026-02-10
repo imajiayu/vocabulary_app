@@ -225,7 +225,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 
 .field-label {
   display: block;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-tertiary);
@@ -266,7 +266,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
 }
 
 .phonetic-label {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   width: 3rem;
@@ -341,7 +341,7 @@ const updateExample = (index: number, type: 'en' | 'zh', value: string) => {
   background: transparent;
   color: var(--color-text-secondary);
   border-radius: var(--radius-default);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-sm);
   cursor: pointer;
   transition: all var(--transition-fast);

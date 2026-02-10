@@ -401,7 +401,7 @@ watch(() => props.topic.title, (newTitle) => {
   width: 100%;
   padding: 8px 10px;
 
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 13px;
   color: var(--primitive-paper-200);
 

@@ -295,7 +295,7 @@ watch(showAddTopicInput, val => {
   width: 100%;
   padding: 10px 12px;
 
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 14px;
   color: var(--primitive-paper-200);
 

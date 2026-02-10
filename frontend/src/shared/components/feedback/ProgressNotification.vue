@@ -236,7 +236,7 @@ const progressPercent = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--primitive-olive-600);
@@ -318,7 +318,7 @@ const progressPercent = computed(() => {
 }
 
 .stat-value {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 1rem;
   font-weight: 700;
   color: var(--primitive-olive-600);
@@ -330,7 +330,7 @@ const progressPercent = computed(() => {
 }
 
 .stat-value--muted {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--primitive-ink-500);

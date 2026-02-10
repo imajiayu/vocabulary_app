@@ -281,7 +281,7 @@ watch(() => props.question.question_text, (newText) => {
   width: 100%;
   padding: 10px 12px;
 
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 12px;
   line-height: 1.5;
   color: var(--primitive-paper-200);

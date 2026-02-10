@@ -347,7 +347,7 @@ onMounted(async () => {
   color: var(--color-text-inverse);
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-default);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-fast);
   border: none;
@@ -383,7 +383,7 @@ onMounted(async () => {
   color: var(--color-text-inverse);
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-default);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-fast);
   border: none;
@@ -417,7 +417,7 @@ onMounted(async () => {
   color: var(--color-text-inverse);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   line-height: 1.4;
   white-space: nowrap;

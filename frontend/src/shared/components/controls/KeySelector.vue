@@ -125,7 +125,7 @@ const selectableKeys = computed(() => {
 
 /* 自定义 CustomSelect 样式以匹配原始设计 */
 .key-select :deep(.custom-select-trigger) {
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-family: var(--font-mono);
   border: 1px solid var(--color-border-medium);
 }
 
@@ -134,6 +134,6 @@ const selectableKeys = computed(() => {
 }
 
 .key-select :deep(.select-option) {
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-family: var(--font-mono);
 }
 </style>

@@ -144,7 +144,7 @@ const handleSave = async () => {
 }
 
 .status-card-label {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-tertiary);
@@ -155,7 +155,7 @@ const handleSave = async () => {
 .status-badge {
   padding: 2px var(--space-2);
   border-radius: var(--radius-full);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.02em;
@@ -191,14 +191,14 @@ const handleSave = async () => {
 }
 
 .stat-label {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 10px;
   color: var(--color-text-tertiary);
   margin-bottom: 2px;
 }
 
 .stat-value {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -222,13 +222,13 @@ const handleSave = async () => {
 }
 
 .date-label {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-xs);
   color: var(--color-text-tertiary);
 }
 
 .date-value {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   font-variant-numeric: tabular-nums;
@@ -246,7 +246,7 @@ const handleSave = async () => {
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;

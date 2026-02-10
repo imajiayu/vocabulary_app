@@ -44,7 +44,7 @@ defineProps<{
 }
 
 .timer-value {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: 14px;
   font-weight: 600;
   color: rgba(250, 247, 242, 0.8);
