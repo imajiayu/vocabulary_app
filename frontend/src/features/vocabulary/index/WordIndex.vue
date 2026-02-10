@@ -297,6 +297,7 @@
         </button>
       </section>
     </div>
+    <span class="version-badge">v{{ appVersion }}</span>
   </div>
 </template>
 
@@ -312,8 +313,10 @@ import { useSourceSelection } from '@/shared/composables/useSourceSelection'
 import { useShuffleSelection } from '@/shared/composables/useShuffleSelection'
 import { api } from '@/shared/api'
 import { useSettings } from '@/shared/composables/useSettings'
+import { APP_VERSION } from '@/shared/constants/version'
 import { logger } from '@/shared/utils/logger'
 
+const appVersion = APP_VERSION
 const log = logger.create('WordIndex')
 
 type Counts = { review: number; lapse: number; spelling: number; today_spell: number }
@@ -1414,6 +1417,31 @@ const resumeProgress = () => {
 
   .main-content {
     max-width: 700px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   版本标记
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.version-badge {
+  position: fixed;
+  bottom: var(--space-3);
+  right: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .version-badge {
+    bottom: calc(var(--mobile-nav-height, 88px) + var(--space-2));
+    font-size: 9px;
   }
 }
 </style>

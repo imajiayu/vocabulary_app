@@ -161,3 +161,4 @@ VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
 - 后端定位为关系专用服务（图查询 + 关系生成）
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
+- 当前版本号 `v1.0`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
