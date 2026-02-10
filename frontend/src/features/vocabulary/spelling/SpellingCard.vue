@@ -299,6 +299,12 @@ const handleKeydown = (event: KeyboardEvent) => {
     return
   }
 
+  // 桌面端只允许英文字母、空格和连字符，其他可打印字符静默忽略
+  if (event.key.length === 1 && !/^[a-zA-Z \-]$/.test(event.key)) {
+    event.preventDefault()
+    return
+  }
+
   recordKeyEvent(event)
 
   if (!['ArrowLeft', 'ArrowRight', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Escape', 'Backspace'].includes(event.key)) {
