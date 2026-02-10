@@ -165,7 +165,8 @@ onUnmounted(() => {
   border-radius: var(--radius-default);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1001;
-  overflow: hidden;
+  max-height: 240px;
+  overflow-y: auto;
 }
 
 .select-option {

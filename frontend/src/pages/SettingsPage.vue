@@ -1727,6 +1727,14 @@ onUnmounted(() => {
    快捷键设置
    ═══════════════════════════════════════════════════════════════════════════ */
 
+#section-hotkeys {
+  overflow: visible;
+}
+
+#section-hotkeys > .section-header {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
 .hotkey-group {
   padding: 12px 0;
   border-bottom: 1px solid var(--color-border-light);
