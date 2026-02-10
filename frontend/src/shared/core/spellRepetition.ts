@@ -208,6 +208,32 @@ export interface SpellResult {
 }
 
 /**
+ * 硬上限检查：如果目标天已满，向后找第一个未满天；全满则回退到最低负荷天
+ */
+function enforceSpellLimit(
+  targetDay: number,
+  loads: number[],
+  limit: number
+): number {
+  if (loads.length === 0 || targetDay < 1) return targetDay
+
+  const maxDay = loads.length
+  const day = Math.min(targetDay, maxDay)
+
+  if (loads[day - 1] < limit) return day
+
+  for (let d = day + 1; d <= maxDay; d++) {
+    if (loads[d - 1] < limit) return d
+  }
+
+  for (let d = day - 1; d >= 1; d--) {
+    if (loads[d - 1] < limit) return d
+  }
+
+  return day
+}
+
+/**
  * 拼写强度计算 + 负荷均衡
  *
  * @param dailySpellLimit - 每日拼写上限（从 settings 获取）
@@ -244,9 +270,10 @@ export function calculateSpellStrengthWithLoadBalancing(
 
   const newStrength = strength + strengthChange
 
-  // 4. 极低强度或未记住 → 不参与负荷均衡
+  // 4. 极低强度或未记住 → 不参与完整负荷均衡，但仍检查硬上限
   if (newStrength < 0.8 || !remembered) {
-    return { strengthChange, interval: basicInterval, breakdownInfo }
+    const clampedInterval = enforceSpellLimit(basicInterval, spellLoads, dailySpellLimit)
+    return { strengthChange, interval: clampedInterval, breakdownInfo }
   }
 
   let optimizedInterval = basicInterval
