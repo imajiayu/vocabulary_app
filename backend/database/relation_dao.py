@@ -4,6 +4,7 @@
 """
 import json
 from typing import List, Optional
+from sqlalchemy import text
 from backend.extensions import get_session
 from backend.models.word import Word, WordRelation, RelationType
 
@@ -50,103 +51,91 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
     with get_session() as db:
         nodes = []
         edges = []
-        visited_words = set()
-        # 用于去重的边集合：(min_id, max_id, relation_type)
-        edge_set = set()
 
-        # 如果指定了中心单词，使用BFS获取指定深度的子图（批量加载）
+        # 如果指定了中心单词，使用递归 CTE 单次查询获取子图
         if word_id is not None:
-            # 转换关系类型过滤列表
-            relation_type_enums = [RelationType[rt] for rt in relation_types] if relation_types else None
+            # 构建关系类型过滤条件
+            type_filter = ""
+            params = {"seed_id": word_id, "user_id": user_id, "max_depth": max_depth}
+            if relation_types:
+                type_placeholders = ", ".join(f":rt{i}" for i in range(len(relation_types)))
+                type_filter = f"AND r.relation_type IN ({type_placeholders})"
+                for i, rt in enumerate(relation_types):
+                    params[f"rt{i}"] = rt
 
-            # 第一步：加载种子节点
-            seed_word = db.query(Word).filter(Word.id == word_id, Word.user_id == user_id).first()
-            if not seed_word:
+            # 递归 CTE: BFS 遍历关系图
+            # 1) bfs: 从种子节点出发，逐层展开（限制 max_depth 层）
+            # 2) 收集所有涉及的节点 ID + 所有边
+            cte_sql = text(f"""
+                WITH RECURSIVE bfs AS (
+                    -- 种子层：起始节点
+                    SELECT :seed_id AS node_id, 0 AS depth
+
+                    UNION ALL
+
+                    -- 递归层：从当前层节点沿关系展开
+                    SELECT r.related_word_id AS node_id, bfs.depth + 1 AS depth
+                    FROM bfs
+                    JOIN words_relations r ON r.word_id = bfs.node_id
+                        AND r.user_id = :user_id
+                        {type_filter}
+                    WHERE bfs.depth < :max_depth
+                ),
+                -- 去重收集所有可达节点
+                reachable AS (
+                    SELECT DISTINCT node_id FROM bfs
+                )
+                -- 返回所有可达节点的信息
+                SELECT w.id, w.word, w.definition
+                FROM words w
+                JOIN reachable rn ON rn.node_id = w.id
+                WHERE w.user_id = :user_id
+            """)
+
+            rows = db.execute(cte_sql, params).fetchall()
+            if not rows:
                 return {"nodes": [], "edges": []}
 
-            nodes.append({
-                "id": seed_word.id,
-                "word": seed_word.word,
-                "definition": _extract_definitions(seed_word.definition)
-            })
-            visited_words.add(word_id)
+            node_ids = set()
+            for row in rows:
+                node_ids.add(row[0])
+                nodes.append({
+                    "id": row[0],
+                    "word": row[1],
+                    "definition": _extract_definitions(row[2])
+                })
 
-            # BFS 逐层批量处理
-            current_layer_ids = [word_id]
+            # 获取所有可达节点之间的边（去重：只取 word_id < related_word_id）
+            edge_type_filter = ""
+            edge_params = {"user_id": user_id}
+            if relation_types:
+                edge_type_filter = f"AND r.relation_type IN ({type_placeholders})"
+                for i, rt in enumerate(relation_types):
+                    edge_params[f"rt{i}"] = rt
 
-            for depth in range(max_depth):
-                if not current_layer_ids:
-                    break
+            # 使用 IN 子句过滤边的两端都在可达节点中
+            id_placeholders = ", ".join(f":nid{i}" for i in range(len(node_ids)))
+            for i, nid in enumerate(node_ids):
+                edge_params[f"nid{i}"] = nid
 
-                # 批量获取当前层所有节点的关系
-                relations_query = db.query(WordRelation).filter(
-                    WordRelation.word_id.in_(current_layer_ids),
-                    WordRelation.user_id == user_id
-                )
-                if relation_type_enums:
-                    relations_query = relations_query.filter(
-                        WordRelation.relation_type.in_(relation_type_enums)
-                    )
-                relations = relations_query.all()
+            edge_sql = text(f"""
+                SELECT r.word_id, r.related_word_id, r.relation_type, r.confidence
+                FROM words_relations r
+                WHERE r.user_id = :user_id
+                    AND r.word_id < r.related_word_id
+                    AND r.word_id IN ({id_placeholders})
+                    AND r.related_word_id IN ({id_placeholders})
+                    {edge_type_filter}
+            """)
 
-                # 收集需要加载的下一层节点 ID，同时处理边去重
-                next_layer_ids = set()
-                pending_edges = []
-
-                for rel in relations:
-                    source_id = rel.word_id
-                    target_id = rel.related_word_id
-
-                    edge_key = (
-                        min(source_id, target_id),
-                        max(source_id, target_id),
-                        rel.relation_type.value
-                    )
-                    if edge_key in edge_set:
-                        continue
-                    edge_set.add(edge_key)
-
-                    pending_edges.append({
-                        "source": source_id,
-                        "target": target_id,
-                        "relation_type": rel.relation_type.value,
-                        "confidence": rel.confidence,
-                        "_target_id": target_id
-                    })
-
-                    if target_id not in visited_words:
-                        next_layer_ids.add(target_id)
-
-                # 批量加载下一层节点
-                if next_layer_ids:
-                    next_words = db.query(Word).filter(
-                        Word.id.in_(list(next_layer_ids)),
-                        Word.user_id == user_id
-                    ).all()
-                    valid_target_ids = set()
-                    for w in next_words:
-                        valid_target_ids.add(w.id)
-                        visited_words.add(w.id)
-                        nodes.append({
-                            "id": w.id,
-                            "word": w.word,
-                            "definition": _extract_definitions(w.definition)
-                        })
-
-                    # 只保留目标节点存在的边
-                    for pe in pending_edges:
-                        tid = pe.pop("_target_id")
-                        if tid in visited_words:
-                            edges.append(pe)
-
-                    current_layer_ids = list(valid_target_ids)
-                else:
-                    # 没有新节点，但仍需添加指向已访问节点的边
-                    for pe in pending_edges:
-                        tid = pe.pop("_target_id")
-                        if tid in visited_words:
-                            edges.append(pe)
-                    break
+            edge_rows = db.execute(edge_sql, edge_params).fetchall()
+            for erow in edge_rows:
+                edges.append({
+                    "source": erow[0],
+                    "target": erow[1],
+                    "relation_type": erow[2] if isinstance(erow[2], str) else erow[2].value,
+                    "confidence": float(erow[3])
+                })
         else:
             # 获取当前用户的所有单词
             words = db.query(Word).filter(Word.user_id == user_id).all()
@@ -159,7 +148,6 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
                     "word": word.word,
                     "definition": _extract_definitions(word.definition)
                 })
-                visited_words.add(word.id)
 
             # 获取所有关系（只查询 word_id < related_word_id 的记录，自然去重）
             relations_query = db.query(WordRelation).filter(
@@ -189,5 +177,3 @@ def db_get_relations_graph(relation_types: Optional[List[str]] = None, word_id: 
             "nodes": nodes,
             "edges": edges
         }
-
-

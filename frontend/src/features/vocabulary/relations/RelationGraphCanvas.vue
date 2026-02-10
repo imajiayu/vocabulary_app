@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import * as echarts from 'echarts'
+import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
 import type { GraphData, GraphNode } from '@/shared/api'
 import { relationColors } from './useRelationGraph'
 import { palette, textColors } from '@/shared/config/chartColors'
@@ -44,18 +44,18 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const chartContainer = ref<HTMLDivElement>()
-let chartInstance: echarts.ECharts | null = null
+let chartInstance: ECharts | null = null
 
 function renderGraph() {
   if (!chartContainer.value) return
 
   if (!chartInstance) {
-    chartInstance = echarts.init(chartContainer.value)
+    chartInstance = init(chartContainer.value)
   }
 
   // Empty state
   if (props.graphData.nodes.length === 0) {
-    const emptyOption: echarts.EChartsOption = {
+    const emptyOption: EChartsOption = {
       title: {
         text: '请搜索单词或展示所有节点',
         left: 'center',
@@ -152,7 +152,7 @@ function renderGraph() {
     }
   })
 
-  const option: echarts.EChartsOption = {
+  const option: EChartsOption = {
     title: {
       text: props.centerWordId
         ? `${props.searchWord} 的关系网络`

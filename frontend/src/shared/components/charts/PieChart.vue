@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watch, onMounted, onBeforeUnmount, ref } from 'vue'
-import * as echarts from 'echarts'
+import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
 
 interface Props {
   labels: string[]
@@ -11,7 +11,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const elRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
+let chart: ECharts | null = null
 let ro: ResizeObserver | null = null
 
 const render = () => {
@@ -38,7 +38,7 @@ const render = () => {
     legendTop = '8%'
   }
 
-  const option: echarts.EChartsOption = {
+  const option: EChartsOption = {
     // Enable animations
     animation: true,
     animationDuration: 1000,
@@ -98,7 +98,7 @@ const render = () => {
     }]
   }
 
-  if (!chart) chart = echarts.init(elRef.value)
+  if (!chart) chart = init(elRef.value)
   chart.setOption(option, true)
 }
 

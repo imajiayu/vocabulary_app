@@ -74,7 +74,7 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* 让内容自然撑开 */
@@ -91,7 +91,7 @@ body {
   align-items: flex-start;
   justify-content: center;
   padding: var(--space-8, 32px);
-  background: var(--color-bg-primary, #FAF7F2);
+  background: var(--color-bg-primary);
 }
 
 .page-loading-content {

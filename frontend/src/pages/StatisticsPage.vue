@@ -221,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, shallowRef, computed, watch, Teleport } from 'vue'
+import { onMounted, ref, shallowRef, triggerRef, computed, watch, Teleport } from 'vue'
 import PageLayout from '@/shared/components/layout/PageLayout.vue'
 import ChartGrid from '@/features/statistics/components/ChartGrid.vue'
 import ChartCard from '@/features/statistics/components/ChartCard.vue'
@@ -315,25 +315,25 @@ const hourlyDistribution = computed(() => statsData.value[currentSource.value]?.
 const fetchStats = async (source: string) => {
   try {
     const data = await api.stats.getStats({ source })
-    statsData.value = {
-      ...statsData.value,
-      [source]: {
-        efDict: data.ef_dict,
-        nextReviewDict: data.next_review_dict,
-        spellNextReviewDict: data.spell_next_review_dict,
-        elapseTimeDict: data.elapse_time_dict,
-        spellStrengthDict: data.spell_strength_dict,
-        addedDateCountDict: data.added_date_count_dict,
-        reviewCountDict: data.review_count_dict,
-        spellHeatmapCells: data.spell_heatmap_cells || [],
-        efHeatmapCells: data.ef_heatmap_cells || [],
-        lapseDict: data.lapse_dict,
-        intervalDict: data.interval_dict,
-        accuracyDict: data.accuracy_dict,
-        dailyActivity: data.daily_activity,
-        hourlyDistribution: data.hourly_distribution,
-      }
+    // Mutate in place + triggerRef — avoids creating a new top-level object
+    // and re-allocating the entire record on each source fetch
+    statsData.value[source] = {
+      efDict: data.ef_dict,
+      nextReviewDict: data.next_review_dict,
+      spellNextReviewDict: data.spell_next_review_dict,
+      elapseTimeDict: data.elapse_time_dict,
+      spellStrengthDict: data.spell_strength_dict,
+      addedDateCountDict: data.added_date_count_dict,
+      reviewCountDict: data.review_count_dict,
+      spellHeatmapCells: data.spell_heatmap_cells || [],
+      efHeatmapCells: data.ef_heatmap_cells || [],
+      lapseDict: data.lapse_dict,
+      intervalDict: data.interval_dict,
+      accuracyDict: data.accuracy_dict,
+      dailyActivity: data.daily_activity,
+      hourlyDistribution: data.hourly_distribution,
     }
+    triggerRef(statsData)
   } catch (e: unknown) {
     error.value = e instanceof Error ? e.message : String(e)
     throw e

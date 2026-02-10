@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { watch, computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import * as echarts from 'echarts'
+import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
+import type { LineSeriesOption } from 'echarts/charts'
 import { palette, borderColors } from '@/shared/config/chartColors'
 
 interface LineSeries {
@@ -18,7 +19,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const elRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
+let chart: ECharts | null = null
 let ro: ResizeObserver | null = null
 
 // 对齐 labels 和 values
@@ -42,10 +43,10 @@ const processedData = computed(() => {
 
 const render = () => {
   if (!elRef.value) return
-  if (!chart) chart = echarts.init(elRef.value)
+  if (!chart) chart = init(elRef.value)
 
   const { mergedLabels, processedSeries } = processedData.value
-  const finalSeries: echarts.EChartsOption['series'] = []
+  const finalSeries: EChartsOption['series'] = []
 
   processedSeries.forEach(s => {
     finalSeries.push({
@@ -69,10 +70,10 @@ const render = () => {
       symbol: 'circle',
       symbolSize: 6,
       emphasis: { symbolSize: 8, lineStyle: { width: 4 } }
-    } as echarts.LineSeriesOption)
+    } as LineSeriesOption)
   })
 
-  const option: echarts.EChartsOption = {
+  const option: EChartsOption = {
     animation: true,
     animationDuration: 1000,
     animationEasing: 'cubicOut',

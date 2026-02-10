@@ -2242,9 +2242,7 @@ onUnmounted(() => {
   animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+/* spin: defined globally in animations.css */
 
 /* 保存栏动画 */
 .save-bar-enter-active {

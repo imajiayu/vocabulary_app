@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import * as echarts from 'echarts'
+import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
 import { logger } from '@/shared/utils/logger'
 import { heatmapColors } from '@/shared/config/chartColors'
 
@@ -23,7 +23,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const elRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
+let chart: ECharts | null = null
 let ro: ResizeObserver | null = null
 let io: IntersectionObserver | null = null
 const isVisible = ref(false)
@@ -135,7 +135,7 @@ const renderChart = () => {
     }
 
     try {
-      chart = echarts.init(elRef.value)
+      chart = init(elRef.value)
     } catch (error) {
       logger.warn('ECharts初始化失败，重试中...', error)
       setTimeout(() => renderChart(), 100)
@@ -147,7 +147,7 @@ const renderChart = () => {
   const numCols = columns.value
   const numRows = rows.value
 
-  const option: echarts.EChartsOption = {
+  const option: EChartsOption = {
     animation: true,
     animationDuration: 600,
     animationEasing: 'cubicOut',

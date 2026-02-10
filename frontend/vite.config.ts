@@ -33,7 +33,7 @@ export default defineConfig({
         assetFileNames: '[ext]/[name]-[hash].[ext]',
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
-          'echarts': ['echarts', 'echarts/core', 'echarts/charts', 'echarts/components', 'echarts/renderers'],
+          'echarts': ['echarts/core', 'echarts/charts', 'echarts/components', 'echarts/renderers'],
         },
       },
     },

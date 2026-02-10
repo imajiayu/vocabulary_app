@@ -7,6 +7,7 @@
 """
 from flask import Blueprint, request, g
 from backend.database.relation_dao import db_get_relations_graph
+from backend.models.word import RelationType
 from backend.utils.response import api_success, api_error
 
 relations_bp = Blueprint("relations", __name__, url_prefix="/api/relations")
@@ -41,7 +42,7 @@ def get_relations_graph():
         # 解析关系类型
         relation_types = None
         if relation_types_str:
-            valid_types = ["synonym", "antonym", "root", "confused", "topic"]
+            valid_types = [e.value for e in RelationType]
             relation_types = [t.strip() for t in relation_types_str.split(",")]
             # 验证关系类型
             for rt in relation_types:

@@ -904,9 +904,7 @@ const saveRecord = async (record: CreateRecordPayload): Promise<SpeakingRecord> 
   opacity: 0.4;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+/* spin: defined globally in animations.css */
 
 .processing-text {
   font-family: var(--font-ui);

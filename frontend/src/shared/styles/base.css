@@ -5,10 +5,8 @@
 @import './breakpoints.css';
 @import './animations.css';
 @import './utilities.css';
-@import './buttons.css';
 @import './scrollbar.css';
 @import './accessibility.css';
-@import './container-queries.css';
 
 /* ══════════════════════════════════════════════════════════════════════════════
    基础重置
@@ -26,7 +24,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Crimson Pro', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
+  font-family: var(--font-serif);
   background-color: var(--color-bg-page);
   color: var(--color-text-primary);
   font-size: var(--font-size-base);
@@ -130,7 +128,7 @@ select {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 8px rgba(45, 55, 72, 0.06), 0 1px 2px rgba(45, 55, 72, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 加载旋转器 */

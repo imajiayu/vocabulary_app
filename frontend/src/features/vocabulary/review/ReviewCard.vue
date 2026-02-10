@@ -997,22 +997,7 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 兼容旧动画名称 */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* fadeIn, slideUp: defined globally in animations.css */
 
 @keyframes slideInFromRight {
   from {

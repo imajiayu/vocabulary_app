@@ -110,6 +110,21 @@ import { useDefinitionProgress } from '@/features/vocabulary/editor/composables'
 
 const words = ref<Word[]>([]);
 const defProgress = useDefinitionProgress();
+
+// O(1) word lookup by id — rebuilt lazily when words array changes
+let _wordIndexMap: Map<number, number> | null = null
+let _wordIndexVersion = 0
+function getWordIndex(wordId: number): number {
+  // Rebuild map when words array has been mutated
+  const currentVersion = words.value.length
+  if (!_wordIndexMap || _wordIndexVersion !== currentVersion) {
+    _wordIndexMap = new Map()
+    words.value.forEach((w, i) => _wordIndexMap!.set(w.id, i))
+    _wordIndexVersion = currentVersion
+  }
+  return _wordIndexMap.get(wordId) ?? -1
+}
+function invalidateWordIndex() { _wordIndexMap = null }
 const searchQuery = ref('');
 const filterStatus = ref('all');
 const sourceFilter = ref<string>('all'); // 新增来源筛选
@@ -265,7 +280,7 @@ const handleShowDetail = (word: Word) => {
     // 注册回调：模态框关闭时更新列表
     wordEditorStore.onClose((finalWord: Word | undefined) => {
         if (finalWord) {
-            const index = words.value.findIndex(w => w.id === finalWord.id);
+            const index = getWordIndex(finalWord.id);
             if (index !== -1) {
                 words.value[index] = finalWord;
             }
@@ -274,15 +289,16 @@ const handleShowDetail = (word: Word) => {
 
     // 注册回调：单词删除时更新列表
     wordEditorStore.onWordDeleted((wordId: number) => {
-        const index = words.value.findIndex(w => w.id === wordId);
+        const index = getWordIndex(wordId);
         if (index !== -1) {
             words.value.splice(index, 1);
+            invalidateWordIndex();
         }
     });
 
     // 注册回调：单词更新时更新列表
     wordEditorStore.onWordUpdated((updatedWord: Word) => {
-        const index = words.value.findIndex(w => w.id === updatedWord.id);
+        const index = getWordIndex(updatedWord.id);
         if (index !== -1) {
             words.value[index] = updatedWord;
         }
@@ -295,12 +311,13 @@ const handleWordInserted = async (word: Word) => {
     wordGridRef.value?.addNewWordId(word.id);
 
     // 新增单词后，异步获取释义
+    invalidateWordIndex();
     defProgress.start(1, '获取释义');
     try {
         const updatedWord = await api.words.fetchDefinition(word.id);
         defProgress.increment();
         // 更新列表中的单词
-        const index = words.value.findIndex(w => w.id === word.id);
+        const index = getWordIndex(word.id);
         if (index !== -1) {
             words.value[index] = updatedWord;
         }
@@ -320,6 +337,7 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
         wordGridRef.value?.addNewWordId(word.id);
     });
 
+    invalidateWordIndex();
     if (insertedWords.length === 0) return;
 
     // 读取并发数设置（settings 已在 onMounted 中加载并缓存）
@@ -337,7 +355,7 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
         try {
             const updatedWord = await api.words.fetchDefinition(word.id);
             defProgress.increment();
-            const index = words.value.findIndex(w => w.id === word.id);
+            const index = getWordIndex(word.id);
             if (index !== -1) {
                 words.value[index] = updatedWord;
             }
@@ -374,7 +392,7 @@ const handleFixDefinitions = async () => {
         try {
             const updatedWord = await api.words.fetchDefinition(word.id);
             defProgress.increment();
-            const index = words.value.findIndex(w => w.id === word.id);
+            const index = getWordIndex(word.id);
             if (index !== -1) {
                 words.value[index] = updatedWord;
             }
@@ -389,6 +407,7 @@ const handleFixDefinitions = async () => {
 const handleBatchDelete = (wordIds: number[]) => {
     // 从本地words数组中批量移除这些单词
     words.value = words.value.filter(w => !wordIds.includes(w.id));
+    invalidateWordIndex();
 };
 
 onUnmounted(() => {

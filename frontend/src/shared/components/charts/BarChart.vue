@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
-import * as echarts from 'echarts'
+import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
 
 interface Props {
   labels: (string | number)[]
@@ -13,15 +13,15 @@ interface Props {
 const props = defineProps<Props>()
 
 const elRef = ref<HTMLDivElement | null>(null)
-let chart: echarts.ECharts | null = null
+let chart: ECharts | null = null
 let ro: ResizeObserver | null = null
 
 const render = () => {
   if (!elRef.value) return
-  if (!chart) chart = echarts.init(elRef.value)
+  if (!chart) chart = init(elRef.value)
 
   const color = props.barColor ?? 'rgba(75,192,192,0.8)'
-  const option: echarts.EChartsOption = {
+  const option: EChartsOption = {
     // Enable animations
     animation: true,
     animationDuration: 800,
