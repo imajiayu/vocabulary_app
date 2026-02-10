@@ -186,6 +186,7 @@ export interface HotkeySettings {
     remembered: string;      // 记住
     notRemembered: string;   // 没记住
     stopReview: string;      // 不再复习
+    resetTimer: string;      // 重置计时器
   };
   // 复习页面 - 显示释义后
   reviewAfter: {
@@ -197,6 +198,7 @@ export interface HotkeySettings {
     playAudio: string;       // 播放发音
     forgot: string;          // 忘记了
     next: string;            // 下一个
+    resetInput: string;      // 重置输入
   };
 }
 

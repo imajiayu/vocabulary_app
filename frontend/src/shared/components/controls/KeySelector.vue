@@ -37,6 +37,7 @@ const emit = defineEmits<Emits>()
 
 // 可用的快捷键列表（排除26个字母、空格、数字、连字符）
 const availableKeys: KeyOption[] = [
+  { value: '', label: '— 无快捷键' },
   { value: 'ArrowLeft', label: '← 左方向键' },
   { value: 'ArrowRight', label: '→ 右方向键' },
   { value: 'ArrowUp', label: '↑ 上方向键' },
@@ -85,12 +86,16 @@ const availableKeys: KeyOption[] = [
 ]
 
 const hasError = computed(() => {
+  // 空值（无快捷键）永远不算冲突
+  if (!props.modelValue) return false
   return props.usedKeys.includes(props.modelValue)
 })
 
 // 过滤出可选择的快捷键（排除已被使用的键，但保留当前选中的键）
 const selectableKeys = computed(() => {
   return availableKeys.filter(key => {
+    // 空值选项（无快捷键）始终可选
+    if (!key.value) return true
     // 如果这个键已被使用且不是当前选中的键，则过滤掉
     return !(props.usedKeys.includes(key.value) && key.value !== props.modelValue)
   })

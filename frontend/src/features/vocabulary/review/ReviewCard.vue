@@ -134,6 +134,12 @@
             >
               <span class="btn-sm-icon">↻</span>
               <span class="btn-sm-label">重置计时器</span>
+              <KeyHint
+                v-if="!isMobile && hotkeys.reviewInitial.resetTimer"
+                :key-value="hotkeys.reviewInitial.resetTimer"
+                variant="default"
+                class="btn-key-hint-sm"
+              />
             </button>
           </div>
         </div>
@@ -342,22 +348,21 @@ const setupKeyboardShortcuts = () => {
   if (!showDefinition.value) {
     setContext('review-initial')
     const initialKeys = hotkeys.value.reviewInitial
-    const keys: Record<string, () => void> = {
-      [initialKeys.remembered]: () => handleChoice('yes'),
-      [initialKeys.notRemembered]: () => handleChoice('no'),
-    }
+    const keys: Record<string, () => void> = {}
+    if (initialKeys.remembered) keys[initialKeys.remembered] = () => handleChoice('yes')
+    if (initialKeys.notRemembered) keys[initialKeys.notRemembered] = () => handleChoice('no')
     if (!isLapseMode.value) {
-      keys[initialKeys.stopReview] = () => handleChoice('stop')
+      if (initialKeys.stopReview) keys[initialKeys.stopReview] = () => handleChoice('stop')
+      if (initialKeys.resetTimer) keys[initialKeys.resetTimer] = () => handleResetTimer()
     }
     registerKeys(keys)
   } else {
     setContext('review-after')
     const afterKeys = hotkeys.value.reviewAfter
-    const keys: Record<string, () => void | Promise<void>> = {
-      [afterKeys.next]: async () => await handleNext()
-    }
+    const keys: Record<string, () => void | Promise<void>> = {}
+    if (afterKeys.next) keys[afterKeys.next] = async () => await handleNext()
     // 只在选择「记住了」时才注册「记错了」快捷键
-    if (pendingChoice.value === 'yes') {
+    if (pendingChoice.value === 'yes' && afterKeys.wrong) {
       keys[afterKeys.wrong] = async () => await handleCorrection()
     }
     registerKeys(keys)

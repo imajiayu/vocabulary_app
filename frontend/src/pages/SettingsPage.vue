@@ -364,7 +364,7 @@
             <div class="section-title-row">
               <span class="section-icon"><AppIcon name="command" /></span>
               <h2 class="section-title">快捷键设置</h2>
-              <span class="section-badge">8 项</span>
+              <span class="section-badge">10 项</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.hotkeys }]"><AppIcon name="expand" /></span>
           </div>
@@ -378,21 +378,28 @@
                   <span class="hotkey-label">记住 <BaseIcon name="Check" size="xs" color="success" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.reviewInitial.remembered"
-                    :used-keys="[settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.stopReview]"
+                    :used-keys="[settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.stopReview, settings.hotkeys.reviewInitial.resetTimer].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">没记住</span>
                   <KeySelector
                     v-model="settings.hotkeys.reviewInitial.notRemembered"
-                    :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.stopReview]"
+                    :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.stopReview, settings.hotkeys.reviewInitial.resetTimer].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">不再复习 <BaseIcon name="Ban" size="xs" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.reviewInitial.stopReview"
-                    :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.notRemembered]"
+                    :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.resetTimer].filter(k => k)"
+                  />
+                </div>
+                <div class="hotkey-row">
+                  <span class="hotkey-label">重置计时器</span>
+                  <KeySelector
+                    v-model="settings.hotkeys.reviewInitial.resetTimer"
+                    :used-keys="[settings.hotkeys.reviewInitial.remembered, settings.hotkeys.reviewInitial.notRemembered, settings.hotkeys.reviewInitial.stopReview].filter(k => k)"
                   />
                 </div>
               </div>
@@ -427,21 +434,28 @@
                   <span class="hotkey-label">播放发音</span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.playAudio"
-                    :used-keys="[settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next]"
+                    :used-keys="[settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">忘记了</span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.forgot"
-                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next]"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">下一个 <BaseIcon name="ArrowRight" size="xs" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.next"
-                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot]"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.resetInput].filter(k => k)"
+                  />
+                </div>
+                <div class="hotkey-row">
+                  <span class="hotkey-label">重置输入</span>
+                  <KeySelector
+                    v-model="settings.hotkeys.spelling.resetInput"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next].filter(k => k)"
                   />
                 </div>
               </div>
@@ -791,6 +805,7 @@ const settings = computed<UserSettings>(() =>
         remembered: 'ArrowRight',
         notRemembered: 'ArrowLeft',
         stopReview: 'ArrowDown',
+        resetTimer: '',
       },
       reviewAfter: {
         wrong: 'ArrowLeft',
@@ -800,6 +815,7 @@ const settings = computed<UserSettings>(() =>
         playAudio: 'ArrowLeft',
         forgot: 'ArrowRight',
         next: 'Enter',
+        resetInput: '',
       },
     },
   }
@@ -927,6 +943,7 @@ const resetSection = (section: string) => {
         remembered: 'ArrowRight',
         notRemembered: 'ArrowLeft',
         stopReview: 'ArrowDown',
+        resetTimer: '',
       },
       reviewAfter: {
         wrong: 'ArrowLeft',
@@ -936,6 +953,7 @@ const resetSection = (section: string) => {
         playAudio: 'ArrowLeft',
         forgot: 'ArrowRight',
         next: 'Enter',
+        resetInput: '',
       },
     }
   }

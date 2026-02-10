@@ -115,6 +115,12 @@
           >
             <span class="btn-sm-icon">↻</span>
             <span class="btn-sm-label">重置输入</span>
+            <KeyHint
+              v-if="hotkeys.spelling.resetInput"
+              :key-value="hotkeys.spelling.resetInput"
+              variant="default"
+              class="btn-key-hint-sm"
+            />
           </button>
         </div>
       </div>
@@ -281,7 +287,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
   const spellingKeys = hotkeys.value.spelling
 
-  if (event.key === spellingKeys.next) {
+  if (spellingKeys.next && event.key === spellingKeys.next) {
     if (canProceed.value) {
       event.preventDefault()
       handleNext()
@@ -289,13 +295,17 @@ const handleKeydown = (event: KeyboardEvent) => {
     return
   }
 
-  if (event.key === spellingKeys.playAudio) {
+  if (spellingKeys.playAudio && event.key === spellingKeys.playAudio) {
     event.preventDefault()
     handlePlayAudio()
     return
-  } else if (event.key === spellingKeys.forgot) {
+  } else if (spellingKeys.forgot && event.key === spellingKeys.forgot) {
     event.preventDefault()
     handleForgot()
+    return
+  } else if (spellingKeys.resetInput && event.key === spellingKeys.resetInput) {
+    event.preventDefault()
+    handleResetInput()
     return
   }
 

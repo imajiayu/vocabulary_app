@@ -11,7 +11,8 @@ const DEFAULT_HOTKEYS: HotkeySettings = {
   reviewInitial: {
     remembered: 'ArrowLeft',
     notRemembered: 'ArrowRight',
-    stopReview: 'ArrowDown'
+    stopReview: 'ArrowDown',
+    resetTimer: ''
   },
   reviewAfter: {
     wrong: 'ArrowLeft',
@@ -20,7 +21,8 @@ const DEFAULT_HOTKEYS: HotkeySettings = {
   spelling: {
     playAudio: 'ArrowLeft',
     forgot: 'ArrowRight',
-    next: 'Enter'
+    next: 'Enter',
+    resetInput: ''
   }
 }
 

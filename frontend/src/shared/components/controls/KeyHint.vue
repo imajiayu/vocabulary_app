@@ -1,5 +1,5 @@
 <template>
-  <span class="key-hint" :class="[`key-hint--${variant}`, { 'key-hint--compact': compact }]">
+  <span v-if="keyValue" class="key-hint" :class="[`key-hint--${variant}`, { 'key-hint--compact': compact }]">
     <span class="key-hint__key">{{ displayKey }}</span>
   </span>
 </template>
