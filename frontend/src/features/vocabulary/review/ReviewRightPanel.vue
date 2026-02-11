@@ -19,7 +19,7 @@
         </header>
 
         <Transition name="notification-fade" mode="out-in">
-          <div v-if="lastLapseResult" :key="lastLapseResult.word" class="lapse-tracker-card">
+          <div v-if="lastLapseResult" :key="lastLapseResult.word" class="lapse-tracker-card notif-lapse">
             <!-- 单词名 + 结果指示 -->
             <div class="lapse-word-row">
               <span class="lapse-word">{{ lastLapseResult.word }}</span>
@@ -37,7 +37,7 @@
                 </span>
               </div>
               <div class="reaction-bar-track">
-                <div class="reaction-bar-fill" :style="{ width: `${getReactionPercentage(lastLapseResult.elapsed_time)}%`, background: getReactionColor(lastLapseResult.elapsed_time) }"></div>
+                <div class="reaction-bar-fill" :style="{ width: `${getReactionPercentage(lastLapseResult.elapsed_time)}%`, background: getTimeColor(lastLapseResult.elapsed_time) }"></div>
                 <div class="reaction-threshold" :style="{ left: '50%' }">
                   <span class="threshold-label">4s</span>
                 </div>
@@ -95,7 +95,7 @@
 
       <!-- 有数据时显示通知内容 -->
       <Transition name="notification-fade" mode="out-in">
-        <div v-if="notificationData" :key="notificationData.word" class="notification-card">
+        <div v-if="notificationData" :key="notificationData.word" class="notification-card" :class="isReviewMode ? 'notif-review' : 'notif-spelling'">
           <!-- 单词 -->
           <div class="notif-word">{{ notificationData.word }}</div>
 
@@ -137,7 +137,7 @@
               <!-- 简化的时间刻度 -->
               <div class="time-scale">
                 <div class="scale-bar">
-                  <div class="scale-fill" :style="{ width: `${getTimePercentage(breakdown.elapsed_time ?? 0)}%` }"></div>
+                  <div class="scale-fill" :style="{ width: `${getTimePercentage(breakdown.elapsed_time ?? 0)}%`, background: getTimeColor(breakdown.elapsed_time ?? 0) }"></div>
                 </div>
                 <div class="scale-labels">
                   <span>0s</span>
@@ -386,7 +386,7 @@
       <Teleport to="body">
         <Transition name="mobile-notif-slide">
           <div v-if="isMobileNotifExpanded && notificationData && !isLapseMode" class="mobile-notif-overlay" @click.self="closeMobileNotif">
-            <div class="mobile-notif-panel">
+            <div class="mobile-notif-panel" :class="isReviewMode ? 'notif-review' : 'notif-spelling'">
               <!-- 面板头部 -->
               <div class="mobile-notif-header">
                 <span class="notif-header-word">{{ notificationData.word }}</span>
@@ -432,7 +432,7 @@
                   <span class="score-time">耗时 {{ (breakdown.elapsed_time ?? 0).toFixed(1) }}s</span>
                 </div>
                 <div class="score-bar">
-                  <div class="bar-fill" :style="{ width: `${getTimePercentage(breakdown.elapsed_time ?? 0)}%` }"></div>
+                  <div class="bar-fill" :style="{ width: `${getTimePercentage(breakdown.elapsed_time ?? 0)}%`, background: getTimeColor(breakdown.elapsed_time ?? 0) }"></div>
                 </div>
               </div>
 
@@ -466,7 +466,7 @@
       <Teleport to="body">
         <Transition name="mobile-notif-slide">
           <div v-if="isMobileLapseExpanded && lastLapseResult" class="mobile-notif-overlay" @click.self="closeMobileLapse">
-            <div class="mobile-lapse-panel">
+            <div class="mobile-lapse-panel notif-lapse">
               <!-- 面板头部 -->
               <div class="mobile-lapse-header">
                 <span class="lapse-header-word">{{ lastLapseResult.word }}</span>
@@ -492,7 +492,7 @@
                   </span>
                 </div>
                 <div class="reaction-bar-track">
-                  <div class="reaction-bar-fill" :style="{ width: `${getReactionPercentage(lastLapseResult.elapsed_time)}%`, background: getReactionColor(lastLapseResult.elapsed_time) }"></div>
+                  <div class="reaction-bar-fill" :style="{ width: `${getReactionPercentage(lastLapseResult.elapsed_time)}%`, background: getTimeColor(lastLapseResult.elapsed_time) }"></div>
                   <div class="reaction-threshold" :style="{ left: '50%' }">
                     <span class="threshold-label">4s</span>
                   </div>
@@ -760,7 +760,7 @@ const getReactionPercentage = (time: number): number => {
   return Math.min((time / 8) * 100, 100)
 }
 
-const getReactionColor = (time: number): string => {
+const getTimeColor = (time: number): string => {
   if (time < 2) return '#7FD17F'
   if (time < 3) return '#B0D87F'
   if (time < 4) return '#FFD77A'
@@ -947,17 +947,22 @@ onUnmounted(() => {
 /* 通知卡片 */
 .notification-card {
   background: linear-gradient(145deg,
-    rgba(153, 107, 61, 0.92),
-    rgba(139, 105, 20, 0.88)
+    rgba(58, 50, 42, 0.92),
+    rgba(42, 36, 30, 0.88)
   );
   border-radius: var(--radius-md);
   padding: 1rem;
   color: var(--primitive-paper-100);
   box-shadow:
-    0 4px 16px rgba(139, 105, 20, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 253, 247, 0.06);
+  border: 1px solid rgba(255, 253, 247, 0.06);
 }
+
+/* 模式色带 */
+.notif-review { border-top: 3px solid var(--primitive-copper-400); }
+.notif-spelling { border-top: 3px solid var(--primitive-olive-400); }
+.notif-lapse { border-top: 3px solid var(--primitive-brick-400); }
 
 .notif-word {
   font-family: var(--font-serif);
@@ -1080,16 +1085,15 @@ onUnmounted(() => {
 
 .scale-bar {
   height: 6px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .scale-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7FD17F, #FFD77A, #FF9B9B);
   border-radius: 3px;
-  transition: width 0.4s ease;
+  transition: width 0.4s ease, background 0.3s ease;
 }
 
 .scale-labels {
@@ -1128,7 +1132,7 @@ onUnmounted(() => {
 
 .spell-score-bar {
   height: 5px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -1239,16 +1243,16 @@ onUnmounted(() => {
 
 .lapse-tracker-card {
   background: linear-gradient(145deg,
-    rgba(45, 55, 72, 0.92),
-    rgba(26, 32, 44, 0.88)
+    rgba(58, 50, 42, 0.92),
+    rgba(42, 36, 30, 0.88)
   );
   border-radius: var(--radius-md);
   padding: 0.875rem;
   color: var(--primitive-paper-100);
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 253, 247, 0.06);
+  border: 1px solid rgba(255, 253, 247, 0.06);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -1335,7 +1339,7 @@ onUnmounted(() => {
 
 .reaction-bar-track {
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
   overflow: visible;
   position: relative;
@@ -2405,13 +2409,16 @@ onUnmounted(() => {
   width: 100%;
   max-width: 400px;
   background: linear-gradient(145deg,
-    rgba(153, 107, 61, 0.95),
-    rgba(139, 105, 20, 0.92)
+    rgba(58, 50, 42, 0.95),
+    rgba(42, 36, 30, 0.92)
   );
   border-radius: var(--radius-xl);
   padding: 1.25rem;
   color: var(--primitive-paper-100);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 253, 247, 0.06);
+  border: 1px solid rgba(255, 253, 247, 0.06);
 }
 
 .mobile-notif-header {
@@ -2518,15 +2525,19 @@ onUnmounted(() => {
 
 .score-bar {
   height: 6px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
   overflow: hidden;
 }
 
-.score-bar .bar-fill,
+.score-bar .bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease, background 0.3s ease;
+}
+
 .spell-bar .bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7FD17F, #FFD77A, #FF9B9B);
   border-radius: 3px;
   transition: width 0.4s ease;
 }
@@ -2552,7 +2563,7 @@ onUnmounted(() => {
 
 .spell-bar {
   height: 5px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -2596,13 +2607,16 @@ onUnmounted(() => {
   width: 100%;
   max-width: 400px;
   background: linear-gradient(145deg,
-    rgba(45, 55, 72, 0.97),
-    rgba(26, 32, 44, 0.95)
+    rgba(58, 50, 42, 0.95),
+    rgba(42, 36, 30, 0.92)
   );
   border-radius: var(--radius-xl);
   padding: 1.25rem;
   color: var(--primitive-paper-100);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 253, 247, 0.06);
+  border: 1px solid rgba(255, 253, 247, 0.06);
   display: flex;
   flex-direction: column;
   gap: 1rem;
