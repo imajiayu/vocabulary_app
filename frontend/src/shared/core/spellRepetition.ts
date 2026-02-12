@@ -7,6 +7,10 @@ import { findOptimalDay, findOptimalDayForStrong } from './loadBalancer'
 import type { LoadBalanceParams } from './loadBalancer'
 import type { SpellingData } from '@/shared/types'
 
+const NON_TYPING_KEYS = new Set([
+  'ArrowLeft', 'ArrowRight', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Escape', 'Backspace'
+])
+
 export interface SpellBreakdownInfo {
   remembered: boolean
   strength_gain: number
@@ -39,7 +43,7 @@ export function calculateSpellStrength(
   const strength = currentStrength ?? initialStrength
 
   if (!remembered) {
-    const newStrength = Math.round(strength * 0.3 * 100) / 100
+    const newStrength = Math.round(strength * 0.5 * 100) / 100
     const breakdownInfo: SpellBreakdownInfo = {
       remembered: false,
       strength_gain: Math.round((newStrength - strength) * 100) / 100,
@@ -63,10 +67,6 @@ function _calculateDetailedSpellStrength(
   const keyEvents = spellingData.keyEvents || []
   const interactions = spellingData.interactions || {}
   const inputAnalysis = spellingData.inputAnalysis || {}
-
-  const NON_TYPING_KEYS = new Set([
-    'ArrowLeft', 'ArrowRight', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Escape', 'Backspace'
-  ])
 
   const typedCount = keyEvents.filter(e => !NON_TYPING_KEYS.has(e.key)).length
   const backspaceCount = keyEvents.filter(e => e.key === 'Backspace').length
@@ -177,7 +177,8 @@ function _analyzeInputFluency(
 
 function _analyzeIndependence(interactions: SpellingData['interactions']): number {
   const audioRequests = interactions?.audioRequestCount ?? 0
-  return Math.max(0.0, 1.0 - audioRequests * 0.2)
+  const penalized = Math.max(0, audioRequests - 1)
+  return Math.max(0.0, 1.0 - penalized * 0.2)
 }
 
 /**
