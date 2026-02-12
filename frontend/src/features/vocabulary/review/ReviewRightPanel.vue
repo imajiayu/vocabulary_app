@@ -199,6 +199,9 @@
       </Transition>
     </section>
 
+    <!-- 未来负荷预览 -->
+    <ReviewLoadPreview />
+
     <!-- AI 助手入口 -->
     <section class="ai-section">
       <button
@@ -262,24 +265,10 @@
                 </div>
                 <h3 class="welcome-title">请教任何问题</h3>
                 <p class="welcome-desc">我是你的词汇学习助手，可以帮你理解词义、记忆技巧、搭配用法等</p>
-
-                <!-- 快捷建议 -->
-                <div class="ai-suggestions">
-                  <button
-                    v-for="(s, i) in suggestions"
-                    :key="i"
-                    class="suggestion-btn"
-                    :style="{ '--delay': `${i * 0.06}s` }"
-                    @click="handleSuggestionClick(s.text)"
-                  >
-                    <span class="suggestion-icon"><AppIcon :name="s.icon" /></span>
-                    <span class="suggestion-label">{{ s.label }}</span>
-                  </button>
-                </div>
               </div>
 
               <!-- 对话消息 -->
-              <template v-else>
+              <template v-if="messages.length > 0">
                 <TransitionGroup name="message-flow">
                   <div
                     v-for="(msg, index) in messages"
@@ -305,6 +294,21 @@
                 </div>
                 <span class="loading-text">正在书写...</span>
               </div>
+            </div>
+
+            <!-- 快捷建议（始终可见） -->
+            <div class="ai-suggestions">
+              <button
+                v-for="(s, i) in suggestions"
+                :key="i"
+                class="suggestion-btn"
+                :style="{ '--delay': `${i * 0.06}s` }"
+                @click="handleSuggestionClick(s.text)"
+                :disabled="isLoading"
+              >
+                <span class="suggestion-icon"><AppIcon :name="s.icon" /></span>
+                <span class="suggestion-label">{{ s.label }}</span>
+              </button>
             </div>
 
             <!-- 输入区 -->
@@ -575,23 +579,10 @@
                   </div>
                   <h3 class="welcome-title">请教任何问题</h3>
                   <p class="welcome-desc">我是你的词汇学习助手，可以帮你理解词义、记忆技巧、搭配用法等</p>
-
-                  <!-- 快捷建议 -->
-                  <div class="mobile-ai-suggestions">
-                    <button
-                      v-for="(s, i) in suggestions"
-                      :key="i"
-                      class="suggestion-btn"
-                      @click="handleSuggestionClick(s.text)"
-                    >
-                      <span class="suggestion-icon"><AppIcon :name="s.icon" /></span>
-                      <span class="suggestion-label">{{ s.label }}</span>
-                    </button>
-                  </div>
                 </div>
 
                 <!-- 对话消息 -->
-                <template v-else>
+                <template v-if="messages.length > 0">
                   <TransitionGroup name="message-flow">
                     <div
                       v-for="(msg, index) in messages"
@@ -617,6 +608,20 @@
                   </div>
                   <span class="loading-text">正在书写...</span>
                 </div>
+              </div>
+
+              <!-- 快捷建议（始终可见） -->
+              <div class="mobile-ai-suggestions">
+                <button
+                  v-for="(s, i) in suggestions"
+                  :key="i"
+                  class="suggestion-btn"
+                  @click="handleSuggestionClick(s.text)"
+                  :disabled="isLoading"
+                >
+                  <span class="suggestion-icon"><AppIcon :name="s.icon" /></span>
+                  <span class="suggestion-label">{{ s.label }}</span>
+                </button>
               </div>
 
               <!-- 输入区 -->
@@ -662,6 +667,7 @@ import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { useChatMessages } from '@/shared/composables/useChatMessages'
 import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
+import ReviewLoadPreview from './ReviewLoadPreview.vue'
 
 interface Props {
   notificationData?: ReviewNotificationData | null
@@ -937,11 +943,10 @@ onUnmounted(() => {
    ───────────────────────────────────────────────────────────────────────────── */
 
 .notification-section {
-  flex: 1;
+  flex-shrink: 0;
+  min-height: 15rem;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
 }
 
 /* 通知卡片 */
@@ -1843,43 +1848,42 @@ onUnmounted(() => {
   max-width: 280px;
 }
 
-/* 快捷建议 */
+/* 快捷建议（始终可见，位于输入区上方） */
 .ai-suggestions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-  width: 100%;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--primitive-paper-300);
+  flex-shrink: 0;
 }
 
 .suggestion-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
+  gap: 0.4rem;
+  padding: 0.45rem 0.6rem;
   background: var(--primitive-paper-50);
   border: 1px solid var(--primitive-paper-400);
   border-radius: var(--radius-default);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s ease;
   font-family: var(--font-ui);
-  animation: suggestionPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-  animation-delay: var(--delay);
 }
 
-@keyframes suggestionPop {
-  from { opacity: 0; transform: scale(0.9) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+.suggestion-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.suggestion-btn:hover {
-  transform: translateY(-2px);
+.suggestion-btn:not(:disabled):hover {
   border-color: var(--primitive-copper-300);
-  box-shadow: 0 4px 12px rgba(153, 107, 61, 0.12);
+  box-shadow: 0 2px 8px rgba(153, 107, 61, 0.1);
   background: var(--primitive-paper-100);
 }
 
-.suggestion-btn:active {
-  transform: translateY(0) scale(0.98);
+.suggestion-btn:not(:disabled):active {
+  transform: scale(0.98);
 }
 
 .suggestion-icon {
@@ -1888,12 +1892,12 @@ onUnmounted(() => {
 }
 
 .suggestion-icon .icon {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
 
 .suggestion-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--primitive-ink-600);
   font-weight: 500;
 }
@@ -2722,10 +2726,12 @@ onUnmounted(() => {
 }
 
 .mobile-ai-suggestions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--primitive-paper-300);
+  flex-shrink: 0;
 }
 
 .mobile-ai-input-area {

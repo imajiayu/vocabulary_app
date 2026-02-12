@@ -188,6 +188,8 @@ export const useReviewStore = defineStore('review', () => {
     wordResults: result.wordResults,
     shuffle: queue.shuffle,
     notification: result.notification,
+    reviewLoadsCache: result.reviewLoadsCache,
+    spellLoadsCache: result.spellLoadsCache,
     graduatedWords: lapse.graduatedWords,
     initialWordCount: lapse.initialWordCount,
     wordGapLevels: lapse.wordGapLevels,

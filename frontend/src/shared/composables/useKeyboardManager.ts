@@ -40,6 +40,16 @@ const globalState: KeyboardManagerState = {
 let globalListenerRegistered = false
 
 const handleGlobalKeydown = async (event: KeyboardEvent) => {
+  // 0. 输入元素内不拦截快捷键（允许正常输入/光标移动）
+  const target = event.target as HTMLElement
+  if (
+    target.tagName === 'INPUT' ||
+    target.tagName === 'TEXTAREA' ||
+    target.isContentEditable
+  ) {
+    return
+  }
+
   // 1. 防止重复触发
   if (globalState.pressedKeys.has(event.key)) {
     event.preventDefault()

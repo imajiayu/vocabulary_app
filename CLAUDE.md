@@ -101,6 +101,8 @@ shared/
 
 详见 **[docs/database-schema.md](docs/database-schema.md)**
 
+**迁移规范**：`supabase/migrations/` 中 baseline 文件（`00000000000*`）记录初始状态，不可修改；Schema 变更只通过新增迁移文件（时间戳前缀）实现。二者不可混用。
+
 - 12 张表：words, words_relations, current_progress, user_config, relation_generation_log, speaking_topics, speaking_questions, speaking_records, writing_folders, writing_prompts, writing_sessions, review_history
 - 13 个视图：stats_words_raw, stats_next/spell_next_review_distribution, stats_elapsed_time/review_count/added_date/lapse/interval_distribution, stats_mastered_overview, stats_daily_activity, stats_hourly_distribution, word_source_stats, relation_stats
 - 1 个函数：update_updated_at()

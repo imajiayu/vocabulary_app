@@ -434,30 +434,30 @@ GROUP BY user_id, source;
 
 ### stats_daily_activity
 
-Daily review activity from review_history (timezone: Asia/Shanghai).
+Daily review activity from review_history (timezone: UTC).
 
 ```sql
 SELECT user_id, source,
-    (reviewed_at AT TIME ZONE 'Asia/Shanghai')::date AS date,
+    (reviewed_at AT TIME ZONE 'UTC')::date AS date,
     COUNT(*) AS total_reviews,
     COUNT(*) FILTER (WHERE remembered) AS correct,
     COUNT(*) FILTER (WHERE NOT remembered) AS incorrect,
     COUNT(*) FILTER (WHERE mode = 'review') AS review_mode_count,
     COUNT(*) FILTER (WHERE mode = 'spelling') AS spelling_mode_count
 FROM review_history
-GROUP BY user_id, source, (reviewed_at AT TIME ZONE 'Asia/Shanghai')::date;
+GROUP BY user_id, source, (reviewed_at AT TIME ZONE 'UTC')::date;
 ```
 
 ### stats_hourly_distribution
 
-Hourly review distribution from review_history (timezone: Asia/Shanghai).
+Hourly review distribution from review_history (timezone: UTC).
 
 ```sql
 SELECT user_id, source,
-    EXTRACT(HOUR FROM reviewed_at AT TIME ZONE 'Asia/Shanghai')::integer AS hour,
+    EXTRACT(HOUR FROM reviewed_at AT TIME ZONE 'UTC')::integer AS hour,
     COUNT(*) AS count
 FROM review_history
-GROUP BY user_id, source, EXTRACT(HOUR FROM reviewed_at AT TIME ZONE 'Asia/Shanghai')::integer;
+GROUP BY user_id, source, EXTRACT(HOUR FROM reviewed_at AT TIME ZONE 'UTC')::integer;
 ```
 
 ### relation_stats
