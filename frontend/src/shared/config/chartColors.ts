@@ -33,10 +33,10 @@ export const heatmapColors = {
     notAvailable: '#C4B8A8',   // 不可拼写（温暖灰）
   },
 
-  // EF(难度系数)热力图
+  // EF(难度系数)热力图 — 深色调，纯色块无文字
   ef: {
-    mastered: '#5D7A5D',       // 熟练单词
-    difficult: '#9B3B3B',      // 困难单词
+    mastered: '#5D7A5D',       // olive-500 熟练单词
+    difficult: '#9B3B3B',      // brick-500 困难单词
   },
 } as const
 

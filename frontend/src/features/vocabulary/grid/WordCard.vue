@@ -10,7 +10,7 @@
       }"
       :style="{
         backgroundColor: isRemembered ? 'var(--color-success)' : backgroundColor,
-        color: 'var(--primitive-ink-600)'
+        color: isRemembered ? '#fff' : undefined,
       }"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
@@ -59,21 +59,26 @@ const isRemembered = computed(() => props.word.stop_review);
 
 const backgroundColor = computed(() => {
   const ef = props.word.ease_factor;
-  if (ef <= 1.3) return 'rgb(239, 68, 68)'; // red-500
-  if (ef >= 3.0) return 'rgb(59, 130, 246)'; // blue-500
-  
+
+  // 使用设计系统的 brick/olive 浅色调，保证深色文字可读性
+  // brick-200 rgb(232,184,184) → 白色 → olive-200 rgb(200,212,200)
+  if (ef <= 1.3) return 'var(--primitive-brick-200)';
+  if (ef >= 3.0) return 'var(--primitive-olive-200)';
+
   if (ef < 2.5) {
+    // brick-200 → 白色
     const t = (ef - 1.3) / (2.5 - 1.3);
-    const r = Math.round(239 + (255 - 239) * t);
-    const g = Math.round(68 + (255 - 68) * t);
-    const b = Math.round(68 + (255 - 68) * t);
+    const r = Math.round(232 + (255 - 232) * t);
+    const g = Math.round(184 + (255 - 184) * t);
+    const b = Math.round(184 + (255 - 184) * t);
     return `rgb(${r}, ${g}, ${b})`;
   }
-  
+
+  // 白色 → olive-200
   const t = (ef - 2.5) / (3.0 - 2.5);
-  const r = Math.round(255 + (59 - 255) * t);
-  const g = Math.round(255 + (130 - 255) * t);
-  const b = Math.round(255 + (246 - 255) * t);
+  const r = Math.round(255 + (200 - 255) * t);
+  const g = Math.round(255 + (212 - 255) * t);
+  const b = Math.round(255 + (200 - 255) * t);
   return `rgb(${r}, ${g}, ${b})`;
 });
 

@@ -239,8 +239,11 @@ const loadRemainingBatches = async () => {
     }
 };
 
-// 初始化加载数据
+// 桌面端隐藏页面滚动条
+const isDesktop = window.matchMedia('(min-width: 769px)').matches
+
 onMounted(async () => {
+    if (isDesktop) document.documentElement.classList.add('hide-scrollbar')
     try {
         // Initialize source filter to sync with WordIndex selection (read-only)
         await initializeFromData();
@@ -411,6 +414,7 @@ const handleBatchDelete = (wordIds: number[]) => {
 };
 
 onUnmounted(() => {
+    document.documentElement.classList.remove('hide-scrollbar')
     // 停止后台加载
     shouldStopLoading.value = true;
 })

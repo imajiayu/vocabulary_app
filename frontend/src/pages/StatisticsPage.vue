@@ -221,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, shallowRef, triggerRef, computed, watch, Teleport } from 'vue'
+import { onMounted, onUnmounted, ref, shallowRef, triggerRef, computed, watch, Teleport } from 'vue'
 import PageLayout from '@/shared/components/layout/PageLayout.vue'
 import ChartGrid from '@/features/statistics/components/ChartGrid.vue'
 import ChartCard from '@/features/statistics/components/ChartCard.vue'
@@ -359,7 +359,10 @@ const handleSourceChange = (newSource: string) => {
   currentSource.value = newSource
 }
 
+// 桌面端隐藏页面滚动条
+const isDesktop = window.matchMedia('(min-width: 769px)').matches
 onMounted(async () => {
+  if (isDesktop) document.documentElement.classList.add('hide-scrollbar')
   try {
     // Initialize source from Supabase settings to sync with WordIndex
     await initializeFromData()
@@ -376,6 +379,10 @@ onMounted(async () => {
   } catch (e: unknown) {
     error.value = e instanceof Error ? e.message : String(e)
   }
+})
+
+onUnmounted(() => {
+  document.documentElement.classList.remove('hide-scrollbar')
 })
 
 // EF histogram buckets (0.1 rounding)

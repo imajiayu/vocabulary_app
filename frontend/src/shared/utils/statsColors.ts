@@ -8,6 +8,8 @@ const MAX_SPELL_STRENGTH = 5.0
 
 /**
  * 计算拼写热力图单元格颜色
+ * 深色调：olive-600 (74,106,74) + alpha 渐变
+ * 热力图纯色块无文字，用饱和色更清晰
  */
 export function calcSpellColor(
   spellStrength: number | null,
@@ -19,7 +21,6 @@ export function calcSpellColor(
   if (spellStrength === null) {
     return heatmapColors.spell.notSpelled
   }
-  // 绿色渐变 - 已拼写 (橄榄绿色系 rgb(74,106,74))
   const clamped = Math.max(0, Math.min(1, spellStrength / MAX_SPELL_STRENGTH))
   const alpha = 0.15 + 0.85 * clamped
   return `rgba(74,106,74,${alpha.toFixed(3)})`
@@ -44,30 +45,30 @@ export function calcSpellTooltip(
 
 /**
  * 计算EF热力图单元格颜色
- * EF范围: 1.3 (困难/砖红) -> 2.5 (中性/白) -> 3.0+ (熟练/橄榄绿)
+ * 深色调：brick-500 (155,59,59) → 白 → olive-500 (93,122,93)
+ * 热力图纯色块无文字，用饱和色更清晰
  */
 export function calcEfColor(ef: number | null): string {
   if (ef === null) {
     return '#ffffff'
   }
   if (ef <= 1.3) {
-    return heatmapColors.ef.difficult // 砖红 - 困难
+    return heatmapColors.ef.difficult // brick-500
   }
   if (ef >= 3.0) {
-    return heatmapColors.ef.mastered // 橄榄绿 - 熟练
+    return heatmapColors.ef.mastered // olive-500
   }
-  if (ef === 2.5) {
-    return '#ffffff' // 白色 - 中性
-  }
+
   if (ef < 2.5) {
-    // 砖红(155,59,59)到白色渐变
+    // brick-500 (155,59,59) → 白色
     const t = (ef - 1.3) / (2.5 - 1.3)
     const r = Math.round(155 + (255 - 155) * t)
     const g = Math.round(59 + (255 - 59) * t)
     const b = Math.round(59 + (255 - 59) * t)
     return `rgb(${r},${g},${b})`
   }
-  // ef > 2.5 && ef < 3.0: 白色到橄榄绿(93,122,93)渐变
+
+  // 白色 → olive-500 (93,122,93)
   const t = (ef - 2.5) / (3.0 - 2.5)
   const r = Math.round(255 - (255 - 93) * t)
   const g = Math.round(255 - (255 - 122) * t)

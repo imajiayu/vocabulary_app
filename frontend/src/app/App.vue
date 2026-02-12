@@ -83,6 +83,17 @@ body {
   position: relative;
 }
 
+/* 隐藏滚动条（保持可滚动） */
+html.hide-scrollbar,
+html.hide-scrollbar body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html.hide-scrollbar::-webkit-scrollbar,
+html.hide-scrollbar body::-webkit-scrollbar {
+  display: none;
+}
+
 /* 页面加载骨架屏 */
 .page-loading {
   min-height: 100vh;
