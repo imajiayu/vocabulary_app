@@ -224,6 +224,13 @@ const currentComponent = computed(() => {
   return mode.value === 'mode_spelling' ? SpellingCard : ReviewCard
 })
 
+// 复习完成时，取消 debounce + 清除 DB 进度，避免首页显示残留通知
+watch(currentWord, (word, oldWord) => {
+  if (!word && oldWord) {
+    reviewStore.clearSessionProgress()
+  }
+})
+
 const modeLabel = computed(() => {
   switch (mode.value) {
     case 'mode_lapse': return '复习错题'

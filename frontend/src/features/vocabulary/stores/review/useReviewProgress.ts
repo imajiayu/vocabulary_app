@@ -73,6 +73,12 @@ export function useReviewProgress() {
     window.addEventListener('beforeunload', beforeUnloadHandler)
   }
 
+  const clearSessionProgress = () => {
+    cancelPendingIndex()
+    api.progress.clearProgressDirect()
+      .catch(err => log.warn('Failed to clear session progress:', err))
+  }
+
   const cleanup = () => {
     cancelPendingIndex()
     if (beforeUnloadHandler && typeof window !== 'undefined') {
@@ -88,6 +94,7 @@ export function useReviewProgress() {
     flushProgressIndex,
     cancelPendingIndex,
     debouncedUpdateProgressIndex,
+    clearSessionProgress,
     cleanup,
   }
 }

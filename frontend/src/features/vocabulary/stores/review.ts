@@ -217,5 +217,6 @@ export const useReviewStore = defineStore('review', () => {
     preloadUpcomingAudio: audio.preloadUpcomingAudio,
     closeNotification: result.closeNotification,
     flushProgressIndex: progress.flushProgressIndex,
+    clearSessionProgress: progress.clearSessionProgress,
   }
 })
