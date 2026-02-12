@@ -182,12 +182,17 @@ function _analyzeIndependence(interactions: SpellingData['interactions']): numbe
 
 /**
  * 基于强度变化计算下次拼写复习间隔
+ *
+ * growthFactor 由 maxPrepDays 动态推导：
+ *   strength=5 时 interval = maxPrepDays / 2（保证备考周期内至少复习 2 次）
+ *   → growthFactor = (maxPrepDays / 2) ^ (1/5)
  */
 export function calculateNextSpellReview(
   strengthChange: number,
   originalStrength: number,
   remembered: boolean,
-  baseInterval = 1
+  baseInterval = 1,
+  maxPrepDays = 45
 ): number {
   let newStrength = originalStrength + strengthChange
   newStrength = Math.max(0, newStrength)
@@ -196,9 +201,10 @@ export function calculateNextSpellReview(
 
   if (newStrength <= 0) return baseInterval
 
-  const growthFactor = 1.8
+  const maxInterval = maxPrepDays / 2
+  const growthFactor = maxInterval ** (1 / 5)
   const interval = baseInterval * (growthFactor ** newStrength)
-  return Math.min(180, Math.max(1, Math.round(interval)))
+  return Math.min(maxPrepDays, Math.max(1, Math.round(interval)))
 }
 
 export interface SpellResult {
@@ -258,15 +264,10 @@ export function calculateSpellStrengthWithLoadBalancing(
 
   const strength = currentStrength ?? initialStrength
 
-  // 2. 计算基础间隔
+  // 2. 计算基础间隔（已内置 maxPrepDays 上限）
   let basicInterval = calculateNextSpellReview(
-    strengthChange, strength, remembered, baseInterval
+    strengthChange, strength, remembered, baseInterval, maxPrepDays
   )
-
-  // 3. 备考时间约束
-  if (basicInterval > maxPrepDays) {
-    basicInterval = maxPrepDays
-  }
 
   const newStrength = strength + strengthChange
 
