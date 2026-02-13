@@ -396,17 +396,6 @@ SELECT user_id, source,
 FROM words GROUP BY user_id, source;
 ```
 
-### stats_lapse_distribution
-
-Words by lapse count (active words only).
-
-```sql
-SELECT user_id, source,
-    COALESCE(lapse, 0) AS lapse, COUNT(*) AS count
-FROM words WHERE stop_review = 0
-GROUP BY user_id, source, COALESCE(lapse, 0);
-```
-
 ### stats_interval_distribution
 
 Words by review interval in days (active words only).

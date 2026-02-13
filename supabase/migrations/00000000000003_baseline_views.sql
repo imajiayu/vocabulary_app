@@ -1,7 +1,7 @@
 -- =============================================
 -- Baseline Part 3: Views
 -- =============================================
--- 13 views total
+-- 12 views total
 
 -- =========================
 -- stats_words_raw
@@ -100,20 +100,6 @@ FROM words
 WHERE stop_review = 0 AND date_added IS NOT NULL
 GROUP BY user_id, source, date_added
 ORDER BY user_id, source, date_added;
-
--- =========================
--- stats_lapse_distribution
--- =========================
-
-CREATE OR REPLACE VIEW stats_lapse_distribution AS
-SELECT
-    user_id,
-    source,
-    COALESCE(lapse, 0) AS lapse,
-    COUNT(*) AS count
-FROM words
-WHERE stop_review = 0
-GROUP BY user_id, source, COALESCE(lapse, 0);
 
 -- =========================
 -- stats_interval_distribution

@@ -57,11 +57,6 @@ interface ReviewCountRow {
   count: number | string
 }
 
-interface LapseRow {
-  lapse: number | string
-  count: number | string
-}
-
 interface IntervalRow {
   interval: number | string
   count: number | string
@@ -100,7 +95,6 @@ export interface StatsResponse {
   spell_heatmap_cells: HeatmapCell[]
   ef_heatmap_cells: HeatmapCell[]
   // Layer 1 new data
-  lapse_dict: Record<number, number>
   interval_dict: Record<number, number>
   accuracy_dict: Record<string, number>
   mastered_overview: { total_mastered: number; avg_ease_factor: number | null; avg_review_count: number | null; avg_elapsed_time: number | null } | null
@@ -199,7 +193,6 @@ export class StatsApi {
       elapsedTimeData,
       reviewCountData,
       addedDateData,
-      lapseData,
       intervalData,
       masteredData,
       dailyActivityData,
@@ -245,13 +238,6 @@ export class StatsApi {
         'date, count',
         sourceFilter,
         'date'
-      ),
-      // 遗忘次数分布
-      fetchAllRows<LapseRow>(
-        'stats_lapse_distribution',
-        'lapse, count',
-        sourceFilter,
-        'lapse'
       ),
       // 复习间隔分布
       fetchAllRows<IntervalRow>(
@@ -350,12 +336,6 @@ export class StatsApi {
       added_date_count_dict[row.date] = toInt(row.count)
     }
 
-    // Lapse distribution
-    const lapse_dict: Record<number, number> = {}
-    for (const row of lapseData) {
-      lapse_dict[toInt(row.lapse)] = toInt(row.count)
-    }
-
     // Interval distribution
     const interval_dict: Record<number, number> = {}
     for (const row of intervalData) {
@@ -412,7 +392,6 @@ export class StatsApi {
       review_count_dict,
       spell_heatmap_cells,
       ef_heatmap_cells,
-      lapse_dict,
       interval_dict,
       accuracy_dict,
       mastered_overview,

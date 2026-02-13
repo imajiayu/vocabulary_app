@@ -1,6 +1,6 @@
 export type ChartId = 'review-count' | 'spell-strength' | 'ef-histogram'
   | 'reaction-time' | 'added-review-trend' | 'ef-pie'
-  | 'lapse-distribution' | 'interval-distribution' | 'accuracy-analysis'
+  | 'interval-distribution' | 'accuracy-analysis'
   | 'daily-activity' | 'daily-accuracy' | 'study-heatmap'
 
 export interface ChartDefinition {

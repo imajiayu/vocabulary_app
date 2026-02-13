@@ -65,14 +65,6 @@
             :colors="[palette.orange, palette.green, palette.blue]"
           />
         </template>
-        <template v-else-if="chart.id === 'lapse-distribution'">
-          <BarChart
-            :labels="lapseBar.labels"
-            :values="lapseBar.values"
-            :bar-color="palette.red"
-            :transparent="true"
-          />
-        </template>
         <template v-else-if="chart.id === 'interval-distribution'">
           <BarChart
             :labels="intervalBuckets.labels"
@@ -286,7 +278,6 @@ const statsData = shallowRef<Record<string, {
   reviewCountDict: Record<number, number>
   spellHeatmapCells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
   efHeatmapCells: Array<{word: string, value: number | null, available: boolean, color: string, tooltip: string}>
-  lapseDict: Record<number, number>
   intervalDict: Record<number, number>
   accuracyDict: Record<string, number>
   dailyActivity: Array<{ date: string; review_count: number; spelling_count: number; correct: number; total: number }>
@@ -306,7 +297,6 @@ const addedDateCountDict = computed(() => statsData.value[currentSource.value]?.
 const reviewCountDict = computed(() => statsData.value[currentSource.value]?.reviewCountDict || {})
 const spellHeatmapCells = computed(() => statsData.value[currentSource.value]?.spellHeatmapCells || EMPTY_ARRAY)
 const efHeatmapCells = computed(() => statsData.value[currentSource.value]?.efHeatmapCells || EMPTY_ARRAY)
-const lapseDict = computed(() => statsData.value[currentSource.value]?.lapseDict || {})
 const intervalDict = computed(() => statsData.value[currentSource.value]?.intervalDict || {})
 const accuracyDict = computed(() => statsData.value[currentSource.value]?.accuracyDict || {})
 const dailyActivity = computed(() => statsData.value[currentSource.value]?.dailyActivity || EMPTY_ARRAY)
@@ -327,7 +317,6 @@ const fetchStats = async (source: string) => {
       reviewCountDict: data.review_count_dict,
       spellHeatmapCells: data.spell_heatmap_cells || [],
       efHeatmapCells: data.ef_heatmap_cells || [],
-      lapseDict: data.lapse_dict,
       intervalDict: data.interval_dict,
       accuracyDict: data.accuracy_dict,
       dailyActivity: data.daily_activity,
@@ -505,16 +494,6 @@ const spellingPintSeries = computed(() => [{
   lineColor: palette.green,
   areaColor: palette.green
 }])
-
-// Lapse distribution (Layer 1)
-const lapseBar = computed(() => {
-  const dict = lapseDict.value
-  const keys = Object.keys(dict).map(Number).sort((a, b) => a - b)
-  return {
-    labels: keys.map(k => String(k)),
-    values: keys.map(k => dict[k]),
-  }
-})
 
 // Interval distribution — aggregate into 6 buckets (Layer 1)
 const intervalBuckets = computed(() => {
