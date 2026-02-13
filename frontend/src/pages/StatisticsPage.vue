@@ -214,6 +214,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, shallowRef, triggerRef, computed, watch, Teleport } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import PageLayout from '@/shared/components/layout/PageLayout.vue'
 import ChartGrid from '@/features/statistics/components/ChartGrid.vue'
 import ChartCard from '@/features/statistics/components/ChartCard.vue'
@@ -349,9 +350,9 @@ const handleSourceChange = (newSource: string) => {
 }
 
 // 桌面端隐藏页面滚动条
-const isDesktop = window.matchMedia('(min-width: 769px)').matches
+const { isDesktop } = useBreakpoint()
 onMounted(async () => {
-  if (isDesktop) document.documentElement.classList.add('hide-scrollbar')
+  if (isDesktop.value) document.documentElement.classList.add('hide-scrollbar')
   try {
     // Initialize source from Supabase settings to sync with WordIndex
     await initializeFromData()

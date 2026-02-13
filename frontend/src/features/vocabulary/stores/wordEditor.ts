@@ -5,6 +5,9 @@ import { api } from '@/shared/api'
 import type { Word, RelatedWord } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
 import { applyBoldToDefinition, stripBoldFromDefinition } from '@/shared/utils/definition'
+import { findOptimalDay } from '@/shared/core/loadBalancer'
+import { addDays } from '@/shared/services/wordResultService'
+import { useSettings } from '@/shared/composables/useSettings'
 
 const log = logger.create('WordEditor')
 
@@ -22,7 +25,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   // 回调函数：用于通知调用方单词已被更新/删除/标记
   const onWordUpdatedCallbacks = ref<Array<(word: Word) => void>>([])
   const onWordDeletedCallbacks = ref<Array<(wordId: number) => void>>([])
-  const onWordForgotCallbacks = ref<Array<(wordId: number) => void>>([])
+  const onWordForgotCallbacks = ref<Array<(wordId: number, updatedWord: Word, scheduledDay: number) => void>>([])
   const onWordMasteredCallbacks = ref<Array<(wordId: number) => void>>([])
   const onCloseCallbacks = ref<Array<(finalWord: Word | undefined) => void>>([])
 
@@ -212,21 +215,46 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   /**
    * 标记单词为"忘记"（进入错题集）
    * 重置学习进度，设置 lapse = 1（二值标记，前端维护 expanding retrieval）
+   * 通过负载均衡选择最优复习日期，避免某天负荷堆积
    */
   async function markForgot(): Promise<boolean> {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
     const word = currentWord.value
-
-    // 计算明天的日期（UTC，与后端和 Supabase 视图保持一致）
-    const tomorrow = new Date(Date.now() + 86400000)
-    const nextReview = tomorrow.toISOString().split('T')[0]
+    const { loadSettings } = useSettings()
 
     try {
+      // 1. 获取设置和负荷数据
+      const userSettings = await loadSettings()
+      const dailyLimit = userSettings.learning.dailyReviewLimit || 50
+      const maxPrepDays = userSettings.learning.maxPrepDays || 45
+      const source = word.source || 'IELTS'
+
+      // 优先从 reviewStore 缓存读取，null 则 fetch fresh
+      let loads: number[]
+      try {
+        const { useReviewStore } = await import('../stores/review')
+        const reviewStore = useReviewStore()
+        loads = reviewStore.reviewLoadsCache ?? await api.words.getDailyReviewLoadsDirect(source, maxPrepDays)
+      } catch {
+        loads = await api.words.getDailyReviewLoadsDirect(source, maxPrepDays)
+      }
+
+      // 2. 负载均衡选择最优日期
+      const { chosenDay } = findOptimalDay({
+        baseInterval: 1,
+        dailyLimit,
+        currentLoads: loads,
+      })
+
+      // 3. 计算日期
+      const today = new Date().toISOString().split('T')[0]
+      const nextReview = addDays(today, chosenDay)
+
       const updatedWord = await api.words.updateWordDirect(wordId, {
         repetition: 0,
-        interval: 1,
+        interval: chosenDay,
         next_review: nextReview,
         ease_factor: parseFloat(Math.max(1.3, word.ease_factor - 0.4).toFixed(2)),
         lapse: 1,
@@ -237,8 +265,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       currentWord.value = updatedWord
       originalWord.value = { ...updatedWord }
 
-      // 触发忘记回调
-      onWordForgotCallbacks.value.forEach(cb => cb(wordId))
+      // 触发忘记回调（传递扩展参数）
+      onWordForgotCallbacks.value.forEach(cb => cb(wordId, updatedWord, chosenDay))
       onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
 
       return true
@@ -326,7 +354,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onWordDeletedCallbacks.value.push(callback)
   }
 
-  function onWordForgot(callback: (wordId: number) => void) {
+  function onWordForgot(callback: (wordId: number, updatedWord: Word, scheduledDay: number) => void) {
     onWordForgotCallbacks.value.push(callback)
   }
 

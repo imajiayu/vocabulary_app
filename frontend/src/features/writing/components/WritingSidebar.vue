@@ -178,7 +178,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import Loading from '@/shared/components/feedback/Loading.vue'
 import FolderItem from './FolderItem.vue'
 import PromptItem from './PromptItem.vue'
@@ -223,7 +224,7 @@ const data = {
 }
 
 // Local state
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 const showFolderInput = ref(false)
 const showPromptEditor = ref(false)
 const newFolderName = ref('')
@@ -279,11 +280,6 @@ async function handlePromptSave(payload: CreatePromptPayload) {
   }
 }
 
-// Mobile detection
-function checkMobile() {
-  isMobile.value = window.innerWidth <= 768
-}
-
 // Watch for folder input focus
 watch(showFolderInput, (show) => {
   if (show) {
@@ -303,16 +299,10 @@ watch(() => props.expanded, (newExpanded) => {
 // Lifecycle
 onMounted(async () => {
   await nextTick()
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
 
   if (props.expanded) {
     setTimeout(() => data.loadData(), 400)
   }
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 
 // Expose methods

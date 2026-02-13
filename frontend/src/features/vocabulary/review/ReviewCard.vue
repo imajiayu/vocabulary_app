@@ -191,6 +191,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import { Word } from '@/shared/types'
 import RelatedWordsPanel from '@/features/vocabulary/relations/RelatedWordsPanel.vue'
@@ -227,10 +228,7 @@ const pendingChoice = ref<string | null>(null)
 const isSubmitting = ref(false)
 
 // 移动端检测（快捷键提示只在桌面端显示）
-const isMobile = ref(false)
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
+const { isMobile } = useBreakpoint()
 
 // 缓存用于显示释义的单词数据（避免 Transition leave 动画期间内容跳变）
 const displayWord = ref<Word>(props.word)
@@ -410,8 +408,6 @@ watch(() => props.word?.id, (newWordId, oldWordId) => {
 }, { immediate: false })
 
 onMounted(async () => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
   await Promise.all([loadAudioAccent(), loadHotkeys()])
   setupKeyboardShortcuts()
   timer.start()
@@ -422,7 +418,6 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', checkMobile)
   if (autoPlayTimer) {
     clearTimeout(autoPlayTimer)
     autoPlayTimer = null

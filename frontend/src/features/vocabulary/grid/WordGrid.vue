@@ -219,8 +219,8 @@ const sortedWords = computed(() => {
 
 const visibleWords = computed(() => sortedWords.value.slice(0, renderCount.value));
 
-// 当 sortedWords 变化时（筛选/搜索/排序）重置 renderCount
-watch(sortedWords, () => {
+// 筛选/搜索/排序条件变化时重置 renderCount（加载新数据时不重置，避免列表闪回）
+watch([() => props.searchQuery, () => props.filterStatus, () => props.sourceFilter, sortFieldIndex, sortOrderIndex], () => {
   renderCount.value = RENDER_BATCH;
 });
 

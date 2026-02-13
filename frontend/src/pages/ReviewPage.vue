@@ -142,8 +142,47 @@ const sidebarWordChange = (finalWord: Word) => {
   }
 }
 
-const handleWordForgot = (wordId: number) => {
+const handleWordForgot = (wordId: number, updatedWord: Word, scheduledDay: number) => {
   wordResults.value.set(wordId, false)
+
+  // 计算 ease_factor 变化量（queue 中还是旧数据）
+  const queueWord = reviewStore.wordQueue.find(w => w.id === wordId)
+  const oldEaseFactor = queueWord?.ease_factor ?? updatedWord.ease_factor
+  const easeChange = Math.round((updatedWord.ease_factor - oldEaseFactor) * 100) / 100
+
+  // 更新 queue 中的单词数据
+  const index = reviewStore.wordQueue.findIndex(w => w.id === wordId)
+  if (index !== -1) {
+    reviewStore.wordQueue.splice(index, 1, updatedWord)
+  }
+
+  // 仅 review 模式：更新 loads cache + 触发 notification
+  if (mode.value === 'mode_review') {
+    if (reviewStore.reviewLoadsCache) {
+      const idx = scheduledDay - 1
+      if (idx >= 0 && idx < reviewStore.reviewLoadsCache.length) {
+        reviewStore.reviewLoadsCache[idx]++
+      }
+    }
+
+    reviewStore.notification = {
+      show: true,
+      data: {
+        word: updatedWord.word,
+        param_type: 'ease_factor',
+        param_change: easeChange,
+        new_param_value: updatedWord.ease_factor,
+        next_review_date: updatedWord.next_review,
+        breakdown: {
+          elapsed_time: 0,
+          remembered: false,
+          score: 0,
+          repetition: 0,
+          interval: scheduledDay,
+        }
+      }
+    }
+  }
 }
 
 const handleSidebarWordDeleted = (wordId: number) => {

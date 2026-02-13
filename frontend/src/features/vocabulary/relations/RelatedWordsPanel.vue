@@ -43,7 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref, onUnmounted } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { Word, RelatedWord } from '@/shared/types'
 import WordTooltip from '@/features/vocabulary/grid/WordTooltip.vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
@@ -88,7 +89,7 @@ const activeTypes = computed(() => {
 })
 
 // Tooltip 状态
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 const showTooltip = ref(false)
 const tooltipPosition = ref({ x: 0, y: 0 })
 const tooltipWord = ref<Word | undefined>(undefined)
@@ -99,10 +100,6 @@ const wordCache = new Map<number, Word>()
 // 定时器
 const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const HOVER_DELAY = 300
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
 
 const fetchAndShowTooltip = async (wordId: number, position: { x: number; y: number }) => {
   try {
@@ -150,13 +147,7 @@ const handleTooltipClose = () => {
   tooltipWord.value = undefined
 }
 
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
   if (hoverTimer.value) clearTimeout(hoverTimer.value)
 })
 </script>

@@ -30,7 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed } from 'vue';
+import { useBreakpoint } from '@/shared/composables/useBreakpoint';
 import WordTooltip from './WordTooltip.vue';
 import type { Word } from '@/shared/types';
 
@@ -53,7 +54,7 @@ const emit = defineEmits<{
 const isHovered = ref(false);
 const showTooltip = ref(false);
 const tooltipPosition = ref({ x: 0, y: 0 });
-const isMobile = ref(false);
+const { isMobile } = useBreakpoint();
 
 const isRemembered = computed(() => props.word.stop_review);
 
@@ -81,11 +82,6 @@ const backgroundColor = computed(() => {
   const b = Math.round(255 + (200 - 255) * t);
   return `rgb(${r}, ${g}, ${b})`;
 });
-
-// 检测是否为移动端
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768;
-};
 
 const handleMouseEnter = (e: MouseEvent) => {
   // 在移动端不显示 tooltip
@@ -124,14 +120,6 @@ const handleToggleSelection = () => {
   emit('toggleSelection', props.word.id);
 };
 
-onMounted(() => {
-  checkMobile();
-  window.addEventListener('resize', checkMobile);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile);
-});
 </script>
 
 <style scoped>

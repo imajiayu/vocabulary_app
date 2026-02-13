@@ -302,7 +302,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive, computed, onUnmounted } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import IOSSwitch from '@/shared/components/controls/IOSSwitch.vue'
 import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import ProgressNotification from '@/shared/components/feedback/ProgressNotification.vue'
@@ -328,7 +329,7 @@ const counts = reactive<Counts>({ review: 0, lapse: 0, spelling: 0, today_spell:
 const spellingLimit = ref(0)
 const reviewLimit = ref(0)
 const lapseLimit = ref(0)
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 
 // 进度恢复通知相关
 const showProgressNotification = ref(false)
@@ -463,20 +464,9 @@ const fetchSummary = async (isRetry = false) => {
   }
 }
 
-// 检测移动端
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
-
 onMounted(async () => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
   await loadAvailableSources()
   await fetchSummary()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 
 const goto = (mode: string) => {

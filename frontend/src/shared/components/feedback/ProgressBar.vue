@@ -18,6 +18,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 
 interface Props {
   progress: number // 0-100
@@ -69,16 +70,15 @@ const fillStyle = computed(() => {
   }
 })
 
+const { isMobile } = useBreakpoint()
+
 const textStyle = computed(() => {
   const baseHeight = parseInt(props.height?.toString() || '20')
   let fontSize = Math.max(10, baseHeight * 0.6)
 
   // 移动端字体大小调整
-  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+  if (isMobile.value) {
     fontSize = Math.max(10, Math.min(fontSize, 12))
-  }
-  if (typeof window !== 'undefined' && window.innerWidth <= 480) {
-    fontSize = Math.max(9, Math.min(fontSize, 11))
   }
 
   return {

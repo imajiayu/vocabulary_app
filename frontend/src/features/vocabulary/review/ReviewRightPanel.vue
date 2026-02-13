@@ -660,7 +660,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { Word, ReviewBreakdown, SpellingBreakdown } from '@/shared/types'
 import type { ReviewNotificationData } from '@/shared/api/words'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
@@ -680,7 +681,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // State
-const isMobile = ref(window.innerWidth <= 768)
+const { isMobile } = useBreakpoint()
 const isAIExpanded = ref(false)
 const isMobileNotifExpanded = ref(false)
 const isMobileLapseExpanded = ref(false)
@@ -815,19 +816,6 @@ const mobileNotifClass = computed(() => {
   return props.notificationData.param_change >= 0 ? 'badge-positive' : 'badge-negative'
 })
 
-// Resize handler
-const handleResize = () => {
-  isMobile.value = window.innerWidth <= 768
-}
-
-// Lifecycle
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
-})
 </script>
 
 <style scoped>
@@ -944,7 +932,7 @@ onUnmounted(() => {
 
 .notification-section {
   flex-shrink: 0;
-  min-height: 15rem;
+  min-height: 18rem;
   display: flex;
   flex-direction: column;
 }

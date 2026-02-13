@@ -5,6 +5,7 @@
  */
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuth } from '@/shared/composables/useAuth'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 
 interface Props {
@@ -19,12 +20,13 @@ const { userEmail, userAvatarUrl, userName, signOut } = useAuth()
 
 const showPopover = ref(false)
 const loggingOut = ref(false)
+const { isMobile } = useBreakpoint()
 
 // 动态计算 popover 位置
 const popoverStyle = computed(() => {
   // 桌面端：固定在导航栏旁边
   // 移动端：居中显示
-  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+  if (isMobile.value) {
     return {}
   }
   return {

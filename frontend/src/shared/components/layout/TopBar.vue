@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import { useRouter } from 'vue-router'
 import TopBarDropdown, { type DropdownItem } from './TopBarDropdown.vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
@@ -40,16 +41,11 @@ const emit = defineEmits<{
 
 const router = useRouter()
 const isNavigating = ref(false)
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 
 const computedHeight = computed(() => {
   return typeof props.height === 'number' ? `${props.height}px` : props.height
 })
-
-// 检测是否为移动端
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
 
 // 下拉菜单项
 const dropdownItems = computed<DropdownItem[]>(() => {
@@ -80,15 +76,6 @@ const dropdownItems = computed<DropdownItem[]>(() => {
     })
   }
   return items
-})
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 
 // 导航方法

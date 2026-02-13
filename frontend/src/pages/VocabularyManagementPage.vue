@@ -92,6 +92,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useBreakpoint } from '@/shared/composables/useBreakpoint';
 import WordInsertForm from '@/features/vocabulary/editor/WordInsertForm.vue';
 import SearchFilter from '@/features/vocabulary/grid/SearchFilter.vue';
 import WordGrid from '@/features/vocabulary/grid/WordGrid.vue';
@@ -192,14 +193,12 @@ const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
     }
 };
 
-// 并行加载所有剩余批次（并发限制 + 重试 + 按顺序插入）
+// 并行加载所有剩余批次（并发限制 + 重试 + 有序排水队列渐进更新）
 const loadRemainingBatches = async () => {
     if (!hasMoreWords.value || shouldStopLoading.value) return;
-
     isLoadingMore.value = true;
 
     try {
-        // 计算所有需要请求的 offset
         const offsets: number[] = [];
         for (let offset = batchSize.value; offset < totalWords.value; offset += batchSize.value) {
             offsets.push(offset);
@@ -210,27 +209,34 @@ const loadRemainingBatches = async () => {
             return;
         }
 
-        // 并发请求（限制 4 并发，每批最多重试 2 次，指数退避 500/1000ms）
-        const batchResults = await concurrentMap(
+        // 有序排水队列：每批完成后存入对应槽位，按顺序 drain 进 words
+        const slots: (Word[] | null)[] = new Array(offsets.length).fill(null);
+        let drainIndex = 0;
+
+        const drainReady = () => {
+            while (drainIndex < slots.length && slots[drainIndex] !== null) {
+                words.value.push(...slots[drainIndex]!);
+                slots[drainIndex] = null; // 释放内存
+                drainIndex++;
+                loadedWords.value = words.value.length;
+            }
+        };
+
+        await concurrentMap(
             offsets,
             async (offset) => {
+                if (shouldStopLoading.value) return;
                 const response = await api.words.getWordsPaginatedDirect(batchSize.value, offset);
-                return { offset, words: response.words };
+                const slotIndex = (offset - batchSize.value) / batchSize.value;
+                slots[slotIndex] = response.words;
+                drainReady();
             },
             4,
             { retries: 2, retryDelay: 500 },
         );
 
-        if (shouldStopLoading.value) return;
-
-        // 按 offset 顺序插入（concurrentMap 已保序）
-        for (const result of batchResults) {
-            if (result) {
-                words.value.push(...result.words);
-                loadedWords.value = words.value.length;
-            }
-        }
-
+        // 兜底 drain
+        drainReady();
         hasMoreWords.value = false;
     } catch (error) {
         logger.error('Failed to load remaining batches:', error);
@@ -240,10 +246,10 @@ const loadRemainingBatches = async () => {
 };
 
 // 桌面端隐藏页面滚动条
-const isDesktop = window.matchMedia('(min-width: 769px)').matches
+const { isDesktop } = useBreakpoint()
 
 onMounted(async () => {
-    if (isDesktop) document.documentElement.classList.add('hide-scrollbar')
+    if (isDesktop.value) document.documentElement.classList.add('hide-scrollbar')
     try {
         // Initialize source filter to sync with WordIndex selection (read-only)
         await initializeFromData();

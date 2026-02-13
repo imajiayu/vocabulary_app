@@ -96,7 +96,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import WordIndex from '@/features/vocabulary/index/WordIndex.vue'
 import SpeakingIndex from '@/pages/SpeakingPage.vue'
 import WritingIndex from '@/pages/WritingPage.vue'
@@ -121,7 +122,7 @@ const writingSidebarExpanded = ref(localStorage.getItem('writingSidebarExpanded'
 const selectedQuestion = ref<Question | null>(null)
 const selectedPrompt = ref<WritingPrompt | null>(null)
 const navExpanded = ref(false)
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 const writingSidebarRef = ref<InstanceType<typeof WritingSidebar> | null>(null)
 
 // Tab 数据
@@ -292,27 +293,14 @@ watch(activeTab, (newTab, oldTab) => {
   }
 })
 
-// 检测移动端
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
-
 // 组件挂载时恢复状态
 onMounted(() => {
-  // 检测移动端
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-
   // 如果当前是speaking模式，尝试恢复选中的问题
   if (activeTab.value === 'speaking') {
     nextTick(() => {
       restoreSelectedQuestion()
     })
   }
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 </script>
 

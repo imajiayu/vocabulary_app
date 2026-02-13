@@ -130,6 +130,7 @@
 
 <script setup lang="ts">
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import type { Word, SpellingData, SpellingKeyEvent, BackspaceSequence } from '@/shared/types'
 import SpellingKeyboard from './SpellingKeyboard.vue'
@@ -143,10 +144,7 @@ import { logger } from '@/shared/utils/logger'
 const log = logger.create('Spelling')
 
 // 移动端检测（快捷键提示只在桌面端显示）
-const isMobile = ref(false)
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
+const { isMobile } = useBreakpoint()
 
 interface Props {
   word: Word
@@ -463,8 +461,6 @@ watch(() => props.word, (newWord, oldWord) => {
 })
 
 onMounted(async () => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
   await Promise.all([loadAudioAccent(), loadHotkeys()])
   resetState()
   await nextTick()
@@ -475,7 +471,6 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', checkMobile)
   stopWordAudio()
 })
 </script>

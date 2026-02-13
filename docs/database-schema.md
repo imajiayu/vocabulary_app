@@ -9,7 +9,7 @@
 | Enum Types | 1 |
 | Functions | 1 |
 | Triggers | 1 |
-| Tables | 12 |
+| Tables | 13 |
 | Views | 13 |
 | Storage Buckets | 2 |
 | Edge Functions | 3 |
@@ -302,6 +302,31 @@ Per-review event log for trend analysis and statistics. Written fire-and-forget 
 |--------|-----------|------|
 | Users can read own review history | SELECT | `auth.uid() = user_id` |
 | Users can insert own review history | INSERT | `auth.uid() = user_id` |
+
+---
+
+### ai_prompt_cache
+
+Shared cache for AI vocabulary assistant responses. No `user_id` — all authenticated users share the same cache. Entries are immutable (no UPDATE/DELETE policies).
+
+| Column | Type | Nullable | Default | Description |
+|--------|------|----------|---------|-------------|
+| id | serial | NO | auto | Primary key |
+| word | varchar | NO | — | Normalized word (lowercase, trimmed) |
+| prompt_type | varchar(20) | NO | — | collocation / sentence / memory / synonym_antonym |
+| response | text | NO | — | Cached DeepSeek response |
+| created_at | timestamptz | NO | NOW() | Creation timestamp |
+
+**Constraints:** PK `id`, UNIQUE `(word, prompt_type)`
+
+**Indexes:** `idx_ai_prompt_cache_word` ON (word)
+
+**RLS Policies:**
+
+| Policy | Operation | Rule |
+|--------|-----------|------|
+| anyone_can_read | SELECT | `true` (all authenticated users) |
+| anyone_can_insert | INSERT | `true` (all authenticated users) |
 
 ---
 

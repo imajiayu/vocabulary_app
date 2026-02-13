@@ -103,7 +103,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted, TransitionGroup } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, TransitionGroup } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { Word } from '@/shared/types'
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
 import WordTooltip from '@/features/vocabulary/grid/WordTooltip.vue'
@@ -121,7 +122,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   sidebarWordChange: [finalWord: Word]
   wordDeleted: [wordId: number]
-  wordForgot: [wordId: number]
+  wordForgot: [wordId: number, updatedWord: Word, scheduledDay: number]
   wordMastered: [wordId: number]
 }>()
 
@@ -131,7 +132,7 @@ const wordListInnerRef = ref<HTMLDivElement | null>(null)
 const mobileWordListRef = ref<HTMLDivElement | null>(null)
 
 // State
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 const isCollapsed = ref(true)
 const showTooltip = ref(false)
 const tooltipPosition = ref({ x: 0, y: 0 })
@@ -164,10 +165,6 @@ const forgotCount = computed(() => {
 })
 
 // Methods
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
-
 const getWordStatus = (wordId: number): string => {
   // Lapse 模式：队首为当前正在复习的单词
   if (isLapseMode.value && props.words.length > 0 && props.words[0].id === wordId) {
@@ -233,8 +230,8 @@ const openModal = (word: Word) => {
     emit('wordDeleted', wordId)
   })
 
-  wordEditorStore.onWordForgot((wordId: number) => {
-    emit('wordForgot', wordId)
+  wordEditorStore.onWordForgot((wordId: number, updatedWord: Word, scheduledDay: number) => {
+    emit('wordForgot', wordId, updatedWord, scheduledDay)
   })
 
   wordEditorStore.onWordMastered((wordId: number) => {
@@ -285,13 +282,7 @@ watch(
 
 // Lifecycle
 onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
   setTimeout(() => isLapseMode.value ? scrollToTop() : scrollToBottom(), 100)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 </script>
 

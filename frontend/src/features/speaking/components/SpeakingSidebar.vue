@@ -142,6 +142,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import Loading from '@/shared/components/feedback/Loading.vue'
 import PartItem from './PartItem.vue'
 import SpeakingImportMenu from './SpeakingImportMenu.vue'
@@ -167,7 +168,7 @@ const { data } = createSpeakingContext({
 const importHandler = useSpeakingImport()
 
 // Local state
-const isMobile = ref(false)
+const { isMobile } = useBreakpoint()
 const fileInputRef = ref<HTMLInputElement | null>(null)
 
 // Sidebar toggle
@@ -228,11 +229,6 @@ function expandToSelectedQuestion(questionId: number | undefined) {
   }
 }
 
-// Mobile detection
-function checkMobile() {
-  isMobile.value = window.innerWidth <= 768
-}
-
 // Click outside handler
 function handleClickOutside(event: MouseEvent) {
   const target = event.target as HTMLElement
@@ -267,8 +263,6 @@ watch(() => props.expanded, (newExpanded, oldExpanded) => {
 // Lifecycle
 onMounted(async () => {
   await nextTick()
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
   document.addEventListener('click', handleClickOutside)
 
   if (props.expanded) {
@@ -277,7 +271,6 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
   document.removeEventListener('click', handleClickOutside)
 })
 

@@ -4,6 +4,7 @@
  */
 
 import { callDeepSeek } from '@/shared/services/deepseek'
+import { AiCacheApi } from './ai-cache'
 
 // 词汇助手消息参数接口
 export interface VocabularyAssistanceMessagePayload {
@@ -52,11 +53,23 @@ export class VocabularyAssistanceApi {
    * @returns AI响应
    */
   static async sendMessage(payload: VocabularyAssistanceMessagePayload): Promise<VocabularyAssistanceResponse> {
+    // 缓存查询：检测 prompt type + 查缓存
+    const promptType = AiCacheApi.detectPromptType(payload.message)
+    if (promptType && payload.word) {
+      const cached = await AiCacheApi.getCached(payload.word, promptType)
+      if (cached) return { response: cached }
+    }
+
     const systemPrompt = VOCABULARY_ASSISTANT_PROMPT
       .replace('{word}', payload.word || '暂无')
       .replace('{definition}', payload.definition || '暂无')
 
     const response = await callDeepSeek(systemPrompt, payload.message)
+
+    // Fire-and-forget 写入缓存
+    if (promptType && payload.word) {
+      AiCacheApi.saveToCache(payload.word, promptType, response)
+    }
 
     return { response }
   }

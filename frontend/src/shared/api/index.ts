@@ -14,6 +14,7 @@ import { ConfigApi } from './config'
 import { SettingsSupabaseApi } from './settings-supabase'
 import { RelationsApi } from './relations'
 import { VocabularyAssistanceApi } from './vocabulary-assistance'
+import { AiCacheApi } from './ai-cache'
 import type { Progress, SaveProgressPayload, RestoreData } from '@/shared/types'
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
@@ -61,6 +62,9 @@ export type {
   VocabularyAssistanceMessagePayload,
   VocabularyAssistanceResponse
 } from './vocabulary-assistance'
+
+export { AiCacheApi } from './ai-cache'
+export type { PromptType } from './ai-cache'
 
 // 进度恢复API（直连 Supabase）
 export class ProgressApi {
@@ -285,7 +289,8 @@ export const api = {
   settings: SettingsSupabaseApi,
   relations: RelationsApi,
   progress: ProgressApi,
-  vocabularyAssistance: VocabularyAssistanceApi
+  vocabularyAssistance: VocabularyAssistanceApi,
+  aiCache: AiCacheApi
 } as const
 
 export default api
