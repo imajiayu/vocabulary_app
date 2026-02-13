@@ -8,6 +8,14 @@ import type { LoadBalanceParams } from './loadBalancer'
 
 export const LOW_EF_THRESHOLD = 2.5
 
+const EF_DELTA_MAP: Record<number, number> = {
+  5: 0.15,
+  4: 0.08,
+  3: -0.02,
+  2: -0.20,
+  1: -0.40,
+}
+
 /**
  * 基于认知心理学的评分函数（Weber-Fechner 对数映射）
  */
@@ -41,15 +49,7 @@ export function sm2UpdateEaseFactor(
   minEf = 1.3,
   maxEf = 3.0
 ): number {
-  const deltaMap: Record<number, number> = {
-    5: 0.15,
-    4: 0.08,
-    3: -0.02,
-    2: -0.20,
-    1: -0.40,
-  }
-
-  let delta = deltaMap[score] ?? 0
+  let delta = EF_DELTA_MAP[score] ?? 0
   if (score >= 4 && easeFactor < LOW_EF_THRESHOLD) {
     delta *= 1.3
   }
@@ -85,7 +85,7 @@ export function calculateSrsParameters(
   const easeFactorNew = sm2UpdateEaseFactor(easeFactor, score)
 
   if (score >= 3) {
-    const growthFactor = score === 3 ? 0.3 : 1.0
+    const growthFactor = score === 3 ? 0.8 : 1.0
     const shrinkFactor = easeFactor <= LOW_EF_THRESHOLD ? 0.5 : 1.0
 
     let intervalNew: number
