@@ -373,7 +373,11 @@ const handleSkip = async () => {
   if (!currentWord.value) return
 
   try {
-    reviewStore.stopReviewWord(currentWord.value.id)
+    if (mode.value === 'mode_spelling') {
+      reviewStore.stopSpellWord(currentWord.value.id)
+    } else {
+      reviewStore.stopReviewWord(currentWord.value.id)
+    }
   } catch (error) {
     logger.error('停止复习单词失败:', error)
   }

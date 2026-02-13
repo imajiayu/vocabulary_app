@@ -186,21 +186,24 @@ export function calculateSpellingResult(
   )
 
   const newStrength = Math.max(0, Math.min(5.0, currentStrength + result.strengthChange))
+  const roundedNewStrength = Math.round(newStrength * 100) / 100
   const nextReviewDate = addDays(today, result.interval)
+  const shouldStopSpell = currentStrength >= 5.0 && roundedNewStrength >= 5.0
 
   return {
     notification: {
       word: word.word,
       param_type: 'spell_strength',
       param_change: Math.round(result.strengthChange * 100) / 100,
-      new_param_value: Math.round(newStrength * 100) / 100,
+      new_param_value: roundedNewStrength,
       next_review_date: nextReviewDate,
       breakdown: result.breakdownInfo as SpellingBreakdown,
     },
     persistData: {
       word_id: word.id,
-      new_strength: Math.round(newStrength * 100) / 100,
+      new_strength: roundedNewStrength,
       next_review: nextReviewDate,
+      should_stop_spell: shouldStopSpell,
     },
     interval: result.interval,
   }

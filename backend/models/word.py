@@ -33,6 +33,7 @@ class Word(Base):
     last_remembered = Column(Date)
     last_forgot = Column(Date)
     stop_review = Column(Integer, default=0)
+    stop_spell = Column(Integer, default=0)
     next_review = Column(Date)
     interval = Column(Integer, default=1)
     repetition = Column(Integer, default=0)

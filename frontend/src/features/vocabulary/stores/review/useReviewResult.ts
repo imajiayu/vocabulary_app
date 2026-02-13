@@ -115,6 +115,7 @@ export function useReviewResult() {
             ...wordQueue[idx],
             spell_strength: calcResult.persistData.new_strength,
             spell_next_review: calcResult.persistData.next_review,
+            stop_spell: calcResult.persistData.should_stop_spell ? 1 : wordQueue[idx].stop_spell,
           }
         }
 
@@ -148,6 +149,23 @@ export function useReviewResult() {
       .catch(log.error)
   }
 
+  const stopSpellWordNonLapse = (
+    wordId: number,
+    wordQueue: Ref<Word[]>,
+    debouncedUpdateProgressIndex: (idx: number) => void,
+    getGlobalIndex: () => number
+  ) => {
+    api.words.updateWordDirect(wordId, { stop_spell: 1 })
+      .then((updatedWord) => {
+        const index = wordQueue.value.findIndex(w => w.id === updatedWord.id)
+        if (index !== -1) {
+          wordQueue.value[index] = updatedWord
+        }
+        debouncedUpdateProgressIndex(getGlobalIndex())
+      })
+      .catch(log.error)
+  }
+
   const reset = () => {
     wordResults.value.clear()
     notification.value = { show: false, data: null }
@@ -163,6 +181,7 @@ export function useReviewResult() {
     closeNotification,
     processNonLapseResult,
     stopReviewWordNonLapse,
+    stopSpellWordNonLapse,
     reset,
   }
 }

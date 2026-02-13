@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
       .from('words')
       .update({ spell_next_review: maxDateStr })
       .eq('user_id', userId)
-      .eq('stop_review', 0)
+      .eq('stop_spell', 0)
       .not('spell_next_review', 'is', null)
       .gt('spell_next_review', maxDateStr)
       .select('id')

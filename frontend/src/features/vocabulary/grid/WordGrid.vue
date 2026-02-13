@@ -16,6 +16,15 @@
 
                 <button
                     v-if="isSelectionMode && selectedWordIds.size > 0"
+                    class="batch-toggle-btn"
+                    :class="batchSpellButtonClass"
+                    @click="handleBatchToggleSpell"
+                    :disabled="isBatchOperating || !canBatchToggleSpell">
+                    <span class="btn-text">{{ batchSpellButtonText }}</span>
+                </button>
+
+                <button
+                    v-if="isSelectionMode && selectedWordIds.size > 0"
                     class="batch-delete-btn"
                     @click="handleBatchDelete"
                     :disabled="isBatchOperating">
@@ -335,6 +344,60 @@ const batchToggleButtonClass = computed(() => {
         return 'mixed';
     }
 });
+
+// 批量拼写状态
+const allStopSpellTrue = computed(() => {
+    return selectedWords.value.length > 0 && selectedWords.value.every(word => word.stop_spell === 1);
+});
+
+const allStopSpellFalse = computed(() => {
+    return selectedWords.value.length > 0 && selectedWords.value.every(word => word.stop_spell === 0);
+});
+
+const canBatchToggleSpell = computed(() => {
+    return allStopSpellTrue.value || allStopSpellFalse.value;
+});
+
+const batchSpellButtonText = computed(() => {
+    if (allStopSpellTrue.value) return `恢复拼写 (${selectedWordIds.value.size})`;
+    if (allStopSpellFalse.value) return `停止拼写 (${selectedWordIds.value.size})`;
+    return `拼写状态不一致 (${selectedWordIds.value.size})`;
+});
+
+const batchSpellButtonClass = computed(() => {
+    if (allStopSpellTrue.value) return 'restore';
+    if (allStopSpellFalse.value) return 'spell-stop';
+    return 'mixed';
+});
+
+// 批量切换拼写状态处理
+const handleBatchToggleSpell = async () => {
+    if (selectedWordIds.value.size === 0 || !canBatchToggleSpell.value) return;
+
+    const newStatus = allStopSpellFalse.value ? 1 : 0;
+    const action = newStatus === 1 ? '停止拼写' : '恢复拼写';
+
+    isBatchOperating.value = true;
+    try {
+        const idsToUpdate = Array.from(selectedWordIds.value);
+        const updatedWords = await api.words.batchUpdateDirect(idsToUpdate, { stop_spell: newStatus });
+
+        updatedWords.forEach(updatedWord => {
+            const index = props.words.findIndex(w => w.id === updatedWord.id);
+            if (index !== -1) {
+                Object.assign(props.words[index], updatedWord);
+            }
+        });
+
+        selectedWordIds.value.clear();
+        isSelectionMode.value = false;
+    } catch (error) {
+        log.error('Batch toggle spell failed:', error);
+        alert(`批量${action}失败，请稍后重试`);
+    } finally {
+        isBatchOperating.value = false;
+    }
+};
 
 // 批量切换复习状态处理
 const handleBatchToggleReview = async () => {
@@ -742,6 +805,17 @@ const handleBatchDelete = async () => {
 .batch-toggle-btn.restore:hover:not(:disabled) {
     background: var(--color-processing-dark);
     box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+}
+
+.batch-toggle-btn.spell-stop {
+    background: var(--primitive-copper-500);
+    border-color: var(--primitive-copper-600);
+    color: white;
+}
+
+.batch-toggle-btn.spell-stop:hover:not(:disabled) {
+    background: var(--primitive-copper-600);
+    box-shadow: 0 4px 6px -1px rgba(153, 107, 61, 0.3);
 }
 
 .batch-toggle-btn.mixed {

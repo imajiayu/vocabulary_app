@@ -133,6 +133,22 @@ export const useReviewStore = defineStore('review', () => {
     }
   }
 
+  const stopSpellWord = (wordId: number): void => {
+    result.wordResults.value.set(wordId, true)
+
+    queue.currentIndex.value++
+    if (shouldLoadMore.value && !isCompleted.value) {
+      loadWords(false, true)
+    }
+
+    result.stopSpellWordNonLapse(
+      wordId,
+      queue.wordQueue,
+      progress.debouncedUpdateProgressIndex,
+      () => globalIndex.value
+    )
+  }
+
   const removeWordFromLapseSession = (wordId: number): void => {
     lapse.removeWordFromLapseSession(queue.wordQueue.value, wordId)
   }
@@ -207,6 +223,7 @@ export const useReviewStore = defineStore('review', () => {
     loadWords,
     submitResult,
     stopReviewWord,
+    stopSpellWord,
     removeWordFromLapseSession,
     removeWordFromSnapshot,
     switchMode,

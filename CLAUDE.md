@@ -105,7 +105,7 @@ shared/
 
 - 13 张表：words, words_relations, current_progress, user_config, relation_generation_log, speaking_topics, speaking_questions, speaking_records, writing_folders, writing_prompts, writing_sessions, review_history, ai_prompt_cache
 - 12 个视图：stats_words_raw, stats_next/spell_next_review_distribution, stats_elapsed_time/review_count/added_date/interval_distribution, stats_mastered_overview, stats_daily_activity, stats_hourly_distribution, word_source_stats, relation_stats
-- 1 个函数：update_updated_at()
+- 2 个函数：update_updated_at(), get_daily_spell_loads()
 - 2 个 Storage Bucket：speaking-audios, writing-images
 - 3 个 Edge Functions：adjust-max-prep-days, delete-source, fetch-definition
 

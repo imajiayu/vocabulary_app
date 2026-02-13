@@ -364,7 +364,7 @@
             <div class="section-title-row">
               <span class="section-icon"><AppIcon name="command" /></span>
               <h2 class="section-title">快捷键设置</h2>
-              <span class="section-badge">10 项</span>
+              <span class="section-badge">11 项</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.hotkeys }]"><AppIcon name="expand" /></span>
           </div>
@@ -434,28 +434,35 @@
                   <span class="hotkey-label">播放发音</span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.playAudio"
-                    :used-keys="[settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput].filter(k => k)"
+                    :used-keys="[settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput, settings.hotkeys.spelling.stopSpell].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">忘记了</span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.forgot"
-                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput].filter(k => k)"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput, settings.hotkeys.spelling.stopSpell].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">下一个 <BaseIcon name="ArrowRight" size="xs" /></span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.next"
-                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.resetInput].filter(k => k)"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.resetInput, settings.hotkeys.spelling.stopSpell].filter(k => k)"
                   />
                 </div>
                 <div class="hotkey-row">
                   <span class="hotkey-label">重置输入</span>
                   <KeySelector
                     v-model="settings.hotkeys.spelling.resetInput"
-                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next].filter(k => k)"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next, settings.hotkeys.spelling.stopSpell].filter(k => k)"
+                  />
+                </div>
+                <div class="hotkey-row">
+                  <span class="hotkey-label">不再拼写 <BaseIcon name="Ban" size="xs" /></span>
+                  <KeySelector
+                    v-model="settings.hotkeys.spelling.stopSpell"
+                    :used-keys="[settings.hotkeys.spelling.playAudio, settings.hotkeys.spelling.forgot, settings.hotkeys.spelling.next, settings.hotkeys.spelling.resetInput].filter(k => k)"
                   />
                 </div>
               </div>
@@ -741,7 +748,7 @@ const sections = computed<{ id: string; title: string; icon: IconName; itemCount
   { id: 'management', title: '管理', icon: 'sliders', itemCount: 2 },
   { id: 'sources', title: '来源', icon: 'layers', itemCount: localSources.value.length },
   { id: 'audio', title: '音频', icon: 'music-note', itemCount: 3 },
-  { id: 'hotkeys', title: '快捷键', icon: 'command', itemCount: 8 },
+  { id: 'hotkeys', title: '快捷键', icon: 'command', itemCount: 11 },
   { id: 'relations', title: '关联', icon: 'git-branch', itemCount: relationStats.value.total },
 ])
 
@@ -816,6 +823,7 @@ const settings = computed<UserSettings>(() =>
         forgot: 'ArrowRight',
         next: 'Enter',
         resetInput: '',
+        stopSpell: '',
       },
     },
   }
@@ -954,6 +962,7 @@ const resetSection = (section: string) => {
         forgot: 'ArrowRight',
         next: 'Enter',
         resetInput: '',
+        stopSpell: '',
       },
     }
   }

@@ -7,7 +7,7 @@
 | Category | Count |
 |----------|-------|
 | Enum Types | 1 |
-| Functions | 1 |
+| Functions | 2 |
 | Triggers | 1 |
 | Tables | 13 |
 | Views | 13 |
@@ -42,6 +42,22 @@ END;
 $$;
 ```
 
+### get_daily_spell_loads(p_source, p_days_ahead)
+
+Returns daily spelling review load for the next N days (default 45). Used by frontend load balancer for spelling schedule distribution.
+
+```sql
+CREATE OR REPLACE FUNCTION get_daily_spell_loads(
+  p_source TEXT, p_days_ahead INT DEFAULT 45
+) RETURNS TABLE(day_offset INT, review_count BIGINT) AS $$
+  SELECT (spell_next_review - CURRENT_DATE)::INT AS day_offset, COUNT(*) AS review_count
+  FROM words
+  WHERE user_id = auth.uid() AND source = p_source AND stop_spell = 0
+    AND spell_next_review BETWEEN CURRENT_DATE + 1 AND CURRENT_DATE + p_days_ahead
+  GROUP BY spell_next_review ORDER BY day_offset;
+$$ LANGUAGE sql STABLE SECURITY INVOKER;
+```
+
 ---
 
 ## Tables
@@ -62,6 +78,7 @@ SM-2 spaced repetition vocabulary.
 | last_remembered | date | YES | — | Last remembered date |
 | last_forgot | date | YES | — | Last forgotten date |
 | stop_review | integer | YES | — | 1 = mastered, excluded from review |
+| stop_spell | integer | YES | 0 | 1 = excluded from spelling queue |
 | next_review | date | YES | — | Next review date (SM-2) |
 | interval | integer | YES | — | Review interval in days (SM-2) |
 | repetition | integer | YES | — | Successful repetitions (SM-2) |
@@ -334,7 +351,7 @@ Shared cache for AI vocabulary assistant responses. No `user_id` — all authent
 
 ### stats_words_raw
 
-Raw word data for statistics (EF, spell strength, heatmaps, accuracy).
+Raw word data for statistics (EF, spell strength, heatmaps, accuracy). Exposes both `stop_review` and `stop_spell` flags — frontend filters by usage context (review stats use `stop_review=0`, spelling stats use `stop_spell=0`).
 
 ```sql
 SELECT user_id, id, word, source, ease_factor,
@@ -348,8 +365,10 @@ SELECT user_id, id, word, source, ease_factor,
     interval, last_score,
     COALESCE(lapse, 0) AS lapse,
     COALESCE(remember_count, 0) AS remember_count,
-    COALESCE(forget_count, 0) AS forget_count
-FROM words WHERE stop_review = 0;
+    COALESCE(forget_count, 0) AS forget_count,
+    COALESCE(stop_review, 0) AS stop_review,
+    COALESCE(stop_spell, 0) AS stop_spell
+FROM words;
 ```
 
 ### stats_next_review_distribution
@@ -368,7 +387,7 @@ Words due for spelling by date.
 
 ```sql
 SELECT user_id, source, spell_next_review AS date, COUNT(*) AS count
-FROM words WHERE stop_review = 0 AND spell_next_review IS NOT NULL
+FROM words WHERE stop_spell = 0 AND spell_next_review IS NOT NULL
 GROUP BY user_id, source, spell_next_review;
 ```
 
@@ -406,7 +425,7 @@ GROUP BY user_id, source, date_added;
 
 ### word_source_stats
 
-Aggregated statistics per source.
+Aggregated statistics per source. Review counts use `stop_review`, spelling counts use `stop_spell`.
 
 ```sql
 SELECT user_id, source,
@@ -415,8 +434,8 @@ SELECT user_id, source,
     count(*) FILTER (WHERE stop_review = 0) AS unremembered,
     count(*) FILTER (WHERE stop_review = 0 AND next_review IS NOT NULL AND next_review <= CURRENT_DATE) AS due_count,
     count(*) FILTER (WHERE stop_review = 0 AND lapse > 0) AS lapse_count,
-    count(*) FILTER (WHERE stop_review = 0 AND (repetition >= 3 OR spell_strength IS NOT NULL)) AS spelling_count,
-    count(*) FILTER (WHERE stop_review = 0 AND (repetition >= 3 OR spell_strength IS NOT NULL)
+    count(*) FILTER (WHERE stop_spell = 0 AND (repetition >= 3 OR spell_strength IS NOT NULL)) AS spelling_count,
+    count(*) FILTER (WHERE stop_spell = 0 AND (repetition >= 3 OR spell_strength IS NOT NULL)
         AND (spell_next_review IS NULL OR spell_next_review <= CURRENT_DATE)) AS today_spell_count
 FROM words GROUP BY user_id, source;
 ```

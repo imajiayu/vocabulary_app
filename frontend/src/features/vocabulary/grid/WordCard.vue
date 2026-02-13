@@ -18,6 +18,11 @@
       @click="handleClick"
     >
       <span class="word-text">{{ word.word }}</span>
+      <span
+        class="spell-bar"
+        :class="{ 'spell-bar-locked': !spellEligible }"
+        :style="spellBarStyle"
+      />
     </div>
 
     <WordTooltip
@@ -57,6 +62,31 @@ const tooltipPosition = ref({ x: 0, y: 0 });
 const { isMobile } = useBreakpoint();
 
 const isRemembered = computed(() => props.word.stop_review);
+const isSpellStopped = computed(() => props.word.stop_spell === 1);
+
+const spellEligible = computed(() => {
+  const w = props.word;
+  return (w.repetition || 0) >= 3 || w.spell_strength !== null;
+});
+
+// 底部条 inline style（不可拼写时由 CSS 类控制，无需 inline）
+const spellBarStyle = computed(() => {
+  if (!spellEligible.value) return {};
+
+  // 已停止：满宽深铜，一眼"封印"
+  if (isSpellStopped.value) {
+    return { width: '100%', backgroundColor: 'var(--primitive-copper-500)' };
+  }
+
+  // 进行中：copper-200 (#E8CBA8) → copper-400 (#B8834A)，宽度随 strength
+  const strength = props.word.spell_strength ?? 0;
+  const pct = Math.max(10, (strength / 5.0) * 100);
+  const t = Math.min(strength / 5.0, 1);
+  const r = Math.round(232 + (184 - 232) * t);
+  const g = Math.round(203 + (131 - 203) * t);
+  const b = Math.round(168 + (74 - 168) * t);
+  return { width: `${pct}%`, backgroundColor: `rgb(${r}, ${g}, ${b})` };
+});
 
 const backgroundColor = computed(() => {
   const ef = props.word.ease_factor;
@@ -133,6 +163,7 @@ const handleToggleSelection = () => {
   cursor: pointer;
   transition: all 0.3s ease-out;
   position: relative;
+  overflow: hidden;
 }
 
 .word-card.remembered {
@@ -202,5 +233,22 @@ const handleToggleSelection = () => {
 .word-card.selection-mode:hover:not(.selected) {
   border-color: var(--color-text-tertiary);
   border-width: 2px;
+}
+
+/* ── 拼写强度底部墨线 ── */
+.spell-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* 不可拼写：全宽虚线，淡灰色 */
+.spell-bar-locked {
+  width: 100%;
+  height: 0;
+  border-top: 2px dashed var(--primitive-ink-200);
+  background: none;
 }
 </style>

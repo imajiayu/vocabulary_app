@@ -7,6 +7,7 @@ export interface Word {
   definition: DefinitionObject;
   ease_factor: number;
   stop_review: number; // 0 或 1，数据库 Integer 字段
+  stop_spell: number;  // 0 或 1，独立控制拼写队列
   date_added: string;
   repetition: number;
   interval: number;
@@ -125,6 +126,7 @@ export interface SpellingPersistData {
   word_id: number
   new_strength: number
   next_review: string
+  should_stop_spell: boolean
 }
 
 export interface Question {
@@ -199,6 +201,7 @@ export interface HotkeySettings {
     forgot: string;          // 忘记了
     next: string;            // 下一个
     resetInput: string;      // 重置输入
+    stopSpell: string;       // 不再拼写
   };
 }
 

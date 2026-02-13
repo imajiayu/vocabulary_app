@@ -122,6 +122,20 @@
               class="btn-key-hint-sm"
             />
           </button>
+          <button
+            class="action-btn-sm skip"
+            :disabled="isSubmitting"
+            @click="emit('skip')"
+          >
+            <span class="btn-sm-icon"><AppIcon name="stop-circle" /></span>
+            <span class="btn-sm-label">不再拼写</span>
+            <KeyHint
+              v-if="hotkeys.spelling.stopSpell"
+              :key-value="hotkeys.spelling.stopSpell"
+              variant="default"
+              class="btn-key-hint-sm"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -154,6 +168,8 @@ interface Props {
     spellingData: SpellingData
   }) => Promise<void>
 }
+
+const emit = defineEmits<{ skip: [] }>()
 
 const props = defineProps<Props>()
 
@@ -304,6 +320,10 @@ const handleKeydown = (event: KeyboardEvent) => {
   } else if (spellingKeys.resetInput && event.key === spellingKeys.resetInput) {
     event.preventDefault()
     handleResetInput()
+    return
+  } else if (spellingKeys.stopSpell && event.key === spellingKeys.stopSpell) {
+    event.preventDefault()
+    emit('skip')
     return
   }
 
@@ -684,6 +704,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.375rem;
   flex-shrink: 0;
 }
 
@@ -691,7 +712,7 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.3rem 0.65rem;
+  padding: 0.4rem 0.65rem;
   border: none;
   border-radius: var(--radius-full);
   cursor: pointer;

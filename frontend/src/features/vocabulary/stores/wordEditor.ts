@@ -309,6 +309,59 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   }
 
   /**
+   * 标记单词为"不再拼写"（停止拼写）
+   */
+  async function markSpellMastered(closeAfter = true): Promise<boolean> {
+    if (!currentWord.value) return false
+
+    const wordId = currentWord.value.id
+
+    try {
+      const updatedWord = await api.words.updateWordDirect(wordId, {
+        stop_spell: 1
+      })
+
+      currentWord.value = updatedWord
+      originalWord.value = { ...updatedWord }
+
+      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
+
+      if (closeAfter) {
+        close()
+      }
+      return true
+    } catch (error) {
+      log.error('停止拼写失败:', error)
+      return false
+    }
+  }
+
+  /**
+   * 恢复拼写（取消"不再拼写"状态）
+   */
+  async function restoreSpell(): Promise<boolean> {
+    if (!currentWord.value) return false
+
+    const wordId = currentWord.value.id
+
+    try {
+      const updatedWord = await api.words.updateWordDirect(wordId, {
+        stop_spell: 0
+      })
+
+      currentWord.value = updatedWord
+      originalWord.value = { ...updatedWord }
+
+      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
+
+      return true
+    } catch (error) {
+      log.error('恢复拼写失败:', error)
+      return false
+    }
+  }
+
+  /**
    * 恢复复习（取消"已掌握"状态）
    */
   async function restoreReview(): Promise<boolean> {
@@ -397,6 +450,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     deleteWord,
     markForgot,
     markMastered,
+    markSpellMastered,
+    restoreSpell,
     restoreReview,
     updateCurrentWord,
 

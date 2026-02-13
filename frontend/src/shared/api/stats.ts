@@ -40,6 +40,8 @@ interface StatsWordRaw {
   lapse: number | string | null
   remember_count: number | string | null
   forget_count: number | string | null
+  stop_review: number | string | null
+  stop_spell: number | string | null
 }
 
 interface DistributionRow {
@@ -201,7 +203,7 @@ export class StatsApi {
       // 原始单词数据（用于ef_dict, spell_strength_dict, 热力图, accuracy_dict）
       fetchAllRows<StatsWordRaw>(
         'stats_words_raw',
-        'word, ease_factor, ef_rounded, elapsed_time_rounded, spell_strength, spell_strength_rounded, repetition, spell_available, interval, last_score, lapse, remember_count, forget_count',
+        'word, ease_factor, ef_rounded, elapsed_time_rounded, spell_strength, spell_strength_rounded, repetition, spell_available, interval, last_score, lapse, remember_count, forget_count, stop_review, stop_spell',
         sourceFilter
       ),
       // 复习日期分布（聚合后行数较少，通常不需要分页）
@@ -268,10 +270,14 @@ export class StatsApi {
       )
     ])
 
+    // 按 stop 状态分离：复习统计用 stop_review=0，拼写统计用 stop_spell=0
+    const reviewData = rawData.filter(row => toInt(row.stop_review) === 0)
+    const spellData = rawData.filter(row => toInt(row.stop_spell) === 0)
+
     // 转换为API响应格式（确保数据类型正确）
     // ef_dict: round(ease_factor, 2)
     const ef_dict: Array<{ word: string; ef: number }> = []
-    for (const row of rawData) {
+    for (const row of reviewData) {
       const ef = toNumber(row.ease_factor)
       if (ef !== null) {
         ef_dict.push({ word: row.word, ef: roundTo(ef, 2)! })
@@ -279,7 +285,7 @@ export class StatsApi {
     }
 
     // spell_strength_dict
-    const spell_strength_dict = rawData.map(row => {
+    const spell_strength_dict = spellData.map(row => {
       const repetition = toInt(row.repetition)
       const available = repetition >= 3
       const strength = toNumber(row.spell_strength)
@@ -291,7 +297,7 @@ export class StatsApi {
     })
 
     // 生成热力图单元格（在前端计算颜色，使用原始值）
-    const spell_heatmap_cells = rawData.map(row => {
+    const spell_heatmap_cells = spellData.map(row => {
       const repetition = toInt(row.repetition)
       const available = repetition >= 3
       const spellStrength = toNumber(row.spell_strength)
@@ -302,7 +308,7 @@ export class StatsApi {
       })
     })
 
-    const ef_heatmap_cells = rawData.map(row => {
+    const ef_heatmap_cells = reviewData.map(row => {
       const easeFactorNum = toNumber(row.ease_factor)
       return generateEfHeatmapCell({
         word: row.word,
@@ -342,9 +348,9 @@ export class StatsApi {
       interval_dict[toInt(row.interval)] = toInt(row.count)
     }
 
-    // Accuracy analysis: derive from rawData (remember_count / total * 100)
+    // Accuracy analysis: derive from reviewData (remember_count / total * 100)
     const accuracy_dict: Record<string, number> = {}
-    for (const row of rawData) {
+    for (const row of reviewData) {
       const rem = toInt(row.remember_count)
       const forg = toInt(row.forget_count)
       const total = rem + forg

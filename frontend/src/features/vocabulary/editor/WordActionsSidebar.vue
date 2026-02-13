@@ -61,6 +61,9 @@
         <button v-if="store.mode !== 'mode_lapse'" @click="toggleReview" :class="['action-btn', isRemembered ? 'btn-secondary' : 'btn-success']">
           {{ isRemembered ? '恢复复习' : '标记掌握' }}
         </button>
+        <button v-if="store.mode !== 'mode_lapse'" @click="toggleSpell" :class="['action-btn', isSpellStopped ? 'btn-secondary' : 'btn-success']">
+          {{ isSpellStopped ? '恢复拼写' : '停止拼写' }}
+        </button>
         <button @click="handleMarkForgot" :disabled="isForgetButtonUsed" class="action-btn btn-warning">
           {{ isForgetButtonUsed ? '已设为忘记' : '设为忘记' }}
         </button>
@@ -89,6 +92,18 @@ const isForgetButtonUsed = computed(() => {
 const isRemembered = computed(() => {
   return currentWord.value ? currentWord.value.stop_review : false;
 });
+
+const isSpellStopped = computed(() => {
+  return currentWord.value?.stop_spell === 1;
+});
+
+const toggleSpell = async () => {
+  if (isSpellStopped.value) {
+    await store.restoreSpell();
+  } else {
+    await store.markSpellMastered(false);
+  }
+};
 
 const toggleReview = async () => {
   if (isRemembered.value) {

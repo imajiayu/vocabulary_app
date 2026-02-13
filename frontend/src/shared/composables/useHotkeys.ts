@@ -22,7 +22,8 @@ const DEFAULT_HOTKEYS: HotkeySettings = {
     playAudio: 'ArrowLeft',
     forgot: 'ArrowRight',
     next: 'Enter',
-    resetInput: ''
+    resetInput: '',
+    stopSpell: ''
   }
 }
 

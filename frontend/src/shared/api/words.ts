@@ -13,6 +13,7 @@ export interface UpdateWordPayload {
   definition?: DefinitionObject
   ease_factor?: number
   stop_review?: boolean | number  // 支持 boolean 和 number (0/1)
+  stop_spell?: number             // 0 或 1，独立控制拼写队列
   repetition?: number
   interval?: number
   next_review?: string
@@ -575,7 +576,7 @@ export class WordsApi {
     // 公共筛选条件
     const baseFilter = {
       user_id: userId,
-      stop_review: 0,
+      stop_spell: 0,
       source,
     }
 
@@ -587,7 +588,7 @@ export class WordsApi {
         .from('words')
         .select('id, word')
         .eq('user_id', baseFilter.user_id)
-        .eq('stop_review', baseFilter.stop_review)
+        .eq('stop_spell', baseFilter.stop_spell)
         .eq('source', baseFilter.source)
         .or('repetition.gte.3,spell_strength.not.is.null')
         .not('spell_next_review', 'is', null)
@@ -598,7 +599,7 @@ export class WordsApi {
         .from('words')
         .select('id, word')
         .eq('user_id', baseFilter.user_id)
-        .eq('stop_review', baseFilter.stop_review)
+        .eq('stop_spell', baseFilter.stop_spell)
         .eq('source', baseFilter.source)
         .or('repetition.gte.3,spell_strength.not.is.null')
         .is('spell_next_review', null),
@@ -608,7 +609,7 @@ export class WordsApi {
         .from('words')
         .select('id, word')
         .eq('user_id', baseFilter.user_id)
-        .eq('stop_review', baseFilter.stop_review)
+        .eq('stop_spell', baseFilter.stop_spell)
         .eq('source', baseFilter.source)
         .or('repetition.gte.3,spell_strength.not.is.null')
         .gt('spell_next_review', today),
@@ -787,15 +788,21 @@ export class WordsApi {
    */
   static async persistSpellingResultDirect(
     wordId: number,
-    persistData: { new_strength: number; next_review: string }
+    persistData: { new_strength: number; next_review: string; should_stop_spell: boolean }
   ): Promise<void> {
     const userId = getCurrentUserId()
+    const values: Record<string, unknown> = {
+      spell_strength: persistData.new_strength,
+      spell_next_review: persistData.next_review,
+    }
+
+    if (persistData.should_stop_spell) {
+      values.stop_spell = 1
+    }
+
     const { error } = await supabase
       .from('words')
-      .update({
-        spell_strength: persistData.new_strength,
-        spell_next_review: persistData.next_review,
-      })
+      .update(values)
       .eq('id', wordId)
       .eq('user_id', userId)
 
@@ -823,6 +830,7 @@ export class WordsApi {
       definition: definition as DefinitionObject,
       ease_factor: Number(row.ease_factor) || 2.5,
       stop_review: Number(row.stop_review) || 0,
+      stop_spell: Number(row.stop_spell) || 0,
       date_added: row.date_added as string,
       repetition: Number(row.repetition) || 0,
       interval: Number(row.interval) || 0,

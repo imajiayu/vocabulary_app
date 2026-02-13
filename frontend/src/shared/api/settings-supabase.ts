@@ -47,7 +47,8 @@ const DEFAULT_CONFIG: UserSettings = {
       playAudio: 'ArrowLeft',
       forgot: 'ArrowRight',
       next: 'Enter',
-      resetInput: ''
+      resetInput: '',
+      stopSpell: ''
     }
   }
 }
