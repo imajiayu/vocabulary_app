@@ -65,6 +65,7 @@
         :key="mode"
         :word="currentWord"
         :audio-type="audioType"
+        v-bind="spellingExtraProps"
         @result="handleResult"
         @skip="handleSkip"
       />
@@ -261,6 +262,18 @@ const displayTotal = computed(() => {
 
 const currentComponent = computed(() => {
   return mode.value === 'mode_spelling' ? SpellingCard : ReviewCard
+})
+
+// 拼写模式：传递前后单词用于画廊式展示
+const spellingExtraProps = computed(() => {
+  if (mode.value !== 'mode_spelling') return {}
+  const idx = currentIndex.value
+  const queue = reviewStore.wordQueue
+  return {
+    prevWord: idx > 0 ? queue[idx - 1] : null,
+    nextWord: idx < queue.length - 1 ? queue[idx + 1] : null,
+    nextNextWord: idx < queue.length - 2 ? queue[idx + 2] : null,
+  }
 })
 
 // 复习完成时，取消 debounce + 清除 DB 进度，避免首页显示残留通知

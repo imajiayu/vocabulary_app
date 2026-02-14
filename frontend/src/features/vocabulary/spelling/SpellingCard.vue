@@ -1,141 +1,216 @@
 <template>
   <div class="spelling-card">
-    <!-- 释义展示区 -->
-    <div class="definition-area">
-      <div class="definition-scroll">
-        <div
-          v-for="(def, i) in word.definition?.definitions || []"
-          :key="i"
-          class="definition-item"
-          :style="{ animationDelay: `${i * 0.1}s` }"
-        >
-          <span class="def-number">{{ i + 1 }}</span>
-          <span class="def-content">{{ maskEnglish(def) }}</span>
+    <!-- 画廊式释义展示区 -->
+    <div class="gallery-viewport">
+      <div
+        class="gallery-track"
+        :class="{ 'is-sliding': isSliding, 'no-transition': suppressTransition }"
+        @transitionend="onSlideEnd"
+      >
+        <!-- 上一个单词释义 -->
+        <div class="gallery-panel">
+          <div v-if="displayPrev" class="panel-content">
+            <div
+              v-for="(def, i) in displayPrev.definition?.definitions || []"
+              :key="i"
+              class="definition-item"
+            >
+              <span class="def-number">{{ i + 1 }}</span>
+              <span class="def-content">{{ maskEnglishFor(def, displayPrev.word) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 当前单词释义 -->
+        <div class="gallery-panel active">
+          <div class="panel-content">
+            <div
+              v-for="(def, i) in displayCurrent?.definition?.definitions || []"
+              :key="i"
+              class="definition-item"
+            >
+              <span class="def-number">{{ i + 1 }}</span>
+              <span class="def-content">{{ maskEnglishFor(def, displayCurrent?.word || '') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 下一个单词释义 -->
+        <div class="gallery-panel">
+          <div v-if="displayNext" class="panel-content">
+            <div
+              v-for="(def, i) in displayNext.definition?.definitions || []"
+              :key="i"
+              class="definition-item"
+            >
+              <span class="def-number">{{ i + 1 }}</span>
+              <span class="def-content">{{ maskEnglishFor(def, displayNext.word) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 下下一个单词释义（滑动过渡时可见） -->
+        <div class="gallery-panel">
+          <div v-if="displayNextNext" class="panel-content">
+            <div
+              v-for="(def, i) in displayNextNext.definition?.definitions || []"
+              :key="i"
+              class="definition-item"
+            >
+              <span class="def-number">{{ i + 1 }}</span>
+              <span class="def-content">{{ maskEnglishFor(def, displayNextNext.word) }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 输入区域 -->
-    <div class="input-area">
-      <div class="input-wrapper" :class="inputStateClass">
-        <input
-          ref="inputRef"
-          v-model="userInput"
-          type="text"
-          class="spelling-input"
-          placeholder="输入单词拼写..."
-          autocomplete="off"
-          :disabled="isSubmitting"
-          :readonly="isMobile"
-          @keydown="handleKeydown"
-          @focus="handleInputFocus"
-        />
-        <div class="input-indicator">
-          <span v-if="isCorrect" class="indicator-icon correct"><AppIcon name="check" /></span>
-          <span v-else-if="userInput && !isCorrect" class="indicator-icon incorrect"><AppIcon name="cross" /></span>
+    <!-- 移动端：输入 + 虚拟键盘 -->
+    <template v-if="isMobile">
+      <div ref="mobileInputAreaRef" class="input-area">
+        <div class="input-wrapper" :class="inputStateClass">
+          <input
+            ref="inputRef"
+            v-model="userInput"
+            type="text"
+            class="spelling-input"
+            placeholder="输入单词拼写..."
+            autocomplete="off"
+            :disabled="isSubmitting"
+            :readonly="true"
+            @keydown="handleKeydown"
+            @focus="handleInputFocus"
+          />
+          <div class="input-indicator">
+            <span v-if="isCorrect" class="indicator-icon correct"><AppIcon name="check" /></span>
+            <span v-else-if="userInput && !isCorrect" class="indicator-icon incorrect"><AppIcon name="cross" /></span>
+          </div>
+        </div>
+        <div class="input-hint">
+          <span v-if="!userInput">听音频，输入正确拼写</span>
+          <span v-else-if="isCorrect" class="hint-success">正确！按 Enter 继续</span>
+          <span v-else class="hint-progress">{{ userInput.length }} / {{ word.word.length }} 字母</span>
         </div>
       </div>
 
-      <!-- 进度提示 -->
-      <div class="input-hint">
-        <span v-if="!userInput">听音频，输入正确拼写</span>
-        <span v-else-if="isCorrect" class="hint-success">正确！按 Enter 继续</span>
-        <span v-else class="hint-progress">{{ userInput.length }} / {{ word.word.length }} 字母</span>
-      </div>
-    </div>
+      <SpellingKeyboard
+        :disabled="isSubmitting"
+        :forgot-disabled="isCorrect || isSubmitting"
+        :enter-disabled="!canProceed || isSubmitting"
+        @key="handleVirtualKey"
+        @backspace="handleVirtualBackspace"
+        @enter="handleVirtualEnter"
+        @play-audio="handlePlayAudio"
+        @forgot="handleForgot"
+        @reset="handleResetInput"
+      />
+    </template>
 
-    <!-- 移动端键盘 -->
-    <SpellingKeyboard
-      v-if="isMobile"
-      :disabled="isSubmitting"
-      :forgot-disabled="isCorrect || isSubmitting"
-      :enter-disabled="!canProceed || isSubmitting"
-      @key="handleVirtualKey"
-      @backspace="handleVirtualBackspace"
-      @enter="handleVirtualEnter"
-      @play-audio="handlePlayAudio"
-      @forgot="handleForgot"
-      @reset="handleResetInput"
-    />
-
-    <!-- 桌面端操作栏 -->
-    <div v-if="!isMobile" class="action-bar">
-      <div class="action-bar-layout">
-        <div class="action-group">
-          <button
-            class="action-btn play"
-            :disabled="isSubmitting"
-            @click="handlePlayAudio"
-          >
-            <AppIcon name="volume" class="btn-icon-svg" />
-            <span class="btn-label">播放</span>
-            <KeyHint
-              :key-value="hotkeys.spelling.playAudio"
-              variant="light"
-              class="btn-key-hint"
+    <!-- 桌面端：固定底部栏（输入框 + 操作按钮） -->
+    <div v-else class="action-bar">
+      <div class="action-bar-inner">
+        <div class="input-area">
+          <div class="input-wrapper" :class="inputStateClass">
+            <input
+              ref="inputRef"
+              v-model="userInput"
+              type="text"
+              class="spelling-input"
+              placeholder="输入单词拼写..."
+              autocomplete="off"
+              :disabled="isSubmitting"
+              @keydown="handleKeydown"
+              @focus="handleInputFocus"
             />
-          </button>
-
-          <button
-            class="action-btn reveal"
-            :disabled="isCorrect || isSubmitting"
-            @click="handleForgot"
-          >
-            <AppIcon name="eye" class="btn-icon-svg" />
-            <span class="btn-label">提示</span>
-            <KeyHint
-              :key-value="hotkeys.spelling.forgot"
-              variant="warning"
-              class="btn-key-hint"
-            />
-          </button>
-
-          <button
-            class="action-btn next"
-            :class="{ 'ready': canProceed }"
-            :disabled="!canProceed || isSubmitting"
-            @click="handleNext"
-          >
-            <span class="btn-icon-arrow">→</span>
-            <span class="btn-label">下一个</span>
-            <KeyHint
-              :key-value="hotkeys.spelling.next"
-              :variant="canProceed ? 'success' : 'default'"
-              class="btn-key-hint"
-            />
-          </button>
+            <div class="input-indicator">
+              <span v-if="isCorrect" class="indicator-icon correct"><AppIcon name="check" /></span>
+              <span v-else-if="userInput && !isCorrect" class="indicator-icon incorrect"><AppIcon name="cross" /></span>
+            </div>
+          </div>
+          <div class="input-hint">
+            <span v-if="!userInput">听音频，输入正确拼写</span>
+            <span v-else-if="isCorrect" class="hint-success">正确！按 Enter 继续</span>
+            <span v-else class="hint-progress">{{ userInput.length }} / {{ word.word.length }} 字母</span>
+          </div>
         </div>
 
-        <div class="secondary-actions">
-          <button
-            class="action-btn-sm reset-input"
-            :disabled="isSubmitting"
-            @click="handleResetInput"
-            title="重置输入"
-          >
-            <span class="btn-sm-icon">↻</span>
-            <span class="btn-sm-label">重置输入</span>
-            <KeyHint
-              v-if="hotkeys.spelling.resetInput"
-              :key-value="hotkeys.spelling.resetInput"
-              variant="default"
-              class="btn-key-hint-sm"
-            />
-          </button>
-          <button
-            class="action-btn-sm skip"
-            :disabled="isSubmitting"
-            @click="emit('skip')"
-          >
-            <span class="btn-sm-icon"><AppIcon name="stop-circle" /></span>
-            <span class="btn-sm-label">不再拼写</span>
-            <KeyHint
-              v-if="hotkeys.spelling.stopSpell"
-              :key-value="hotkeys.spelling.stopSpell"
-              variant="default"
-              class="btn-key-hint-sm"
-            />
-          </button>
+        <div class="action-bar-layout">
+          <div class="action-group">
+            <button
+              class="action-btn play"
+              :disabled="isSubmitting"
+              @click="handlePlayAudio"
+            >
+              <AppIcon name="volume" class="btn-icon-svg" />
+              <span class="btn-label">播放</span>
+              <KeyHint
+                :key-value="hotkeys.spelling.playAudio"
+                variant="light"
+                class="btn-key-hint"
+              />
+            </button>
+
+            <button
+              class="action-btn reveal"
+              :disabled="isCorrect || isSubmitting"
+              @click="handleForgot"
+            >
+              <AppIcon name="eye" class="btn-icon-svg" />
+              <span class="btn-label">提示</span>
+              <KeyHint
+                :key-value="hotkeys.spelling.forgot"
+                variant="warning"
+                class="btn-key-hint"
+              />
+            </button>
+
+            <button
+              class="action-btn next"
+              :class="{ 'ready': canProceed }"
+              :disabled="!canProceed || isSubmitting"
+              @click="handleNext"
+            >
+              <span class="btn-icon-arrow">→</span>
+              <span class="btn-label">下一个</span>
+              <KeyHint
+                :key-value="hotkeys.spelling.next"
+                :variant="canProceed ? 'success' : 'default'"
+                class="btn-key-hint"
+              />
+            </button>
+          </div>
+
+          <div class="secondary-actions">
+            <button
+              class="action-btn-sm reset-input"
+              :disabled="isSubmitting"
+              @click="handleResetInput"
+              title="重置输入"
+            >
+              <span class="btn-sm-icon">↻</span>
+              <span class="btn-sm-label">重置输入</span>
+              <KeyHint
+                v-if="hotkeys.spelling.resetInput"
+                :key-value="hotkeys.spelling.resetInput"
+                variant="default"
+                class="btn-key-hint-sm"
+              />
+            </button>
+            <button
+              class="action-btn-sm skip"
+              :disabled="isSubmitting"
+              @click="emit('skip')"
+            >
+              <span class="btn-sm-icon"><AppIcon name="stop-circle" /></span>
+              <span class="btn-sm-label">不再拼写</span>
+              <KeyHint
+                v-if="hotkeys.spelling.stopSpell"
+                :key-value="hotkeys.spelling.stopSpell"
+                variant="default"
+                class="btn-key-hint-sm"
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -143,7 +218,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, shallowRef, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import type { Word, SpellingData, SpellingKeyEvent, BackspaceSequence } from '@/shared/types'
@@ -163,6 +238,9 @@ const { isMobile } = useBreakpoint()
 interface Props {
   word: Word
   audioType: AudioType
+  prevWord?: Word | null
+  nextWord?: Word | null
+  nextNextWord?: Word | null
   onResult: (result: {
     remembered: boolean
     spellingData: SpellingData
@@ -176,9 +254,37 @@ const props = defineProps<Props>()
 const { hotkeys, loadHotkeys } = useHotkeys()
 
 const inputRef = ref<HTMLInputElement>()
+const mobileInputAreaRef = ref<HTMLElement>()
 const userInput = ref('')
 const forgotClicked = ref(false)
 const isSubmitting = ref(false)
+
+// 画廊滑动状态
+const displayPrev = shallowRef<Word | null>(props.prevWord ?? null)
+const displayCurrent = shallowRef<Word>(props.word)
+const displayNext = shallowRef<Word | null>(props.nextWord ?? null)
+const displayNextNext = shallowRef<Word | null>(props.nextNextWord ?? null)
+const isSliding = ref(false)
+const suppressTransition = ref(false)
+let slideFallbackTimer: ReturnType<typeof setTimeout> | null = null
+
+const commitSlide = () => {
+  if (slideFallbackTimer) { clearTimeout(slideFallbackTimer); slideFallbackTimer = null }
+  suppressTransition.value = true
+  displayPrev.value = props.prevWord ?? null
+  displayCurrent.value = props.word
+  displayNext.value = props.nextWord ?? null
+  displayNextNext.value = props.nextNextWord ?? null
+  isSliding.value = false
+  requestAnimationFrame(() => {
+    suppressTransition.value = false
+  })
+}
+
+const onSlideEnd = (e: TransitionEvent) => {
+  if (e.propertyName !== 'transform') return
+  commitSlide()
+}
 
 // 详细输入数据
 const startTime = ref<number>(0)
@@ -224,9 +330,9 @@ function shouldMask(defWord: string, target: string): boolean {
   return false
 }
 
-const maskEnglish = (text: string) =>
+const maskEnglishFor = (text: string, targetWord: string) =>
   text.replace(/[a-zA-Z]+/g, (match) =>
-    shouldMask(match, props.word.word) ? '*'.repeat(match.length) : match
+    shouldMask(match, targetWord) ? '*'.repeat(match.length) : match
   )
 
 const isCorrect = computed(() => userInput.value.trim().toLowerCase() === props.word.word.toLowerCase())
@@ -293,6 +399,12 @@ const finishBackspaceSequence = () => {
 
 const handleKeydown = (event: KeyboardEvent) => {
   if (isSubmitting.value) return
+
+  // 跳过 IME 合成事件（中文输入法），避免记录噪声键盘事件
+  if (event.isComposing || event.key === 'Process') {
+    event.preventDefault()
+    return
+  }
 
   if (isMobile.value) {
     event.preventDefault()
@@ -470,8 +582,29 @@ const handleResetInput = () => {
   }
 }
 
+// 过滤非法字符（拦截 IME 中文输入、粘贴等绕过 keydown 的情况）
+watch(userInput, (val) => {
+  const filtered = val.replace(/[^a-zA-Z \-]/g, '')
+  if (filtered !== val) {
+    userInput.value = filtered
+  }
+})
+
 watch(() => props.word, (newWord, oldWord) => {
   if (newWord && newWord !== oldWord) {
+    if (isSliding.value) {
+      // 快速连续切换：跳过动画，直接 snap 到新位置
+      commitSlide()
+    } else {
+      // 正常速度：触发画廊滑动（display refs 保持旧值，视觉上先滑动再更新）
+      nextTick(() => {
+        suppressTransition.value = false
+        isSliding.value = true
+        // 安全兜底：transitionend 可能不触发（tab 切换等）
+        slideFallbackTimer = setTimeout(commitSlide, 600)
+      })
+    }
+
     resetState()
     playWordAudio(newWord.word, audioAccent.value)
     if (!isMobile.value) {
@@ -485,6 +618,10 @@ onMounted(async () => {
   resetState()
   await nextTick()
   playWordAudio(props.word.word, audioAccent.value)
+  if (isMobile.value && mobileInputAreaRef.value) {
+    const h = mobileInputAreaRef.value.offsetHeight
+    document.documentElement.style.setProperty('--spelling-input-height', `${h}px`)
+  }
   if (!isMobile.value) {
     setTimeout(() => inputRef.value?.focus(), 50)
   }
@@ -492,15 +629,19 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   stopWordAudio()
+  if (slideFallbackTimer) clearTimeout(slideFallbackTimer)
+  document.documentElement.style.removeProperty('--spelling-input-height')
 })
 </script>
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════════════════════════
-   Neo-Editorial Spelling Card - 沉浸式拼写练习
+   Neo-Editorial Spelling Card - 画廊式拼写练习
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .spelling-card {
+  --action-bar-height: 13rem;
+
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -510,18 +651,53 @@ onBeforeUnmount(() => {
   padding: 0 1.5rem;
 }
 
-/* ── 释义展示区 ── */
-.definition-area {
+/* ── 画廊视口 ── */
+.gallery-viewport {
   display: flex;
   flex-direction: column;
   padding-top: 1.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: var(--action-bar-height);
+  overflow: hidden;
 }
 
-.definition-scroll {
-  /* 桌面端不限制高度，自然撑开 */
+/* ── 画廊滑轨 ── */
+.gallery-track {
+  --panel-width: 40%;
+  --gap: 1rem;
+  --center-offset: calc((100% - var(--panel-width)) / 2);
+
+  display: flex;
+  gap: var(--gap);
+  height: 100%;
+  /* 初始位置：居中显示第 2 个面板（index=1） */
+  transform: translateX(
+    calc(-1 * (var(--panel-width) + var(--gap)) + var(--center-offset))
+  );
+  will-change: transform;
 }
 
+.gallery-track.is-sliding {
+  /* 滑到第 3 个面板（index=2） */
+  transform: translateX(
+    calc(-2 * (var(--panel-width) + var(--gap)) + var(--center-offset))
+  );
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-track.no-transition {
+  transition: none !important;
+}
+
+/* ── 画廊面板 ── */
+.gallery-panel {
+  flex: 0 0 var(--panel-width);
+}
+
+.panel-content {
+  padding: 0 0.25rem;
+}
+
+/* ── 释义条目 ── */
 .definition-item {
   display: flex;
   align-items: flex-start;
@@ -532,7 +708,6 @@ onBeforeUnmount(() => {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border-left: 4px solid var(--color-primary);
-  animation: slideInFromLeft 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .definition-item:last-child {
@@ -565,7 +740,6 @@ onBeforeUnmount(() => {
 .input-area {
   flex-shrink: 0;
   padding: 1rem 0;
-  padding-bottom: calc(var(--button-bar-height) + 1rem);
 }
 
 .input-wrapper {
@@ -677,18 +851,42 @@ onBeforeUnmount(() => {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1.25rem 1rem;
-  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--color-bg-page) 80%, transparent);
+  padding: 1rem 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg-page) 92%, transparent);
   z-index: 100;
+}
+
+.action-bar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.action-bar .input-area {
+  padding: 0;
+}
+
+.action-bar .input-wrapper {
+  border-radius: var(--radius-lg);
+}
+
+.action-bar .spelling-input {
+  font-size: 1.4rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.action-bar .input-hint {
+  margin-top: 0.375rem;
+  font-size: 0.8rem;
 }
 
 .action-bar-layout {
   display: flex;
   align-items: stretch;
   gap: 0.5rem;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .action-group {
@@ -850,17 +1048,6 @@ onBeforeUnmount(() => {
    动画
    ══════════════════════════════════════════════════════════════════════════ */
 
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes popIn {
   0% {
     opacity: 0;
@@ -893,9 +1080,15 @@ onBeforeUnmount(() => {
     padding: 0 1rem;
   }
 
-  .definition-area {
+  .gallery-track {
+    --panel-width: 55%;
+    --gap: 0.75rem;
+  }
+
+  .gallery-viewport {
     padding-top: 1rem;
-    padding-bottom: 0.5rem;
+    /* 为固定输入框 + 虚拟键盘留出底部空间 */
+    padding-bottom: calc(var(--spelling-keyboard-height, 260px) + var(--spelling-input-height, 5rem) + 0.5rem);
   }
 
   .definition-item {
@@ -915,8 +1108,13 @@ onBeforeUnmount(() => {
   }
 
   .input-area {
-    padding: 1rem 0;
-    padding-bottom: calc(13rem + 1rem);
+    position: fixed;
+    bottom: var(--spelling-keyboard-height, 260px);
+    left: 0;
+    right: 0;
+    z-index: 200; /* 高于 sidebar/notification 的 z-index: 150 */
+    padding: 0.5rem 1rem;
+    background: linear-gradient(to top, var(--color-bg-page) 85%, transparent);
   }
 
   .spelling-input {
@@ -950,9 +1148,9 @@ onBeforeUnmount(() => {
 
 /* 横屏适配 */
 @media (max-height: 500px) and (orientation: landscape) {
-  .definition-area {
+  .gallery-viewport {
     padding-top: 0.5rem;
-    padding-bottom: 0.25rem;
+    padding-bottom: calc(var(--spelling-keyboard-height, 200px) + var(--spelling-input-height, 4rem) + 0.5rem);
   }
 
   .definition-item {
@@ -966,8 +1164,7 @@ onBeforeUnmount(() => {
   }
 
   .input-area {
-    padding: 0.5rem 0;
-    padding-bottom: 75px;
+    padding: 0.375rem 1rem;
   }
 
   .spelling-input {
