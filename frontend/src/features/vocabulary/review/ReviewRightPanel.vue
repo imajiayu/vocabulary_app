@@ -2217,9 +2217,9 @@ const mobileNotifClass = computed(() => {
   z-index: 150;
 }
 
-/* 拼写模式：定位在虚拟键盘上方 */
+/* 拼写模式：定位在虚拟键盘 + 固定输入框上方 */
 .review-right-panel.is-mobile.is-spelling {
-  bottom: calc(var(--spelling-keyboard-height, 260px) + 12px);
+  bottom: calc(var(--spelling-keyboard-height, 260px) + var(--spelling-input-height, 0px) + 12px);
 }
 
 /* 移动端控制栏 */

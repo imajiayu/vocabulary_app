@@ -573,9 +573,9 @@ onMounted(() => {
   z-index: 150;
 }
 
-/* 拼写模式：定位在虚拟键盘上方 */
+/* 拼写模式：定位在虚拟键盘 + 固定输入框上方 */
 .word-sidebar.is-spelling .mobile-sidebar {
-  bottom: calc(var(--spelling-keyboard-height, 260px) + 12px);
+  bottom: calc(var(--spelling-keyboard-height, 260px) + var(--spelling-input-height, 0px) + 12px);
 }
 
 /* 切换按钮 */
