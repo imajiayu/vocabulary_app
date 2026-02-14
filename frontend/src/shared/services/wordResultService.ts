@@ -92,7 +92,7 @@ export function calculateReviewResult(
         remembered,
         score,
         repetition: srs.repetition,
-        interval: srs.scheduledDay,
+        interval: srs.interval,
       },
     },
     persistData: {

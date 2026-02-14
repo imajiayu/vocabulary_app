@@ -71,13 +71,10 @@ export class AiCacheApi {
       .select('response')
       .eq('word', normalized)
       .eq('prompt_type', promptType)
-      .single()
+      .maybeSingle()
 
     if (error) {
-      // PGRST116 = no rows found → cache miss
-      if (error.code !== 'PGRST116') {
-        log.error('缓存查询失败:', error)
-      }
+      log.error('缓存查询失败:', error)
       return null
     }
 
