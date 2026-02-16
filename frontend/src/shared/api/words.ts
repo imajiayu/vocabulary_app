@@ -18,6 +18,8 @@ export interface UpdateWordPayload {
   interval?: number
   next_review?: string
   lapse?: number
+  spell_strength?: number
+  spell_next_review?: string
 }
 
 // 复习模式通知（param_type 判别联合）

@@ -41,7 +41,7 @@
     </div>
 
     <!-- 移动端：浮动气泡列表 -->
-    <div v-else class="mobile-sidebar">
+    <div v-else class="mobile-sidebar" ref="mobileSidebarRef">
       <!-- 展开/收起按钮 -->
       <button
         class="mobile-toggle"
@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, TransitionGroup } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, TransitionGroup } from 'vue'
 import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { Word } from '@/shared/types'
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
@@ -123,6 +123,7 @@ const emit = defineEmits<{
   sidebarWordChange: [finalWord: Word]
   wordDeleted: [wordId: number]
   wordForgot: [wordId: number, updatedWord: Word, scheduledDay: number]
+  wordSpellReset: [wordId: number, updatedWord: Word, scheduledDay: number]
   wordMastered: [wordId: number]
 }>()
 
@@ -130,6 +131,7 @@ const emit = defineEmits<{
 const wordListRef = ref<HTMLDivElement | null>(null)
 const wordListInnerRef = ref<HTMLDivElement | null>(null)
 const mobileWordListRef = ref<HTMLDivElement | null>(null)
+const mobileSidebarRef = ref<HTMLDivElement | null>(null)
 
 // State
 const { isMobile } = useBreakpoint()
@@ -234,6 +236,10 @@ const openModal = (word: Word) => {
     emit('wordForgot', wordId, updatedWord, scheduledDay)
   })
 
+  wordEditorStore.onWordSpellReset((wordId: number, updatedWord: Word, scheduledDay: number) => {
+    emit('wordSpellReset', wordId, updatedWord, scheduledDay)
+  })
+
   wordEditorStore.onWordMastered((wordId: number) => {
     emit('wordMastered', wordId)
   })
@@ -280,9 +286,22 @@ watch(
   { deep: true, flush: 'post' }
 )
 
+// Click outside → 收起移动端面板
+const handleDocumentClick = (e: MouseEvent) => {
+  if (isCollapsed.value || !mobileSidebarRef.value) return
+  if (!mobileSidebarRef.value.contains(e.target as Node)) {
+    isCollapsed.value = true
+  }
+}
+
 // Lifecycle
 onMounted(() => {
   setTimeout(() => isLapseMode.value ? scrollToTop() : scrollToBottom(), 100)
+  document.addEventListener('click', handleDocumentClick)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleDocumentClick)
 })
 </script>
 

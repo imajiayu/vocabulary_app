@@ -67,6 +67,9 @@
         <button @click="handleMarkForgot" :disabled="isForgetButtonUsed" class="action-btn btn-warning">
           {{ isForgetButtonUsed ? '已设为忘记' : '设为忘记' }}
         </button>
+        <button @click="handleResetSpelling" :disabled="isSpellResetDisabled" class="action-btn btn-warning">
+          {{ isSpellResetDisabled ? '已重置拼写' : '重置拼写' }}
+        </button>
         <button @click="store.startEdit()" class="action-btn btn-outline">编辑单词</button>
         <button @click="handleDelete" class="action-btn btn-danger-ghost">删除单词</button>
       </template>
@@ -97,6 +100,12 @@ const isSpellStopped = computed(() => {
   return currentWord.value?.stop_spell === 1;
 });
 
+const isSpellResetDisabled = computed(() => {
+  if (!currentWord.value) return true;
+  const s = currentWord.value.spell_strength;
+  return s === null || s === undefined || s === 0;
+});
+
 const toggleSpell = async () => {
   if (isSpellStopped.value) {
     await store.restoreSpell();
@@ -116,6 +125,11 @@ const toggleReview = async () => {
 const handleMarkForgot = async () => {
   if (isForgetButtonUsed.value) return;
   await store.markForgot();
+};
+
+const handleResetSpelling = async () => {
+  if (isSpellResetDisabled.value) return;
+  await store.resetSpelling();
 };
 
 const handleDelete = async () => {

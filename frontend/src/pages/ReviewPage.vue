@@ -15,6 +15,7 @@
       @sidebar-word-change="sidebarWordChange"
       @word-deleted="handleSidebarWordDeleted"
       @word-forgot="handleWordForgot"
+      @word-spell-reset="handleWordSpellReset"
       @word-mastered="handleWordMastered"
     />
 
@@ -180,6 +181,57 @@ const handleWordForgot = (wordId: number, updatedWord: Word, scheduledDay: numbe
           score: 0,
           repetition: 0,
           interval: scheduledDay,
+        }
+      }
+    }
+  }
+}
+
+const handleWordSpellReset = (wordId: number, updatedWord: Word, scheduledDay: number) => {
+  // 获取旧 spell_strength（splice 之前）
+  const queueWord = reviewStore.wordQueue.find(w => w.id === wordId)
+  const oldStrength = queueWord?.spell_strength ?? 0
+
+  // 更新 queue
+  const index = reviewStore.wordQueue.findIndex(w => w.id === wordId)
+  if (index !== -1) {
+    reviewStore.wordQueue.splice(index, 1, updatedWord)
+  }
+
+  // 仅 spelling 模式：更新 loads cache + 触发 notification
+  if (mode.value === 'mode_spelling') {
+    if (reviewStore.spellLoadsCache) {
+      const idx = scheduledDay - 1
+      if (idx >= 0 && idx < reviewStore.spellLoadsCache.length) {
+        reviewStore.spellLoadsCache[idx]++
+      }
+    }
+
+    reviewStore.notification = {
+      show: true,
+      data: {
+        word: updatedWord.word,
+        param_type: 'spell_strength',
+        param_change: -oldStrength,
+        new_param_value: 0,
+        next_review_date: updatedWord.spell_next_review ?? '',
+        breakdown: {
+          remembered: false,
+          typed_count: 0,
+          backspace_count: 0,
+          word_length: updatedWord.word.length,
+          avg_key_interval: 0,
+          longest_pause: 0,
+          total_typing_time: 0,
+          audio_requests: 0,
+          accuracy_score: 0,
+          fluency_score: 0,
+          independence_score: 0,
+          weighted_accuracy: 0,
+          weighted_fluency: 0,
+          weighted_independence: 0,
+          total_score: 0,
+          strength_gain: -oldStrength,
         }
       }
     }

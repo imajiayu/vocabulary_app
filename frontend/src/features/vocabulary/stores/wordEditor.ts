@@ -26,6 +26,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   const onWordUpdatedCallbacks = ref<Array<(word: Word) => void>>([])
   const onWordDeletedCallbacks = ref<Array<(wordId: number) => void>>([])
   const onWordForgotCallbacks = ref<Array<(wordId: number, updatedWord: Word, scheduledDay: number) => void>>([])
+  const onWordSpellResetCallbacks = ref<Array<(wordId: number, updatedWord: Word, scheduledDay: number) => void>>([])
   const onWordMasteredCallbacks = ref<Array<(wordId: number) => void>>([])
   const onCloseCallbacks = ref<Array<(finalWord: Word | undefined) => void>>([])
 
@@ -277,6 +278,60 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   }
 
   /**
+   * 重置拼写进度
+   * 将 spell_strength 归零，通过负载均衡选择最优拼写日期
+   */
+  async function resetSpelling(): Promise<boolean> {
+    if (!currentWord.value) return false
+
+    const wordId = currentWord.value.id
+    const word = currentWord.value
+    const { loadSettings } = useSettings()
+
+    try {
+      const userSettings = await loadSettings()
+      const dailyLimit = userSettings.learning.dailySpellLimit || 200
+      const maxPrepDays = userSettings.learning.maxPrepDays || 45
+      const source = word.source || 'IELTS'
+
+      let loads: number[]
+      try {
+        const { useReviewStore } = await import('../stores/review')
+        const reviewStore = useReviewStore()
+        loads = reviewStore.spellLoadsCache ?? await api.words.getDailySpellLoadsDirect(source, maxPrepDays)
+      } catch {
+        loads = await api.words.getDailySpellLoadsDirect(source, maxPrepDays)
+      }
+
+      const { chosenDay } = findOptimalDay({
+        baseInterval: 1,
+        dailyLimit,
+        currentLoads: loads,
+      })
+
+      const today = new Date().toISOString().split('T')[0]
+      const nextSpellReview = addDays(today, chosenDay)
+
+      const updatedWord = await api.words.updateWordDirect(wordId, {
+        spell_strength: 0,
+        spell_next_review: nextSpellReview,
+        stop_spell: 0,
+      })
+
+      currentWord.value = updatedWord
+      originalWord.value = { ...updatedWord }
+
+      onWordSpellResetCallbacks.value.forEach(cb => cb(wordId, updatedWord, chosenDay))
+      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
+
+      return true
+    } catch (error) {
+      log.error('重置拼写失败:', error)
+      return false
+    }
+  }
+
+  /**
    * 标记单词为"已掌握"（停止复习）
    * @param closeAfter 是否在操作后关闭模态框
    */
@@ -411,6 +466,10 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onWordForgotCallbacks.value.push(callback)
   }
 
+  function onWordSpellReset(callback: (wordId: number, updatedWord: Word, scheduledDay: number) => void) {
+    onWordSpellResetCallbacks.value.push(callback)
+  }
+
   function onWordMastered(callback: (wordId: number) => void) {
     onWordMasteredCallbacks.value.push(callback)
   }
@@ -423,6 +482,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onWordUpdatedCallbacks.value = []
     onWordDeletedCallbacks.value = []
     onWordForgotCallbacks.value = []
+    onWordSpellResetCallbacks.value = []
     onWordMasteredCallbacks.value = []
     onCloseCallbacks.value = []
   }
@@ -449,6 +509,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     save,
     deleteWord,
     markForgot,
+    resetSpelling,
     markMastered,
     markSpellMastered,
     restoreSpell,
@@ -459,6 +520,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onWordUpdated,
     onWordDeleted,
     onWordForgot,
+    onWordSpellReset,
     onWordMastered,
     onClose,
     clearCallbacks,
