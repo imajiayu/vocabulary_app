@@ -6,14 +6,9 @@
 """
 import os
 import logging
-from pathlib import Path
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-# 加载 backend/.env
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent / ".env")
 
 logger = logging.getLogger(__name__)
 
