@@ -5,7 +5,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 ## 部署架构
 
 - **前端**: 阿里云（Vue3 静态构建）
-- **后端**: 阿里云（Flask，关系图查询 + 关系生成）
+- **后端**: 阿里云（Flask，关系生成）
 - **数据库**: Supabase PostgreSQL
 - **认证**: Supabase Auth (Google OAuth)
 - **存储**: Supabase Storage (音频、图片)
@@ -38,9 +38,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 复习结果提交 | Frontend（本地 SM-2 算法）→ Supabase | 前端计算 + 直连持久化 |
 | 拼写结果提交 | Frontend（本地拼写算法）→ Supabase | 前端计算 + 直连持久化 |
 | 复习/拼写单词列表 | Frontend → Supabase | 前端获取 ID + 分页加载 |
-| 关系图查询 | Backend | 递归深度查询（BFS） |
 | 关系生成 | Backend（线程 + SSE） | CPU 密集 + NLTK 依赖 |
-| 关系 CRUD | Frontend → Supabase | 双向插入/删除 |
 | 关系清空 | Frontend → Supabase | 按类型批量删除 |
 | 统计数据 | Frontend → Supabase Views | 直接查询视图 |
 | 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
@@ -52,7 +50,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 ## 本地开发
 
 ```bash
-# 后端（仅关系图查询需要）
+# 后端（关系生成需要）
 source .venv/bin/activate && python -m backend.app  # :5001
 
 # 前端
@@ -65,7 +63,6 @@ cd frontend && npm run dev
 
 ```
 app.py                        # Flask 入口（CORS/请求限制/健康检查）
-api/relations.py              # 关系图 BFS 查询 API
 api/generation.py             # 关系生成/停止/进度 API（SSE 空闲超时 5min）
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
@@ -76,7 +73,6 @@ generators/                   # 5种关系生成器
   confused_generator.py       # 易混淆（编辑距离 + 语义检查）
   topic_generator.py          # 主题（IELTS 预定义主题）
 services/generation_service.py  # 生成任务管理（线程安全 + 优雅关闭）
-database/relation_dao.py      # 关系图 DAO
 models/word.py                # SQLAlchemy 模型
 utils/response.py             # 统一 API 响应格式（api_success/api_error）
 ```

@@ -30,7 +30,7 @@ npm run format      # Prettier（需安装 prettier）
 | writing.ts | — | 全部（Folders, Prompts, Sessions, Storage） |
 | settings-supabase.ts | — | 全部 |
 | stats.ts | getIndexSummary | getStats（查询 Views） |
-| relations.ts | getGraph | addDirect, deleteDirect, getStatsDirect |
+| relations.ts | — | getStatsDirect, startGeneration, stopGeneration, clearByType |
 
 ## 核心算法（前端 TypeScript）
 

@@ -14,7 +14,6 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 ## 职责范围
 
 **后端负责：**
-- 关系图递归查询（BFS，`/api/relations/graph`）
 - 关系生成（5种生成器，线程化执行 + SSE 进度推送，多用户隔离）
 
 **后端不处理（已迁移到前端）：**
@@ -35,13 +34,11 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 | 文件/目录 | 职责 |
 |------|------|
 | `app.py` | Flask 入口（CORS 来源限制、请求体大小限制、健康检查含活跃任务数） |
-| `api/relations.py` | 关系图 BFS 查询 API |
 | `api/generation.py` | 关系生成/停止/进度 API（SSE 空闲 5min 超时断开） |
 | `generators/` | 5种关系生成器（synonym, antonym, root, confused, topic） |
 | `generators/base.py` | BaseGenerator 基类（进度回调 + 停止信号 + 增量保存，flush_threshold 可配置） |
 | `generators/data.py` | 统一数据源（反义词对、词根、易混淆词、IELTS主题） |
 | `services/generation_service.py` | 生成任务管理（线程安全锁 + atexit 优雅关闭 + 已完成任务清理） |
-| `database/relation_dao.py` | 关系图 DAO |
 | `models/word.py` | SQLAlchemy 模型（Word, WordRelation, RelationGenerationLog） |
 | `extensions.py` | 数据库 session 管理（显式连接池参数） |
 | `exceptions.py` | 自定义异常 |
@@ -52,7 +49,6 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 
 | 路径 | 方法 | 功能 |
 |------|------|------|
-| `/api/relations/graph` | GET | 关系图 BFS 查询 |
 | `/api/relations/generate` | POST | 启动关系生成 |
 | `/api/relations/generate/stop` | POST | 停止关系生成 |
 | `/api/relations/generate/status` | GET | 获取所有任务状态 |

@@ -8,24 +8,6 @@ import { get, post, createEventSource } from './client'
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
 
-export interface GraphNode {
-  id: number
-  word: string
-  definition: string
-}
-
-export interface GraphEdge {
-  source: number
-  target: number
-  relation_type: string
-  confidence: number
-}
-
-export interface GraphData {
-  nodes: GraphNode[]
-  edges: GraphEdge[]
-}
-
 export interface RelationStats {
   synonym: number
   antonym: number
@@ -33,19 +15,6 @@ export interface RelationStats {
   confused: number
   topic: number
   total: number
-}
-
-export interface AddRelationPayload {
-  word_id: number
-  related_word_id: number
-  relation_type: string
-  confidence?: number
-}
-
-export interface DeleteRelationPayload {
-  word_id: number
-  related_word_id: number
-  relation_type: string
 }
 
 export interface GenerationTaskStatus {
@@ -59,33 +28,6 @@ export interface GenerationTaskStatus {
 }
 
 export class RelationsApi {
-  /**
-   * 获取单词关系图数据（保留后端：涉及递归深度查询）
-   * @param params 查询参数
-   */
-  static async getGraph(params?: {
-    relation_types?: string[]
-    word_id?: number
-    max_depth?: number
-  }): Promise<GraphData> {
-    const queryParams: string[] = []
-
-    if (params?.relation_types && params.relation_types.length > 0) {
-      queryParams.push(`relation_types=${params.relation_types.join(',')}`)
-    }
-
-    if (params?.word_id) {
-      queryParams.push(`word_id=${params.word_id}`)
-    }
-
-    if (params?.max_depth) {
-      queryParams.push(`max_depth=${params.max_depth}`)
-    }
-
-    const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : ''
-    return get<GraphData>(`/api/relations/graph${queryString}`)
-  }
-
   // ============================================================================
   // Supabase 直接查询方法
   // ============================================================================
@@ -122,57 +64,6 @@ export class RelationsApi {
     }
 
     return stats
-  }
-
-  // ============================================================================
-  // Supabase 直接写入方法
-  // ============================================================================
-
-  /**
-   * 添加关系（双向插入）
-   */
-  static async addDirect(payload: AddRelationPayload): Promise<void> {
-    const { word_id, related_word_id, relation_type, confidence = 1.0 } = payload
-    const userId = getCurrentUserId()
-
-    const { error } = await supabase
-      .from('words_relations')
-      .insert([
-        { word_id, related_word_id, relation_type, confidence, user_id: userId },
-        { word_id: related_word_id, related_word_id: word_id, relation_type, confidence, user_id: userId }
-      ])
-
-    if (error) throw new Error(error.message)
-  }
-
-  /**
-   * 删除关系（双向删除）
-   */
-  static async deleteDirect(payload: DeleteRelationPayload): Promise<void> {
-    const { word_id, related_word_id, relation_type } = payload
-    const userId = getCurrentUserId()
-
-    // 删除正向关系
-    const { error: error1 } = await supabase
-      .from('words_relations')
-      .delete()
-      .eq('word_id', word_id)
-      .eq('related_word_id', related_word_id)
-      .eq('relation_type', relation_type)
-      .eq('user_id', userId)
-
-    if (error1) throw new Error(error1.message)
-
-    // 删除反向关系
-    const { error: error2 } = await supabase
-      .from('words_relations')
-      .delete()
-      .eq('word_id', related_word_id)
-      .eq('related_word_id', word_id)
-      .eq('relation_type', relation_type)
-      .eq('user_id', userId)
-
-    if (error2) throw new Error(error2.message)
   }
 
   // ============================================================================

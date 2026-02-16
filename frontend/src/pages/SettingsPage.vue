@@ -610,14 +610,6 @@
               </article>
             </div>
 
-            <!-- 底部操作栏 -->
-            <div class="relation-footer desktop-only">
-              <button class="relation-graph-btn" @click="viewRelationGraph">
-                <span class="relation-graph-btn__icon"><AppIcon name="git-branch" /></span>
-                <span class="relation-graph-btn__text">查看关系图谱</span>
-                <span class="relation-graph-btn__arrow"><AppIcon name="expand" /></span>
-              </button>
-            </div>
           </div>
         </section>
       </div>
@@ -654,8 +646,6 @@
       </div>
     </transition>
 
-    <!-- 关系图浮窗 -->
-    <RelationGraphModal v-model:show="showGraphModal" />
   </div>
 </template>
 
@@ -664,7 +654,6 @@ import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import IOSSwitch from '@/shared/components/controls/IOSSwitch.vue'
 import KeySelector from '@/shared/components/controls/KeySelector.vue'
-import RelationGraphModal from '@/shared/components/RelationGraphModal.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'
@@ -847,8 +836,6 @@ const relationStats = ref({
 
 // 保存状态
 const toastMessage = ref('')
-const showGraphModal = ref(false)
-
 // 方法
 const toggleSection = (id: string) => {
   expandedSections[id as keyof typeof expandedSections] =
@@ -1039,10 +1026,6 @@ const loadRelationStats = async () => {
   } catch (error) {
     logger.error('加载关系统计失败:', error)
   }
-}
-
-const viewRelationGraph = () => {
-  showGraphModal.value = true
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -2111,62 +2094,6 @@ onUnmounted(() => {
   color: var(--primitive-brick-600);
 }
 
-/* 底部操作栏 */
-.relation-footer {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border-light);
-}
-
-.relation-graph-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: transparent;
-  border: 1px solid var(--color-border-medium);
-  border-radius: var(--radius-default);
-  color: var(--color-text-secondary);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.relation-graph-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.relation-graph-btn__icon {
-  display: inline-flex;
-  align-items: center;
-}
-
-.relation-graph-btn__icon .icon {
-  width: 14px;
-  height: 14px;
-}
-
-.relation-graph-btn__text {
-  flex: 1;
-}
-
-.relation-graph-btn__arrow {
-  display: inline-flex;
-  align-items: center;
-  transition: transform 0.15s;
-}
-
-.relation-graph-btn__arrow .icon {
-  width: 12px;
-  height: 12px;
-}
-
-.relation-graph-btn:hover .relation-graph-btn__arrow {
-  transform: translateX(2px);
-}
-
 /* ═══════════════════════════════════════════════════════════════════════════
    统一保存栏 - 底部固定
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -2477,10 +2404,6 @@ onUnmounted(() => {
   .tile-btn {
     padding: 5px 10px;
     font-size: 11px;
-  }
-
-  .relation-footer {
-    display: none;
   }
 
   .desktop-only {

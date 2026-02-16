@@ -32,9 +32,7 @@ def create_app():
     app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
     # 注册蓝图
-    from backend.api.relations import relations_bp
     from backend.api.generation import generation_bp
-    app.register_blueprint(relations_bp)
     app.register_blueprint(generation_bp)
 
     cors_origins = os.environ.get("CORS_ORIGINS", "*")

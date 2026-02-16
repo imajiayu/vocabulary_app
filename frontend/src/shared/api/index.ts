@@ -48,12 +48,7 @@ export { SettingsSupabaseApi } from './settings-supabase'
 
 export { RelationsApi } from './relations'
 export type {
-  GraphNode,
-  GraphEdge,
-  GraphData,
   RelationStats,
-  AddRelationPayload,
-  DeleteRelationPayload,
   GenerationTaskStatus
 } from './relations'
 
