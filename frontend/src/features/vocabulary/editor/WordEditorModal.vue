@@ -67,15 +67,20 @@ const handleKeydown = (event: KeyboardEvent) => {
 watch(isOpen, (open) => {
   if (open) {
     const scrollY = window.scrollY;
+    // 检测页面是否本来就有滚动条（在 body fixed 之前检测）
+    const hadScrollbar = document.documentElement.scrollHeight > window.innerHeight;
 
     // 锁定背景滚动：body fixed 保持视觉位置
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
     document.body.style.width = '100%';
-    // 强制 html 保留滚动条轨道（overflow: scroll 而非 hidden），
-    // 避免滚动条消失导致 viewport 变宽、所有 fixed 元素抖动
-    document.documentElement.style.overflowY = 'scroll';
+    // 仅当页面本来有滚动条时，强制 html 保留滚动条轨道，
+    // 避免滚动条消失导致 viewport 变宽、所有 fixed 元素抖动。
+    // 页面无滚动条时（如复习页）不添加，避免出现多余滚动条。
+    if (hadScrollbar) {
+      document.documentElement.style.overflowY = 'scroll';
+    }
 
     document.body.setAttribute('data-scroll-y', scrollY.toString());
 

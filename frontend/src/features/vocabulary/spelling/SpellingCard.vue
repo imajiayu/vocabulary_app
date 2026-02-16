@@ -703,15 +703,38 @@ onBeforeUnmount(() => {
   align-items: flex-start;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   background: var(--color-bg-primary);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border-left: 4px solid var(--color-primary);
+  border-top: 1px solid var(--primitive-paper-300);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
-.definition-item:last-child {
-  margin-bottom: 0;
+.definition-item:first-child {
+  border-top: none;
+}
+
+.definition-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 装饰折角 — 仅桌面端第一条释义 */
+.definition-item:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent var(--primitive-paper-300) transparent transparent;
+  opacity: 0.5;
+  border-top-right-radius: var(--radius-lg);
 }
 
 .def-number {
@@ -721,11 +744,13 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gradient-primary);
-  color: white;
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
-  font-weight: 700;
+  background: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-style: italic;
+  border: 1.5px solid var(--color-primary);
   border-radius: var(--radius-full);
 }
 
@@ -1091,6 +1116,16 @@ onBeforeUnmount(() => {
     padding-bottom: calc(var(--spelling-keyboard-height, 260px) + var(--spelling-input-height, 5rem) + 0.5rem);
   }
 
+  /* 移除 hover 效果和装饰折角 */
+  .definition-item:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .definition-item:first-child::after {
+    display: none;
+  }
+
   .definition-item {
     padding: 0.875rem 1rem;
     gap: 0.75rem;
@@ -1188,6 +1223,13 @@ onBeforeUnmount(() => {
 
   .btn-label {
     font-size: 0.7rem;
+  }
+}
+
+/* 无障碍：前庭障碍友好 */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-track.is-sliding {
+    transition-duration: 0.15s;
   }
 }
 </style>

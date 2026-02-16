@@ -254,7 +254,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
       const updatedWord = await api.words.updateWordDirect(wordId, {
         repetition: 0,
-        interval: chosenDay,
+        interval: 1,
         next_review: nextReview,
         ease_factor: parseFloat(Math.max(1.3, word.ease_factor - 0.4).toFixed(2)),
         lapse: 1,
