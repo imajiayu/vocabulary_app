@@ -286,6 +286,17 @@ onMounted(async () => {
 const handleShowDetail = (word: Word) => {
     wordEditorStore.open(word);
 
+    // 注册重复检测器：本地已全部加载时走内存查找，否则走 Supabase 查询
+    wordEditorStore.setDuplicateChecker(async (wordText, excludeId) => {
+        const normalized = wordText.trim().toLowerCase()
+        if (!hasMoreWords.value) {
+            return words.value.some(w =>
+                w.id !== excludeId && w.word.trim().toLowerCase() === normalized
+            )
+        }
+        return api.words.checkWordExistsDirect(wordText, excludeId)
+    });
+
     // 注册回调：模态框关闭时更新列表
     wordEditorStore.onClose((finalWord: Word | undefined) => {
         if (finalWord) {
@@ -330,6 +341,10 @@ const handleWordInserted = async (word: Word) => {
         if (index !== -1) {
             words.value[index] = updatedWord;
         }
+        // 如果 modal 正在显示同一个单词，同步释义到 modal
+        if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
+            wordEditorStore.updateCurrentWord(updatedWord);
+        }
     } catch (error) {
         defProgress.incrementFailed();
         logger.error('Failed to fetch definition for new word:', error);
@@ -368,6 +383,9 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
             if (index !== -1) {
                 words.value[index] = updatedWord;
             }
+            if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
+                wordEditorStore.updateCurrentWord(updatedWord);
+            }
             return updatedWord;
         } catch {
             defProgress.incrementFailed();
@@ -404,6 +422,9 @@ const handleFixDefinitions = async () => {
             const index = getWordIndex(word.id);
             if (index !== -1) {
                 words.value[index] = updatedWord;
+            }
+            if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
+                wordEditorStore.updateCurrentWord(updatedWord);
             }
             return updatedWord;
         } catch {

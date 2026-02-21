@@ -139,6 +139,7 @@ VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
 
 ## 开发规范
 
+- 交流语言：始终使用中文与用户沟通
 - 前端日志使用 `logger.ts`，生产环境自动禁用
 - 组件通信：浅层用 Props/Emit，深层用 Context，跨模块用 Pinia
 - 样式优先使用 CSS 变量
@@ -159,4 +160,4 @@ VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
 - 后端定位为关系专用服务（图查询 + 关系生成）
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
-- 当前版本号 `v1.0`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v1.1`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新

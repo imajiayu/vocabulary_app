@@ -1,6 +1,6 @@
 // stores/wordEditor.ts - Word Editor Modal 状态管理
 import { defineStore } from 'pinia'
-import { ref, shallowRef, computed } from 'vue'
+import { ref, shallowRef, computed, watch } from 'vue'
 import { api } from '@/shared/api'
 import type { Word, RelatedWord } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
@@ -11,16 +11,29 @@ import { useSettings } from '@/shared/composables/useSettings'
 
 const log = logger.create('WordEditor')
 
+export type DuplicateCheckState = 'idle' | 'checking' | 'duplicate' | 'clear'
+export type DuplicateCheckerFn = (word: string, excludeId: number) => Promise<boolean>
+
 export const useWordEditorStore = defineStore('wordEditor', () => {
   // ── State ──
   const currentWord = ref<Word | null>(null)
   const originalWord = ref<Word | null>(null)
   const isOpen = ref(false)
   const isEditing = ref(false)
-  const isSaving = ref(false)
   const mode = ref<string>('') // 复习模式，如 'mode_lapse', 'mode_review', 'mode_spelling'
   const relatedWords = shallowRef<RelatedWord[]>([])
   const isLoadingRelated = ref(false)
+
+  // ── 重复检测 ──
+  const duplicateCheckState = ref<DuplicateCheckState>('idle')
+  const duplicateChecker = ref<DuplicateCheckerFn | null>(null)
+
+  // 当 word 文本变化时重置检测状态
+  watch(() => currentWord.value?.word, () => {
+    if (duplicateCheckState.value !== 'idle') {
+      duplicateCheckState.value = 'idle'
+    }
+  })
 
   // 回调函数：用于通知调用方单词已被更新/删除/标记
   const onWordUpdatedCallbacks = ref<Array<(word: Word) => void>>([])
@@ -37,7 +50,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   })
 
   const canSave = computed(() => {
-    return isEditing.value && hasChanges.value && !isSaving.value
+    return isEditing.value && hasChanges.value
   })
 
   // ── Actions ──
@@ -101,6 +114,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     mode.value = ''
     relatedWords.value = []
     isLoadingRelated.value = false
+    duplicateCheckState.value = 'idle'
 
     // 清空回调
     clearCallbacks()
@@ -128,48 +142,76 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       currentWord.value = { ...originalWord.value }
     }
     isEditing.value = false
+    duplicateCheckState.value = 'idle'
   }
 
   /**
-   * 保存单词更改
+   * 保存单词更改 — 乐观更新
+   *
+   * 如果 word 字段被修改，第一次点击触发重复检测（返回 false），
+   * 检测通过后第二次点击才执行实际保存。
+   * 如果只修改了 definition，直接保存。
    */
   async function save(): Promise<boolean> {
     if (!currentWord.value || !canSave.value) return false
 
-    const wordFieldChanged = originalWord.value && currentWord.value.word !== originalWord.value.word
+    const wordId = currentWord.value.id
+    const wordFieldChanged = !!originalWord.value && currentWord.value.word !== originalWord.value.word
 
+    // ── 重复检测阶段 ──
+    if (wordFieldChanged && duplicateCheckState.value === 'idle') {
+      duplicateCheckState.value = 'checking'
+      const wordTextSnapshot = currentWord.value.word
+
+      try {
+        const checker = duplicateChecker.value ?? api.words.checkWordExistsDirect
+        const exists = await checker(wordTextSnapshot, wordId)
+
+        // 防止竞态：检测期间用户已修改 word 文本，watcher 已重置为 idle
+        if (duplicateCheckState.value !== 'checking') return false
+
+        // 再次确认文本未变
+        if (currentWord.value?.word !== wordTextSnapshot) {
+          duplicateCheckState.value = 'idle'
+          return false
+        }
+
+        duplicateCheckState.value = exists ? 'duplicate' : 'clear'
+      } catch (error) {
+        log.error('重复检测失败:', error)
+        // 网络错误时放行，让后端 constraint 兜底
+        duplicateCheckState.value = 'clear'
+      }
+      return false
+    }
+
+    // ── 实际保存 ──
     // 保存前：strip → re-bold（基于当前 word 文本重新加粗）
     const wordText = currentWord.value.word
     const strippedDef = stripBoldFromDefinition(currentWord.value.definition)
     const boldedDef = applyBoldToDefinition(strippedDef, wordText)
 
-    isSaving.value = true
-    try {
-      const updatedWord = await api.words.updateWordDirect(currentWord.value.id, {
-        word: currentWord.value.word,
-        definition: boldedDef
+    // 乐观更新
+    currentWord.value = { ...currentWord.value, definition: boldedDef }
+    originalWord.value = { ...currentWord.value }
+    isEditing.value = false
+    duplicateCheckState.value = 'idle'
+
+    onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
+
+    // 后台持久化
+    api.words.updateWordDirect(wordId, {
+      word: wordText,
+      definition: boldedDef
+    })
+      .then(() => {
+        if (wordFieldChanged) fetchDefinitionAsync(wordId)
+      })
+      .catch(error => {
+        log.error('保存单词失败:', error)
       })
 
-      // 立即更新状态并退出编辑模式
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
-      isEditing.value = false
-      isSaving.value = false
-
-      // 触发更新回调（先用当前数据）
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
-
-      // 单词文本变了 → 异步爬取新释义（内部会加粗 + 写入 DB）
-      if (wordFieldChanged) {
-        fetchDefinitionAsync(updatedWord.id)
-      }
-
-      return true
-    } catch (error) {
-      log.error('保存单词失败:', error)
-      isSaving.value = false
-      return false
-    }
+    return true
   }
 
   /**
@@ -214,7 +256,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   }
 
   /**
-   * 标记单词为"忘记"（进入错题集）
+   * 标记单词为"忘记"（进入错题集）— 计算阶段 await，DB 写入乐观
    * 重置学习进度，设置 lapse = 1（二值标记，前端维护 expanding retrieval）
    * 通过负载均衡选择最优复习日期，避免某天负荷堆积
    */
@@ -226,49 +268,52 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     const { loadSettings } = useSettings()
 
     try {
-      // 1. 获取设置和负荷数据
+      // 计算阶段（需 await）
       const userSettings = await loadSettings()
       const dailyLimit = userSettings.learning.dailyReviewLimit || 50
       const maxPrepDays = userSettings.learning.maxPrepDays || 45
       const source = word.source || 'IELTS'
 
-      // 优先从 reviewStore 缓存读取，null 则 fetch fresh
       let loads: number[]
       try {
         const { useReviewStore } = await import('../stores/review')
-        const reviewStore = useReviewStore()
-        loads = reviewStore.reviewLoadsCache ?? await api.words.getDailyReviewLoadsDirect(source, maxPrepDays)
+        loads = useReviewStore().reviewLoadsCache ?? await api.words.getDailyReviewLoadsDirect(source, maxPrepDays)
       } catch {
         loads = await api.words.getDailyReviewLoadsDirect(source, maxPrepDays)
       }
 
-      // 2. 负载均衡选择最优日期
       const { chosenDay } = findOptimalDay({
         baseInterval: 1,
         dailyLimit,
         currentLoads: loads,
       })
 
-      // 3. 计算日期
       const today = new Date().toISOString().split('T')[0]
       const nextReview = addDays(today, chosenDay)
+      const newEaseFactor = parseFloat(Math.max(1.3, word.ease_factor - 0.4).toFixed(2))
 
-      const updatedWord = await api.words.updateWordDirect(wordId, {
+      const updatePayload = {
         repetition: 0,
         interval: 1,
         next_review: nextReview,
-        ease_factor: parseFloat(Math.max(1.3, word.ease_factor - 0.4).toFixed(2)),
+        ease_factor: newEaseFactor,
         lapse: 1,
         stop_review: 0
-      })
+      }
 
-      // 更新本地数据
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
+      // 乐观更新
+      currentWord.value = { ...currentWord.value, ...updatePayload }
+      originalWord.value = { ...currentWord.value }
 
-      // 触发忘记回调（传递扩展参数）
-      onWordForgotCallbacks.value.forEach(cb => cb(wordId, updatedWord, chosenDay))
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
+      const optimisticWord = { ...currentWord.value }
+      onWordForgotCallbacks.value.forEach(cb => cb(wordId, optimisticWord, chosenDay))
+      onWordUpdatedCallbacks.value.forEach(cb => cb(optimisticWord))
+
+      // 后台持久化
+      api.words.updateWordDirect(wordId, updatePayload)
+        .catch(error => {
+          log.error('标记忘记失败:', error)
+        })
 
       return true
     } catch (error) {
@@ -278,7 +323,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   }
 
   /**
-   * 重置拼写进度
+   * 重置拼写进度 — 计算阶段 await，DB 写入乐观
    * 将 spell_strength 归零，通过负载均衡选择最优拼写日期
    */
   async function resetSpelling(): Promise<boolean> {
@@ -289,6 +334,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     const { loadSettings } = useSettings()
 
     try {
+      // 计算阶段（需 await）
       const userSettings = await loadSettings()
       const dailyLimit = userSettings.learning.dailySpellLimit || 200
       const maxPrepDays = userSettings.learning.maxPrepDays || 45
@@ -297,8 +343,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       let loads: number[]
       try {
         const { useReviewStore } = await import('../stores/review')
-        const reviewStore = useReviewStore()
-        loads = reviewStore.spellLoadsCache ?? await api.words.getDailySpellLoadsDirect(source, maxPrepDays)
+        loads = useReviewStore().spellLoadsCache ?? await api.words.getDailySpellLoadsDirect(source, maxPrepDays)
       } catch {
         loads = await api.words.getDailySpellLoadsDirect(source, maxPrepDays)
       }
@@ -312,17 +357,25 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       const today = new Date().toISOString().split('T')[0]
       const nextSpellReview = addDays(today, chosenDay)
 
-      const updatedWord = await api.words.updateWordDirect(wordId, {
+      const updatePayload = {
         spell_strength: 0,
         spell_next_review: nextSpellReview,
         stop_spell: 0,
-      })
+      }
 
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
+      // 乐观更新
+      currentWord.value = { ...currentWord.value, ...updatePayload }
+      originalWord.value = { ...currentWord.value }
 
-      onWordSpellResetCallbacks.value.forEach(cb => cb(wordId, updatedWord, chosenDay))
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
+      const optimisticWord = { ...currentWord.value }
+      onWordSpellResetCallbacks.value.forEach(cb => cb(wordId, optimisticWord, chosenDay))
+      onWordUpdatedCallbacks.value.forEach(cb => cb(optimisticWord))
+
+      // 后台持久化
+      api.words.updateWordDirect(wordId, updatePayload)
+        .catch(error => {
+          log.error('重置拼写失败:', error)
+        })
 
       return true
     } catch (error) {
@@ -332,123 +385,105 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   }
 
   /**
-   * 标记单词为"已掌握"（停止复习）
+   * 标记单词为"已掌握"（停止复习）— 乐观更新
    * @param closeAfter 是否在操作后关闭模态框
    */
-  async function markMastered(closeAfter = true): Promise<boolean> {
+  function markMastered(closeAfter = true): boolean {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
 
-    try {
-      const updatedWord = await api.words.updateWordDirect(wordId, {
-        stop_review: 1
+    currentWord.value = { ...currentWord.value, stop_review: 1 }
+    originalWord.value = { ...currentWord.value }
+
+    onWordMasteredCallbacks.value.forEach(cb => cb(wordId))
+    onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
+
+    if (closeAfter) close()
+
+    api.words.updateWordDirect(wordId, { stop_review: 1 })
+      .catch(error => {
+        log.error('标记掌握失败:', error)
       })
 
-      // 更新本地数据
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
-
-      // 触发掌握回调
-      onWordMasteredCallbacks.value.forEach(cb => cb(wordId))
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
-
-      if (closeAfter) {
-        close()
-      }
-      return true
-    } catch (error) {
-      log.error('标记掌握失败:', error)
-      return false
-    }
+    return true
   }
 
   /**
-   * 标记单词为"不再拼写"（停止拼写）
+   * 标记单词为"不再拼写"（停止拼写）— 乐观更新
    */
-  async function markSpellMastered(closeAfter = true): Promise<boolean> {
+  function markSpellMastered(closeAfter = true): boolean {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
 
-    try {
-      const updatedWord = await api.words.updateWordDirect(wordId, {
-        stop_spell: 1
+    currentWord.value = { ...currentWord.value, stop_spell: 1 }
+    originalWord.value = { ...currentWord.value }
+
+    onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
+
+    if (closeAfter) close()
+
+    api.words.updateWordDirect(wordId, { stop_spell: 1 })
+      .catch(error => {
+        log.error('停止拼写失败:', error)
       })
 
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
-
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
-
-      if (closeAfter) {
-        close()
-      }
-      return true
-    } catch (error) {
-      log.error('停止拼写失败:', error)
-      return false
-    }
+    return true
   }
 
   /**
-   * 恢复拼写（取消"不再拼写"状态）
+   * 恢复拼写（取消"不再拼写"状态）— 乐观更新
    */
-  async function restoreSpell(): Promise<boolean> {
+  function restoreSpell(): boolean {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
 
-    try {
-      const updatedWord = await api.words.updateWordDirect(wordId, {
-        stop_spell: 0
+    currentWord.value = { ...currentWord.value, stop_spell: 0 }
+    originalWord.value = { ...currentWord.value }
+
+    onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
+
+    api.words.updateWordDirect(wordId, { stop_spell: 0 })
+      .catch(error => {
+        log.error('恢复拼写失败:', error)
       })
 
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
-
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
-
-      return true
-    } catch (error) {
-      log.error('恢复拼写失败:', error)
-      return false
-    }
+    return true
   }
 
   /**
-   * 恢复复习（取消"已掌握"状态）
+   * 恢复复习（取消"已掌握"状态）— 乐观更新
    */
-  async function restoreReview(): Promise<boolean> {
+  function restoreReview(): boolean {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
 
-    try {
-      const updatedWord = await api.words.updateWordDirect(wordId, {
-        stop_review: 0
+    currentWord.value = { ...currentWord.value, stop_review: 0 }
+    originalWord.value = { ...currentWord.value }
+
+    onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
+
+    api.words.updateWordDirect(wordId, { stop_review: 0 })
+      .catch(error => {
+        log.error('恢复复习失败:', error)
       })
 
-      // 更新本地数据
-      currentWord.value = updatedWord
-      originalWord.value = { ...updatedWord }
-
-      // 触发更新回调
-      onWordUpdatedCallbacks.value.forEach(cb => cb(updatedWord))
-
-      return true
-    } catch (error) {
-      log.error('恢复复习失败:', error)
-      return false
-    }
+    return true
   }
 
   /**
-   * 更新当前单词数据（用于外部WebSocket更新等场景）
+   * 更新当前单词数据（用于外部更新，如释义获取完成）
+   * 非编辑模式下同步 originalWord，避免 hasChanges 误判
    */
   function updateCurrentWord(word: Partial<Word>) {
     if (currentWord.value) {
       currentWord.value = { ...currentWord.value, ...word }
+      if (!isEditing.value) {
+        originalWord.value = { ...currentWord.value }
+      }
     }
   }
 
@@ -478,6 +513,10 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onCloseCallbacks.value.push(callback)
   }
 
+  function setDuplicateChecker(fn: DuplicateCheckerFn) {
+    duplicateChecker.value = fn
+  }
+
   function clearCallbacks() {
     onWordUpdatedCallbacks.value = []
     onWordDeletedCallbacks.value = []
@@ -485,6 +524,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onWordSpellResetCallbacks.value = []
     onWordMasteredCallbacks.value = []
     onCloseCallbacks.value = []
+    duplicateChecker.value = null
   }
 
   return {
@@ -492,7 +532,6 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     currentWord,
     isOpen,
     isEditing,
-    isSaving,
     mode,
     relatedWords,
     isLoadingRelated,
@@ -500,6 +539,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     // Getters
     hasChanges,
     canSave,
+    duplicateCheckState,
 
     // Actions
     open,
@@ -523,6 +563,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     onWordSpellReset,
     onWordMastered,
     onClose,
+    setDuplicateChecker,
     clearCallbacks,
   }
 })

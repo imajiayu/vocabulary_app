@@ -71,6 +71,9 @@
         @skip="handleSkip"
       />
 
+      <!-- 后台加载中：当前批次已用完但还有更多单词待加载 -->
+      <LoadingComponent v-else-if="isBackgroundLoading || !isCompleted" text="加载中..." />
+
       <!-- 复习完成 -->
       <div v-else class="completion-screen">
         <div class="completion-card">
@@ -271,6 +274,8 @@ const {
   mode,
   audioType,
   isLoading,
+  isBackgroundLoading,
+  isCompleted,
   totalWords,
   currentIndex,
   progress,
@@ -328,9 +333,11 @@ const spellingExtraProps = computed(() => {
   }
 })
 
-// 复习完成时，取消 debounce + 清除 DB 进度，避免首页显示残留通知
-watch(currentWord, (word, oldWord) => {
-  if (!word && oldWord) {
+// 复习真正完成时，取消 debounce + 清除 DB 进度，避免首页显示残留通知
+// 注意：watch isCompleted 而非 currentWord，避免后台加载期间误清除进度
+// guard isInitializing：lapse 模式下 reset() 后 queue 为空导致 isCompleted 短暂为 true
+watch(isCompleted, (completed) => {
+  if (completed && !isInitializing.value) {
     reviewStore.clearSessionProgress()
   }
 })

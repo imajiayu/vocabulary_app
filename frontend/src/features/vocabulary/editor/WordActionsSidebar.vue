@@ -51,8 +51,8 @@
     <!-- Actions -->
     <div class="actions-group">
       <template v-if="isEditing">
-        <button @click="handleSave" :disabled="isSaving" class="action-btn btn-primary">
-          {{ isSaving ? '保存中...' : '保存' }}
+        <button @click="handleSave" :disabled="saveButtonDisabled" class="action-btn btn-primary">
+          {{ saveButtonText }}
         </button>
         <button @click="store.cancelEdit()" class="action-btn btn-ghost">取消</button>
       </template>
@@ -84,7 +84,7 @@ import { useWordEditorStore } from '../stores/wordEditor';
 
 // 使用 Pinia Store
 const store = useWordEditorStore();
-const { currentWord, isEditing, isSaving } = storeToRefs(store);
+const { currentWord, isEditing, duplicateCheckState } = storeToRefs(store);
 
 // Computed property to check if word has been marked as forgotten (lapse > 0)
 const isForgetButtonUsed = computed(() => {
@@ -106,41 +106,56 @@ const isSpellResetDisabled = computed(() => {
   return s === null || s === undefined || s === 0;
 });
 
-const toggleSpell = async () => {
+const toggleSpell = () => {
   if (isSpellStopped.value) {
-    await store.restoreSpell();
+    store.restoreSpell();
   } else {
-    await store.markSpellMastered(false);
+    store.markSpellMastered(false);
   }
 };
 
-const toggleReview = async () => {
+const toggleReview = () => {
   if (isRemembered.value) {
-    await store.restoreReview();
+    store.restoreReview();
   } else {
-    await store.markMastered(false); // 不自动关闭
+    store.markMastered(false); // 不自动关闭
   }
 };
 
-const handleMarkForgot = async () => {
+const handleMarkForgot = () => {
   if (isForgetButtonUsed.value) return;
-  await store.markForgot();
+  store.markForgot(); // async internally but fire-and-forget from UI
 };
 
-const handleResetSpelling = async () => {
+const handleResetSpelling = () => {
   if (isSpellResetDisabled.value) return;
-  await store.resetSpelling();
+  store.resetSpelling(); // async internally but fire-and-forget from UI
 };
+
+const saveButtonDisabled = computed(() => {
+  const state = duplicateCheckState.value;
+  if (state === 'checking' || state === 'duplicate') return true;
+  return !store.canSave;
+});
+
+const saveButtonText = computed(() => {
+  switch (duplicateCheckState.value) {
+    case 'checking': return '查询中...';
+    case 'duplicate': return '已存在';
+    case 'clear': return '确认保存';
+    default: return '保存';
+  }
+});
 
 const handleDelete = async () => {
   if (!confirm('确定要删除这个单词吗？')) {
     return;
   }
-  await store.deleteWord();
+  await store.deleteWord(); // deleteWord is still async (not optimistic)
 };
 
-const handleSave = async () => {
-  await store.save();
+const handleSave = () => {
+  store.save();
 };
 </script>
 

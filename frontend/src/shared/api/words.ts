@@ -185,6 +185,23 @@ export class WordsApi {
     return word
   }
 
+  /**
+   * 检查同一 user_id 下是否已存在相同单词（排除指定 ID）
+   * 唯一约束不限定 source，同一用户的单词全局唯一
+   */
+  static async checkWordExistsDirect(word: string, excludeId: number): Promise<boolean> {
+    const userId = getCurrentUserId()
+    const { count, error } = await supabase
+      .from('words')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('word', word.trim().toLowerCase())
+      .neq('id', excludeId)
+
+    if (error) throw new Error(error.message)
+    return (count ?? 0) > 0
+  }
+
   // ============================================================================
   // Supabase 直连查询方法
   // ============================================================================
