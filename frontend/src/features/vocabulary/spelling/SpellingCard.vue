@@ -197,6 +197,7 @@
               />
             </button>
             <button
+              v-if="!hideStopSpell"
               class="action-btn-sm skip"
               :disabled="isSubmitting"
               @click="emit('skip')"
@@ -220,6 +221,7 @@
 <script setup lang="ts">
 import { ref, shallowRef, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useBreakpoint } from '@/shared/composables/useBreakpoint'
+import { useReviewStore } from '@/features/vocabulary/stores/review'
 import type { AudioType } from '@/features/vocabulary/stores/review'
 import type { Word, SpellingData, SpellingKeyEvent, BackspaceSequence } from '@/shared/types'
 import SpellingKeyboard from './SpellingKeyboard.vue'
@@ -252,6 +254,9 @@ const emit = defineEmits<{ skip: [] }>()
 const props = defineProps<Props>()
 
 const { hotkeys, loadHotkeys } = useHotkeys()
+
+const reviewStore = useReviewStore()
+const hideStopSpell = computed(() => reviewStore.mode === 'mode_skilled_spelling')
 
 const inputRef = ref<HTMLInputElement>()
 const mobileInputAreaRef = ref<HTMLElement>()

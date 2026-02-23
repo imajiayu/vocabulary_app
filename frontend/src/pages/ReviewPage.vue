@@ -318,12 +318,13 @@ const displayTotal = computed(() => {
 })
 
 const currentComponent = computed(() => {
-  return mode.value === 'mode_spelling' ? SpellingCard : ReviewCard
+  return (mode.value === 'mode_spelling' || mode.value === 'mode_skilled_spelling')
+    ? SpellingCard : ReviewCard
 })
 
 // 拼写模式：传递前后单词用于画廊式展示
 const spellingExtraProps = computed(() => {
-  if (mode.value !== 'mode_spelling') return {}
+  if (mode.value !== 'mode_spelling' && mode.value !== 'mode_skilled_spelling') return {}
   const idx = currentIndex.value
   const queue = reviewStore.wordQueue
   return {
@@ -346,6 +347,8 @@ const modeLabel = computed(() => {
   switch (mode.value) {
     case 'mode_lapse': return '复习错题'
     case 'mode_spelling': return '拼写熟练'
+    case 'mode_mastered_review': return '复习已掌握'
+    case 'mode_skilled_spelling': return '拼写已熟练'
     default: return '复习已有'
   }
 })
@@ -354,6 +357,8 @@ const modeClass = computed(() => {
   switch (mode.value) {
     case 'mode_lapse': return 'lapse'
     case 'mode_spelling': return 'spelling'
+    case 'mode_mastered_review': return 'mastered-review'
+    case 'mode_skilled_spelling': return 'skilled-spelling'
     default: return 'review'
   }
 })
@@ -401,7 +406,7 @@ const initializeFromRoute = async () => {
     const routeMode = props.mode || 'mode_review'
     let reviewMode: ReviewMode = 'mode_review'
 
-    if (['mode_lapse', 'mode_spelling', 'mode_review'].includes(routeMode)) {
+    if (['mode_lapse', 'mode_spelling', 'mode_review', 'mode_mastered_review', 'mode_skilled_spelling'].includes(routeMode)) {
       reviewMode = routeMode as ReviewMode
     }
 
@@ -426,10 +431,11 @@ const handleResult = async (result: CardResultEvent) => {
   if (!currentWord.value) return
 
   try {
+    const isSpellingMode = mode.value === 'mode_spelling' || mode.value === 'mode_skilled_spelling'
     const wordResult: WordResult = {
-      is_spelling: mode.value === 'mode_spelling',
+      is_spelling: isSpellingMode,
       remembered: result.remembered,
-      ...(mode.value === 'mode_spelling'
+      ...(isSpellingMode
         ? { spelling_data: result.spellingData }
         : { elapsed_time: result.elapsedTime }
       )
@@ -443,6 +449,8 @@ const handleResult = async (result: CardResultEvent) => {
 
 const handleSkip = async () => {
   if (!currentWord.value) return
+  // 新模式下按钮已隐藏，但保留防御性代码
+  if (mode.value === 'mode_mastered_review' || mode.value === 'mode_skilled_spelling') return
 
   try {
     if (mode.value === 'mode_spelling') {
@@ -595,6 +603,16 @@ onUnmounted(() => {
 }
 
 .badge.mode.spelling {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.badge.mode.mastered-review {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.badge.mode.skilled-spelling {
   background: var(--color-warning-light);
   color: var(--color-warning);
 }

@@ -75,8 +75,7 @@ SM-2 spaced repetition vocabulary.
 | date_added | date | YES | — | Date word was added |
 | remember_count | integer | YES | — | Times remembered |
 | forget_count | integer | YES | — | Times forgotten |
-| last_remembered | date | YES | — | Last remembered date |
-| last_forgot | date | YES | — | Last forgotten date |
+| last_review | date | YES | — | Last review date (remember or forget) |
 | stop_review | integer | YES | — | 1 = mastered, excluded from review |
 | stop_spell | integer | YES | 0 | 1 = excluded from spelling queue |
 | next_review | date | YES | — | Next review date (SM-2) |

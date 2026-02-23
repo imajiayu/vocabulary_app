@@ -298,7 +298,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
         next_review: nextReview,
         ease_factor: newEaseFactor,
         lapse: 1,
-        stop_review: 0
+        stop_review: 0,
+        last_review: today,
+        forget_count: word.forget_count + 1,
       }
 
       // 乐观更新

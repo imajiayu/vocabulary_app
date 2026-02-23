@@ -168,6 +168,16 @@
             <AppIcon name="chart" class="link-icon-svg" />
             <span class="link-text">查看统计</span>
           </button>
+          <span class="link-separator">·</span>
+          <button class="quick-link" @click="goMasteredReview">
+            <AppIcon name="check-circle" class="link-icon-svg" />
+            <span class="link-text">复习已掌握</span>
+          </button>
+          <span class="link-separator">·</span>
+          <button class="quick-link" @click="goSkilledSpelling">
+            <AppIcon name="graduation-cap" class="link-icon-svg" />
+            <span class="link-text">拼写已熟练</span>
+          </button>
         </section>
       </main>
     </div>
@@ -294,6 +304,16 @@
         <button class="quick-btn" @click="goStats">
           <AppIcon name="chart" class="quick-icon-svg" />
           <span class="quick-text">查看统计</span>
+        </button>
+        <span class="quick-divider">·</span>
+        <button class="quick-btn" @click="goMasteredReview">
+          <AppIcon name="check-circle" class="quick-icon-svg" />
+          <span class="quick-text">复习已掌握</span>
+        </button>
+        <span class="quick-divider">·</span>
+        <button class="quick-btn" @click="goSkilledSpelling">
+          <AppIcon name="graduation-cap" class="quick-icon-svg" />
+          <span class="quick-text">拼写已熟练</span>
         </button>
       </section>
     </div>
@@ -505,6 +525,14 @@ const goStats = () => {
 
 const goManagement = () => {
   router.push('/management')
+}
+
+const goMasteredReview = () => {
+  router.push({ path: '/review', query: { mode: 'mode_mastered_review' } })
+}
+
+const goSkilledSpelling = () => {
+  router.push({ path: '/review', query: { mode: 'mode_skilled_spelling' } })
 }
 
 const dismissProgressNotification = () => {
@@ -919,6 +947,7 @@ const resumeProgress = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 1rem;
   padding-top: 1.5rem;
   border-top: 1px dashed var(--primitive-paper-400);
@@ -1151,7 +1180,8 @@ const resumeProgress = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
   padding: 0.875rem 0.25rem;
   margin-top: 0.25rem;
   border-top: 1px dashed var(--primitive-paper-400);

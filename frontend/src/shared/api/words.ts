@@ -20,6 +20,10 @@ export interface UpdateWordPayload {
   lapse?: number
   spell_strength?: number
   spell_next_review?: string
+  last_review?: string
+  last_spell?: string
+  remember_count?: number
+  forget_count?: number
 }
 
 // 复习模式通知（param_type 判别联合）
@@ -495,6 +499,84 @@ export class WordsApi {
   // ============================================================================
 
   /**
+   * 获取已掌握的单词 ID（stop_review = 1）
+   * 按 last_review 升序排列，NULL 在最前
+   * 这样每次检查的都是最久没检查过的单词
+   */
+  static async getMasteredReviewWordIdsDirect(source: string): Promise<number[]> {
+    const userId = getCurrentUserId()
+
+    // 分页获取，避免 PostgREST 1000 行限制
+    const PAGE_SIZE = 1000
+    const allRows: Array<Record<string, unknown>> = []
+    let offset = 0
+    while (true) {
+      const { data, error } = await supabase
+        .from('words')
+        .select('id, last_review')
+        .eq('user_id', userId)
+        .eq('stop_review', 1)
+        .eq('source', source)
+        .range(offset, offset + PAGE_SIZE - 1)
+
+      if (error) throw new Error(error.message)
+      if (!data || data.length === 0) break
+      allRows.push(...data)
+      if (data.length < PAGE_SIZE) break
+      offset += PAGE_SIZE
+    }
+
+    allRows.sort((a, b) => {
+      const da = a.last_review as string | null
+      const db = b.last_review as string | null
+      if (da === null && db === null) return 0
+      if (da === null) return -1
+      if (db === null) return 1
+      return da.localeCompare(db)
+    })
+
+    return allRows.map(r => r.id as number)
+  }
+
+  /**
+   * 获取已熟练的拼写 ID（stop_spell = 1），按字母排序
+   */
+  static async getSkilledSpellingWordIdsDirect(source: string): Promise<number[]> {
+    const userId = getCurrentUserId()
+
+    // 分页获取，避免 PostgREST 1000 行限制
+    const PAGE_SIZE = 1000
+    const allRows: Array<Record<string, unknown>> = []
+    let offset = 0
+    while (true) {
+      const { data, error } = await supabase
+        .from('words')
+        .select('id, word, last_spell')
+        .eq('user_id', userId)
+        .eq('stop_spell', 1)
+        .eq('source', source)
+        .range(offset, offset + PAGE_SIZE - 1)
+
+      if (error) throw new Error(error.message)
+      if (!data || data.length === 0) break
+      allRows.push(...data)
+      if (data.length < PAGE_SIZE) break
+      offset += PAGE_SIZE
+    }
+
+    // 按 last_spell 排序：NULL 优先（从未检查过），然后旧日期在前
+    const sorted = allRows.sort((a, b) => {
+      const aDate = a.last_spell as string | null
+      const bDate = b.last_spell as string | null
+      if (!aDate && !bDate) return 0
+      if (!aDate) return -1
+      if (!bDate) return 1
+      return aDate.localeCompare(bDate)
+    })
+    return sorted.map(r => r.id as number)
+  }
+
+  /**
    * 获取需要复习的单词 ID 列表
    */
   static async getReviewWordIdsDirect(
@@ -551,8 +633,7 @@ export class WordsApi {
 
       // 排除今天已复习的单词
       lowEfQuery = lowEfQuery
-        .not('last_remembered', 'eq', today)
-        .not('last_forgot', 'eq', today)
+        .not('last_review', 'eq', today)
 
       // 排除已在 dueIds 中的
       if (dueIds.length > 0) {
@@ -729,8 +810,7 @@ export class WordsApi {
   static async persistReviewResultDirect(
     wordId: number,
     persistData: {
-      last_remembered: string | null
-      last_forgot: string | null
+      last_review: string
       remember_inc: number
       forget_inc: number
       repetition: number
@@ -748,8 +828,7 @@ export class WordsApi {
   ): Promise<void> {
     const userId = getCurrentUserId()
     const values: Record<string, unknown> = {
-      last_remembered: persistData.last_remembered,
-      last_forgot: persistData.last_forgot,
+      last_review: persistData.last_review,
       remember_count: persistData.current_remember_count + persistData.remember_inc,
       forget_count: persistData.current_forget_count + persistData.forget_inc,
       repetition: persistData.repetition,
@@ -813,6 +892,7 @@ export class WordsApi {
     const values: Record<string, unknown> = {
       spell_strength: persistData.new_strength,
       spell_next_review: persistData.next_review,
+      last_spell: new Date().toISOString().split('T')[0],
     }
 
     if (persistData.should_stop_spell) {
@@ -859,6 +939,8 @@ export class WordsApi {
       spell_next_review: row.spell_next_review as string | null,
       source: row.source as string,
       related_words: row.related_words as Word['related_words'],
+      last_review: (row.last_review as string) || null,
+      last_spell: (row.last_spell as string) || null,
       remember_count: Number(row.remember_count) || 0,
       forget_count: Number(row.forget_count) || 0,
       avg_elapsed_time: Number(row.avg_elapsed_time) || 0

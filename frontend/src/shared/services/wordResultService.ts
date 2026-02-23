@@ -64,6 +64,12 @@ export function calculateReviewResult(
   const maxPrepDays = settings.learning.maxPrepDays || 45
   const dailyReviewLimit = settings.learning.dailyReviewLimit || 100
 
+  // 计算遗忘率（包含本次结果）
+  const newRememberCount = rememberCount + (remembered ? 1 : 0)
+  const newForgetCount = forgetCount + (remembered ? 0 : 1)
+  const totalAfter = newRememberCount + newForgetCount
+  const forgetRate = totalAfter >= 5 ? newForgetCount / totalAfter : 0
+
   const srs = calculateSrsParametersWithLoadBalancing(
     score,
     interval,
@@ -72,11 +78,12 @@ export function calculateReviewResult(
     lapse,
     dailyReviewLimit,
     reviewLoads,
-    maxPrepDays
+    maxPrepDays,
+    forgetRate
   )
 
   const nextReviewDate = addDays(today, srs.scheduledDay)
-  const shouldStopReview = srs.easeFactor >= 3.0 && srs.repetition >= 6
+  const shouldStopReview = srs.easeFactor >= 3.0 && srs.repetition >= 6 && forgetRate < 0.3
 
   const easeFactorChange = Math.round((srs.easeFactor - oldEaseFactor) * 100) / 100
 
@@ -97,8 +104,7 @@ export function calculateReviewResult(
     },
     persistData: {
       word_id: word.id,
-      last_remembered: srs.lastRemembered,
-      last_forgot: srs.lastForgot,
+      last_review: srs.lastReview,
       remember_inc: srs.rememberInc,
       forget_inc: srs.forgetInc,
       repetition: srs.repetition,

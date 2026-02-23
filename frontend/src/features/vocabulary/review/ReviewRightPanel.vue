@@ -11,8 +11,8 @@
         <div class="ink-drip drip-2"></div>
       </div>
 
-      <!-- Lapse 模式：错题追踪面板 -->
-      <section v-if="isLapseMode" class="lapse-tracker-section">
+      <!-- Lapse 模式：错题追踪面板（通知的 lapse 变体） -->
+      <section v-if="showNotification && isLapseMode" class="lapse-tracker-section">
         <header class="section-header">
           <div class="header-accent"></div>
           <span class="header-title">错题追踪</span>
@@ -86,8 +86,8 @@
         </Transition>
       </section>
 
-      <!-- 参数通知区域 - 错题模式下隐藏 -->
-      <section v-if="!isLapseMode" class="notification-section" :class="{ 'has-data': notificationData }">
+      <!-- 学习反馈通知（通知的默认变体） -->
+      <section v-if="showNotification && !isLapseMode" class="notification-section" :class="{ 'has-data': notificationData }">
       <header class="section-header">
         <div class="header-accent"></div>
         <span class="header-title">学习反馈</span>
@@ -200,7 +200,7 @@
     </section>
 
     <!-- 未来负荷预览 -->
-    <ReviewLoadPreview />
+    <ReviewLoadPreview v-if="showLoadPreview" />
 
     <!-- AI 助手入口 -->
     <section class="ai-section">
@@ -351,9 +351,9 @@
     <template v-else>
       <!-- 浮动控制栏 -->
       <div class="mobile-control-bar">
-        <!-- Lapse 模式徽章 -->
+        <!-- Lapse 模式徽章（通知的 lapse 变体） -->
         <button
-          v-if="isLapseMode && lastLapseResult"
+          v-if="showNotification && isLapseMode && lastLapseResult"
           class="mobile-lapse-badge"
           :class="lastLapseResult.graduated ? 'badge-graduated' : lastLapseResult.remembered ? 'badge-correct' : 'badge-wrong'"
           @click="toggleMobileLapse"
@@ -364,9 +364,9 @@
           </span>
         </button>
 
-        <!-- 通知徽章（有数据时显示，错题模式下隐藏） -->
+        <!-- 通知徽章（通知的默认变体） -->
         <button
-          v-if="notificationData && !isLapseMode"
+          v-if="notificationData && showNotification && !isLapseMode"
           class="mobile-notif-badge"
           :class="mobileNotifClass"
           @click="toggleMobileNotif"
@@ -386,10 +386,10 @@
         </button>
       </div>
 
-      <!-- 移动端通知展开面板 - 错题模式下隐藏 -->
+      <!-- 移动端通知展开面板（通知的默认变体） -->
       <Teleport to="body">
         <Transition name="mobile-notif-slide">
-          <div v-if="isMobileNotifExpanded && notificationData && !isLapseMode" class="mobile-notif-overlay" @click.self="closeMobileNotif">
+          <div v-if="isMobileNotifExpanded && notificationData && showNotification && !isLapseMode" class="mobile-notif-overlay" @click.self="closeMobileNotif">
             <div class="mobile-notif-panel" :class="isReviewMode ? 'notif-review' : 'notif-spelling'">
               <!-- 面板头部 -->
               <div class="mobile-notif-header">
@@ -691,9 +691,23 @@ const inputRef = ref<HTMLInputElement | null>(null)
 const { requestPause, releasePause } = useTimerPause()
 const reviewStore = useReviewStore()
 
-// 错题模式下不显示通知
 const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
 const isSpellingMode = computed(() => reviewStore.mode === 'mode_spelling')
+
+// 各模式的面板可见性：
+//   mode_review:           通知 ✓  负荷 ✓
+//   mode_spelling:         通知 ✓  负荷 ✓
+//   mode_lapse:            通知 ✓  负荷 ✓  （通知展示为专属追踪面板）
+//   mode_mastered_review:  通知 ✗  负荷 ✗
+//   mode_skilled_spelling: 通知 ✗  负荷 ✗
+const showNotification = computed(() => {
+  const m = reviewStore.mode
+  return m === 'mode_review' || m === 'mode_spelling' || m === 'mode_lapse'
+})
+const showLoadPreview = computed(() => {
+  const m = reviewStore.mode
+  return m === 'mode_review' || m === 'mode_spelling' || m === 'mode_lapse'
+})
 
 // Lapse 追踪数据
 const lastLapseResult = computed(() => reviewStore.lastLapseResult)
@@ -1511,6 +1525,7 @@ const mobileNotifClass = computed(() => {
 
 .ai-section {
   flex-shrink: 0;
+  margin-top: auto;
   padding-top: 0.5rem;
   border-top: 1px solid var(--primitive-paper-400);
 }

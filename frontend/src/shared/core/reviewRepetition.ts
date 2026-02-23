@@ -63,8 +63,7 @@ export interface SrsResult {
   interval: number          // 纯 SM-2 计算值（不受负荷均衡影响）
   scheduledDay: number      // 负荷均衡后的实际调度天数（用于计算 next_review）
   easeFactor: number
-  lastRemembered: string | null  // ISO date string
-  lastForgot: string | null      // ISO date string
+  lastReview: string             // ISO date string
   rememberInc: number
   forgetInc: number
   lapse: number
@@ -105,8 +104,7 @@ export function calculateSrsParameters(
       interval: intervalNew,
       scheduledDay: intervalNew,
       easeFactor: easeFactorNew,
-      lastRemembered: today,
-      lastForgot: null,
+      lastReview: today,
       rememberInc: 1,
       forgetInc: 0,
       lapse,
@@ -117,8 +115,7 @@ export function calculateSrsParameters(
       interval: 1,
       scheduledDay: 1,
       easeFactor: easeFactorNew,
-      lastRemembered: null,
-      lastForgot: today,
+      lastReview: today,
       rememberInc: 0,
       forgetInc: 1,
       lapse: 1,
@@ -129,12 +126,14 @@ export function calculateSrsParameters(
 export function shouldApplyLoadBalancing(
   easeFactor: number,
   repetition: number,
-  score: number
+  score: number,
+  forgetRate?: number
 ): boolean {
   return (
     easeFactor <= LOW_EF_THRESHOLD ||
     repetition < 3 ||
-    score <= 3
+    score <= 3 ||
+    (forgetRate !== undefined && forgetRate >= 0.3)
   )
 }
 
@@ -156,7 +155,8 @@ export function calculateSrsParametersWithLoadBalancing(
   lapse: number,
   dailyReviewLimit: number,
   currentLoads: number[],
-  maxPrepDays: number = 45
+  maxPrepDays: number = 45,
+  forgetRate?: number
 ): SrsResult {
   // 1. 基础 SM-2 计算
   const basic = calculateSrsParameters(score, interval, repetition, easeFactor, lapse)
@@ -170,7 +170,7 @@ export function calculateSrsParametersWithLoadBalancing(
   }
 
   // 3. 低强度单词 → 负荷均衡（填谷策略）
-  if (shouldApplyLoadBalancing(easeFactorNew, repetitionNew, score)) {
+  if (shouldApplyLoadBalancing(easeFactorNew, repetitionNew, score, forgetRate)) {
     const params: LoadBalanceParams = {
       baseInterval: constrainedInterval,
       dailyLimit: dailyReviewLimit,

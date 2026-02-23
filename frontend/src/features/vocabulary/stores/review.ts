@@ -26,7 +26,7 @@ export interface WordResult {
   mode?: ReviewMode
 }
 
-export type ReviewMode = 'mode_review' | 'mode_lapse' | 'mode_spelling'
+export type ReviewMode = 'mode_review' | 'mode_lapse' | 'mode_spelling' | 'mode_mastered_review' | 'mode_skilled_spelling'
 export type AudioType = 'us' | 'uk'
 
 export type { ReviewNotificationState } from './review/useReviewResult'

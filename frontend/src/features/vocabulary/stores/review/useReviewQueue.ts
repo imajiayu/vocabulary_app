@@ -123,6 +123,10 @@ export function useReviewQueue() {
           let ids: number[]
           if (mode === 'mode_spelling') {
             ids = await api.words.getSpellingWordIdsDirect(source, totalLimit, shuffle.value)
+          } else if (mode === 'mode_mastered_review') {
+            ids = await api.words.getMasteredReviewWordIdsDirect(source)
+          } else if (mode === 'mode_skilled_spelling') {
+            ids = await api.words.getSkilledSpellingWordIdsDirect(source)
           } else {
             ids = await api.words.getReviewWordIdsDirect(source, totalLimit, lowEfExtra)
             if (shuffle.value) {

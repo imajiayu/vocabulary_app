@@ -111,7 +111,7 @@
           </div>
 
           <!-- 辅助按钮：右侧竖排 -->
-          <div v-if="!isLapseMode" class="secondary-actions">
+          <div v-if="!hideSecondaryActions" class="secondary-actions">
             <button
               class="action-btn-sm skip"
               :disabled="isSubmitting"
@@ -253,7 +253,9 @@ const { setContext, registerKeys, cleanup } = useKeyboardManager()
 
 // 获取当前复习模式
 const reviewStore = useReviewStore()
-const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
+const hideSecondaryActions = computed(() =>
+  reviewStore.mode === 'mode_lapse' || reviewStore.mode === 'mode_mastered_review'
+)
 
 // 播放音频
 const playAudio = () => {
@@ -349,7 +351,7 @@ const setupKeyboardShortcuts = () => {
     const keys: Record<string, () => void> = {}
     if (initialKeys.remembered) keys[initialKeys.remembered] = () => handleChoice('yes')
     if (initialKeys.notRemembered) keys[initialKeys.notRemembered] = () => handleChoice('no')
-    if (!isLapseMode.value) {
+    if (!hideSecondaryActions.value) {
       if (initialKeys.stopReview) keys[initialKeys.stopReview] = () => handleChoice('stop')
       if (initialKeys.resetTimer) keys[initialKeys.resetTimer] = () => handleResetTimer()
     }

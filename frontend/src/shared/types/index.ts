@@ -17,6 +17,8 @@ export interface Word {
   spell_next_review: string | null;
   source: string;
   related_words?: RelatedWord[];
+  last_review: string | null;
+  last_spell: string | null;
   // 统计字段（用于分离式 API 计算，跳过数据库查询）
   remember_count: number;
   forget_count: number;
@@ -108,8 +110,7 @@ export interface SpellingBreakdown {
 
 export interface ReviewPersistData {
   word_id: number
-  last_remembered: string | null
-  last_forgot: string | null
+  last_review: string
   remember_inc: number
   forget_inc: number
   repetition: number
