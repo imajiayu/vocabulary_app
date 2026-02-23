@@ -577,6 +577,7 @@ const resetState = () => {
 
 const handleResetInput = () => {
   resetState()
+  playWordAudio(props.word.word, audioAccent.value)
   if (!isMobile.value) {
     inputRef.value?.focus()
   }

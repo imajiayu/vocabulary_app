@@ -62,12 +62,27 @@ export async function playWordAudio(
       audio.currentTime = 0
     }
   } catch {
-    // 静默失败：Youdao CDN 很稳定，失败时不阻塞用户操作
+    // 缓存音频失败（浏览器可能已回收解码数据）→ 删除坏缓存，用新 Audio 重试
     if (cachedAudio) {
       preloadCache.delete(cacheKey)
-    }
-    if (currentAudio === audio) {
-      currentAudio = null
+      if (playId !== currentPlayId) return
+
+      const freshAudio = new Audio(url)
+      currentAudio = freshAudio
+      freshAudio.onended = () => {
+        if (currentAudio === freshAudio) currentAudio = null
+      }
+      try {
+        await freshAudio.play()
+        if (playId !== currentPlayId) {
+          freshAudio.pause()
+          freshAudio.currentTime = 0
+        }
+      } catch {
+        if (currentAudio === freshAudio) currentAudio = null
+      }
+    } else {
+      if (currentAudio === audio) currentAudio = null
     }
   }
 }
