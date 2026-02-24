@@ -6,7 +6,7 @@ import type { Word, RelatedWord } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
 import { applyBoldToDefinition, stripBoldFromDefinition } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
-import { addDays } from '@/shared/services/wordResultService'
+import { addDays } from '@/shared/utils/date'
 import { useSettings } from '@/shared/composables/useSettings'
 
 const log = logger.create('WordEditor')

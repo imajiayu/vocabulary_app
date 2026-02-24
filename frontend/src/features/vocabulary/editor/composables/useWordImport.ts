@@ -1,10 +1,31 @@
 import { ref, type Ref } from 'vue'
 import type { Word } from '@/shared/types'
 import { api } from '@/shared/api'
+import type { ImportLoadBalanceParams } from '@/shared/api'
 import { handleWordInsertError } from '@/shared/utils/errorHandler'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('WordImport')
+
+/**
+ * 获取导入用的负荷均衡参数
+ * 构造 [todayDueCount, ...futureLoads] 数组，供 findOptimalDay 使用
+ */
+async function getImportLoadBalanceParams(source: string): Promise<ImportLoadBalanceParams> {
+  const settings = await api.settings.getSettings()
+  const dailyLimit = settings.learning?.dailyReviewLimit ?? 50
+  const maxPrepDays = settings.learning?.maxPrepDays ?? 90
+
+  const [todayDue, futureLoads] = await Promise.all([
+    api.words.getTodayDueCountDirect(source),
+    api.words.getDailyReviewLoadsDirect(source, maxPrepDays)
+  ])
+
+  return {
+    dailyLimit,
+    loadsWithToday: [todayDue, ...futureLoads]
+  }
+}
 
 interface MessageState {
   type: string
@@ -47,7 +68,8 @@ export function useWordImport(
     message.value = { type: '', text: '' }
 
     try {
-      const newWord = await api.words.createWordDirect(word.value, source.value)
+      const lbParams = await getImportLoadBalanceParams(source.value)
+      const newWord = await api.words.createWordDirect(word.value, source.value, lbParams)
 
       emit('wordInserted', newWord)
       word.value = ''
@@ -99,7 +121,8 @@ export function useWordImport(
         return
       }
 
-      const result = await api.words.batchImportWordsDirect(words, source.value)
+      const lbParams = await getImportLoadBalanceParams(source.value)
+      const result = await api.words.batchImportWordsDirect(words, source.value, lbParams)
 
       let displayMsg = `批量导入完成：成功 ${result.success_count}，失败 ${result.failed_count}`
 

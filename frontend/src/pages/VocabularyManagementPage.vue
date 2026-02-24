@@ -11,6 +11,9 @@
             <span class="title">单词管理</span>
         </template>
         <template #topbar-right>
+            <button class="button" @click="handleOpenLoadAdjustment" :disabled="isLoading || hasMoreWords || isLoadingMore">
+                负荷调整
+            </button>
             <button class="button" @click="handleFixDefinitions" :disabled="isLoading || hasMoreWords || isLoadingMore || defProgress.isActive.value">
                 修复释义
             </button>
@@ -86,6 +89,9 @@
 
             <!-- 详情弹窗 - 使用 store 管理状态 -->
             <WordEditorModal />
+
+            <!-- 负荷调整弹窗 -->
+            <LoadAdjustmentModal ref="loadAdjustmentRef" />
         </template>
     </PageLayout>
 </template>
@@ -97,6 +103,7 @@ import WordInsertForm from '@/features/vocabulary/editor/WordInsertForm.vue';
 import SearchFilter from '@/features/vocabulary/grid/SearchFilter.vue';
 import WordGrid from '@/features/vocabulary/grid/WordGrid.vue';
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue';
+import LoadAdjustmentModal from '@/features/vocabulary/editor/LoadAdjustmentModal.vue';
 import Loading from '@/shared/components/feedback/Loading.vue'
 import PageLayout from '@/shared/components/layout/PageLayout.vue';
 import type { Word } from '@/shared/types';
@@ -134,6 +141,7 @@ const sourceFilter = ref<string>('all'); // 新增来源筛选
 const wordEditorStore = useWordEditorStore();
 const isLoading = ref(true);
 const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引用
+const loadAdjustmentRef = ref<InstanceType<typeof LoadAdjustmentModal>>(); // 负荷调整组件引用
 
 // 使用全局设置管理
 const { loadSettings } = useSettings();
@@ -281,6 +289,11 @@ onMounted(async () => {
         isLoading.value = false;
     }
 });
+
+// 打开负荷调整
+const handleOpenLoadAdjustment = () => {
+    loadAdjustmentRef.value?.open(sourceFilter.value)
+}
 
 // 显示详情 - 使用 store.open() 打开模态框
 const handleShowDetail = (word: Word) => {

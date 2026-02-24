@@ -13,9 +13,9 @@ import type { UserSettings } from '@/shared/types'
 // 默认配置
 const DEFAULT_CONFIG: UserSettings = {
   learning: {
-    dailyReviewLimit: 300,
-    dailySpellLimit: 200,
-    maxPrepDays: 30,
+    dailyReviewLimit: 50,
+    dailySpellLimit: 50,
+    maxPrepDays: 90,
     lapseQueueSize: 20,
     defaultShuffle: true,
     lowEfExtraCount: 0

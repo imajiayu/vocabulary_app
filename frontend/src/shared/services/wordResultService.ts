@@ -9,6 +9,7 @@ import { calculateSpellStrengthWithLoadBalancing } from '@/shared/core/spellRepe
 import { WordsApi } from '@/shared/api/words'
 import type { ReviewNotificationData } from '@/shared/api/words'
 import type { Word, SpellingData, SpellingBreakdown, ReviewPersistData, SpellingPersistData, UserSettings } from '@/shared/types'
+import { addDays } from '@/shared/utils/date'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('WordResultService')
@@ -235,13 +236,5 @@ export async function persistSpellingResult(
   }
 }
 
-// ============================================================================
-// 工具函数
-// ============================================================================
-
-export function addDays(dateStr: string, days: number): string {
-  const [year, month, day] = dateStr.split('-').map(Number)
-  const d = new Date(Date.UTC(year, month - 1, day))
-  d.setUTCDate(d.getUTCDate() + days)
-  return d.toISOString().split('T')[0]
-}
+// Re-export for backwards compatibility
+export { addDays } from '@/shared/utils/date'

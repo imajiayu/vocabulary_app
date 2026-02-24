@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
       .from('user_config')
       .select('config')
       .eq('user_id', userId)
-      .single()
+      .maybeSingle()
 
     if (configError) {
       throw new Error(`获取用户配置失败: ${configError.message}`)

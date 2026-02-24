@@ -975,15 +975,19 @@ const addSource = async () => {
   const name = newSourceName.value.trim()
   if (!name || localSources.value.length >= 3 || localSources.value.includes(name)) return
 
+  // 乐观更新：先更新本地状态防止快速重复提交
+  localSources.value.push(name)
+  newSourceName.value = ''
+
   try {
-    const newSources = [...localSources.value, name]
     await updateSettings({
-      sources: { customSources: newSources },
+      sources: { customSources: [...localSources.value] },
     })
-    localSources.value.push(name)
-    newSourceName.value = ''
     showToast(`已添加来源"${name}"`)
   } catch (error) {
+    // 回滚本地状态
+    const index = localSources.value.indexOf(name)
+    if (index > -1) localSources.value.splice(index, 1)
     logger.error('添加来源失败:', error)
     alert('添加失败，请重试')
   }

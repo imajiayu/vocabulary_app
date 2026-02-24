@@ -27,6 +27,8 @@ export { WordsApi } from './words'
 export type {
   UpdateWordPayload,
   ReviewNotificationData,
+  ImportLoadBalanceParams,
+  WordScheduleData,
 } from './words'
 
 export { SpeakingApi } from './speaking'

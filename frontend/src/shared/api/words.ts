@@ -5,6 +5,8 @@
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
 import { applyBoldToDefinition } from '@/shared/utils/definition'
+import { findOptimalDay } from '@/shared/core/loadBalancer'
+import { addDays } from '@/shared/utils/date'
 import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord } from '@/shared/types'
 
 // 单词更新参数接口
@@ -57,6 +59,24 @@ export interface BatchImportResult {
   failed_details: string[]
   total: number
   inserted_words: Word[]
+}
+
+// 导入负荷均衡参数
+export interface ImportLoadBalanceParams {
+  dailyLimit: number
+  loadsWithToday: number[]  // [todayDueCount, ...futureLoads]
+}
+
+// 负荷调整所需的轻量调度数据
+export interface WordScheduleData {
+  id: number
+  word: string
+  next_review: string | null
+  ease_factor: number
+  spell_next_review: string | null
+  spell_strength: number | null
+  stop_review: number
+  stop_spell: number
 }
 
 /**
@@ -411,11 +431,24 @@ export class WordsApi {
 
   /**
    * 创建新单词
+   * @param lbParams 可选负荷均衡参数，传入时会将 next_review 分散到未来
    */
-  static async createWordDirect(wordText: string, source: string): Promise<Word> {
+  static async createWordDirect(wordText: string, source: string, lbParams?: ImportLoadBalanceParams): Promise<Word> {
     const userId = getCurrentUserId()
     const word = wordText.trim().toLowerCase()
     const today = new Date().toISOString().split('T')[0]
+
+    let nextReview = today
+    if (lbParams) {
+      const { chosenDay } = findOptimalDay({
+        baseInterval: 1,
+        dailyLimit: lbParams.dailyLimit,
+        currentLoads: lbParams.loadsWithToday
+      })
+      nextReview = addDays(today, chosenDay - 1)
+      // 内存递增负荷，确保后续调用看到更新后的值
+      lbParams.loadsWithToday[chosenDay - 1]++
+    }
 
     const { data, error } = await supabase
       .from('words')
@@ -425,7 +458,7 @@ export class WordsApi {
         definition: '{}',
         source,
         date_added: today,
-        next_review: today,
+        next_review: nextReview,
         stop_review: 0
       })
       .select()
@@ -443,8 +476,9 @@ export class WordsApi {
 
   /**
    * 批量导入单词（单次 upsert）
+   * @param lbParams 可选负荷均衡参数，传入时会将 next_review 分散到未来
    */
-  static async batchImportWordsDirect(words: string[], source: string): Promise<BatchImportResult> {
+  static async batchImportWordsDirect(words: string[], source: string, lbParams?: ImportLoadBalanceParams): Promise<BatchImportResult> {
     const userId = getCurrentUserId()
     const today = new Date().toISOString().split('T')[0]
 
@@ -453,15 +487,33 @@ export class WordsApi {
       words.map(w => w.trim().toLowerCase()).filter(w => w.length > 0)
     )]
 
-    const rows = uniqueWords.map(word => ({
-      user_id: userId,
-      word,
-      definition: '{}',
-      source,
-      date_added: today,
-      next_review: today,
-      stop_review: 0
-    }))
+    const rows = uniqueWords.map(word => {
+      let nextReview = today
+      if (lbParams) {
+        // 动态扩展数组：确保有足够空间
+        const neededLen = Math.ceil(uniqueWords.length / lbParams.dailyLimit) + lbParams.loadsWithToday.length
+        while (lbParams.loadsWithToday.length < neededLen) {
+          lbParams.loadsWithToday.push(0)
+        }
+        const { chosenDay } = findOptimalDay({
+          baseInterval: 1,
+          dailyLimit: lbParams.dailyLimit,
+          currentLoads: lbParams.loadsWithToday
+        })
+        nextReview = addDays(today, chosenDay - 1)
+        // 内存递增负荷，确保下一个单词看到更新后的值
+        lbParams.loadsWithToday[chosenDay - 1]++
+      }
+      return {
+        user_id: userId,
+        word,
+        definition: '{}',
+        source,
+        date_added: today,
+        next_review: nextReview,
+        stop_review: 0
+      }
+    })
 
     const { data, error } = await supabase
       .from('words')
@@ -754,6 +806,25 @@ export class WordsApi {
   }
 
   /**
+   * 获取今日到期的复习单词数量（用于导入负荷均衡）
+   */
+  static async getTodayDueCountDirect(source: string): Promise<number> {
+    const userId = getCurrentUserId()
+    const today = new Date().toISOString().split('T')[0]
+
+    const { count, error } = await supabase
+      .from('words')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('source', source)
+      .eq('stop_review', 0)
+      .lte('next_review', today)
+
+    if (error) throw new Error(error.message)
+    return count ?? 0
+  }
+
+  /**
    * 获取未来每日的复习负荷（DB 端 GROUP BY 聚合）
    */
   static async getDailyReviewLoadsDirect(
@@ -905,6 +976,78 @@ export class WordsApi {
       .eq('id', wordId)
       .eq('user_id', userId)
 
+    if (error) throw new Error(error.message)
+  }
+
+  // ============================================================================
+  // 负荷调整方法
+  // ============================================================================
+
+  /**
+   * 获取所有活跃单词的调度字段（轻量查询，不含 definition）
+   * source 为 'all' 时不过滤来源
+   */
+  static async getScheduleDataDirect(source: string): Promise<WordScheduleData[]> {
+    const userId = getCurrentUserId()
+    const PAGE_SIZE = 1000
+    const allRows: WordScheduleData[] = []
+    let offset = 0
+
+    while (true) {
+      let query = supabase
+        .from('words')
+        .select('id, word, next_review, ease_factor, spell_next_review, spell_strength, stop_review, stop_spell')
+        .eq('user_id', userId)
+
+      if (source !== 'all') {
+        query = query.eq('source', source)
+      }
+
+      query = query.range(offset, offset + PAGE_SIZE - 1)
+
+      const { data, error } = await query
+      if (error) throw new Error(error.message)
+      if (!data || data.length === 0) break
+
+      for (const row of data) {
+        allRows.push({
+          id: row.id as number,
+          word: row.word as string,
+          next_review: row.next_review as string | null,
+          ease_factor: Number(row.ease_factor) || 2.5,
+          spell_next_review: row.spell_next_review as string | null,
+          spell_strength: row.spell_strength !== null ? Number(row.spell_strength) : null,
+          stop_review: Number(row.stop_review) || 0,
+          stop_spell: Number(row.stop_spell) || 0,
+        })
+      }
+
+      if (data.length < PAGE_SIZE) break
+      offset += PAGE_SIZE
+    }
+
+    return allRows
+  }
+
+  /**
+   * 批量更新复习日期（RPC，单次网络往返）
+   */
+  static async batchRescheduleReview(wordIds: number[], dates: string[]): Promise<void> {
+    const { error } = await supabase.rpc('batch_reschedule_review', {
+      p_word_ids: wordIds,
+      p_dates: dates,
+    })
+    if (error) throw new Error(error.message)
+  }
+
+  /**
+   * 批量更新拼写日期（RPC，单次网络往返）
+   */
+  static async batchRescheduleSpell(wordIds: number[], dates: string[]): Promise<void> {
+    const { error } = await supabase.rpc('batch_reschedule_spell', {
+      p_word_ids: wordIds,
+      p_dates: dates,
+    })
     if (error) throw new Error(error.message)
   }
 

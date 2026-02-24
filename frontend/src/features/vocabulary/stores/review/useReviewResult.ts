@@ -12,8 +12,8 @@ import {
   persistReviewResult,
   calculateSpellingResult,
   persistSpellingResult,
-  addDays,
 } from '@/shared/services/wordResultService'
+import { addDays } from '@/shared/utils/date'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { calculateSpellStrength } from '@/shared/core/spellRepetition'
 import { useSettings } from '@/shared/composables/useSettings'
