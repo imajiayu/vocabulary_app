@@ -16,6 +16,7 @@
 import { ref, computed, shallowRef } from 'vue'
 import { WordsApi } from '@/shared/api/words'
 import type { WordScheduleData } from '@/shared/api/words'
+import { useSettings } from '@/shared/composables/useSettings'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('LoadAdjustment')
@@ -359,17 +360,18 @@ export function useLoadAdjustment() {
     currentSource.value = source
 
     try {
-      const data = await WordsApi.getScheduleDataDirect(source)
+      const { loadSettings } = useSettings()
+      const [data, settings] = await Promise.all([
+        WordsApi.getScheduleDataDirect(source),
+        loadSettings(),
+      ])
       rawWords.value = data
 
       reviewBuckets.value = buildBuckets(data, 'review', daysAhead)
       spellBuckets.value = buildBuckets(data, 'spell', daysAhead)
 
-      // 自动设置上限为当前最大值（至少 10）
-      const maxReview = Math.max(10, ...reviewBuckets.value.map(b => b.words.length))
-      const maxSpell = Math.max(10, ...spellBuckets.value.map(b => b.words.length))
-      dailyReviewLimit.value = maxReview
-      dailySpellLimit.value = maxSpell
+      dailyReviewLimit.value = settings.learning?.dailyReviewLimit ?? 50
+      dailySpellLimit.value = settings.learning?.dailySpellLimit ?? 50
     } catch (e) {
       log.error('Failed to load schedule data:', e)
       throw e
