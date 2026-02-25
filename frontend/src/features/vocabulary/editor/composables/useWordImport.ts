@@ -7,6 +7,10 @@ import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('WordImport')
 
+const MESSAGE_TIMEOUT_MS = 3000        // 单词提交后消息自动消失
+const BATCH_MESSAGE_TIMEOUT_MS = 5000  // 批量导入后消息自动消失
+const FOCUS_DELAY_MS = 50             // 提交后聚焦输入框的延迟
+
 /**
  * 获取导入用的负荷均衡参数
  * 构造 [todayDueCount, ...futureLoads] 数组，供 findOptimalDay 使用
@@ -45,11 +49,14 @@ export function useWordImport(
   const isBatchLoading = ref(false)
   const message = ref<MessageState>({ type: '', text: '' })
   const fileInputRef = ref<HTMLInputElement>()
+  let messageTimer: ReturnType<typeof setTimeout> | null = null
 
   // Clear message after timeout
-  function clearMessageAfterDelay(delay: number = 3000) {
-    setTimeout(() => {
+  function clearMessageAfterDelay(delay: number = MESSAGE_TIMEOUT_MS) {
+    if (messageTimer) clearTimeout(messageTimer)
+    messageTimer = setTimeout(() => {
       message.value = { type: '', text: '' }
+      messageTimer = null
     }, delay)
   }
 
@@ -57,7 +64,7 @@ export function useWordImport(
   function focusInput() {
     setTimeout(() => {
       inputRef.value?.focus()
-    }, 50)
+    }, FOCUS_DELAY_MS)
   }
 
   // Submit single word
@@ -149,7 +156,7 @@ export function useWordImport(
     } finally {
       isBatchLoading.value = false
       target.value = ''
-      clearMessageAfterDelay(5000)
+      clearMessageAfterDelay(BATCH_MESSAGE_TIMEOUT_MS)
     }
   }
 

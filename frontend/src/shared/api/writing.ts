@@ -11,6 +11,7 @@ import { supabase } from '@/shared/config/supabase'
 import { countWords } from '@/shared/utils/text'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
 import { logger } from '@/shared/utils/logger'
+import { throwIfError } from './errors'
 import type {
   WritingFolder,
   WritingPrompt,
@@ -45,7 +46,7 @@ export class WritingApi {
       .order('sort_order')
       .order('id')
 
-    if (error) throw new Error(`获取文件夹失败: ${error.message}`)
+    throwIfError(error, '获取文件夹失败')
 
     return (data || []).map(row => ({
       id: row.id as number,
@@ -71,7 +72,7 @@ export class WritingApi {
       .select()
       .single()
 
-    if (error) throw new Error(`创建文件夹失败: ${error.message}`)
+    throwIfError(error, '创建文件夹失败')
 
     return {
       id: data.id as number,
@@ -95,7 +96,7 @@ export class WritingApi {
       .select()
       .single()
 
-    if (error) throw new Error(`更新文件夹失败: ${error.message}`)
+    throwIfError(error, '更新文件夹失败')
 
     return {
       id: data.id as number,
@@ -118,7 +119,7 @@ export class WritingApi {
       .eq('id', id)
       .eq('user_id', userId)
 
-    if (error) throw new Error(`删除文件夹失败: ${error.message}`)
+    throwIfError(error, '删除文件夹失败')
   }
 
   /**
@@ -137,7 +138,7 @@ export class WritingApi {
       .from('writing_folders')
       .upsert(updates, { onConflict: 'id' })
 
-    if (error) throw new Error(`重新排序失败: ${error.message}`)
+    throwIfError(error, '重新排序失败')
   }
 
   // ============================================================================
@@ -157,7 +158,7 @@ export class WritingApi {
       .order('sort_order')
       .order('id')
 
-    if (error) throw new Error(`获取题目失败: ${error.message}`)
+    throwIfError(error, '获取题目失败')
 
     return (data || []).map(row => ({
       id: row.id as number,
@@ -192,7 +193,7 @@ export class WritingApi {
       .order('sort_order')
       .order('id')
 
-    if (error) throw new Error(`获取题目失败: ${error.message}`)
+    throwIfError(error, '获取题目失败')
 
     return (data || []).map(row => ({
       id: row.id as number,
@@ -235,9 +236,9 @@ export class WritingApi {
     if (error) {
       // 如果插入失败，清理已上传的图片
       if (imageUrl) {
-        await this.deleteImage(imageUrl).catch(() => {})
+        await this.deleteImage(imageUrl).catch(err => logger.warn('图片清理失败:', err))
       }
-      throw new Error(`创建题目失败: ${error.message}`)
+      throwIfError(error, '创建题目失败')
     }
 
     return {
@@ -266,7 +267,7 @@ export class WritingApi {
       .select()
       .single()
 
-    if (error) throw new Error(`更新题目失败: ${error.message}`)
+    throwIfError(error, '更新题目失败')
 
     return {
       id: data.id as number,
@@ -294,7 +295,7 @@ export class WritingApi {
       .select()
       .single()
 
-    if (error) throw new Error(`更新笔记失败: ${error.message}`)
+    throwIfError(error, '更新笔记失败')
 
     return {
       id: data.id as number,
@@ -336,7 +337,7 @@ export class WritingApi {
 
     // 2. 删除图片
     if (prompt?.image_url) {
-      await this.deleteImage(prompt.image_url as string).catch(() => {})
+      await this.deleteImage(prompt.image_url as string).catch(err => logger.warn('图片清理失败:', err))
     }
 
     // 3. 删除题目
@@ -346,7 +347,7 @@ export class WritingApi {
       .eq('id', id)
       .eq('user_id', userId)
 
-    if (error) throw new Error(`删除题目失败: ${error.message}`)
+    throwIfError(error, '删除题目失败')
   }
 
   /**
@@ -360,7 +361,7 @@ export class WritingApi {
       .eq('id', id)
       .eq('user_id', userId)
 
-    if (error) throw new Error(`移动题目失败: ${error.message}`)
+    throwIfError(error, '移动题目失败')
   }
 
   // ============================================================================
@@ -383,7 +384,7 @@ export class WritingApi {
         upsert: false
       })
 
-    if (error) throw new Error(`上传图片失败: ${error.message}`)
+    throwIfError(error, '上传图片失败')
 
     const { data } = supabase.storage
       .from(IMAGES_BUCKET)
@@ -477,7 +478,7 @@ export class WritingApi {
     const { data, error } = await query
       .order('created_at', { ascending: false })
 
-    if (error) throw new Error(`获取会话失败: ${error.message}`)
+    throwIfError(error, '获取会话失败')
 
     return (data || []).map(row => this.mapSession(row as Record<string, unknown>))
   }
@@ -496,7 +497,7 @@ export class WritingApi {
 
     if (error) {
       if (error.code === 'PGRST116') return null
-      throw new Error(`获取会话失败: ${error.message}`)
+      throwIfError(error, '获取会话失败')
     }
 
     if (!data) return null
@@ -520,7 +521,7 @@ export class WritingApi {
       .select('*, writing_prompts(*)')
       .single()
 
-    if (error) throw new Error(`创建会话失败: ${error.message}`)
+    throwIfError(error, '创建会话失败')
 
     return this.mapSession(data as Record<string, unknown>)
   }
@@ -538,7 +539,7 @@ export class WritingApi {
       .select('*, writing_prompts(*)')
       .single()
 
-    if (error) throw new Error(`更新会话失败: ${error.message}`)
+    throwIfError(error, '更新会话失败')
 
     return this.mapSession(data as Record<string, unknown>)
   }
@@ -554,7 +555,7 @@ export class WritingApi {
       .eq('id', id)
       .eq('user_id', userId)
 
-    if (error) throw new Error(`删除会话失败: ${error.message}`)
+    throwIfError(error, '删除会话失败')
   }
 
   /**

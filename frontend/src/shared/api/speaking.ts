@@ -11,6 +11,8 @@ import { supabase } from '@/shared/config/supabase'
 import { uploadAudio, deleteAudio } from '@/shared/services/supabase-storage'
 import { getSpeakingFeedback } from '@/shared/services/speaking-ai'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
+import { paginateSupabase } from './pagination'
+import { throwIfError } from './errors'
 import type { TopicGroup, Question, SpeakingRecord } from '@/shared/types'
 
 // 创建记录参数接口
@@ -43,15 +45,12 @@ export class SpeakingApi {
   private static async fetchAllAudioFiles(
     filters: { questionIds?: number[]; questionId?: number; userId: string }
   ): Promise<string[]> {
-    const PAGE_SIZE = 1000
-    const audioFiles: string[] = []
-    let offset = 0
-    while (true) {
+    const rows = await paginateSupabase<Record<string, unknown>>((from, to) => {
       let query = supabase
         .from('speaking_records')
         .select('audio_file')
         .eq('user_id', filters.userId)
-        .range(offset, offset + PAGE_SIZE - 1)
+        .range(from, to)
 
       if (filters.questionIds) {
         query = query.in('question_id', filters.questionIds)
@@ -59,16 +58,9 @@ export class SpeakingApi {
         query = query.eq('question_id', filters.questionId)
       }
 
-      const { data, error } = await query
-      if (error) throw new Error(error.message)
-      if (!data || data.length === 0) break
-      for (const r of data) {
-        if (r.audio_file) audioFiles.push(r.audio_file as string)
-      }
-      if (data.length < PAGE_SIZE) break
-      offset += PAGE_SIZE
-    }
-    return audioFiles
+      return query
+    })
+    return rows.filter(r => r.audio_file).map(r => r.audio_file as string)
   }
 
   // ============================================================================
@@ -102,7 +94,7 @@ export class SpeakingApi {
     if (error) {
       // 如果写入失败，尝试清理已上传的音频
       await deleteAudio(audioUrl).catch(() => {})
-      throw new Error(`创建记录失败: ${error.message}`)
+      throwIfError(error, '创建记录失败')
     }
 
     return {
@@ -130,7 +122,7 @@ export class SpeakingApi {
       .single()
 
     if (fetchError) {
-      throw new Error(`获取记录失败: ${fetchError.message}`)
+      throwIfError(fetchError, '获取记录失败')
     }
 
     // 2. 删除音频文件
@@ -145,7 +137,7 @@ export class SpeakingApi {
       .eq('id', recordId)
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '删除记录失败')
   }
 
   // ============================================================================
@@ -185,7 +177,7 @@ export class SpeakingApi {
       .order('part')
       .order('id')
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '获取话题列表失败')
 
     return (data || []).map(topic => ({
       id: topic.id as number,
@@ -213,7 +205,7 @@ export class SpeakingApi {
       .eq('user_id', userId)
       .order('id')
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '获取练习记录失败')
 
     const records = (data || []).map(row => ({
       id: row.id as number,
@@ -242,7 +234,7 @@ export class SpeakingApi {
       .select()
       .single()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '创建话题失败')
     return { ...topic, questions: [] } as TopicGroup
   }
 
@@ -259,7 +251,7 @@ export class SpeakingApi {
       .select()
       .single()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '更新话题失败')
     return { ...topic, questions: [] } as TopicGroup
   }
 
@@ -293,7 +285,7 @@ export class SpeakingApi {
       .eq('id', topicId)
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '删除话题失败')
   }
 
   /**
@@ -307,7 +299,7 @@ export class SpeakingApi {
       .select()
       .single()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '创建问题失败')
     return question as Question
   }
 
@@ -324,7 +316,7 @@ export class SpeakingApi {
       .select()
       .single()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '更新问题失败')
     return question as Question
   }
 
@@ -349,7 +341,7 @@ export class SpeakingApi {
       .eq('id', questionId)
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '删除问题失败')
   }
 
   // ============================================================================
@@ -376,7 +368,7 @@ export class SpeakingApi {
       .select('id, title')
 
     if (topicError) {
-      throw new Error(`创建主题失败: ${topicError.message}`)
+      throwIfError(topicError, '创建主题失败')
     }
 
     // ignoreDuplicates 时 .select() 只返回新插入的行
@@ -403,7 +395,7 @@ export class SpeakingApi {
         .insert(allQuestions)
 
       if (questionsError) {
-        throw new Error(`创建问题失败: ${questionsError.message}`)
+        throwIfError(questionsError, '批量创建问题失败')
       }
     }
 
@@ -432,6 +424,6 @@ export class SpeakingApi {
       .delete()
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '清除口语数据失败')
   }
 }

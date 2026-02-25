@@ -8,6 +8,8 @@ import { applyBoldToDefinition } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
 import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord } from '@/shared/types'
+import { paginateSupabase } from './pagination'
+import { throwIfError } from './errors'
 
 // 单词更新参数接口
 export interface UpdateWordPayload {
@@ -107,7 +109,7 @@ export class WordsApi {
       .select()
       .single()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '更新单词失败')
     return this.transformWord(row)
   }
 
@@ -118,7 +120,7 @@ export class WordsApi {
     const { error } = await supabase.rpc('delete_words_cascade', {
       p_word_ids: [wordId]
     })
-    if (error) throw new Error(error.message)
+    throwIfError(error, '删除单词失败')
   }
 
   /**
@@ -129,7 +131,7 @@ export class WordsApi {
     const { error } = await supabase.rpc('delete_words_cascade', {
       p_word_ids: wordIds
     })
-    if (error) throw new Error(error.message)
+    throwIfError(error, '批量删除失败')
   }
 
   /**
@@ -154,7 +156,7 @@ export class WordsApi {
       .in('id', wordIds)
       .select()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '批量更新失败')
     return (data || []).map(row => this.transformWord(row))
   }
 
@@ -202,7 +204,7 @@ export class WordsApi {
       this.getRelatedWordsDirect(wordId)
     ])
 
-    if (updateResult.error) throw new Error(updateResult.error.message)
+    throwIfError(updateResult.error, '更新释义失败')
 
     const word = this.transformWord(updateResult.data)
     word.related_words = relatedWords
@@ -222,7 +224,7 @@ export class WordsApi {
       .eq('word', word.trim().toLowerCase())
       .neq('id', excludeId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '检查单词重复失败')
     return (count ?? 0) > 0
   }
 
@@ -249,7 +251,7 @@ export class WordsApi {
     }
 
     const { data, error } = await query
-    if (error) throw new Error(error.message)
+    throwIfError(error, '获取错题集失败')
 
     const words = (data || []).map(row => this.transformWord(row))
 
@@ -276,7 +278,7 @@ export class WordsApi {
       .eq('id', wordId)
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '清除 lapse 失败')
   }
 
   /**
@@ -298,7 +300,7 @@ export class WordsApi {
       this.getRelatedWordsByIds(wordIds)
     ])
 
-    if (wordsResult.error) throw new Error(wordsResult.error.message)
+    throwIfError(wordsResult.error, '批量获取单词失败')
 
     // 按原始 wordIds 顺序排列结果，并填充 related_words
     const wordMap = new Map((wordsResult.data || []).map(row => [row.id as number, row]))
@@ -328,12 +330,8 @@ export class WordsApi {
     const userId = getCurrentUserId()
 
     // 查询 words_relations，JOIN words 表获取关联词的文本
-    // 分页获取，避免 PostgREST 1000 行限制
-    const PAGE_SIZE = 1000
-    const allRelationRows: Array<Record<string, unknown>> = []
-    let offset = 0
-    while (true) {
-      const { data, error } = await supabase
+    const allRelationRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
+      supabase
         .from('words_relations')
         .select(`
           word_id,
@@ -344,14 +342,8 @@ export class WordsApi {
         `)
         .eq('user_id', userId)
         .in('word_id', wordIds)
-        .range(offset, offset + PAGE_SIZE - 1)
-
-      if (error) throw new Error(error.message)
-      if (!data || data.length === 0) break
-      allRelationRows.push(...data)
-      if (data.length < PAGE_SIZE) break
-      offset += PAGE_SIZE
-    }
+        .range(from, to)
+    )
 
     // 按 word_id 分组
     const result = new Map<number, RelatedWord[]>()
@@ -394,7 +386,7 @@ export class WordsApi {
 
     if (wordResult.error) {
       if (wordResult.error.code === 'PGRST116') return null // Not found
-      throw new Error(wordResult.error.message)
+      throwIfError(wordResult.error, '获取单词详情失败')
     }
 
     const word = this.transformWord(wordResult.data)
@@ -417,7 +409,7 @@ export class WordsApi {
       .order('word')
       .range(offset, offset + limit - 1)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '分页获取单词失败')
 
     const total = count || 0
     const words = (data || []).map(row => this.transformWord(row))
@@ -468,7 +460,7 @@ export class WordsApi {
       if (error.code === '23505') {
         throw new Error(`单词 '${word}' 已存在`)
       }
-      throw new Error(error.message)
+      throwIfError(error, '创建单词失败')
     }
 
     return this.transformWord(data)
@@ -520,7 +512,7 @@ export class WordsApi {
       .upsert(rows, { onConflict: 'word,user_id,source', ignoreDuplicates: true })
       .select()
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '批量导入失败')
 
     const insertedWords = (data || []).map(row => this.transformWord(row))
     const insertedSet = new Set(insertedWords.map(w => w.word))
@@ -558,25 +550,15 @@ export class WordsApi {
   static async getMasteredReviewWordIdsDirect(source: string): Promise<number[]> {
     const userId = getCurrentUserId()
 
-    // 分页获取，避免 PostgREST 1000 行限制
-    const PAGE_SIZE = 1000
-    const allRows: Array<Record<string, unknown>> = []
-    let offset = 0
-    while (true) {
-      const { data, error } = await supabase
+    const allRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
+      supabase
         .from('words')
         .select('id, last_review')
         .eq('user_id', userId)
         .eq('stop_review', 1)
         .eq('source', source)
-        .range(offset, offset + PAGE_SIZE - 1)
-
-      if (error) throw new Error(error.message)
-      if (!data || data.length === 0) break
-      allRows.push(...data)
-      if (data.length < PAGE_SIZE) break
-      offset += PAGE_SIZE
-    }
+        .range(from, to)
+    )
 
     allRows.sort((a, b) => {
       const da = a.last_review as string | null
@@ -596,25 +578,15 @@ export class WordsApi {
   static async getSkilledSpellingWordIdsDirect(source: string): Promise<number[]> {
     const userId = getCurrentUserId()
 
-    // 分页获取，避免 PostgREST 1000 行限制
-    const PAGE_SIZE = 1000
-    const allRows: Array<Record<string, unknown>> = []
-    let offset = 0
-    while (true) {
-      const { data, error } = await supabase
+    const allRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
+      supabase
         .from('words')
         .select('id, word, last_spell')
         .eq('user_id', userId)
         .eq('stop_spell', 1)
         .eq('source', source)
-        .range(offset, offset + PAGE_SIZE - 1)
-
-      if (error) throw new Error(error.message)
-      if (!data || data.length === 0) break
-      allRows.push(...data)
-      if (data.length < PAGE_SIZE) break
-      offset += PAGE_SIZE
-    }
+        .range(from, to)
+    )
 
     // 按 last_spell 排序：NULL 优先（从未检查过），然后旧日期在前
     const sorted = allRows.sort((a, b) => {
@@ -639,12 +611,9 @@ export class WordsApi {
     const userId = getCurrentUserId()
     const today = new Date().toISOString().split('T')[0]
 
-    // 1. 查询到期的单词（分页获取，避免 PostgREST 1000 行限制）
-    const PAGE_SIZE = 1000
-    const dueRows: Array<Record<string, unknown>> = []
-    let offset = 0
-    while (true) {
-      const { data, error: dueError } = await supabase
+    // 1. 查询到期的单词
+    const dueRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
+      supabase
         .from('words')
         .select('id, word')
         .eq('user_id', userId)
@@ -652,14 +621,8 @@ export class WordsApi {
         .not('next_review', 'is', null)
         .lte('next_review', today)
         .eq('source', source)
-        .range(offset, offset + PAGE_SIZE - 1)
-
-      if (dueError) throw new Error(dueError.message)
-      if (!data || data.length === 0) break
-      dueRows.push(...data)
-      if (data.length < PAGE_SIZE) break
-      offset += PAGE_SIZE
-    }
+        .range(from, to)
+    )
 
     // 前端按首字母排序（不区分大小写）
     const sortedDue = (dueRows || []).sort((a, b) =>
@@ -693,7 +656,7 @@ export class WordsApi {
       }
 
       const { data: lowEfRows, error: lowEfError } = await lowEfQuery
-      if (lowEfError) throw new Error(lowEfError.message)
+      throwIfError(lowEfError, '获取低EF单词失败')
 
       // 先按 EF 选出 N 个（DB 已排序），再按首字母排序用于展示
       const selectedLowEf = (lowEfRows || []).slice(0, lowEfExtraCount)
@@ -767,9 +730,9 @@ export class WordsApi {
         .gt('spell_next_review', today),
     ])
 
-    if (dueResult.error) throw new Error(dueResult.error.message)
-    if (neverSpelledResult.error) throw new Error(neverSpelledResult.error.message)
-    if (notYetDueResult.error) throw new Error(notYetDueResult.error.message)
+    throwIfError(dueResult.error, '获取到期拼写单词失败')
+    throwIfError(neverSpelledResult.error, '获取未拼写单词失败')
+    throwIfError(notYetDueResult.error, '获取未到期拼写单词失败')
 
     const groups = [
       dueResult.data || [],
@@ -820,7 +783,7 @@ export class WordsApi {
       .eq('stop_review', 0)
       .lte('next_review', today)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '获取今日到期数量失败')
     return count ?? 0
   }
 
@@ -836,7 +799,7 @@ export class WordsApi {
       p_days_ahead: daysAhead
     })
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '获取复习负荷失败')
 
     // 将稀疏的 {day_offset, review_count} 映射为连续数组
     const loads = new Array(daysAhead).fill(0)
@@ -861,7 +824,7 @@ export class WordsApi {
       p_days_ahead: daysAhead
     })
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '获取拼写负荷失败')
 
     const loads = new Array(daysAhead).fill(0)
     for (const row of data || []) {
@@ -921,7 +884,7 @@ export class WordsApi {
       .eq('id', wordId)
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '持久化复习结果失败')
   }
 
   /**
@@ -949,7 +912,7 @@ export class WordsApi {
         source: record.source,
       })
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '插入复习历史失败')
   }
 
   /**
@@ -976,7 +939,7 @@ export class WordsApi {
       .eq('id', wordId)
       .eq('user_id', userId)
 
-    if (error) throw new Error(error.message)
+    throwIfError(error, '持久化拼写结果失败')
   }
 
   // ============================================================================
@@ -989,44 +952,28 @@ export class WordsApi {
    */
   static async getScheduleDataDirect(source: string): Promise<WordScheduleData[]> {
     const userId = getCurrentUserId()
-    const PAGE_SIZE = 1000
-    const allRows: WordScheduleData[] = []
-    let offset = 0
 
-    while (true) {
+    const rawRows = await paginateSupabase<Record<string, unknown>>((from, to) => {
       let query = supabase
         .from('words')
         .select('id, word, next_review, ease_factor, spell_next_review, spell_strength, stop_review, stop_spell')
         .eq('user_id', userId)
-
       if (source !== 'all') {
         query = query.eq('source', source)
       }
+      return query.range(from, to)
+    })
 
-      query = query.range(offset, offset + PAGE_SIZE - 1)
-
-      const { data, error } = await query
-      if (error) throw new Error(error.message)
-      if (!data || data.length === 0) break
-
-      for (const row of data) {
-        allRows.push({
-          id: row.id as number,
-          word: row.word as string,
-          next_review: row.next_review as string | null,
-          ease_factor: Number(row.ease_factor) || 2.5,
-          spell_next_review: row.spell_next_review as string | null,
-          spell_strength: row.spell_strength !== null ? Number(row.spell_strength) : null,
-          stop_review: Number(row.stop_review) || 0,
-          stop_spell: Number(row.stop_spell) || 0,
-        })
-      }
-
-      if (data.length < PAGE_SIZE) break
-      offset += PAGE_SIZE
-    }
-
-    return allRows
+    return rawRows.map(row => ({
+      id: row.id as number,
+      word: row.word as string,
+      next_review: row.next_review as string | null,
+      ease_factor: Number(row.ease_factor) || 2.5,
+      spell_next_review: row.spell_next_review as string | null,
+      spell_strength: row.spell_strength !== null ? Number(row.spell_strength) : null,
+      stop_review: Number(row.stop_review) || 0,
+      stop_spell: Number(row.stop_spell) || 0,
+    }))
   }
 
   /**
@@ -1037,7 +984,7 @@ export class WordsApi {
       p_word_ids: wordIds,
       p_dates: dates,
     })
-    if (error) throw new Error(error.message)
+    throwIfError(error, '批量调整复习日期失败')
   }
 
   /**
@@ -1048,7 +995,7 @@ export class WordsApi {
       p_word_ids: wordIds,
       p_dates: dates,
     })
-    if (error) throw new Error(error.message)
+    throwIfError(error, '批量调整拼写日期失败')
   }
 
   /**

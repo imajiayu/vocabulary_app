@@ -24,6 +24,9 @@ interface KeyboardManagerState {
   lastContextChangeTime: number
 }
 
+const CONTEXT_SWITCH_GUARD_MS = 100  // 上下文切换后的按键保护期
+const HANDLER_RESET_DELAY_MS = 100   // 处理器执行后的重置延迟
+
 // 防泄漏 timer
 let handlingTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -64,7 +67,7 @@ const handleGlobalKeydown = async (event: KeyboardEvent) => {
 
   // 3. 防止上下文切换后立即触发（100ms保护期）
   const timeSinceContextChange = Date.now() - globalState.lastContextChangeTime
-  if (timeSinceContextChange < 100) {
+  if (timeSinceContextChange < CONTEXT_SWITCH_GUARD_MS) {
     event.preventDefault()
     return
   }
@@ -90,7 +93,7 @@ const handleGlobalKeydown = async (event: KeyboardEvent) => {
     handlingTimer = setTimeout(() => {
       globalState.isHandling = false
       handlingTimer = null
-    }, 100)
+    }, HANDLER_RESET_DELAY_MS)
   }
 }
 

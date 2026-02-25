@@ -4,6 +4,7 @@
 
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
+import { paginateSupabase } from './pagination'
 import {
   generateSpellHeatmapCell,
   generateEfHeatmapCell,
@@ -129,6 +130,7 @@ function roundTo(value: number | null, decimals: number): number | null {
 
 /**
  * 分页获取所有数据（绕过 Supabase 1000 行限制）
+ * 基于 paginateSupabase 工具函数，保留便捷的表名+过滤参数接口
  */
 async function fetchAllRows<T>(
   tableName: string,
@@ -136,16 +138,11 @@ async function fetchAllRows<T>(
   filters: { column: string; value: string }[],
   orderBy?: string
 ): Promise<T[]> {
-  const PAGE_SIZE = 1000
-  const allRows: T[] = []
-  let offset = 0
-  let hasMore = true
-
-  while (hasMore) {
+  return paginateSupabase<T>((from, to) => {
     let query = supabase
       .from(tableName)
       .select(selectFields)
-      .range(offset, offset + PAGE_SIZE - 1)
+      .range(from, to)
 
     for (const filter of filters) {
       query = query.eq(filter.column, filter.value)
@@ -155,32 +152,44 @@ async function fetchAllRows<T>(
       query = query.order(orderBy)
     }
 
-    const { data, error } = await query
-
-    if (error) throw new Error(`Failed to fetch ${tableName}: ${error.message}`)
-
-    if (data && data.length > 0) {
-      allRows.push(...(data as T[]))
-      offset += PAGE_SIZE
-      hasMore = data.length === PAGE_SIZE
-    } else {
-      hasMore = false
-    }
-  }
-
-  return allRows
+    return query
+  })
 }
+
+// 统计数据内存缓存（5 分钟 TTL）
+const STATS_CACHE_TTL = 5 * 60 * 1000
+const statsCache = new Map<string, { data: StatsResponse; ts: number }>()
 
 /**
  * 统计API类
  */
 export class StatsApi {
   /**
+   * 手动失效缓存（复习提交后调用）
+   * @param source 失效指定 source 的缓存，不传则清空所有
+   */
+  static invalidateCache(source?: string): void {
+    if (source) {
+      statsCache.delete(source)
+    } else {
+      statsCache.clear()
+    }
+  }
+
+  /**
    * 获取详细统计数据
    * 重构：直接从Supabase VIEW查询，使用分页获取所有数据
+   * 内置 5 分钟 TTL 缓存，避免反复进出统计页面时重复查询
    */
   static async getStats(params?: { source?: string }): Promise<StatsResponse> {
     const source = params?.source || 'IELTS'
+
+    // 检查缓存
+    const cached = statsCache.get(source)
+    if (cached && Date.now() - cached.ts < STATS_CACHE_TTL) {
+      return cached.data
+    }
+
     const userId = getCurrentUserId()
     const sourceFilter = [
       { column: 'source', value: source },
@@ -388,7 +397,7 @@ export class StatsApi {
       hourly_distribution[toInt(row.hour)] = toInt(row.count)
     }
 
-    return {
+    const result: StatsResponse = {
       ef_dict,
       next_review_dict,
       spell_next_review_dict,
@@ -404,5 +413,10 @@ export class StatsApi {
       daily_activity,
       hourly_distribution,
     }
+
+    // 写入缓存
+    statsCache.set(source, { data: result, ts: Date.now() })
+
+    return result
   }
 }

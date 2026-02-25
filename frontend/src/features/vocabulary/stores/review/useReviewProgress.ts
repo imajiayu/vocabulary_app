@@ -5,6 +5,8 @@ import { api } from '@/shared/api'
 import { useAuth, getCurrentUserId } from '@/shared/composables/useAuth'
 import { reviewLogger as log } from '@/shared/utils/logger'
 
+const PROGRESS_DEBOUNCE_MS = 5000  // 进度持久化防抖间隔
+
 export function useReviewProgress() {
   const { session: authSession } = useAuth()
 
@@ -35,7 +37,7 @@ export function useReviewProgress() {
   const debouncedUpdateProgressIndex = (index: number) => {
     pendingIndexValue = index
     if (indexDebounceTimer) clearTimeout(indexDebounceTimer)
-    indexDebounceTimer = setTimeout(flushProgressIndex, 5000)
+    indexDebounceTimer = setTimeout(flushProgressIndex, PROGRESS_DEBOUNCE_MS)
   }
 
   // beforeunload: keepalive fetch 保证页面关闭时请求送达

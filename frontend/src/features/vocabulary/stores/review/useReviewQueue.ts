@@ -10,6 +10,10 @@ import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelect
 import { useSettings } from '@/shared/composables/useSettings'
 import { reviewLogger as log } from '@/shared/utils/logger'
 
+const QUEUE_THRESHOLD = 5      // 剩余词数低于此值时触发后台加载
+const BATCH_SIZE = 20           // 每次分页加载的单词数
+const TOTAL_LIMIT = 100         // 单次会话的最大单词数
+
 export function useReviewQueue() {
   const { shuffle, initializeFromData: initializeShuffle } = useShuffleSelectionReadOnly()
   const { currentSource, initializeFromData: initializeSource } = useSourceSelectionReadOnly()
@@ -25,9 +29,9 @@ export function useReviewQueue() {
   const allWordIds = shallowRef<number[]>([])
 
   const settings = ref({
-    queueThreshold: 5,
-    batchSize: 20,
-    totalLimit: 100
+    queueThreshold: QUEUE_THRESHOLD,
+    batchSize: BATCH_SIZE,
+    totalLimit: TOTAL_LIMIT
   })
 
   const shouldLoadMore = (mode: ReviewMode) => {

@@ -3,7 +3,7 @@
  */
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import type { SpellingData, Word } from '@/shared/types'
+import type { SpellingData, Word, UserSettings } from '@/shared/types'
 import type { ReviewNotificationData } from '@/shared/api/words'
 import type { ReviewMode } from '../review'
 import { api } from '@/shared/api'
@@ -24,6 +24,31 @@ export interface ReviewNotificationState {
   data: ReviewNotificationData | null
 }
 
+// 处理上下文：各模式处理函数共用的参数
+interface ProcessContext {
+  wordForCalc: Word
+  result: { is_spelling: boolean; remembered: boolean; elapsed_time?: number; spelling_data?: SpellingData }
+  source: string
+  wordQueue: Word[]
+  wordId: number
+  userSettings: UserSettings
+}
+
+// 辅助：递增 loads cache 中对应天的负荷
+function incrementLoadsCache(cache: number[] | null, dayIndex: number): void {
+  if (cache && dayIndex >= 0 && dayIndex < cache.length) {
+    cache[dayIndex]++
+  }
+}
+
+// 辅助：更新 wordQueue 中对应单词的字段
+function updateWordInQueue(wordQueue: Word[], wordId: number, updates: Partial<Word>): void {
+  const idx = wordQueue.findIndex(w => w.id === wordId)
+  if (idx !== -1) {
+    wordQueue[idx] = { ...wordQueue[idx], ...updates }
+  }
+}
+
 export function useReviewResult() {
   const { loadSettings } = useSettings()
 
@@ -41,6 +66,222 @@ export function useReviewResult() {
     notification.value = { show: false, data: null }
   }
 
+  // === 模式 1：普通复习 ===
+  const handleReviewMode = async (ctx: ProcessContext) => {
+    if (!reviewLoadsCache.value) {
+      reviewLoadsCache.value = await api.words.getDailyReviewLoadsDirect(
+        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+      )
+    }
+    const calcResult = calculateReviewResult(
+      ctx.wordForCalc, ctx.result.remembered, ctx.result.elapsed_time ?? 3,
+      ctx.userSettings, reviewLoadsCache.value
+    )
+
+    incrementLoadsCache(reviewLoadsCache.value, calcResult.scheduledDay - 1)
+    notification.value = { show: true, data: calcResult.notification }
+
+    const pd = calcResult.persistData
+    updateWordInQueue(ctx.wordQueue, ctx.wordId, {
+      ease_factor: pd.ease_factor,
+      repetition: pd.repetition,
+      interval: pd.interval,
+      next_review: pd.next_review,
+      lapse: pd.lapse,
+      remember_count: pd.current_remember_count + pd.remember_inc,
+      forget_count: pd.current_forget_count + pd.forget_inc,
+      avg_elapsed_time: pd.avg_elapsed_time,
+      stop_review: pd.should_stop_review ? 1 : ctx.wordForCalc.stop_review,
+    })
+
+    persistReviewResult(calcResult.persistData, {
+      source: ctx.source,
+      elapsed_time: Math.round(ctx.result.elapsed_time ?? 3),
+      score: calcResult.persistData.score,
+    }).catch(err => log.error('Failed to persist review result:', err))
+  }
+
+  // === 模式 2：拼写练习 ===
+  const handleSpellingMode = async (ctx: ProcessContext) => {
+    if (!ctx.result.spelling_data) {
+      log.error('Missing spelling_data in spelling mode')
+      return
+    }
+    if (!spellLoadsCache.value) {
+      spellLoadsCache.value = await api.words.getDailySpellLoadsDirect(
+        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+      )
+    }
+    const calcResult = calculateSpellingResult(
+      ctx.wordForCalc, ctx.result.remembered, ctx.result.spelling_data,
+      ctx.userSettings, spellLoadsCache.value
+    )
+
+    incrementLoadsCache(spellLoadsCache.value, calcResult.interval - 1)
+    notification.value = { show: true, data: calcResult.notification }
+
+    updateWordInQueue(ctx.wordQueue, ctx.wordId, {
+      spell_strength: calcResult.persistData.new_strength,
+      spell_next_review: calcResult.persistData.next_review,
+      stop_spell: calcResult.persistData.should_stop_spell ? 1 : ctx.wordForCalc.stop_spell,
+    })
+
+    persistSpellingResult(calcResult.persistData, {
+      source: ctx.source,
+      elapsed_time: Math.round((ctx.result.spelling_data?.inputAnalysis?.totalTypingTime ?? 0) / 1000),
+      score: ctx.result.remembered ? 5 : 1,
+    }).catch(err => log.error('Failed to persist spelling result:', err))
+  }
+
+  // === 模式 3：已掌握复习 ===
+  const handleMasteredReview = async (ctx: ProcessContext) => {
+    const today = new Date().toISOString().split('T')[0]
+
+    if (ctx.result.remembered) {
+      // 记住了：更新 last_review + remember_count
+      api.words.updateWordDirect(ctx.wordId, {
+        last_review: today,
+        remember_count: ctx.wordForCalc.remember_count + 1,
+      }).catch(err => log.error('Failed to update last_review:', err))
+      return
+    }
+
+    // 没记住：重置学习参数 + 取消掌握状态
+    if (!reviewLoadsCache.value) {
+      reviewLoadsCache.value = await api.words.getDailyReviewLoadsDirect(
+        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+      )
+    }
+
+    const { chosenDay } = findOptimalDay({
+      baseInterval: 1,
+      dailyLimit: ctx.userSettings.learning.dailyReviewLimit || 100,
+      currentLoads: reviewLoadsCache.value,
+    })
+
+    const nextReview = addDays(today, chosenDay)
+    const newEaseFactor = parseFloat(Math.max(1.3, ctx.wordForCalc.ease_factor - 0.4).toFixed(2))
+
+    const updatePayload = {
+      repetition: 0,
+      interval: 1,
+      next_review: nextReview,
+      ease_factor: newEaseFactor,
+      lapse: 1,
+      stop_review: 0,
+      last_review: today,
+      forget_count: ctx.wordForCalc.forget_count + 1,
+    }
+
+    incrementLoadsCache(reviewLoadsCache.value, chosenDay - 1)
+    updateWordInQueue(ctx.wordQueue, ctx.wordId, updatePayload)
+
+    const easeChange = Math.round((newEaseFactor - ctx.wordForCalc.ease_factor) * 100) / 100
+    notification.value = {
+      show: true,
+      data: {
+        word: ctx.wordForCalc.word,
+        param_type: 'ease_factor',
+        param_change: easeChange,
+        new_param_value: newEaseFactor,
+        next_review_date: nextReview,
+        breakdown: {
+          elapsed_time: Math.round(ctx.result.elapsed_time ?? 3),
+          remembered: false,
+          score: 0,
+          repetition: 0,
+          interval: chosenDay,
+        }
+      }
+    }
+
+    api.words.updateWordDirect(ctx.wordId, updatePayload)
+      .catch(err => log.error('Failed to persist mastered review result:', err))
+  }
+
+  // === 模式 4：已熟练拼写 ===
+  const handleSkilledSpelling = async (ctx: ProcessContext) => {
+    if (!ctx.result.spelling_data) {
+      log.error('Missing spelling_data in skilled spelling mode')
+      return
+    }
+
+    const needsReset = (() => {
+      if (!ctx.result.remembered) return true
+      const [, breakdownInfo] = calculateSpellStrength(
+        ctx.result.spelling_data!, true, ctx.wordForCalc.word, ctx.wordForCalc.spell_strength
+      )
+      return (breakdownInfo.total_score ?? 0) < 0.55
+    })()
+
+    if (!needsReset) {
+      // remembered 且 totalScore >= 0.55：只更新 last_spell 检查时间
+      const today = new Date().toISOString().split('T')[0]
+      api.words.updateWordDirect(ctx.wordId, { last_spell: today })
+        .catch(err => log.error('Failed to update last_spell:', err))
+      return
+    }
+
+    // 需要重置拼写进度
+    if (!spellLoadsCache.value) {
+      spellLoadsCache.value = await api.words.getDailySpellLoadsDirect(
+        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+      )
+    }
+
+    const today = new Date().toISOString().split('T')[0]
+    const { chosenDay } = findOptimalDay({
+      baseInterval: 1,
+      dailyLimit: ctx.userSettings.learning.dailySpellLimit || 200,
+      currentLoads: spellLoadsCache.value,
+    })
+
+    const nextSpellReview = addDays(today, chosenDay)
+    const updatePayload = {
+      spell_strength: 0,
+      spell_next_review: nextSpellReview,
+      stop_spell: 0,
+      last_spell: today,
+    }
+
+    incrementLoadsCache(spellLoadsCache.value, chosenDay - 1)
+    updateWordInQueue(ctx.wordQueue, ctx.wordId, updatePayload)
+
+    const oldStrength = ctx.wordForCalc.spell_strength ?? 0
+    notification.value = {
+      show: true,
+      data: {
+        word: ctx.wordForCalc.word,
+        param_type: 'spell_strength',
+        param_change: -oldStrength,
+        new_param_value: 0,
+        next_review_date: nextSpellReview,
+        breakdown: {
+          remembered: ctx.result.remembered,
+          typed_count: 0,
+          backspace_count: 0,
+          word_length: ctx.wordForCalc.word.length,
+          avg_key_interval: 0,
+          longest_pause: 0,
+          total_typing_time: 0,
+          audio_requests: 0,
+          accuracy_score: 0,
+          fluency_score: 0,
+          independence_score: 0,
+          weighted_accuracy: 0,
+          weighted_fluency: 0,
+          weighted_independence: 0,
+          total_score: 0,
+          strength_gain: -oldStrength,
+        }
+      }
+    }
+
+    api.words.updateWordDirect(ctx.wordId, updatePayload)
+      .catch(err => log.error('Failed to persist skilled spelling reset:', err))
+  }
+
+  // === 主调度函数 ===
   const processNonLapseResult = async (
     wordForCalc: Word,
     result: { is_spelling: boolean; remembered: boolean; elapsed_time?: number; spelling_data?: SpellingData },
@@ -53,243 +294,22 @@ export function useReviewResult() {
   ) => {
     try {
       const userSettings = await loadSettings()
-      const source = wordForCalc.source || currentSource
-
-      if (!result.is_spelling && mode === 'mode_review') {
-        if (!reviewLoadsCache.value) {
-          reviewLoadsCache.value = await api.words.getDailyReviewLoadsDirect(source, userSettings.learning.maxPrepDays || 45)
-        }
-        const calcResult = calculateReviewResult(
-          wordForCalc, result.remembered, result.elapsed_time ?? 3, userSettings, reviewLoadsCache.value
-        )
-
-        const chosenIdx = calcResult.scheduledDay - 1
-        if (reviewLoadsCache.value && chosenIdx >= 0 && chosenIdx < reviewLoadsCache.value.length) {
-          reviewLoadsCache.value[chosenIdx]++
-        }
-
-        notification.value = { show: true, data: calcResult.notification }
-
-        const idx = wordQueue.findIndex(w => w.id === wordId)
-        if (idx !== -1) {
-          const pd = calcResult.persistData
-          wordQueue[idx] = {
-            ...wordQueue[idx],
-            ease_factor: pd.ease_factor,
-            repetition: pd.repetition,
-            interval: pd.interval,
-            next_review: pd.next_review,
-            lapse: pd.lapse,
-            remember_count: pd.current_remember_count + pd.remember_inc,
-            forget_count: pd.current_forget_count + pd.forget_inc,
-            avg_elapsed_time: pd.avg_elapsed_time,
-            stop_review: pd.should_stop_review ? 1 : wordQueue[idx].stop_review,
-          }
-        }
-
-        persistReviewResult(calcResult.persistData, {
-          source,
-          elapsed_time: Math.round(result.elapsed_time ?? 3),
-          score: calcResult.persistData.score,
-        }).catch(err => log.error('Failed to persist review result:', err))
-
-      } else if (result.is_spelling && mode === 'mode_spelling') {
-        if (!result.spelling_data) {
-          log.error('Missing spelling_data in spelling mode')
-          return
-        }
-        if (!spellLoadsCache.value) {
-          spellLoadsCache.value = await api.words.getDailySpellLoadsDirect(source, userSettings.learning.maxPrepDays || 45)
-        }
-        const calcResult = calculateSpellingResult(
-          wordForCalc, result.remembered, result.spelling_data, userSettings, spellLoadsCache.value
-        )
-
-        const chosenIdx = calcResult.interval - 1
-        if (spellLoadsCache.value && chosenIdx >= 0 && chosenIdx < spellLoadsCache.value.length) {
-          spellLoadsCache.value[chosenIdx]++
-        }
-
-        notification.value = { show: true, data: calcResult.notification }
-
-        const idx = wordQueue.findIndex(w => w.id === wordId)
-        if (idx !== -1) {
-          wordQueue[idx] = {
-            ...wordQueue[idx],
-            spell_strength: calcResult.persistData.new_strength,
-            spell_next_review: calcResult.persistData.next_review,
-            stop_spell: calcResult.persistData.should_stop_spell ? 1 : wordQueue[idx].stop_spell,
-          }
-        }
-
-        persistSpellingResult(calcResult.persistData, {
-          source,
-          elapsed_time: Math.round((result.spelling_data?.inputAnalysis?.totalTypingTime ?? 0) / 1000),
-          score: result.remembered ? 5 : 1,
-        }).catch(err => log.error('Failed to persist spelling result:', err))
-
-      } else if (!result.is_spelling && mode === 'mode_mastered_review') {
-        // === 复习已掌握模式 ===
-        const today = new Date().toISOString().split('T')[0]
-
-        if (result.remembered) {
-          // 记住了：更新 last_review + remember_count
-          api.words.updateWordDirect(wordId, {
-            last_review: today,
-            remember_count: wordForCalc.remember_count + 1,
-          }).catch(err => log.error('Failed to update last_review:', err))
-        } else {
-          // 没记住：重置学习参数 + 取消掌握状态
-          if (!reviewLoadsCache.value) {
-            reviewLoadsCache.value = await api.words.getDailyReviewLoadsDirect(source, userSettings.learning.maxPrepDays || 45)
-          }
-
-          const { chosenDay } = findOptimalDay({
-            baseInterval: 1,
-            dailyLimit: userSettings.learning.dailyReviewLimit || 100,
-            currentLoads: reviewLoadsCache.value,
-          })
-
-          const nextReview = addDays(today, chosenDay)
-          const newEaseFactor = parseFloat(Math.max(1.3, wordForCalc.ease_factor - 0.4).toFixed(2))
-
-          const updatePayload = {
-            repetition: 0,
-            interval: 1,
-            next_review: nextReview,
-            ease_factor: newEaseFactor,
-            lapse: 1,
-            stop_review: 0,
-            last_review: today,
-            forget_count: wordForCalc.forget_count + 1,
-          }
-
-          // 更新 loads cache
-          const chosenIdx = chosenDay - 1
-          if (reviewLoadsCache.value && chosenIdx >= 0 && chosenIdx < reviewLoadsCache.value.length) {
-            reviewLoadsCache.value[chosenIdx]++
-          }
-
-          // 更新 wordQueue 中对应单词
-          const idx = wordQueue.findIndex(w => w.id === wordId)
-          if (idx !== -1) {
-            wordQueue[idx] = { ...wordQueue[idx], ...updatePayload }
-          }
-
-          // 通知
-          const easeChange = Math.round((newEaseFactor - wordForCalc.ease_factor) * 100) / 100
-          notification.value = {
-            show: true,
-            data: {
-              word: wordForCalc.word,
-              param_type: 'ease_factor',
-              param_change: easeChange,
-              new_param_value: newEaseFactor,
-              next_review_date: nextReview,
-              breakdown: {
-                elapsed_time: Math.round(result.elapsed_time ?? 3),
-                remembered: false,
-                score: 0,
-                repetition: 0,
-                interval: chosenDay,
-              }
-            }
-          }
-
-          api.words.updateWordDirect(wordId, updatePayload)
-            .catch(err => log.error('Failed to persist mastered review result:', err))
-        }
-
-      } else if (result.is_spelling && mode === 'mode_skilled_spelling') {
-        // === 拼写已熟练模式 ===
-        if (!result.spelling_data) {
-          log.error('Missing spelling_data in skilled spelling mode')
-          return
-        }
-
-        const needsReset = (() => {
-          if (!result.remembered) return true
-          // 计算 totalScore 判断是否需要重置
-          const [, breakdownInfo] = calculateSpellStrength(
-            result.spelling_data!, true, wordForCalc.word, wordForCalc.spell_strength
-          )
-          return (breakdownInfo.total_score ?? 0) < 0.55
-        })()
-
-        if (needsReset) {
-          // resetSpelling 逻辑
-          if (!spellLoadsCache.value) {
-            spellLoadsCache.value = await api.words.getDailySpellLoadsDirect(source, userSettings.learning.maxPrepDays || 45)
-          }
-
-          const today = new Date().toISOString().split('T')[0]
-          const { chosenDay } = findOptimalDay({
-            baseInterval: 1,
-            dailyLimit: userSettings.learning.dailySpellLimit || 200,
-            currentLoads: spellLoadsCache.value,
-          })
-
-          const nextSpellReview = addDays(today, chosenDay)
-          const updatePayload = {
-            spell_strength: 0,
-            spell_next_review: nextSpellReview,
-            stop_spell: 0,
-            last_spell: today,
-          }
-
-          // 更新 loads cache
-          const chosenIdx = chosenDay - 1
-          if (spellLoadsCache.value && chosenIdx >= 0 && chosenIdx < spellLoadsCache.value.length) {
-            spellLoadsCache.value[chosenIdx]++
-          }
-
-          // 更新 wordQueue
-          const idx = wordQueue.findIndex(w => w.id === wordId)
-          if (idx !== -1) {
-            wordQueue[idx] = { ...wordQueue[idx], ...updatePayload }
-          }
-
-          // 通知
-          const oldStrength = wordForCalc.spell_strength ?? 0
-          notification.value = {
-            show: true,
-            data: {
-              word: wordForCalc.word,
-              param_type: 'spell_strength',
-              param_change: -oldStrength,
-              new_param_value: 0,
-              next_review_date: nextSpellReview,
-              breakdown: {
-                remembered: result.remembered,
-                typed_count: 0,
-                backspace_count: 0,
-                word_length: wordForCalc.word.length,
-                avg_key_interval: 0,
-                longest_pause: 0,
-                total_typing_time: 0,
-                audio_requests: 0,
-                accuracy_score: 0,
-                fluency_score: 0,
-                independence_score: 0,
-                weighted_accuracy: 0,
-                weighted_fluency: 0,
-                weighted_independence: 0,
-                total_score: 0,
-                strength_gain: -oldStrength,
-              }
-            }
-          }
-
-          api.words.updateWordDirect(wordId, updatePayload)
-            .catch(err => log.error('Failed to persist skilled spelling reset:', err))
-        } else {
-          // remembered 且 totalScore >= 0.55：只更新 last_spell 检查时间
-          const today = new Date().toISOString().split('T')[0]
-          api.words.updateWordDirect(wordId, { last_spell: today })
-            .catch(err => log.error('Failed to update last_spell:', err))
-        }
+      const ctx: ProcessContext = {
+        wordForCalc, result, wordQueue, wordId, userSettings,
+        source: wordForCalc.source || currentSource,
       }
 
+      if (!result.is_spelling && mode === 'mode_review') {
+        await handleReviewMode(ctx)
+      } else if (result.is_spelling && mode === 'mode_spelling') {
+        await handleSpellingMode(ctx)
+      } else if (!result.is_spelling && mode === 'mode_mastered_review') {
+        await handleMasteredReview(ctx)
+      } else if (result.is_spelling && mode === 'mode_skilled_spelling') {
+        await handleSkilledSpelling(ctx)
+      }
+
+      api.stats.invalidateCache(ctx.source)
       debouncedUpdateProgressIndex(globalIndex)
     } catch (err) {
       log.error('Failed to calculate/persist result:', err)
