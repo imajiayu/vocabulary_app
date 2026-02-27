@@ -140,17 +140,13 @@ watch(
   (data) => {
     if (!data) return
 
-    // Calculate target day index
-    let dayIndex: number
-    if (data.param_type === 'ease_factor') {
-      dayIndex = data.breakdown.interval - 1
-    } else {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const next = new Date(data.next_review_date)
-      next.setHours(0, 0, 0, 0)
-      dayIndex = Math.round((next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) - 1
-    }
+    // Calculate target day index from next_review_date
+    // 不能用 breakdown.interval，因为负荷均衡后 scheduledDay 可能与 interval 不同
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const next = new Date(data.next_review_date)
+    next.setHours(0, 0, 0, 0)
+    const dayIndex = Math.round((next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) - 1
 
     const cacheLen = loadsCache.value?.length ?? 0
     if (dayIndex < 0 || dayIndex >= cacheLen) return

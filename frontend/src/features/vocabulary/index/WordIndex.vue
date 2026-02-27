@@ -161,19 +161,16 @@
         <section class="quick-links">
           <button class="quick-link" @click="goManagement">
             <AppIcon name="plus-circle" class="link-icon-svg" />
-            <span class="link-text">管理单词</span>
+            <span class="link-text">管理</span>
           </button>
-          <span class="link-separator">·</span>
           <button class="quick-link" @click="goStats">
             <AppIcon name="chart" class="link-icon-svg" />
-            <span class="link-text">查看统计</span>
+            <span class="link-text">统计</span>
           </button>
-          <span class="link-separator">·</span>
           <button class="quick-link" @click="goMasteredReview">
             <AppIcon name="check-circle" class="link-icon-svg" />
             <span class="link-text">复习已掌握</span>
           </button>
-          <span class="link-separator">·</span>
           <button class="quick-link" @click="goSkilledSpelling">
             <AppIcon name="graduation-cap" class="link-icon-svg" />
             <span class="link-text">拼写已熟练</span>
@@ -298,19 +295,16 @@
       <section class="mobile-quick-links">
         <button class="quick-btn" @click="goManagement">
           <AppIcon name="plus-circle" class="quick-icon-svg" />
-          <span class="quick-text">管理单词</span>
+          <span class="quick-text">管理</span>
         </button>
-        <span class="quick-divider">·</span>
         <button class="quick-btn" @click="goStats">
           <AppIcon name="chart" class="quick-icon-svg" />
-          <span class="quick-text">查看统计</span>
+          <span class="quick-text">统计</span>
         </button>
-        <span class="quick-divider">·</span>
         <button class="quick-btn" @click="goMasteredReview">
           <AppIcon name="check-circle" class="quick-icon-svg" />
           <span class="quick-text">复习已掌握</span>
         </button>
-        <span class="quick-divider">·</span>
         <button class="quick-btn" @click="goSkilledSpelling">
           <AppIcon name="graduation-cap" class="quick-icon-svg" />
           <span class="quick-text">拼写已熟练</span>
@@ -948,7 +942,7 @@ const resumeProgress = () => {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.25rem;
   padding-top: 1.5rem;
   border-top: 1px dashed var(--primitive-paper-400);
 }
@@ -956,8 +950,8 @@ const resumeProgress = () => {
 .quick-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
   border: none;
   background: transparent;
   border-radius: var(--radius-md);
@@ -970,19 +964,16 @@ const resumeProgress = () => {
 }
 
 .link-icon-svg {
-  width: 1rem;
-  height: 1rem;
+  width: 0.875rem;
+  height: 0.875rem;
   fill: var(--primitive-ink-500);
 }
 
 .link-text {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--primitive-ink-600);
-}
-
-.link-separator {
-  color: var(--primitive-ink-300);
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1177,12 +1168,10 @@ const resumeProgress = () => {
 
 /* ── 移动端快捷入口 ── */
 .mobile-quick-links {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  padding: 0.875rem 0.25rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem;
+  padding: 0.75rem 0;
   margin-top: 0.25rem;
   border-top: 1px dashed var(--primitive-paper-400);
 }
@@ -1190,8 +1179,9 @@ const resumeProgress = () => {
 .quick-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.25rem;
   border: none;
   background: transparent;
   border-radius: var(--radius-md);
@@ -1205,20 +1195,16 @@ const resumeProgress = () => {
 }
 
 .quick-icon-svg {
-  width: 1rem;
-  height: 1rem;
+  width: 0.875rem;
+  height: 0.875rem;
   fill: var(--primitive-ink-500);
 }
 
 .quick-text {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--primitive-ink-600);
-}
-
-.quick-divider {
-  color: var(--primitive-ink-300);
-  font-size: 1.25rem;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
