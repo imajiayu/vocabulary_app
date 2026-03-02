@@ -33,7 +33,15 @@
               @mouseleave="handleMouseLeave"
             >
               <span class="word-text">{{ w.word }}</span>
-              <span class="word-indicator"></span>
+              <!-- Lapse 模式：显示 level 进度点 -->
+              <span v-if="isLapseMode" class="level-dots">
+                <span
+                  v-for="i in LAPSE_MAX_LEVEL"
+                  :key="i"
+                  :class="['level-dot', { filled: i <= getWordLevel(w.id) }]"
+                ></span>
+              </span>
+              <span v-else class="word-indicator"></span>
             </div>
           </component>
         </div>
@@ -77,7 +85,8 @@
                 :class="['word-chip', getWordStatus(w.id)]"
                 @click="() => openModal(w)"
               >
-                {{ w.word }}
+                <span class="chip-word">{{ w.word }}</span>
+                <span v-if="isLapseMode" class="chip-level">L{{ getWordLevel(w.id) }}</span>
               </button>
             </component>
           </div>
@@ -115,6 +124,7 @@ interface Props {
   words: Word[]
   rememberHistory: Map<number, boolean>
   mode?: string
+  wordGapLevels?: Map<number, number>
 }
 
 const props = defineProps<Props>()
@@ -146,6 +156,9 @@ const isHovering = ref(false)
 const wordEditorStore = useWordEditorStore()
 const { requestPause, releasePause } = useTimerPause()
 
+// Lapse level 常量（与 useLapseSession 保持一致）
+const LAPSE_MAX_LEVEL = 4
+
 // Computed
 const isLapseMode = computed(() => props.mode === 'mode_lapse')
 const isSpellingMode = computed(() => props.mode === 'mode_spelling')
@@ -167,6 +180,10 @@ const forgotCount = computed(() => {
 })
 
 // Methods
+const getWordLevel = (wordId: number): number => {
+  return props.wordGapLevels?.get(wordId) ?? 0
+}
+
 const getWordStatus = (wordId: number): string => {
   // Lapse 模式：队首为当前正在复习的单词
   if (isLapseMode.value && props.words.length > 0 && props.words[0].id === wordId) {
@@ -179,10 +196,9 @@ const getWordStatus = (wordId: number): string => {
 
 const toggleCollapse = async () => {
   isCollapsed.value = !isCollapsed.value
-  // 展开时滚动到底部
   if (!isCollapsed.value) {
     await nextTick()
-    scrollToBottom()
+    isLapseMode.value ? scrollToTop() : scrollToBottom()
   }
 }
 
@@ -547,6 +563,38 @@ onUnmounted(() => {
   box-shadow: 0 0 8px rgba(153, 107, 61, 0.4);
 }
 
+/* Lapse 模式：level 进度点 */
+.level-dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.level-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primitive-paper-400);
+  transition: all 0.3s ease;
+}
+
+.level-dot.filled {
+  background: var(--primitive-copper-500);
+  box-shadow: 0 0 4px rgba(153, 107, 61, 0.3);
+}
+
+/* 当前词的 level 点使用更强调的样式 */
+.word-drop.current .level-dots .level-dot {
+  background: var(--primitive-copper-200);
+}
+
+.word-drop.current .level-dots .level-dot.filled {
+  background: var(--primitive-copper-600);
+  box-shadow: 0 0 6px rgba(153, 107, 61, 0.5);
+}
+
 /* 列表过渡动画 */
 .ink-flow-enter-active {
   animation: ink-drop-in 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -765,6 +813,25 @@ onUnmounted(() => {
   background: var(--primitive-copper-100);
   border-color: var(--primitive-copper-300);
   font-weight: 600;
+}
+
+/* 移动端 Lapse level 标签 */
+.chip-word {
+  /* 保持 inline 默认行为 */
+}
+
+.chip-level {
+  font-family: var(--font-data);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--primitive-copper-500);
+  margin-left: 0.25rem;
+  opacity: 0.8;
+}
+
+.word-chip.current .chip-level {
+  color: var(--primitive-copper-700);
+  opacity: 1;
 }
 
 /* 气泡过渡动画 */
