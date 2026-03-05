@@ -344,7 +344,7 @@ const maskWordsFor = (text: string, targetWord: string) =>
     shouldMask(match, targetWord) ? '*'.repeat(match.length) : match
   )
 
-const isCorrect = computed(() => userInput.value.trim().toLowerCase() === props.word.word.toLowerCase())
+const isCorrect = computed(() => userInput.value.normalize('NFC').trim().toLowerCase() === props.word.word.normalize('NFC').toLowerCase())
 const canProceed = computed(() => isCorrect.value)
 
 const inputStateClass = computed(() => {

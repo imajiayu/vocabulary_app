@@ -10,7 +10,11 @@ import type { DefinitionObject } from '@/shared/types'
  */
 export function boldWordInSentence(sentence: string, word: string): string {
   const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const pattern = new RegExp(`(?<!<strong>)\\b(${escaped})\\b(?!<\\/strong>)`, 'gi')
+  // \p{L} matches any Unicode letter (Latin, Cyrillic, etc.)
+  // Replaces \b which only recognizes [a-zA-Z0-9_] as word characters
+  const pattern = new RegExp(
+    `(?<!<strong>)(?<!\\p{L})(${escaped})(?!\\p{L})(?!<\\/strong>)`, 'giu'
+  )
   return sentence.replace(pattern, '<strong>$1</strong>')
 }
 

@@ -13,8 +13,15 @@
         <div v-if="showDefinition" class="content-stage">
           <!-- 音标区域 -->
           <div class="phonetics-bar">
-            <!-- 有音标数据：显示 US/UK 音标（数据驱动） -->
-            <div v-if="displayWord.definition?.phonetic?.us || displayWord.definition?.phonetic?.uk" class="phonetics">
+            <!-- 单一 IPA 音标（非英语） -->
+            <div v-if="displayWord.definition?.phonetic?.ipa" class="phonetics">
+              <span class="phonetic-tag" @click="playAudio">
+                <AppIcon name="volume" class="phonetic-play-icon" />
+                <span class="ipa">{{ displayWord.definition.phonetic.ipa }}</span>
+              </span>
+            </div>
+            <!-- US/UK 音标（英语） -->
+            <div v-else-if="displayWord.definition?.phonetic?.us || displayWord.definition?.phonetic?.uk" class="phonetics">
               <span
                 v-if="displayWord.definition?.phonetic?.us"
                 class="phonetic-tag"

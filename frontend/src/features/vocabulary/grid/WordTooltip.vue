@@ -16,14 +16,19 @@
         <div class="tooltip-header">
           <span class="tooltip-word">{{ word.word }}</span>
           <div v-if="hasPhonetic" class="tooltip-phonetic">
-            <span v-if="word.definition.phonetic?.us" class="phonetic-item">
-              <span class="phonetic-label">US</span>
-              <span class="phonetic-text">/{{ word.definition.phonetic.us }}/</span>
+            <span v-if="word.definition.phonetic?.ipa" class="phonetic-item">
+              <span class="phonetic-text">{{ word.definition.phonetic.ipa }}</span>
             </span>
-            <span v-if="word.definition.phonetic?.uk" class="phonetic-item">
-              <span class="phonetic-label">UK</span>
-              <span class="phonetic-text">/{{ word.definition.phonetic.uk }}/</span>
-            </span>
+            <template v-else>
+              <span v-if="word.definition.phonetic?.us" class="phonetic-item">
+                <span class="phonetic-label">US</span>
+                <span class="phonetic-text">/{{ word.definition.phonetic.us }}/</span>
+              </span>
+              <span v-if="word.definition.phonetic?.uk" class="phonetic-item">
+                <span class="phonetic-label">UK</span>
+                <span class="phonetic-text">/{{ word.definition.phonetic.uk }}/</span>
+              </span>
+            </template>
           </div>
         </div>
 
@@ -75,12 +80,17 @@
               </button>
             </div>
             <div v-if="hasPhonetic" class="mobile-phonetic">
-              <span v-if="word.definition.phonetic?.us" class="phonetic-tag">
-                US /{{ word.definition.phonetic.us }}/
+              <span v-if="word.definition.phonetic?.ipa" class="phonetic-tag">
+                {{ word.definition.phonetic.ipa }}
               </span>
-              <span v-if="word.definition.phonetic?.uk" class="phonetic-tag">
-                UK /{{ word.definition.phonetic.uk }}/
-              </span>
+              <template v-else>
+                <span v-if="word.definition.phonetic?.us" class="phonetic-tag">
+                  US /{{ word.definition.phonetic.us }}/
+                </span>
+                <span v-if="word.definition.phonetic?.uk" class="phonetic-tag">
+                  UK /{{ word.definition.phonetic.uk }}/
+                </span>
+              </template>
             </div>
           </div>
 
@@ -155,7 +165,8 @@ const isMobileMode = computed(() => props.isMobile)
 
 // Computed
 const hasPhonetic = computed(() => {
-  return props.word.definition.phonetic?.us || props.word.definition.phonetic?.uk
+  const p = props.word.definition.phonetic
+  return p?.us || p?.uk || p?.ipa
 })
 
 const definitions = computed(() => {

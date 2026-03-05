@@ -39,6 +39,7 @@ export interface DefinitionObject {
   phonetic?: {
     us?: string;
     uk?: string;
+    ipa?: string;
   };
   definitions?: string[];
   examples?: {

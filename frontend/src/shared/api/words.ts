@@ -7,7 +7,7 @@ import { getCurrentUserId } from '@/shared/composables/useAuth'
 import { applyBoldToDefinition } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
-import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord } from '@/shared/types'
+import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord, SourceLang } from '@/shared/types'
 import { paginateSupabase } from './pagination'
 import { throwIfError } from './errors'
 
@@ -166,24 +166,39 @@ export class WordsApi {
    * 获取单词释义（Edge Function + Supabase 直连）
    * 1. 查询单词文本 2. Edge Function 爬取释义 3. 加粗例句 4. 写入 DB 5. 返回完整 Word
    */
-  static async fetchDefinition(wordId: number): Promise<Word> {
+  static async fetchDefinition(wordId: number, lang?: SourceLang): Promise<Word> {
     const userId = getCurrentUserId()
 
-    // 1. 轻量查询获取单词文本
-    const { data: row, error: queryError } = await supabase
+    // 1. 查询单词文本和来源
+    const wordPromise = supabase
       .from('words')
-      .select('word')
+      .select('word, source')
       .eq('id', wordId)
       .eq('user_id', userId)
       .single()
 
-    if (queryError || !row) throw new Error('单词不存在')
+    // 若未传 lang，并行查 user_config 获取 source → lang 映射
+    const configPromise = !lang
+      ? supabase.from('user_config').select('config').eq('user_id', userId).single()
+      : null
 
-    const wordText = row.word as string
+    const [wordResult, configResult] = await Promise.all([wordPromise, configPromise])
+
+    if (wordResult.error || !wordResult.data) throw new Error('单词不存在')
+
+    const wordText = wordResult.data.word as string
+
+    let resolvedLang: SourceLang = lang || 'en'
+    if (!lang && configResult?.data) {
+      const source = wordResult.data.source as string
+      const config = configResult.data.config as Record<string, unknown> | null
+      const customSources = (config?.sources as Record<string, unknown> | undefined)?.customSources as Record<string, SourceLang> | undefined
+      resolvedLang = customSources?.[source] || 'en'
+    }
 
     // 2. 调用 Edge Function 爬取释义
     const { data, error: fnError } = await supabase.functions.invoke('fetch-definition', {
-      body: { word: wordText },
+      body: { word: wordText, lang: resolvedLang },
     })
 
     if (fnError || !data?.success) {
@@ -223,7 +238,7 @@ export class WordsApi {
       .from('words')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
-      .eq('word', word.trim().toLowerCase())
+      .eq('word', word.normalize('NFC').trim().toLowerCase())
       .neq('id', excludeId)
 
     throwIfError(error, '检查单词重复失败')
@@ -429,7 +444,7 @@ export class WordsApi {
    */
   static async createWordDirect(wordText: string, source: string, lbParams?: ImportLoadBalanceParams): Promise<Word> {
     const userId = getCurrentUserId()
-    const word = wordText.trim().toLowerCase()
+    const word = wordText.normalize('NFC').trim().toLowerCase()
     const today = new Date().toISOString().split('T')[0]
 
     let nextReview = today
@@ -478,7 +493,7 @@ export class WordsApi {
 
     // 标准化 + 去重
     const uniqueWords = [...new Set(
-      words.map(w => w.trim().toLowerCase()).filter(w => w.length > 0)
+      words.map(w => w.normalize('NFC').trim().toLowerCase()).filter(w => w.length > 0)
     )]
 
     const rows = uniqueWords.map(word => {

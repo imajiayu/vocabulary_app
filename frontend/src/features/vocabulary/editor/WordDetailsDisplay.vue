@@ -6,8 +6,18 @@
 
       <!-- 音标 / 发音 -->
       <div v-if="hasDefinition" class="phonetic-row">
-        <!-- 有音标数据：显示 US/UK（数据驱动） -->
-        <template v-if="props.word?.definition.phonetic?.us || props.word?.definition.phonetic?.uk">
+        <!-- 单一 IPA 音标（非英语） -->
+        <template v-if="props.word?.definition.phonetic?.ipa">
+          <span
+            class="phonetic-pill"
+            @click="playWordAudio(props.word.word, 'us', ttsLang)"
+          >
+            <AppIcon name="volume" class="phonetic-play-icon" />
+            <span class="phonetic-text">{{ props.word.definition.phonetic.ipa }}</span>
+          </span>
+        </template>
+        <!-- US/UK 音标（英语） -->
+        <template v-else-if="props.word?.definition.phonetic?.us || props.word?.definition.phonetic?.uk">
           <span
             v-if="props.word?.definition.phonetic?.us"
             class="phonetic-pill"

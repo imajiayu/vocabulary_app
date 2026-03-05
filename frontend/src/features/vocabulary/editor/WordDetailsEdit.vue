@@ -13,26 +13,42 @@
     <div class="field-group">
       <label class="field-label">音标</label>
       <div class="phonetic-edit">
-        <div class="phonetic-input-row">
-          <label class="phonetic-label">美音</label>
-          <input
-            :value="props.editData?.definition?.phonetic?.us ?? ''"
-            @input="updatePhonetic('us', ($event.target as HTMLInputElement).value)"
-            type="text"
-            class="field-input phonetic-input"
-            placeholder="[əkˈseləreɪt]"
-          />
-        </div>
-        <div class="phonetic-input-row">
-          <label class="phonetic-label">英音</label>
-          <input
-            :value="props.editData?.definition?.phonetic?.uk ?? ''"
-            @input="updatePhonetic('uk', ($event.target as HTMLInputElement).value)"
-            type="text"
-            class="field-input phonetic-input"
-            placeholder="[əkˈseləreɪt]"
-          />
-        </div>
+        <!-- 非英语：单一 IPA -->
+        <template v-if="!langConfig.supportsAccentSwitch">
+          <div class="phonetic-input-row">
+            <label class="phonetic-label">IPA</label>
+            <input
+              :value="props.editData?.definition?.phonetic?.ipa ?? ''"
+              @input="updatePhonetic('ipa', ($event.target as HTMLInputElement).value)"
+              type="text"
+              class="field-input phonetic-input"
+              placeholder="/prɪˈʋit/"
+            />
+          </div>
+        </template>
+        <!-- 英语：US/UK -->
+        <template v-else>
+          <div class="phonetic-input-row">
+            <label class="phonetic-label">美音</label>
+            <input
+              :value="props.editData?.definition?.phonetic?.us ?? ''"
+              @input="updatePhonetic('us', ($event.target as HTMLInputElement).value)"
+              type="text"
+              class="field-input phonetic-input"
+              placeholder="[əkˈseləreɪt]"
+            />
+          </div>
+          <div class="phonetic-input-row">
+            <label class="phonetic-label">英音</label>
+            <input
+              :value="props.editData?.definition?.phonetic?.uk ?? ''"
+              @input="updatePhonetic('uk', ($event.target as HTMLInputElement).value)"
+              type="text"
+              class="field-input phonetic-input"
+              placeholder="[əkˈseləreɪt]"
+            />
+          </div>
+        </template>
       </div>
     </div>
 
@@ -100,6 +116,7 @@
 <script setup lang="ts">
 import { X as XIcon } from 'lucide-vue-next';
 import type { Word } from '@/shared/types';
+import { useWordLangConfig } from '@/shared/composables/useWordLangConfig';
 
 interface Props {
   editData?: Word;
@@ -107,6 +124,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:editData']);
+const langConfig = useWordLangConfig(() => props.editData?.source || '');
 
 const addDefinition = () => {
   if (props.editData?.definition) {
@@ -168,7 +186,7 @@ const updateWord = (value: string) => {
   }
 };
 
-const updatePhonetic = (type: 'us' | 'uk', value: string) => {
+const updatePhonetic = (type: 'us' | 'uk' | 'ipa', value: string) => {
   if (props.editData?.definition) {
     const newPhonetic = {
       ...(props.editData.definition.phonetic),
