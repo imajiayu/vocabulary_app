@@ -86,6 +86,16 @@
           <p class="completion-message">
             {{ mode === 'mode_lapse' ? '所有遗忘单词已复习完成' : '当前批次复习完成' }}
           </p>
+          <div v-if="sessionStartTime && sessionEndTime" class="session-time-info">
+            <div class="time-duration">
+              <span class="duration-value">{{ sessionDuration }}</span>
+            </div>
+            <div class="time-range">
+              <span class="time-point">{{ formatTime(sessionStartTime) }}</span>
+              <span class="time-separator">—</span>
+              <span class="time-point">{{ formatTime(sessionEndTime) }}</span>
+            </div>
+          </div>
           <button @click="goHome" class="home-btn">
             <span class="btn-icon">←</span>
             <span class="btn-text">回到首页</span>
@@ -302,6 +312,27 @@ provideReviewContext({
 const loadingText = ref('加载中...')
 const isInitializing = ref(true)
 
+// 会话时间跟踪
+const sessionStartTime = ref<Date | null>(null)
+const sessionEndTime = ref<Date | null>(null)
+
+const formatTime = (date: Date | null): string => {
+  if (!date) return '--:--'
+  return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false })
+}
+
+const sessionDuration = computed(() => {
+  if (!sessionStartTime.value || !sessionEndTime.value) return ''
+  const diffMs = sessionEndTime.value.getTime() - sessionStartTime.value.getTime()
+  const totalSeconds = Math.max(0, Math.floor(diffMs / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  if (hours > 0) return `${hours}小时${minutes}分`
+  if (minutes > 0) return `${minutes}分${seconds}秒`
+  return `${seconds}秒`
+})
+
 useTimerPause()
 
 // 计算属性
@@ -341,6 +372,7 @@ const spellingExtraProps = computed(() => {
 // guard isInitializing：lapse 模式下 reset() 后 queue 为空导致 isCompleted 短暂为 true
 watch(isCompleted, (completed) => {
   if (completed && !isInitializing.value) {
+    sessionEndTime.value = new Date()
     reviewStore.clearSessionProgress()
   }
 })
@@ -396,6 +428,7 @@ const initializeFromRoute = async () => {
 
       if (restored) {
         logger.log('Progress restored successfully')
+        sessionStartTime.value = new Date()
         isInitializing.value = false
         return
       } else {
@@ -421,6 +454,7 @@ const initializeFromRoute = async () => {
       await reviewStore.loadWords(true)
     }
 
+    sessionStartTime.value = new Date()
     isInitializing.value = false
   } catch (error) {
     logger.error('初始化失败:', error)
@@ -720,7 +754,46 @@ onUnmounted(() => {
   font-size: 1rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── 会话时间信息 ── */
+.session-time-info {
+  margin-bottom: 1.75rem;
+}
+
+.time-duration {
+  margin-bottom: 0.625rem;
+}
+
+.duration-value {
+  font-family: var(--font-data);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.time-range {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.time-point {
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.time-separator {
+  font-size: 0.75rem;
+  color: var(--primitive-paper-500);
 }
 
 .home-btn {
@@ -833,7 +906,19 @@ onUnmounted(() => {
 
   .completion-message {
     font-size: 0.9rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .session-time-info {
+    margin-bottom: 1.25rem;
+  }
+
+  .duration-value {
+    font-size: 1.25rem;
+  }
+
+  .time-point {
+    font-size: 0.75rem;
   }
 
   .home-btn {
@@ -869,7 +954,23 @@ onUnmounted(() => {
 
   .completion-message {
     font-size: 0.8rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .session-time-info {
+    margin-bottom: 0.5rem;
+  }
+
+  .time-duration {
+    margin-bottom: 0.375rem;
+  }
+
+  .duration-value {
+    font-size: 1.1rem;
+  }
+
+  .time-point {
+    font-size: 0.7rem;
   }
 
   .home-btn {
