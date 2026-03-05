@@ -275,9 +275,9 @@ export async function preloadMultipleWordAudio(
 export function clearPreloadCache(keepCount: number = 10): void {
   if (preloadCache.size <= keepCount) return
 
-  // 转换为数组并保留最后 keepCount 个
+  // 转换为数组并保留最后 keepCount 个（注意：slice(-0) === slice(0)，需特判）
   const entries = Array.from(preloadCache.entries())
-  const toKeep = entries.slice(-keepCount)
+  const toKeep = keepCount > 0 ? entries.slice(-keepCount) : []
 
   preloadCache.clear()
   toKeep.forEach(([key, audio]) => {
@@ -286,7 +286,8 @@ export function clearPreloadCache(keepCount: number = 10): void {
 
   // 同步清理 TTS blob URL 缓存
   const ttsEntries = Array.from(ttsCache.entries())
-  const ttsKeep = new Set(ttsEntries.slice(-keepCount).map(([k]) => k))
+  const ttsKeepEntries = keepCount > 0 ? ttsEntries.slice(-keepCount) : []
+  const ttsKeep = new Set(ttsKeepEntries.map(([k]) => k))
   for (const [key, url] of ttsEntries) {
     if (!ttsKeep.has(key)) {
       URL.revokeObjectURL(url)
