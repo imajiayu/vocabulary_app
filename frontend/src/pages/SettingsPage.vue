@@ -252,7 +252,7 @@
             <div class="section-title-row">
               <span class="section-icon"><AppIcon name="layers" /></span>
               <h2 class="section-title">词汇来源</h2>
-              <span class="section-badge">{{ localSources.length }}/3</span>
+              <span class="section-badge">{{ sourceCount }}/3</span>
               <span class="auto-save-tag">自动保存</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.sources }]"><AppIcon name="expand" /></span>
@@ -262,23 +262,24 @@
             <!-- 来源列表 -->
             <div class="sources-grid">
               <div
-                v-for="(source, index) in localSources"
-                :key="index"
+                v-for="(lang, name) in localSources"
+                :key="name"
                 class="source-chip"
               >
-                <span class="source-name">{{ source }}</span>
-                <span class="source-count">{{ sourceStats[source] || 0 }}</span>
+                <span class="source-name">{{ name }}</span>
+                <span class="source-lang">{{ lang === 'uk' ? 'УКР' : 'EN' }}</span>
+                <span class="source-count">{{ sourceStats[name] || 0 }}</span>
                 <button
                   class="source-delete"
-                  :disabled="localSources.length <= 1 || isDeleting"
-                  @click="confirmDeleteSource(source)"
+                  :disabled="sourceCount <= 1 || isDeleting"
+                  @click="confirmDeleteSource(name as string)"
                 >
                   ×
                 </button>
               </div>
 
               <!-- 添加新来源 -->
-              <div v-if="localSources.length < 3" class="source-add">
+              <div v-if="sourceCount < 3" class="source-add">
                 <input
                   v-model="newSourceName"
                   type="text"
@@ -286,6 +287,10 @@
                   class="source-input"
                   @keyup.enter="addSource"
                 />
+                <select v-model="newSourceLang" class="source-lang-select">
+                  <option value="en">English</option>
+                  <option value="uk">Українська</option>
+                </select>
               </div>
             </div>
 
@@ -657,7 +662,7 @@ import KeySelector from '@/shared/components/controls/KeySelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'
-import type { UserSettings } from '@/shared/types'
+import type { UserSettings, SourceLang } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
 import { BaseIcon } from '@/shared/components/base'
 import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
@@ -735,7 +740,7 @@ const sections = computed<{ id: string; title: string; icon: IconName; itemCount
   { id: 'learning', title: '学习', icon: 'graduation-cap', itemCount: 4 },
   { id: 'lapse', title: '错题', icon: 'rotate-ccw', itemCount: 1 },
   { id: 'management', title: '管理', icon: 'sliders', itemCount: 2 },
-  { id: 'sources', title: '来源', icon: 'layers', itemCount: localSources.value.length },
+  { id: 'sources', title: '来源', icon: 'layers', itemCount: sourceCount.value },
   { id: 'audio', title: '音频', icon: 'music-note', itemCount: 3 },
   { id: 'hotkeys', title: '快捷键', icon: 'command', itemCount: 11 },
   { id: 'relations', title: '关联', icon: 'git-branch', itemCount: relationStats.value.total },
@@ -789,7 +794,7 @@ const settings = computed<UserSettings>(() =>
       definitionFetchThreads: 3,
     },
     sources: {
-      customSources: ['IELTS', 'GRE'],
+      customSources: { IELTS: 'en', GRE: 'en' },
     },
     audio: {
       accent: 'us',
@@ -819,9 +824,11 @@ const settings = computed<UserSettings>(() =>
 )
 
 // 来源管理
-const localSources = ref<string[]>([])
+const localSources = ref<Record<string, SourceLang>>({})
+const sourceCount = computed(() => Object.keys(localSources.value).length)
 const sourceStats = ref<Record<string, number>>({})
 const newSourceName = ref('')
+const newSourceLang = ref<SourceLang>('en')
 const isDeleting = ref(false)
 
 // 关系统计
@@ -973,21 +980,21 @@ const saveAudioSettings = async () => {
 // 来源管理（自动保存，不受统一保存控制）
 const addSource = async () => {
   const name = newSourceName.value.trim()
-  if (!name || localSources.value.length >= 3 || localSources.value.includes(name)) return
+  const lang = newSourceLang.value
+  if (!name || sourceCount.value >= 3 || name in localSources.value) return
 
   // 乐观更新：先更新本地状态防止快速重复提交
-  localSources.value.push(name)
+  localSources.value[name] = lang
   newSourceName.value = ''
+  newSourceLang.value = 'en'
 
   try {
     await updateSettings({
-      sources: { customSources: [...localSources.value] },
+      sources: { customSources: { ...localSources.value } },
     })
     showToast(`已添加来源"${name}"`)
   } catch (error) {
-    // 回滚本地状态
-    const index = localSources.value.indexOf(name)
-    if (index > -1) localSources.value.splice(index, 1)
+    delete localSources.value[name]
     logger.error('添加来源失败:', error)
     alert('添加失败，请重试')
   }
@@ -1000,10 +1007,7 @@ const confirmDeleteSource = async (source: string) => {
   try {
     isDeleting.value = true
     await api.config.deleteSource(source)
-    const index = localSources.value.indexOf(source)
-    if (index > -1) {
-      localSources.value.splice(index, 1)
-    }
+    delete localSources.value[source]
     await loadSourceStats()
     showToast(`已删除来源"${source}"`)
   } catch (error) {
@@ -1016,7 +1020,7 @@ const confirmDeleteSource = async (source: string) => {
 
 const loadSourceStats = async () => {
   try {
-    sourceStats.value = await api.config.getSourcesStats(localSources.value)
+    sourceStats.value = await api.config.getSourcesStats(Object.keys(localSources.value))
   } catch (error) {
     logger.error('加载来源统计失败:', error)
   }
@@ -1187,7 +1191,7 @@ onMounted(async () => {
 
   // 加载来源
   const settingsData = await api.settings.getSettings()
-  localSources.value = [...(settingsData.sources?.customSources || ['IELTS', 'GRE'])]
+  localSources.value = { ...(settingsData.sources?.customSources || { IELTS: 'en', GRE: 'en' }) }
 
   await Promise.all([loadSourceStats(), loadRelationStats(), initGenerationStatus()])
 })
@@ -1655,6 +1659,17 @@ onUnmounted(() => {
   color: var(--color-text-primary);
 }
 
+.source-lang {
+  font-size: 9px;
+  font-family: var(--font-data);
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-tertiary);
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+}
+
 .source-count {
   font-size: 11px;
   color: var(--color-text-tertiary);
@@ -1688,6 +1703,8 @@ onUnmounted(() => {
 
 .source-add {
   display: flex;
+  gap: 6px;
+  align-items: center;
 }
 
 .source-input {
@@ -1710,6 +1727,24 @@ onUnmounted(() => {
 
 .source-input::placeholder {
   color: var(--color-text-tertiary);
+}
+
+.source-lang-select {
+  padding: 5px 8px;
+  border: 1px dashed var(--color-border-medium);
+  border-radius: var(--radius-full);
+  background: transparent;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.source-lang-select:focus {
+  border-style: solid;
+  border-color: var(--color-primary);
+  background: var(--color-bg-primary);
 }
 
 .source-warning {

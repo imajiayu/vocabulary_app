@@ -8,7 +8,7 @@
 
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
-import type { UserSettings } from '@/shared/types'
+import type { UserSettings, SourceLang } from '@/shared/types'
 
 // 默认配置
 const DEFAULT_CONFIG: UserSettings = {
@@ -25,7 +25,7 @@ const DEFAULT_CONFIG: UserSettings = {
     definitionFetchThreads: 3
   },
   sources: {
-    customSources: ['IELTS', 'GRE']
+    customSources: { IELTS: 'en', GRE: 'en' }
   },
   audio: {
     accent: 'us',
@@ -97,7 +97,7 @@ interface DeleteSourceResponse {
   message: string
   deleted_words: number
   deleted_progress: number
-  remaining_sources: string[]
+  remaining_sources: Record<string, SourceLang>
   error?: string
 }
 
@@ -127,7 +127,15 @@ export class SettingsSupabaseApi {
 
     // 将数据库配置与默认配置合并，确保所有字段存在
     const dbConfig = (data?.config || {}) as Partial<UserSettings>
-    return deepMerge(DEFAULT_CONFIG, dbConfig)
+    const merged = deepMerge(DEFAULT_CONFIG, dbConfig)
+
+    // customSources 是动态键集合，必须整体替换而非递归合并
+    // （deepMerge 会把 DEFAULT 中已被用户删除的 source 复活）
+    if (dbConfig.sources?.customSources) {
+      merged.sources.customSources = dbConfig.sources.customSources
+    }
+
+    return merged
   }
 
   /**
@@ -234,7 +242,7 @@ export class SettingsSupabaseApi {
     }
 
     // 确保所有配置的 source 都有统计（零计数补全）
-    const sources = customSources ?? (await this.getSettings()).sources.customSources
+    const sources = customSources ?? Object.keys((await this.getSettings()).sources.customSources)
     for (const source of sources) {
       if (!(source in stats)) {
         stats[source] = 0

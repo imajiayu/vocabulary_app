@@ -74,7 +74,7 @@ export function useSourceSelection() {
   const loadAvailableSources = async () => {
     try {
       const settings = await api.settings.getSettings()
-      availableSources.value = settings.sources?.customSources || ['IELTS', 'GRE']
+      availableSources.value = Object.keys(settings.sources?.customSources || { IELTS: 'en', GRE: 'en' })
       // 同时缓存 lowEfExtraCount
       cachedLowEfExtraCount = settings.learning?.lowEfExtraCount ?? 30
 
@@ -97,7 +97,7 @@ export function useSourceSelection() {
       }
     } catch (e) {
       logger.error('Failed to load available sources:', e)
-      availableSources.value = ['IELTS', 'GRE']  // 降级到默认值
+      availableSources.value = ['IELTS', 'GRE']
     }
   }
 
@@ -170,7 +170,7 @@ export function useSourceSelectionReadOnly() {
   const initializeFromData = async () => {
     try {
       const settings = await api.settings.getSettings()
-      availableSources.value = settings.sources?.customSources || ['IELTS', 'GRE']
+      availableSources.value = Object.keys(settings.sources?.customSources || { IELTS: 'en', GRE: 'en' })
 
       // 从 sessionStorage 恢复，否则使用第一个可用的 source
       const cachedSource = sessionStorage.getItem('currentSource')

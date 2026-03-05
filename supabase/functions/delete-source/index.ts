@@ -21,7 +21,7 @@ interface DeleteSourceResponse {
   message: string
   deleted_words: number
   deleted_progress: number
-  remaining_sources: string[]
+  remaining_sources: Record<string, string>
 }
 
 Deno.serve(async (req) => {
@@ -74,10 +74,10 @@ Deno.serve(async (req) => {
     }
 
     const config = configData?.config || {}
-    const customSources: string[] = config?.sources?.customSources || ['IELTS', 'GRE']
+    const customSources: Record<string, string> = config?.sources?.customSources || { IELTS: 'en', GRE: 'en' }
 
     // 验证：至少保留 1 个 source
-    if (customSources.length <= 1) {
+    if (Object.keys(customSources).length <= 1) {
       return new Response(
         JSON.stringify({ success: false, error: '至少需要保留1个source' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -85,7 +85,7 @@ Deno.serve(async (req) => {
     }
 
     // 验证：source 存在
-    if (!customSources.includes(sourceName)) {
+    if (!(sourceName in customSources)) {
       return new Response(
         JSON.stringify({ success: false, error: `source '${sourceName}' 不存在` }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -119,7 +119,7 @@ Deno.serve(async (req) => {
     const deletedProgressCount = deletedProgress?.length || 0
 
     // 4. 更新 user_config 中的 customSources
-    const remainingSources = customSources.filter(s => s !== sourceName)
+    const { [sourceName]: _, ...remainingSources } = customSources
     const updatedConfig = {
       ...config,
       sources: {

@@ -2,6 +2,7 @@
  * 配置相关的API接口
  */
 
+import type { SourceLang } from '@/shared/types'
 import { SettingsSupabaseApi } from './settings-supabase'
 
 /**
@@ -23,7 +24,7 @@ export class ConfigApi {
     message: string
     deleted_words: number
     deleted_progress: number
-    remaining_sources: string[]
+    remaining_sources: Record<string, SourceLang>
   }> {
     const result = await SettingsSupabaseApi.deleteSource(sourceName)
     return {

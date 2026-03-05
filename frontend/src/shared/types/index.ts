@@ -206,8 +206,10 @@ export interface HotkeySettings {
   };
 }
 
+export type SourceLang = 'en' | 'uk'
+
 export interface SourcesSettings {
-  customSources: string[];  // 自定义的 source 列表
+  customSources: Record<string, SourceLang>;  // source名 → 语言代码
 }
 
 export interface UserSettings {
