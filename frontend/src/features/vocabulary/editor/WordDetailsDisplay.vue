@@ -4,23 +4,35 @@
     <div class="word-hero">
       <h1 class="word-display">{{ props.word?.word }}</h1>
 
-      <!-- 音标 inline -->
+      <!-- 音标 / 发音 -->
       <div v-if="hasDefinition" class="phonetic-row">
+        <!-- 有音标数据：显示 US/UK（数据驱动） -->
+        <template v-if="props.word?.definition.phonetic?.us || props.word?.definition.phonetic?.uk">
+          <span
+            v-if="props.word?.definition.phonetic?.us"
+            class="phonetic-pill"
+            @click="playWordAudio(props.word.word, 'us', ttsLang)"
+          >
+            <span class="phonetic-flag">US</span>
+            <span class="phonetic-text">{{ props.word.definition.phonetic.us }}</span>
+          </span>
+          <span
+            v-if="props.word?.definition.phonetic?.uk"
+            class="phonetic-pill"
+            @click="playWordAudio(props.word.word, 'uk', ttsLang)"
+          >
+            <span class="phonetic-flag">UK</span>
+            <span class="phonetic-text">{{ props.word.definition.phonetic.uk }}</span>
+          </span>
+        </template>
+        <!-- 无音标数据：单个发音按钮 -->
         <span
-          v-if="props.word?.definition.phonetic?.us"
+          v-else
           class="phonetic-pill"
-          @click="playWordAudio(props.word.word, 'us', ttsLang)"
+          @click="playWordAudio(props.word?.word ?? '', 'us', ttsLang)"
         >
-          <span class="phonetic-flag">US</span>
-          <span class="phonetic-text">{{ props.word.definition.phonetic.us }}</span>
-        </span>
-        <span
-          v-if="props.word?.definition.phonetic?.uk"
-          class="phonetic-pill"
-          @click="playWordAudio(props.word.word, 'uk', ttsLang)"
-        >
-          <span class="phonetic-flag">UK</span>
-          <span class="phonetic-text">{{ props.word.definition.phonetic.uk }}</span>
+          <AppIcon name="volume" class="phonetic-play-icon" />
+          <span class="phonetic-flag">发音</span>
         </span>
       </div>
       <div v-else class="loading-inline">
@@ -72,19 +84,16 @@
 import { computed } from 'vue';
 import type { Word } from '@/shared/types';
 import { playWordAudio } from '@/shared/utils/playWordAudio';
-import { useSettings } from '@/shared/composables/useSettings';
-import { getSourceLangConfig } from '@/shared/config/sourceLanguage';
+import { useWordLangConfig } from '@/shared/composables/useWordLangConfig';
+import AppIcon from '@/shared/components/controls/Icons.vue';
 
 interface Props {
   word?: Word;
 }
 
 const props = defineProps<Props>();
-const { settings: globalSettings } = useSettings();
-const ttsLang = computed(() => {
-  const customSources = globalSettings.value?.sources?.customSources || {};
-  return getSourceLangConfig(props.word?.source || '', customSources).ttsLang;
-});
+const langConfig = useWordLangConfig(() => props.word?.source || '');
+const ttsLang = computed(() => langConfig.value.ttsLang);
 
 const hasDefinition = computed(() => {
   if (!props.word) return false;
@@ -164,6 +173,12 @@ const hasDefinition = computed(() => {
   color: var(--color-text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.phonetic-play-icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--color-text-tertiary);
 }
 
 .phonetic-text {

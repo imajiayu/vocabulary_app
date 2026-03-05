@@ -232,8 +232,7 @@ import KeyHint from '@/shared/components/controls/KeyHint.vue'
 import { playWordAudio, stopWordAudio } from '@/shared/utils/playWordAudio'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
-import { useSettings } from '@/shared/composables/useSettings'
-import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
+import { useWordLangConfig } from '@/shared/composables/useWordLangConfig'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('Spelling')
@@ -258,11 +257,7 @@ const emit = defineEmits<{ skip: [] }>()
 const props = defineProps<Props>()
 
 const { hotkeys, loadHotkeys } = useHotkeys()
-const { settings: globalSettings } = useSettings()
-const langConfig = computed(() => {
-  const customSources = globalSettings.value?.sources?.customSources || {}
-  return getSourceLangConfig(props.word.source || '', customSources)
-})
+const langConfig = useWordLangConfig(() => props.word.source || '')
 
 const reviewStore = useReviewStore()
 const hideStopSpell = computed(() => reviewStore.mode === 'mode_skilled_spelling')

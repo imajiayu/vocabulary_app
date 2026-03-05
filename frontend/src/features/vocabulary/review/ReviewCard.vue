@@ -13,22 +13,30 @@
         <div v-if="showDefinition" class="content-stage">
           <!-- 音标区域 -->
           <div class="phonetics-bar">
-            <div v-if="displayWord.definition?.phonetic" class="phonetics">
+            <!-- 有音标数据：显示 US/UK 音标（数据驱动） -->
+            <div v-if="displayWord.definition?.phonetic?.us || displayWord.definition?.phonetic?.uk" class="phonetics">
               <span
-                v-if="displayWord.definition.phonetic.us"
+                v-if="displayWord.definition?.phonetic?.us"
                 class="phonetic-tag"
                 @click="playWordAudio(displayWord.word, 'us')"
               >
                 <span class="accent">US</span>
-                <span class="ipa">{{ displayWord.definition.phonetic.us }}</span>
+                <span class="ipa">{{ displayWord.definition?.phonetic?.us }}</span>
               </span>
               <span
-                v-if="displayWord.definition.phonetic.uk"
+                v-if="displayWord.definition?.phonetic?.uk"
                 class="phonetic-tag"
                 @click="playWordAudio(displayWord.word, 'uk')"
               >
                 <span class="accent">UK</span>
-                <span class="ipa">{{ displayWord.definition.phonetic.uk }}</span>
+                <span class="ipa">{{ displayWord.definition?.phonetic?.uk }}</span>
+              </span>
+            </div>
+            <!-- 无音标数据：单个发音按钮 -->
+            <div v-else class="phonetics">
+              <span class="phonetic-tag" @click="playAudio">
+                <AppIcon name="volume" class="phonetic-play-icon" />
+                <span class="accent">发音</span>
               </span>
             </div>
             <!-- 装饰线 -->
@@ -199,8 +207,7 @@ import KeyHint from '@/shared/components/controls/KeyHint.vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 import { playWordAudio, stopWordAudio } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
-import { useSettings } from '@/shared/composables/useSettings'
-import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
+import { useWordLangConfig } from '@/shared/composables/useWordLangConfig'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
@@ -246,11 +253,8 @@ const { pauseCount } = useTimerPause()
 
 // 使用全局音频设置
 const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
-const { settings: globalSettings } = useSettings()
-const ttsLang = computed(() => {
-  const customSources = globalSettings.value?.sources?.customSources || {}
-  return getSourceLangConfig(props.word.source || '', customSources).ttsLang
-})
+const langConfig = useWordLangConfig(() => props.word.source || '')
+const ttsLang = computed(() => langConfig.value.ttsLang)
 
 // 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
@@ -589,6 +593,12 @@ onBeforeUnmount(() => {
 .phonetic-tag:hover {
   background: var(--color-bg-tertiary);
   transform: translateY(-1px);
+}
+
+.phonetic-play-icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--color-text-tertiary);
 }
 
 .phonetic-tag .accent {
