@@ -304,7 +304,7 @@ const suggestions = [
 | 2 | 虚拟键盘布局 (1.3) | P0 | ✅ `rows` + `specialChars` props |
 | 3 | 发音音频源 (2.1) | P0 | ✅ Google Cloud TTS (`ttsLang`) |
 | 4 | 释义爬取 (3.1) | P0 | ✅ Edge Function 支持 `lang` 参数，Wiktionary 解析 |
-| 5 | AI 词汇助手 prompt (7.1) | P1 | 未开始 |
+| 5 | AI 词汇助手 prompt (7.1) | P1 | ✅ 按 `lang` 动态选择 prompt |
 | 6 | AudioSettings 类型适配 (2.2, 2.3) | P1 | ✅ 设置页注明"仅英语生效" |
 | 7 | 释义数据结构 (3.2) | P1 | ✅ `phonetic.ipa` + UI 三组件适配 + 编辑表单 |
 | 8 | 释义加粗正则 (4) | P1 | ✅ `\b` → `\p{L}` Unicode 感知边界 |

@@ -1,8 +1,9 @@
 import { ref, nextTick, watch, type Ref } from 'vue'
-import type { Word } from '@/shared/types'
+import type { SourceLang, Word } from '@/shared/types'
 import { api } from '@/shared/api'
 import { formatMarkdown } from '@/shared/utils/markdown'
 import { logger } from '@/shared/utils/logger'
+import { useSettings } from './useSettings'
 
 export interface Message {
   role: 'user' | 'assistant'
@@ -13,6 +14,7 @@ export function useChatMessages(
   currentWord: Ref<Word | null | undefined>,
   _isExpanded: Ref<boolean>
 ) {
+  const { settings, loadSettings } = useSettings()
   const userInput = ref('')
   const messages = ref<Message[]>([])
   const isLoading = ref(false)
@@ -50,10 +52,16 @@ export function useChatMessages(
       const definitions = currentWord.value?.definition?.definitions || []
       const definitionText = definitions.join('; ')
 
+      await loadSettings()
+      const customSources = settings.value?.sources?.customSources || {}
+      const source = currentWord.value?.source || ''
+      const lang: SourceLang = customSources[source] ?? 'en'
+
       const result = await api.vocabularyAssistance.sendMessage({
         message: message,
         word: currentWord.value?.word || '',
-        definition: definitionText || ''
+        definition: definitionText || '',
+        lang,
       })
 
       messages.value.push({
