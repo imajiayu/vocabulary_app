@@ -38,6 +38,7 @@ export interface ReviewModeNotification {
   new_param_value: number
   next_review_date: string
   breakdown: ReviewBreakdown
+  mastered?: boolean
 }
 
 // 拼写模式通知
@@ -48,6 +49,7 @@ export interface SpellingModeNotification {
   new_param_value: number
   next_review_date: string
   breakdown: SpellingBreakdown
+  mastered?: boolean
 }
 
 // 判别联合：根据 param_type 区分两种通知结构

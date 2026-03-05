@@ -95,18 +95,27 @@
 
       <!-- 有数据时显示通知内容 -->
       <Transition name="notification-fade" mode="out-in">
-        <div v-if="notificationData" :key="notificationData.word" class="notification-card" :class="isReviewMode ? 'notif-review' : 'notif-spelling'">
+        <div v-if="notificationData" :key="notificationData.word" class="notification-card" :class="[isReviewMode ? 'notif-review' : 'notif-spelling', { 'notif-mastered': isMastered }]">
           <!-- 单词 -->
           <div class="notif-word">{{ notificationData.word }}</div>
 
+          <!-- 已掌握里程碑 -->
+          <div v-if="isMastered" class="notif-mastered-banner">
+            <span class="mastered-icon"><AppIcon name="graduation-cap" /></span>
+            <span class="mastered-label">已掌握</span>
+          </div>
+          <div v-if="isMastered" class="mastered-desc">
+            {{ isReviewMode ? '复习任务完成，已从队列移除' : '拼写已熟练，已从队列移除' }}
+          </div>
+
           <!-- 参数变化 -->
-          <div class="notif-param">
+          <div v-if="!isMastered" class="notif-param">
             <span class="param-label">{{ paramLabel }}</span>
             <span class="param-change" :class="changeClass">{{ formattedChange }}</span>
           </div>
 
           <!-- 详情网格 -->
-          <div class="notif-details">
+          <div v-if="!isMastered" class="notif-details">
             <div class="detail-item">
               <span class="detail-label">新值</span>
               <span class="detail-value">{{ notificationData.new_param_value.toFixed(2) }}</span>
@@ -368,11 +377,12 @@
         <button
           v-if="notificationData && showNotification && !isLapseMode"
           class="mobile-notif-badge"
-          :class="mobileNotifClass"
+          :class="[mobileNotifClass, { 'badge-mastered': isMastered }]"
           @click="toggleMobileNotif"
         >
           <span class="badge-word">{{ notificationData.word }}</span>
-          <span class="badge-change" :class="changeClass">{{ formattedChange }}</span>
+          <span v-if="isMastered" class="badge-mastered-label">已掌握</span>
+          <span v-else class="badge-change" :class="changeClass">{{ formattedChange }}</span>
         </button>
 
         <!-- AI 助手入口按钮 -->
@@ -390,7 +400,7 @@
       <Teleport to="body">
         <Transition name="mobile-notif-slide">
           <div v-if="isMobileNotifExpanded && notificationData && showNotification && !isLapseMode" class="mobile-notif-overlay" @click.self="closeMobileNotif">
-            <div class="mobile-notif-panel" :class="isReviewMode ? 'notif-review' : 'notif-spelling'">
+            <div class="mobile-notif-panel" :class="[isReviewMode ? 'notif-review' : 'notif-spelling', { 'notif-mastered': isMastered }]">
               <!-- 面板头部 -->
               <div class="mobile-notif-header">
                 <span class="notif-header-word">{{ notificationData.word }}</span>
@@ -402,14 +412,23 @@
                 </button>
               </div>
 
+              <!-- 已掌握里程碑 -->
+              <div v-if="isMastered" class="notif-mastered-banner">
+                <span class="mastered-icon"><AppIcon name="graduation-cap" /></span>
+                <span class="mastered-label">已掌握</span>
+              </div>
+              <div v-if="isMastered" class="mastered-desc">
+                {{ isReviewMode ? '复习任务完成，已从队列移除' : '拼写已熟练，已从队列移除' }}
+              </div>
+
               <!-- 参数变化 -->
-              <div class="mobile-notif-main">
+              <div v-if="!isMastered" class="mobile-notif-main">
                 <span class="notif-param-label">{{ paramLabel }}</span>
                 <span class="notif-param-change" :class="changeClass">{{ formattedChange }}</span>
               </div>
 
               <!-- 详情网格 -->
-              <div class="mobile-notif-details">
+              <div v-if="!isMastered" class="mobile-notif-details">
                 <div class="detail-row">
                   <span class="detail-label">新值</span>
                   <span class="detail-value">{{ notificationData.new_param_value.toFixed(2) }}</span>
@@ -730,6 +749,7 @@ const breakdown = computed(() =>
   props.notificationData?.breakdown as Partial<ReviewBreakdown & SpellingBreakdown> | undefined
 )
 const isReviewMode = computed(() => props.notificationData?.param_type === 'ease_factor')
+const isMastered = computed(() => !!props.notificationData?.mastered)
 
 const paramLabel = computed(() =>
   props.notificationData?.param_type === 'ease_factor' ? '难度系数' : '拼写强度'
@@ -970,6 +990,48 @@ const mobileNotifClass = computed(() => {
 .notif-review { border-top: 3px solid var(--primitive-copper-400); }
 .notif-spelling { border-top: 3px solid var(--primitive-olive-400); }
 .notif-lapse { border-top: 3px solid var(--primitive-brick-400); }
+
+/* 已掌握里程碑 — 复用 notif-forgot 的水平布局模式，金色色调 */
+.notif-mastered {
+  border-top-color: var(--primitive-gold-400);
+}
+
+.notif-mastered-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  background: rgba(255, 215, 122, 0.12);
+  border-radius: var(--radius-sm);
+}
+
+.mastered-icon {
+  display: inline-flex;
+  align-items: center;
+  color: #FFD77A;
+}
+
+.mastered-icon .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.mastered-label {
+  font-size: 0.85rem;
+  color: #FFD77A;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.mastered-desc {
+  font-size: 0.65rem;
+  color: rgba(255, 253, 247, 0.5);
+  text-align: center;
+  line-height: 1.3;
+  margin-top: 0.35rem;
+}
 
 .notif-word {
   font-family: var(--font-serif);
@@ -2270,6 +2332,17 @@ const mobileNotifClass = computed(() => {
 
 .mobile-notif-badge.badge-negative {
   border-color: var(--primitive-brick-300);
+}
+
+.mobile-notif-badge.badge-mastered {
+  border-color: var(--primitive-gold-400);
+}
+
+.badge-mastered-label {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primitive-gold-600);
 }
 
 .badge-word {

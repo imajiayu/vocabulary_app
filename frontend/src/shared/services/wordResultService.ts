@@ -102,6 +102,7 @@ export function calculateReviewResult(
         repetition: srs.repetition,
         interval: srs.interval,
       },
+      mastered: shouldStopReview,
     },
     persistData: {
       word_id: word.id,
@@ -205,6 +206,7 @@ export function calculateSpellingResult(
       new_param_value: roundedNewStrength,
       next_review_date: nextReviewDate,
       breakdown: result.breakdownInfo as SpellingBreakdown,
+      mastered: shouldStopSpell,
     },
     persistData: {
       word_id: word.id,
