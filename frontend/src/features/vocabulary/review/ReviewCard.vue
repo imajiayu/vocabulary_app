@@ -199,6 +199,8 @@ import KeyHint from '@/shared/components/controls/KeyHint.vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 import { playWordAudio, stopWordAudio } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
+import { useSettings } from '@/shared/composables/useSettings'
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useKeyboardManager } from '@/shared/composables/useKeyboardManager'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
@@ -244,6 +246,11 @@ const { pauseCount } = useTimerPause()
 
 // 使用全局音频设置
 const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
+const { settings: globalSettings } = useSettings()
+const ttsLang = computed(() => {
+  const customSources = globalSettings.value?.sources?.customSources || {}
+  return getSourceLangConfig(props.word.source || '', customSources).ttsLang
+})
 
 // 使用全局快捷键设置
 const { hotkeys, loadHotkeys } = useHotkeys()
@@ -259,7 +266,7 @@ const hideSecondaryActions = computed(() =>
 
 // 播放音频
 const playAudio = () => {
-  playWordAudio(props.word.word, audioAccent.value)
+  playWordAudio(props.word.word, audioAccent.value, ttsLang.value)
 }
 
 // 监听全局暂停状态
@@ -404,7 +411,7 @@ watch(() => props.word?.id, (newWordId, oldWordId) => {
     timer.start()
 
     if (autoPlayOnWordChange.value && props.word) {
-      playWordAudio(props.word.word, audioAccent.value)
+      playWordAudio(props.word.word, audioAccent.value, ttsLang.value)
     }
   }
 }, { immediate: false })
@@ -415,7 +422,7 @@ onMounted(async () => {
   timer.start()
 
   if (props.word && autoPlayOnWordChange.value) {
-    playWordAudio(props.word.word, audioAccent.value)
+    playWordAudio(props.word.word, audioAccent.value, ttsLang.value)
   }
 })
 

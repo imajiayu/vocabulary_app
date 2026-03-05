@@ -7,6 +7,8 @@ import type { Word } from '@/shared/types'
 import type { ReviewMode, AudioType } from '../review'
 import { preloadMultipleWordAudio, clearPreloadCache } from '@/shared/utils/playWordAudio'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
+import { useSettings } from '@/shared/composables/useSettings'
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 import { reviewLogger as log } from '@/shared/utils/logger'
 
 export function useAudioPreloader(
@@ -16,6 +18,13 @@ export function useAudioPreloader(
   mode: Ref<ReviewMode>
 ) {
   const { audioAccent } = useAudioAccent()
+  const { settings } = useSettings()
+
+  // 根据单词 source 获取 ttsLang
+  const getTtsLang = (word: Word): string | undefined => {
+    const customSources = settings.value?.sources?.customSources || {}
+    return getSourceLangConfig(word.source || '', customSources).ttsLang
+  }
 
   // 同步 audioType 与全局 audioAccent
   watch(audioAccent, (newAccent) => {
@@ -39,10 +48,12 @@ export function useAudioPreloader(
     if (startIndex >= wordQueue.value.length) return
 
     const endIndex = Math.min(startIndex + preloadCount, wordQueue.value.length)
-    const wordsToPreload = wordQueue.value.slice(startIndex, endIndex).map(w => w.word)
+    const upcoming = wordQueue.value.slice(startIndex, endIndex)
 
-    if (wordsToPreload.length > 0) {
-      preloadMultipleWordAudio(wordsToPreload, accent).catch(err => {
+    if (upcoming.length > 0) {
+      // 取首个单词的 ttsLang（同一批次通常同源；混源时以首个为准）
+      const ttsLang = getTtsLang(upcoming[0])
+      preloadMultipleWordAudio(upcoming.map(w => w.word), accent, ttsLang).catch(err => {
         log.warn('预加载音频失败:', err)
       })
     }

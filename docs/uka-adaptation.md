@@ -8,9 +8,9 @@
 
 **已完成**: `customSources` 已从 `string[]` 改为 `Record<string, string>`（source名 → 语言代码），每个 source 在创建时选择语言（'en' | 'uk'），创建后不可变更。涉及 types、settings-supabase、config、useSourceSelection、SettingsPage、delete-source Edge Function。老用户数据自动迁移。
 
-**下一步**：新增前端配置文件，集中定义每个 source 的语言行为。所有需要语言感知的地方统一从这里取配置，而非散落各处写 `if (source === 'uka')`。
+**已完成**: `frontend/src/shared/config/sourceLanguage.ts` — 集中定义每个语言的行为配置（输入过滤、键盘布局、音频源、功能开关等）。所有语言感知的代码通过 `getSourceLangConfig(source, customSources)` 获取配置。
 
-**新建文件**: `frontend/src/shared/config/sourceLanguage.ts`
+**配置文件**: `frontend/src/shared/config/sourceLanguage.ts`
 
 ```typescript
 export type SourceLang = 'en' | 'uk'
@@ -297,16 +297,16 @@ const suggestions = [
 
 ## 修改优先级
 
-| 序号 | 项目 | 优先级 | 原因 |
+| 序号 | 项目 | 优先级 | 状态 |
 |------|------|--------|------|
-| 0 | 语言配置映射 (0) | P0 | 所有后续改动的基础 |
-| 1 | 拼写输入过滤 (1.1, 1.2) | P0 | 不改则拼写完全无法使用 |
-| 2 | 虚拟键盘布局 (1.3) | P0 | 移动端拼写完全无法使用 |
-| 3 | 发音音频源 (2.1) | P0 | 不改则无发音 |
-| 4 | 释义爬取 (3.1) | P0 | 不改则无释义 |
-| 5 | AI 词汇助手 prompt (7.1) | P1 | 不改则 AI 用英语逻辑回答乌克兰语问题 |
-| 6 | AudioSettings 类型适配 (2.2, 2.3) | P1 | 口音选择对 uka 无意义 |
-| 7 | 释义数据结构 (3.2) | P1 | 与释义爬取配套 |
-| 8 | 释义加粗正则 (4) | P1 | 例句加粗失效 |
-| 9 | Unicode 规范化 (5) | P1 | 潜在数据一致性问题 |
-| 10 | 关系生成 UI 屏蔽 (6) | P2 | 用户可能误触发 |
+| 0 | 语言配置映射 (0) | P0 | ✅ `sourceLanguage.ts` 集中配置 |
+| 1 | 拼写输入过滤 (1.1, 1.2) | P0 | ✅ `inputPattern` / `sanitizePattern` |
+| 2 | 虚拟键盘布局 (1.3) | P0 | ✅ `rows` + `specialChars` props |
+| 3 | 发音音频源 (2.1) | P0 | ✅ Google Cloud TTS (`ttsLang`) |
+| 4 | 释义爬取 (3.1) | P0 | 未开始 |
+| 5 | AI 词汇助手 prompt (7.1) | P1 | 未开始 |
+| 6 | AudioSettings 类型适配 (2.2, 2.3) | P1 | ✅ 设置页注明"仅英语生效" |
+| 7 | 释义数据结构 (3.2) | P1 | 未开始 |
+| 8 | 释义加粗正则 (4) | P1 | 未开始 |
+| 9 | Unicode 规范化 (5) | P1 | 未开始 |
+| 10 | 关系生成 UI 屏蔽 (6) | P2 | ✅ `v-if="supportsRelations"` |

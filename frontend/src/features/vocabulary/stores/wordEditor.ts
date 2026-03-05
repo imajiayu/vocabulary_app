@@ -8,6 +8,7 @@ import { applyBoldToDefinition, stripBoldFromDefinition } from '@/shared/utils/d
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
 import { useSettings } from '@/shared/composables/useSettings'
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 
 const log = logger.create('WordEditor')
 
@@ -80,17 +81,22 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       }
     }
 
-    // 异步加载关联词（不阻塞 modal 打开）
-    loadRelatedWords(word.id)
+    // 异步加载关联词（不阻塞 modal 打开，非英语源跳过）
+    loadRelatedWords(word)
   }
 
   /**
-   * 加载单词的关联词
+   * 加载单词的关联词（非英语源跳过）
    */
-  async function loadRelatedWords(wordId: number) {
+  async function loadRelatedWords(word: Word) {
+    const { settings } = useSettings()
+    const customSources = settings.value?.sources?.customSources || {}
+    const langConfig = getSourceLangConfig(word.source || '', customSources)
+    if (!langConfig.supportsRelations) return
+
     isLoadingRelated.value = true
     try {
-      relatedWords.value = await api.words.getRelatedWordsDirect(wordId)
+      relatedWords.value = await api.words.getRelatedWordsDirect(word.id)
     } catch (error) {
       log.error('加载关联词失败:', error)
       relatedWords.value = []

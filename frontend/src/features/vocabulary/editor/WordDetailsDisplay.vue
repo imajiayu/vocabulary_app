@@ -9,7 +9,7 @@
         <span
           v-if="props.word?.definition.phonetic?.us"
           class="phonetic-pill"
-          @click="playWordAudio(props.word.word, 'us')"
+          @click="playWordAudio(props.word.word, 'us', ttsLang)"
         >
           <span class="phonetic-flag">US</span>
           <span class="phonetic-text">{{ props.word.definition.phonetic.us }}</span>
@@ -17,7 +17,7 @@
         <span
           v-if="props.word?.definition.phonetic?.uk"
           class="phonetic-pill"
-          @click="playWordAudio(props.word.word, 'uk')"
+          @click="playWordAudio(props.word.word, 'uk', ttsLang)"
         >
           <span class="phonetic-flag">UK</span>
           <span class="phonetic-text">{{ props.word.definition.phonetic.uk }}</span>
@@ -72,12 +72,19 @@
 import { computed } from 'vue';
 import type { Word } from '@/shared/types';
 import { playWordAudio } from '@/shared/utils/playWordAudio';
+import { useSettings } from '@/shared/composables/useSettings';
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage';
 
 interface Props {
   word?: Word;
 }
 
 const props = defineProps<Props>();
+const { settings: globalSettings } = useSettings();
+const ttsLang = computed(() => {
+  const customSources = globalSettings.value?.sources?.customSources || {};
+  return getSourceLangConfig(props.word?.source || '', customSources).ttsLang;
+});
 
 const hasDefinition = computed(() => {
   if (!props.word) return false;

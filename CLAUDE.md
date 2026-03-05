@@ -135,6 +135,7 @@ VITE_SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co
 VITE_SUPABASE_ANON_KEY=...
 VITE_DEEPSEEK_API_KEY=...
 VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
+VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 ```
 
 ## 开发规范

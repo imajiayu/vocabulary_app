@@ -86,17 +86,19 @@
       </div>
     </div>
 
-    <!-- 功能键区域（对称：hyphen↔enter, play↔hint, 空格居中） -->
+    <!-- 功能键区域 -->
     <div class="action-row">
       <button
-        class="key action-key hyphen"
+        v-for="ch in extraChars"
+        :key="ch"
+        class="key action-key char-key"
         :disabled="disabled"
-        @pointerdown="onKeyDown($event, '-')"
+        @pointerdown="onKeyDown($event, ch)"
         @pointerup="onKeyUp"
         @pointerleave="onKeyUp"
         @pointercancel="onKeyUp"
       >
-        <span class="key-cap key-symbol">-</span>
+        <span class="key-cap key-symbol">{{ ch }}</span>
       </button>
 
       <button
@@ -154,24 +156,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppIcon from '@/shared/components/controls/Icons.vue'
 
-const ROW_1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'] as const
-const ROW_2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'] as const
-const ROW_3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'] as const
+const DEFAULT_ROWS = [
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L'],
+  ['Z','X','C','V','B','N','M'],
+]
 
 interface Props {
   disabled?: boolean
   forgotDisabled?: boolean
   enterDisabled?: boolean
+  rows?: string[][]
+  specialChars?: string[]
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   forgotDisabled: false,
-  enterDisabled: true
+  enterDisabled: true,
 })
+
+const ROW_1 = computed(() => props.rows?.[0] ?? DEFAULT_ROWS[0])
+const ROW_2 = computed(() => props.rows?.[1] ?? DEFAULT_ROWS[1])
+const ROW_3 = computed(() => props.rows?.[2] ?? DEFAULT_ROWS[2])
+const extraChars = computed(() => props.specialChars ?? ['-'])
 
 const emit = defineEmits<{
   key: [value: string]
@@ -567,9 +578,9 @@ function onKeyUp(event: Event) {
   height: 52px;
 }
 
-/* 连字符键 */
-.action-key.hyphen {
-  width: 52px;
+/* 特殊字符键（连字符、撇号等） */
+.action-key.char-key {
+  width: 44px;
   background: linear-gradient(
     180deg,
     var(--primitive-paper-50) 0%,
@@ -585,7 +596,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(0, 0, 0, 0.06);
 }
 
-.action-key.hyphen.pressed:not(:disabled) {
+.action-key.char-key.pressed:not(:disabled) {
   box-shadow:
     0 0 0 var(--primitive-paper-300),
     0 1px 0 var(--primitive-paper-400),

@@ -316,10 +316,11 @@
 
           <div v-show="expandedSections.audio" class="section-body">
             <div class="settings-grid">
-              <!-- 发音口音 -->
+              <!-- 发音口音（仅英语源生效） -->
               <div class="setting-row setting-row-accent" v-show="matchesSearchItem('accent')">
                 <div class="setting-label-group">
                   <label class="setting-label">单词发音</label>
+                  <span v-if="!currentSourceLang.supportsAccentSwitch" class="setting-hint">仅对英语来源生效</span>
                 </div>
                 <div class="accent-toggle">
                   <button
@@ -481,8 +482,9 @@
           </div>
         </section>
 
-        <!-- 单词关联 -->
+        <!-- 单词关联（仅英语源支持） -->
         <section
+          v-if="supportsRelations"
           v-show="matchesSearch('relations')"
           :id="'section-relations'"
           class="settings-section settings-section--relations"
@@ -663,6 +665,7 @@ import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'
 import type { UserSettings, SourceLang } from '@/shared/types'
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 import { logger } from '@/shared/utils/logger'
 import { BaseIcon } from '@/shared/components/base'
 import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
@@ -743,7 +746,9 @@ const sections = computed<{ id: string; title: string; icon: IconName; itemCount
   { id: 'sources', title: '来源', icon: 'layers', itemCount: sourceCount.value },
   { id: 'audio', title: '音频', icon: 'music-note', itemCount: 3 },
   { id: 'hotkeys', title: '快捷键', icon: 'command', itemCount: 11 },
-  { id: 'relations', title: '关联', icon: 'git-branch', itemCount: relationStats.value.total },
+  ...(supportsRelations.value
+    ? [{ id: 'relations', title: '关联', icon: 'git-branch' as const, itemCount: relationStats.value.total }]
+    : []),
 ])
 
 const filteredSections = computed(() => {
@@ -830,6 +835,13 @@ const sourceStats = ref<Record<string, number>>({})
 const newSourceName = ref('')
 const newSourceLang = ref<SourceLang>('en')
 const isDeleting = ref(false)
+
+// 当前 source 语言配置（mount 时从 sessionStorage 读取一次）
+const currentSourceKey = ref(sessionStorage.getItem('currentSource') || '')
+const currentSourceLang = computed(() => {
+  return getSourceLangConfig(currentSourceKey.value, localSources.value)
+})
+const supportsRelations = computed(() => currentSourceLang.value.supportsRelations)
 
 // 关系统计
 const relationStats = ref({
@@ -1193,7 +1205,11 @@ onMounted(async () => {
   const settingsData = await api.settings.getSettings()
   localSources.value = { ...(settingsData.sources?.customSources || { IELTS: 'en', GRE: 'en' }) }
 
-  await Promise.all([loadSourceStats(), loadRelationStats(), initGenerationStatus()])
+  const tasks: Promise<void>[] = [loadSourceStats()]
+  if (supportsRelations.value) {
+    tasks.push(loadRelationStats(), initGenerationStatus())
+  }
+  await Promise.all(tasks)
 })
 
 onUnmounted(() => {

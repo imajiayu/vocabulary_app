@@ -16,7 +16,7 @@
               class="definition-item"
             >
               <span class="def-number">{{ i + 1 }}</span>
-              <span class="def-content">{{ maskEnglishFor(def, displayPrev.word) }}</span>
+              <span class="def-content">{{ maskWordsFor(def, displayPrev.word) }}</span>
             </div>
           </div>
         </div>
@@ -30,7 +30,7 @@
               class="definition-item"
             >
               <span class="def-number">{{ i + 1 }}</span>
-              <span class="def-content">{{ maskEnglishFor(def, displayCurrent?.word || '') }}</span>
+              <span class="def-content">{{ maskWordsFor(def, displayCurrent?.word || '') }}</span>
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@
               class="definition-item"
             >
               <span class="def-number">{{ i + 1 }}</span>
-              <span class="def-content">{{ maskEnglishFor(def, displayNext.word) }}</span>
+              <span class="def-content">{{ maskWordsFor(def, displayNext.word) }}</span>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
               class="definition-item"
             >
               <span class="def-number">{{ i + 1 }}</span>
-              <span class="def-content">{{ maskEnglishFor(def, displayNextNext.word) }}</span>
+              <span class="def-content">{{ maskWordsFor(def, displayNextNext.word) }}</span>
             </div>
           </div>
         </div>
@@ -97,6 +97,8 @@
         :disabled="isSubmitting"
         :forgot-disabled="isCorrect || isSubmitting"
         :enter-disabled="!canProceed || isSubmitting"
+        :rows="langConfig.keyboardLayout"
+        :special-chars="langConfig.keyboardSpecialChars"
         @key="handleVirtualKey"
         @backspace="handleVirtualBackspace"
         @enter="handleVirtualEnter"
@@ -230,6 +232,8 @@ import KeyHint from '@/shared/components/controls/KeyHint.vue'
 import { playWordAudio, stopWordAudio } from '@/shared/utils/playWordAudio'
 import { useHotkeys } from '@/shared/composables/useHotkeys'
 import { useAudioAccent } from '@/shared/composables/useAudioAccent'
+import { useSettings } from '@/shared/composables/useSettings'
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('Spelling')
@@ -254,6 +258,11 @@ const emit = defineEmits<{ skip: [] }>()
 const props = defineProps<Props>()
 
 const { hotkeys, loadHotkeys } = useHotkeys()
+const { settings: globalSettings } = useSettings()
+const langConfig = computed(() => {
+  const customSources = globalSettings.value?.sources?.customSources || {}
+  return getSourceLangConfig(props.word.source || '', customSources)
+})
 
 const reviewStore = useReviewStore()
 const hideStopSpell = computed(() => reviewStore.mode === 'mode_skilled_spelling')
@@ -335,8 +344,8 @@ function shouldMask(defWord: string, target: string): boolean {
   return false
 }
 
-const maskEnglishFor = (text: string, targetWord: string) =>
-  text.replace(/[a-zA-Z]+/g, (match) =>
+const maskWordsFor = (text: string, targetWord: string) =>
+  text.replace(langConfig.value.wordPattern, (match) =>
     shouldMask(match, targetWord) ? '*'.repeat(match.length) : match
   )
 
@@ -353,7 +362,7 @@ const { audioAccent, loadAudioAccent } = useAudioAccent()
 const handlePlayAudio = async () => {
   if (isSubmitting.value) return
   interactions.value.audioRequestCount++
-  playWordAudio(props.word.word, audioAccent.value)
+  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang)
   await nextTick()
   inputRef.value?.focus()
 }
@@ -444,8 +453,8 @@ const handleKeydown = (event: KeyboardEvent) => {
     return
   }
 
-  // 桌面端只允许英文字母、空格和连字符，其他可打印字符静默忽略
-  if (event.key.length === 1 && !/^[a-zA-Z \-]$/.test(event.key)) {
+  // 桌面端只允许当前语言的合法字符，其他可打印字符静默忽略
+  if (event.key.length === 1 && !langConfig.value.inputPattern.test(event.key)) {
     event.preventDefault()
     return
   }
@@ -582,7 +591,7 @@ const resetState = () => {
 
 const handleResetInput = () => {
   resetState()
-  playWordAudio(props.word.word, audioAccent.value)
+  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang)
   if (!isMobile.value) {
     inputRef.value?.focus()
   }
@@ -590,7 +599,7 @@ const handleResetInput = () => {
 
 // 过滤非法字符（拦截 IME 中文输入、粘贴等绕过 keydown 的情况）
 watch(userInput, (val) => {
-  const filtered = val.replace(/[^a-zA-Z \-]/g, '')
+  const filtered = val.replace(langConfig.value.sanitizePattern, '')
   if (filtered !== val) {
     userInput.value = filtered
   }
@@ -612,7 +621,7 @@ watch(() => props.word, (newWord, oldWord) => {
     }
 
     resetState()
-    playWordAudio(newWord.word, audioAccent.value)
+    playWordAudio(newWord.word, audioAccent.value, langConfig.value.ttsLang)
     if (!isMobile.value) {
       setTimeout(() => inputRef.value?.focus(), 50)
     }
@@ -623,7 +632,7 @@ onMounted(async () => {
   await Promise.all([loadAudioAccent(), loadHotkeys()])
   resetState()
   await nextTick()
-  playWordAudio(props.word.word, audioAccent.value)
+  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang)
   if (isMobile.value && mobileInputAreaRef.value) {
     const h = mobileInputAreaRef.value.offsetHeight
     document.documentElement.style.setProperty('--spelling-input-height', `${h}px`)

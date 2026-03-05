@@ -9,15 +9,22 @@ let playId = 0
 const MAX_PRELOAD_CACHE_SIZE = 30
 const preloadCache = new Map<string, HTMLAudioElement>()
 
+// Google TTS blob URL 缓存（避免重复 API 调用，上限与 preloadCache 一致）
+const MAX_TTS_CACHE_SIZE = 30
+const ttsCache = new Map<string, string>()
+
 /**
- * 播放单词音频（US / UK）
- * 简化逻辑：尝试缓存 → 尝试直接播放 → 静默失败
+ * 播放单词音频
+ * - 英语：有道词典（US / UK 口音）
+ * - 非英语：Google Cloud TTS（通过 ttsLang 指定语言）
  * @param word 单词文本
- * @param region 'us' | 'uk'，默认 'us'
+ * @param region 'us' | 'uk'，仅英语有效
+ * @param ttsLang Google TTS 语言代码（如 'uk-UA'），传入则使用 Google TTS
  */
 export async function playWordAudio(
   word: string,
-  region: 'us' | 'uk' = 'us'
+  region: 'us' | 'uk' = 'us',
+  ttsLang?: string
 ): Promise<void> {
   if (!word) return
 
@@ -33,8 +40,26 @@ export async function playWordAudio(
     prev.currentTime = 0
   }
 
-  const cacheKey = getCacheKey(word, region)
-  const url = buildAudioUrl(word, region)
+  const cacheKey = ttsLang ? `tts_${ttsLang}_${word}` : getCacheKey(word, region)
+
+  // 获取音频 URL（Google TTS 需要异步获取）
+  let url: string
+  if (ttsLang) {
+    const cached = ttsCache.get(cacheKey)
+    if (cached) {
+      url = cached
+    } else {
+      try {
+        url = await fetchGoogleTtsUrl(word, ttsLang)
+        ttsCache.set(cacheKey, url)
+      } catch {
+        return // API 调用失败，静默处理
+      }
+      if (playId !== currentPlayId) return
+    }
+  } else {
+    url = buildYoudaoUrl(word, region)
+  }
 
   // 优先使用预加载的音频
   const cachedAudio = preloadCache.get(cacheKey)
@@ -101,15 +126,42 @@ export function stopWordAudio(): void {
 }
 
 /**
- * 构建音频 URL 的辅助函数
+ * 构建有道词典音频 URL
  */
-function buildAudioUrl(word: string, region: 'us' | 'uk'): string {
+function buildYoudaoUrl(word: string, region: 'us' | 'uk'): string {
   const type = region === 'us' ? 2 : 1
   return `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`
 }
 
 /**
- * 生成缓存键
+ * 调用 Google Cloud TTS API，返回 blob URL
+ */
+async function fetchGoogleTtsUrl(word: string, lang: string): Promise<string> {
+  const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY
+  if (!apiKey) throw new Error('VITE_GOOGLE_TTS_API_KEY not configured')
+  const resp = await fetch(
+    `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: { text: word },
+        voice: { languageCode: lang },
+        audioConfig: { audioEncoding: 'MP3' },
+      }),
+    }
+  )
+  if (!resp.ok) throw new Error(`Google TTS API error: ${resp.status}`)
+  const data = await resp.json()
+  const binary = atob(data.audioContent)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+  const blob = new Blob([bytes], { type: 'audio/mp3' })
+  return URL.createObjectURL(blob)
+}
+
+/**
+ * 生成缓存键（仅有道词典）
  */
 function getCacheKey(word: string, region: 'us' | 'uk'): string {
   return `${word}_${region}`
@@ -118,44 +170,51 @@ function getCacheKey(word: string, region: 'us' | 'uk'): string {
 /**
  * 预加载单词音频
  * @param word 单词文本
- * @param region 'us' | 'uk'，默认 'us'
- * @returns Promise<void>
+ * @param region 'us' | 'uk'，仅英语有效
+ * @param ttsLang Google TTS 语言代码，传入则预加载 Google TTS 音频
  */
 export async function preloadWordAudio(
   word: string,
-  region: 'us' | 'uk' = 'us'
+  region: 'us' | 'uk' = 'us',
+  ttsLang?: string
 ): Promise<void> {
   if (!word) return
 
-  const cacheKey = getCacheKey(word, region)
+  const cacheKey = ttsLang ? `tts_${ttsLang}_${word}` : getCacheKey(word, region)
 
   // 如果已经缓存，直接返回
-  if (preloadCache.has(cacheKey)) {
+  if (preloadCache.has(cacheKey) || (ttsLang && ttsCache.has(cacheKey))) {
     return
   }
 
-  const url = buildAudioUrl(word, region)
-  const audio = new Audio()
+  // Google TTS：预先获取 blob URL 并创建 Audio
+  if (ttsLang) {
+    try {
+      const url = await fetchGoogleTtsUrl(word, ttsLang)
+      ttsCache.set(cacheKey, url)
+      const audio = new Audio(url)
+      audio.preload = 'auto'
+      evictIfNeeded()
+      preloadCache.set(cacheKey, audio)
+    } catch {
+      // 静默处理
+    }
+    return
+  }
 
-  // 设置预加载
+  // 有道词典：直接用 URL 预加载
+  const url = buildYoudaoUrl(word, region)
+  const audio = new Audio()
   audio.preload = 'auto'
   audio.src = url
 
-  // 监听加载完成
   return new Promise<void>((resolve) => {
     let isResolved = false
 
     audio.addEventListener('canplaythrough', () => {
       if (isResolved) return
       isResolved = true
-      // 缓存上限：超出时淘汰最旧的一半
-      if (preloadCache.size >= MAX_PRELOAD_CACHE_SIZE) {
-        const evictCount = Math.floor(MAX_PRELOAD_CACHE_SIZE / 2)
-        const keys = Array.from(preloadCache.keys())
-        for (let i = 0; i < evictCount; i++) {
-          preloadCache.delete(keys[i])
-        }
-      }
+      evictIfNeeded()
       preloadCache.set(cacheKey, audio)
       resolve()
     }, { once: true })
@@ -163,26 +222,50 @@ export async function preloadWordAudio(
     audio.addEventListener('error', () => {
       if (isResolved) return
       isResolved = true
-      // 静默处理预加载失败
-      resolve() // 即使失败也 resolve，不阻塞后续操作
+      resolve()
     }, { once: true })
 
-    // 开始加载
     audio.load()
   })
+}
+
+function evictIfNeeded() {
+  if (preloadCache.size >= MAX_PRELOAD_CACHE_SIZE) {
+    const evictCount = Math.floor(MAX_PRELOAD_CACHE_SIZE / 2)
+    const keys = Array.from(preloadCache.keys())
+    for (let i = 0; i < evictCount; i++) {
+      preloadCache.delete(keys[i])
+    }
+  }
+  evictTtsCacheIfNeeded()
+}
+
+function evictTtsCacheIfNeeded() {
+  if (ttsCache.size >= MAX_TTS_CACHE_SIZE) {
+    const evictCount = Math.floor(MAX_TTS_CACHE_SIZE / 2)
+    const keys = Array.from(ttsCache.keys())
+    for (let i = 0; i < evictCount; i++) {
+      const url = ttsCache.get(keys[i])
+      if (url) URL.revokeObjectURL(url)
+      ttsCache.delete(keys[i])
+      preloadCache.delete(keys[i])
+    }
+  }
 }
 
 /**
  * 批量预加载多个单词的音频（真正并行）
  * @param words 单词列表
- * @param region 'us' | 'uk'，默认 'us'
+ * @param region 'us' | 'uk'，仅英语有效
+ * @param ttsLang Google TTS 语言代码
  */
 export async function preloadMultipleWordAudio(
   words: string[],
-  region: 'us' | 'uk' = 'us'
+  region: 'us' | 'uk' = 'us',
+  ttsLang?: string
 ): Promise<void> {
   if (words.length === 0) return
-  await Promise.all(words.map(word => preloadWordAudio(word, region)))
+  await Promise.all(words.map(word => preloadWordAudio(word, region, ttsLang)))
 }
 
 /**
@@ -200,6 +283,16 @@ export function clearPreloadCache(keepCount: number = 10): void {
   toKeep.forEach(([key, audio]) => {
     preloadCache.set(key, audio)
   })
+
+  // 同步清理 TTS blob URL 缓存
+  const ttsEntries = Array.from(ttsCache.entries())
+  const ttsKeep = new Set(ttsEntries.slice(-keepCount).map(([k]) => k))
+  for (const [key, url] of ttsEntries) {
+    if (!ttsKeep.has(key)) {
+      URL.revokeObjectURL(url)
+      ttsCache.delete(key)
+    }
+  }
 }
 
 /**
