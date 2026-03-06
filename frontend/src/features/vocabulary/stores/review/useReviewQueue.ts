@@ -82,7 +82,7 @@ export function useReviewQueue() {
     }
 
     try {
-      if (!currentSource.value) {
+      if (resetQueue || !currentSource.value) {
         await initializeSource()
       }
 
