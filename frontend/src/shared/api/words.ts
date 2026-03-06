@@ -8,6 +8,7 @@ import { applyBoldToDefinition } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
 import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord, SourceLang } from '@/shared/types'
+import { normalizeWordText } from '@/shared/config/sourceLanguage'
 import { paginateSupabase } from './pagination'
 import { throwIfError } from './errors'
 
@@ -232,13 +233,14 @@ export class WordsApi {
    * 检查同一 user_id 下是否已存在相同单词（排除指定 ID）
    * 唯一约束不限定 source，同一用户的单词全局唯一
    */
-  static async checkWordExistsDirect(word: string, excludeId: number): Promise<boolean> {
+  static async checkWordExistsDirect(word: string, excludeId: number, lang?: SourceLang): Promise<boolean> {
     const userId = getCurrentUserId()
+    const normalized = lang ? normalizeWordText(word, lang) : word.normalize('NFC').trim().toLowerCase()
     const { count, error } = await supabase
       .from('words')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
-      .eq('word', word.normalize('NFC').trim().toLowerCase())
+      .eq('word', normalized)
       .neq('id', excludeId)
 
     throwIfError(error, '检查单词重复失败')
@@ -442,9 +444,9 @@ export class WordsApi {
    * 创建新单词
    * @param lbParams 可选负荷均衡参数，传入时会将 next_review 分散到未来
    */
-  static async createWordDirect(wordText: string, source: string, lbParams?: ImportLoadBalanceParams): Promise<Word> {
+  static async createWordDirect(wordText: string, source: string, lbParams?: ImportLoadBalanceParams, lang?: SourceLang): Promise<Word> {
     const userId = getCurrentUserId()
-    const word = wordText.normalize('NFC').trim().toLowerCase()
+    const word = lang ? normalizeWordText(wordText, lang) : wordText.normalize('NFC').trim().toLowerCase()
     const today = new Date().toISOString().split('T')[0]
 
     let nextReview = today
@@ -487,13 +489,16 @@ export class WordsApi {
    * 批量导入单词（单次 upsert）
    * @param lbParams 可选负荷均衡参数，传入时会将 next_review 分散到未来
    */
-  static async batchImportWordsDirect(words: string[], source: string, lbParams?: ImportLoadBalanceParams): Promise<BatchImportResult> {
+  static async batchImportWordsDirect(words: string[], source: string, lbParams?: ImportLoadBalanceParams, lang?: SourceLang): Promise<BatchImportResult> {
     const userId = getCurrentUserId()
     const today = new Date().toISOString().split('T')[0]
 
-    // 标准化 + 去重
+    // 标准化 + 去重（含语言特定字符规范化，如乌克兰语 ' → ʼ）
+    const normalize = lang
+      ? (w: string) => normalizeWordText(w, lang)
+      : (w: string) => w.normalize('NFC').trim().toLowerCase()
     const uniqueWords = [...new Set(
-      words.map(w => w.normalize('NFC').trim().toLowerCase()).filter(w => w.length > 0)
+      words.map(normalize).filter(w => w.length > 0)
     )]
 
     const rows = uniqueWords.map(word => {

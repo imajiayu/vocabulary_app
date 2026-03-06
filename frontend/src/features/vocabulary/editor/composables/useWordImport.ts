@@ -1,5 +1,5 @@
 import { ref, type Ref } from 'vue'
-import type { Word } from '@/shared/types'
+import type { Word, SourceLang } from '@/shared/types'
 import { api } from '@/shared/api'
 import type { ImportLoadBalanceParams } from '@/shared/api'
 import { handleWordInsertError } from '@/shared/utils/errorHandler'
@@ -15,10 +15,12 @@ const FOCUS_DELAY_MS = 50             // 提交后聚焦输入框的延迟
  * 获取导入用的负荷均衡参数
  * 构造 [todayDueCount, ...futureLoads] 数组，供 findOptimalDay 使用
  */
-async function getImportLoadBalanceParams(source: string): Promise<ImportLoadBalanceParams> {
+async function getImportLoadBalanceParams(source: string): Promise<ImportLoadBalanceParams & { lang: SourceLang }> {
   const settings = await api.settings.getSettings()
   const dailyLimit = settings.learning?.dailyReviewLimit ?? 50
   const maxPrepDays = settings.learning?.maxPrepDays ?? 90
+  const customSources = settings.sources?.customSources as Record<string, SourceLang> | undefined
+  const lang: SourceLang = customSources?.[source] ?? 'en'
 
   const [todayDue, futureLoads] = await Promise.all([
     api.words.getTodayDueCountDirect(source),
@@ -27,7 +29,8 @@ async function getImportLoadBalanceParams(source: string): Promise<ImportLoadBal
 
   return {
     dailyLimit,
-    loadsWithToday: [todayDue, ...futureLoads]
+    loadsWithToday: [todayDue, ...futureLoads],
+    lang,
   }
 }
 
@@ -75,8 +78,8 @@ export function useWordImport(
     message.value = { type: '', text: '' }
 
     try {
-      const lbParams = await getImportLoadBalanceParams(source.value)
-      const newWord = await api.words.createWordDirect(word.value, source.value, lbParams)
+      const { lang, ...lbParams } = await getImportLoadBalanceParams(source.value)
+      const newWord = await api.words.createWordDirect(word.value, source.value, lbParams, lang)
 
       emit('wordInserted', newWord)
       word.value = ''
@@ -128,8 +131,8 @@ export function useWordImport(
         return
       }
 
-      const lbParams = await getImportLoadBalanceParams(source.value)
-      const result = await api.words.batchImportWordsDirect(words, source.value, lbParams)
+      const { lang, ...lbParams } = await getImportLoadBalanceParams(source.value)
+      const result = await api.words.batchImportWordsDirect(words, source.value, lbParams, lang)
 
       let displayMsg = `批量导入完成：成功 ${result.success_count}，失败 ${result.failed_count}`
 

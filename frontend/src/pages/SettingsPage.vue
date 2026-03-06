@@ -837,9 +837,11 @@ const newSourceLang = ref<SourceLang>('en')
 const isDeleting = ref(false)
 
 // 当前 source 语言配置（mount 时从 sessionStorage 读取一次）
+// 若 sessionStorage 无值（直接访问设置页），回落到第一个已有源
 const currentSourceKey = ref(sessionStorage.getItem('currentSource') || '')
 const currentSourceLang = computed(() => {
-  return getSourceLangConfig(currentSourceKey.value, localSources.value)
+  const key = currentSourceKey.value || Object.keys(localSources.value)[0] || ''
+  return getSourceLangConfig(key, localSources.value)
 })
 const supportsRelations = computed(() => currentSourceLang.value.supportsRelations)
 

@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, shallowRef, computed, watch } from 'vue'
 import { api } from '@/shared/api'
-import type { Word, RelatedWord } from '@/shared/types'
+import type { Word, RelatedWord, SourceLang } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
 import { applyBoldToDefinition, stripBoldFromDefinition } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
@@ -170,8 +170,15 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       const wordTextSnapshot = currentWord.value.word
 
       try {
-        const checker = duplicateChecker.value ?? api.words.checkWordExistsDirect
-        const exists = await checker(wordTextSnapshot, wordId)
+        let exists: boolean
+        if (duplicateChecker.value) {
+          exists = await duplicateChecker.value(wordTextSnapshot, wordId)
+        } else {
+          const { settings } = useSettings()
+          const customSources = settings.value?.sources?.customSources as Record<string, SourceLang> | undefined
+          const lang: SourceLang = customSources?.[currentWord.value?.source || ''] ?? 'en'
+          exists = await api.words.checkWordExistsDirect(wordTextSnapshot, wordId, lang)
+        }
 
         // 防止竞态：检测期间用户已修改 word 文本，watcher 已重置为 idle
         if (duplicateCheckState.value !== 'checking') return false

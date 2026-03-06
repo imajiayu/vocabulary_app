@@ -106,7 +106,8 @@ import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue';
 import LoadAdjustmentModal from '@/features/vocabulary/editor/LoadAdjustmentModal.vue';
 import Loading from '@/shared/components/feedback/Loading.vue'
 import PageLayout from '@/shared/components/layout/PageLayout.vue';
-import type { Word } from '@/shared/types';
+import type { Word, SourceLang } from '@/shared/types';
+import { normalizeWordText } from '@/shared/config/sourceLanguage';
 import { useWordStats } from '@/shared/composables/useWordStats';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
 import { api } from '@/shared/api';
@@ -144,7 +145,7 @@ const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引�
 const loadAdjustmentRef = ref<InstanceType<typeof LoadAdjustmentModal>>(); // 负荷调整组件引用
 
 // 使用全局设置管理
-const { loadSettings } = useSettings();
+const { settings, loadSettings } = useSettings();
 
 // 分批加载相关状态
 const batchSize = ref(200); // 每批加载单词数量，从settings读取
@@ -300,14 +301,16 @@ const handleShowDetail = (word: Word) => {
     wordEditorStore.open(word);
 
     // 注册重复检测器：本地已全部加载时走内存查找，否则走 Supabase 查询
+    const customSources = settings.value?.sources?.customSources as Record<string, SourceLang> | undefined
+    const lang: SourceLang = customSources?.[word.source || ''] ?? 'en'
     wordEditorStore.setDuplicateChecker(async (wordText, excludeId) => {
-        const normalized = wordText.trim().toLowerCase()
+        const normalized = normalizeWordText(wordText, lang)
         if (!hasMoreWords.value) {
             return words.value.some(w =>
-                w.id !== excludeId && w.word.trim().toLowerCase() === normalized
+                w.id !== excludeId && w.word.normalize('NFC').toLowerCase() === normalized
             )
         }
-        return api.words.checkWordExistsDirect(wordText, excludeId)
+        return api.words.checkWordExistsDirect(wordText, excludeId, lang)
     });
 
     // 注册回调：模态框关闭时更新列表

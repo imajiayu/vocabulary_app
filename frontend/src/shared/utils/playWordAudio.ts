@@ -234,6 +234,12 @@ function evictIfNeeded() {
     const evictCount = Math.floor(MAX_PRELOAD_CACHE_SIZE / 2)
     const keys = Array.from(preloadCache.keys())
     for (let i = 0; i < evictCount; i++) {
+      // 若该条目是 TTS blob URL，同步 revoke 防止内存泄漏
+      const ttsUrl = ttsCache.get(keys[i])
+      if (ttsUrl) {
+        URL.revokeObjectURL(ttsUrl)
+        ttsCache.delete(keys[i])
+      }
       preloadCache.delete(keys[i])
     }
   }

@@ -140,15 +140,15 @@ const filteredWords = computed(() => {
         if (props.filterStatus === 'remembered' && !isRemembered) return false;
         if (props.filterStatus === 'unremembered' && isRemembered) return false;
 
-        // 搜索过滤
+        // 搜索过滤（NFC 规范化确保 Unicode 字符一致匹配）
         if (props.searchQuery) {
-            const query = props.searchQuery.trim().toLowerCase();
+            const query = props.searchQuery.normalize('NFC').trim().toLowerCase();
             const isChinese = /[\u4e00-\u9fa5]/.test(query);
 
             if (isChinese) {
                 return word.definition.definitions?.join('\n').includes(query);
             } else {
-                return word.word.toLowerCase().includes(query);
+                return word.word.normalize('NFC').toLowerCase().includes(query);
             }
         }
         return true;

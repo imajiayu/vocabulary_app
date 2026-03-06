@@ -593,10 +593,14 @@ const handleResetInput = () => {
 }
 
 // 过滤非法字符（拦截 IME 中文输入、粘贴等绕过 keydown 的情况）
+// 同时规范化同形字符（如乌克兰语 ' U+0027 → ʼ U+02BC）
 watch(userInput, (val) => {
-  const filtered = val.replace(langConfig.value.sanitizePattern, '')
-  if (filtered !== val) {
-    userInput.value = filtered
+  let result = val.replace(langConfig.value.sanitizePattern, '')
+  if (langConfig.value.normalizeInput) {
+    result = langConfig.value.normalizeInput(result)
+  }
+  if (result !== val) {
+    userInput.value = result
   }
 })
 

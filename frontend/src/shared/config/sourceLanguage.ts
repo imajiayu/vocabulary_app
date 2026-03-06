@@ -10,6 +10,8 @@ export interface SourceLanguageConfig {
   supportsRelations: boolean
   supportsAccentSwitch: boolean
   ttsLang?: string
+  /** 输入规范化：统一同形字符（如乌克兰语 ' → ʼ） */
+  normalizeInput?: (text: string) => string
 }
 
 const EN_CONFIG: SourceLanguageConfig = {
@@ -32,6 +34,7 @@ const UK_CONFIG: SourceLanguageConfig = {
   inputPattern: /^[а-яА-ЯіІїЇєЄґҐʼ' \-]$/,
   sanitizePattern: /[^а-яА-ЯіІїЇєЄґҐʼ' \-]/g,
   wordPattern: /[а-яіїєґʼ']+/gi,
+  normalizeInput: (text: string) => text.replace(/'/g, 'ʼ'),
   keyboardLayout: [
     ['Й','Ц','У','К','Е','Н','Г','Ш','Щ','З','Х','Ї'],
     ['Ф','І','В','А','П','Р','О','Л','Д','Ж','Є'],
@@ -58,4 +61,14 @@ export function getSourceLangConfig(
 ): SourceLanguageConfig {
   const lang = customSources[source] ?? 'en'
   return getLangConfig(lang)
+}
+
+/** 标准化单词文本：NFC + 语言特定字符规范化 + trim + toLowerCase */
+export function normalizeWordText(text: string, lang: SourceLang): string {
+  let result = text.normalize('NFC')
+  const config = getLangConfig(lang)
+  if (config.normalizeInput) {
+    result = config.normalizeInput(result)
+  }
+  return result.trim().toLowerCase()
 }

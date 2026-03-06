@@ -17,31 +17,31 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginPage,
-    meta: { title: 'IELTS 登录', public: true }
+    meta: { title: '登录', public: true }
   },
   {
     path: '/',
     name: 'index',
     component: HomePage,
-    meta: { title: 'IELTS 首页', depth: 0 }
+    meta: { title: '词汇学习', depth: 0 }
   },
   {
     path: '/stats',
     name: 'stats',
     component: StatisticsPage,
-    meta: { title: 'IELTS 单词统计', depth: 1 }
+    meta: { title: '单词统计', depth: 1 }
   },
   {
     path: '/management',
     name: 'management',
     component: VocabularyManagementPage,
-    meta: { title: 'IELTS 单词管理', depth: 1 }
+    meta: { title: '单词管理', depth: 1 }
   },
   {
     path: '/review',
     name: 'review',
     component: ReviewPage,
-    meta: { title: 'IELTS 单词复习', depth: 1 },
+    meta: { title: '单词复习', depth: 1 },
     props: (route: RouteLocationNormalized) => ({
       mode: route.query.mode || 'mode_review',
       shuffle: route.query.shuffle === 'true',
@@ -52,19 +52,19 @@ const routes = [
     path: '/speaking',
     name: 'speaking',
     component: SpeakingPage,
-    meta: { title: 'IELTS 口语练习', depth: 1 }
+    meta: { title: '口语练习', depth: 1 }
   },
   {
     path: '/writing',
     name: 'writing',
     component: WritingPage,
-    meta: { title: 'IELTS 写作练习', depth: 1 }
+    meta: { title: '写作练习', depth: 1 }
   },
   {
     path: '/settings',
     name: 'settings',
     component: SettingsPage,
-    meta: { title: 'IELTS 设置', depth: 1 }
+    meta: { title: '设置', depth: 1 }
   }
 ]
 
@@ -94,7 +94,7 @@ router.beforeEach(async (to, _from, next) => {
       next({ name: 'index' })
     }
   } else {
-    document.title = (to.meta.title as string) || 'IELTS'
+    document.title = (to.meta.title as string) || '词汇学习'
     next()
   }
 })
