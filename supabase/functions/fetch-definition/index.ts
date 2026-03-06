@@ -101,15 +101,8 @@ async function fetchFromYoudao(word: string): Promise<DefinitionResult> {
 // Wiktionary (Ukrainian / non-English)
 // ═══════════════════════════════════════════════════════════════════
 
-/**
- * 从英语 Wiktionary 获取乌克兰语单词的释义
- *
- * 流程：
- * 1. 调用 MediaWiki parse API 获取页面渲染 HTML
- * 2. 按 <h2> 切分语言段落，定位 Ukrainian 段落
- * 3. 提取 IPA 音标、释义列表、用例
- */
-async function fetchFromWiktionary(word: string, langSection: string): Promise<DefinitionResult> {
+/** 调用 Wiktionary parse API，返回页面 HTML；找不到时返回 null */
+async function wiktionaryParse(word: string): Promise<string | null> {
   const apiUrl = `https://en.wiktionary.org/w/api.php?` +
     `action=parse&page=${encodeURIComponent(word)}&format=json&prop=text&redirects=1`
 
@@ -126,13 +119,24 @@ async function fetchFromWiktionary(word: string, langSection: string): Promise<D
     clearTimeout(timeoutId)
   }
 
+  if (!response.ok) return null
   const json = await response.json()
-  if (json.error) {
-    throw new Error(json.error.info || '未找到 Wiktionary 词条')
-  }
+  if (json.error) return null
+  return json.parse?.text?.['*'] || null
+}
 
-  const fullHtml: string = json.parse?.text?.['*']
-  if (!fullHtml) throw new Error('无法获取页面内容')
+async function fetchFromWiktionary(word: string, langSection: string): Promise<DefinitionResult> {
+  // Wiktionary 页面标题使用 ASCII 撇号 (U+0027)，
+  // 但前端存储使用 ʼ (U+02BC, MODIFIER LETTER APOSTROPHE)，需要转换
+  const lookupWord = word.replace(/\u02BC/g, "'")
+
+  // 先用原始形式查询，失败则尝试首字母大写（专有名词如 Ілля）
+  let fullHtml = await wiktionaryParse(lookupWord)
+  if (!fullHtml && lookupWord[0] !== lookupWord[0].toUpperCase()) {
+    const capitalized = lookupWord[0].toUpperCase() + lookupWord.slice(1)
+    fullHtml = await wiktionaryParse(capitalized)
+  }
+  if (!fullHtml) throw new Error('未找到 Wiktionary 词条')
 
   // 按 <h2> 切分语言段落，定位目标语言段
   const sectionHtml = extractLanguageSection(fullHtml, langSection)

@@ -77,6 +77,19 @@
                         </div>
                     </div>
 
+                    <!-- 释义获取失败摘要 -->
+                    <div v-if="defProgress.showFailureSummary.value" class="failure-summary">
+                        <div class="failure-header">
+                            <span class="failure-text">
+                                {{ defProgress.failedWords.value.length }} 个单词释义获取失败
+                            </span>
+                            <button class="failure-dismiss" @click="defProgress.dismiss()">✕</button>
+                        </div>
+                        <div class="failure-words">
+                            {{ defProgress.failedWords.value.join('、') }}
+                        </div>
+                    </div>
+
                     <WordGrid
                         ref="wordGridRef"
                         :words="words"
@@ -362,10 +375,10 @@ const handleWordInserted = async (word: Word) => {
             wordEditorStore.updateCurrentWord(updatedWord);
         }
     } catch (error) {
-        defProgress.incrementFailed();
+        defProgress.incrementFailed(word.word);
         logger.error('Failed to fetch definition for new word:', error);
     } finally {
-        defProgress.reset();
+        defProgress.finish();
     }
 };
 
@@ -404,10 +417,10 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
             }
             return updatedWord;
         } catch {
-            defProgress.incrementFailed();
+            defProgress.incrementFailed(word.word);
         }
     }, threads);
-    defProgress.reset();
+    defProgress.finish();
 };
 
 // 修复释义：找出 definition 为空的单词并批量获取
@@ -444,10 +457,10 @@ const handleFixDefinitions = async () => {
             }
             return updatedWord;
         } catch {
-            defProgress.incrementFailed();
+            defProgress.incrementFailed(word.word);
         }
     }, threads);
-    defProgress.reset();
+    defProgress.finish();
 };
 
 const handleBatchDelete = (wordIds: number[]) => {
@@ -538,6 +551,51 @@ onUnmounted(() => {
 }
 
 /* spin animation defined in animations.css */
+
+/* 释义获取失败摘要 */
+.failure-summary {
+    padding: var(--space-4);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.failure-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+}
+
+.failure-text {
+    font-family: var(--font-ui);
+    font-size: var(--font-size-sm);
+    color: var(--color-danger);
+    font-weight: var(--font-weight-medium);
+}
+
+.failure-dismiss {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-xs);
+    line-height: 1;
+}
+
+.failure-dismiss:hover {
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
+}
+
+.failure-words {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    word-break: break-word;
+}
 
 /* 移动端适配 */
 @media (max-width: 768px) {

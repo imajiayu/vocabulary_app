@@ -9,6 +9,7 @@ import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
 import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord, SourceLang } from '@/shared/types'
 import { normalizeWordText } from '@/shared/config/sourceLanguage'
+import { fetchDefinitionFromAI } from '@/shared/services/definition-ai'
 import { paginateSupabase } from './pagination'
 import { throwIfError } from './errors'
 
@@ -197,17 +198,31 @@ export class WordsApi {
       resolvedLang = customSources?.[source] || 'en'
     }
 
-    // 2. 调用 Edge Function 爬取释义
+    // 2. 调用 Edge Function 爬取释义，失败时对非英语单词回退到 AI
+    let rawDefinition: DefinitionObject
+
     const { data, error: fnError } = await supabase.functions.invoke('fetch-definition', {
       body: { word: wordText, lang: resolvedLang },
     })
 
     if (fnError || !data?.success) {
-      throw new Error(data?.error || fnError?.message || '获取释义失败')
+      // 非英语单词：尝试 AI 回退
+      if (resolvedLang !== 'en') {
+        try {
+          rawDefinition = await fetchDefinitionFromAI(wordText, resolvedLang)
+        } catch {
+          // AI 也失败，抛出原始 Wiktionary 错误
+          throw new Error(data?.error || fnError?.message || '获取释义失败')
+        }
+      } else {
+        throw new Error(data?.error || fnError?.message || '获取释义失败')
+      }
+    } else {
+      rawDefinition = data.definition as DefinitionObject
     }
 
     // 3. 加粗例句
-    const definition = applyBoldToDefinition(data.definition as DefinitionObject, wordText)
+    const definition = applyBoldToDefinition(rawDefinition, wordText)
 
     // 4. 写入 DB 并返回更新后的行
     const definitionStr = JSON.stringify(definition)
