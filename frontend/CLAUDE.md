@@ -127,7 +127,7 @@ src/
 - Paper（纸张）— 背景色系
 
 **字体**：
-- Serif: Crimson Pro（正文/标题）
+- Serif: Lora（正文/标题，支持 Latin + Cyrillic）
 - Sans: Inter（UI 控件）
 - Mono: JetBrains Mono（数据/代码）
 

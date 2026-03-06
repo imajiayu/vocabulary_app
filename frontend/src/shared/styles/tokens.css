@@ -339,7 +339,7 @@
      ═══════════════════════════════════════════════════════════════════════════ */
 
   /* ── 字体栈 ── */
-  --font-serif: 'Crimson Pro', 'Noto Serif SC', Georgia, serif;
+  --font-serif: 'Lora', 'Noto Serif SC', Georgia, serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
