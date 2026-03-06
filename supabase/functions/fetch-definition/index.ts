@@ -136,7 +136,14 @@ async function fetchFromWiktionary(word: string, langSection: string): Promise<D
 
   // 按 <h2> 切分语言段落，定位目标语言段
   const sectionHtml = extractLanguageSection(fullHtml, langSection)
-  if (!sectionHtml) throw new Error(`未找到 ${langSection} 语言段落`)
+  if (!sectionHtml) {
+    // 诊断信息：帮助定位解析失败原因
+    const h2Count = (fullHtml.match(/<h2[\s>]/gi) || []).length
+    const hasId = fullHtml.includes(`id="${langSection}"`)
+    throw new Error(
+      `未找到 ${langSection} 语言段落 (h2=${h2Count}, hasId=${hasId}, len=${fullHtml.length})`
+    )
+  }
 
   const doc = new DOMParser().parseFromString(`<div>${sectionHtml}</div>`, 'text/html')
   if (!doc) throw new Error('无法解析段落 HTML')
@@ -265,9 +272,11 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Error in fetch-definition:', error)
+    // 返回 200 + success:false，而非 500
+    // 因为 supabase.functions.invoke() 遇到非 2xx 时不解析响应体，前端会丢失错误信息
     return new Response(
       JSON.stringify({ success: false, error: error.message || '服务器错误' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
 })
