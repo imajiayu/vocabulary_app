@@ -92,33 +92,7 @@ Deno.serve(async (req) => {
       )
     }
 
-    // 2. 删除 words 表中该 source 的记录
-    const { data: deletedWords, error: wordsError } = await supabase
-      .from('words')
-      .delete()
-      .eq('user_id', userId)
-      .eq('source', sourceName)
-      .select('id')
-
-    if (wordsError) {
-      throw new Error(`删除单词失败: ${wordsError.message}`)
-    }
-    const deletedWordsCount = deletedWords?.length || 0
-
-    // 3. 删除 current_progress 表中该 source 的记录
-    const { data: deletedProgress, error: progressError } = await supabase
-      .from('current_progress')
-      .delete()
-      .eq('user_id', userId)
-      .eq('source', sourceName)
-      .select('id')
-
-    if (progressError) {
-      throw new Error(`删除进度失败: ${progressError.message}`)
-    }
-    const deletedProgressCount = deletedProgress?.length || 0
-
-    // 4. 更新 user_config 中的 customSources
+    // 2. 先更新 user_config（从 source 列表移除），即使后续删除失败也不会 UI 残留
     const { [sourceName]: _, ...remainingSources } = customSources
     const updatedConfig = {
       ...config,
@@ -136,6 +110,32 @@ Deno.serve(async (req) => {
     if (updateError) {
       throw new Error(`更新配置失败: ${updateError.message}`)
     }
+
+    // 3. 删除 words 表中该 source 的记录
+    const { data: deletedWords, error: wordsError } = await supabase
+      .from('words')
+      .delete()
+      .eq('user_id', userId)
+      .eq('source', sourceName)
+      .select('id')
+
+    if (wordsError) {
+      throw new Error(`删除单词失败: ${wordsError.message}`)
+    }
+    const deletedWordsCount = deletedWords?.length || 0
+
+    // 4. 删除 current_progress 表中该 source 的记录
+    const { data: deletedProgress, error: progressError } = await supabase
+      .from('current_progress')
+      .delete()
+      .eq('user_id', userId)
+      .eq('source', sourceName)
+      .select('id')
+
+    if (progressError) {
+      throw new Error(`删除进度失败: ${progressError.message}`)
+    }
+    const deletedProgressCount = deletedProgress?.length || 0
 
     const response: DeleteSourceResponse = {
       success: true,

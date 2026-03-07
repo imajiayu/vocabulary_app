@@ -6,6 +6,7 @@
 """
 import atexit
 import logging
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from threading import Event, Lock, Thread
@@ -47,6 +48,7 @@ class GenerationTask:
     found: int = 0
     saved: int = 0              # 已成功写入数据库的关系对数
     skipped: int = 0            # 因已生成过该类型关系而跳过的单词数
+    save_errors: int = 0        # 保存失败的批次数
     error: Optional[str] = None
     started_at: datetime = field(default_factory=datetime.now)
 
@@ -62,6 +64,11 @@ class GenerationTask:
         with self._lock:
             self.saved += count
 
+    def add_save_error(self):
+        """线程安全地累加保存失败计数"""
+        with self._lock:
+            self.save_errors += 1
+
     def snapshot(self) -> dict:
         """线程安全地获取状态快照"""
         with self._lock:
@@ -72,6 +79,7 @@ class GenerationTask:
                 "found": self.found,
                 "saved": self.saved,
                 "skipped": self.skipped,
+                "save_errors": self.save_errors,
                 "error": self.error,
             }
 
@@ -203,9 +211,26 @@ class GenerationService:
                 task.update_progress(processed, total, found)
 
             def on_save(relations: List[Dict], logs: List[Dict]):
-                self._save_batch(relations, logs, user_id)
-                # 关系双向存储，每对 2 条记录；saved 与 found 同单位（对数）
-                task.add_saved(len(relations) // 2)
+                max_retries = 3
+                for attempt in range(max_retries):
+                    try:
+                        self._save_batch(relations, logs, user_id)
+                        task.add_saved(len(relations) // 2)
+                        return
+                    except Exception as e:
+                        if attempt < max_retries - 1:
+                            wait = 2 ** attempt
+                            logger.warning(
+                                f"Save batch failed (attempt {attempt + 1}/{max_retries}), "
+                                f"retrying in {wait}s: {e}"
+                            )
+                            time.sleep(wait)
+                        else:
+                            logger.error(
+                                f"Save batch failed after {max_retries} attempts, "
+                                f"skipping {len(relations)} relations: {e}"
+                            )
+                            task.add_save_error()
 
             # 3. 创建生成器
             generator_cls = GENERATOR_MAP[relation_type]

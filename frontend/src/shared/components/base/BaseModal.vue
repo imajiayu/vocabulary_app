@@ -57,6 +57,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+import { lockScroll, unlockScroll } from '@/shared/utils/scrollLock'
 
 interface Props {
   modelValue: boolean
@@ -87,12 +88,12 @@ const close = () => {
   emit('close')
 }
 
-// 锁定滚动
+// 锁定滚动（引用计数，支持嵌套 Modal）
 watch(() => props.modelValue, (open) => {
   if (open) {
-    document.body.style.overflow = 'hidden'
+    lockScroll()
   } else {
-    document.body.style.overflow = ''
+    unlockScroll()
   }
 })
 
@@ -109,8 +110,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEsc)
-  // 确保卸载时恢复滚动
-  document.body.style.overflow = ''
+  if (props.modelValue) {
+    unlockScroll()
+  }
 })
 
 // 暴露关闭方法

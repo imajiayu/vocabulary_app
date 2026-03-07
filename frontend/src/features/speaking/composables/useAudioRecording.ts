@@ -173,6 +173,10 @@ export const useAudioRecording = () => {
   }
 
   const resetRecording = () => {
+    const recorder = context.value.mediaRecorder
+    if (recorder && recorder.state !== 'inactive') {
+      recorder.stop()
+    }
     context.value.mediaRecorder = null
     context.value.audioChunks = []
     context.value.recordingTime = 0

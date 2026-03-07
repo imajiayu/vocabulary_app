@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { speakingLogger } from '@/shared/utils/logger'
 
 const props = defineProps<{
@@ -71,16 +71,28 @@ const getBarHeight = (index: number) => {
   return 30 + Math.sin(seed) * 25 + Math.cos(seed * 0.5) * 20
 }
 
-const audioSrc = computed(() => {
-  if (!props.audioFile) return ''
+const audioSrc = ref('')
 
-  if (typeof props.audioFile === 'string') {
-    return props.audioFile
-  } else if (props.audioFile instanceof File) {
-    return URL.createObjectURL(props.audioFile)
+watchEffect((onCleanup) => {
+  const file = props.audioFile
+  if (!file) {
+    audioSrc.value = ''
+    return
   }
 
-  return ''
+  if (typeof file === 'string') {
+    audioSrc.value = file
+    return
+  }
+
+  if (file instanceof File) {
+    const blobUrl = URL.createObjectURL(file)
+    audioSrc.value = blobUrl
+    onCleanup(() => URL.revokeObjectURL(blobUrl))
+    return
+  }
+
+  audioSrc.value = ''
 })
 
 const progressPercent = computed(() => {
@@ -190,11 +202,6 @@ watch(() => audioElement.value, (audio) => {
   }
 })
 
-onUnmounted(() => {
-  if (props.audioFile instanceof File && audioSrc.value) {
-    URL.revokeObjectURL(audioSrc.value)
-  }
-})
 </script>
 
 <style scoped>

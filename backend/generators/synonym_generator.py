@@ -6,7 +6,7 @@
 """
 from typing import Callable, Dict, List, Optional, Set, Tuple
 from functools import lru_cache
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from threading import Event
 import os
 
@@ -135,10 +135,14 @@ class SynonymGenerator(BaseGenerator):
             batches.append((batch_indices, words_with_synsets, self.semantic_threshold))
 
         with ProcessPoolExecutor(max_workers=n_workers) as executor:
-            results = list(executor.map(_compute_similarity_batch, batches))
+            futures = [executor.submit(_compute_similarity_batch, b) for b in batches]
 
-        for batch_result in results:
-            similar_pairs.update(batch_result)
+            for future in as_completed(futures):
+                if self._is_stopped():
+                    for f in futures:
+                        f.cancel()
+                    break
+                similar_pairs.update(future.result())
 
         return similar_pairs
 
