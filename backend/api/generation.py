@@ -70,7 +70,7 @@ def stream_progress():
     def event_stream():
         MAX_IDLE_SECONDS = 300  # 5 分钟无变化则断开
         prev_status = {}
-        idle_seconds = 0
+        last_change = time.monotonic()
 
         while True:
             current = generation_service.get_status_for_user(user_id)
@@ -82,7 +82,7 @@ def stream_progress():
                     changed[rt] = status
 
             if changed:
-                idle_seconds = 0  # 有变化，重置空闲计时
+                last_change = time.monotonic()
 
                 # 检查终态事件
                 for rt, status in changed.items():
@@ -97,13 +97,10 @@ def stream_progress():
                 }
                 if running:
                     yield f"event: progress\ndata: {json.dumps(running)}\n\n"
-            else:
-                idle_seconds += 0.5
-
             prev_status = current
 
             # 超时断开：客户端断开后 while True 循环继续运行
-            if idle_seconds >= MAX_IDLE_SECONDS:
+            if time.monotonic() - last_change >= MAX_IDLE_SECONDS:
                 yield f"event: done\ndata: {json.dumps({'message': 'idle timeout'})}\n\n"
                 break
 

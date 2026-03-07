@@ -150,7 +150,6 @@ onMounted(() => {
   ro = new ResizeObserver(() => {
     if (chart) {
       chart.resize()
-      render()
     }
   })
   if (elRef.value) ro.observe(elRef.value)

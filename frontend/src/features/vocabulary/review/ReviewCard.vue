@@ -395,9 +395,13 @@ watch(showDefinition, () => {
 const onRevealEnter = (el: Element, done: () => void) => {
   const htmlEl = el as HTMLElement
   // 移动端使用更短的动画时间
-  const duration = isMobile.value ? '0.3s' : '0.6s'
-  htmlEl.style.animation = `contentReveal ${duration} cubic-bezier(0.22, 1, 0.36, 1) forwards`
-  htmlEl.addEventListener('animationend', done, { once: true })
+  const durationMs = isMobile.value ? 300 : 600
+  htmlEl.style.animation = `contentReveal ${durationMs}ms cubic-bezier(0.22, 1, 0.36, 1) forwards`
+  const fallback = setTimeout(done, durationMs + 100)
+  htmlEl.addEventListener('animationend', () => {
+    clearTimeout(fallback)
+    done()
+  }, { once: true })
 }
 
 const onRevealLeave = (_el: Element, done: () => void) => {

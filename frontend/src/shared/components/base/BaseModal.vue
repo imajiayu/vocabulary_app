@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { lockScroll, unlockScroll } from '@/shared/utils/scrollLock'
 
 interface Props {
@@ -80,7 +80,7 @@ const emit = defineEmits<{
   'close': []
 }>()
 
-const titleId = computed(() => `modal-title-${Math.random().toString(36).slice(2, 9)}`)
+const titleId = `modal-title-${Math.random().toString(36).slice(2, 9)}`
 const modalRef = ref<HTMLElement | null>(null)
 
 const close = () => {

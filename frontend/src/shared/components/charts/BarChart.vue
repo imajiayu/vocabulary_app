@@ -82,8 +82,6 @@ onMounted(() => {
   ro = new ResizeObserver(() => {
     if (chart) {
       chart.resize()
-      // 重新渲染以调整柱子宽度
-      render()
     }
   })
   if (elRef.value) ro.observe(elRef.value)
