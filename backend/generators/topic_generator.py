@@ -75,6 +75,10 @@ class TopicGenerator(BaseGenerator):
 
         for topic_idx, (topic, topic_word_list) in enumerate(self.topic_words.items()):
             if self._is_stopped():
+                # 为 remaining_topics 中剩余的词补记 log
+                for wid in list(remaining_topics.keys()):
+                    self._add_log(wid, word_found_counts.get(wid, 0))
+                del remaining_topics
                 break
 
             topic_found = 0

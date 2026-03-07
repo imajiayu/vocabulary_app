@@ -165,6 +165,7 @@ class SynonymGenerator(BaseGenerator):
 
         total_found = 0
         skipped_existing = 0
+        phase1_found_counts: Dict[int, int] = {}
 
         # Phase 1: WordNet 直接同义词
         for i, word_data in enumerate(unprocessed):
@@ -186,6 +187,7 @@ class SynonymGenerator(BaseGenerator):
                     else:
                         skipped_existing += 1
 
+            phase1_found_counts[word_id] = found_count
             self._add_log(word_id, found_count)
             self._flush()
             self._report_progress(i + 1, len(unprocessed), total_found)
@@ -195,12 +197,19 @@ class SynonymGenerator(BaseGenerator):
         if not self._is_stopped():
             semantic_pairs = self._compute_semantic_similarities(unprocessed)
 
+            semantic_counts: Dict[int, int] = {}
             for (w1_id, w2_id), confidence in semantic_pairs.items():
                 if self._add_relation(w1_id, w2_id, confidence, existing_relations):
                     semantic_found += 1
                     total_found += 1
+                    semantic_counts[w1_id] = semantic_counts.get(w1_id, 0) + 1
+                    semantic_counts[w2_id] = semantic_counts.get(w2_id, 0) + 1
                 else:
                     skipped_existing += 1
+
+            # 更新有语义新增关系的词的 log found_count
+            for wid, sem_count in semantic_counts.items():
+                self._add_log(wid, phase1_found_counts.get(wid, 0) + sem_count)
 
         # 刷入剩余缓冲区
         self._flush(force=True)
