@@ -27,6 +27,7 @@ export function useReviewQueue() {
   const totalWords = ref(0)
   const initialOffset = ref(0)
   const allWordIds = shallowRef<number[]>([])
+  let loadGeneration = 0
 
   const settings = ref({
     queueThreshold: QUEUE_THRESHOLD,
@@ -73,7 +74,17 @@ export function useReviewQueue() {
     graduatedWordsRef?: { value: Word[] }
   ): Promise<void> => {
     if (resetQueue) cancelPendingIndex()
-    if (isLoading.value || isBackgroundLoading.value) return
+
+    if (resetQueue) {
+      // resetQueue 时强制中断进行中的加载
+      loadGeneration++
+      isLoading.value = false
+      isBackgroundLoading.value = false
+    } else if (isLoading.value || isBackgroundLoading.value) {
+      return
+    }
+
+    const myGeneration = loadGeneration
 
     if (silent) {
       isBackgroundLoading.value = true
@@ -174,11 +185,14 @@ export function useReviewQueue() {
       }
 
     } catch (error) {
+      if (myGeneration !== loadGeneration) return
       log.error('Failed to load words:', error)
       throw error
     } finally {
-      isLoading.value = false
-      isBackgroundLoading.value = false
+      if (myGeneration === loadGeneration) {
+        isLoading.value = false
+        isBackgroundLoading.value = false
+      }
     }
   }
 

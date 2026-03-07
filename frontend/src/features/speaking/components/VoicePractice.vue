@@ -346,7 +346,9 @@ watch(
 )
 
 // 组件卸载时清理资源
+let isMounted = true
 onUnmounted(() => {
+  isMounted = false
   handleIdleEntry()
 })
 
@@ -465,6 +467,7 @@ const processTranscriptionAndAnalysis = async (): Promise<void> => {
       speakingLogger.log('Google Cloud STT 转录中...')
       const durationSeconds = audioRecording.context.value.recordingTime
       const result = await transcribeAudio(audioFile, durationSeconds)
+      if (!isMounted) return
       if (result.success) {
         transcriptText = result.text
       } else {
@@ -484,6 +487,7 @@ const processTranscriptionAndAnalysis = async (): Promise<void> => {
     emit('temporaryRecord', { ...machine.value.context.record })
 
     const feedback = await getAIFeedback(transcriptText)
+    if (!isMounted) return
     // 用分隔符合并两部分存入 ai_feedback
     machine.value.context.record.ai_feedback = feedback.chineseFeedback && feedback.improvedEnglish
       ? `${feedback.chineseFeedback}\n---\n${feedback.improvedEnglish}`
@@ -493,6 +497,7 @@ const processTranscriptionAndAnalysis = async (): Promise<void> => {
     emit('temporaryRecord', { ...machine.value.context.record })
     transition('ANALYSIS_SUCCESS')
   } catch (error) {
+    if (!isMounted) return
     speakingLogger.error('处理错误:', error)
     machine.value.context.error = '处理失败，请重试'
     transition('ANALYSIS_ERROR')
