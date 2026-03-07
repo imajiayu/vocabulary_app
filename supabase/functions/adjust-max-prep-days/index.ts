@@ -53,9 +53,9 @@ Deno.serve(async (req) => {
     const body: AdjustRequest = await req.json()
     const { maxPrepDays } = body
 
-    if (typeof maxPrepDays !== 'number' || maxPrepDays < 1) {
+    if (!Number.isInteger(maxPrepDays) || maxPrepDays < 1 || maxPrepDays > 365) {
       return new Response(
-        JSON.stringify({ success: false, error: 'maxPrepDays 必须是正整数' }),
+        JSON.stringify({ success: false, error: 'maxPrepDays 必须是 1-365 之间的整数' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }

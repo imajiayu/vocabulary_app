@@ -36,11 +36,13 @@ async function fetchFromYoudao(word: string): Promise<DefinitionResult> {
       headers: { 'User-Agent': 'Mozilla/5.0' },
       signal: controller.signal,
     })
-  } finally {
+  } catch (e) {
     clearTimeout(timeoutId)
+    throw e
   }
 
   const html = await response.text()
+  clearTimeout(timeoutId)
   const doc = new DOMParser().parseFromString(html, 'text/html')
   if (!doc) throw new Error('无法解析 HTML')
 
@@ -115,12 +117,17 @@ async function wiktionaryParse(word: string): Promise<string | null> {
       headers: { 'User-Agent': 'Mozilla/5.0' },
       signal: controller.signal,
     })
-  } finally {
+  } catch (e) {
     clearTimeout(timeoutId)
+    throw e
   }
 
-  if (!response.ok) return null
+  if (!response.ok) {
+    clearTimeout(timeoutId)
+    return null
+  }
   const json = await response.json()
+  clearTimeout(timeoutId)
   if (json.error) return null
   return json.parse?.text?.['*'] || null
 }

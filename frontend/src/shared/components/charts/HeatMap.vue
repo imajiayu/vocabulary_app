@@ -27,6 +27,18 @@ let chart: ECharts | null = null
 let ro: ResizeObserver | null = null
 let io: IntersectionObserver | null = null
 const isVisible = ref(false)
+let isDestroyed = false
+const pendingTimers: ReturnType<typeof setTimeout>[] = []
+
+const safeTimeout = (fn: () => void, delay: number) => {
+  if (isDestroyed) return
+  const id = setTimeout(() => {
+    const idx = pendingTimers.indexOf(id)
+    if (idx !== -1) pendingTimers.splice(idx, 1)
+    if (!isDestroyed) fn()
+  }, delay)
+  pendingTimers.push(id)
+}
 
 // 固定的方块尺寸配置
 const DESKTOP_CELL_SIZE = 10   // 桌面端正方形边长
@@ -130,7 +142,7 @@ const renderChart = () => {
     const containerHeight = elRef.value.clientHeight
     if (containerWidth === 0 || containerHeight === 0) {
       // 容器尚无尺寸，延迟重试
-      setTimeout(() => renderChart(), 100)
+      safeTimeout(() => renderChart(), 100)
       return
     }
 
@@ -138,7 +150,7 @@ const renderChart = () => {
       chart = init(elRef.value)
     } catch (error) {
       logger.warn('ECharts初始化失败，重试中...', error)
-      setTimeout(() => renderChart(), 100)
+      safeTimeout(() => renderChart(), 100)
       return
     }
   }
@@ -259,7 +271,7 @@ const renderChart = () => {
     } else {
       logger.warn('ECharts实例不可用，重新初始化')
       chart = null
-      setTimeout(() => renderChart(), 150)
+      safeTimeout(() => renderChart(), 150)
     }
   } catch (error) {
     logger.warn('设置ECharts选项失败:', error, {
@@ -270,7 +282,7 @@ const renderChart = () => {
     // 尝试重新初始化
     chart?.dispose()
     chart = null
-    setTimeout(() => renderChart(), 200)
+    safeTimeout(() => renderChart(), 200)
   }
 }
 
@@ -313,7 +325,7 @@ onMounted(() => {
 
   // ResizeObserver
   ro = new ResizeObserver(() => {
-    setTimeout(() => {
+    safeTimeout(() => {
       doRender()
     }, 50)
   })
@@ -321,7 +333,7 @@ onMounted(() => {
   ro.observe(elRef.value)
 
   // 延迟启动 IntersectionObserver，避免初始化时立即触发
-  setTimeout(() => {
+  safeTimeout(() => {
     if (!elRef.value) return
 
     // 设置Intersection Observer监控可见性（仅用于性能优化）
@@ -336,6 +348,9 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  isDestroyed = true
+  for (const id of pendingTimers) clearTimeout(id)
+  pendingTimers.length = 0
   chart?.dispose()
   chart = null
   ro?.disconnect()
