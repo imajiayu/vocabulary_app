@@ -63,6 +63,7 @@ import { computed, watch, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import { useSettings } from '@/shared/composables/useSettings'
+import { addDays, getUtcToday } from '@/shared/utils/date'
 
 const reviewStore = useReviewStore()
 const { mode, notification, reviewLoadsCache, spellLoadsCache } = storeToRefs(reviewStore)
@@ -89,14 +90,14 @@ const days = computed(() => {
   const cache = loadsCache.value
   if (!cache) return []
 
-  const today = new Date()
+  const todayStr = getUtcToday()
   return cache.map((load, i) => {
-    const date = new Date(today)
-    date.setDate(date.getDate() + i + 1)
+    const dateStr = addDays(todayStr, i + 1)
+    const [, m, d] = dateStr.split('-').map(Number)
     let label: string
     if (i === 0) label = '明天'
     else if (i === 1) label = '后天'
-    else label = `${date.getMonth() + 1}/${date.getDate()}`
+    else label = `${m}/${d}`
 
     return { load, label }
   })
@@ -142,11 +143,12 @@ watch(
 
     // Calculate target day index from next_review_date
     // 不能用 breakdown.interval，因为负荷均衡后 scheduledDay 可能与 interval 不同
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    const next = new Date(data.next_review_date)
-    next.setHours(0, 0, 0, 0)
-    const dayIndex = Math.round((next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) - 1
+    const todayStr = getUtcToday()
+    const [ty, tm, td] = todayStr.split('-').map(Number)
+    const todayMs = Date.UTC(ty, tm - 1, td)
+    const [ny, nm, nd] = data.next_review_date.split('-').map(Number)
+    const nextMs = Date.UTC(ny, nm - 1, nd)
+    const dayIndex = Math.round((nextMs - todayMs) / 86400000) - 1
 
     const cacheLen = loadsCache.value?.length ?? 0
     if (dayIndex < 0 || dayIndex >= cacheLen) return

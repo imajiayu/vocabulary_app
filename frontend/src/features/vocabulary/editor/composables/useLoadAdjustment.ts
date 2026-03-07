@@ -18,6 +18,7 @@ import { WordsApi } from '@/shared/api/words'
 import type { WordScheduleData } from '@/shared/api/words'
 import { useSettings } from '@/shared/composables/useSettings'
 import { logger } from '@/shared/utils/logger'
+import { addDays, getUtcToday } from '@/shared/utils/date'
 
 const log = logger.create('LoadAdjustment')
 
@@ -52,26 +53,9 @@ type TabType = 'review' | 'spell'
 
 const WEEKDAY_NAMES = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 
-function toDateString(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
-
-function addDaysToDate(dateStr: string, days: number): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  d.setDate(d.getDate() + days)
-  return toDateString(d)
-}
-
 function getWeekday(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  return WEEKDAY_NAMES[d.getDay()]
-}
-
-function getToday(): string {
-  return toDateString(new Date())
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return WEEKDAY_NAMES[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]
 }
 
 // ============================================================================
@@ -83,13 +67,13 @@ function buildBuckets(
   tab: TabType,
   daysAhead: number
 ): DayBucket[] {
-  const today = getToday()
+  const today = getUtcToday()
 
   // 生成连续日期桶（今天 + daysAhead 天）
   const bucketMap = new Map<string, BucketWord[]>()
   const dateList: string[] = []
   for (let i = 0; i <= daysAhead; i++) {
-    const date = addDaysToDate(today, i)
+    const date = addDays(today, i)
     dateList.push(date)
     bucketMap.set(date, [])
   }
@@ -277,7 +261,7 @@ function computeChanges(
   buckets: DayBucket[],
   tab: TabType
 ): ScheduleChange[] {
-  const today = getToday()
+  const today = getUtcToday()
 
   // 构建 wordId → 当前桶日期 的映射
   const newDateMap = new Map<number, string>()

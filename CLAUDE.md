@@ -144,6 +144,7 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 - 前端日志使用 `logger.ts`，生产环境自动禁用
 - 组件通信：浅层用 Props/Emit，深层用 Context，跨模块用 Pinia
 - 样式优先使用 CSS 变量
+- **时区规范**：全栈统一使用 UTC 日期。前端用 `getUtcToday()`（`shared/utils/date.ts`），DB 函数用 `CURRENT_DATE`（Supabase 默认 UTC）。禁止使用 `getFullYear()/getMonth()/getDate()` 等本地时间方法处理业务日期。
 
 ## 核心算法（前端 TypeScript）
 
