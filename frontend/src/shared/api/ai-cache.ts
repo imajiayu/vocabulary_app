@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/shared/config/supabase'
+import { getCurrentUserId } from '@/shared/composables/useAuth'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('AiCacheApi')
@@ -91,7 +92,7 @@ export class AiCacheApi {
     const { error } = await supabase
       .from('ai_prompt_cache')
       .upsert(
-        { word: normalized, prompt_type: promptType, response },
+        { word: normalized, prompt_type: promptType, response, created_by: getCurrentUserId() },
         { onConflict: 'word,prompt_type', ignoreDuplicates: true }
       )
 
