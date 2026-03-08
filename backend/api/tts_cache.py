@@ -56,6 +56,7 @@ def save_tts_audio():
         try:
             with os.fdopen(fd, "wb") as f:
                 f.write(audio_bytes)
+            os.chmod(tmp_path, 0o644)
             os.rename(tmp_path, file_path)
         except BaseException:
             if os.path.exists(tmp_path):
