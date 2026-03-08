@@ -277,7 +277,7 @@ const hideSecondaryActions = computed(() =>
 
 // 播放音频
 const playAudio = () => {
-  playWordAudio(props.word.word, audioAccent.value, ttsLang.value)
+  playWordAudio(props.word.word, audioAccent.value, ttsLang.value, props.word.source)
 }
 
 // 监听全局暂停状态
@@ -426,7 +426,7 @@ watch(() => props.word?.id, (newWordId, oldWordId) => {
     timer.start()
 
     if (autoPlayOnWordChange.value && props.word) {
-      playWordAudio(props.word.word, audioAccent.value, ttsLang.value)
+      playWordAudio(props.word.word, audioAccent.value, ttsLang.value, props.word.source)
     }
   }
 }, { immediate: false })
@@ -437,7 +437,7 @@ onMounted(async () => {
   timer.start()
 
   if (props.word && autoPlayOnWordChange.value) {
-    playWordAudio(props.word.word, audioAccent.value, ttsLang.value)
+    playWordAudio(props.word.word, audioAccent.value, ttsLang.value, props.word.source)
   }
 })
 

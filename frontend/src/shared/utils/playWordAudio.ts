@@ -1,5 +1,8 @@
 // src/utils/playWordAudio.ts
 
+import { supabase } from '@/shared/config/supabase'
+import { API_BASE_URL } from '@/shared/config/env'
+
 let currentAudio: HTMLAudioElement | null = null
 
 // 播放版本号：用于解决竞态条件，确保只有最新的播放请求能真正播放
@@ -9,7 +12,7 @@ let playId = 0
 const MAX_PRELOAD_CACHE_SIZE = 30
 const preloadCache = new Map<string, HTMLAudioElement>()
 
-// Google TTS blob URL 缓存（避免重复 API 调用，上限与 preloadCache 一致）
+// Google TTS URL 缓存（避免重复 API 调用 / HEAD 请求，上限与 preloadCache 一致）
 const MAX_TTS_CACHE_SIZE = 30
 const ttsCache = new Map<string, string>()
 
@@ -20,11 +23,13 @@ const ttsCache = new Map<string, string>()
  * @param word 单词文本
  * @param region 'us' | 'uk'，仅英语有效
  * @param ttsLang Google TTS 语言代码（如 'uk-UA'），传入则使用 Google TTS
+ * @param source 单词来源（用于服务器缓存路径）
  */
 export async function playWordAudio(
   word: string,
   region: 'us' | 'uk' = 'us',
-  ttsLang?: string
+  ttsLang?: string,
+  source?: string
 ): Promise<void> {
   if (!word) return
 
@@ -50,7 +55,7 @@ export async function playWordAudio(
       url = cached
     } else {
       try {
-        url = await fetchGoogleTtsUrl(word, ttsLang)
+        url = await fetchGoogleTtsUrl(word, ttsLang, source)
         ttsCache.set(cacheKey, url)
       } catch {
         return // API 调用失败，静默处理
@@ -134,9 +139,88 @@ function buildYoudaoUrl(word: string, region: 'us' | 'uk'): string {
 }
 
 /**
- * 调用 Google Cloud TTS API，返回 blob URL
+ * 计算单词的 SHA-256 哈希（与后端 hashlib.sha256 一致）
  */
-async function fetchGoogleTtsUrl(word: string, lang: string): Promise<string> {
+async function sha256Hex(text: string): Promise<string> {
+  const data = new TextEncoder().encode(text)
+  const hash = await crypto.subtle.digest('SHA-256', data)
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
+/**
+ * 构建服务器 TTS 缓存 URL（用 SHA-256 哈希做文件名，避免编码不一致问题）
+ */
+async function buildTtsCacheUrl(word: string, source: string): Promise<string> {
+  const hash = await sha256Hex(word)
+  return `${window.location.origin}/tts-cache/${encodeURIComponent(source)}/${hash}.mp3`
+}
+
+/**
+ * 上传音频到服务器缓存（fire-and-forget）
+ */
+function uploadTtsCache(word: string, source: string, audioBase64: string): void {
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!session?.access_token) return
+    fetch(`${API_BASE_URL}/api/tts/cache`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ word, source, audio: audioBase64 }),
+    }).catch(() => {})
+  })
+}
+
+/**
+ * 删除指定单词的 TTS 缓存（fire-and-forget）
+ */
+export function deleteTtsCache(words: string[], source: string): void {
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!session?.access_token) return
+    fetch(`${API_BASE_URL}/api/tts/cache`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ source, words }),
+    }).catch(() => {})
+  })
+}
+
+/**
+ * 删除整个 source 目录的 TTS 缓存（fire-and-forget）
+ */
+export function deleteTtsCacheSource(source: string): void {
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!session?.access_token) return
+    fetch(`${API_BASE_URL}/api/tts/cache`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ source }),
+    }).catch(() => {})
+  })
+}
+
+/**
+ * 调用 Google Cloud TTS API，返回音频 URL
+ * 有 source 时先尝试服务器缓存，未命中再调 API 并上传
+ */
+async function fetchGoogleTtsUrl(word: string, lang: string, source?: string): Promise<string> {
+  // 1. 有 source 时，先尝试从服务器缓存获取
+  if (source) {
+    const cacheUrl = await buildTtsCacheUrl(word, source)
+    try {
+      const headResp = await fetch(cacheUrl, { method: 'HEAD' })
+      if (headResp.ok) return cacheUrl
+    } catch { /* 缓存不可用，继续调 API */ }
+  }
+
+  // 2. 调用 Google TTS API
   const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY
   if (!apiKey) throw new Error('VITE_GOOGLE_TTS_API_KEY not configured')
   const resp = await fetch(
@@ -153,7 +237,13 @@ async function fetchGoogleTtsUrl(word: string, lang: string): Promise<string> {
   )
   if (!resp.ok) throw new Error(`Google TTS API error: ${resp.status}`)
   const data = await resp.json()
-  const binary = atob(data.audioContent)
+  const audioContent: string = data.audioContent
+
+  // 3. 有 source 时，上传到服务器缓存（fire-and-forget）
+  if (source) uploadTtsCache(word, source, audioContent)
+
+  // 4. 转换为 blob URL 供本次播放
+  const binary = atob(audioContent)
   const bytes = new Uint8Array(binary.length)
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
   const blob = new Blob([bytes], { type: 'audio/mp3' })
@@ -172,11 +262,13 @@ function getCacheKey(word: string, region: 'us' | 'uk'): string {
  * @param word 单词文本
  * @param region 'us' | 'uk'，仅英语有效
  * @param ttsLang Google TTS 语言代码，传入则预加载 Google TTS 音频
+ * @param source 单词来源（用于服务器缓存路径）
  */
 export async function preloadWordAudio(
   word: string,
   region: 'us' | 'uk' = 'us',
-  ttsLang?: string
+  ttsLang?: string,
+  source?: string
 ): Promise<void> {
   if (!word) return
 
@@ -187,10 +279,10 @@ export async function preloadWordAudio(
     return
   }
 
-  // Google TTS：预先获取 blob URL 并创建 Audio
+  // Google TTS：预先获取 URL 并创建 Audio
   if (ttsLang) {
     try {
-      const url = await fetchGoogleTtsUrl(word, ttsLang)
+      const url = await fetchGoogleTtsUrl(word, ttsLang, source)
       ttsCache.set(cacheKey, url)
       const audio = new Audio(url)
       audio.preload = 'auto'
@@ -237,7 +329,7 @@ function evictIfNeeded() {
       // 若该条目是 TTS blob URL，同步 revoke 防止内存泄漏
       const ttsUrl = ttsCache.get(keys[i])
       if (ttsUrl) {
-        URL.revokeObjectURL(ttsUrl)
+        if (ttsUrl.startsWith('blob:')) URL.revokeObjectURL(ttsUrl)
         ttsCache.delete(keys[i])
       }
       preloadCache.delete(keys[i])
@@ -252,7 +344,7 @@ function evictTtsCacheIfNeeded() {
     const keys = Array.from(ttsCache.keys())
     for (let i = 0; i < evictCount; i++) {
       const url = ttsCache.get(keys[i])
-      if (url) URL.revokeObjectURL(url)
+      if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
       ttsCache.delete(keys[i])
       preloadCache.delete(keys[i])
     }
@@ -264,14 +356,16 @@ function evictTtsCacheIfNeeded() {
  * @param words 单词列表
  * @param region 'us' | 'uk'，仅英语有效
  * @param ttsLang Google TTS 语言代码
+ * @param source 单词来源（用于服务器缓存路径）
  */
 export async function preloadMultipleWordAudio(
   words: string[],
   region: 'us' | 'uk' = 'us',
-  ttsLang?: string
+  ttsLang?: string,
+  source?: string
 ): Promise<void> {
   if (words.length === 0) return
-  await Promise.all(words.map(word => preloadWordAudio(word, region, ttsLang)))
+  await Promise.all(words.map(word => preloadWordAudio(word, region, ttsLang, source)))
 }
 
 /**
@@ -290,13 +384,13 @@ export function clearPreloadCache(keepCount: number = 10): void {
     preloadCache.set(key, audio)
   })
 
-  // 同步清理 TTS blob URL 缓存
+  // 同步清理 TTS URL 缓存（仅 revoke blob URL）
   const ttsEntries = Array.from(ttsCache.entries())
   const ttsKeepEntries = keepCount > 0 ? ttsEntries.slice(-keepCount) : []
   const ttsKeep = new Set(ttsKeepEntries.map(([k]) => k))
   for (const [key, url] of ttsEntries) {
     if (!ttsKeep.has(key)) {
-      URL.revokeObjectURL(url)
+      if (url.startsWith('blob:')) URL.revokeObjectURL(url)
       ttsCache.delete(key)
     }
   }

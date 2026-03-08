@@ -33,7 +33,9 @@ def create_app():
 
     # 注册蓝图
     from backend.api.generation import generation_bp
+    from backend.api.tts_cache import tts_cache_bp
     app.register_blueprint(generation_bp)
+    app.register_blueprint(tts_cache_bp)
 
     cors_origins = os.environ.get("CORS_ORIGINS", "*")
     origins = [o.strip() for o in cors_origins.split(",")] if cors_origins != "*" else "*"

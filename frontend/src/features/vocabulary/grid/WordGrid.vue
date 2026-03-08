@@ -85,6 +85,9 @@ import { ChevronUp, ChevronDown, Square, CheckSquare, Trash2 } from 'lucide-vue-
 import type { Word } from '@/shared/types';
 import { api } from '@/shared/api';
 import { logger } from '@/shared/utils/logger';
+import { deleteTtsCache } from '@/shared/utils/playWordAudio';
+import { getSourceLangConfig } from '@/shared/config/sourceLanguage';
+import { useSettings } from '@/shared/composables/useSettings';
 
 const log = logger.create('WordGrid');
 
@@ -441,6 +444,23 @@ const handleBatchDelete = async () => {
     try {
         const idsToDelete = Array.from(selectedWordIds.value);
         await api.words.batchDeleteDirect(idsToDelete);
+
+        // 清理 TTS 缓存（fire-and-forget）
+        const { settings } = useSettings()
+        const customSources = settings.value?.sources?.customSources || {}
+        const wordsToDelete = props.words.filter(w => selectedWordIds.value.has(w.id))
+        const bySource = new Map<string, string[]>()
+        for (const w of wordsToDelete) {
+            if (!w.source) continue
+            const ttsLang = getSourceLangConfig(w.source, customSources).ttsLang
+            if (!ttsLang) continue
+            const arr = bySource.get(w.source) || []
+            arr.push(w.word)
+            bySource.set(w.source, arr)
+        }
+        for (const [source, words] of bySource) {
+            deleteTtsCache(words, source)
+        }
 
         // 通知父组件批量删除成功
         emit('batchDelete', idsToDelete);

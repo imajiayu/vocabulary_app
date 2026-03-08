@@ -1,6 +1,6 @@
 # backend
 
-Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
+Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 管理）。
 
 ## 认证
 
@@ -15,6 +15,7 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 
 **后端负责：**
 - 关系生成（5种生成器，线程化执行 + SSE 进度推送，多用户隔离）
+- TTS 音频缓存（保存/删除 Google TTS 音频到文件系统，nginx 静态服务）
 
 **后端不处理（已迁移到前端）：**
 - 单词 CRUD（前端直连 Supabase）
@@ -35,6 +36,7 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 |------|------|
 | `app.py` | Flask 入口（CORS 来源限制、请求体大小限制、健康检查含活跃任务数） |
 | `api/generation.py` | 关系生成/停止/进度 API（SSE 空闲 5min 超时断开） |
+| `api/tts_cache.py` | TTS 音频缓存保存/删除（base64 → 文件系统，路径遍历防护） |
 | `generators/` | 5种关系生成器（synonym, antonym, root, confused, topic） |
 | `generators/base.py` | BaseGenerator 基类（进度回调 + 停止信号 + 增量保存，flush_threshold 可配置） |
 | `generators/data.py` | 统一数据源（反义词对、词根、易混淆词、IELTS主题） |
@@ -54,6 +56,8 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 | `/api/relations/generate/status` | GET | 获取所有任务状态 |
 | `/api/relations/generate/progress` | GET | SSE 实时进度流 |
 | `/api/health` | GET | 健康检查 |
+| `/api/tts/cache` | POST | 保存 TTS 音频缓存 |
+| `/api/tts/cache` | DELETE | 删除 TTS 音频缓存 |
 
 ## 环境变量
 
@@ -61,6 +65,7 @@ Flask 后端 — 关系专用服务，部署于阿里云（systemd 管理）。
 DATABASE_URL=postgresql://...    # Supabase 连接串
 SUPABASE_URL=https://xxx.supabase.co  # JWKS endpoint base URL
 SUPABASE_JWT_SECRET=...          # HS256 回退验证密钥
+TTS_CACHE_DIR=/opt/vocabulary_app/tts-cache  # TTS 音频缓存目录
 CORS_ORIGINS=*                   # 允许的来源（逗号分隔，默认 *）
 FLASK_DEBUG=0                    # 调试模式（仅开发环境设为 1）
 ```

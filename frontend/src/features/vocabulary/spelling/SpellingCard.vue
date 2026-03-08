@@ -357,7 +357,7 @@ const { audioAccent, loadAudioAccent } = useAudioAccent()
 const handlePlayAudio = async () => {
   if (isSubmitting.value) return
   interactions.value.audioRequestCount++
-  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang)
+  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang, props.word.source)
   await nextTick()
   inputRef.value?.focus()
 }
@@ -586,7 +586,7 @@ const resetState = () => {
 
 const handleResetInput = () => {
   resetState()
-  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang)
+  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang, props.word.source)
   if (!isMobile.value) {
     inputRef.value?.focus()
   }
@@ -620,7 +620,7 @@ watch(() => props.word, (newWord, oldWord) => {
     }
 
     resetState()
-    playWordAudio(newWord.word, audioAccent.value, langConfig.value.ttsLang)
+    playWordAudio(newWord.word, audioAccent.value, langConfig.value.ttsLang, newWord.source)
     if (!isMobile.value) {
       setTimeout(() => inputRef.value?.focus(), 50)
     }
@@ -631,7 +631,7 @@ onMounted(async () => {
   await Promise.all([loadAudioAccent(), loadHotkeys()])
   resetState()
   await nextTick()
-  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang)
+  playWordAudio(props.word.word, audioAccent.value, langConfig.value.ttsLang, props.word.source)
   if (isMobile.value && mobileInputAreaRef.value) {
     const h = mobileInputAreaRef.value.offsetHeight
     document.documentElement.style.setProperty('--spelling-input-height', `${h}px`)

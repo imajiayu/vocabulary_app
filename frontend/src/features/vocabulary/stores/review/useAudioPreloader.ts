@@ -53,7 +53,8 @@ export function useAudioPreloader(
     if (upcoming.length > 0) {
       // 取首个单词的 ttsLang（同一批次通常同源；混源时以首个为准）
       const ttsLang = getTtsLang(upcoming[0])
-      preloadMultipleWordAudio(upcoming.map(w => w.word), accent, ttsLang).catch(err => {
+      const source = upcoming[0].source
+      preloadMultipleWordAudio(upcoming.map(w => w.word), accent, ttsLang, source).catch(err => {
         log.warn('预加载音频失败:', err)
       })
     }

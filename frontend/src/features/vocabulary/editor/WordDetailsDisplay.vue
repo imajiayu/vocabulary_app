@@ -10,7 +10,7 @@
         <template v-if="props.word?.definition.phonetic?.ipa">
           <span
             class="phonetic-pill"
-            @click="playWordAudio(props.word.word, 'us', ttsLang)"
+            @click="playWordAudio(props.word.word, 'us', ttsLang, props.word.source)"
           >
             <AppIcon name="volume" class="phonetic-play-icon" />
             <span class="phonetic-text">{{ props.word.definition.phonetic.ipa }}</span>
@@ -21,7 +21,7 @@
           <span
             v-if="props.word?.definition.phonetic?.us"
             class="phonetic-pill"
-            @click="playWordAudio(props.word.word, 'us', ttsLang)"
+            @click="playWordAudio(props.word.word, 'us', ttsLang, props.word.source)"
           >
             <span class="phonetic-flag">US</span>
             <span class="phonetic-text">{{ props.word.definition.phonetic.us }}</span>
@@ -29,7 +29,7 @@
           <span
             v-if="props.word?.definition.phonetic?.uk"
             class="phonetic-pill"
-            @click="playWordAudio(props.word.word, 'uk', ttsLang)"
+            @click="playWordAudio(props.word.word, 'uk', ttsLang, props.word.source)"
           >
             <span class="phonetic-flag">UK</span>
             <span class="phonetic-text">{{ props.word.definition.phonetic.uk }}</span>
@@ -39,7 +39,7 @@
         <span
           v-else
           class="phonetic-pill"
-          @click="playWordAudio(props.word?.word ?? '', 'us', ttsLang)"
+          @click="playWordAudio(props.word?.word ?? '', 'us', ttsLang, props.word?.source)"
         >
           <AppIcon name="volume" class="phonetic-play-icon" />
           <span class="phonetic-flag">发音</span>

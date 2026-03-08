@@ -5,7 +5,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 ## 部署架构
 
 - **前端**: 阿里云（Vue3 静态构建）
-- **后端**: 阿里云（Flask，关系生成）
+- **后端**: 阿里云（Flask，关系生成 + TTS 缓存）
 - **数据库**: Supabase PostgreSQL
 - **认证**: Supabase Auth (Google OAuth)
 - **存储**: Supabase Storage (音频、图片)
@@ -39,6 +39,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 拼写结果提交 | Frontend（本地拼写算法）→ Supabase | 前端计算 + 直连持久化 |
 | 复习/拼写单词列表 | Frontend → Supabase | 前端获取 ID + 分页加载 |
 | 关系生成 | Backend（线程 + SSE） | CPU 密集 + NLTK 依赖 |
+| TTS 音频缓存 | Frontend → Backend → 文件系统 | nginx 静态服务 + 避免重复 API 调用 |
 | 关系清空 | Frontend → Supabase | 按类型批量删除 |
 | 统计数据 | Frontend → Supabase Views | 直接查询视图 |
 | 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
@@ -64,6 +65,7 @@ cd frontend && npm run dev
 ```
 app.py                        # Flask 入口（CORS/请求限制/健康检查）
 api/generation.py             # 关系生成/停止/进度 API（SSE 空闲超时 5min）
+api/tts_cache.py              # TTS 音频缓存保存/删除（文件系统）
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
   data.py                     # 统一数据源（4885行常量 + IELTS主题）
@@ -125,6 +127,7 @@ CSS 变量定义在 `shared/styles/tokens.css`，三层架构：Primitives → S
 DATABASE_URL=postgresql://...
 SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co
 SUPABASE_JWT_SECRET=...  # 本地开发用 HS256 验证，生产环境用 JWKS
+TTS_CACHE_DIR=/opt/vocabulary_app/tts-cache  # TTS 音频缓存目录
 CORS_ORIGINS=*           # 生产环境设为前端域名（逗号分隔）
 FLASK_DEBUG=0            # 仅开发环境设为 1
 ```
@@ -162,4 +165,5 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 - 后端定位为关系专用服务（图查询 + 关系生成）
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
-- 当前版本号 `v1.2`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{word}.mp3`），后续直接从 nginx 静态文件获取
+- 当前版本号 `v1.3.7`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新

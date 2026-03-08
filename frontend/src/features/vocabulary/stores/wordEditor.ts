@@ -9,6 +9,7 @@ import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
 import { useSettings } from '@/shared/composables/useSettings'
 import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
+import { deleteTtsCache } from '@/shared/utils/playWordAudio'
 
 const log = logger.create('WordEditor')
 
@@ -163,6 +164,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     const wordId = currentWord.value.id
     const wordFieldChanged = !!originalWord.value && currentWord.value.word !== originalWord.value.word
+    const oldWordText = originalWord.value?.word
 
     // ── 重复检测阶段 ──
     if (wordFieldChanged && duplicateCheckState.value === 'idle') {
@@ -212,6 +214,17 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
 
+    // 修改单词文本时，清理旧文本的 TTS 缓存（fire-and-forget）
+    if (wordFieldChanged && oldWordText) {
+      const source = currentWord.value.source
+      if (source) {
+        const { settings } = useSettings()
+        const customSources = settings.value?.sources?.customSources || {}
+        const ttsLang = getSourceLangConfig(source, customSources).ttsLang
+        if (ttsLang) deleteTtsCache([oldWordText], source)
+      }
+    }
+
     // 后台持久化
     api.words.updateWordDirect(wordId, {
       word: wordText,
@@ -254,8 +267,18 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
+    const wordText = currentWord.value.word
+    const wordSource = currentWord.value.source
     try {
       await api.words.deleteWordDirect(wordId)
+
+      // 清理 TTS 缓存（fire-and-forget）
+      if (wordSource) {
+        const { settings } = useSettings()
+        const customSources = settings.value?.sources?.customSources || {}
+        const ttsLang = getSourceLangConfig(wordSource, customSources).ttsLang
+        if (ttsLang) deleteTtsCache([wordText], wordSource)
+      }
 
       // 触发删除回调
       onWordDeletedCallbacks.value.forEach(cb => cb(wordId))

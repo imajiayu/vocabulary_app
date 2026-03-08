@@ -666,6 +666,7 @@ import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'
 import type { UserSettings, SourceLang } from '@/shared/types'
 import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
+import { deleteTtsCacheSource } from '@/shared/utils/playWordAudio'
 import { logger } from '@/shared/utils/logger'
 import { BaseIcon } from '@/shared/components/base'
 import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
@@ -1020,7 +1021,9 @@ const confirmDeleteSource = async (source: string) => {
 
   try {
     isDeleting.value = true
+    const ttsLang = getSourceLangConfig(source, localSources.value).ttsLang
     await api.config.deleteSource(source)
+    if (ttsLang) deleteTtsCacheSource(source)
     delete localSources.value[source]
     await loadSourceStats()
     showToast(`已删除来源"${source}"`)
