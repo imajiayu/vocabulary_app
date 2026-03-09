@@ -25,7 +25,8 @@ const DEFAULT_CONFIG: UserSettings = {
     definitionFetchThreads: 3
   },
   sources: {
-    customSources: { IELTS: 'en', GRE: 'en' }
+    customSources: { IELTS: 'en' },
+    sourceOrder: ['IELTS']
   },
   audio: {
     accent: 'us',
@@ -134,6 +135,21 @@ export class SettingsSupabaseApi {
     if (dbConfig.sources?.customSources) {
       merged.sources.customSources = dbConfig.sources.customSources
     }
+
+    // sourceOrder 兼容：旧数据无此字段时从 customSources 键推导
+    if (dbConfig.sources?.sourceOrder) {
+      merged.sources.sourceOrder = dbConfig.sources.sourceOrder
+    } else if (dbConfig.sources?.customSources) {
+      merged.sources.sourceOrder = Object.keys(dbConfig.sources.customSources)
+    }
+
+    // 归一化：确保 sourceOrder 与 customSources 同步
+    // （防止旧客户端直接改了 customSources 导致二者不一致）
+    const sourceKeys = new Set(Object.keys(merged.sources.customSources))
+    const order = merged.sources.sourceOrder ?? []
+    const filtered = order.filter(s => sourceKeys.has(s))
+    const missing = [...sourceKeys].filter(s => !filtered.includes(s))
+    merged.sources.sourceOrder = [...filtered, ...missing]
 
     return merged
   }

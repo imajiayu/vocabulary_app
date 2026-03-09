@@ -48,10 +48,16 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 设置复杂操作 | Frontend → Edge Functions | 级联删除、批量调整 |
 | 进度追踪 | Frontend → Supabase | 简单 CRUD |
 
-## 服务器
+## 服务器与部署
 
 - **SSH**: `ssh root@8.152.193.35`
-- **域名**: `mieltsm.top`
+- **域名**: `mieltsm.top`（HTTPS，Let's Encrypt）
+- **部署目录**: `/opt/vocabulary_app/`
+- **CI/CD**: GitHub Actions（`.github/workflows/deploy.yml`）— push 到 `main` 自动部署（git pull → pip install → npm ci + build → 重启后端 + reload nginx）
+- **后端服务**: systemd `vocabulary-backend`，gunicorn 2 workers，端口 5001
+- **nginx**: `www-data` 用户，配置文件 `/etc/nginx/sites-enabled/vocabulary-app`，静态文件 + `/api/` 反代 + `/tts-cache/` 静态服务
+- **后端环境变量**: `backend/.env`（python-dotenv 加载）
+- **运行环境**: Python 3.9.5、Node v24.13.0
 
 ## 本地开发
 
@@ -171,4 +177,4 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{word}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v1.3.9`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v1.4.0`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新

@@ -262,17 +262,33 @@
             <!-- 来源列表 -->
             <div class="sources-grid">
               <div
-                v-for="(lang, name) in localSources"
+                v-for="(name, index) in localSourceOrder"
                 :key="name"
-                class="source-chip"
+                :class="[
+                  'source-chip',
+                  { 'is-dragging': dragIndex === index },
+                  { 'drop-before': dropIndex === index && dragIndex !== null && dragIndex > index },
+                  { 'drop-after': dropIndex === index && dragIndex !== null && dragIndex < index },
+                ]"
+                :draggable="localSourceOrder.length > 1"
+                @dragstart="onDragStart(index, $event)"
+                @dragover.prevent="onDragOver(index)"
+                @dragend="onDragEnd"
               >
+                <span v-if="localSourceOrder.length > 1" class="drag-handle">
+                  <svg width="8" height="14" viewBox="0 0 8 14" fill="currentColor">
+                    <circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/>
+                    <circle cx="2" cy="7" r="1.2"/><circle cx="6" cy="7" r="1.2"/>
+                    <circle cx="2" cy="12" r="1.2"/><circle cx="6" cy="12" r="1.2"/>
+                  </svg>
+                </span>
                 <span class="source-name">{{ name }}</span>
-                <span class="source-lang">{{ lang === 'uk' ? 'УКР' : 'EN' }}</span>
+                <span class="source-lang">{{ localSources[name] === 'uk' ? 'УКР' : 'EN' }}</span>
                 <span class="source-count">{{ sourceStats[name] || 0 }}</span>
                 <button
                   class="source-delete"
                   :disabled="sourceCount <= 1 || isDeleting"
-                  @click="confirmDeleteSource(name as string)"
+                  @click="confirmDeleteSource(name)"
                 >
                   ×
                 </button>
@@ -800,7 +816,8 @@ const settings = computed<UserSettings>(() =>
       definitionFetchThreads: 3,
     },
     sources: {
-      customSources: { IELTS: 'en', GRE: 'en' },
+      customSources: { IELTS: 'en' },
+      sourceOrder: ['IELTS'],
     },
     audio: {
       accent: 'us',
@@ -831,11 +848,16 @@ const settings = computed<UserSettings>(() =>
 
 // 来源管理
 const localSources = ref<Record<string, SourceLang>>({})
-const sourceCount = computed(() => Object.keys(localSources.value).length)
+const localSourceOrder = ref<string[]>([])
+const sourceCount = computed(() => localSourceOrder.value.length)
 const sourceStats = ref<Record<string, number>>({})
 const newSourceName = ref('')
 const newSourceLang = ref<SourceLang>('en')
 const isDeleting = ref(false)
+
+// 拖拽状态
+const dragIndex = ref<number | null>(null)
+const dropIndex = ref<number | null>(null)
 
 // 当前 source 语言配置（mount 时从 sessionStorage 读取一次）
 // 若 sessionStorage 无值（直接访问设置页），回落到第一个已有源
@@ -1000,16 +1022,21 @@ const addSource = async () => {
 
   // 乐观更新：先更新本地状态防止快速重复提交
   localSources.value[name] = lang
+  localSourceOrder.value.push(name)
   newSourceName.value = ''
   newSourceLang.value = 'en'
 
   try {
     await updateSettings({
-      sources: { customSources: { ...localSources.value } },
+      sources: {
+        customSources: { ...localSources.value },
+        sourceOrder: [...localSourceOrder.value],
+      },
     })
     showToast(`已添加来源"${name}"`)
   } catch (error) {
     delete localSources.value[name]
+    localSourceOrder.value = localSourceOrder.value.filter(s => s !== name)
     logger.error('添加来源失败:', error)
     alert('添加失败，请重试')
   }
@@ -1025,6 +1052,7 @@ const confirmDeleteSource = async (source: string) => {
     await api.config.deleteSource(source)
     if (ttsLang) deleteTtsCacheSource(source)
     delete localSources.value[source]
+    localSourceOrder.value = localSourceOrder.value.filter(s => s !== source)
     await loadSourceStats()
     showToast(`已删除来源"${source}"`)
   } catch (error) {
@@ -1032,6 +1060,50 @@ const confirmDeleteSource = async (source: string) => {
     alert('删除失败，请重试')
   } finally {
     isDeleting.value = false
+  }
+}
+
+// 拖拽排序
+const onDragStart = (index: number, e: DragEvent) => {
+  dragIndex.value = index
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move'
+  }
+}
+
+const onDragOver = (index: number) => {
+  dropIndex.value = index
+}
+
+const onDragEnd = async () => {
+  const from = dragIndex.value
+  const to = dropIndex.value
+  dragIndex.value = null
+  dropIndex.value = null
+
+  if (from === null || to === null || from === to) return
+
+  // 保存旧顺序用于回滚
+  const oldOrder = [...localSourceOrder.value]
+
+  // 数组重排
+  const order = [...oldOrder]
+  const [moved] = order.splice(from, 1)
+  order.splice(to, 0, moved)
+  localSourceOrder.value = order
+
+  // 自动保存
+  try {
+    await updateSettings({
+      sources: {
+        customSources: { ...localSources.value },
+        sourceOrder: [...localSourceOrder.value],
+      },
+    })
+    showToast('排序已保存')
+  } catch (error) {
+    localSourceOrder.value = oldOrder
+    logger.error('保存排序失败:', error)
   }
 }
 
@@ -1206,9 +1278,11 @@ onMounted(async () => {
   // 初始化快照
   savedSnapshot.value = takeSavableSnapshot()
 
-  // 加载来源
-  const settingsData = await api.settings.getSettings()
-  localSources.value = { ...(settingsData.sources?.customSources || { IELTS: 'en', GRE: 'en' }) }
+  // 加载来源（直接从已加载的 globalSettings 读取，避免重复请求）
+  const sourcesConfig = globalSettings.value?.sources
+  localSources.value = { ...(sourcesConfig?.customSources || { IELTS: 'en' }) }
+  localSourceOrder.value = sourcesConfig?.sourceOrder
+    ?? Object.keys(localSources.value)
 
   const tasks: Promise<void>[] = [loadSourceStats()]
   if (supportsRelations.value) {
@@ -1673,6 +1747,56 @@ onUnmounted(() => {
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-full);
   font-size: 13px;
+}
+
+/* 拖拽交互 */
+.source-chip {
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.15s ease;
+  position: relative;
+}
+
+.source-chip[draggable="true"] {
+  cursor: grab;
+}
+
+.source-chip.is-dragging {
+  opacity: 0.25;
+  transform: scale(0.95);
+}
+
+.source-chip.drop-before::before,
+.source-chip.drop-after::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--primitive-copper-400, #996B3D);
+  pointer-events: none;
+}
+
+.source-chip.drop-before::before {
+  left: -5px;
+}
+
+.source-chip.drop-after::after {
+  right: -5px;
+}
+
+.drag-handle {
+  color: var(--color-text-quaternary, var(--color-text-tertiary));
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  opacity: 0.4;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.source-chip:hover .drag-handle {
+  opacity: 0.8;
+  color: var(--color-text-secondary);
 }
 
 .source-name {

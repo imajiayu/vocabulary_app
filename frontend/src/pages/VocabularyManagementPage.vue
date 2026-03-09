@@ -172,19 +172,14 @@ const shouldStopLoading = ref(false); // 控制是否停止后台加载
 const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
 
 // 使用 word stats composable
-const { allStats, ieltsStats, greStats } = useWordStats(words);
+const { allStats, getStatsBySource } = useWordStats(words);
 
-// 首先根据来源筛选的单词已通过 useWordStats composable 处理
-
-// 统计数据 - 基于来源筛选后的结果 (使用 composable)
+// 统计数据 - 基于来源筛选后的结果
 const stats = computed(() => {
     if (sourceFilter.value === 'all') {
         return allStats.value;
-    } else if (sourceFilter.value === 'IELTS') {
-        return ieltsStats.value;
-    } else {
-        return greStats.value;
     }
+    return getStatsBySource(sourceFilter.value);
 });
 
 // 分批加载单词的函数

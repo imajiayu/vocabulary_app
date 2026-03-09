@@ -211,6 +211,7 @@ export type SourceLang = 'en' | 'uk'
 
 export interface SourcesSettings {
   customSources: Record<string, SourceLang>;  // source名 → 语言代码
+  sourceOrder?: string[];  // 显式控制顺序（jsonb 不保留对象键顺序）
 }
 
 export interface UserSettings {

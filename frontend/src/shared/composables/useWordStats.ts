@@ -23,22 +23,12 @@ export function useWordStats(words: Ref<Word[]>) {
 
   const allStats = computed(() => calculateStats(words.value))
 
-  const ieltsStats = computed(() => {
-    const ieltsWords = words.value.filter(w => w.source === 'IELTS')
-    return calculateStats(ieltsWords)
-  })
-
-  const greStats = computed(() => {
-    const greWords = words.value.filter(w => w.source === 'GRE')
-    return calculateStats(greWords)
-  })
-
   const getStatsBySource = (source: string): WordStats => {
     const filteredWords = words.value.filter(w => w.source === source)
     return calculateStats(filteredWords)
   }
 
-  const filterWordsBySource = (source: 'all' | 'IELTS' | 'GRE') => {
+  const filterWordsBySource = (source: string) => {
     if (source === 'all') {
       return words.value
     }
@@ -47,8 +37,6 @@ export function useWordStats(words: Ref<Word[]>) {
 
   return {
     allStats,
-    ieltsStats,
-    greStats,
     getStatsBySource,
     calculateStats,
     filterWordsBySource

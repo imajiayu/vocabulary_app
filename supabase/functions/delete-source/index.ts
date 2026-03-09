@@ -74,7 +74,7 @@ Deno.serve(async (req) => {
     }
 
     const config = configData?.config || {}
-    const customSources: Record<string, string> = config?.sources?.customSources || { IELTS: 'en', GRE: 'en' }
+    const customSources: Record<string, string> = config?.sources?.customSources || { IELTS: 'en' }
 
     // 验证：至少保留 1 个 source
     if (Object.keys(customSources).length <= 1) {
@@ -98,7 +98,9 @@ Deno.serve(async (req) => {
       ...config,
       sources: {
         ...config.sources,
-        customSources: remainingSources
+        customSources: remainingSources,
+        sourceOrder: (config.sources?.sourceOrder || Object.keys(customSources))
+          .filter((s: string) => s !== sourceName)
       }
     }
 

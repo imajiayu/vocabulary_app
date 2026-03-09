@@ -74,7 +74,9 @@ export function useSourceSelection() {
   const loadAvailableSources = async () => {
     try {
       const settings = await api.settings.getSettings()
-      availableSources.value = Object.keys(settings.sources?.customSources || { IELTS: 'en', GRE: 'en' })
+      const sources = settings.sources
+      availableSources.value = sources?.sourceOrder
+        ?? Object.keys(sources?.customSources || { IELTS: 'en' })
       // 同时缓存 lowEfExtraCount
       cachedLowEfExtraCount = settings.learning?.lowEfExtraCount ?? 30
 
@@ -97,7 +99,7 @@ export function useSourceSelection() {
       }
     } catch (e) {
       logger.error('Failed to load available sources:', e)
-      availableSources.value = ['IELTS', 'GRE']
+      availableSources.value = ['IELTS']
     }
   }
 
@@ -165,12 +167,14 @@ export function useSourceSelection() {
 // For other components - read-only access to WordIndex selection
 export function useSourceSelectionReadOnly() {
   const currentSource = ref<Source>('')
-  const availableSources = ref<string[]>(['IELTS', 'GRE'])  // 设置默认值
+  const availableSources = ref<string[]>(['IELTS'])  // 设置默认值
 
   const initializeFromData = async () => {
     try {
       const settings = await api.settings.getSettings()
-      availableSources.value = Object.keys(settings.sources?.customSources || { IELTS: 'en', GRE: 'en' })
+      const sources = settings.sources
+      availableSources.value = sources?.sourceOrder
+        ?? Object.keys(sources?.customSources || { IELTS: 'en' })
 
       // 从 sessionStorage 恢复，否则使用第一个可用的 source
       const cachedSource = sessionStorage.getItem('currentSource')
@@ -182,7 +186,7 @@ export function useSourceSelectionReadOnly() {
     } catch (error) {
       logger.error('Failed to get current source:', error)
       if (availableSources.value.length === 0) {
-        availableSources.value = ['IELTS', 'GRE']
+        availableSources.value = ['IELTS']
       }
       if (!currentSource.value && availableSources.value.length > 0) {
         currentSource.value = availableSources.value[0]

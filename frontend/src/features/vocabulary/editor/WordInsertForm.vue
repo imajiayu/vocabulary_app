@@ -3,7 +3,6 @@
     <div class="form-header">
       <h2 class="form-title">添加新单词</h2>
 
-      <!-- 右侧切换 IELTS/GRE -->
       <SwitchTab
         v-model="source"
         :tabs="sourceTabs"
