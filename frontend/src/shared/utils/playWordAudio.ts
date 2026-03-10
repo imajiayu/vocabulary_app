@@ -68,7 +68,6 @@ export async function playWordAudio(
 
   // 优先使用预加载的音频
   const cachedAudio = preloadCache.get(cacheKey)
-  console.log(`[Audio] play "${word}": ${cachedAudio ? 'HIT' : 'MISS'}, cache=${preloadCache.size}, key=${cacheKey}`)
   const audio = cachedAudio ?? new Audio(url)
 
   if (cachedAudio) {
@@ -295,31 +294,36 @@ export async function preloadWordAudio(
     return
   }
 
-  // 有道词典：直接用 URL 预加载
+  // 有道词典：<link rel="preload"> 高优先级下载 → Audio.load() 从浏览器缓存读取
+  // 注：Audio.load() 直接请求是 Low Priority（1-30s），link preload 是 High Priority（~100ms）
   const url = buildYoudaoUrl(word, region)
-  const audio = new Audio()
-  audio.preload = 'auto'
-  audio.src = url
 
-  return new Promise<void>((resolve) => {
-    let isResolved = false
-    const t0 = Date.now()
+  // Step 1: link preload 高优先级下载到浏览器 preload cache
+  await new Promise<void>((resolve) => {
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.as = 'audio'
+    link.href = url
+    const timer = setTimeout(() => { link.remove(); resolve() }, 5000)
+    link.onload = () => { clearTimeout(timer); link.remove(); resolve() }
+    link.onerror = () => { clearTimeout(timer); link.remove(); resolve() }
+    document.head.appendChild(link)
+  })
 
-    audio.addEventListener('canplaythrough', () => {
-      if (isResolved) return
-      isResolved = true
-      evictIfNeeded()
-      preloadCache.set(cacheKey, audio)
-      console.log(`[Preload] cached "${word}" in ${Date.now() - t0}ms, cache=${preloadCache.size}`)
+  // Step 2: Audio.load() 从 preload cache 读取（应近乎即时）
+  await new Promise<void>((resolve) => {
+    const audio = new Audio()
+    audio.preload = 'auto'
+    audio.src = url
+    let done = false
+    const finish = (ok: boolean) => {
+      if (done) return
+      done = true
+      if (ok) { evictIfNeeded(); preloadCache.set(cacheKey, audio) }
       resolve()
-    }, { once: true })
-
-    audio.addEventListener('error', () => {
-      if (isResolved) return
-      isResolved = true
-      resolve()
-    }, { once: true })
-
+    }
+    audio.addEventListener('canplaythrough', () => finish(true), { once: true })
+    audio.addEventListener('error', () => finish(false), { once: true })
     audio.load()
   })
 }
@@ -329,12 +333,10 @@ function evictIfNeeded() {
     const evictCount = Math.floor(MAX_PRELOAD_CACHE_SIZE / 2)
     const keys = Array.from(preloadCache.keys())
     for (let i = 0; i < evictCount; i++) {
-      // 若该条目是 TTS blob URL，同步 revoke 防止内存泄漏
-      const ttsUrl = ttsCache.get(keys[i])
-      if (ttsUrl) {
-        if (ttsUrl.startsWith('blob:')) URL.revokeObjectURL(ttsUrl)
-        ttsCache.delete(keys[i])
-      }
+      // revoke TTS blob URL 防止内存泄漏
+      const audio = preloadCache.get(keys[i])
+      if (audio?.src.startsWith('blob:')) URL.revokeObjectURL(audio.src)
+      ttsCache.delete(keys[i])
       preloadCache.delete(keys[i])
     }
   }
@@ -378,25 +380,30 @@ export async function preloadMultipleWordAudio(
 export function clearPreloadCache(keepCount: number = 10): void {
   if (preloadCache.size <= keepCount) return
 
-  // 转换为数组并保留最后 keepCount 个（注意：slice(-0) === slice(0)，需特判）
   const entries = Array.from(preloadCache.entries())
   const toKeep = keepCount > 0 ? entries.slice(-keepCount) : []
+  const keepKeys = new Set(toKeep.map(([k]) => k))
+
+  // revoke 被驱逐条目的 TTS blob URL + 清理 ttsCache
+  for (const [key, audio] of entries) {
+    if (!keepKeys.has(key)) {
+      if (audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src)
+      ttsCache.delete(key)
+    }
+  }
+
+  // 清理 ttsCache 中的孤儿条目（playWordAudio 直接播放时只写 ttsCache 不写 preloadCache）
+  for (const [key, url] of Array.from(ttsCache.entries())) {
+    if (!keepKeys.has(key)) {
+      if (url.startsWith('blob:')) URL.revokeObjectURL(url)
+      ttsCache.delete(key)
+    }
+  }
 
   preloadCache.clear()
   toKeep.forEach(([key, audio]) => {
     preloadCache.set(key, audio)
   })
-
-  // 同步清理 TTS URL 缓存（仅 revoke blob URL）
-  const ttsEntries = Array.from(ttsCache.entries())
-  const ttsKeepEntries = keepCount > 0 ? ttsEntries.slice(-keepCount) : []
-  const ttsKeep = new Set(ttsKeepEntries.map(([k]) => k))
-  for (const [key, url] of ttsEntries) {
-    if (!ttsKeep.has(key)) {
-      if (url.startsWith('blob:')) URL.revokeObjectURL(url)
-      ttsCache.delete(key)
-    }
-  }
 }
 
 /**
