@@ -68,6 +68,7 @@ export async function playWordAudio(
 
   // 优先使用预加载的音频
   const cachedAudio = preloadCache.get(cacheKey)
+  console.log(`[Audio] play "${word}": ${cachedAudio ? 'HIT' : 'MISS'}, cache=${preloadCache.size}, key=${cacheKey}`)
   const audio = cachedAudio ?? new Audio(url)
 
   if (cachedAudio) {
@@ -302,12 +303,14 @@ export async function preloadWordAudio(
 
   return new Promise<void>((resolve) => {
     let isResolved = false
+    const t0 = Date.now()
 
     audio.addEventListener('canplaythrough', () => {
       if (isResolved) return
       isResolved = true
       evictIfNeeded()
       preloadCache.set(cacheKey, audio)
+      console.log(`[Preload] cached "${word}" in ${Date.now() - t0}ms, cache=${preloadCache.size}`)
       resolve()
     }, { once: true })
 
