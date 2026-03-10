@@ -61,6 +61,8 @@ export function useAudioPreloader(
   }
 
   // 监听队列/索引变化，自动预加载
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
   watch([wordQueue, currentIndex, audioType], ([newQueue, newIndex], [oldQueue, oldIndex]) => {
     const isQueueChanged = newQueue.length !== oldQueue?.length || newQueue !== oldQueue
     const isInitialLoad = oldQueue === undefined || oldQueue.length === 0
@@ -68,7 +70,8 @@ export function useAudioPreloader(
     if (isQueueChanged || isInitialLoad) {
       preloadUpcomingAudio(audioType.value, 5, true)
     } else if (newIndex !== oldIndex) {
-      setTimeout(() => preloadUpcomingAudio(audioType.value, 5, false), 100)
+      if (debounceTimer) clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(() => preloadUpcomingAudio(audioType.value, 5, false), 250)
     }
   }, { deep: false })
 
