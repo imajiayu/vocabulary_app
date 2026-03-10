@@ -274,6 +274,9 @@
                 @dragstart="onDragStart(index, $event)"
                 @dragover.prevent="onDragOver(index)"
                 @dragend="onDragEnd"
+                @touchstart="onTouchStart(index, $event)"
+                @touchmove="onTouchMove($event)"
+                @touchend="onTouchEnd"
               >
                 <span v-if="localSourceOrder.length > 1" class="drag-handle">
                   <svg width="8" height="14" viewBox="0 0 8 14" fill="currentColor">
@@ -1063,7 +1066,7 @@ const confirmDeleteSource = async (source: string) => {
   }
 }
 
-// 拖拽排序
+// 拖拽排序（桌面端 HTML5 Drag and Drop）
 const onDragStart = (index: number, e: DragEvent) => {
   dragIndex.value = index
   if (e.dataTransfer) {
@@ -1075,7 +1078,65 @@ const onDragOver = (index: number) => {
   dropIndex.value = index
 }
 
-const onDragEnd = async () => {
+const onDragEnd = () => {
+  commitDrag()
+}
+
+// 拖拽排序（移动端 Touch Events）
+const touchStartY = ref(0)
+const touchStartX = ref(0)
+const touchMoved = ref(false)
+
+const onTouchStart = (index: number, e: TouchEvent) => {
+  if (localSourceOrder.value.length <= 1) return
+  dragIndex.value = index
+  const touch = e.touches[0]
+  touchStartY.value = touch.clientY
+  touchStartX.value = touch.clientX
+  touchMoved.value = false
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  if (dragIndex.value === null) return
+  const touch = e.touches[0]
+
+  // 判断是否超过拖拽阈值（5px），避免误触
+  if (!touchMoved.value) {
+    const dx = Math.abs(touch.clientX - touchStartX.value)
+    const dy = Math.abs(touch.clientY - touchStartY.value)
+    if (dx < 5 && dy < 5) return
+    touchMoved.value = true
+  }
+
+  // 进入拖拽后才阻止默认滚动
+  e.preventDefault()
+
+  // 找到手指下方的 source-chip 元素
+  const el = document.elementFromPoint(touch.clientX, touch.clientY)
+  if (!el) return
+  const chip = el.closest('.source-chip') as HTMLElement | null
+  if (!chip) return
+
+  // 从 DOM 顺序确定目标索引
+  const chips = Array.from(chip.parentElement!.querySelectorAll('.source-chip'))
+  const targetIndex = chips.indexOf(chip)
+  if (targetIndex !== -1) {
+    dropIndex.value = targetIndex
+  }
+}
+
+const onTouchEnd = () => {
+  if (!touchMoved.value) {
+    // 没有实际拖拽，清除状态
+    dragIndex.value = null
+    dropIndex.value = null
+    return
+  }
+  commitDrag()
+}
+
+// 共用：提交拖拽结果
+const commitDrag = async () => {
   const from = dragIndex.value
   const to = dropIndex.value
   dragIndex.value = null
@@ -1797,6 +1858,17 @@ onUnmounted(() => {
 .source-chip:hover .drag-handle {
   opacity: 0.8;
   color: var(--color-text-secondary);
+}
+
+/* 移动端：drag-handle 始终可见（无 hover），touch-action 禁止默认手势 */
+@media (max-width: 768px) {
+  .source-chip[draggable="true"] {
+    touch-action: none;
+  }
+
+  .drag-handle {
+    opacity: 0.6;
+  }
 }
 
 .source-name {
