@@ -25,12 +25,39 @@ jobs:
             source .venv/bin/activate
             pip install -r requirements.txt
 
-            # 前端构建
+            # 前端：构建到临时目录，避免覆盖正在服务的 dist/
             cd frontend
             npm ci
-            npm run build
+            npx vue-tsc -b
+            npx vite build --outDir dist_new
             cd ..
 
-            # 重启服务
-            sudo systemctl restart vocabulary-backend
+            # 前端：原子替换（mv 在同一文件系统上是原子操作）
+            cd frontend
+            rm -rf dist_old
+            mv dist dist_old 2>/dev/null || true
+            mv dist_new dist
+            cd ..
+
+            # 后端：优雅重载（SIGHUP），失败则 restart 兜底
+            sudo systemctl reload vocabulary-backend || \
+              sudo systemctl restart vocabulary-backend
             sudo systemctl reload nginx
+
+            # 健康检查
+            sleep 2
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+              http://127.0.0.1:5001/api/health)
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "Health check failed (HTTP $HTTP_CODE), rolling back..."
+              cd frontend
+              rm -rf dist
+              mv dist_old dist
+              cd ..
+              sudo systemctl restart vocabulary-backend
+              sudo systemctl reload nginx
+              exit 1
+            fi
+
+            rm -rf frontend/dist_old
+            echo "Deploy successful"

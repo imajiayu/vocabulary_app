@@ -69,47 +69,60 @@ def stream_progress():
 
     def event_stream():
         MAX_IDLE_SECONDS = 300  # 5 分钟无变化则断开
+        HEARTBEAT_INTERVAL = 15  # 每 15 秒心跳，用于检测客户端断连
         prev_status = {}
         last_change = time.monotonic()
+        last_heartbeat = time.monotonic()
 
-        while True:
-            current = generation_service.get_status_for_user(user_id)
+        try:
+            while True:
+                current = generation_service.get_status_for_user(user_id)
 
-            # 推送有变化的任务状态
-            changed = {}
-            for rt, status in current.items():
-                if status != prev_status.get(rt):
-                    changed[rt] = status
+                # 推送有变化的任务状态
+                changed = {}
+                for rt, status in current.items():
+                    if status != prev_status.get(rt):
+                        changed[rt] = status
 
-            if changed:
-                last_change = time.monotonic()
+                if changed:
+                    last_change = time.monotonic()
 
-                # 检查终态事件
-                for rt, status in changed.items():
-                    s = status["status"]
-                    if s in ("completed", "stopped", "error"):
-                        event_type = s if s != "error" else "error"
-                        yield f"event: {event_type}\ndata: {json.dumps({'relation_type': rt, **status})}\n\n"
+                    # 检查终态事件
+                    for rt, status in changed.items():
+                        s = status["status"]
+                        if s in ("completed", "stopped", "error"):
+                            event_type = s if s != "error" else "error"
+                            yield f"event: {event_type}\ndata: {json.dumps({'relation_type': rt, **status})}\n\n"
 
-                # 汇总进度事件
-                running = {
-                    rt: st for rt, st in current.items() if st["status"] == "running"
-                }
-                if running:
-                    yield f"event: progress\ndata: {json.dumps(running)}\n\n"
-            prev_status = current
+                    # 汇总进度事件
+                    running = {
+                        rt: st for rt, st in current.items() if st["status"] == "running"
+                    }
+                    if running:
+                        yield f"event: progress\ndata: {json.dumps(running)}\n\n"
+                prev_status = current
 
-            # 超时断开：客户端断开后 while True 循环继续运行
-            if time.monotonic() - last_change >= MAX_IDLE_SECONDS:
-                yield f"event: done\ndata: {json.dumps({'message': 'idle timeout'})}\n\n"
-                break
+                now = time.monotonic()
 
-            # 用已获取的 current 快照判断是否还有活跃任务
-            if not any(s["status"] == "running" for s in current.values()):
-                yield f"event: done\ndata: {json.dumps({'message': 'no active tasks'})}\n\n"
-                break
+                # 心跳：SSE 注释格式，客户端忽略，但触发 TCP 写入以检测断连
+                if now - last_heartbeat >= HEARTBEAT_INTERVAL:
+                    yield ":heartbeat\n\n"
+                    last_heartbeat = now
 
-            time.sleep(0.5)
+                # 超时断开
+                if now - last_change >= MAX_IDLE_SECONDS:
+                    yield f"event: done\ndata: {json.dumps({'message': 'idle timeout'})}\n\n"
+                    break
+
+                # 用已获取的 current 快照判断是否还有活跃任务
+                if not any(s["status"] == "running" for s in current.values()):
+                    yield f"event: done\ndata: {json.dumps({'message': 'no active tasks'})}\n\n"
+                    break
+
+                time.sleep(0.5)
+
+        except GeneratorExit:
+            logger.info(f"SSE client disconnected (user={user_id})")
 
     return Response(
         stream_with_context(event_stream()),
