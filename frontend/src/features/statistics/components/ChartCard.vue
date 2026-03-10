@@ -1,5 +1,6 @@
 <template>
   <section
+    ref="cardRef"
     class="chart-card"
     :class="chart.heightClass"
     :style="cardStyle"
@@ -9,19 +10,43 @@
       <slot name="title-extra" />
     </div>
     <div class="chart-card-body">
-      <slot />
+      <slot v-if="isVisible" />
+      <div v-else class="chart-placeholder" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import type { ChartDefinition } from '../types'
 
 const props = defineProps<{
   chart: ChartDefinition
   index: number
 }>()
+
+const cardRef = ref<HTMLElement>()
+const isVisible = ref(false)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  if (!cardRef.value) return
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        isVisible.value = true
+        observer?.disconnect()
+        observer = null
+      }
+    },
+    { rootMargin: '200px' }
+  )
+  observer.observe(cardRef.value)
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
+})
 
 const cardStyle = computed(() => ({
   'grid-column': `span ${props.chart.span}`,
@@ -103,6 +128,12 @@ const cardStyle = computed(() => ({
   min-height: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* Placeholder for lazy-loaded charts */
+.chart-placeholder {
+  flex: 1;
+  min-height: 0;
 }
 
 /* Ensure chart content fills body */

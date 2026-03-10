@@ -7,9 +7,10 @@
 import atexit
 import logging
 import time
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime
-from threading import Event, Lock, Thread
+from threading import Event, Lock
 from typing import Dict, List, Optional, Set, Tuple
 
 from sqlalchemy import text
@@ -39,8 +40,8 @@ class GenerationTask:
     """单个生成任务的状态（线程安全）"""
     user_id: str
     relation_type: str
-    thread: Thread
-    stop_event: Event
+    future: Optional[Future] = None
+    stop_event: Event = field(default_factory=Event)
     _lock: Lock = field(default_factory=Lock)
     status: str = "running"     # running | completed | stopped | error
     processed: int = 0
@@ -91,6 +92,7 @@ class GenerationService:
         # key: (user_id, relation_type) 元组，支持多用户同时生成
         self._tasks: Dict[Tuple[str, str], GenerationTask] = {}
         self._lock = Lock()
+        self._executor = ThreadPoolExecutor(max_workers=10, thread_name_prefix="gen")
 
     def start(self, relation_type: str, user_id: str) -> bool:
         """启动生成任务。返回 True 表示成功启动，False 表示已在运行。"""
@@ -108,21 +110,15 @@ class GenerationService:
             if task and task.status != "running":
                 del self._tasks[task_key]
 
-            stop_event = Event()
-            thread = Thread(
-                target=self._run_generation,
-                args=(relation_type, user_id, stop_event, task_key),
-                daemon=True,
-            )
-
-            self._tasks[task_key] = GenerationTask(
+            new_task = GenerationTask(
                 user_id=user_id,
                 relation_type=relation_type,
-                thread=thread,
-                stop_event=stop_event,
             )
+            self._tasks[task_key] = new_task
 
-            thread.start()
+            new_task.future = self._executor.submit(
+                self._run_generation, new_task
+            )
             return True
 
     def stop(self, relation_type: str, user_id: str) -> bool:
@@ -177,22 +173,28 @@ class GenerationService:
             task.stop_event.set()
 
         for task in running:
-            task.thread.join(timeout=10)
-            if task.thread.is_alive():
-                logger.warning(
-                    f"Generation thread for {task.relation_type} "
-                    f"(user={task.user_id}) did not stop within 10s"
-                )
+            if task.future:
+                try:
+                    task.future.result(timeout=10)
+                except Exception:
+                    if not task.future.done():
+                        logger.warning(
+                            f"Generation thread for {task.relation_type} "
+                            f"(user={task.user_id}) did not stop within 10s"
+                        )
 
+        self._executor.shutdown(wait=False)
         logger.info("Generation service shutdown complete")
 
     # ═══════════════════════════════════════════════════════════════════════
     # 内部方法
     # ═══════════════════════════════════════════════════════════════════════
 
-    def _run_generation(self, relation_type: str, user_id: str, stop_event: Event, task_key: Tuple[str, str]):
+    def _run_generation(self, task: GenerationTask):
         """线程目标函数：执行完整的生成流程"""
-        task = self._tasks[task_key]
+        relation_type = task.relation_type
+        user_id = task.user_id
+        stop_event = task.stop_event
 
         try:
             # 1. 读取数据库

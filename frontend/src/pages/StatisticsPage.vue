@@ -105,8 +105,10 @@
     </ChartGrid>
 
     <!-- 热力图单独放在 ChartGrid 外面，避免 grid-column 影响其他图表的布局 -->
+    <!-- heatmapRef 用作 IntersectionObserver 哨兵，即使热力图未渲染也保留在 DOM 中 -->
+    <div ref="heatmapRef" />
     <section
-      v-if="!isLoading"
+      v-if="!isLoading && heatmapVisible"
       class="chart-card heatmap-card"
       :style="{ '--accent': heatmapColors.spell.hasStrength, '--stagger': `${CHART_DEFINITIONS.length * 60}ms` }"
     >
@@ -128,7 +130,7 @@
     </section>
 
     <section
-      v-if="!isLoading"
+      v-if="!isLoading && heatmapVisible"
       class="chart-card heatmap-card"
       :style="{ '--accent': heatmapColors.ef.difficult, '--stagger': `${(CHART_DEFINITIONS.length + 1) * 60}ms` }"
     >
@@ -242,6 +244,11 @@ interface EFRangeConfig {
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 
+// 热力图延迟加载
+const heatmapRef = ref<HTMLElement>()
+const heatmapVisible = ref(false)
+let heatmapObserver: IntersectionObserver | null = null
+
 // EF Range Configuration with localStorage persistence
 const defaultEFRange: EFRangeConfig = { lowMax: 2.3, mediumMax: 2.5 }
 const efRangeConfig = ref<EFRangeConfig>(
@@ -330,20 +337,6 @@ const fetchStats = async (source: string) => {
   }
 }
 
-const preloadAllStats = async () => {
-  try {
-    isLoading.value = true
-    // Dynamically fetch stats for all available sources
-    await Promise.all(
-      availableSources.value.map(source => fetchStats(source))
-    )
-  } catch (e: unknown) {
-    error.value = e instanceof Error ? e.message : String(e)
-  } finally {
-    isLoading.value = false
-  }
-}
-
 // Handle source change - only changes local display, doesn't affect WordIndex
 const handleSourceChange = (newSource: string) => {
   currentSource.value = newSource
@@ -364,15 +357,40 @@ onMounted(async () => {
       currentSource.value = availableSources.value[0]
     }
 
-    // Then preload stats data for both sources
-    await preloadAllStats()
+    // 1. 先加载当前 source，立即显示
+    await fetchStats(currentSource.value)
+    isLoading.value = false
+
+    // 2. 后台预加载其他 source（不阻塞 UI）
+    const others = availableSources.value.filter(s => s !== currentSource.value)
+    if (others.length > 0) {
+      Promise.all(others.map(s => fetchStats(s))).catch(() => {})
+    }
   } catch (e: unknown) {
     error.value = e instanceof Error ? e.message : String(e)
+    isLoading.value = false
   }
+})
+
+// 热力图进入视口时才渲染
+watch(heatmapRef, (el) => {
+  if (!el) return
+  heatmapObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        heatmapVisible.value = true
+        heatmapObserver?.disconnect()
+        heatmapObserver = null
+      }
+    },
+    { rootMargin: '200px' }
+  )
+  heatmapObserver.observe(el)
 })
 
 onUnmounted(() => {
   document.documentElement.classList.remove('hide-scrollbar')
+  heatmapObserver?.disconnect()
 })
 
 // EF histogram buckets (0.1 rounding)
