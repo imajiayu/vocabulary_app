@@ -12,13 +12,33 @@
         </div>
         <div class="rail-tabs">
           <button
-            v-for="source in availableSources"
+            v-for="(source, index) in availableSources"
             :key="source"
-            :class="['rail-tab', { active: currentSource === source }]"
+            :class="[
+              'rail-tab',
+              { active: currentSource === source },
+              { 'is-dragging': dragIndex === index },
+              { 'drop-before': dropIndex === index && dragIndex !== null && dragIndex > index },
+              { 'drop-after': dropIndex === index && dragIndex !== null && dragIndex < index },
+            ]"
+            :draggable="availableSources.length > 1"
             @click="handleSourceChange(source)"
+            @dragstart="onDragStart(index, $event)"
+            @dragover.prevent="onDragOver(index)"
+            @dragend="onDragEnd"
+            @touchstart="onTouchStart(index, $event)"
+            @touchmove="onTouchMove($event)"
+            @touchend="onTouchEnd"
           >
             <span class="tab-name">{{ source }}</span>
             <span class="tab-count">{{ sourceStatsMap[source]?.total || 0 }}</span>
+            <span v-if="availableSources.length > 1" class="drag-handle">
+              <svg width="8" height="14" viewBox="0 0 8 14" fill="currentColor">
+                <circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/>
+                <circle cx="2" cy="7" r="1.2"/><circle cx="6" cy="7" r="1.2"/>
+                <circle cx="2" cy="12" r="1.2"/><circle cx="6" cy="12" r="1.2"/>
+              </svg>
+            </span>
           </button>
         </div>
       </aside>
@@ -195,11 +215,31 @@
         <!-- 来源横向滚动 -->
         <div class="source-scroll">
           <button
-            v-for="source in availableSources"
+            v-for="(source, index) in availableSources"
             :key="source"
-            :class="['source-chip', { active: currentSource === source }]"
+            :class="[
+              'source-chip',
+              { active: currentSource === source },
+              { 'is-dragging': dragIndex === index },
+              { 'drop-before': dropIndex === index && dragIndex !== null && dragIndex > index },
+              { 'drop-after': dropIndex === index && dragIndex !== null && dragIndex < index },
+            ]"
+            :draggable="availableSources.length > 1"
             @click="handleSourceChange(source)"
+            @dragstart="onDragStart(index, $event)"
+            @dragover.prevent="onDragOver(index)"
+            @dragend="onDragEnd"
+            @touchstart="onTouchStart(index, $event)"
+            @touchmove="onTouchMove($event)"
+            @touchend="onTouchEnd"
           >
+            <span v-if="availableSources.length > 1" class="drag-handle">
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor">
+                <circle cx="1.5" cy="1.5" r="1"/><circle cx="4.5" cy="1.5" r="1"/>
+                <circle cx="1.5" cy="5" r="1"/><circle cx="4.5" cy="5" r="1"/>
+                <circle cx="1.5" cy="8.5" r="1"/><circle cx="4.5" cy="8.5" r="1"/>
+              </svg>
+            </span>
             {{ source }}
             <span class="chip-count">{{ sourceStatsMap[source]?.total || 0 }}</span>
           </button>
@@ -330,6 +370,7 @@ import { api } from '@/shared/api'
 import { useSettings } from '@/shared/composables/useSettings'
 import { APP_VERSION } from '@/shared/constants/version'
 import { logger } from '@/shared/utils/logger'
+import type { UserSettings } from '@/shared/types'
 
 const appVersion = APP_VERSION
 const log = logger.create('WordIndex')
@@ -344,6 +385,14 @@ const spellingLimit = ref(0)
 const reviewLimit = ref(0)
 const lapseLimit = ref(0)
 const { isMobile } = useBreakpoint()
+
+// 拖拽排序状态
+const dragIndex = ref<number | null>(null)
+const dropIndex = ref<number | null>(null)
+const touchStartX = ref(0)
+const touchStartY = ref(0)
+const touchMoved = ref(false)
+const dragJustFinished = ref(false)
 
 // 进度恢复通知相关
 const showProgressNotification = ref(false)
@@ -368,7 +417,7 @@ const {
 } = useSourceSelection()
 
 // 使用全局设置管理
-const { loadSettings } = useSettings()
+const { loadSettings, updateSettings } = useSettings()
 
 // 使用 shuffle selection composable
 const {
@@ -380,12 +429,116 @@ const router = useRouter()
 
 // 处理来源切换
 const handleSourceChange = async (source: string) => {
+  // 拖拽刚结束时，忽略浏览器派发的 click 事件
+  if (dragJustFinished.value) return
   try {
     const sourceCounts = await switchSourceComposable(source)
     Object.assign(counts, sourceCounts)
     updateWheelValues()
   } catch (e) {
     log.error('Failed to switch source:', e)
+  }
+}
+
+// 拖拽排序（桌面端 HTML5 Drag and Drop）
+const onDragStart = (index: number, e: DragEvent) => {
+  dragIndex.value = index
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move'
+  }
+}
+
+const onDragOver = (index: number) => {
+  dropIndex.value = index
+}
+
+const onDragEnd = () => {
+  commitDrag()
+}
+
+// 拖拽排序（移动端 Touch Events）
+const onTouchStart = (index: number, e: TouchEvent) => {
+  if (availableSources.value.length <= 1) return
+  dragIndex.value = index
+  const touch = e.touches[0]
+  touchStartX.value = touch.clientX
+  touchStartY.value = touch.clientY
+  touchMoved.value = false
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  if (dragIndex.value === null) return
+  const touch = e.touches[0]
+
+  // 判断是否超过拖拽阈值（5px），避免误触
+  if (!touchMoved.value) {
+    const dx = Math.abs(touch.clientX - touchStartX.value)
+    const dy = Math.abs(touch.clientY - touchStartY.value)
+    if (dx < 5 && dy < 5) return
+    touchMoved.value = true
+  }
+
+  // 进入拖拽后才阻止默认滚动
+  e.preventDefault()
+
+  // 找到手指下方的元素
+  const el = document.elementFromPoint(touch.clientX, touch.clientY)
+  if (!el) return
+  const railTab = el.closest('.rail-tab') as HTMLElement | null
+  const sourceChip = el.closest('.source-chip') as HTMLElement | null
+  const chip = railTab || sourceChip
+  if (!chip) return
+
+  // 从 DOM 顺序确定目标索引（按实际匹配的选择器查询同类兄弟）
+  const selector = railTab ? '.rail-tab' : '.source-chip'
+  const siblings = Array.from(chip.parentElement!.querySelectorAll(selector))
+  const targetIndex = siblings.indexOf(chip)
+  if (targetIndex !== -1) {
+    dropIndex.value = targetIndex
+  }
+}
+
+const onTouchEnd = () => {
+  if (!touchMoved.value) {
+    // 没有实际拖拽，清除状态
+    dragIndex.value = null
+    dropIndex.value = null
+    return
+  }
+  commitDrag()
+}
+
+// 共用：提交拖拽结果
+const commitDrag = async () => {
+  const from = dragIndex.value
+  const to = dropIndex.value
+  dragIndex.value = null
+  dropIndex.value = null
+
+  // 阻止 touchend 后浏览器派发的 click 事件触发 source 切换
+  // 用 setTimeout(0) 而非 rAF：click 作为宏任务入队，setTimeout(0) 保证在其之后执行
+  dragJustFinished.value = true
+  setTimeout(() => { dragJustFinished.value = false }, 0)
+
+  if (from === null || to === null || from === to) return
+
+  // 保存旧顺序用于回滚
+  const oldOrder = [...availableSources.value]
+
+  // 数组重排
+  const order = [...oldOrder]
+  const [moved] = order.splice(from, 1)
+  order.splice(to, 0, moved)
+  availableSources.value = order
+
+  // 持久化
+  try {
+    await updateSettings({
+      sources: { sourceOrder: [...order] } as UserSettings['sources'],
+    })
+  } catch (err) {
+    availableSources.value = oldOrder
+    log.error('保存排序失败:', err)
   }
 }
 
@@ -624,6 +777,7 @@ const resumeProgress = () => {
 }
 
 .rail-tab {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -646,6 +800,7 @@ const resumeProgress = () => {
 }
 
 .rail-tab .tab-name {
+  flex: 1;
   font-size: 14px;
   font-weight: 500;
   color: var(--primitive-ink-700);
@@ -666,6 +821,63 @@ const resumeProgress = () => {
 
 .rail-tab.active .tab-count {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.rail-tab[draggable="true"] {
+  cursor: grab;
+}
+
+.rail-tab.is-dragging {
+  opacity: 0.25;
+  transform: scale(0.95);
+}
+
+.rail-tab.drop-before::before,
+.rail-tab.drop-after::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--primitive-copper-400, #996B3D);
+  pointer-events: none;
+  animation: drop-line-h 0.15s ease-out;
+}
+
+@keyframes drop-line-h {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+.rail-tab.drop-before::before {
+  top: -3px;
+}
+
+.rail-tab.drop-after::after {
+  bottom: -3px;
+}
+
+.rail-tab .drag-handle {
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  cursor: grab;
+  user-select: none;
+  color: var(--primitive-ink-400);
+}
+
+.rail-tab:hover .drag-handle {
+  opacity: 0.6;
+}
+
+.rail-tab.active .drag-handle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rail-tab.active:hover .drag-handle {
+  opacity: 0.8;
 }
 
 /* ── 主内容区 ── */
@@ -1042,6 +1254,7 @@ const resumeProgress = () => {
 }
 
 .source-chip {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.375rem;
@@ -1058,7 +1271,7 @@ const resumeProgress = () => {
   flex-shrink: 0;
 }
 
-.source-chip:active {
+.source-chip:active:not(.is-dragging) {
   transform: scale(0.96);
 }
 
@@ -1072,6 +1285,58 @@ const resumeProgress = () => {
   font-family: var(--font-data);
   font-size: 0.6875rem;
   opacity: 0.8;
+}
+
+.source-chip[draggable="true"] {
+  cursor: grab;
+}
+
+.source-chip.is-dragging {
+  opacity: 0.25;
+  transform: scale(0.95);
+}
+
+.source-chip.drop-before::before,
+.source-chip.drop-after::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--primitive-copper-400, #996B3D);
+  pointer-events: none;
+  animation: drop-line-v 0.15s ease-out;
+}
+
+@keyframes drop-line-v {
+  from { transform: scaleY(0); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+.source-chip.drop-before::before {
+  left: -4px;
+}
+
+.source-chip.drop-after::after {
+  right: -4px;
+}
+
+.source-chip .drag-handle {
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+  cursor: grab;
+  user-select: none;
+  color: var(--primitive-ink-400);
+  transition: opacity 0.15s ease;
+  /* 扩大触摸区域，SVG 仅 6x10 太小 */
+  padding: 4px 2px;
+  margin: -4px -2px;
+}
+
+.source-chip.active .drag-handle {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ── 移动端卡片区 ── */
