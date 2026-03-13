@@ -270,9 +270,7 @@ function handleCondense() {
 
 async function handleApply() {
   const ok = await adj.applyChanges()
-  if (ok) {
-    adj.close()
-  } else {
+  if (!ok) {
     alert('应用失败，请重试')
   }
 }
