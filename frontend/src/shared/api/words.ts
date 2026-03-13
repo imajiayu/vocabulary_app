@@ -78,9 +78,7 @@ export interface WordScheduleData {
   id: number
   word: string
   next_review: string | null
-  ease_factor: number
   spell_next_review: string | null
-  spell_strength: number | null
   stop_review: number
   stop_spell: number
 }
@@ -993,7 +991,7 @@ export class WordsApi {
     const rawRows = await paginateSupabase<Record<string, unknown>>((from, to) => {
       let query = supabase
         .from('words')
-        .select('id, word, next_review, ease_factor, spell_next_review, spell_strength, stop_review, stop_spell')
+        .select('id, word, next_review, spell_next_review, stop_review, stop_spell')
         .eq('user_id', userId)
       if (source !== 'all') {
         query = query.eq('source', source)
@@ -1005,9 +1003,7 @@ export class WordsApi {
       id: row.id as number,
       word: row.word as string,
       next_review: row.next_review as string | null,
-      ease_factor: Number(row.ease_factor) || 2.5,
       spell_next_review: row.spell_next_review as string | null,
-      spell_strength: row.spell_strength !== null ? Number(row.spell_strength) : null,
       stop_review: Number(row.stop_review) || 0,
       stop_spell: Number(row.stop_spell) || 0,
     }))

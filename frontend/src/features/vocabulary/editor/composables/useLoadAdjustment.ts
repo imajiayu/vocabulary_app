@@ -29,7 +29,6 @@ const log = logger.create('LoadAdjustment')
 export interface BucketWord {
   id: number
   word: string
-  tolerance: number // ease_factor（复习）或 spell_strength（拼写）
 }
 
 export interface DayBucket {
@@ -86,11 +85,7 @@ function buildBuckets(
     // 跳过已停止的和无日期的
     if (stopField === 1 || !dateField) continue
 
-    const tolerance = tab === 'review'
-      ? w.ease_factor
-      : (w.spell_strength ?? 0)
-
-    const bucketWord: BucketWord = { id: w.id, word: w.word, tolerance }
+    const bucketWord: BucketWord = { id: w.id, word: w.word }
 
     // 过期词归入今天
     if (dateField <= today) {
@@ -122,8 +117,8 @@ function buildBuckets(
 
 /**
  * 设置某天的目标数量
- * - 减少：按 tolerance 降序移除多余单词 → 分配到最近的有空余天
- * - 增加：从相邻天按 tolerance 降序拉取
+ * - 减少：移走多余单词 → 分配到最近的有空余天
+ * - 增加：从相邻天拉取
  */
 function adjustDay(
   buckets: DayBucket[],
@@ -137,28 +132,22 @@ function adjustDay(
   if (target === current) return
 
   if (target < current) {
-    // 减少：移走多余的（高 tolerance 先走）
-    const sorted = [...bucket.words].sort((a, b) => b.tolerance - a.tolerance)
-    const overflow = sorted.splice(0, current - target)
-    bucket.words = sorted
+    const overflow = bucket.words.splice(target)
 
-    // 分配溢出单词到最近的有空余天
     for (const word of overflow) {
       const targetIdx = findNearestAvailable(buckets, dayIndex, cap)
       if (targetIdx !== -1) {
         buckets[targetIdx].words.push(word)
       } else {
-        // 所有天都满了，放回原位
         bucket.words.push(word)
       }
     }
   } else {
-    // 增加：从相邻天拉取（螺旋搜索）
     const needed = target - current
     let collected = 0
 
     for (let dist = 1; dist < buckets.length && collected < needed; dist++) {
-      for (const sign of [-1, 1]) {
+      for (const sign of [1, -1]) {
         if (collected >= needed) break
         const idx = dayIndex + dist * sign
         if (idx < 0 || idx >= buckets.length) continue
@@ -166,10 +155,8 @@ function adjustDay(
         const donor = buckets[idx]
         if (donor.words.length <= 0) continue
 
-        // 从 donor 按 tolerance 降序取
-        donor.words.sort((a, b) => b.tolerance - a.tolerance)
         while (donor.words.length > 0 && collected < needed) {
-          bucket.words.push(donor.words.shift()!)
+          bucket.words.push(donor.words.pop()!)
           collected++
         }
       }
@@ -200,24 +187,20 @@ function findNearestAvailable(
 // ============================================================================
 
 function flattenPeaks(buckets: DayBucket[], cap: number): void {
-  for (let i = 0; i < buckets.length; i++) {
-    const bucket = buckets[i]
-    if (bucket.words.length <= cap) continue
+  let carry: BucketWord[] = [] // 从更早天级联来的单词，日期优先级更高
 
-    // 按 tolerance 降序取出溢出
-    bucket.words.sort((a, b) => b.tolerance - a.tolerance)
-    const overflow = bucket.words.splice(cap)
+  for (let i = 0; i < buckets.length - 1; i++) {
+    if (carry.length === 0 && buckets[i].words.length <= cap) continue
 
-    // 螺旋分配
-    for (const word of overflow) {
-      const targetIdx = findNearestAvailable(buckets, i, cap)
-      if (targetIdx !== -1) {
-        buckets[targetIdx].words.push(word)
-      } else {
-        // 无法分配，放回
-        bucket.words.push(word)
-      }
-    }
+    // carry（早期）在前，当天在后 — 日期优先级自然体现
+    const all = [...carry, ...buckets[i].words]
+    buckets[i].words = all.slice(0, cap)
+    carry = all.slice(cap)
+  }
+
+  // 最后一天接收剩余
+  if (carry.length > 0) {
+    buckets[buckets.length - 1].words.push(...carry)
   }
 }
 
@@ -226,28 +209,14 @@ function flattenPeaks(buckets: DayBucket[], cap: number): void {
 // ============================================================================
 
 function condense(buckets: DayBucket[], limit: number): void {
-  // 收集所有单词，按 tolerance 升序（不熟悉的先排）
-  const allWords: BucketWord[] = []
-  for (const bucket of buckets) {
-    allWords.push(...bucket.words)
-    bucket.words = []
-  }
-  allWords.sort((a, b) => a.tolerance - b.tolerance)
+  for (let i = 0; i < buckets.length - 1; i++) {
+    if (buckets[i].words.length >= limit) continue
 
-  // 从第一天开始逐天填满
-  let wordIdx = 0
-  for (const bucket of buckets) {
-    while (wordIdx < allWords.length && bucket.words.length < limit) {
-      bucket.words.push(allWords[wordIdx++])
-    }
-    if (wordIdx >= allWords.length) break
-  }
-
-  // 溢出的放在最后一个非空桶
-  if (wordIdx < allWords.length) {
-    const lastBucket = buckets[buckets.length - 1]
-    while (wordIdx < allWords.length) {
-      lastBucket.words.push(allWords[wordIdx++])
+    // 从后续最近的天拉取，直到当天填满
+    for (let j = i + 1; j < buckets.length && buckets[i].words.length < limit; j++) {
+      if (buckets[j].words.length === 0) continue
+      const needed = limit - buckets[i].words.length
+      buckets[i].words.push(...buckets[j].words.splice(0, needed))
     }
   }
 }
