@@ -25,7 +25,7 @@
               <span
                 v-if="displayWord.definition?.phonetic?.us"
                 class="phonetic-tag"
-                @click="playWordAudio(displayWord.word, 'us')"
+                @click="playWordAudio(displayWord.word, 'us', ttsLang, props.word.source)"
               >
                 <span class="accent">US</span>
                 <span class="ipa">{{ displayWord.definition?.phonetic?.us }}</span>
@@ -33,7 +33,7 @@
               <span
                 v-if="displayWord.definition?.phonetic?.uk"
                 class="phonetic-tag"
-                @click="playWordAudio(displayWord.word, 'uk')"
+                @click="playWordAudio(displayWord.word, 'uk', ttsLang, props.word.source)"
               >
                 <span class="accent">UK</span>
                 <span class="ipa">{{ displayWord.definition?.phonetic?.uk }}</span>

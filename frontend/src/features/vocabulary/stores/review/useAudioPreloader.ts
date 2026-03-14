@@ -15,7 +15,8 @@ export function useAudioPreloader(
   wordQueue: Ref<Word[]>,
   currentIndex: Ref<number>,
   audioType: Ref<AudioType>,
-  mode: Ref<ReviewMode>
+  mode: Ref<ReviewMode>,
+  queueVersion: Ref<number>
 ) {
   const { audioAccent } = useAudioAccent()
   const { settings } = useSettings()
@@ -60,20 +61,30 @@ export function useAudioPreloader(
     }
   }
 
-  // 监听队列/索引变化，自动预加载
+  // 监听队列/索引/版本变化，自动预加载
   let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
-  watch([wordQueue, currentIndex, audioType], ([newQueue, newIndex], [oldQueue, oldIndex]) => {
-    const isQueueChanged = newQueue.length !== oldQueue?.length || newQueue !== oldQueue
-    const isInitialLoad = oldQueue === undefined || oldQueue.length === 0
+  watch(
+    [wordQueue, currentIndex, audioType, queueVersion],
+    ([newQueue, newIndex, , newVer], [oldQueue, oldIndex, , oldVer]) => {
+      // Bug 1 fix: queueVersion 变化 → lapse 模式队列原地修改 → 强制重新预加载
+      if (newVer !== oldVer) {
+        preloadUpcomingAudio(audioType.value, 5, true)
+        return
+      }
 
-    if (isQueueChanged || isInitialLoad) {
-      preloadUpcomingAudio(audioType.value, 5, true)
-    } else if (newIndex !== oldIndex) {
-      if (debounceTimer) clearTimeout(debounceTimer)
-      debounceTimer = setTimeout(() => preloadUpcomingAudio(audioType.value, 5, false), 250)
-    }
-  }, { deep: false })
+      const isQueueChanged = newQueue.length !== oldQueue?.length || newQueue !== oldQueue
+      const isInitialLoad = oldQueue === undefined || oldQueue.length === 0
+
+      if (isQueueChanged || isInitialLoad) {
+        preloadUpcomingAudio(audioType.value, 5, true)
+      } else if (newIndex !== oldIndex) {
+        if (debounceTimer) clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(() => preloadUpcomingAudio(audioType.value, 5, false), 250)
+      }
+    },
+    { deep: false }
+  )
 
   // 定期清理缓存
   watch(currentIndex, (newIndex) => {

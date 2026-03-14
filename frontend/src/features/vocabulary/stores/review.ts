@@ -42,8 +42,11 @@ export const useReviewStore = defineStore('review', () => {
   const mode = ref<ReviewMode>('mode_review')
   const audioType = ref<AudioType>('us')
 
+  // Lapse 模式队列原地修改时递增，驱动预加载 watcher 重新触发
+  const queueVersion = ref(0)
+
   // 音频预加载（需要传入 refs）
-  const audio = useAudioPreloader(queue.wordQueue, queue.currentIndex, audioType, mode)
+  const audio = useAudioPreloader(queue.wordQueue, queue.currentIndex, audioType, mode, queueVersion)
 
   // === 计算属性（代理到子模块） ===
   const currentWord = computed(() => queue.currentWord(mode.value))
@@ -86,6 +89,7 @@ export const useReviewStore = defineStore('review', () => {
         wordResult.remembered,
         wordResult.elapsed_time ?? 3
       )
+      queueVersion.value++
       return
     }
 
@@ -116,6 +120,7 @@ export const useReviewStore = defineStore('review', () => {
 
     if (mode.value === 'mode_lapse') {
       lapse.stopLapseWord(queue.wordQueue.value, wordId)
+      queueVersion.value++
     } else {
       queue.currentIndex.value++
       if (shouldLoadMore.value && !isCompleted.value) {
@@ -151,6 +156,7 @@ export const useReviewStore = defineStore('review', () => {
 
   const removeWordFromLapseSession = (wordId: number): void => {
     lapse.removeWordFromLapseSession(queue.wordQueue.value, wordId)
+    queueVersion.value++
   }
 
   const removeWordFromSnapshot = (wordId: number): void => {
