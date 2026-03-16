@@ -11,6 +11,7 @@ const ReviewPage = () => import('@/pages/ReviewPage.vue')
 const SpeakingPage = () => import('@/pages/SpeakingPage.vue')
 const WritingPage = () => import('@/pages/WritingPage.vue')
 const SettingsPage = () => import('@/pages/SettingsPage.vue')
+const NotFoundPage = () => import('@/pages/NotFoundPage.vue')
 
 const routes = [
   {
@@ -65,6 +66,12 @@ const routes = [
     name: 'settings',
     component: SettingsPage,
     meta: { title: '设置', depth: 1 }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFoundPage,
+    meta: { title: '页面未找到', public: true }
   }
 ]
 
