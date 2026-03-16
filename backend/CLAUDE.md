@@ -16,6 +16,7 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 **后端负责：**
 - 关系生成（5种生成器，线程化执行 + SSE 进度推送，多用户隔离）
 - TTS 音频缓存（保存/删除 Google TTS 音频到文件系统，nginx 静态服务）
+- 外部工具 API（无需认证的单词新增/删除/查询，供 iOS 快捷指令、learn_ukrainian 课程生成等调用）
 
 **后端不处理（已迁移到前端）：**
 - 单词 CRUD（前端直连 Supabase）
@@ -37,6 +38,7 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 | `app.py` | Flask 入口（CORS 来源限制、请求体大小限制、健康检查含活跃任务数） |
 | `api/generation.py` | 关系生成/停止/进度 API（SSE 空闲 5min 超时断开） |
 | `api/tts_cache.py` | TTS 音频缓存保存/删除（base64 → 文件系统，路径遍历防护） |
+| `api/external.py` | 外部工具 API — 新增/删除/查询单词（无需认证，供 iOS 快捷指令、外部项目调用） |
 | `generators/` | 5种关系生成器（synonym, antonym, root, confused, topic） |
 | `generators/base.py` | BaseGenerator 基类（进度回调 + 停止信号 + 增量保存，flush_threshold 可配置） |
 | `generators/data.py` | 统一数据源（反义词对、词根、易混淆词、IELTS主题） |
@@ -58,6 +60,9 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 | `/api/health` | GET | 健康检查 |
 | `/api/tts/cache` | POST | 保存 TTS 音频缓存 |
 | `/api/tts/cache` | DELETE | 删除 TTS 音频缓存 |
+| `/api/external/words` | GET | 查询用户单词列表（无需认证，支持 source 过滤） |
+| `/api/external/words` | POST | 外部工具新增单词（无需认证） |
+| `/api/external/words` | DELETE | 外部工具删除单词（无需认证） |
 
 ## 环境变量
 

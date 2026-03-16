@@ -19,7 +19,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | Project URL | `https://oilcmmlkkmikmftqjlih.supabase.co` |
 | OAuth Callback | `https://oilcmmlkkmikmftqjlih.supabase.co/auth/v1/callback` |
 
-> **开发理念**: 虽然已从 Vercel 迁移至阿里云部署，但几乎所有业务逻辑都在 Vue 前端实现，仍按 Serverless 模式开发（前端直连 Supabase，后端仅保留关系专用服务），便于后续迁移至其他平台。
+> **开发理念**: 虽然已从 Vercel 迁移至阿里云部署，但几乎所有业务逻辑都在 Vue 前端实现，仍按 Serverless 模式开发（前端直连 Supabase，后端保留关系服务 + 外部工具 API），便于后续迁移至其他平台。
 
 ## 认证架构
 
@@ -40,6 +40,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 复习/拼写单词列表 | Frontend → Supabase | 前端获取 ID + 分页加载 |
 | 关系生成 | Backend（线程 + SSE） | CPU 密集 + NLTK 依赖 |
 | TTS 音频缓存 | Frontend → Backend → 文件系统 | nginx 静态服务 + 避免重复 API 调用 |
+| 外部工具 API | External Tool → Backend → Supabase | 无需认证，供 iOS 快捷指令等外部调用 |
 | 关系清空 | Frontend → Supabase | 按类型批量删除 |
 | 统计数据 | Frontend → Supabase Views | 直接查询视图 |
 | 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
@@ -77,6 +78,7 @@ cd frontend && npm run dev
 app.py                        # Flask 入口（CORS/请求限制/健康检查）
 api/generation.py             # 关系生成/停止/进度 API（SSE 空闲超时 5min）
 api/tts_cache.py              # TTS 音频缓存保存/删除（文件系统）
+api/external.py               # 外部工具 API — 单词新增/删除/查询（无需认证）
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
   data.py                     # 统一数据源（4885行常量 + IELTS主题）
@@ -173,7 +175,7 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 
 ## 注意事项
 
-- 后端定位为关系专用服务（图查询 + 关系生成）
+- 后端定位为关系服务（图查询 + 关系生成）+ 外部工具 API（单词 CRUD，无需认证）
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{word}.mp3`），后续直接从 nginx 静态文件获取
