@@ -168,6 +168,8 @@ async function sendMessage() {
   // Get AI response
   const isEditMode = mode.value === 'edit' && selected
   isLoading.value = true
+  await nextTick()
+  scrollToBottom()
   try {
     let chatContent: string
     let replaceText: string | null = null

@@ -12,7 +12,7 @@ export interface Message {
 
 export function useChatMessages(
   currentWord: Ref<Word | null | undefined>,
-  _isExpanded: Ref<boolean>
+  isExpanded: Ref<boolean>
 ) {
   const { settings, loadSettings } = useSettings()
   const userInput = ref('')
@@ -24,7 +24,11 @@ export function useChatMessages(
 
   function scrollToBottom() {
     if (messagesContainer.value) {
-      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+      requestAnimationFrame(() => {
+        if (messagesContainer.value) {
+          messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+        }
+      })
     }
   }
 
@@ -43,9 +47,6 @@ export function useChatMessages(
       role: 'user',
       content: message
     })
-
-    await nextTick()
-    scrollToBottom()
 
     isLoading.value = true
     try {
@@ -68,8 +69,6 @@ export function useChatMessages(
         role: 'assistant',
         content: result.response
       })
-      await nextTick()
-      scrollToBottom()
     } catch (error) {
       logger.error('AI聊天失败:', error)
       messages.value.push({
@@ -80,6 +79,20 @@ export function useChatMessages(
       isLoading.value = false
     }
   }
+
+  // Auto-scroll when messages change or loading state changes
+  watch(
+    [() => messages.value.length, isLoading],
+    () => scrollToBottom(),
+    { flush: 'post' }
+  )
+
+  // Scroll to bottom when panel reopens with existing messages
+  watch(isExpanded, (expanded) => {
+    if (expanded && messages.value.length > 0) {
+      nextTick(() => setTimeout(() => scrollToBottom(), 50))
+    }
+  })
 
   // Clear messages when switching words
   watch(currentWord, (newWord, oldWord) => {
