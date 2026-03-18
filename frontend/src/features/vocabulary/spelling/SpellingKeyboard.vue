@@ -1,5 +1,5 @@
 <template>
-  <div ref="keyboardRef" class="spelling-keyboard" @selectstart.prevent @contextmenu.prevent>
+  <div ref="keyboardRef" class="spelling-keyboard" :class="{ 'kb-dense': isDense }" @selectstart.prevent @contextmenu.prevent>
     <!-- 按键字符预览气泡 -->
     <div
       v-show="previewVisible"
@@ -87,7 +87,7 @@
     </div>
 
     <!-- 功能键区域 -->
-    <div class="action-row">
+    <div class="action-row" :class="{ 'action-row--compact': isCompactActionRow }">
       <button
         v-for="ch in extraChars"
         :key="ch"
@@ -98,7 +98,7 @@
         @pointerleave="onKeyUp"
         @pointercancel="onKeyUp"
       >
-        <span class="key-cap key-symbol">{{ ch }}</span>
+        <span class="key-cap key-symbol">{{ ch.toUpperCase() }}</span>
       </button>
 
       <button
@@ -184,6 +184,13 @@ const ROW_2 = computed(() => props.rows?.[1] ?? DEFAULT_ROWS[1])
 const ROW_3 = computed(() => props.rows?.[2] ?? DEFAULT_ROWS[2])
 const extraChars = computed(() => props.specialChars ?? ['-'])
 
+// 密集布局检测：任意行超过 10 键时启用紧凑样式
+const isDense = computed(() =>
+  Math.max(ROW_1.value.length, ROW_2.value.length, ROW_3.value.length) > 10
+)
+// 功能行紧凑模式：特殊字符超过 2 个时缩小按键
+const isCompactActionRow = computed(() => extraChars.value.length > 2)
+
 const emit = defineEmits<{
   key: [value: string]
   backspace: []
@@ -262,7 +269,9 @@ function playClickSound(isSpecial = false) {
 
 // Show character preview above the pressed key (like iOS keyboard pop-up)
 function showPreview(target: HTMLElement, char: string) {
-  const rect = target.getBoundingClientRect()
+  // 用 .key-cap 定位，避免被外层 .key 的 padding 影响
+  const capEl = target.querySelector('.key-cap') as HTMLElement
+  const rect = (capEl || target).getBoundingClientRect()
   const kbRect = keyboardRef.value?.getBoundingClientRect()
   if (!kbRect) return
 
@@ -339,9 +348,12 @@ function onKeyUp(event: Event) {
    Editorial Typewriter Keyboard - 拟物化移动端键盘
    ═══════════════════════════════════════════════════════════════════════════
    设计理念：复古打字机质感 + 现代触感反馈
-   - 更宽敞的按键触控区域
-   - 3D 按压效果（阴影 + 位移）
-   - 清脆的音频反馈
+
+   触控优化（模拟 iPhone 原生键盘"零死区"行为）：
+   - 容器无 gap，按键 button 填满所有空间，触控区域无间隙
+   - .key（button）= 透明触控容器，padding 制造视觉间距
+   - .key-cap（span）= 承载 3D 拟物外观
+   - 3D 按压效果（阴影 + 位移）+ 清脆音频反馈
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .spelling-keyboard {
@@ -359,8 +371,8 @@ function onKeyUp(event: Event) {
     var(--primitive-paper-400) 50%,
     var(--primitive-paper-500) 100%
   );
-  padding: 10px 6px 12px;
-  padding-bottom: calc(14px + env(safe-area-inset-bottom));
+  padding: 6px 3px 8px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
   z-index: 1000;
   box-shadow:
     0 -1px 0 var(--primitive-paper-600),
@@ -403,44 +415,38 @@ function onKeyUp(event: Event) {
   }
 }
 
-/* ── 键盘行 ── */
+/* ── 键盘行 - 无间隙，按键填满空间 ── */
 .keyboard-rows {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2px;
   width: 100%;
 }
 
 .keyboard-row {
   display: flex;
   justify-content: center;
-  gap: 5px;
   width: 100%;
-  padding: 0 2px;
-  /* 向下扩展触控区域，吞掉行间空隙（模拟 iPhone 原生键盘行为） */
-  padding-bottom: 8px;
 }
 
 .row-with-special {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 6px;
+  align-items: stretch;
   width: 100%;
-  padding: 0 2px;
-  padding-bottom: 8px;
 }
 
 .letter-group {
   display: flex;
   justify-content: center;
-  gap: 5px;
   flex: 1;
   min-width: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   按键基础样式 - 3D 拟物设计
+   按键基础样式 - 透明触控容器
+   ═══════════════════════════════════════════════════════════════════════════
+   .key = button 元素，背景透明，padding 产生按键间视觉间距
+   .key-cap = 内层 span，承载全部 3D 拟物外观
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .key {
@@ -448,7 +454,7 @@ function onKeyUp(event: Event) {
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 8px;
+  background: transparent;
   cursor: pointer;
   font-family: var(--font-ui);
   -webkit-tap-highlight-color: transparent;
@@ -457,21 +463,22 @@ function onKeyUp(event: Event) {
   touch-action: manipulation;
   user-select: none;
   position: relative;
-  /* 3D 效果基础 */
-  transform-style: preserve-3d;
-  transition:
-    transform 0.08s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.08s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 4px 2.5px;
+  box-sizing: border-box;
 }
 
-/* 按键内的文字/图标容器 - 用于按压时的微位移 */
+/* 按键内的视觉容器 - 3D 拟物外观 */
 .key-cap {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.08s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.08s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .key:disabled {
@@ -479,24 +486,23 @@ function onKeyUp(event: Event) {
   cursor: not-allowed;
 }
 
-/* 按下状态 - 向下位移 + 阴影消失 */
-.key.pressed:not(:disabled) {
-  transform: translateY(3px);
-}
-
+/* 按下状态 - key-cap 向下位移 + 缩放（触控区域不动） */
 .key.pressed:not(:disabled) .key-cap {
-  transform: scale(0.96);
+  transform: translateY(3px) scale(0.96);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   字母键 - 更宽敞的触控区域
+   字母键
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .letter-key {
   flex: 1;
   min-width: 30px;
-  max-width: 36px;      /* 从 2.25rem (36px) 扩展到固定 36px */
-  height: 52px;          /* 从 2.75rem (44px) 扩展到 52px */
+  max-width: 41px;
+  height: 60px;
+}
+
+.letter-key .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-paper-50) 0%,
@@ -506,7 +512,6 @@ function onKeyUp(event: Event) {
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  /* 3D 阴影层 */
   box-shadow:
     0 1px 0 var(--primitive-paper-300),
     0 3px 0 var(--primitive-paper-400),
@@ -514,7 +519,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(0, 0, 0, 0.06);
 }
 
-.letter-key.pressed:not(:disabled) {
+.letter-key.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-paper-300),
     0 1px 0 var(--primitive-paper-400),
@@ -532,8 +537,11 @@ function onKeyUp(event: Event) {
 
 .special-key {
   flex-shrink: 0;
-  width: 50px;
-  height: 52px;
+  width: 55px;
+  height: 60px;
+}
+
+.special-key .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-ink-100) 0%,
@@ -547,7 +555,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(0, 0, 0, 0.06);
 }
 
-.special-key.pressed:not(:disabled) {
+.special-key.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-ink-200),
     0 1px 0 var(--primitive-ink-300),
@@ -566,21 +574,22 @@ function onKeyUp(event: Event) {
 .action-row {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 4px 0;
+  align-items: stretch;
   width: 100%;
   box-sizing: border-box;
 }
 
 .action-key {
   flex-shrink: 0;
-  height: 52px;
+  height: 60px;
 }
 
 /* 特殊字符键（连字符、撇号等） */
 .action-key.char-key {
-  width: 44px;
+  width: 49px;
+}
+
+.action-key.char-key .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-paper-50) 0%,
@@ -596,7 +605,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(0, 0, 0, 0.06);
 }
 
-.action-key.char-key.pressed:not(:disabled) {
+.action-key.char-key.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-paper-300),
     0 1px 0 var(--primitive-paper-400),
@@ -606,7 +615,10 @@ function onKeyUp(event: Event) {
 
 /* 播放键 */
 .action-key.play {
-  width: 52px;
+  width: 57px;
+}
+
+.action-key.play .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-copper-400) 0%,
@@ -620,7 +632,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(153, 107, 61, 0.15);
 }
 
-.action-key.play.pressed:not(:disabled) {
+.action-key.play.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-copper-500),
     0 1px 0 var(--primitive-copper-600),
@@ -631,8 +643,12 @@ function onKeyUp(event: Event) {
 /* 空格键 */
 .action-key.space {
   flex: 1;
+  flex-shrink: 1;
   min-width: 80px;
   max-width: 140px;
+}
+
+.action-key.space .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-paper-50) 0%,
@@ -649,7 +665,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(0, 0, 0, 0.06);
 }
 
-.action-key.space.pressed:not(:disabled) {
+.action-key.space.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-paper-300),
     0 1px 0 var(--primitive-paper-400),
@@ -659,7 +675,10 @@ function onKeyUp(event: Event) {
 
 /* 提示键 */
 .action-key.hint {
-  width: 52px;
+  width: 57px;
+}
+
+.action-key.hint .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-gold-400) 0%,
@@ -673,7 +692,7 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(184, 134, 11, 0.15);
 }
 
-.action-key.hint.pressed:not(:disabled) {
+.action-key.hint.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-gold-500),
     0 1px 0 var(--primitive-gold-600),
@@ -683,7 +702,10 @@ function onKeyUp(event: Event) {
 
 /* 确认键 */
 .action-key.enter {
-  width: 52px;
+  width: 57px;
+}
+
+.action-key.enter .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-ink-100) 0%,
@@ -697,14 +719,14 @@ function onKeyUp(event: Event) {
     0 6px 8px rgba(0, 0, 0, 0.06);
 }
 
-.action-key.enter.pressed:not(:disabled) {
+.action-key.enter.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-ink-200),
     0 1px 0 var(--primitive-ink-300),
     0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-.action-key.enter.ready {
+.action-key.enter.ready .key-cap {
   background: linear-gradient(
     180deg,
     var(--primitive-olive-400) 0%,
@@ -720,7 +742,7 @@ function onKeyUp(event: Event) {
   animation: readyPulse 2s ease-in-out infinite;
 }
 
-.action-key.enter.ready.pressed:not(:disabled) {
+.action-key.enter.ready.pressed:not(:disabled) .key-cap {
   box-shadow:
     0 0 0 var(--primitive-olive-500),
     0 1px 0 var(--primitive-olive-600),
@@ -779,42 +801,84 @@ function onKeyUp(event: Event) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   密集键盘模式（11+ 键/行，如乌克兰语 ЙЦУКЕН）
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.kb-dense .letter-key {
+  max-width: none;
+}
+
+.kb-dense .letter-key .key-cap {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.kb-dense .special-key {
+  width: 48px;
+}
+
+/* 紧凑功能行（3+ 特殊字符键） */
+.action-row--compact .action-key.char-key {
+  width: 42px;
+}
+
+.action-row--compact .action-key.char-key .key-cap {
+  font-size: 20px;
+}
+
+.action-row--compact .action-key.play,
+.action-row--compact .action-key.hint,
+.action-row--compact .action-key.enter {
+  width: 52px;
+}
+
+.action-row--compact .action-key.space {
+  min-width: 60px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    响应式适配
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* 横屏优化 */
 @media (max-height: 500px) and (orientation: landscape) {
   .spelling-keyboard {
-    padding: 6px 8px 8px;
-    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    padding: 4px 3px 4px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
   }
 
-  .keyboard-rows {
-    margin-bottom: 2px;
-  }
-
-  .keyboard-row,
-  .row-with-special {
-    padding-bottom: 5px;
+  .key {
+    padding: 2.5px 2.5px;
   }
 
   .letter-key {
-    height: 44px;
+    height: 49px;
+  }
+
+  .letter-key .key-cap {
     font-size: 16px;
   }
 
   .special-key {
-    height: 44px;
-    width: 44px;
+    height: 49px;
+    width: 49px;
   }
 
   .action-key {
-    height: 44px;
+    height: 49px;
   }
 
   .key-icon-svg {
     width: 20px;
     height: 20px;
+  }
+
+  .kb-dense .letter-key .key-cap {
+    font-size: 13px;
+  }
+
+  .kb-dense .special-key {
+    width: 42px;
   }
 }
 </style>

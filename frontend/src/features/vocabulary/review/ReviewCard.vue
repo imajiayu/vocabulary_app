@@ -1075,18 +1075,14 @@ onBeforeUnmount(() => {
 
   .word-presenter {
     min-height: 140px;
-    /* 移动端简化过渡 */
-    transition:
-      min-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      margin-bottom 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    /* 移动端：禁用 min-height/margin 布局过渡，避免逐帧重排导致卡顿 */
+    transition: none;
   }
 
   .word-text {
     font-size: clamp(2rem, 10vw, 3rem);
-    /* 移动端简化过渡 */
-    transition:
-      font-size 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    /* 移动端：仅过渡颜色（paint-only），禁用 font-size 过渡（触发布局重算） */
+    transition: color 0.2s ease;
   }
 
   .word-presenter.to-header .word-text {
@@ -1126,6 +1122,9 @@ onBeforeUnmount(() => {
     /* 移除交错延迟，统一动画 */
     animation: cardSlideInMobile 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     animation-delay: 0.1s;
+    /* 移除永久合成层，降低 GPU 内存压力（动画期间由 keyframes 自行提升） */
+    will-change: auto;
+    transform: none;
   }
 
   .def-text {
@@ -1137,6 +1136,9 @@ onBeforeUnmount(() => {
     /* 移除交错延迟，统一动画 */
     animation: cardSlideInMobile 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     animation-delay: 0.1s;
+    /* 移除永久合成层 */
+    will-change: auto;
+    transform: none;
   }
 
   .example-en {
