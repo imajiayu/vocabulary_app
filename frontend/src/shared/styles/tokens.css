@@ -424,7 +424,7 @@
 
   /* ── 按钮栏高度 ── */
   --button-bar-height: 120px;
-  --button-bar-height-mobile: 140px;
+  --button-bar-height-mobile: 80px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

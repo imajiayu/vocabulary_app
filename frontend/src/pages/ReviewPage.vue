@@ -1,14 +1,15 @@
 <template>
-  <div class="review-page">
+  <div class="review-page" :class="{ 'is-completed': isCompleted }">
     <!-- 右侧面板（通知 + AI 助手）- 桌面端固定 / 移动端浮动 -->
     <ReviewRightPanel
+      v-if="!isCompleted"
       :notification-data="notification.data"
       :current-word="currentWord"
     />
 
     <!-- 侧边栏 -->
     <WordSideBar
-      v-if="displayIndex <= displayTotal"
+      v-if="displayIndex <= displayTotal && !isCompleted"
       :words="sidebarWords"
       :remember-history="wordResults"
       :mode="mode"
@@ -552,6 +553,14 @@ onUnmounted(() => {
     --sidebar-right: 260px;
     padding-left: var(--sidebar-left);
     padding-right: var(--sidebar-right);
+  }
+}
+
+/* 完成后取消侧边栏 padding，让完成屏幕居中 */
+@media (min-width: 769px) {
+  .review-page.is-completed {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 

@@ -7,10 +7,10 @@
 | Category | Count |
 |----------|-------|
 | Enum Types | 1 |
-| Functions | 2 |
-| Triggers | 1 |
+| Functions | 6 |
+| Triggers | 2 |
 | Tables | 13 |
-| Views | 13 |
+| Views | 12 |
 | Storage Buckets | 2 |
 | Edge Functions | 3 |
 
@@ -58,6 +58,50 @@ CREATE OR REPLACE FUNCTION get_daily_spell_loads(
 $$ LANGUAGE sql STABLE SECURITY INVOKER;
 ```
 
+### handle_new_user()
+
+Trigger function that auto-creates a `user_config` row for new users. Prevents Edge Functions from failing on `.single()` when no config row exists.
+
+```sql
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public AS $$
+BEGIN
+  INSERT INTO public.user_config (user_id, config)
+  VALUES (NEW.id, '{}'::jsonb)
+  ON CONFLICT (user_id) DO NOTHING;
+  RETURN NEW;
+END;
+$$;
+```
+
+**Trigger:** `on_auth_user_created` AFTER INSERT ON `auth.users` → `handle_new_user()`
+
+### delete_words_cascade(p_word_ids)
+
+Transactional cascade delete of words and all associated data (relations, generation logs). Uses `auth.uid()` for RLS safety.
+
+```sql
+CREATE OR REPLACE FUNCTION delete_words_cascade(p_word_ids INT[])
+RETURNS void AS $$
+  -- Deletes words_relations, relation_generation_log, then words
+  -- All scoped to auth.uid()
+$$ LANGUAGE plpgsql SECURITY INVOKER;
+```
+
+### batch_reschedule_review(p_word_ids, p_dates) / batch_reschedule_spell(p_word_ids, p_dates)
+
+Bulk update review/spelling dates via UNNEST array alignment. Only modifies `next_review` / `spell_next_review`, does not touch SM-2 parameters or spell_strength.
+
+```sql
+CREATE OR REPLACE FUNCTION batch_reschedule_review(p_word_ids INT[], p_dates DATE[])
+RETURNS VOID AS $$
+  UPDATE words w SET next_review = u.new_date
+  FROM UNNEST(p_word_ids, p_dates) AS u(wid, new_date)
+  WHERE w.id = u.wid AND w.user_id = auth.uid();
+$$ LANGUAGE sql VOLATILE SECURITY INVOKER;
+```
+
 ---
 
 ## Tables
@@ -85,13 +129,17 @@ SM-2 spaced repetition vocabulary.
 | last_score | integer | YES | — | Last review score |
 | avg_elapsed_time | integer | YES | — | Average response time (ms) |
 | lapse | integer | YES | — | Lapse counter |
-| spell_strength | double precision | YES | — | Spelling strength (0-1) |
+| spell_strength | double precision | YES | — | Spelling strength (0-5) |
 | spell_next_review | date | YES | — | Next spelling review date |
+| last_spell | date | YES | — | Last spelling review date |
 | source | varchar(20) | NO | — | Word source (IELTS, GRE, etc.) |
 
 **Constraints:** PK `id`, UNIQUE `(word, user_id, source)`
 
-**Indexes:** `idx_words_user_id` ON (user_id)
+**Indexes:**
+- `idx_words_user_id` ON (user_id)
+- `idx_words_review_queue` ON (user_id, stop_review, next_review) WHERE stop_review = 0
+- `idx_words_spell_queue` ON (user_id, stop_spell, spell_next_review) WHERE stop_spell = 0
 
 ---
 
@@ -308,7 +356,7 @@ Per-review event log for trend analysis and statistics. Written fire-and-forget 
 | mode | varchar(10) | NO | — | 'review' or 'spelling' |
 | source | varchar(20) | NO | — | Word source (IELTS, GRE, etc.) |
 
-**Constraints:** PK `id`, FK `word_id → words.id ON DELETE CASCADE`, CHECK `score >= 1 AND score <= 5`, CHECK `mode IN ('review', 'spelling')`
+**Constraints:** PK `id`, FK `word_id → words.id ON DELETE CASCADE`, FK `user_id → auth.users(id) ON DELETE CASCADE`, CHECK `score >= 1 AND score <= 5`, CHECK `mode IN ('review', 'spelling')`
 
 **Indexes:** `idx_review_history_user_date` ON (user_id, reviewed_at)
 
@@ -331,6 +379,7 @@ Shared cache for AI vocabulary assistant responses. No `user_id` — all authent
 | word | varchar | NO | — | Normalized word (lowercase, trimmed) |
 | prompt_type | varchar(20) | NO | — | collocation / sentence / memory / synonym_antonym |
 | response | text | NO | — | Cached DeepSeek response |
+| created_by | uuid | YES | — | FK → auth.users(id), inserting user |
 | created_at | timestamptz | NO | NOW() | Creation timestamp |
 
 **Constraints:** PK `id`, UNIQUE `(word, prompt_type)`
@@ -342,7 +391,7 @@ Shared cache for AI vocabulary assistant responses. No `user_id` — all authent
 | Policy | Operation | Rule |
 |--------|-----------|------|
 | anyone_can_read | SELECT | `true` (all authenticated users) |
-| anyone_can_insert | INSERT | `true` (all authenticated users) |
+| insert_with_owner | INSERT | `created_by = auth.uid()` |
 
 ---
 
@@ -598,12 +647,13 @@ Cascade deletes a vocabulary source and all associated data.
 3. Delete all words with matching source from `words` table
 4. Delete matching progress from `current_progress` table
 5. Remove source from `user_config.config.sources.customSources`
+6. Remove source from `user_config.config.sources.sourceOrder`
 
 ---
 
 ### fetch-definition
 
-CORS proxy for fetching word definitions from youdao.com. Parses HTML and returns structured definition data (phonetic, definitions, examples). Does NOT bold examples — bolding is done by the frontend.
+CORS proxy for fetching word definitions. Supports two sources: English (有道词典 HTML 解析) and Ukrainian (Wiktionary MediaWiki API). Returns structured definition data (phonetic, definitions, examples). Does NOT bold examples — bolding is done by the frontend.
 
 **Endpoint:** `POST /fetch-definition`
 

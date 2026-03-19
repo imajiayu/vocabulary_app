@@ -740,6 +740,7 @@ onBeforeUnmount(() => {
   right: 0;
   padding: 0.75rem 1rem;
   padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg-page) 92%, transparent);
   z-index: 100;
   display: flex;
   justify-content: center;
@@ -1070,7 +1071,7 @@ onBeforeUnmount(() => {
 
   .card-body {
     padding-top: 1.5rem;
-    padding-bottom: calc(var(--button-bar-height-mobile) + 1rem);
+    padding-bottom: calc(var(--button-bar-height-mobile) + env(safe-area-inset-bottom) + 1rem);
   }
 
   .word-presenter {
