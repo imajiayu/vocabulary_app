@@ -3,7 +3,6 @@ import { useSettings } from './useSettings'
 import { logger } from '@/shared/utils/logger'
 import type { UserSettings } from '@/shared/types'
 
-// For WordIndex - can read and write shuffle setting
 export function useShuffleSelection() {
   const shuffle = ref<boolean>(false)
   const loading = ref(false)
@@ -63,23 +62,3 @@ export function useShuffleSelection() {
   }
 }
 
-// For other components - read-only access to shuffle selection
-export function useShuffleSelectionReadOnly() {
-  const shuffle = ref<boolean>(false)
-
-  const initializeFromData = async () => {
-    const { loadSettings } = useSettings()
-    try {
-      // 使用统一的 settings 加载器，避免重复请求
-      const settings = await loadSettings()
-      shuffle.value = settings.learning.defaultShuffle
-    } catch (error) {
-      logger.error('Failed to get current shuffle:', error)
-    }
-  }
-
-  return {
-    shuffle,
-    initializeFromData
-  }
-}

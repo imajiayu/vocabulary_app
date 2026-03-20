@@ -130,6 +130,17 @@ export interface HistoryContext {
   score: number
 }
 
+/** 共享的 history 写入逻辑 */
+function _saveHistory(
+  wordId: number, mode: 'review' | 'spelling',
+  remembered: boolean, ctx: HistoryContext
+): void {
+  WordsApi.insertReviewHistory({
+    word_id: wordId, score: ctx.score, remembered,
+    elapsed_time: ctx.elapsed_time, mode, source: ctx.source,
+  }).catch(err => log.warn('Failed to save review history:', err))
+}
+
 /**
  * 持久化复习结果到 Supabase（fire-and-forget）
  */
@@ -139,14 +150,7 @@ export async function persistReviewResult(
 ): Promise<void> {
   await WordsApi.persistReviewResultDirect(persistData.word_id, persistData)
   if (historyContext) {
-    WordsApi.insertReviewHistory({
-      word_id: persistData.word_id,
-      score: historyContext.score,
-      remembered: persistData.remember_inc > 0,
-      elapsed_time: historyContext.elapsed_time,
-      mode: 'review',
-      source: historyContext.source,
-    }).catch(err => log.warn('Failed to save review history:', err))
+    _saveHistory(persistData.word_id, 'review', persistData.remember_inc > 0, historyContext)
   }
 }
 
@@ -227,14 +231,7 @@ export async function persistSpellingResult(
 ): Promise<void> {
   await WordsApi.persistSpellingResultDirect(persistData.word_id, persistData)
   if (historyContext) {
-    WordsApi.insertReviewHistory({
-      word_id: persistData.word_id,
-      score: historyContext.score,
-      remembered: historyContext.score >= 3,
-      elapsed_time: historyContext.elapsed_time,
-      mode: 'spelling',
-      source: historyContext.source,
-    }).catch(err => log.warn('Failed to save review history:', err))
+    _saveHistory(persistData.word_id, 'spelling', historyContext.score >= 3, historyContext)
   }
 }
 

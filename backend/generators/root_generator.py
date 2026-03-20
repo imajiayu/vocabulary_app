@@ -226,7 +226,7 @@ class RootGenerator(BaseGenerator):
         unprocessed = [w for w in words if w['id'] not in processed_word_ids]
 
         if not unprocessed:
-            return GenerationResult(relations=[], logs=[], stats={'skipped': True})
+            return GenerationResult(stats={'skipped': True})
 
         total_found = 0
         skipped_existing = 0
@@ -271,14 +271,9 @@ class RootGenerator(BaseGenerator):
             self._flush()
             self._report_progress(i + 1, len(unprocessed), total_found)
 
-        # 刷入剩余缓冲区
-        self._flush(force=True)
-
-        stats = {
+        return self._finalize({
             'total_found': total_found,
             'skipped_existing': skipped_existing,
             'by_method': stats_by_method,
-            'processed_count': len(unprocessed)
-        }
-
-        return GenerationResult(relations=[], logs=[], stats=stats)
+            'processed_count': len(unprocessed),
+        })

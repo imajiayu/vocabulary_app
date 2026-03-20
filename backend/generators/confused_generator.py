@@ -142,7 +142,7 @@ class ConfusedGenerator(BaseGenerator):
         ]
 
         if not unprocessed:
-            return GenerationResult(relations=[], logs=[], stats={'skipped': True})
+            return GenerationResult(stats={'skipped': True})
 
         # 所有满足长度要求的词作为候选（含已处理），确保新词能和旧词比较
         all_candidates = [w for w in words if len(w['word']) >= self.min_length]
@@ -178,14 +178,9 @@ class ConfusedGenerator(BaseGenerator):
             self._flush()
             self._report_progress(i + 1, len(unprocessed), total_found)
 
-        # 刷入剩余缓冲区
-        self._flush(force=True)
-
-        stats = {
+        return self._finalize({
             'total_found': total_found,
             'skipped_existing': skipped_existing,
             'by_type': stats_by_type,
-            'processed_count': len(unprocessed)
-        }
-
-        return GenerationResult(relations=[], logs=[], stats=stats)
+            'processed_count': len(unprocessed),
+        })

@@ -15,12 +15,12 @@ from threading import Event
 import re
 
 from .base import BaseGenerator, GenerationResult
+from .wordnet_utils import get_synsets, NLTK_AVAILABLE
 
 try:
     from nltk.corpus import wordnet
-    NLTK_AVAILABLE = True
 except ImportError:
-    NLTK_AVAILABLE = False
+    pass
 
 # ─── 常量 ──────────────────────────────────────────────────────────
 
@@ -62,14 +62,6 @@ _STOP_WORDS = frozenset({
 })
 
 # ─── 缓存辅助函数 ──────────────────────────────────────────────────
-
-
-@lru_cache(maxsize=10000)
-def _get_synsets(word: str):
-    """缓存 WordNet synsets 查询（仅最常见义项，避免罕见义项产生噪声关联）"""
-    if not NLTK_AVAILABLE:
-        return ()
-    return tuple(wordnet.synsets(word.lower())[:1])
 
 
 @lru_cache(maxsize=50000)
@@ -168,11 +160,11 @@ class TopicGenerator(BaseGenerator):
         """生成主题关系（双阶段）"""
 
         if not NLTK_AVAILABLE:
-            return GenerationResult(relations=[], logs=[], stats={'error': 'nltk not available'})
+            return GenerationResult(stats={'error': 'nltk not available'})
 
         unprocessed = [w for w in words if w['id'] not in processed_word_ids]
         if not unprocessed:
-            return GenerationResult(relations=[], logs=[], stats={'skipped': True})
+            return GenerationResult(stats={'skipped': True})
 
         unprocessed_ids = {w['id'] for w in unprocessed}
         total_found = 0
@@ -191,7 +183,7 @@ class TopicGenerator(BaseGenerator):
         for idx, w in enumerate(words):
             if self._is_stopped():
                 break
-            synsets = _get_synsets(w['word'])
+            synsets = get_synsets(w['word'])[:1]
             for synset in synsets:
                 ancestors = _get_ancestors(
                     synset.name(), self.MAX_HYPERNYM_DEPTH, self.MIN_ANCESTOR_DEPTH
@@ -242,7 +234,7 @@ class TopicGenerator(BaseGenerator):
             for idx, w in enumerate(words):
                 if self._is_stopped():
                     break
-                synsets = _get_synsets(w['word'])
+                synsets = get_synsets(w['word'])[:1]
                 content_words: Set[str] = set()
                 for synset in synsets:
                     content_words |= _tokenize_definition(synset.definition())
@@ -331,9 +323,7 @@ class TopicGenerator(BaseGenerator):
             for w in unprocessed:
                 self._add_log(w['id'], word_found_counts.get(w['id'], 0))
 
-        self._flush(force=True)
-
-        stats = {
+        return self._finalize({
             'total_found': total_found,
             'skipped_existing': skipped_existing,
             'skipped_capped': skipped_capped,
@@ -341,6 +331,4 @@ class TopicGenerator(BaseGenerator):
             'phase1_pairs': phase1_pairs,
             'definition_pairs': defn_pairs_added,
             'processed_count': len(unprocessed),
-        }
-
-        return GenerationResult(relations=[], logs=[], stats=stats)
+        })

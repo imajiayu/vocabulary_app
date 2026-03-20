@@ -14,10 +14,8 @@ from abc import ABC, abstractmethod
 
 @dataclass
 class GenerationResult:
-    """生成结果（stats 为主，relations/logs 已通过 on_save 增量保存）"""
-    relations: List[Dict]  # 保留字段（增量模式下为空列表）
-    logs: List[Dict]       # 保留字段（增量模式下为空列表）
-    stats: Dict            # 统计信息
+    """生成结果 — 关系和日志已通过 on_save 增量保存，此处只返回统计"""
+    stats: Dict
 
 
 class BaseGenerator(ABC):
@@ -68,7 +66,7 @@ class BaseGenerator(ABC):
         - processed_word_ids: 已处理的单词ID集合
 
         返回:
-        - GenerationResult: stats 为主；关系和日志已通过 on_save 增量保存
+        - GenerationResult: 统计信息；关系和日志已通过 on_save 增量保存
         """
         pass
 
@@ -137,3 +135,8 @@ class BaseGenerator(ABC):
                 self._on_save(self._pending_relations, self._pending_logs)
                 self._pending_relations = []
                 self._pending_logs = []
+
+    def _finalize(self, stats: Dict) -> GenerationResult:
+        """刷入剩余缓冲区并返回生成结果"""
+        self._flush(force=True)
+        return GenerationResult(stats=stats)

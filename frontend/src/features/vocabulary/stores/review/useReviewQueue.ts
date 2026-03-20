@@ -5,7 +5,7 @@ import { ref, shallowRef } from 'vue'
 import type { Word } from '@/shared/types'
 import type { ReviewMode } from '../review'
 import { api } from '@/shared/api'
-import { useShuffleSelectionReadOnly } from '@/shared/composables/useShuffleSelection'
+import { useShuffleSelection } from '@/shared/composables/useShuffleSelection'
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
 import { useSettings } from '@/shared/composables/useSettings'
 import { reviewLogger as log } from '@/shared/utils/logger'
@@ -15,7 +15,7 @@ const BATCH_SIZE = 20           // 每次分页加载的单词数
 const TOTAL_LIMIT = 100         // 单次会话的最大单词数
 
 export function useReviewQueue() {
-  const { shuffle, initializeFromData: initializeShuffle } = useShuffleSelectionReadOnly()
+  const { shuffle, initializeFromData: initializeShuffle } = useShuffleSelection()
   const { currentSource, initializeFromData: initializeSource } = useSourceSelectionReadOnly()
   const { loadSettings } = useSettings()
 

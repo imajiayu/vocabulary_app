@@ -28,23 +28,9 @@ async function getAccessToken(): Promise<string> {
 }
 
 /**
- * 发送 GET 请求到 Flask 后端
+ * 统一处理 HTTP 响应：错误检查 + 响应体解析
  */
-export async function get<T = unknown>(
-  url: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const token = await getAccessToken()
-  const response = await fetch(`${API_BASE_URL}${url}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      ...options.headers,
-    },
-    ...options,
-  })
-
+async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     let errorMessage = `HTTP ${response.status}: ${response.statusText}`
     let apiMessage = ''
@@ -76,6 +62,26 @@ export async function get<T = unknown>(
 }
 
 /**
+ * 发送 GET 请求到 Flask 后端
+ */
+export async function get<T = unknown>(
+  url: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const token = await getAccessToken()
+  const response = await fetch(`${API_BASE_URL}${url}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      ...options.headers,
+    },
+    ...options,
+  })
+  return handleResponse<T>(response)
+}
+
+/**
  * 发送 POST 请求到 Flask 后端
  */
 export async function post<T = unknown>(
@@ -94,35 +100,7 @@ export async function post<T = unknown>(
     body: JSON.stringify(body),
     ...options,
   })
-
-  if (!response.ok) {
-    let errorMessage = `HTTP ${response.status}: ${response.statusText}`
-    let apiMessage = ''
-    try {
-      const json = await response.json()
-      const msg = json?.error || json?.message
-      if (msg) {
-        apiMessage = msg
-        errorMessage = apiMessage
-      }
-    } catch {
-      // 非 JSON 响应
-    }
-    throw new ApiError(errorMessage, response.status, response, apiMessage)
-  }
-
-  const json = await response.json()
-
-  // 统一响应格式: {success: true, data: ...}
-  if (json && typeof json === 'object' && 'success' in json && 'data' in json) {
-    if (json.success === true) {
-      return json.data as T
-    }
-    const errMsg = json.error || json.message || 'Request failed'
-    throw new ApiError(errMsg, response.status, response, errMsg)
-  }
-
-  return json as T
+  return handleResponse<T>(response)
 }
 
 /**

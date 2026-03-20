@@ -114,7 +114,7 @@ class AntonymGenerator(BaseGenerator):
         unprocessed = [w for w in words if w['id'] not in processed_word_ids]
 
         if not unprocessed:
-            return GenerationResult(relations=[], logs=[], stats={'skipped': True})
+            return GenerationResult(stats={'skipped': True})
 
         stats_by_source = {'wordnet': 0, 'manual': 0, 'morphological': 0}
         skipped_existing = 0
@@ -162,16 +162,11 @@ class AntonymGenerator(BaseGenerator):
             self._flush()
             self._report_progress(i + 1, len(unprocessed), sum(stats_by_source.values()))
 
-        # 刷入剩余缓冲区
-        self._flush(force=True)
-
         total_found = sum(stats_by_source.values())
 
-        stats = {
+        return self._finalize({
             'total_found': total_found,
             'skipped_existing': skipped_existing,
             'by_source': stats_by_source,
-            'processed_count': len(unprocessed)
-        }
-
-        return GenerationResult(relations=[], logs=[], stats=stats)
+            'processed_count': len(unprocessed),
+        })

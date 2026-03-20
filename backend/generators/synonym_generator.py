@@ -5,26 +5,17 @@
 使用 WordNet 直接同义词 + 语义相似度两种方法找同义词。
 """
 from typing import Callable, Dict, List, Optional, Set, Tuple
-from functools import lru_cache
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from threading import Event
 import os
 
 from .base import BaseGenerator, GenerationResult
+from .wordnet_utils import get_synsets, NLTK_AVAILABLE
 
 try:
     from nltk.corpus import wordnet
-    NLTK_AVAILABLE = True
 except ImportError:
-    NLTK_AVAILABLE = False
-
-
-@lru_cache(maxsize=10000)
-def _get_synsets(word: str):
-    """缓存 WordNet synsets 查询"""
-    if not NLTK_AVAILABLE:
-        return []
-    return wordnet.synsets(word.lower())
+    pass
 
 
 def _compute_similarity_batch(args):
@@ -97,7 +88,7 @@ class SynonymGenerator(BaseGenerator):
         synonyms = {}
         word_lower = word.lower()
 
-        synsets = _get_synsets(word_lower)
+        synsets = get_synsets(word_lower)
         if not synsets:
             return synonyms
 
@@ -118,7 +109,7 @@ class SynonymGenerator(BaseGenerator):
         words: List[Dict],
     ) -> Dict[Tuple[int, int], float]:
         """使用并行计算语义相似度"""
-        words_with_synsets = [w for w in words if _get_synsets(w['word'])]
+        words_with_synsets = [w for w in words if get_synsets(w['word'])]
         total = len(words_with_synsets)
 
         if total == 0:
@@ -156,12 +147,12 @@ class SynonymGenerator(BaseGenerator):
         """生成同义词关系"""
 
         if not NLTK_AVAILABLE:
-            return GenerationResult(relations=[], logs=[], stats={'error': 'nltk not available'})
+            return GenerationResult(stats={'error': 'nltk not available'})
 
         unprocessed = [w for w in words if w['id'] not in processed_word_ids]
 
         if not unprocessed:
-            return GenerationResult(relations=[], logs=[], stats={'skipped': True})
+            return GenerationResult(stats={'skipped': True})
 
         total_found = 0
         skipped_existing = 0
@@ -214,15 +205,10 @@ class SynonymGenerator(BaseGenerator):
             self._flush()
             self._report_progress(len(unprocessed), len(unprocessed), total_found)
 
-        # 刷入剩余缓冲区
-        self._flush(force=True)
-
-        stats = {
+        return self._finalize({
             'total_found': total_found,
             'skipped_existing': skipped_existing,
             'wordnet_found': total_found - semantic_found,
             'semantic_found': semantic_found,
-            'processed_count': len(unprocessed)
-        }
-
-        return GenerationResult(relations=[], logs=[], stats=stats)
+            'processed_count': len(unprocessed),
+        })

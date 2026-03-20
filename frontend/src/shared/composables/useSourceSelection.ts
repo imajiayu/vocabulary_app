@@ -20,7 +20,25 @@ interface ViewRow {
   today_spell_count: number
 }
 
-// For WordIndex - can read and write source selection
+// 共享逻辑：从设置加载 source 列表 + 从 sessionStorage 恢复选中项
+async function _loadSourceConfig() {
+  const settings = await api.settings.getSettings()
+  const sourcesConfig = settings.sources
+  const sources = sourcesConfig?.sourceOrder
+    ?? Object.keys(sourcesConfig?.customSources || { IELTS: 'en' })
+  const lowEfExtraCount = settings.learning?.lowEfExtraCount ?? 30
+
+  let currentSource = ''
+  const cached = sessionStorage.getItem('currentSource')
+  if (cached && sources.includes(cached)) {
+    currentSource = cached
+  } else if (sources.length > 0) {
+    currentSource = sources[0]
+  }
+
+  return { sources, currentSource, lowEfExtraCount }
+}
+
 export function useSourceSelection() {
   const currentSource = ref<Source>('')
   const availableSources = ref<string[]>([])  // 可用的 sources 列表
@@ -73,21 +91,12 @@ export function useSourceSelection() {
   // 加载可用的 sources，同时从 Supabase 获取所有 source 的统计
   const loadAvailableSources = async () => {
     try {
-      const settings = await api.settings.getSettings()
-      const sources = settings.sources
-      availableSources.value = sources?.sourceOrder
-        ?? Object.keys(sources?.customSources || { IELTS: 'en' })
-      // 同时缓存 lowEfExtraCount
-      cachedLowEfExtraCount = settings.learning?.lowEfExtraCount ?? 30
+      const config = await _loadSourceConfig()
+      availableSources.value = config.sources
+      cachedLowEfExtraCount = config.lowEfExtraCount
 
-      // 优先从 sessionStorage 恢复，否则使用第一个可用的
       if (!currentSource.value) {
-        const cached = sessionStorage.getItem('currentSource')
-        if (cached && availableSources.value.includes(cached)) {
-          currentSource.value = cached
-        } else if (availableSources.value.length > 0) {
-          currentSource.value = availableSources.value[0]
-        }
+        currentSource.value = config.currentSource
       }
 
       // 从 Supabase 获取所有 source 的统计数据
@@ -167,27 +176,15 @@ export function useSourceSelection() {
 // For other components - read-only access to WordIndex selection
 export function useSourceSelectionReadOnly() {
   const currentSource = ref<Source>('')
-  const availableSources = ref<string[]>(['IELTS'])  // 设置默认值
+  const availableSources = ref<string[]>(['IELTS'])
 
   const initializeFromData = async () => {
     try {
-      const settings = await api.settings.getSettings()
-      const sources = settings.sources
-      availableSources.value = sources?.sourceOrder
-        ?? Object.keys(sources?.customSources || { IELTS: 'en' })
-
-      // 从 sessionStorage 恢复，否则使用第一个可用的 source
-      const cachedSource = sessionStorage.getItem('currentSource')
-      if (cachedSource && availableSources.value.includes(cachedSource)) {
-        currentSource.value = cachedSource
-      } else if (availableSources.value.length > 0) {
-        currentSource.value = availableSources.value[0]
-      }
+      const config = await _loadSourceConfig()
+      availableSources.value = config.sources
+      currentSource.value = config.currentSource
     } catch (error) {
       logger.error('Failed to get current source:', error)
-      if (availableSources.value.length === 0) {
-        availableSources.value = ['IELTS']
-      }
       if (!currentSource.value && availableSources.value.length > 0) {
         currentSource.value = availableSources.value[0]
       }
