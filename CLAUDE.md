@@ -85,12 +85,12 @@ api/tts_cache.py              # TTS 音频缓存保存/删除（文件系统，S
 api/external.py               # 外部工具 API — 单词新增/删除/查询（无需认证）
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
-  data.py                     # 统一数据源（4885行常量 + IELTS主题）
+  data.py                     # 统一数据源（反义词对、词根、易混淆词）
   synonym_generator.py        # 同义词（WordNet + 语义相似度）
   antonym_generator.py        # 反义词（WordNet + 手工 + 形态学）
   root_generator.py           # 词根（拉丁/希腊词根 + 词干）
   confused_generator.py       # 易混淆（编辑距离 + 语义检查）
-  topic_generator.py          # 主题（IELTS 预定义主题）
+  topic_generator.py          # 主题（WordNet 语义层级聚类）
 services/generation_service.py  # 生成任务管理（线程安全 + 优雅关闭）
 models/word.py                # SQLAlchemy 模型
 utils/response.py             # 统一 API 响应格式（api_success/api_error）

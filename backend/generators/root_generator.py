@@ -233,11 +233,13 @@ class RootGenerator(BaseGenerator):
         stats_by_method = {'latin_greek': 0, 'stem': 0}
 
         # Phase 1: 预计算词根缓存
-        for word in words:
+        for idx, word in enumerate(words):
             if self._is_stopped():
                 break
             self.extract_latin_greek_roots(word["word"])
             self.get_stem(word["word"])
+            if (idx + 1) % 100 == 0 or idx == len(words) - 1:
+                self._report_progress(0, len(unprocessed), 0)
 
         # Phase 2: 比较词对
         for i, w1 in enumerate(unprocessed):

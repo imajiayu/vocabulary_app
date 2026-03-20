@@ -211,6 +211,9 @@ class SynonymGenerator(BaseGenerator):
             for wid, sem_count in semantic_counts.items():
                 self._add_log(wid, phase1_found_counts.get(wid, 0) + sem_count)
 
+            self._flush()
+            self._report_progress(len(unprocessed), len(unprocessed), total_found)
+
         # 刷入剩余缓冲区
         self._flush(force=True)
 

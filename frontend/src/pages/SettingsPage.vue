@@ -581,11 +581,8 @@
                     </div>
                     <div class="progress-meta">
                       <span class="progress-percent">{{ progressPercent(rt.type) }}%</span>
-                      <span class="progress-detail">
-                        {{ generationStatus[rt.type]?.processed || 0 }} / {{ generationStatus[rt.type]?.total || 0 }}
-                        <template v-if="generationStatus[rt.type]?.skipped">
-                          · 跳过 {{ generationStatus[rt.type]?.skipped }}
-                        </template>
+                      <span v-if="generationStatus[rt.type]?.skipped" class="progress-detail">
+                        跳过 {{ generationStatus[rt.type]?.skipped }} 词
                       </span>
                     </div>
                   </div>
