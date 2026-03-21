@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['word-sidebar', { 'is-mobile': isMobile, 'is-collapsed': isCollapsed, 'is-spelling': isSpellingMode }]"
+    :class="['word-sidebar', { 'is-mobile': isMobile, 'is-collapsed': isCollapsed, 'is-spelling': isSpellingMode, 'has-secondary-actions': hasSecondaryActions }]"
     @mouseenter="handleSidebarEnter"
     @mouseleave="handleSidebarLeave"
   >
@@ -162,6 +162,7 @@ const LAPSE_MAX_LEVEL = 4
 // Computed
 const isLapseMode = computed(() => props.mode === 'mode_lapse')
 const isSpellingMode = computed(() => props.mode === 'mode_spelling')
+const hasSecondaryActions = computed(() => props.mode === 'mode_review')
 const useTransition = computed(() => displayedWords.value.length <= 50)
 
 const displayedWords = computed(() => {
@@ -638,6 +639,11 @@ onUnmounted(() => {
   bottom: calc(var(--button-bar-height-mobile) + env(safe-area-inset-bottom) + 12px);
   right: 12px;
   z-index: 150;
+}
+
+/* 复习模式阶段一：含辅助按钮，按钮栏更高 */
+.word-sidebar.has-secondary-actions .mobile-sidebar {
+  bottom: calc(var(--button-bar-height-mobile-initial) + env(safe-area-inset-bottom) + 12px);
 }
 
 /* 拼写模式：定位在虚拟键盘 + 固定输入框上方 */

@@ -1,6 +1,6 @@
 <template>
   <!-- 右侧学习控制台 - 桌面端固定面板 / 移动端浮动按钮 -->
-  <div class="review-right-panel" :class="{ 'is-mobile': isMobile, 'is-spelling': isSpellingMode }">
+  <div class="review-right-panel" :class="{ 'is-mobile': isMobile, 'is-spelling': isSpellingMode, 'has-secondary-actions': hasSecondaryActions }">
     <!-- ═══════════════════════════════════════════════════════════════════════════
          桌面端：固定右侧面板
          ═══════════════════════════════════════════════════════════════════════════ -->
@@ -712,6 +712,7 @@ const reviewStore = useReviewStore()
 
 const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
 const isSpellingMode = computed(() => reviewStore.mode === 'mode_spelling')
+const hasSecondaryActions = computed(() => reviewStore.mode === 'mode_review')
 
 // 各模式的面板可见性：
 //   mode_review:           通知 ✓  负荷 ✓
@@ -2292,6 +2293,11 @@ const mobileNotifClass = computed(() => {
   box-shadow: none;
   padding: 0;
   z-index: 150;
+}
+
+/* 复习模式阶段一：含辅助按钮，按钮栏更高 */
+.review-right-panel.is-mobile.has-secondary-actions {
+  bottom: calc(var(--button-bar-height-mobile-initial) + env(safe-area-inset-bottom) + 12px);
 }
 
 /* 拼写模式：定位在虚拟键盘 + 固定输入框上方 */
