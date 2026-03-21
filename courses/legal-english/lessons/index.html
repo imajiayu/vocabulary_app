@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>法律英语学习 — Legal English for Contracts</title>
+  <link rel="stylesheet" href="templates/lesson.css">
+  <style>
+    .hero {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+    .hero h1 {
+      border-bottom: none;
+      font-size: 2em;
+      margin-bottom: 4px;
+    }
+    .hero .subtitle {
+      color: var(--text-light);
+      font-size: 1.05em;
+      margin-bottom: 0;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 24px 0 36px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.85em;
+      color: var(--text-light);
+    }
+
+    .week-section {
+      margin-bottom: 36px;
+    }
+    .week-section h2 {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .week-badge {
+      display: inline-block;
+      font-size: 0.65em;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+    .badge-done { background: #dcfce7; color: #15803d; }
+    .badge-current { background: #ebf4ff; color: var(--accent); }
+    .badge-upcoming { background: #f1f5f9; color: var(--text-light); }
+
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .lesson-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    }
+    .lesson-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(26, 54, 93, 0.1);
+      transform: translateY(-1px);
+    }
+    .lesson-card.completed {
+      border-left: 4px solid var(--success);
+    }
+    .lesson-card.available {
+      border-left: 4px solid var(--accent);
+      background: var(--highlight);
+    }
+    .lesson-card.upcoming {
+      border-left: 4px solid var(--border);
+      opacity: 0.7;
+    }
+    .lesson-card.rest {
+      border-left: 4px solid var(--border);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .lesson-icon {
+      font-size: 1.4em;
+      width: 36px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .lesson-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .lesson-title {
+      font-weight: 600;
+      font-size: 1em;
+    }
+    .lesson-meta {
+      font-size: 0.85em;
+      color: var(--text-light);
+    }
+
+    .lesson-check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      cursor: pointer;
+      position: relative;
+    }
+    .lesson-check input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .lesson-check .checkmark {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lesson-check .checkmark::after {
+      content: '';
+      display: none;
+      width: 6px;
+      height: 10px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin-top: -2px;
+    }
+    .lesson-check input:checked + .checkmark {
+      background: var(--success);
+      border-color: var(--success);
+    }
+    .lesson-check input:checked + .checkmark::after {
+      display: block;
+    }
+    .lesson-check:hover .checkmark {
+      border-color: var(--accent);
+    }
+
+    .progress-track {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 8px;
+      margin: 12px 0 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--accent), #4a7ab5);
+      transition: width 0.5s ease;
+    }
+    .progress-text {
+      font-size: 0.8em;
+      color: var(--text-light);
+      text-align: right;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.5em; }
+      .stats-bar { gap: 20px; }
+      .stat-value { font-size: 1.4em; }
+      .lesson-card { padding: 12px 14px; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Legal English for Contracts</h1>
+  <p class="subtitle">12周商务合同法律英语课程</p>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div id="course-content"></div>
+
+<div id="progress-data" data-progress="{}" style="display:none"></div>
+
+<footer>
+  Powered by Claude &middot; Google Cloud TTS
+</footer>
+
+<script>
+const lessons = [
+  // 第1周：合同基础与结构
+  { week: 1, day: 1, file: "w1d1.html", title: "本周词汇预载", enTitle: "Vocabulary", topic: "添加本周术语到背单词App", vocab: true },
+  { week: 1, day: 2, file: "w1d2.html", title: "合同总体结构", enTitle: "Contract Structure", topic: "title, preamble, recitals, definitions, operative provisions" },
+  { week: 1, day: 3, file: "w1d3.html", title: "合同当事人", enTitle: "Parties", topic: "party, hereinafter, whereas, witnesseth" },
+  { week: 1, day: 4, file: "w1d4.html", title: "定义条款", enTitle: "Definitions Clause", topic: "shall mean, material, affiliate, hereof/thereof" },
+  { week: 1, day: 5, file: "w1d5.html", title: "合同标的与履行", enTitle: "Subject Matter & Performance", topic: "deliverables, due diligence, scope of work" },
+  { week: 1, day: 6, file: "w1d6.html", title: "合同生效与期限", enTitle: "Effective Date & Term", topic: "commencement, expiration, renewal, termination" },
+  { week: 1, day: 7, file: "w1d7.html", title: "复习日", enTitle: "Week 1 Review", topic: "合同基础与结构综合练习", review: true },
+
+  // 第2周：权利与义务条款
+  { week: 2, day: 1, file: "w2d1.html", title: "本周词汇预载", enTitle: "Vocabulary", topic: "添加本周术语到背单词App", vocab: true },
+  { week: 2, day: 2, file: "w2d2.html", title: "情态动词的法律含义", enTitle: "Shall, May & Must", topic: "obligation, duty, right, discretion, binding" },
+  { week: 2, day: 3, file: "w2d3.html", title: "保证与陈述", enTitle: "Representations & Warranties", topic: "warrant, represent, covenant, undertake" },
+  { week: 2, day: 4, file: "w2d4.html", title: "条件与前提", enTitle: "Conditions & Prerequisites", topic: "condition precedent, subject to, provided that" },
+  { week: 2, day: 5, file: "w2d5.html", title: "豁免与责任限制", enTitle: "Waiver & Limitation", topic: "limitation of liability, disclaimer, indemnify" },
+  { week: 2, day: 6, file: "w2d6.html", title: "保密条款", enTitle: "Confidentiality & NDA", topic: "confidential information, trade secret, injunctive relief" },
+  { week: 2, day: 7, file: "w2d7.html", title: "复习日", enTitle: "Week 2 Review", topic: "权利与义务条款综合练习", review: true },
+
+  // 第3周：支付与对价条款
+  { week: 3, day: 1, file: "w3d1.html", title: "本周词汇预载", enTitle: "Vocabulary", topic: "添加本周术语到背单词App", vocab: true },
+  { week: 3, day: 2, file: "w3d2.html", title: "对价基础", enTitle: "Consideration Fundamentals", topic: "consideration, mutual/adequate/nominal consideration, quid pro quo" },
+  { week: 3, day: 3, file: "w3d3.html", title: "支付条款", enTitle: "Payment Terms", topic: "payment terms, invoice, net 30/60, installment, advance payment, retention" },
+  { week: 3, day: 4, file: "w3d4.html", title: "利息与违约金", enTitle: "Interest & Liquidated Damages", topic: "interest, default interest, liquidated damages, per annum, accrue, grace period" },
+  { week: 3, day: 5, file: "w3d5.html", title: "税费与扣款", enTitle: "Tax, Withholding & Set-off", topic: "tax, withholding tax, gross-up, VAT, duty, set-off, deduction, remit, levy" },
+  { week: 3, day: 6, file: null, title: "货币与汇率", enTitle: "Currency & Exchange", topic: "currency, exchange rate, denomination, conversion" },
+  { week: 3, day: 7, file: null, title: "复习日", enTitle: "Week 3 Review", topic: "支付与对价条款综合练习", review: true },
+];
+
+const futureWeeks = [
+  { week: 4, title: "违约与救济", enTitle: "Breach & Remedies" },
+  { week: 5, title: "知识产权条款", enTitle: "Intellectual Property" },
+  { week: 6, title: "担保与赔偿条款", enTitle: "Warranties & Indemnification" },
+  { week: 7, title: "终止与退出条款", enTitle: "Termination & Exit" },
+  { week: 8, title: "合规与监管条款", enTitle: "Compliance & Regulatory" },
+  { week: 9, title: "公司治理条款", enTitle: "Corporate Governance" },
+  { week: 10, title: "国际贸易合同", enTitle: "International Trade" },
+  { week: 11, title: "合同起草技巧", enTitle: "Drafting Skills" },
+  { week: 12, title: "综合复习与实战", enTitle: "Comprehensive Review" },
+];
+
+const weekTitles = {
+  1: { zh: "合同基础与结构", en: "Contract Fundamentals" },
+  2: { zh: "权利与义务条款", en: "Rights & Obligations" },
+  3: { zh: "支付与对价条款", en: "Payment & Consideration" },
+};
+
+const STORAGE_KEY = 'legal_english_progress';
+
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+
+function saveProgress(progress) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch (e) {}
+}
+
+function getStatus(lesson, progress) {
+  if (lesson.rest) return "rest";
+  if (!lesson.file) return "upcoming";
+  const key = 'w' + lesson.week + 'd' + lesson.day;
+  if (progress[key]) return "completed";
+  return "available";
+}
+
+function toggleLesson(key, checked, event) {
+  event.stopPropagation();
+  var progress = loadProgress();
+  if (checked) {
+    progress[key] = true;
+  } else {
+    delete progress[key];
+  }
+  saveProgress(progress);
+  renderAll();
+}
+
+function renderAll() {
+  var progress = loadProgress();
+  var completed = Object.keys(progress).length;
+  var totalLessons = 12 * 7;
+
+  var statsEl = document.getElementById("stats-bar");
+  statsEl.textContent = '';
+  var statsData = [
+    { value: completed, label: '已完成课程' },
+    { value: '~' + (completed * 12), label: '已学术语' },
+    { value: Math.round(completed / totalLessons * 100) + '%', label: '总体进度' }
+  ];
+  statsData.forEach(function(s) {
+    var div = document.createElement('div');
+    div.className = 'stat';
+    var val = document.createElement('div');
+    val.className = 'stat-value';
+    val.textContent = s.value;
+    var lbl = document.createElement('div');
+    lbl.className = 'stat-label';
+    lbl.textContent = s.label;
+    div.appendChild(val);
+    div.appendChild(lbl);
+    statsEl.appendChild(div);
+  });
+
+  var content = document.getElementById("course-content");
+  content.textContent = '';
+
+  var weekMap = {};
+  lessons.forEach(function(l) {
+    if (!weekMap[l.week]) weekMap[l.week] = [];
+    weekMap[l.week].push(l);
+  });
+
+  Object.keys(weekMap).forEach(function(weekNum) {
+    var weekLessons = weekMap[weekNum];
+    var statuses = weekLessons.map(function(l) { return getStatus(l, progress); });
+    var nonRest = statuses.filter(function(s) { return s !== "rest"; });
+    var doneCount = statuses.filter(function(s) { return s === "completed"; }).length;
+    var allDone = nonRest.length > 0 && nonRest.every(function(s) { return s === "completed"; });
+    var hasAvailable = statuses.indexOf("available") !== -1;
+    var badgeClass = allDone ? "badge-done" : hasAvailable ? "badge-current" : "badge-upcoming";
+    var badgeText = allDone ? "已完成" : hasAvailable ? "进行中" : "待学习";
+    var wt = weekTitles[weekNum] || { zh: "", en: "" };
+
+    var section = document.createElement('div');
+    section.className = 'week-section';
+
+    var h2 = document.createElement('h2');
+    h2.textContent = '第' + weekNum + '周：' + wt.zh + '（' + wt.en + '） ';
+    var badge = document.createElement('span');
+    badge.className = 'week-badge ' + badgeClass;
+    badge.textContent = badgeText;
+    h2.appendChild(badge);
+    section.appendChild(h2);
+
+    var weekTotal = nonRest.length;
+    var track = document.createElement('div');
+    track.className = 'progress-track';
+    var fill = document.createElement('div');
+    fill.className = 'progress-fill';
+    fill.style.width = (weekTotal ? Math.round(doneCount / weekTotal * 100) : 0) + '%';
+    track.appendChild(fill);
+    section.appendChild(track);
+
+    var ptext = document.createElement('div');
+    ptext.className = 'progress-text';
+    ptext.textContent = doneCount + '/' + weekTotal + ' 课';
+    section.appendChild(ptext);
+
+    var list = document.createElement('div');
+    list.className = 'lesson-list';
+
+    weekLessons.forEach(function(l) {
+      var status = getStatus(l, progress);
+      var icons = { completed: "✅", available: "📖", upcoming: "📋", rest: "☕" };
+      var icon = l.vocab ? "📝" : icons[status];
+      var key = 'w' + l.week + 'd' + l.day;
+
+      if (l.rest) {
+        var card = document.createElement('div');
+        card.className = 'lesson-card rest';
+        var iconEl = document.createElement('span');
+        iconEl.className = 'lesson-icon';
+        iconEl.textContent = icon;
+        var info = document.createElement('div');
+        info.className = 'lesson-info';
+        var title = document.createElement('div');
+        title.className = 'lesson-title';
+        title.textContent = 'Day ' + l.day + ' — ' + l.title;
+        info.appendChild(title);
+        card.appendChild(iconEl);
+        card.appendChild(info);
+        list.appendChild(card);
+      } else if (l.file) {
+        var card = document.createElement('a');
+        card.href = l.file;
+        card.className = 'lesson-card ' + status;
+        var iconEl = document.createElement('span');
+        iconEl.className = 'lesson-icon';
+        iconEl.textContent = icon;
+        var info = document.createElement('div');
+        info.className = 'lesson-info';
+        var title = document.createElement('div');
+        title.className = 'lesson-title';
+        title.textContent = 'Day ' + l.day + ' — ' + l.title + '（' + l.enTitle + '）';
+        var meta = document.createElement('div');
+        meta.className = 'lesson-meta';
+        meta.textContent = l.topic;
+        info.appendChild(title);
+        info.appendChild(meta);
+
+        var label = document.createElement('label');
+        label.className = 'lesson-check';
+        label.addEventListener('click', function(e) { e.stopPropagation(); });
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = !!progress[key];
+        (function(k) {
+          cb.addEventListener('change', function(e) { toggleLesson(k, this.checked, e); });
+        })(key);
+        var cm = document.createElement('span');
+        cm.className = 'checkmark';
+        label.appendChild(cb);
+        label.appendChild(cm);
+
+        card.appendChild(iconEl);
+        card.appendChild(info);
+        card.appendChild(label);
+        list.appendChild(card);
+      } else {
+        var card = document.createElement('div');
+        card.className = 'lesson-card upcoming';
+        var iconEl = document.createElement('span');
+        iconEl.className = 'lesson-icon';
+        iconEl.textContent = icon;
+        var info = document.createElement('div');
+        info.className = 'lesson-info';
+        var title = document.createElement('div');
+        title.className = 'lesson-title';
+        title.textContent = 'Day ' + l.day + ' — ' + l.title + '（' + l.enTitle + '）';
+        var meta = document.createElement('div');
+        meta.className = 'lesson-meta';
+        meta.textContent = l.topic;
+        info.appendChild(title);
+        info.appendChild(meta);
+        card.appendChild(iconEl);
+        card.appendChild(info);
+        list.appendChild(card);
+      }
+    });
+
+    section.appendChild(list);
+    content.appendChild(section);
+  });
+
+  futureWeeks.forEach(function(w) {
+    var section = document.createElement('div');
+    section.className = 'week-section';
+    var h2 = document.createElement('h2');
+    h2.textContent = '第' + w.week + '周：' + w.title + '（' + w.enTitle + '） ';
+    var badge = document.createElement('span');
+    badge.className = 'week-badge badge-upcoming';
+    badge.textContent = '待解锁';
+    h2.appendChild(badge);
+    var meta = document.createElement('div');
+    meta.className = 'lesson-meta';
+    meta.style.padding = '12px 0';
+    meta.style.color = 'var(--text-light)';
+    meta.textContent = '课程将在学习到该周时自动生成';
+    section.appendChild(h2);
+    section.appendChild(meta);
+    content.appendChild(section);
+  });
+
+  // 将进度数据写入 DOM，供外部应用读取
+  var pd = document.getElementById('progress-data');
+  if (pd) pd.setAttribute('data-progress', JSON.stringify(progress));
+}
+
+renderAll();
+</script>
+</body>
+</html>

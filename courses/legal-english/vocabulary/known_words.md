@@ -1,0 +1,294 @@
+# 已学词汇库
+
+## 第1周 第2天 — 合同总体结构（2026-03-02）
+- title
+- preamble
+- recitals
+- definitions
+- operative provisions
+- boilerplate
+- schedules
+- clause
+- provision
+- article
+- amendment
+- execution
+
+## 第1周 第3天 — 合同当事人（2026-03-03）
+- party
+- hereinafter
+- whereas
+- witnesseth
+- now therefore
+- enter into
+- by and between
+- duly organized
+- principal place of business
+- in consideration of
+- mutual covenants
+- the premises
+- referred to as
+- recital
+
+## 第1周 第4天 — 定义条款（2026-03-04）
+- shall mean
+- shall have the meaning
+- as used herein
+- unless the context otherwise requires
+- affiliate
+- person (legal definition)
+- business day
+- effective date
+- material
+- including without limitation
+- hereof
+- thereof
+- ascribe
+- set forth
+
+## 第1周 第5天 — 合同标的与履行义务（2026-03-05）
+- subject matter
+- deliverables
+- performance
+- obligation
+- due diligence
+- deliver
+- provide
+- furnish
+- render
+- scope of work
+- milestone
+- turnkey
+- specifications
+- compliance
+- workmanlike
+- subject to
+- time is of the essence
+- best efforts
+- reasonable efforts
+- upon receipt of
+- in accordance with
+- to the satisfaction of
+- in a professional and workmanlike manner
+
+## 第1周 第6天 — 合同生效与期限（2026-03-06）
+- effective date
+- term (期限)
+- commencement
+- commence
+- expiration
+- expire
+- renewal
+- renew
+- termination
+- terminate
+- initial term
+- duration
+- perpetual
+- extend
+- extension
+- survival
+- notwithstanding
+- as of
+
+## 第2周 第2天 — 情态动词的法律含义（2026-03-09）
+- shall (法律义务)
+- may (权利/许可)
+- must (强制要求)
+- will (未来事实陈述)
+- should (建议性)
+- obligation
+- duty
+- right
+- entitlement
+- discretion
+- mandatory
+- compulsory
+- binding
+- enforceable
+- consent
+- at one's sole discretion
+- is entitled to
+
+## 第2周 第3天 — 保证与陈述（2026-03-10）
+- representation
+- warranty
+- represent
+- warrant
+- covenant
+- undertake
+- undertaking
+- assurance
+- guarantee
+- guaranty
+- pledge
+- certify
+- acknowledge
+- declare
+- affirm
+- to the best of one's knowledge
+- as of the date hereof
+- representations and warranties
+- make a representation
+- breach of warranty
+- covenants and agrees
+- true and correct in all material respects
+
+## 第2周 第4天 — 条件与前提（2026-03-11）
+- condition
+- condition precedent
+- condition subsequent
+- subject to (多义)
+- provided that
+- provided however that
+- contingent upon
+- prerequisite
+- precondition
+- satisfaction
+- fulfill
+- waive
+- waiver
+- conditional
+- unconditional
+- in the event that
+- upon the occurrence of
+- subject to the satisfaction of
+- on the condition that
+- contingent upon the occurrence of
+- upon fulfillment of
+- the conditions set forth in
+- waiver of conditions
+- subject to the terms and conditions
+
+## 第2周 第5天 — 豁免与责任限制（2026-03-12）
+- waiver
+- waive
+- limitation of liability
+- cap (上限)
+- exclusion
+- disclaimer
+- indemnify
+- indemnification
+- hold harmless
+- liability
+- negligence
+- gross negligence
+- willful misconduct
+- consequential damages
+- direct damages
+- incidental damages
+- in no event shall
+- aggregate
+
+## 第2周 第6天 — 保密条款（2026-03-13）
+- confidential
+- confidential information
+- confidentiality
+- non-disclosure
+- NDA (Non-Disclosure Agreement)
+- proprietary
+- proprietary information
+- trade secret
+- permitted disclosure
+- receiving party
+- disclosing party
+- unauthorized disclosure
+- breach of confidentiality
+- remedies
+- injunctive relief
+- return of materials
+- destruction
+
+## 第3周 第2天 — 对价基础（2026-03-17）
+- consideration (对价/约因)
+- mutual consideration
+- adequate consideration
+- nominal consideration
+- valuable consideration
+- good consideration
+- past consideration
+- failure of consideration
+- total failure of consideration
+- want of consideration
+- bargain
+- bargained-for exchange
+- promisor
+- promisee
+- gratuitous
+- quid pro quo
+- executory consideration
+- executed consideration
+
+## 第3周 第3天 — 支付条款（2026-03-19）
+- payment terms
+- invoice
+- net 30
+- net 60
+- installment (instalment)
+- advance payment
+- retention (retention money)
+- due date
+- overdue
+- remittance
+- wire transfer (telegraphic transfer / T/T)
+- lump sum
+- milestone payment
+- progress payment
+- outstanding balance
+- payment in full
+- payment schedule
+- due and payable
+- upon receipt of invoice
+- undisputed (amounts)
+- free and clear of
+- payment in full and final settlement
+- immediately available funds
+- disbursement
+
+## 第3周 第4天 — 利息与违约金（2026-03-20）
+- interest (利息)
+- interest rate (利率)
+- default interest (违约利息)
+- late payment interest (逾期付款利息)
+- per annum (每年；p.a.)
+- accrue (产生；累积)
+- compound interest (复利)
+- simple interest (单利)
+- default (违约；逾期)
+- grace period (宽限期)
+- penalty (罚款；惩罚性违约金)
+- penalty clause (违约金条款)
+- liquidated damages (预定损害赔偿；LD)
+- genuine pre-estimate (真实预先估算)
+- in default of payment (因未履行付款义务而违约)
+- without prejudice to (不影响……的权利)
+- bear interest (计/产生利息)
+- accruing on a daily basis (按日累计)
+- subject to a maximum aggregate of (以……为最高累计上限)
+- shall not be construed as a penalty (不应被解释为违约罚款)
+
+## 第3周 第5天 — 税费与扣款（2026-03-21）
+- tax (税；税款)
+- withholding tax (预扣税；扣缴税款)
+- gross-up (总额化；税后净额补足)
+- VAT / Value Added Tax (增值税)
+- duty (关税；进出口税)
+- deduction (扣款；扣除；扣减)
+- set-off (抵销；抵销权)
+- net of tax (税后净额)
+- tax authority (税务机关；税务局)
+- applicable tax (适用税款；应缴税款)
+- remit (缴纳；汇缴税款)
+- levy (征收；税捐)
+- counterclaim (反诉；反索赔)
+- gross amount (总金额；税前金额)
+- net amount (净金额；税后实得金额)
+- tax-exempt (免税的；豁免税款的)
+- free and clear of all taxes (不含任何税款地足额支付)
+- without any deduction or withholding (不作任何扣除或扣缴)
+- gross-up obligation (总额化义务)
+- exclusive of VAT (不含增值税)
+- right of set-off (抵销权)
+- remit to the relevant tax authority (向有关税务机关缴纳)
+- subject to withholding tax (须缴纳预扣税的)
+- taxes and duties (税款与关税)
