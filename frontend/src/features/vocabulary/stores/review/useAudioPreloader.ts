@@ -1,12 +1,11 @@
 /**
  * 音频预加载管理：预加载 watchers、缓存清理
  */
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 import type { Ref } from 'vue'
 import type { Word } from '@/shared/types'
 import type { ReviewMode, AudioType } from '../review'
 import { preloadMultipleWordAudio, clearPreloadCache } from '@/shared/utils/playWordAudio'
-import { useAudioAccent } from '@/shared/composables/useAudioAccent'
 import { useSettings } from '@/shared/composables/useSettings'
 import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 import { reviewLogger as log } from '@/shared/utils/logger'
@@ -18,8 +17,14 @@ export function useAudioPreloader(
   mode: Ref<ReviewMode>,
   queueVersion: Ref<number>
 ) {
-  const { audioAccent } = useAudioAccent()
   const { settings } = useSettings()
+
+  // 根据当前单词的 source 动态获取 accent（per-source）
+  const currentWordAccent = computed<'us' | 'uk'>(() => {
+    const word = wordQueue.value[currentIndex.value]
+    if (!word) return 'us'
+    return settings.value?.sourceSettings[word.source]?.accent ?? 'us'
+  })
 
   // 根据单词 source 获取 ttsLang
   const getTtsLang = (word: Word): string | undefined => {
@@ -27,8 +32,8 @@ export function useAudioPreloader(
     return getSourceLangConfig(word.source || '', customSources).ttsLang
   }
 
-  // 同步 audioType 与全局 audioAccent
-  watch(audioAccent, (newAccent) => {
+  // 同步 audioType 与当前单词的 accent
+  watch(currentWordAccent, (newAccent) => {
     if (audioType.value !== newAccent) {
       audioType.value = newAccent
       clearPreloadCache(0)

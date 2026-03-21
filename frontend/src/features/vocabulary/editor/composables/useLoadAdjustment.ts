@@ -323,8 +323,9 @@ export function useLoadAdjustment() {
       reviewBuckets.value = buildBuckets(data, 'review', daysAhead)
       spellBuckets.value = buildBuckets(data, 'spell', daysAhead)
 
-      dailyReviewLimit.value = settings.learning?.dailyReviewLimit ?? 50
-      dailySpellLimit.value = settings.learning?.dailySpellLimit ?? 50
+      const sourceLearning = settings.sourceSettings[source]?.learning
+      dailyReviewLimit.value = sourceLearning?.dailyReviewLimit ?? 50
+      dailySpellLimit.value = sourceLearning?.dailySpellLimit ?? 50
     } catch (e) {
       log.error('Failed to load schedule data:', e)
       throw e

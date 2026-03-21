@@ -15,7 +15,8 @@ const BATCH_SIZE = 20           // 每次分页加载的单词数
 const TOTAL_LIMIT = 100         // 单次会话的最大单词数
 
 export function useReviewQueue() {
-  const { shuffle, initializeFromData: initializeShuffle } = useShuffleSelection()
+  const { shuffle, initializeFromData: initializeShuffleFromData } = useShuffleSelection()
+  const initializeShuffle = () => initializeShuffleFromData(currentSource.value)
   const { currentSource, initializeFromData: initializeSource } = useSourceSelectionReadOnly()
   const { loadSettings } = useSettings()
 
@@ -133,7 +134,7 @@ export function useReviewQueue() {
         const userSettings = await loadSettings()
 
         if (resetQueue) {
-          const lowEfExtra = userSettings.learning.lowEfExtraCount || 0
+          const lowEfExtra = userSettings.sourceSettings[source]?.learning?.lowEfExtraCount || 0
           const totalLimit = settings.value.totalLimit
           let ids: number[]
           if (mode === 'mode_spelling') {

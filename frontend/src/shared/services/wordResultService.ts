@@ -62,8 +62,9 @@ export function calculateReviewResult(
 
   const score = calculateScore(remembered, elapsedTime)
   const today = new Date().toISOString().split('T')[0]
-  const maxPrepDays = settings.learning.maxPrepDays || 45
-  const dailyReviewLimit = settings.learning.dailyReviewLimit || 100
+  const sourceLearning = settings.sourceSettings[word.source]?.learning
+  const maxPrepDays = sourceLearning?.maxPrepDays || 45
+  const dailyReviewLimit = sourceLearning?.dailyReviewLimit || 100
 
   // 计算遗忘率（包含本次结果）
   const newRememberCount = rememberCount + (remembered ? 1 : 0)
@@ -181,8 +182,9 @@ export function calculateSpellingResult(
   spellLoads: number[]
 ): SpellingCalculationResult {
   const currentStrength = word.spell_strength ?? 0
-  const maxPrepDays = settings.learning.maxPrepDays || 45
-  const dailySpellLimit = settings.learning.dailySpellLimit || 100
+  const sourceLearning = settings.sourceSettings[word.source]?.learning
+  const maxPrepDays = sourceLearning?.maxPrepDays || 45
+  const dailySpellLimit = sourceLearning?.dailySpellLimit || 100
   const today = new Date().toISOString().split('T')[0]
 
   const result = calculateSpellStrengthWithLoadBalancing(

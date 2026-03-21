@@ -1,33 +1,27 @@
 import { ref } from 'vue'
 import { useSettings } from './useSettings'
 import { logger } from '@/shared/utils/logger'
-import type { UserSettings } from '@/shared/types'
 
 export function useShuffleSelection() {
   const shuffle = ref<boolean>(false)
   const loading = ref(false)
   const error = ref<string | null>(null)
-  const { settings, updateSettings } = useSettings()
+  const { settings, updateSourceSettings } = useSettings()
 
-  const setShuffle = async (newShuffle: boolean) => {
+  const setShuffle = async (newShuffle: boolean, source: string) => {
     try {
       loading.value = true
       error.value = null
 
-      // 获取当前设置，确保有完整的 learning 对象
-      const currentLearning = settings.value?.learning
+      const currentLearning = settings.value?.sourceSettings[source]?.learning
       if (!currentLearning) {
         throw new Error('Settings not loaded')
       }
 
-      // 使用全局设置管理器更新
-      const updatedSettings = await updateSettings({
-        learning: {
-          ...currentLearning,
-          defaultShuffle: newShuffle
-        }
-      } as Partial<UserSettings>)
-      shuffle.value = updatedSettings.learning.defaultShuffle
+      const updatedSettings = await updateSourceSettings(source, {
+        learning: { ...currentLearning, defaultShuffle: newShuffle }
+      })
+      shuffle.value = updatedSettings.sourceSettings[source]?.learning.defaultShuffle ?? false
 
       return { shuffle: newShuffle }
     } catch (e: unknown) {
@@ -40,15 +34,13 @@ export function useShuffleSelection() {
     }
   }
 
-  const initializeFromData = async () => {
+  const initializeFromData = async (source: string) => {
     const { loadSettings } = useSettings()
     try {
-      // 使用统一的 settings 加载器，避免重复请求
       const settings = await loadSettings()
-      shuffle.value = settings.learning.defaultShuffle
+      shuffle.value = settings.sourceSettings[source]?.learning.defaultShuffle ?? false
     } catch (error) {
       logger.error('Failed to get current shuffle:', error)
-      // Default to false if there's an error
       shuffle.value = false
     }
   }
@@ -61,4 +53,3 @@ export function useShuffleSelection() {
     initializeFromData
   }
 }
-

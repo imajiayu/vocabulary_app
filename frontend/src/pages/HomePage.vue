@@ -594,6 +594,11 @@ onMounted(() => {
   overflow: hidden;
 }
 
+/* 设置页面需要 sticky 定位，必须解除 overflow 限制 */
+.app-container.is-settings .main-container {
+  overflow: visible;
+}
+
 /* 移动端主内容区域 - 统一 padding 为 0，由各页面组件自己处理内边距 */
 .app-container.is-mobile .main-container {
   margin-left: 0;

@@ -17,8 +17,9 @@ const FOCUS_DELAY_MS = 50             // 提交后聚焦输入框的延迟
  */
 async function getImportLoadBalanceParams(source: string): Promise<ImportLoadBalanceParams & { lang: SourceLang }> {
   const settings = await api.settings.getSettings()
-  const dailyLimit = settings.learning?.dailyReviewLimit ?? 50
-  const maxPrepDays = settings.learning?.maxPrepDays ?? 90
+  const sourceLearning = settings.sourceSettings[source]?.learning
+  const dailyLimit = sourceLearning?.dailyReviewLimit ?? 50
+  const maxPrepDays = sourceLearning?.maxPrepDays ?? 90
   const customSources = settings.sources?.customSources as Record<string, SourceLang> | undefined
   const lang: SourceLang = customSources?.[source] ?? 'en'
 

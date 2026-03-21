@@ -1,26 +1,34 @@
 <template>
-  <div class="settings-page">
-    <!-- 顶部搜索栏 -->
-    <header class="settings-header">
-      <div class="header-content">
-        <h1 class="settings-title">设置</h1>
-        <div class="search-box">
-          <span class="search-icon">⌘K</span>
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="搜索设置项..."
-            class="search-input"
-            @focus="isSearchFocused = true"
-            @blur="isSearchFocused = false"
-          />
-        </div>
+  <div class="settings-page" ref="contentRef">
+
+    <!-- Tab 栏 + 搜索 -->
+    <nav class="settings-tabs">
+      <div class="tabs-track">
+        <button
+          v-for="tab in tabs"
+          :key="tab.key"
+          :class="['tab-item', { active: activeTab === tab.key }]"
+          @click="activeTab = tab.key"
+        >
+          <span class="tab-label">{{ tab.label }}</span>
+          <span v-if="tab.langTag" class="tab-lang">{{ tab.langTag }}</span>
+        </button>
       </div>
-    </header>
+      <div class="tabs-search">
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="搜索..."
+          class="search-input"
+          @focus="isSearchFocused = true"
+          @blur="isSearchFocused = false"
+        />
+      </div>
+    </nav>
 
     <!-- 主内容区 -->
     <main class="settings-main">
-      <!-- 左侧快速导航 -->
+      <!-- 左侧索引导航 -->
       <aside class="settings-nav desktop-only">
         <nav class="nav-list">
           <button
@@ -36,99 +44,105 @@
         </nav>
       </aside>
 
-      <!-- 设置内容区 -->
-      <div class="settings-content" ref="contentRef" @scroll="handleScroll">
+      <!-- 内容区 -->
+      <div class="settings-content">
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           Source Tab 内容（按源独立的设置）
+           ═══════════════════════════════════════════════════════════════ -->
+      <template v-if="activeTab !== '__global__'">
+
         <!-- 学习设置 -->
         <section
           v-show="matchesSearch('learning')"
           :id="'section-learning'"
-          class="settings-section"
+          class="settings-card"
         >
-          <div class="section-header" @click="toggleSection('learning')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="graduation-cap" /></span>
-              <h2 class="section-title">学习设置</h2>
-              <span class="section-badge">{{ Object.keys(learningItems).length }} 项</span>
+          <div class="card-header" @click="toggleSection('learning')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="graduation-cap" /></span>
+              <h2 class="card-title">学习设置</h2>
+              <span class="card-badge">{{ Object.keys(learningItems).length }}</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.learning }]"><AppIcon name="expand" /></span>
           </div>
 
-          <div v-show="expandedSections.learning" class="section-body">
-            <div class="settings-grid">
+          <div v-show="expandedSections.learning" class="card-body">
+            <div class="setting-list">
               <!-- 每日复习上限 -->
               <div class="setting-row" v-show="matchesSearchItem('dailyReviewLimit')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">每日复习上限</label>
                   <span class="setting-hint">建议 50-500</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
-                    v-model="settings.learning.dailyReviewLimit"
+                    v-model="currentSourceSettings.learning.dailyReviewLimit"
                     :min="50"
                     :max="1000"
                     :step="50"
                   />
-                  <span class="setting-value">{{ settings.learning.dailyReviewLimit }}</span>
+                  <span class="setting-value">{{ currentSourceSettings.learning.dailyReviewLimit }}</span>
                   <span class="setting-unit">词</span>
                 </div>
               </div>
 
               <!-- 每日拼写上限 -->
               <div class="setting-row" v-show="matchesSearchItem('dailySpellLimit')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">每日拼写上限</label>
                   <span class="setting-hint">建议为复习量的 60-80%</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
-                    v-model="settings.learning.dailySpellLimit"
+                    v-model="currentSourceSettings.learning.dailySpellLimit"
                     :min="50"
                     :max="800"
                     :step="50"
                   />
-                  <span class="setting-value">{{ settings.learning.dailySpellLimit }}</span>
+                  <span class="setting-value">{{ currentSourceSettings.learning.dailySpellLimit }}</span>
                   <span class="setting-unit">词</span>
                 </div>
               </div>
 
               <!-- 最大准备天数 -->
               <div class="setting-row" v-show="matchesSearchItem('maxPrepDays')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">最大准备天数</label>
                   <span class="setting-hint">系统优化复习间隔确保考前完成</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
-                    v-model="settings.learning.maxPrepDays"
+                    v-model="currentSourceSettings.learning.maxPrepDays"
                     :min="15"
                     :max="180"
                     :step="15"
                   />
-                  <span class="setting-value">{{ settings.learning.maxPrepDays }}</span>
+                  <span class="setting-value">{{ currentSourceSettings.learning.maxPrepDays }}</span>
                   <span class="setting-unit">天</span>
                 </div>
               </div>
 
               <!-- 低EF额外数量 -->
               <div class="setting-row" v-show="matchesSearchItem('lowEfExtraCount')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">低EF额外数量</label>
                   <span class="setting-hint">复习时额外加入难词加速提升</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
-                    v-model="settings.learning.lowEfExtraCount"
+                    v-model="currentSourceSettings.learning.lowEfExtraCount"
                     :min="0"
                     :max="200"
                     :step="10"
                   />
-                  <span class="setting-value">{{ settings.learning.lowEfExtraCount }}</span>
+                  <span class="setting-value">{{ currentSourceSettings.learning.lowEfExtraCount }}</span>
                   <span class="setting-unit">词</span>
                 </div>
               </div>
             </div>
 
-            <div class="section-actions">
+            <div class="card-footer">
               <button class="reset-link" @click="resetSection('learning')">
                 恢复默认
               </button>
@@ -140,42 +154,124 @@
         <section
           v-show="matchesSearch('lapse')"
           :id="'section-lapse'"
-          class="settings-section"
+          class="settings-card"
         >
-          <div class="section-header" @click="toggleSection('lapse')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="rotate-ccw" /></span>
-              <h2 class="section-title">错题集设置</h2>
-              <span class="section-badge">1 项</span>
+          <div class="card-header" @click="toggleSection('lapse')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="rotate-ccw" /></span>
+              <h2 class="card-title">错题集设置</h2>
+              <span class="card-badge">1</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.lapse }]"><AppIcon name="expand" /></span>
           </div>
 
-          <div v-show="expandedSections.lapse" class="section-body">
-            <div class="settings-grid">
-              <!-- 错题队列大小 -->
+          <div v-show="expandedSections.lapse" class="card-body">
+            <div class="setting-list">
               <div class="setting-row" v-show="matchesSearchItem('lapseQueueSize')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">错题队列默认大小</label>
                   <span class="setting-hint">推荐 20-30 个</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
-                    v-model="settings.learning.lapseQueueSize"
+                    v-model="currentSourceSettings.learning.lapseQueueSize"
                     :min="15"
                     :max="40"
                     :step="5"
                   />
-                  <span class="setting-value">{{ settings.learning.lapseQueueSize }}</span>
+                  <span class="setting-value">{{ currentSourceSettings.learning.lapseQueueSize }}</span>
                   <span class="setting-unit">词</span>
                 </div>
               </div>
             </div>
 
-            <div class="section-actions">
+            <div class="card-footer">
               <button class="reset-link" @click="resetSection('lapse')">
                 恢复默认
               </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 发音口音 -->
+        <section
+          v-if="currentTabSupportsAccent"
+          v-show="matchesSearch('accent')"
+          :id="'section-accent'"
+          class="settings-card"
+        >
+          <div class="card-header" @click="toggleSection('accent')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="music-note" /></span>
+              <h2 class="card-title">发音口音</h2>
+              <span class="auto-save-tag">自动保存</span>
+            </div>
+            <span :class="['chevron', { expanded: expandedSections.accent }]"><AppIcon name="expand" /></span>
+          </div>
+
+          <div v-show="expandedSections.accent" class="card-body">
+            <div class="setting-list">
+              <div class="setting-row">
+                <div class="setting-info">
+                  <label class="setting-label">单词发音</label>
+                </div>
+                <div class="accent-toggle">
+                  <button
+                    :class="['accent-btn', { active: currentSourceSettings.accent === 'us' }]"
+                    @click="setAccent('us')"
+                  >
+                    美音
+                  </button>
+                  <button
+                    :class="['accent-btn', { active: currentSourceSettings.accent === 'uk' }]"
+                    @click="setAccent('uk')"
+                  >
+                    英音
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </template>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           通用 Tab 内容（全局设置）
+           ═══════════════════════════════════════════════════════════════ -->
+      <template v-else>
+
+        <!-- 自动播放设置 -->
+        <section
+          v-show="matchesSearch('audio')"
+          :id="'section-audio'"
+          class="settings-card"
+        >
+          <div class="card-header" @click="toggleSection('audio')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="music-note" /></span>
+              <h2 class="card-title">自动播放</h2>
+              <span class="auto-save-tag">自动保存</span>
+            </div>
+            <span :class="['chevron', { expanded: expandedSections.audio }]"><AppIcon name="expand" /></span>
+          </div>
+
+          <div v-show="expandedSections.audio" class="card-body">
+            <div class="setting-list">
+              <div class="setting-row setting-row--toggle" v-show="matchesSearchItem('autoPlayOnWordChange')">
+                <div class="setting-info">
+                  <label class="setting-label">新单词出现时自动播放</label>
+                  <span class="setting-hint">切换到新单词时自动播放发音</span>
+                </div>
+                <IOSSwitch v-model="settings.audio.autoPlayOnWordChange" @update:modelValue="saveAudioSettings" />
+              </div>
+              <div class="setting-row setting-row--toggle" v-show="matchesSearchItem('autoPlayAfterAnswer')">
+                <div class="setting-info">
+                  <label class="setting-label">选择答案后自动播放</label>
+                  <span class="setting-hint">点击记住/没记住后自动播放</span>
+                </div>
+                <IOSSwitch v-model="settings.audio.autoPlayAfterAnswer" @update:modelValue="saveAudioSettings" />
+              </div>
             </div>
           </div>
         </section>
@@ -184,26 +280,25 @@
         <section
           v-show="matchesSearch('management')"
           :id="'section-management'"
-          class="settings-section"
+          class="settings-card"
         >
-          <div class="section-header" @click="toggleSection('management')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="sliders" /></span>
-              <h2 class="section-title">单词管理</h2>
-              <span class="section-badge">2 项</span>
+          <div class="card-header" @click="toggleSection('management')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="sliders" /></span>
+              <h2 class="card-title">单词管理</h2>
+              <span class="card-badge">2</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.management }]"><AppIcon name="expand" /></span>
           </div>
 
-          <div v-show="expandedSections.management" class="section-body">
-            <div class="settings-grid">
-              <!-- 分页加载数量 -->
+          <div v-show="expandedSections.management" class="card-body">
+            <div class="setting-list">
               <div class="setting-row" v-show="matchesSearchItem('wordsLoadBatchSize')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">分页加载数量</label>
                   <span class="setting-hint">单词管理页每批加载数</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
                     v-model="settings.management.wordsLoadBatchSize"
                     :min="50"
@@ -215,13 +310,12 @@
                 </div>
               </div>
 
-              <!-- 释义获取线程数 -->
               <div class="setting-row" v-show="matchesSearchItem('definitionFetchThreads')">
-                <div class="setting-label-group">
+                <div class="setting-info">
                   <label class="setting-label">释义获取线程</label>
                   <span class="setting-hint">推荐 2-5 个</span>
                 </div>
-                <div class="setting-control-row">
+                <div class="setting-control">
                   <WheelSelector
                     v-model="settings.management.definitionFetchThreads"
                     :min="1"
@@ -234,7 +328,7 @@
               </div>
             </div>
 
-            <div class="section-actions">
+            <div class="card-footer">
               <button class="reset-link" @click="resetSection('management')">
                 恢复默认
               </button>
@@ -246,21 +340,20 @@
         <section
           v-show="matchesSearch('sources')"
           :id="'section-sources'"
-          class="settings-section"
+          class="settings-card"
         >
-          <div class="section-header" @click="toggleSection('sources')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="layers" /></span>
-              <h2 class="section-title">词汇来源</h2>
-              <span class="section-badge">{{ sourceCount }}/3</span>
+          <div class="card-header" @click="toggleSection('sources')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="layers" /></span>
+              <h2 class="card-title">词汇来源</h2>
+              <span class="card-badge">{{ sourceCount }}/3</span>
               <span class="auto-save-tag">自动保存</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.sources }]"><AppIcon name="expand" /></span>
           </div>
 
-          <div v-show="expandedSections.sources" class="section-body">
-            <!-- 来源列表 -->
-            <div class="sources-grid">
+          <div v-show="expandedSections.sources" class="card-body">
+            <div class="sources-list">
               <div
                 v-for="(name, index) in localSourceOrder"
                 :key="name"
@@ -317,84 +410,125 @@
           </div>
         </section>
 
-        <!-- 音频设置 -->
+        <!-- 单词关联（仅当有英语源时显示） -->
         <section
-          v-show="matchesSearch('audio')"
-          :id="'section-audio'"
-          class="settings-section"
+          v-if="englishSources.length > 0"
+          v-show="matchesSearch('relations')"
+          :id="'section-relations'"
+          class="settings-card"
         >
-          <div class="section-header" @click="toggleSection('audio')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="music-note" /></span>
-              <h2 class="section-title">音频设置</h2>
-              <span class="section-badge">3 项</span>
-              <span class="auto-save-tag">自动保存</span>
+          <div class="card-header" @click="toggleSection('relations')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="git-branch" /></span>
+              <h2 class="card-title">单词关联</h2>
+              <span class="relation-scope">{{ englishSources.join(' · ') }}</span>
+              <span class="card-badge">{{ relationStats.total }}</span>
             </div>
-            <span :class="['chevron', { expanded: expandedSections.audio }]"><AppIcon name="expand" /></span>
+            <span :class="['chevron', { expanded: expandedSections.relations }]"><AppIcon name="expand" /></span>
           </div>
 
-          <div v-show="expandedSections.audio" class="section-body">
-            <div class="settings-grid">
-              <!-- 发音口音（仅英语源生效） -->
-              <div class="setting-row setting-row-accent" v-show="matchesSearchItem('accent')">
-                <div class="setting-label-group">
-                  <label class="setting-label">单词发音</label>
-                  <span v-if="!currentSourceLang.supportsAccentSwitch" class="setting-hint">仅对英语来源生效</span>
-                </div>
-                <div class="accent-toggle">
-                  <button
-                    :class="['accent-btn', { active: settings.audio.accent === 'us' }]"
-                    @click="setAccent('us')"
-                  >
-                    美音
-                  </button>
-                  <button
-                    :class="['accent-btn', { active: settings.audio.accent === 'uk' }]"
-                    @click="setAccent('uk')"
-                  >
-                    英音
-                  </button>
-                </div>
-              </div>
+          <div v-show="expandedSections.relations" class="card-body card-body--flush">
+            <div class="relation-grid">
+              <article
+                v-for="rt in relationTypes"
+                :key="rt.type"
+                :class="[
+                  'relation-tile',
+                  `relation-tile--${rt.type}`,
+                  { 'relation-tile--active': isRunning(rt.type) }
+                ]"
+              >
+                <div class="relation-tile__accent"></div>
+                <div class="relation-tile__body">
+                  <header class="relation-tile__header">
+                    <div class="relation-tile__icon-wrap">
+                      <span class="relation-tile__icon"><AppIcon :name="rt.icon" /></span>
+                    </div>
+                    <div class="relation-tile__title-group">
+                      <h3 class="relation-tile__title">{{ rt.label }}</h3>
+                      <span class="relation-tile__count-inline" v-if="!isRunning(rt.type) && !hasResult(rt.type)">
+                        {{ relationStats[rt.type as keyof typeof relationStats] || 0 }} 对
+                      </span>
+                    </div>
+                  </header>
 
-              <!-- 新单词出现时自动播放 -->
-              <div class="setting-row setting-row-toggle" v-show="matchesSearchItem('autoPlayOnWordChange')">
-                <div class="setting-label-group">
-                  <label class="setting-label">新单词出现时自动播放</label>
-                  <span class="setting-hint">切换到新单词时自动播放发音</span>
-                </div>
-                <IOSSwitch v-model="settings.audio.autoPlayOnWordChange" @update:modelValue="saveAudioSettings" />
-              </div>
+                  <template v-if="isRunning(rt.type)">
+                    <div class="relation-tile__live-stats">
+                      <div class="live-stat">
+                        <span class="live-stat__value">{{ generationStatus[rt.type]?.found || 0 }}</span>
+                        <span class="live-stat__label">发现</span>
+                      </div>
+                      <div class="live-stat">
+                        <span class="live-stat__value">{{ generationStatus[rt.type]?.saved || 0 }}</span>
+                        <span class="live-stat__label">已保存</span>
+                      </div>
+                    </div>
+                    <div class="relation-tile__progress">
+                      <div class="progress-track">
+                        <div class="progress-fill" :style="{ width: progressPercent(rt.type) + '%' }">
+                          <div class="progress-shine"></div>
+                        </div>
+                      </div>
+                      <div class="progress-meta">
+                        <span class="progress-percent">{{ progressPercent(rt.type) }}%</span>
+                        <span v-if="generationStatus[rt.type]?.skipped" class="progress-detail">
+                          跳过 {{ generationStatus[rt.type]?.skipped }} 词
+                        </span>
+                      </div>
+                    </div>
+                  </template>
 
-              <!-- 选择答案后自动播放 -->
-              <div class="setting-row setting-row-toggle" v-show="matchesSearchItem('autoPlayAfterAnswer')">
-                <div class="setting-label-group">
-                  <label class="setting-label">选择答案后自动播放</label>
-                  <span class="setting-hint">点击记住/没记住后自动播放</span>
+                  <div v-else-if="hasResult(rt.type)" class="relation-tile__result">
+                    <span class="result-badge" :class="generationStatus[rt.type]?.status === 'completed' ? 'result-badge--success' : 'result-badge--stopped'">
+                      {{ generationStatus[rt.type]?.status === 'completed' ? '完成' : '已停止' }}
+                    </span>
+                    <span class="result-summary">
+                      +{{ generationStatus[rt.type]?.saved || 0 }} 对
+                      <template v-if="generationStatus[rt.type]?.skipped">
+                        · 跳过 {{ generationStatus[rt.type]?.skipped }}
+                      </template>
+                    </span>
+                  </div>
                 </div>
-                <IOSSwitch v-model="settings.audio.autoPlayAfterAnswer" @update:modelValue="saveAudioSettings" />
-              </div>
 
+                <footer class="relation-tile__actions">
+                  <template v-if="isRunning(rt.type)">
+                    <button class="tile-btn tile-btn--stop" @click="handleStop(rt.type)">
+                      <span class="tile-btn__icon"><AppIcon name="ban" /></span>
+                      停止
+                    </button>
+                  </template>
+                  <template v-else>
+                    <button class="tile-btn tile-btn--generate" :disabled="isRunning(rt.type)" @click="handleGenerate(rt.type)">
+                      <span class="tile-btn__icon"><AppIcon name="play" /></span>
+                      生成
+                    </button>
+                    <button class="tile-btn tile-btn--clear" :disabled="isRunning(rt.type) || !(relationStats[rt.type as keyof typeof relationStats])" @click="handleClear(rt.type, rt.label)">
+                      清空
+                    </button>
+                  </template>
+                </footer>
+              </article>
             </div>
           </div>
         </section>
 
-        <!-- 快捷键设置 - 仅桌面端 -->
+        <!-- 快捷键设置 -->
         <section
           v-show="matchesSearch('hotkeys')"
           :id="'section-hotkeys'"
-          class="settings-section desktop-only"
+          class="settings-card desktop-only"
         >
-          <div class="section-header" @click="toggleSection('hotkeys')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="command" /></span>
-              <h2 class="section-title">快捷键设置</h2>
-              <span class="section-badge">11 项</span>
+          <div class="card-header" @click="toggleSection('hotkeys')">
+            <div class="card-title-row">
+              <span class="card-icon"><AppIcon name="command" /></span>
+              <h2 class="card-title">快捷键设置</h2>
+              <span class="card-badge">11</span>
             </div>
             <span :class="['chevron', { expanded: expandedSections.hotkeys }]"><AppIcon name="expand" /></span>
           </div>
 
-          <div v-show="expandedSections.hotkeys" class="section-body">
+          <div v-show="expandedSections.hotkeys" class="card-body">
             <!-- 复习初始状态 -->
             <div class="hotkey-group">
               <h3 class="hotkey-group-title">复习 · 初始状态</h3>
@@ -493,7 +627,7 @@
               </div>
             </div>
 
-            <div class="section-actions">
+            <div class="card-footer">
               <button class="reset-link" @click="resetSection('hotkeys')">
                 恢复默认
               </button>
@@ -501,146 +635,12 @@
           </div>
         </section>
 
-        <!-- 单词关联（仅英语源支持） -->
-        <section
-          v-if="supportsRelations"
-          v-show="matchesSearch('relations')"
-          :id="'section-relations'"
-          class="settings-section settings-section--relations"
-        >
-          <div class="section-header" @click="toggleSection('relations')">
-            <div class="section-title-row">
-              <span class="section-icon"><AppIcon name="git-branch" /></span>
-              <h2 class="section-title">单词关联</h2>
-              <span class="section-badge">{{ relationStats.total }} 条</span>
-            </div>
-            <span :class="['chevron', { expanded: expandedSections.relations }]"><AppIcon name="expand" /></span>
-          </div>
+      </template>
 
-          <div v-show="expandedSections.relations" class="section-body section-body--relations">
-            <!-- 关系卡片网格 -->
-            <div class="relation-grid">
-              <article
-                v-for="rt in relationTypes"
-                :key="rt.type"
-                :class="[
-                  'relation-tile',
-                  `relation-tile--${rt.type}`,
-                  { 'relation-tile--active': isRunning(rt.type) }
-                ]"
-              >
-                <!-- 装饰性色带 -->
-                <div class="relation-tile__accent"></div>
-
-                <!-- 主体内容 -->
-                <div class="relation-tile__body">
-                  <!-- 头部：图标 + 标题 -->
-                  <header class="relation-tile__header">
-                    <div class="relation-tile__icon-wrap">
-                      <span class="relation-tile__icon"><AppIcon :name="rt.icon" /></span>
-                    </div>
-                    <div class="relation-tile__title-group">
-                      <h3 class="relation-tile__title">{{ rt.label }}</h3>
-                      <span class="relation-tile__subtitle">{{ rt.type }}</span>
-                    </div>
-                  </header>
-
-                  <!-- 统计/状态区 -->
-                  <div class="relation-tile__stats">
-                    <template v-if="isRunning(rt.type)">
-                      <div class="relation-tile__live-stats">
-                        <div class="live-stat">
-                          <span class="live-stat__value">{{ generationStatus[rt.type]?.found || 0 }}</span>
-                          <span class="live-stat__label">发现</span>
-                        </div>
-                        <div class="live-stat">
-                          <span class="live-stat__value">{{ generationStatus[rt.type]?.saved || 0 }}</span>
-                          <span class="live-stat__label">已保存</span>
-                        </div>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div class="relation-tile__count">
-                        <span class="relation-tile__count-value">
-                          {{ relationStats[rt.type as keyof typeof relationStats] || 0 }}
-                        </span>
-                        <span class="relation-tile__count-unit">对</span>
-                      </div>
-                    </template>
-                  </div>
-
-                  <!-- 进度条（生成中） -->
-                  <div v-if="isRunning(rt.type)" class="relation-tile__progress">
-                    <div class="progress-track">
-                      <div
-                        class="progress-fill"
-                        :style="{ width: progressPercent(rt.type) + '%' }"
-                      >
-                        <div class="progress-shine"></div>
-                      </div>
-                    </div>
-                    <div class="progress-meta">
-                      <span class="progress-percent">{{ progressPercent(rt.type) }}%</span>
-                      <span v-if="generationStatus[rt.type]?.skipped" class="progress-detail">
-                        跳过 {{ generationStatus[rt.type]?.skipped }} 词
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- 结果摘要（完成/停止后） -->
-                  <div v-else-if="hasResult(rt.type)" class="relation-tile__result">
-                    <span class="result-badge" :class="generationStatus[rt.type]?.status === 'completed' ? 'result-badge--success' : 'result-badge--stopped'">
-                      {{ generationStatus[rt.type]?.status === 'completed' ? '完成' : '已停止' }}
-                    </span>
-                    <span class="result-summary">
-                      +{{ generationStatus[rt.type]?.saved || 0 }} 对
-                      <template v-if="generationStatus[rt.type]?.skipped">
-                        · 跳过 {{ generationStatus[rt.type]?.skipped }}
-                      </template>
-                    </span>
-                  </div>
-                </div>
-
-                <!-- 操作区 -->
-                <footer class="relation-tile__actions">
-                  <template v-if="isRunning(rt.type)">
-                    <button
-                      class="tile-btn tile-btn--stop"
-                      @click="handleStop(rt.type)"
-                    >
-                      <span class="tile-btn__icon"><AppIcon name="ban" /></span>
-                      停止
-                    </button>
-                  </template>
-                  <template v-else>
-                    <button
-                      class="tile-btn tile-btn--generate"
-                      :disabled="isRunning(rt.type)"
-                      @click="handleGenerate(rt.type)"
-                    >
-                      <span class="tile-btn__icon"><AppIcon name="play" /></span>
-                      生成
-                    </button>
-                    <button
-                      class="tile-btn tile-btn--clear"
-                      :disabled="isRunning(rt.type) || !(relationStats[rt.type as keyof typeof relationStats])"
-                      @click="handleClear(rt.type, rt.label)"
-                    >
-                      清空
-                    </button>
-                  </template>
-                </footer>
-              </article>
-            </div>
-
-          </div>
-        </section>
-      </div>
+    </div>
     </main>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         统一保存栏 - 有未保存修改时从底部滑入
-         ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- 统一保存栏 -->
     <transition name="save-bar">
       <div v-if="isDirty" class="save-bar">
         <div class="save-bar-inner">
@@ -661,7 +661,7 @@
       </div>
     </transition>
 
-    <!-- 全局保存成功提示 -->
+    <!-- Toast 提示 -->
     <transition name="toast">
       <div v-if="toastMessage" class="toast">
         <span class="toast-icon"><AppIcon name="check" /></span>
@@ -680,7 +680,8 @@ import KeySelector from '@/shared/components/controls/KeySelector.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'
-import type { UserSettings, SourceLang } from '@/shared/types'
+import type { UserSettings, SourceLang, SourceSpecificSettings } from '@/shared/types'
+import { createDefaultSourceSettings } from '@/shared/api/settings-supabase'
 import { getSourceLangConfig } from '@/shared/config/sourceLanguage'
 import { deleteTtsCacheSource } from '@/shared/utils/playWordAudio'
 import { logger } from '@/shared/utils/logger'
@@ -690,19 +691,23 @@ import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
 // 搜索和导航
 const searchQuery = ref('')
 const isSearchFocused = ref(false)
-const activeSection = ref('learning')
+const activeSection = ref('')
 const contentRef = ref<HTMLElement | null>(null)
 
 // 展开状态 - 默认全部展开
-const expandedSections = reactive({
+const expandedSections = reactive<Record<string, boolean>>({
   learning: true,
   lapse: true,
   management: true,
   sources: true,
   audio: true,
+  accent: true,
   hotkeys: true,
   relations: true,
 })
+
+// Tab 状态
+const activeTab = ref<string>('')  // source name 或 '__global__'
 
 // 设置数据
 const { settings: globalSettings, loadSettings, updateSettings } = useSettings()
@@ -714,14 +719,14 @@ const savedSnapshot = ref<string>('')
 
 const takeSavableSnapshot = () => {
   if (!globalSettings.value) return ''
-  const { learning, management, hotkeys } = globalSettings.value
-  return JSON.stringify({ learning, management, hotkeys })
+  const { sourceSettings, management, hotkeys } = globalSettings.value
+  return JSON.stringify({ sourceSettings, management, hotkeys })
 }
 
 const currentSavableState = computed(() => {
   if (!globalSettings.value) return ''
-  const { learning, management, hotkeys } = globalSettings.value
-  return JSON.stringify({ learning, management, hotkeys })
+  const { sourceSettings, management, hotkeys } = globalSettings.value
+  return JSON.stringify({ sourceSettings, management, hotkeys })
 })
 
 const isDirty = computed(() => {
@@ -748,25 +753,37 @@ const searchKeywords: Record<string, string[]> = {
 const sectionKeywords: Record<string, string[]> = {
   learning: ['学习', '复习', '拼写', 'learning'],
   lapse: ['错题', 'lapse'],
+  accent: ['发音', '口音', '美音', '英音', 'accent'],
   management: ['管理', '加载', 'management'],
   sources: ['来源', '词库', 'sources'],
-  audio: ['音频', '发音', 'audio'],
+  audio: ['音频', '自动播放', 'audio', 'autoplay'],
   hotkeys: ['快捷键', 'hotkey'],
   relations: ['关联', '关系', 'relation'],
 }
 
-// 导航数据
-const sections = computed<{ id: string; title: string; icon: IconName; itemCount: number }[]>(() => [
-  { id: 'learning', title: '学习', icon: 'graduation-cap', itemCount: 4 },
-  { id: 'lapse', title: '错题', icon: 'rotate-ccw', itemCount: 1 },
-  { id: 'management', title: '管理', icon: 'sliders', itemCount: 2 },
-  { id: 'sources', title: '来源', icon: 'layers', itemCount: sourceCount.value },
-  { id: 'audio', title: '音频', icon: 'music-note', itemCount: 3 },
-  { id: 'hotkeys', title: '快捷键', icon: 'command', itemCount: 11 },
-  ...(supportsRelations.value
-    ? [{ id: 'relations', title: '关联', icon: 'git-branch' as const, itemCount: relationStats.value.total }]
-    : []),
-])
+// 导航数据 - 根据当前 Tab 动态切换
+const sections = computed<{ id: string; title: string; icon: IconName; itemCount: number }[]>(() => {
+  if (activeTab.value === '__global__') {
+    const result: { id: string; title: string; icon: IconName; itemCount: number }[] = [
+      { id: 'audio', title: '自动播放', icon: 'music-note', itemCount: 2 },
+      { id: 'management', title: '管理', icon: 'sliders', itemCount: 2 },
+      { id: 'sources', title: '来源', icon: 'layers', itemCount: sourceCount.value },
+    ]
+    if (englishSources.value.length > 0) {
+      result.push({ id: 'relations', title: '关联', icon: 'git-branch', itemCount: relationStats.value.total })
+    }
+    result.push({ id: 'hotkeys', title: '快捷键', icon: 'command', itemCount: 11 })
+    return result
+  }
+  const result: { id: string; title: string; icon: IconName; itemCount: number }[] = [
+    { id: 'learning', title: '学习', icon: 'graduation-cap', itemCount: 4 },
+    { id: 'lapse', title: '错题', icon: 'rotate-ccw', itemCount: 1 },
+  ]
+  if (currentTabSupportsAccent.value) {
+    result.push({ id: 'accent', title: '发音', icon: 'music-note', itemCount: 1 })
+  }
+  return result
+})
 
 const filteredSections = computed(() => {
   if (!searchQuery.value.trim()) return sections.value
@@ -803,13 +820,10 @@ const learningItems = {
 // 设置数据 - 带默认值
 const settings = computed<UserSettings>(() =>
   globalSettings.value || {
-    learning: {
-      dailyReviewLimit: 300,
-      dailySpellLimit: 200,
-      maxPrepDays: 45,
-      lapseQueueSize: 20,
-      defaultShuffle: false,
-      lowEfExtraCount: 50,
+    sourceSettings: { IELTS: createDefaultSourceSettings() },
+    audio: {
+      autoPlayOnWordChange: true,
+      autoPlayAfterAnswer: true,
     },
     management: {
       wordsLoadBatchSize: 200,
@@ -818,11 +832,6 @@ const settings = computed<UserSettings>(() =>
     sources: {
       customSources: { IELTS: 'en' },
       sourceOrder: ['IELTS'],
-    },
-    audio: {
-      accent: 'us',
-      autoPlayOnWordChange: true,
-      autoPlayAfterAnswer: true,
     },
     hotkeys: {
       reviewInitial: {
@@ -846,6 +855,37 @@ const settings = computed<UserSettings>(() =>
   }
 )
 
+// 当前 Tab 对应的 source settings（per-source 设置的双向绑定入口）
+const currentSourceSettings = computed<SourceSpecificSettings>(() => {
+  if (activeTab.value === '__global__' || !globalSettings.value) {
+    return createDefaultSourceSettings()
+  }
+  return globalSettings.value.sourceSettings[activeTab.value] ?? createDefaultSourceSettings()
+})
+
+// Tab 数据
+const tabs = computed(() => {
+  const sourceTabs = localSourceOrder.value.map(name => ({
+    key: name,
+    label: name,
+    langTag: localSources.value[name] === 'uk' ? 'УКР' : 'EN',
+  }))
+  return [...sourceTabs, { key: '__global__', label: '通用', langTag: '' }]
+})
+
+// 当前 Tab 是否支持口音切换
+const currentTabSupportsAccent = computed(() => {
+  if (activeTab.value === '__global__') return false
+  const lang = localSources.value[activeTab.value]
+  if (!lang) return false
+  return getSourceLangConfig(activeTab.value, localSources.value).supportsAccentSwitch
+})
+
+// 所有英语来源（关系生成的作用范围）
+const englishSources = computed(() =>
+  localSourceOrder.value.filter(name => localSources.value[name] === 'en')
+)
+
 // 来源管理
 const localSources = ref<Record<string, SourceLang>>({})
 const localSourceOrder = ref<string[]>([])
@@ -859,14 +899,7 @@ const isDeleting = ref(false)
 const dragIndex = ref<number | null>(null)
 const dropIndex = ref<number | null>(null)
 
-// 当前 source 语言配置（mount 时从 sessionStorage 读取一次）
-// 若 sessionStorage 无值（直接访问设置页），回落到第一个已有源
-const currentSourceKey = ref(sessionStorage.getItem('currentSource') || '')
-const currentSourceLang = computed(() => {
-  const key = currentSourceKey.value || Object.keys(localSources.value)[0] || ''
-  return getSourceLangConfig(key, localSources.value)
-})
-const supportsRelations = computed(() => currentSourceLang.value.supportsRelations)
+// supportsRelations 已被 englishSources 替代
 
 // 关系统计
 const relationStats = ref({
@@ -896,20 +929,43 @@ const scrollToSection = (sectionId: string) => {
   }
 }
 
+// 找到实际的滚动父容器（向上遍历直到找到 overflow auto/scroll 的元素）
+let scrollParent: HTMLElement | null = null
+
+const findScrollParent = (el: HTMLElement | null): HTMLElement => {
+  let node = el?.parentElement
+  while (node && node !== document.documentElement) {
+    const style = getComputedStyle(node)
+    if (style.overflowY === 'auto' || style.overflowY === 'scroll') return node
+    node = node.parentElement
+  }
+  return document.documentElement
+}
+
 const handleScroll = () => {
-  if (!contentRef.value) return
-  const containerRect = contentRef.value.getBoundingClientRect()
+  // 使用视口顶部作为参考（sticky tab 栏高度约 45px）
+  const threshold = 100
 
   for (const section of sections.value) {
     const element = document.getElementById(`section-${section.id}`)
     if (element) {
       const rect = element.getBoundingClientRect()
-      if (rect.top <= containerRect.top + 100 && rect.bottom > containerRect.top) {
+      if (rect.top <= threshold && rect.bottom > 0) {
         activeSection.value = section.id
         break
       }
     }
   }
+}
+
+/**
+ * 自动保存后 patch 快照中对应字段，而非重拍整个快照
+ * （避免将内存中未持久化的 learning/hotkeys 修改纳入快照，导致 isDirty 误清除）
+ */
+const patchSnapshot = (patcher: (snap: Record<string, unknown>) => void) => {
+  const snap = JSON.parse(savedSnapshot.value || '{}')
+  patcher(snap)
+  savedSnapshot.value = JSON.stringify(snap)
 }
 
 const showToast = (message: string) => {
@@ -925,11 +981,17 @@ const showToast = (message: string) => {
 const saveAllSettings = async () => {
   isSaving.value = true
   try {
+    // 从快照中提取旧的 sourceSettings 用于 maxPrepDays 变小检测
+    // （v-model 已原地修改了 reactive 对象，不能直接取 settings.value 作为旧值）
+    const oldSourceSettings = savedSnapshot.value
+      ? (JSON.parse(savedSnapshot.value) as Pick<UserSettings, 'sourceSettings'>).sourceSettings
+      : undefined
+
     await updateSettings({
-      learning: settings.value.learning,
+      sourceSettings: settings.value.sourceSettings,
       management: settings.value.management,
       hotkeys: settings.value.hotkeys,
-    })
+    }, oldSourceSettings)
     savedSnapshot.value = takeSavableSnapshot()
     showToast('设置已保存')
   } catch (error) {
@@ -944,8 +1006,8 @@ const saveAllSettings = async () => {
 const discardChanges = () => {
   if (!savedSnapshot.value || !globalSettings.value) return
   try {
-    const snapshot = JSON.parse(savedSnapshot.value) as Pick<UserSettings, 'learning' | 'management' | 'hotkeys'>
-    globalSettings.value.learning = { ...snapshot.learning }
+    const snapshot = JSON.parse(savedSnapshot.value) as Pick<UserSettings, 'sourceSettings' | 'management' | 'hotkeys'>
+    globalSettings.value.sourceSettings = JSON.parse(JSON.stringify(snapshot.sourceSettings))
     globalSettings.value.management = { ...snapshot.management }
     globalSettings.value.hotkeys = JSON.parse(JSON.stringify(snapshot.hotkeys))
   } catch (error) {
@@ -957,19 +1019,25 @@ const discardChanges = () => {
 const resetSection = (section: string) => {
   if (!confirm('确定要恢复默认值吗？恢复后需点击"保存设置"生效。')) return
 
-  if (section === 'learning') {
-    settings.value.learning = {
-      ...settings.value.learning,
-      dailyReviewLimit: 300,
-      dailySpellLimit: 200,
-      maxPrepDays: 45,
-      defaultShuffle: false,
-      lowEfExtraCount: 50,
+  if (section === 'learning' && activeTab.value !== '__global__') {
+    const source = activeTab.value
+    if (globalSettings.value?.sourceSettings[source]) {
+      globalSettings.value.sourceSettings[source].learning = {
+        ...globalSettings.value.sourceSettings[source].learning,
+        dailyReviewLimit: 300,
+        dailySpellLimit: 200,
+        maxPrepDays: 45,
+        defaultShuffle: false,
+        lowEfExtraCount: 50,
+      }
     }
-  } else if (section === 'lapse') {
-    settings.value.learning = {
-      ...settings.value.learning,
-      lapseQueueSize: 20,
+  } else if (section === 'lapse' && activeTab.value !== '__global__') {
+    const source = activeTab.value
+    if (globalSettings.value?.sourceSettings[source]) {
+      globalSettings.value.sourceSettings[source].learning = {
+        ...globalSettings.value.sourceSettings[source].learning,
+        lapseQueueSize: 20,
+      }
     }
   } else if (section === 'management') {
     settings.value.management = {
@@ -999,16 +1067,31 @@ const resetSection = (section: string) => {
   }
 }
 
-// 音频设置自动保存（不受统一保存控制）
+// 口音设置自动保存（per-source，不受统一保存控制）
 const setAccent = async (accent: 'us' | 'uk') => {
-  settings.value.audio.accent = accent
-  await saveAudioSettings()
+  const source = activeTab.value
+  if (source === '__global__' || !globalSettings.value?.sourceSettings[source]) return
+  globalSettings.value.sourceSettings[source].accent = accent
+  try {
+    // 只传 accent，避免意外将未保存的 learning 修改写入 DB
+    await updateSettings({
+      sourceSettings: { [source]: { accent } as SourceSpecificSettings }
+    })
+    patchSnapshot(snap => {
+      const ss = snap.sourceSettings as Record<string, Record<string, unknown>> | undefined
+      if (ss?.[source]) ss[source].accent = accent
+    })
+    showToast('口音设置已保存')
+  } catch (error) {
+    logger.error('保存口音设置失败:', error)
+  }
 }
 
+// 自动播放设置自动保存（全局，不受统一保存控制）
 const saveAudioSettings = async () => {
   try {
     await updateSettings({ audio: settings.value.audio })
-    showToast('音频设置已保存')
+    showToast('自动播放设置已保存')
   } catch (error) {
     logger.error('保存音频设置失败:', error)
   }
@@ -1026,17 +1109,29 @@ const addSource = async () => {
   newSourceName.value = ''
   newSourceLang.value = 'en'
 
+  // 为新 source 创建默认 sourceSettings
+  if (globalSettings.value) {
+    globalSettings.value.sourceSettings[name] = createDefaultSourceSettings()
+  }
+
   try {
     await updateSettings({
       sources: {
         customSources: { ...localSources.value },
         sourceOrder: [...localSourceOrder.value],
       },
+      sourceSettings: { [name]: createDefaultSourceSettings() },
+    })
+    activeTab.value = name
+    patchSnapshot(snap => {
+      const ss = snap.sourceSettings as Record<string, unknown> | undefined
+      if (ss) ss[name] = JSON.parse(JSON.stringify(createDefaultSourceSettings()))
     })
     showToast(`已添加来源"${name}"`)
   } catch (error) {
     delete localSources.value[name]
     localSourceOrder.value = localSourceOrder.value.filter(s => s !== name)
+    if (globalSettings.value) delete globalSettings.value.sourceSettings[name]
     logger.error('添加来源失败:', error)
     alert('添加失败，请重试')
   }
@@ -1052,8 +1147,16 @@ const confirmDeleteSource = async (source: string) => {
     await api.config.deleteSource(source)
     if (ttsLang) deleteTtsCacheSource(source)
     delete localSources.value[source]
+    if (globalSettings.value) delete globalSettings.value.sourceSettings[source]
     localSourceOrder.value = localSourceOrder.value.filter(s => s !== source)
+    if (activeTab.value === source) {
+      activeTab.value = localSourceOrder.value[0] || '__global__'
+    }
     await loadSourceStats()
+    patchSnapshot(snap => {
+      const ss = snap.sourceSettings as Record<string, unknown> | undefined
+      if (ss) delete ss[source]
+    })
     showToast(`已删除来源"${source}"`)
   } catch (error) {
     logger.error('删除来源失败:', error)
@@ -1342,25 +1445,42 @@ onMounted(async () => {
   localSourceOrder.value = sourcesConfig?.sourceOrder
     ?? Object.keys(localSources.value)
 
+  // 初始化 Tab（联动 WordIndex 选择的 source，回退到第一个）
+  const lastSource = sessionStorage.getItem('currentSource') || ''
+  activeTab.value = localSourceOrder.value.includes(lastSource)
+    ? lastSource
+    : localSourceOrder.value[0] || '__global__'
+
   const tasks: Promise<void>[] = [loadSourceStats()]
-  if (supportsRelations.value) {
+  // 如果有任何英语源，加载关系数据
+  const hasEnglishSource = Object.values(localSources.value).some(lang => lang === 'en')
+  if (hasEnglishSource) {
     tasks.push(loadRelationStats(), initGenerationStatus())
   }
   await Promise.all(tasks)
+
+  // 监听实际滚动父容器的 scroll 事件
+  scrollParent = findScrollParent(contentRef.value)
+  scrollParent.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onUnmounted(() => {
   closeSSE()
+  if (scrollParent) {
+    scrollParent.removeEventListener('scroll', handleScroll)
+    scrollParent = null
+  }
 })
 </script>
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════════════════════════
-   高信息密度设置页面 - IDE/编辑器风格
+   Settings Page — Editorial Study 风格
+   温暖纸质感 · Tab + 内容区两层结构
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .settings-page {
-  /* 设置模块主题色覆盖 - 墨灰色调 */
+  /* 设置模块主题色覆盖 — 墨灰色调 */
   --color-primary: var(--primitive-ink-500);
   --color-primary-hover: var(--primitive-ink-600);
   --color-primary-light: rgba(90, 101, 120, 0.1);
@@ -1378,80 +1498,110 @@ onUnmounted(() => {
   min-height: 100vh;
   background: var(--color-bg-secondary);
   font-family: var(--font-ui);
-  /* 覆盖父容器的居中效果，填满宽度 */
   width: 100%;
   align-self: stretch;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   顶部搜索栏
+   Tab 栏 — 紧贴顶部，下划线指示
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.settings-header {
+.settings-tabs {
+  --tabs-height: 41px;
   position: sticky;
   top: 0;
   z-index: 100;
   background: var(--color-bg-primary);
   border-bottom: 1px solid var(--color-border-medium);
-  padding: 12px 24px;
+  display: flex;
+  align-items: stretch;
 }
 
-.header-content {
+.tabs-track {
+  display: flex;
+  gap: 0;
+  padding: 0 0 0 var(--space-6);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.tabs-track::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs-search {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.settings-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-text-primary);
-  margin: 0;
-  font-family: var(--font-serif);
-}
-
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border-medium);
-  border-radius: var(--radius-default);
-  padding: 6px 12px;
-  min-width: 240px;
-  transition: all 0.2s;
-}
-
-.search-box:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
-}
-
-.search-icon {
-  font-size: 11px;
-  color: var(--color-text-tertiary);
-  background: var(--color-bg-tertiary);
-  padding: 2px 6px;
-  border-radius: var(--radius-xs);
-  margin-right: 8px;
-  font-family: var(--font-mono);
+  padding: 0 var(--space-4);
+  flex-shrink: 0;
 }
 
 .search-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 13px;
+  width: 120px;
+  padding: 5px 10px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-default);
+  background: var(--color-bg-secondary);
+  font-size: 12px;
   color: var(--color-text-primary);
   outline: none;
+  transition: all 0.15s;
+  font-family: var(--font-ui);
 }
 
 .search-input::placeholder {
   color: var(--color-text-tertiary);
 }
 
+.search-input:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg-primary);
+  width: 180px;
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  white-space: nowrap;
+  font-family: var(--font-ui);
+}
+
+.tab-item:hover {
+  color: var(--color-text-primary);
+}
+
+.tab-item.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-lang {
+  font-size: 9px;
+  font-family: var(--font-data);
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-tertiary);
+  padding: 2px 5px;
+  border-radius: var(--radius-xs);
+  line-height: 1;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
-   主内容区
+   主内容区（侧边栏 + 内容）
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .settings-main {
@@ -1461,15 +1611,16 @@ onUnmounted(() => {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   左侧快速导航
+   左侧索引导航
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .settings-nav {
   position: sticky;
-  top: 60px;
-  width: 160px;
-  height: calc(100vh - 60px);
-  padding: 16px 8px;
+  top: var(--tabs-height, 41px);
+  width: 148px;
+  height: calc(100vh - var(--tabs-height, 41px));
+  align-self: flex-start;
+  padding: var(--space-4) var(--space-2);
   flex-shrink: 0;
   overflow-y: auto;
 }
@@ -1484,7 +1635,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 7px 10px;
   border: none;
   background: transparent;
   border-radius: var(--radius-sm);
@@ -1492,6 +1643,7 @@ onUnmounted(() => {
   text-align: left;
   transition: all 0.15s;
   font-size: 13px;
+  font-family: var(--font-ui);
 }
 
 .nav-item:hover {
@@ -1507,7 +1659,7 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
+  width: 18px;
 }
 
 .nav-icon .icon {
@@ -1532,89 +1684,87 @@ onUnmounted(() => {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   设置内容区
+   内容区
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .settings-content {
   flex: 1;
-  padding: 16px 32px 80px;
-  overflow-y: auto;
-  max-height: calc(100vh - 60px);
-  /* 隐藏滚动条但保持滚动功能 */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.settings-content::-webkit-scrollbar {
-  display: none;
-}
-
-.settings-content > .settings-section {
-  max-width: 900px;
+  padding: var(--space-4) var(--space-6) calc(var(--space-16) + var(--space-8));
+  max-width: 720px;
+  width: 100%;
+  min-height: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   设置区块
+   设置卡片
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.settings-section {
+.settings-card {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-md);
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
   overflow: hidden;
 }
 
-.section-header {
+.card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: var(--space-3) var(--space-4);
   cursor: pointer;
   user-select: none;
-  transition: background 0.15s;
+  transition: background var(--transition-fast);
 }
 
-.section-header:hover {
+.card-header:hover {
   background: var(--color-bg-secondary);
 }
 
-.section-title-row {
+.card-title-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
-.section-icon {
+.card-icon {
   display: inline-flex;
   align-items: center;
+  color: var(--color-primary);
 }
 
-.section-icon .icon {
+.card-icon .icon {
   width: 16px;
   height: 16px;
 }
 
-.section-title {
-  font-size: 14px;
-  font-weight: 600;
+.card-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-serif);
   color: var(--color-text-primary);
   margin: 0;
 }
 
-.section-badge {
+.card-badge {
   font-size: 11px;
   color: var(--color-text-tertiary);
   background: var(--color-bg-tertiary);
-  padding: 2px 8px;
+  padding: 1px 7px;
   border-radius: var(--radius-full);
   font-family: var(--font-data);
 }
 
-/* 自动保存标签 */
+.relation-scope {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-data);
+  letter-spacing: 0.02em;
+}
+
 .auto-save-tag {
   font-size: 10px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-state-success);
   background: var(--color-state-success-light);
   padding: 2px 7px;
@@ -1638,35 +1788,63 @@ onUnmounted(() => {
   transform: rotate(90deg);
 }
 
-.section-body {
-  padding: 0 16px 16px;
-  border-top: 1px solid var(--color-border-light);
+.card-body {
+  padding: 0 var(--space-4) var(--space-4);
+  border-top: 1px solid var(--color-bg-tertiary);
+}
+
+.card-body--flush {
+  padding: var(--space-3);
+}
+
+.card-footer {
+  display: flex;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-bg-tertiary);
+  margin-top: var(--space-1);
+}
+
+.reset-link {
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  padding: var(--space-1) 0;
+  transition: color var(--transition-fast);
+}
+
+.reset-link:hover {
+  color: var(--color-primary);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   设置行 - 高密度布局
+   设置行
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.settings-grid {
+.setting-list {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .setting-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--color-border-light);
-  gap: 16px;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-bg-tertiary);
+  gap: var(--space-4);
 }
 
 .setting-row:last-child {
   border-bottom: none;
 }
 
-.setting-label-group {
+.setting-row--toggle {
+  padding: var(--space-2) 0;
+}
+
+.setting-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1676,7 +1854,7 @@ onUnmounted(() => {
 
 .setting-label {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
 }
 
@@ -1685,15 +1863,14 @@ onUnmounted(() => {
   color: var(--color-text-tertiary);
 }
 
-.setting-control-row {
+.setting-control {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-shrink: 0;
 }
 
-/* WheelSelector 包装器 - 让绝对定位的组件正常显示 */
-.setting-control-row :deep(.wheel) {
+.setting-control :deep(.wheel) {
   position: relative;
   top: auto;
   left: auto;
@@ -1704,7 +1881,7 @@ onUnmounted(() => {
 
 .setting-value {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
   font-family: var(--font-data);
   min-width: 40px;
@@ -1712,43 +1889,9 @@ onUnmounted(() => {
 }
 
 .setting-unit {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
   min-width: 24px;
-}
-
-.setting-row-toggle {
-  padding: 10px 0;
-}
-
-.setting-row-accent {
-  flex-wrap: wrap;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   区块操作 - 仅保留恢复默认（文字链接样式）
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.section-actions {
-  display: flex;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid var(--color-border-light);
-  margin-top: 4px;
-}
-
-.reset-link {
-  background: none;
-  border: none;
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  cursor: pointer;
-  padding: 4px 0;
-  transition: color 0.15s;
-}
-
-.reset-link:hover {
-  color: var(--color-primary);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1757,31 +1900,32 @@ onUnmounted(() => {
 
 .accent-toggle {
   display: flex;
-  gap: 4px;
-  background: var(--color-bg-secondary);
+  gap: 2px;
+  background: var(--color-bg-tertiary);
   padding: 3px;
   border-radius: var(--radius-default);
 }
 
 .accent-btn {
-  padding: 6px 14px;
+  padding: 6px 16px;
   border: none;
   background: transparent;
   border-radius: var(--radius-sm);
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
   color: var(--color-text-secondary);
+  font-family: var(--font-ui);
 }
 
 .accent-btn:hover {
-  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
 }
 
 .accent-btn.active {
-  background: var(--color-bg-primary);
+  background: var(--color-surface-elevated);
   color: var(--color-primary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   box-shadow: var(--shadow-sm);
 }
 
@@ -1789,27 +1933,23 @@ onUnmounted(() => {
    来源管理
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.sources-grid {
+.sources-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px 0;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
 }
 
 .source-chip {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   padding: 6px 10px 6px 12px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-full);
   font-size: 13px;
-}
-
-/* 拖拽交互 */
-.source-chip {
-  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.15s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color var(--transition-fast);
   position: relative;
 }
 
@@ -1830,46 +1970,29 @@ onUnmounted(() => {
   bottom: 4px;
   width: 2px;
   border-radius: 1px;
-  background: var(--primitive-copper-400, #996B3D);
+  background: var(--color-primary);
   pointer-events: none;
 }
 
-.source-chip.drop-before::before {
-  left: -5px;
-}
-
-.source-chip.drop-after::after {
-  right: -5px;
-}
+.source-chip.drop-before::before { left: -5px; }
+.source-chip.drop-after::after { right: -5px; }
 
 .drag-handle {
-  color: var(--color-text-quaternary, var(--color-text-tertiary));
+  color: var(--color-text-tertiary);
   cursor: grab;
   user-select: none;
   display: flex;
   align-items: center;
   opacity: 0.4;
-  transition: opacity 0.15s ease, color 0.15s ease;
+  transition: opacity var(--transition-fast);
 }
 
 .source-chip:hover .drag-handle {
   opacity: 0.8;
-  color: var(--color-text-secondary);
-}
-
-/* 移动端：drag-handle 始终可见（无 hover），touch-action 禁止默认手势 */
-@media (max-width: 768px) {
-  .source-chip[draggable="true"] {
-    touch-action: none;
-  }
-
-  .drag-handle {
-    opacity: 0.6;
-  }
 }
 
 .source-name {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
 }
 
@@ -1880,7 +2003,7 @@ onUnmounted(() => {
   color: var(--color-text-tertiary);
   background: var(--color-bg-tertiary);
   padding: 2px 5px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   line-height: 1;
 }
 
@@ -1902,12 +2025,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .source-delete:hover:not(:disabled) {
-  background: var(--color-danger-light);
-  color: var(--color-danger);
+  background: var(--color-state-error-light);
+  color: var(--color-state-error);
 }
 
 .source-delete:disabled {
@@ -1930,13 +2053,14 @@ onUnmounted(() => {
   color: var(--color-text-primary);
   outline: none;
   min-width: 100px;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
+  font-family: var(--font-ui);
 }
 
 .source-input:focus {
   border-style: solid;
   border-color: var(--color-primary);
-  background: var(--color-bg-primary);
+  background: var(--color-surface-elevated);
 }
 
 .source-input::placeholder {
@@ -1948,24 +2072,25 @@ onUnmounted(() => {
   border: 1px dashed var(--color-border-medium);
   border-radius: var(--radius-full);
   background: transparent;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   outline: none;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
+  font-family: var(--font-ui);
 }
 
 .source-lang-select:focus {
   border-style: solid;
   border-color: var(--color-primary);
-  background: var(--color-bg-primary);
+  background: var(--color-surface-elevated);
 }
 
 .source-warning {
   font-size: 11px;
-  color: var(--color-warning);
+  color: var(--color-state-warning);
   margin: 0;
-  padding-top: 4px;
+  padding-top: var(--space-1);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1976,84 +2101,82 @@ onUnmounted(() => {
   overflow: visible;
 }
 
-#section-hotkeys > .section-header {
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-
 .hotkey-group {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--color-border-light);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-bg-tertiary);
 }
 
-.hotkey-group:has(+ .section-actions) {
+.hotkey-group:has(+ .card-footer) {
   border-bottom: none;
 }
 
 .hotkey-group-title {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 0 0 10px 0;
+  margin: 0 0 var(--space-2) 0;
+  font-family: var(--font-ui);
 }
 
 .hotkey-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 .hotkey-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  gap: var(--space-4);
+}
+
+.hotkey-row:last-child {
+  border-bottom: none;
 }
 
 .hotkey-label {
   font-size: 13px;
   color: var(--color-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   单词关联模块 - 与设置页面统一的灰色调
+   单词关联 — 网格布局 + 左侧色带
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.section-body--relations {
-  padding: 16px !important;
-}
-
-/* 卡片网格布局 */
 .relation-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-3);
 }
 
-/* 单张关系卡片 */
 .relation-tile {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-primary);
+  background: var(--color-surface-elevated);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-default);
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .relation-tile:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(90, 101, 120, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .relation-tile--active {
   border-color: var(--color-primary);
-  box-shadow: 0 2px 12px rgba(90, 101, 120, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
-/* 左侧装饰色带 */
+/* 左侧色带 */
 .relation-tile__accent {
   position: absolute;
   left: 0;
@@ -2068,25 +2191,23 @@ onUnmounted(() => {
 .relation-tile--confused .relation-tile__accent { background: var(--primitive-gold-500); }
 .relation-tile--topic .relation-tile__accent { background: var(--primitive-azure-500); }
 
-/* 卡片主体 */
 .relation-tile__body {
   flex: 1;
-  padding: 12px 14px 10px 16px;
+  padding: var(--space-3) var(--space-3) var(--space-2) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
-/* 头部区域 */
 .relation-tile__header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .relation-tile__icon-wrap {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -2107,59 +2228,33 @@ onUnmounted(() => {
 }
 
 .relation-tile__icon .icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .relation-tile__title-group {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
+  align-items: baseline;
+  gap: var(--space-2);
 }
 
 .relation-tile__title {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0;
 }
 
-.relation-tile__subtitle {
-  font-size: 10px;
-  color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
-}
-
-/* 统计区 */
-.relation-tile__stats {
-  display: flex;
-  align-items: center;
-}
-
-.relation-tile__count {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.relation-tile__count-value {
-  font-size: 24px;
-  font-weight: 700;
-  font-family: var(--font-data);
-  color: var(--color-text-primary);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.relation-tile__count-unit {
+.relation-tile__count-inline {
   font-size: 12px;
   color: var(--color-text-tertiary);
+  font-family: var(--font-data);
 }
 
-/* 实时统计（生成中） */
+/* 实时统计 */
 .relation-tile__live-stats {
   display: flex;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .live-stat {
@@ -2169,8 +2264,8 @@ onUnmounted(() => {
 }
 
 .live-stat__value {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
   font-family: var(--font-data);
   color: var(--color-text-primary);
   line-height: 1;
@@ -2185,11 +2280,11 @@ onUnmounted(() => {
 .relation-tile__progress {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .progress-track {
-  height: 4px;
+  height: 3px;
   background: var(--color-bg-tertiary);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -2203,19 +2298,10 @@ onUnmounted(() => {
   background: var(--color-primary);
 }
 
-/* 进度条光效 */
 .progress-shine {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%
-  );
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
   animation: progress-shimmer 1.5s ease-in-out infinite;
 }
 
@@ -2231,14 +2317,14 @@ onUnmounted(() => {
 }
 
 .progress-percent {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
   font-family: var(--font-data);
   color: var(--color-text-primary);
 }
 
 .progress-detail {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--color-text-tertiary);
   font-family: var(--font-data);
 }
@@ -2247,15 +2333,15 @@ onUnmounted(() => {
 .relation-tile__result {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
   background: var(--color-bg-secondary);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
 }
 
 .result-badge {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   padding: 2px 6px;
   border-radius: var(--radius-full);
 }
@@ -2279,10 +2365,9 @@ onUnmounted(() => {
 /* 操作区 */
 .relation-tile__actions {
   display: flex;
-  gap: 6px;
-  padding: 10px 14px 10px 16px;
-  background: var(--color-bg-secondary);
-  border-top: 1px solid var(--color-border-light);
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  border-top: 1px solid var(--color-bg-tertiary);
 }
 
 .tile-btn {
@@ -2290,16 +2375,17 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 5px 10px;
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-sm);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
-  transition: all 0.15s;
-  background: var(--color-bg-primary);
+  transition: all var(--transition-fast);
+  background: var(--color-surface-elevated);
   color: var(--color-text-secondary);
+  font-family: var(--font-ui);
 }
 
 .tile-btn__icon {
@@ -2348,7 +2434,7 @@ onUnmounted(() => {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   统一保存栏 - 底部固定
+   保存栏 — 底部粘性，铜褐强调
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .save-bar {
@@ -2358,30 +2444,30 @@ onUnmounted(() => {
   right: 0;
   z-index: 200;
   background: var(--color-bg-primary);
-  border-top: 1px solid var(--color-border-medium);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  border-top: 2px solid var(--color-primary);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
 }
 
 .save-bar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
-  max-width: 1100px;
+  padding: var(--space-3) var(--space-6);
+  max-width: 720px;
   margin: 0 auto;
 }
 
 .save-bar-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .save-bar-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-state-warning);
+  background: var(--color-primary);
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
@@ -2392,25 +2478,26 @@ onUnmounted(() => {
 
 .save-bar-text {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
 }
 
 .save-bar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .save-bar-discard {
-  padding: 7px 16px;
+  padding: 7px var(--space-4);
   border: none;
   background: transparent;
   color: var(--color-text-tertiary);
   font-size: 13px;
   cursor: pointer;
   border-radius: var(--radius-default);
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
+  font-family: var(--font-ui);
 }
 
 .save-bar-discard:hover:not(:disabled) {
@@ -2427,20 +2514,21 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 20px;
+  padding: 7px var(--space-5);
   border: none;
-  background: var(--button-primary-bg);
+  background: var(--color-primary);
   color: var(--button-primary-text);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   border-radius: var(--radius-default);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
+  font-family: var(--font-ui);
 }
 
 .save-bar-save:hover:not(:disabled) {
   background: var(--button-primary-bg-hover);
-  box-shadow: 0 2px 8px rgba(90, 101, 120, 0.25);
+  box-shadow: 0 2px 8px var(--color-primary-light);
 }
 
 .save-bar-save:disabled {
@@ -2456,8 +2544,6 @@ onUnmounted(() => {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
-/* spin: defined globally in animations.css */
 
 /* 保存栏动画 */
 .save-bar-enter-active {
@@ -2492,10 +2578,10 @@ onUnmounted(() => {
   padding: 10px 20px;
   border-radius: var(--radius-full);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   box-shadow: var(--shadow-lg);
   z-index: 1000;
 }
@@ -2503,7 +2589,7 @@ onUnmounted(() => {
 .toast-icon {
   display: inline-flex;
   align-items: center;
-  color: var(--color-success);
+  color: var(--color-state-success);
 }
 
 .toast-icon .icon {
@@ -2527,11 +2613,11 @@ onUnmounted(() => {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   响应式 - 隐藏桌面端元素
+   桌面端可见性
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .desktop-only {
-  display: flex;
+  display: block;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2540,79 +2626,62 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .settings-page {
-    /* 移动端：去掉外边距，让背景填满容器 */
     margin: 0;
     width: 100%;
-    /* 减去底部导航高度，避免与父容器 padding-bottom 叠加导致多余滚动 */
     min-height: calc(100dvh - var(--mobile-nav-height, 88px));
     border-radius: 0;
-    /* 移动端：自己处理滚动，隐藏滚动条 */
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
   }
 
-  .settings-page::-webkit-scrollbar {
+  .tabs-track {
+    padding: 0 var(--space-4);
+  }
+
+  .tabs-search {
     display: none;
   }
 
-  .settings-header {
-    padding: 10px 16px;
-  }
-
-  .settings-title {
-    font-size: 18px;
-  }
-
-  .search-box {
-    min-width: 160px;
-  }
-
-  .search-icon {
-    display: none;
-  }
-
-  .settings-nav {
-    display: none;
+  .tab-item {
+    padding: var(--space-2) var(--space-3);
+    font-size: 13px;
   }
 
   .settings-content {
-    padding: 12px 16px 16px;
-    max-height: none;
+    padding: var(--space-3) var(--space-3) var(--space-12);
+    max-width: none;
   }
 
-  .settings-section {
-    margin-bottom: 8px;
+  .settings-card {
+    margin-bottom: var(--space-2);
   }
 
-  .section-header {
-    padding: 10px 12px;
+  .card-header {
+    padding: var(--space-2) var(--space-3);
   }
 
-  .section-body {
-    padding: 0 12px 12px;
+  .card-body {
+    padding: 0 var(--space-3) var(--space-3);
+  }
+
+  .card-body--flush {
+    padding: var(--space-2);
   }
 
   .setting-row {
     flex-wrap: wrap;
-    padding: 10px 0;
+    padding: var(--space-2) 0;
   }
 
-  .setting-label-group {
+  .setting-info {
     width: 100%;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
   }
 
-  .setting-control-row {
+  .setting-control {
     width: 100%;
     justify-content: flex-end;
   }
 
-  .hotkey-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sources-grid {
+  .sources-list {
     gap: 6px;
   }
 
@@ -2621,41 +2690,29 @@ onUnmounted(() => {
     font-size: 12px;
   }
 
-  /* 关系卡片移动端适配 */
+  .source-chip[draggable="true"] {
+    touch-action: none;
+  }
+
+  .drag-handle {
+    opacity: 0.6;
+  }
+
   .relation-grid {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .relation-tile__body {
-    padding: 10px 12px 8px 14px;
-    gap: 8px;
-  }
-
-  .relation-tile__icon-wrap {
-    width: 28px;
-    height: 28px;
-  }
-
-  .relation-tile__icon .icon {
-    width: 14px;
-    height: 14px;
-  }
-
-  .relation-tile__count-value {
-    font-size: 20px;
-  }
-
-  .live-stat__value {
-    font-size: 16px;
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-3);
   }
 
   .relation-tile__actions {
-    padding: 8px 12px 8px 14px;
+    padding: var(--space-2) var(--space-3);
   }
 
   .tile-btn {
-    padding: 5px 10px;
+    padding: 5px 8px;
     font-size: 11px;
   }
 
@@ -2663,15 +2720,9 @@ onUnmounted(() => {
     display: none !important;
   }
 
-  /* 保存栏移动端适配 */
-  .save-bar {
-    /* 移动端下方有更多空间给 nav bar */
-    bottom: 0;
-  }
-
   .save-bar-inner {
-    padding: 10px 16px;
-    gap: 8px;
+    padding: var(--space-2) var(--space-4);
+    gap: var(--space-2);
   }
 
   .save-bar-text {
@@ -2679,12 +2730,12 @@ onUnmounted(() => {
   }
 
   .save-bar-discard {
-    padding: 6px 12px;
+    padding: 6px var(--space-3);
     font-size: 12px;
   }
 
   .save-bar-save {
-    padding: 6px 16px;
+    padding: 6px var(--space-4);
     font-size: 12px;
   }
 }

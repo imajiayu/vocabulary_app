@@ -8,10 +8,10 @@
 
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
-import type { UserSettings, SourceLang } from '@/shared/types'
+import type { UserSettings, SourceLang, SourceSpecificSettings } from '@/shared/types'
 
-// 默认配置
-const DEFAULT_CONFIG: UserSettings = {
+// 每个 source 的默认设置
+const _DEFAULT_SOURCE_SETTINGS: SourceSpecificSettings = {
   learning: {
     dailyReviewLimit: 50,
     dailySpellLimit: 50,
@@ -20,6 +20,23 @@ const DEFAULT_CONFIG: UserSettings = {
     defaultShuffle: true,
     lowEfExtraCount: 0
   },
+  accent: 'us'
+}
+
+/** 每次返回独立深拷贝，避免共享引用污染 */
+export function createDefaultSourceSettings(): SourceSpecificSettings {
+  return JSON.parse(JSON.stringify(_DEFAULT_SOURCE_SETTINGS))
+}
+
+// 默认配置
+const DEFAULT_CONFIG: UserSettings = {
+  sourceSettings: {
+    IELTS: createDefaultSourceSettings()
+  },
+  audio: {
+    autoPlayOnWordChange: true,
+    autoPlayAfterAnswer: true
+  },
   management: {
     wordsLoadBatchSize: 200,
     definitionFetchThreads: 3
@@ -27,11 +44,6 @@ const DEFAULT_CONFIG: UserSettings = {
   sources: {
     customSources: { IELTS: 'en' },
     sourceOrder: ['IELTS']
-  },
-  audio: {
-    accent: 'us',
-    autoPlayOnWordChange: true,
-    autoPlayAfterAnswer: true
   },
   hotkeys: {
     reviewInitial: {
@@ -82,6 +94,7 @@ function deepMerge<T extends object>(base: T, override: Partial<T>): T {
   return result
 }
 
+
 // Edge Function 响应接口
 interface AdjustMaxPrepDaysResponse {
   success: boolean
@@ -126,12 +139,24 @@ export class SettingsSupabaseApi {
       throw new Error(`获取设置失败: ${error.message}`)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dbConfig = (data?.config || {}) as any
+
     // 将数据库配置与默认配置合并，确保所有字段存在
-    const dbConfig = (data?.config || {}) as Partial<UserSettings>
-    const merged = deepMerge(DEFAULT_CONFIG, dbConfig)
+    const merged = deepMerge(DEFAULT_CONFIG, dbConfig as Partial<UserSettings>)
+
+    // sourceSettings 是动态键集合，整体替换而非递归合并（同 customSources）
+    if (dbConfig.sourceSettings) {
+      merged.sourceSettings = {}
+      for (const [key, val] of Object.entries(dbConfig.sourceSettings)) {
+        merged.sourceSettings[key] = deepMerge(
+          createDefaultSourceSettings(),
+          val as Partial<SourceSpecificSettings>
+        )
+      }
+    }
 
     // customSources 是动态键集合，必须整体替换而非递归合并
-    // （deepMerge 会把 DEFAULT 中已被用户删除的 source 复活）
     if (dbConfig.sources?.customSources) {
       merged.sources.customSources = dbConfig.sources.customSources
     }
@@ -144,12 +169,18 @@ export class SettingsSupabaseApi {
     }
 
     // 归一化：确保 sourceOrder 与 customSources 同步
-    // （防止旧客户端直接改了 customSources 导致二者不一致）
     const sourceKeys = new Set(Object.keys(merged.sources.customSources))
     const order = merged.sources.sourceOrder ?? []
     const filtered = order.filter(s => sourceKeys.has(s))
     const missing = [...sourceKeys].filter(s => !filtered.includes(s))
     merged.sources.sourceOrder = [...filtered, ...missing]
+
+    // 确保每个 source 都有对应的 sourceSettings 条目
+    for (const key of sourceKeys) {
+      if (!merged.sourceSettings[key]) {
+        merged.sourceSettings[key] = createDefaultSourceSettings()
+      }
+    }
 
     return merged
   }
@@ -157,11 +188,11 @@ export class SettingsSupabaseApi {
   /**
    * 更新用户设置（直连 Supabase）
    * @param settings 要更新的设置（部分更新）
-   * @param oldMaxPrepDays 如果传入，且新 maxPrepDays 变小，会调用 Edge Function 调整单词
+   * @param oldSourceSettings 如果传入，会对比每个 source 的 maxPrepDays 是否变小
    */
   static async updateSettings(
     settings: Partial<UserSettings>,
-    oldMaxPrepDays?: number
+    oldSourceSettings?: Record<string, SourceSpecificSettings>
   ): Promise<UserSettings> {
     const userId = getCurrentUserId()
 
@@ -171,14 +202,27 @@ export class SettingsSupabaseApi {
     // 2. 合并新配置
     const mergedConfig = deepMerge(currentSettings, settings)
 
-    // 3. 检查是否需要调整单词（maxPrepDays 变小）
-    const newMaxPrepDays = settings.learning?.maxPrepDays
-    if (
-      oldMaxPrepDays !== undefined &&
-      newMaxPrepDays !== undefined &&
-      newMaxPrepDays < oldMaxPrepDays
-    ) {
-      await this.adjustMaxPrepDays(newMaxPrepDays)
+    // sourceSettings 需要特殊合并：source key 级别浅合并，每个 source 内部 deepMerge
+    if (settings.sourceSettings) {
+      for (const [source, partial] of Object.entries(settings.sourceSettings)) {
+        const current = currentSettings.sourceSettings[source] ?? createDefaultSourceSettings()
+        mergedConfig.sourceSettings[source] = deepMerge(current, partial)
+      }
+    }
+
+    // 3. 检查是否需要调整单词（per-source maxPrepDays 变小）
+    if (oldSourceSettings && settings.sourceSettings) {
+      for (const [source, newSourceSettings] of Object.entries(settings.sourceSettings)) {
+        const oldMaxPrepDays = oldSourceSettings[source]?.learning?.maxPrepDays
+        const newMaxPrepDays = newSourceSettings.learning?.maxPrepDays
+        if (
+          oldMaxPrepDays !== undefined &&
+          newMaxPrepDays !== undefined &&
+          newMaxPrepDays < oldMaxPrepDays
+        ) {
+          await this.adjustMaxPrepDays(newMaxPrepDays, source)
+        }
+      }
     }
 
     // 4. 保存到数据库（upsert）
@@ -197,9 +241,9 @@ export class SettingsSupabaseApi {
    * 调用 Edge Function 调整单词复习时间
    * 当 maxPrepDays 变小时使用
    */
-  static async adjustMaxPrepDays(maxPrepDays: number): Promise<AdjustMaxPrepDaysResponse> {
+  static async adjustMaxPrepDays(maxPrepDays: number, source: string): Promise<AdjustMaxPrepDaysResponse> {
     const { data, error } = await supabase.functions.invoke('adjust-max-prep-days', {
-      body: { maxPrepDays },
+      body: { maxPrepDays, source },
     })
 
     if (error) {

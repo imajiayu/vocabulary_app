@@ -70,7 +70,7 @@ export function useReviewResult() {
   const handleReviewMode = async (ctx: ProcessContext) => {
     if (!reviewLoadsCache.value) {
       reviewLoadsCache.value = await api.words.getDailyReviewLoadsDirect(
-        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+        ctx.source, ctx.userSettings.sourceSettings[ctx.source]?.learning?.maxPrepDays || 45
       )
     }
     const calcResult = calculateReviewResult(
@@ -109,7 +109,7 @@ export function useReviewResult() {
     }
     if (!spellLoadsCache.value) {
       spellLoadsCache.value = await api.words.getDailySpellLoadsDirect(
-        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+        ctx.source, ctx.userSettings.sourceSettings[ctx.source]?.learning?.maxPrepDays || 45
       )
     }
     const calcResult = calculateSpellingResult(
@@ -149,13 +149,13 @@ export function useReviewResult() {
     // 没记住：重置学习参数 + 取消掌握状态
     if (!reviewLoadsCache.value) {
       reviewLoadsCache.value = await api.words.getDailyReviewLoadsDirect(
-        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+        ctx.source, ctx.userSettings.sourceSettings[ctx.source]?.learning?.maxPrepDays || 45
       )
     }
 
     const { chosenDay } = findOptimalDay({
       baseInterval: 1,
-      dailyLimit: ctx.userSettings.learning.dailyReviewLimit || 100,
+      dailyLimit: ctx.userSettings.sourceSettings[ctx.source]?.learning?.dailyReviewLimit || 100,
       currentLoads: reviewLoadsCache.value,
     })
 
@@ -225,14 +225,14 @@ export function useReviewResult() {
     // 需要重置拼写进度
     if (!spellLoadsCache.value) {
       spellLoadsCache.value = await api.words.getDailySpellLoadsDirect(
-        ctx.source, ctx.userSettings.learning.maxPrepDays || 45
+        ctx.source, ctx.userSettings.sourceSettings[ctx.source]?.learning?.maxPrepDays || 45
       )
     }
 
     const today = new Date().toISOString().split('T')[0]
     const { chosenDay } = findOptimalDay({
       baseInterval: 1,
-      dailyLimit: ctx.userSettings.learning.dailySpellLimit || 200,
+      dailyLimit: ctx.userSettings.sourceSettings[ctx.source]?.learning?.dailySpellLimit || 200,
       currentLoads: spellLoadsCache.value,
     })
 

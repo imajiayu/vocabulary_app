@@ -92,10 +92,12 @@ Deno.serve(async (req) => {
       )
     }
 
-    // 2. 先更新 user_config（从 source 列表移除），即使后续删除失败也不会 UI 残留
+    // 2. 先更新 user_config（从 source 列表和 sourceSettings 中移除）
     const { [sourceName]: _, ...remainingSources } = customSources
+    const { [sourceName]: _s, ...remainingSourceSettings } = config.sourceSettings || {}
     const updatedConfig = {
       ...config,
+      sourceSettings: remainingSourceSettings,
       sources: {
         ...config.sources,
         customSources: remainingSources,

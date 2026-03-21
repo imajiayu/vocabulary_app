@@ -352,7 +352,7 @@ const inputStateClass = computed(() => {
   return isCorrect.value ? 'correct' : 'incorrect'
 })
 
-const { audioAccent, loadAudioAccent } = useAudioAccent()
+const { audioAccent, loadAudioAccent } = useAudioAccent(() => props.word.source || '')
 
 const handlePlayAudio = async () => {
   if (isSubmitting.value) return

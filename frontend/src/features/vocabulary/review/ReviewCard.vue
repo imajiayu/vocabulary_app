@@ -259,7 +259,7 @@ const timer = useTimer()
 const { pauseCount } = useTimerPause()
 
 // 使用全局音频设置
-const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent()
+const { audioAccent, autoPlayOnWordChange, autoPlayAfterAnswer, loadAudioAccent } = useAudioAccent(() => props.word.source || '')
 const langConfig = useWordLangConfig(() => props.word.source || '')
 const ttsLang = computed(() => langConfig.value.ttsLang)
 

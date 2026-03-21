@@ -26,7 +26,6 @@ async function _loadSourceConfig() {
   const sourcesConfig = settings.sources
   const sources = sourcesConfig?.sourceOrder
     ?? Object.keys(sourcesConfig?.customSources || { IELTS: 'en' })
-  const lowEfExtraCount = settings.learning?.lowEfExtraCount ?? 30
 
   let currentSource = ''
   const cached = sessionStorage.getItem('currentSource')
@@ -35,6 +34,8 @@ async function _loadSourceConfig() {
   } else if (sources.length > 0) {
     currentSource = sources[0]
   }
+
+  const lowEfExtraCount = settings.sourceSettings[currentSource]?.learning?.lowEfExtraCount ?? 30
 
   return { sources, currentSource, lowEfExtraCount }
 }

@@ -549,7 +549,8 @@ const WHEEL_MAX = 500
 const updateWheelValues = async () => {
   try {
     const settings = await loadSettings()
-    lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize, WHEEL_MAX)
+    const sourceLearning = settings.sourceSettings[currentSource.value]?.learning
+    lapseLimit.value = Math.min(counts.lapse, sourceLearning?.lapseQueueSize ?? 20, WHEEL_MAX)
   } catch {
     lapseLimit.value = Math.min(counts.lapse, 25, WHEEL_MAX)
   }
@@ -561,7 +562,7 @@ const updateWheelValues = async () => {
 const shuffleModel = computed({
   get: () => shuffle.value,
   set: (value: boolean) => {
-    setShuffle(value)
+    setShuffle(value, currentSource.value)
   }
 })
 
@@ -583,8 +584,9 @@ const fetchSummary = async (isRetry = false) => {
 
     if (settingsResult.status === 'fulfilled') {
       const settings = settingsResult.value
-      shuffle.value = settings.learning.defaultShuffle
-      lapseLimit.value = Math.min(counts.lapse, settings.learning.lapseQueueSize, WHEEL_MAX)
+      const srcLearning = settings.sourceSettings[currentSource.value]?.learning
+      shuffle.value = srcLearning?.defaultShuffle ?? false
+      lapseLimit.value = Math.min(counts.lapse, srcLearning?.lapseQueueSize ?? 20, WHEEL_MAX)
     } else {
       log.error('Failed to load settings:', settingsResult.reason)
       shuffle.value = false

@@ -177,10 +177,14 @@ export interface ManagementSettings {
   definitionFetchThreads: number;
 }
 
-export interface AudioSettings {
-  accent: 'us' | 'uk';
+export interface GlobalAudioSettings {
   autoPlayOnWordChange: boolean;  // 新单词出现时自动播放
   autoPlayAfterAnswer: boolean;    // 选择答案后自动播放
+}
+
+export interface SourceSpecificSettings {
+  learning: LearningSettings;
+  accent: 'us' | 'uk';  // 发音口音（仅英语源有意义）
 }
 
 // 快捷键配置
@@ -215,9 +219,9 @@ export interface SourcesSettings {
 }
 
 export interface UserSettings {
-  learning: LearningSettings;
+  sourceSettings: Record<string, SourceSpecificSettings>;
+  audio: GlobalAudioSettings;
   management: ManagementSettings;
-  audio: AudioSettings;
   hotkeys: HotkeySettings;
   sources: SourcesSettings;
 }

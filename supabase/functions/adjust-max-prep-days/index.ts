@@ -14,6 +14,7 @@ const corsHeaders = {
 
 interface AdjustRequest {
   maxPrepDays: number
+  source: string
 }
 
 interface AdjustResponse {
@@ -51,11 +52,18 @@ Deno.serve(async (req) => {
 
     // 解析请求体
     const body: AdjustRequest = await req.json()
-    const { maxPrepDays } = body
+    const { maxPrepDays, source } = body
 
     if (!Number.isInteger(maxPrepDays) || maxPrepDays < 1 || maxPrepDays > 365) {
       return new Response(
         JSON.stringify({ success: false, error: 'maxPrepDays 必须是 1-365 之间的整数' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    if (!source || typeof source !== 'string') {
+      return new Response(
+        JSON.stringify({ success: false, error: 'source 不能为空' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -69,7 +77,7 @@ Deno.serve(async (req) => {
     maxDate.setDate(maxDate.getDate() + maxPrepDays)
     const maxDateStr = maxDate.toISOString().split('T')[0]
 
-    // 1. 调整 interval 超过 maxPrepDays 的单词
+    // 1. 调整 interval 超过 maxPrepDays 的单词（仅指定 source）
     const { data: intervalData, error: intervalError } = await supabase
       .from('words')
       .update({
@@ -77,6 +85,7 @@ Deno.serve(async (req) => {
         next_review: maxDateStr
       })
       .eq('user_id', userId)
+      .eq('source', source)
       .eq('stop_review', 0)
       .gt('interval', maxPrepDays)
       .select('id')
@@ -91,6 +100,7 @@ Deno.serve(async (req) => {
       .from('words')
       .update({ next_review: maxDateStr })
       .eq('user_id', userId)
+      .eq('source', source)
       .eq('stop_review', 0)
       .not('next_review', 'is', null)
       .gt('next_review', maxDateStr)
@@ -107,6 +117,7 @@ Deno.serve(async (req) => {
       .from('words')
       .update({ spell_next_review: maxDateStr })
       .eq('user_id', userId)
+      .eq('source', source)
       .eq('stop_spell', 0)
       .not('spell_next_review', 'is', null)
       .gt('spell_next_review', maxDateStr)

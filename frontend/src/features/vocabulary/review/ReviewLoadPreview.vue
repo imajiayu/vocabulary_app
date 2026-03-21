@@ -79,11 +79,14 @@ const loadsCache = computed(() =>
   mode.value === 'mode_spelling' ? spellLoadsCache.value : reviewLoadsCache.value
 )
 
+const currentSource = sessionStorage.getItem('currentSource') || ''
+
 const dailyLimit = computed(() => {
   if (!userSettings.value) return Infinity
+  const sourceLearning = userSettings.value.sourceSettings[currentSource]?.learning
   return mode.value === 'mode_spelling'
-    ? userSettings.value.learning.dailySpellLimit
-    : userSettings.value.learning.dailyReviewLimit
+    ? sourceLearning?.dailySpellLimit ?? 50
+    : sourceLearning?.dailyReviewLimit ?? 50
 })
 
 const days = computed(() => {

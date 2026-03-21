@@ -306,9 +306,10 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     try {
       // 计算阶段（需 await）
       const userSettings = await loadSettings()
-      const dailyLimit = userSettings.learning.dailyReviewLimit || 50
-      const maxPrepDays = userSettings.learning.maxPrepDays || 45
       const source = word.source || 'IELTS'
+      const sourceLearning = userSettings.sourceSettings[source]?.learning
+      const dailyLimit = sourceLearning?.dailyReviewLimit || 50
+      const maxPrepDays = sourceLearning?.maxPrepDays || 45
 
       let loads: number[]
       try {
@@ -374,9 +375,10 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     try {
       // 计算阶段（需 await）
       const userSettings = await loadSettings()
-      const dailyLimit = userSettings.learning.dailySpellLimit || 200
-      const maxPrepDays = userSettings.learning.maxPrepDays || 45
       const source = word.source || 'IELTS'
+      const sourceLearning = userSettings.sourceSettings[source]?.learning
+      const dailyLimit = sourceLearning?.dailySpellLimit || 200
+      const maxPrepDays = sourceLearning?.maxPrepDays || 45
 
       let loads: number[]
       try {
