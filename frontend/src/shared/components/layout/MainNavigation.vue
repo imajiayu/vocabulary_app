@@ -68,8 +68,8 @@
         </span>
         <transition name="label-slide">
           <span v-show="expanded" class="chapter-label">
-            <span class="label-chinese">英国生活</span>
-            <span class="label-english">UK Life</span>
+            <span class="label-chinese">乌克兰语</span>
+            <span class="label-english">Ukrainian</span>
           </span>
         </transition>
       </a>
@@ -85,8 +85,8 @@
         </span>
         <transition name="label-slide">
           <span v-show="expanded" class="chapter-label">
-            <span class="label-chinese">法律信息</span>
-            <span class="label-english">Legal</span>
+            <span class="label-chinese">法律英语</span>
+            <span class="label-english">Legal English</span>
           </span>
         </transition>
       </a>

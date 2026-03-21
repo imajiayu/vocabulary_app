@@ -1,5 +1,6 @@
 /* === 课程共享样式 === */
 /* 乌克兰语 (<html lang="uk">) 和法律英语 (<html lang="en">) 共用 */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 /* --- 基础变量（默认：乌克兰语主题） --- */
 :root {
@@ -41,6 +42,7 @@ body {
 
 /* --- 标题层级 --- */
 h1 {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
   font-size: 1.8em;
   color: var(--accent);
   border-bottom: 3px solid var(--accent);
@@ -49,6 +51,7 @@ h1 {
 }
 
 h2 {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
   font-size: 1.4em;
   color: var(--accent);
   margin-top: 48px;
@@ -862,6 +865,38 @@ code {
 }
 .vocab-add-one:hover { background: var(--accent); color: #fff; }
 .vocab-add-one:disabled { opacity: 0.5; cursor: wait; }
+
+/* --- 课程导航栏 --- */
+.course-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88em;
+}
+
+.course-nav-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-family: "Lora", Georgia, serif;
+  font-style: italic;
+  transition: color 0.15s;
+}
+
+.course-nav-link:hover {
+  color: var(--accent);
+}
+
+.course-nav-home {
+  font-size: 0.92em;
+  opacity: 0.65;
+}
+
+.course-nav-home:hover {
+  opacity: 1;
+}
 
 /* --- 响应式 --- */
 @media (max-width: 600px) {

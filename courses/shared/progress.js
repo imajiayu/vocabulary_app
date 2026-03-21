@@ -27,12 +27,16 @@
       syncFromServer();
     });
 
-    // 监听 checkbox 变化，额外同步到服务端
-    document.addEventListener('change', function (e) {
-      if (e.target.type === 'checkbox' && e.target.closest('.lesson-check')) {
+    // 包装全局 saveProgress：checkbox 变化时 toggleLesson() 会调用它
+    // 注意：toggleLesson 中 event.stopPropagation() 阻止了事件冒泡，
+    // 所以不能用 document 级别的 change 监听，必须 hook saveProgress
+    if (typeof saveProgress === 'function') {
+      var _orig = saveProgress;
+      saveProgress = function (progress) {
+        _orig(progress);
         pushToServer();
-      }
-    });
+      };
+    }
   });
 
   function syncFromServer() {

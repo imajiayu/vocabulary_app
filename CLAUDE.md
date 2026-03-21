@@ -188,7 +188,7 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 
 ```
 courses/
-  shared/               # 统一 templates（lesson.css, tts.js, exercise.js, vocab.js）
+  shared/               # 统一 templates（lesson.css, nav.js, tts.js, exercise.js, vocab.js）
   ukrainian/            # 乌克兰语语法课程
     lessons/            # HTML 课程文件 + templates 符号链接
     curriculum.md       # 12 周课程大纲
@@ -208,8 +208,9 @@ courses/
 
 ### 共享 Templates 机制
 
-`courses/shared/` 下的 4 个文件被两套课程共用：
-- **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色）
+`courses/shared/` 下的 5 个文件被两套课程共用：
+- **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色），引入 Lora 衬线字体用于标题
+- **nav.js** — 自动注入顶部导航栏（课程首页显示"← IELTS Study 主页"，课时页显示"← 课程名"+ 主页链接）
 - **tts.js** — 自动读取 `<html lang>` 选择语言和语速（uk-UA 0.85x / en-US 0.95x）
 - **exercise.js** — 选择题 + 翻译题 + AI 批改 + localStorage 持久化（翻译功能仅在有 `.translation-exercise` 元素时激活）
 - **vocab.js** — 从 Supabase 认证会话获取 user_id，用户可通过下拉框选择 source，直接调 Supabase REST API 添加词汇

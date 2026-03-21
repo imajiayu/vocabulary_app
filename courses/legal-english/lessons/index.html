@@ -6,19 +6,39 @@
   <title>法律英语学习 — Legal English for Contracts</title>
   <link rel="stylesheet" href="templates/lesson.css">
   <style>
+    /* 法律英语主题色覆盖（index.html 为 lang="zh"，无法触发 :lang(en)） */
+    :root {
+      --bg: #f8f9fa;
+      --accent: #1a365d;
+      --accent-hover: #2c5282;
+      --border: #e2e8f0;
+      --highlight: #ebf4ff;
+    }
     .hero {
       text-align: center;
       padding: 32px 0 24px;
     }
     .hero h1 {
+      font-family: "Lora", Georgia, serif;
       border-bottom: none;
-      font-size: 2em;
-      margin-bottom: 4px;
+      font-size: 2.2em;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
     }
     .hero .subtitle {
       color: var(--text-light);
+      font-family: "Lora", Georgia, serif;
+      font-style: italic;
       font-size: 1.05em;
       margin-bottom: 0;
+    }
+    .hero-ornament {
+      text-align: center;
+      color: var(--accent);
+      opacity: 0.2;
+      font-size: 0.75em;
+      margin-top: 14px;
+      letter-spacing: 8px;
     }
 
     .stats-bar {
@@ -30,8 +50,14 @@
     }
     .stat {
       text-align: center;
+      padding: 16px 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      min-width: 120px;
     }
     .stat-value {
+      font-family: "Lora", Georgia, serif;
       font-size: 1.8em;
       font-weight: 700;
       color: var(--accent);
@@ -209,6 +235,7 @@
 <div class="hero">
   <h1>Legal English for Contracts</h1>
   <p class="subtitle">12周商务合同法律英语课程</p>
+  <div class="hero-ornament">◆ ◆ ◆</div>
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
@@ -484,6 +511,7 @@ function renderAll() {
 
 renderAll();
 </script>
+<script src="templates/nav.js"></script>
 <script src="templates/auth.js"></script>
 <script src="templates/progress.js"></script>
 </body>
