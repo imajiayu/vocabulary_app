@@ -15,25 +15,18 @@
 - 语法基础：零（不了解词性、格变化等）
 - 母语：中文
 
-## Vocabulary App 联动配置
+## Vocabulary App 联动
 
-| 项目 | 值 |
-|------|------|
-| user_id | `2a7bf539-4881-4a24-ae0d-c5abad4e501d` |
-| source | `UKA` |
-| API | `https://mieltsm.top/api/external/words` |
+课程页面通过 `courses/shared/auth.js` 读取主站 Supabase 登录会话，使用认证用户的 ID 添加词汇。默认 source 为 `UKA`，用户可在页面下拉框中切换。
+
+课程生成时，通过 Supabase REST API 获取用户已知词汇（需要 service key，见 `backend/.env` 中的 `SUPABASE_SERVICE_KEY`）。
 
 ## 课程生成工作流
 
 每次用户请求生成课程时，按以下步骤执行：
 
 1. **读取进度**：先读取 `courses/ukrainian/progress.md`，了解当前所在周次、天数、薄弱点
-2. **获取已知词汇**：通过 API 获取用户已添加的乌克兰语单词
-   ```bash
-   curl -s "https://mieltsm.top/api/external/words?\
-   user_id=2a7bf539-4881-4a24-ae0d-c5abad4e501d&source=UKA"
-   ```
-   返回 `{"success":true,"data":{"words":["книга","молоко",...],"count":N}}`
+2. **获取已知词汇**：通过 Supabase REST API 获取用户已添加的乌克兰语单词（user_id 和 source 从课程上下文确定）
 3. **参考大纲**：对照 `courses/ukrainian/curriculum.md` 确定今天的教学内容
 4. **生成课程**：
    - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载课（`courses/ukrainian/lessons/w*d1.html`）了解已教过哪些词汇，并通过 API 查询背单词 App 中的已知词汇（见上方"Vocabulary App 联动配置"）。确保新词汇不与已教内容重复。生成词汇页面，列出本周所有新单词（含中文释义），引用 `templates/vocab.js` 实现一键添加到背单词App。参考 `courses/ukrainian/vocabulary/weekly-vocab.md` 中的词汇列表

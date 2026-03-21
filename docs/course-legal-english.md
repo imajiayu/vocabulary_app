@@ -17,12 +17,7 @@
 2. **参考大纲**：对照 `courses/legal-english/curriculum.md` 确定今天的教学内容
 3. **检查错题**：读取 `courses/legal-english/mistakes.md`，在新课程中针对性复习
 4. **生成课程**：
-   - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载课（`courses/legal-english/lessons/w*d1.html`）了解已教过哪些词汇，并通过 API 查询背单词 App 中的已知词汇：
-     ```bash
-     curl -s "https://mieltsm.top/api/external/words?\
-     user_id=f18e410b-400d-4492-bc3e-eb0e034eb366&source=IELTS"
-     ```
-     确保新词汇不与已教内容重复。生成词汇页面，列出本周所有新术语（含中文释义），引用 `templates/vocab.js` 实现一键添加到背单词App
+   - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载课（`courses/legal-english/lessons/w*d1.html`）了解已教过哪些词汇，并通过 Supabase REST API 查询背单词 App 中的已知词汇（user_id 和 source 从课程上下文确定）。确保新词汇不与已教内容重复。生成词汇页面，列出本周所有新术语（含中文释义），引用 `templates/vocab.js` 实现一键添加到背单词App
    - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载课（`courses/legal-english/lessons/wXd1.html`）确认本周允许使用的词汇范围。在 `courses/legal-english/lessons/` 目录下创建以周次天数命名的 `.html` 文件（如 `w3d5.html`）。生成后对照 `courses/legal-english/curriculum.md` 检查每道练习题是否超纲
    - **复习日（第7天）**：巩固本周内容，不引入新知识点
 5. **更新进度**：课程生成后更新 `courses/legal-english/progress.md`（推进天数、记录完成的课程）

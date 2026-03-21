@@ -82,7 +82,6 @@ exceptions.py                 # 自定义异常类（AppError）
 middleware/user_context.py    # JWT 验证（JWKS P-256 + HS256 fallback）
 api/generation.py             # 关系生成/停止/进度 API（SSE 空闲超时 5min）
 api/tts_cache.py              # TTS 音频缓存保存/删除（文件系统，SHA256 命名）
-api/external.py               # 外部工具 API — 单词新增/删除/查询（无需认证）
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
   data.py                     # 统一数据源（反义词对、词根、易混淆词）
