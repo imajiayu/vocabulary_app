@@ -80,7 +80,7 @@
                     v-model="currentSourceSettings.learning.dailyReviewLimit"
                     :min="50"
                     :max="1000"
-                    :step="50"
+                    :step="10"
                   />
                   <span class="setting-value">{{ currentSourceSettings.learning.dailyReviewLimit }}</span>
                   <span class="setting-unit">词</span>
@@ -98,7 +98,7 @@
                     v-model="currentSourceSettings.learning.dailySpellLimit"
                     :min="50"
                     :max="800"
-                    :step="50"
+                    :step="10"
                   />
                   <span class="setting-value">{{ currentSourceSettings.learning.dailySpellLimit }}</span>
                   <span class="setting-unit">词</span>
