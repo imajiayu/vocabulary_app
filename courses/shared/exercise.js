@@ -2,7 +2,7 @@
 
 (function () {
   // --- localStorage 持久化工具 ---
-  var STATE_VERSION = 4;
+  var STATE_VERSION = 5;
   var pageKey = 'exercise_v' + STATE_VERSION + '_' + location.pathname;
 
   // 清除旧版本数据
@@ -13,8 +13,11 @@
     }
   } catch (e) {}
 
+  // AI 批改结果缓存（避免刷新页面重复调 API）
+  var _aiFeedbackCache = {};
+
   function saveState() {
-    var state = { radio: {}, textarea: {}, graded: {}, translationGraded: {} };
+    var state = { radio: {}, textarea: {}, graded: {}, translationGraded: {}, aiFeedback: _aiFeedbackCache };
     document.querySelectorAll('.quiz-item input[type="radio"]:checked').forEach(function (r) {
       state.radio[r.name] = r.value;
     });
@@ -323,8 +326,13 @@
         });
       }
 
+      // 恢复 AI 批改缓存
+      if (saved && saved.aiFeedback) {
+        _aiFeedbackCache = saved.aiFeedback;
+      }
+
       if (saved && saved.translationGraded && saved.translationGraded['tex' + texIdx]) {
-        triggerTranslationGrade(items, btn);
+        restoreTranslationFeedback(items, btn, texIdx);
       } else {
         exercise.addEventListener('input', function () {
           var filled = 0;
@@ -484,6 +492,33 @@
       });
     }
 
+    function restoreTranslationFeedback(items, btn, texIdx) {
+      btn.textContent = '✅ AI 批改完成';
+      btn.disabled = true;
+
+      items.forEach(function (item, itemIdx) {
+        var input = item.querySelector('textarea');
+        if (input) input.disabled = true;
+
+        var cacheKey = 'tex' + texIdx + '_t' + itemIdx;
+        var cached = _aiFeedbackCache[cacheKey];
+        if (!cached) return;
+
+        var old = item.querySelector('.translate-feedback');
+        if (old) old.remove();
+
+        if (cached.type === 'ai' && cached.data) {
+          var feedbackDiv = document.createElement('div');
+          feedbackDiv.className = 'translate-feedback';
+          item.appendChild(feedbackDiv);
+          renderAIFeedback(feedbackDiv, cached.data, cached.reference || '');
+        } else if (cached.type === 'local') {
+          var userText = input ? input.value.trim() : '';
+          if (userText) buildGradeFeedback(item, userText);
+        }
+      });
+    }
+
     function triggerTranslationGrade(items, btn) {
       btn.textContent = '⏳ AI 批改中...';
       btn.disabled = true;
@@ -524,14 +559,18 @@
         item.appendChild(feedbackDiv);
 
         // 调用 DeepSeek API，失败降级到本地 rubric
+        var itemIdx = Array.prototype.indexOf.call(items, item);
+        var cacheKey = 'tex' + texIdx + '_t' + itemIdx;
         var p = callDeepSeek(source, userText, reference, rubric, direction)
           .then(function (result) {
+            _aiFeedbackCache[cacheKey] = { type: 'ai', data: result, reference: reference };
             renderAIFeedback(feedbackDiv, result, reference);
           })
           .catch(function (err) {
             console.warn('DeepSeek API failed, falling back to local rubric:', err);
-            feedbackDiv.innerHTML = '';
+            while (feedbackDiv.firstChild) feedbackDiv.removeChild(feedbackDiv.firstChild);
             buildGradeFeedback(item, userText);
+            _aiFeedbackCache[cacheKey] = { type: 'local' };
           });
 
         promises.push(p);

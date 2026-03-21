@@ -296,16 +296,16 @@ const weekTitles = {
   3: { zh: "支付与对价条款", en: "Payment & Consideration" },
 };
 
-const STORAGE_KEY = 'legal_english_progress';
+// 进度数据由 progress.js 从 Supabase 加载，这里只用内存变量
+var _progress = {};
 
 function loadProgress() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-  catch (e) { return {}; }
+  return _progress;
 }
 
 function saveProgress(progress) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
-  catch (e) {}
+  _progress = progress;
+  // progress.js 会 hook 此函数，异步写入 Supabase
 }
 
 function getStatus(lesson, progress) {

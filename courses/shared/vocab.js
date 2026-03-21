@@ -15,12 +15,27 @@ const COURSE_DEFAULTS = {
 
 const courseCfg = Object.entries(COURSE_DEFAULTS).find(([p]) => location.pathname.startsWith(p))?.[1];
 
-let selectedSource = courseCfg?.defaultSource || '';
+const SOURCE_STORAGE_KEY = 'vocab_selected_source';
+let selectedSource = (() => {
+  try { return localStorage.getItem(SOURCE_STORAGE_KEY) || courseCfg?.defaultSource || ''; }
+  catch (e) { return courseCfg?.defaultSource || ''; }
+})();
 let authUserId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const addBtn = document.getElementById('add-all-btn');
   if (!addBtn) return;
+
+  // 确保 auth.js 已加载
+  if (!window.CourseAuth) {
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'templates/auth.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
 
   const auth = window.CourseAuth?.getAuth();
 
@@ -64,11 +79,12 @@ async function renderSourceSelector(addBtn) {
   let sources = [];
   try {
     const resp = await window.CourseAuth.supabaseFetch(
-      '/rest/v1/words?select=source&user_id=eq.' + authUserId + '&order=source'
+      '/rest/v1/word_source_stats?select=source&order=source'
     );
     const rows = await resp.json();
-    const seen = new Set();
-    rows.forEach(r => { if (r.source && !seen.has(r.source)) { seen.add(r.source); sources.push(r.source); } });
+    if (Array.isArray(rows)) {
+      sources = rows.map(r => r.source).filter(Boolean);
+    }
   } catch (e) {
     console.warn('获取 source 列表失败', e);
   }
@@ -102,6 +118,7 @@ async function renderSourceSelector(addBtn) {
 
   select.addEventListener('change', async () => {
     selectedSource = select.value;
+    try { localStorage.setItem(SOURCE_STORAGE_KEY, selectedSource); } catch (e) {}
     // 重置所有词汇状态，重新检查
     document.querySelectorAll('.vocab-row').forEach(row => {
       row.classList.remove('vocab-added', 'vocab-failed');
