@@ -19,7 +19,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | Project URL | `https://oilcmmlkkmikmftqjlih.supabase.co` |
 | OAuth Callback | `https://oilcmmlkkmikmftqjlih.supabase.co/auth/v1/callback` |
 
-> **开发理念**: 虽然已从 Vercel 迁移至阿里云部署，但几乎所有业务逻辑都在 Vue 前端实现，仍按 Serverless 模式开发（前端直连 Supabase，后端保留关系服务 + 外部工具 API），便于后续迁移至其他平台。
+> **开发理念**: 虽然已从 Vercel 迁移至阿里云部署，但几乎所有业务逻辑都在 Vue 前端实现，仍按 Serverless 模式开发（前端直连 Supabase，后端仅保留关系生成 + TTS 缓存服务），便于后续迁移至其他平台。
 
 ## 认证架构
 
@@ -188,16 +188,18 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 
 ```
 courses/
-  shared/               # 统一 templates（lesson.css, nav.js, tts.js, exercise.js, vocab.js）
+  shared/               # 统一 templates（auth.js, lesson.css, nav.js, progress.js, tts.js, exercise.js, vocab.js）
   ukrainian/            # 乌克兰语语法课程
     lessons/            # HTML 课程文件 + templates 符号链接
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
+    vocabulary/         # 推荐词汇表
   legal-english/        # 法律英语词汇课程
     lessons/            # HTML 课程文件 + templates 符号链接
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
     mistakes.md         # 错题库
+    vocabulary/         # 已学词汇库
 ```
 
 ### 课程访问
@@ -208,9 +210,11 @@ courses/
 
 ### 共享 Templates 机制
 
-`courses/shared/` 下的 5 个文件被两套课程共用：
+`courses/shared/` 下的 7 个文件被两套课程共用：
+- **auth.js** — 从 localStorage 读取主站 Supabase 登录会话，提供 `CourseAuth.getAuth()` 和 `CourseAuth.supabaseFetch()` 封装
 - **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色），引入 Lora 衬线字体用于标题
 - **nav.js** — 自动注入顶部导航栏（课程首页显示"← IELTS Study 主页"，课时页显示"← 课程名"+ 主页链接）
+- **progress.js** — checkbox 进度跨设备同步（纯 Supabase `course_progress` 表读写，未登录时仅当前会话有效）
 - **tts.js** — 自动读取 `<html lang>` 选择语言和语速（uk-UA 0.85x / en-US 0.95x）
 - **exercise.js** — 选择题 + 翻译题 + AI 批改 + localStorage 持久化（翻译功能仅在有 `.translation-exercise` 元素时激活）
 - **vocab.js** — 从 Supabase 认证会话获取 user_id，用户可通过下拉框选择 source，直接调 Supabase REST API 添加词汇
@@ -229,10 +233,10 @@ courses/
 
 ## 注意事项
 
-- 后端定位为关系服务（图查询 + 关系生成）+ 外部工具 API（单词 CRUD，无需认证）
+- 后端定位为关系服务（图查询 + 关系生成）+ TTS 音频缓存服务
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v1.5.1`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v1.6.3`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 修改 `courses/shared/` 中的 templates 会同时影响两套课程
 - 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录

@@ -393,6 +393,8 @@ Shared cache for AI vocabulary assistant responses. No `user_id` — all authent
 | anyone_can_read | SELECT | `true` (all authenticated users) |
 | insert_with_owner | INSERT | `created_by = auth.uid()` |
 
+---
+
 ### course_progress
 
 Course completion checkbox progress (cross-device sync).

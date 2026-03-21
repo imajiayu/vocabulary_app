@@ -22,6 +22,24 @@ let selectedSource = (() => {
 })();
 let authUserId = null;
 
+function injectAddButtons() {
+  document.querySelectorAll('.vocab-row').forEach(row => {
+    const status = row.querySelector('.vocab-status');
+    if (status && !status.querySelector('.vocab-add-one')) {
+      const btn = document.createElement('button');
+      btn.className = 'vocab-add-one';
+      btn.textContent = '+';
+      btn.title = '添加到背单词 App';
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addOneWord(row, btn);
+      });
+      status.textContent = '';
+      status.appendChild(btn);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const addBtn = document.getElementById('add-all-btn');
   if (!addBtn) return;
@@ -53,21 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await renderSourceSelector(addBtn);
 
   // 为每个 vocab-row 注入单词添加按钮
-  document.querySelectorAll('.vocab-row').forEach(row => {
-    const status = row.querySelector('.vocab-status');
-    if (status && !status.querySelector('.vocab-add-one')) {
-      const btn = document.createElement('button');
-      btn.className = 'vocab-add-one';
-      btn.textContent = '+';
-      btn.title = '添加到背单词 App';
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        addOneWord(row, btn);
-      });
-      status.textContent = '';
-      status.appendChild(btn);
-    }
-  });
+  injectAddButtons();
 
   // 检查哪些词已添加（基于当前选择的 source）
   await checkExistingWords();
@@ -122,20 +126,8 @@ async function renderSourceSelector(addBtn) {
     // 重置所有词汇状态，重新检查
     document.querySelectorAll('.vocab-row').forEach(row => {
       row.classList.remove('vocab-added', 'vocab-failed');
-      const status = row.querySelector('.vocab-status');
-      if (status && !status.querySelector('.vocab-add-one')) {
-        const btn = document.createElement('button');
-        btn.className = 'vocab-add-one';
-        btn.textContent = '+';
-        btn.title = '添加到背单词 App';
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          addOneWord(row, btn);
-        });
-        status.textContent = '';
-        status.appendChild(btn);
-      }
     });
+    injectAddButtons();
     const addBtn = document.getElementById('add-all-btn');
     if (addBtn) {
       addBtn.textContent = '一键添加全部';
