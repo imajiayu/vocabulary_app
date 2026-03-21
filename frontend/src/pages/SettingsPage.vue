@@ -78,7 +78,7 @@
                 <div class="setting-control">
                   <WheelSelector
                     v-model="currentSourceSettings.learning.dailyReviewLimit"
-                    :min="50"
+                    :min="10"
                     :max="1000"
                     :step="10"
                   />
@@ -96,7 +96,7 @@
                 <div class="setting-control">
                   <WheelSelector
                     v-model="currentSourceSettings.learning.dailySpellLimit"
-                    :min="50"
+                    :min="10"
                     :max="800"
                     :step="10"
                   />
