@@ -73,7 +73,7 @@
               <div class="setting-row" v-show="matchesSearchItem('dailyReviewLimit')">
                 <div class="setting-info">
                   <label class="setting-label">每日复习上限</label>
-                  <span class="setting-hint">建议 50-500</span>
+                  <span class="setting-hint">建议 10-500</span>
                 </div>
                 <div class="setting-control">
                   <WheelSelector

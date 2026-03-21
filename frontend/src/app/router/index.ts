@@ -1,17 +1,35 @@
 // router/index.ts
+import { defineAsyncComponent } from 'vue'
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { useAuth } from '@/shared/composables/useAuth'
 
-// 路由懒加载 - 按需加载页面组件，减少初始包体积
-const LoginPage = () => import('@/pages/LoginPage.vue')
-const HomePage = () => import('@/pages/HomePage.vue')
-const StatisticsPage = () => import('@/pages/StatisticsPage.vue')
-const VocabularyManagementPage = () => import('@/pages/VocabularyManagementPage.vue')
-const ReviewPage = () => import('@/pages/ReviewPage.vue')
-const SpeakingPage = () => import('@/pages/SpeakingPage.vue')
-const WritingPage = () => import('@/pages/WritingPage.vue')
-const SettingsPage = () => import('@/pages/SettingsPage.vue')
-const NotFoundPage = () => import('@/pages/NotFoundPage.vue')
+// 使用 defineAsyncComponent 包裹懒加载，让 Vue Router 立即导航，
+// chunk 加载交给 App.vue 的 <Suspense> fallback 骨架屏处理。
+// 部署后旧 chunk 404 在 onError 中直接刷新
+const lazyPage = (loader: () => Promise<any>) =>
+  defineAsyncComponent({
+    loader,
+    onError(error, _retry, fail) {
+      if (
+        error.message.includes('Failed to fetch dynamically imported module') ||
+        error.message.includes('Importing a module script failed')
+      ) {
+        window.location.reload()
+        return
+      }
+      fail()
+    }
+  })
+
+const LoginPage = lazyPage(() => import('@/pages/LoginPage.vue'))
+const HomePage = lazyPage(() => import('@/pages/HomePage.vue'))
+const StatisticsPage = lazyPage(() => import('@/pages/StatisticsPage.vue'))
+const VocabularyManagementPage = lazyPage(() => import('@/pages/VocabularyManagementPage.vue'))
+const ReviewPage = lazyPage(() => import('@/pages/ReviewPage.vue'))
+const SpeakingPage = lazyPage(() => import('@/pages/SpeakingPage.vue'))
+const WritingPage = lazyPage(() => import('@/pages/WritingPage.vue'))
+const SettingsPage = lazyPage(() => import('@/pages/SettingsPage.vue'))
+const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage.vue'))
 
 const routes = [
   {
@@ -103,16 +121,6 @@ router.beforeEach(async (to, _from, next) => {
   } else {
     document.title = (to.meta.title as string) || '词汇学习'
     next()
-  }
-})
-
-// 处理部署后旧 chunk 404 的问题：自动刷新页面加载新资源
-router.onError((error, to) => {
-  if (
-    error.message.includes('Failed to fetch dynamically imported module') ||
-    error.message.includes('Importing a module script failed')
-  ) {
-    window.location.assign(to.fullPath)
   }
 })
 

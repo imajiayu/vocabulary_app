@@ -15,22 +15,28 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: number): void
 }>()
 
-// 每个 item 的高度
-const itemHeight = props.itemHeight ?? 28
-// 最小值
-const minValue = () => props.min ?? 1
-// 步长
-const stepValue = () => props.step ?? 1
-// spacer 高度（与 CSS 保持一致）
-const spacerHeight = 26
+// ── 派生常量（全部用 computed，响应式 + 有缓存） ──────────────
 
-// 显示的最大值（如果没有指定，则等于可滚动的最大值）
+const ITEM_HEIGHT = computed(() => props.itemHeight ?? 28)
+const MIN = computed(() => props.min ?? 1)
+const STEP = computed(() => props.step ?? 1)
+const CONTAINER_HEIGHT = 80
+// spacer 高度由容器和 item 高度自动派生，不再硬编码
+const SPACER_HEIGHT = computed(() => (CONTAINER_HEIGHT - ITEM_HEIGHT.value) / 2)
+
 const displayMaxValue = computed(() => props.displayMax ?? props.max)
+
+// 将任意值钳位到最近的合法 step 值
+const clampToStep = (value: number): number => {
+  const clamped = Math.max(MIN.value, Math.min(value, props.max))
+  const steps = Math.round((clamped - MIN.value) / STEP.value)
+  return MIN.value + steps * STEP.value
+}
 
 // 生成所有显示值的数组（包括禁用的）
 const validValues = computed(() => {
   const result: number[] = []
-  for (let v = minValue(); v <= displayMaxValue.value; v += stepValue()) {
+  for (let v = MIN.value; v <= displayMaxValue.value; v += STEP.value) {
     result.push(v)
   }
   return result
@@ -50,26 +56,26 @@ let lastWheelTime = 0
 let accumulatedDelta = 0
 
 // 配置参数
-const FRICTION = 0.92 // 摩擦系数（越小停得越快）
-const WHEEL_SENSITIVITY = 0.4 // 滚轮灵敏度（越小越精确）
-const SNAP_THRESHOLD = 0.5 // 速度低于此值时开始吸附
-const SNAP_SPEED = 0.15 // 吸附动画速度
+const FRICTION = 0.92
+const WHEEL_SENSITIVITY = 0.4
+const SNAP_THRESHOLD = 0.5
+const SNAP_SPEED = 0.15
 
 // 根据滚动位置计算当前值
 const getValueFromScroll = (scrollTop: number): number => {
-  const containerCenter = wheelRef.value?.clientHeight ?? 80
+  const containerCenter = wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT
   const centerPosition = scrollTop + containerCenter / 2
-  const itemIndex = Math.round((centerPosition - spacerHeight) / itemHeight - 0.5)
-  const rawValue = minValue() + Math.max(0, itemIndex) * stepValue()
-  return Math.max(minValue(), Math.min(rawValue, props.max))
+  const itemIndex = Math.round((centerPosition - SPACER_HEIGHT.value) / ITEM_HEIGHT.value - 0.5)
+  const rawValue = MIN.value + Math.max(0, itemIndex) * STEP.value
+  return Math.max(MIN.value, Math.min(rawValue, props.max))
 }
 
 // 根据值计算滚动位置
 const getScrollFromValue = (value: number): number => {
-  const targetValue = Math.max(minValue(), Math.min(value, props.max))
-  const containerCenter = (wheelRef.value?.clientHeight ?? 80) / 2
-  const itemIndex = Math.round((targetValue - minValue()) / stepValue())
-  const elementCenter = spacerHeight + itemIndex * itemHeight + itemHeight / 2
+  const aligned = clampToStep(value)
+  const containerCenter = (wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT) / 2
+  const itemIndex = Math.round((aligned - MIN.value) / STEP.value)
+  const elementCenter = SPACER_HEIGHT.value + itemIndex * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
   return Math.max(0, elementCenter - containerCenter)
 }
 
@@ -153,28 +159,23 @@ const onWheel = (e: WheelEvent) => {
     accumulatedDelta = 0
   }
 
-  // 使用 deltaY，对触控板和鼠标滚轮都有效
-  // 触控板的 deltaY 通常较小且连续，鼠标滚轮的 deltaY 较大
   let delta = e.deltaY
 
   // 规范化 delta（处理不同设备的差异）
   if (e.deltaMode === 1) {
-    // 行模式（某些鼠标）
-    delta *= itemHeight
+    delta *= ITEM_HEIGHT.value
   } else if (e.deltaMode === 2) {
-    // 页模式
-    delta *= itemHeight * 3
+    delta *= ITEM_HEIGHT.value * 3
   }
 
   // 累积 delta 以实现更平滑的手势
   accumulatedDelta += delta * WHEEL_SENSITIVITY
 
   // 对于小的增量，累积后再应用（提供颗粒感）
-  if (Math.abs(accumulatedDelta) >= itemHeight * 0.3) {
+  if (Math.abs(accumulatedDelta) >= ITEM_HEIGHT.value * 0.3) {
     velocity += accumulatedDelta * 0.08
     accumulatedDelta = 0
   } else {
-    // 即使小增量也要有反馈
     velocity += delta * WHEEL_SENSITIVITY * 0.05
   }
 
@@ -188,7 +189,6 @@ const onWheel = (e: WheelEvent) => {
 }
 
 // 处理触摸事件
-let touchStartY = 0
 let touchLastY = 0
 let touchLastTime = 0
 
@@ -200,8 +200,7 @@ const onTouchStart = (e: TouchEvent) => {
   }
   velocity = 0
 
-  touchStartY = e.touches[0].clientY
-  touchLastY = touchStartY
+  touchLastY = e.touches[0].clientY
   touchLastTime = Date.now()
 }
 
@@ -212,13 +211,10 @@ const onTouchMove = (e: TouchEvent) => {
   const now = Date.now()
   const timeDelta = now - touchLastTime
 
-  // 计算移动距离
   const delta = touchLastY - touchY
 
-  // 更新滚动位置
   currentScrollTop += delta
 
-  // 边界限制
   const maxScroll = getMaxScroll()
   currentScrollTop = Math.max(0, Math.min(currentScrollTop, maxScroll))
 
@@ -226,12 +222,10 @@ const onTouchMove = (e: TouchEvent) => {
     wheelRef.value.scrollTop = currentScrollTop
   }
 
-  // 计算速度（用于惯性）
   if (timeDelta > 0) {
-    velocity = delta / timeDelta * 16 // 转换为每帧的速度
+    velocity = delta / timeDelta * 16
   }
 
-  // 更新值
   const currentValue = getValueFromScroll(currentScrollTop)
   if (currentValue !== props.modelValue) {
     emit('update:modelValue', currentValue)
@@ -242,11 +236,9 @@ const onTouchMove = (e: TouchEvent) => {
 }
 
 const onTouchEnd = () => {
-  // 启动惯性动画
   if (Math.abs(velocity) > 0.5) {
     animationId = requestAnimationFrame(animate)
   } else {
-    // 直接吸附
     snapToNearest()
     const diff = targetScrollTop - currentScrollTop
     if (Math.abs(diff) > 0.5) {
@@ -259,7 +251,6 @@ const onTouchEnd = () => {
 const setScrollPosition = (value: number) => {
   if (!wheelRef.value) return
 
-  // 停止当前动画
   if (animationId) {
     cancelAnimationFrame(animationId)
     animationId = null
@@ -273,22 +264,27 @@ const setScrollPosition = (value: number) => {
 
 // 初始化滚轮位置
 const initPosition = () => {
-  if (props.modelValue >= minValue() && props.max >= minValue()) {
+  if (props.max >= MIN.value) {
     nextTick(() => {
       setScrollPosition(props.modelValue)
     })
   }
 }
 
-// 监听外部 modelValue 变化
+// 监听外部 modelValue 变化（含 step 对齐修正）
 watch(
   () => props.modelValue,
   (newValue) => {
-    if (newValue >= minValue() && newValue <= props.max) {
-      // 只有当不在动画中时才设置位置
-      if (!animationId) {
-        setScrollPosition(newValue)
-      }
+    const aligned = clampToStep(newValue)
+
+    // 如果外部传入的值未对齐 step，修正它
+    if (aligned !== newValue) {
+      emit('update:modelValue', aligned)
+      return
+    }
+
+    if (!animationId) {
+      setScrollPosition(aligned)
     }
   }
 )
@@ -297,7 +293,7 @@ watch(
 watch(
   () => props.max,
   () => {
-    if (props.max >= minValue()) {
+    if (props.max >= MIN.value) {
       nextTick(() => {
         initPosition()
       })
@@ -306,11 +302,10 @@ watch(
 )
 
 onMounted(() => {
-  if (props.max >= minValue()) {
+  if (props.max >= MIN.value) {
     initPosition()
   }
 
-  // 绑定事件
   const el = wheelRef.value
   if (el) {
     el.addEventListener('wheel', onWheel, { passive: false })
@@ -338,12 +333,17 @@ onUnmounted(() => {
 <template>
   <div class="wheel" @click.stop>
     <div class="wheel-list scrollbar-hidden" ref="wheelRef">
-      <!-- 添加顶部和底部的占位空间，确保第一个和最后一个元素能滚动到中心 -->
-      <div class="wheel-spacer"></div>
-      <div class="wheel-item" v-for="value in validValues" :key="value" :class="{ active: value === modelValue, disabled: isDisabled(value) }">
+      <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
+      <div
+        class="wheel-item"
+        v-for="value in validValues"
+        :key="value"
+        :class="{ active: value === modelValue, disabled: isDisabled(value) }"
+        :style="{ height: ITEM_HEIGHT + 'px', lineHeight: ITEM_HEIGHT + 'px' }"
+      >
         {{ value }}
       </div>
-      <div class="wheel-spacer"></div>
+      <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
     </div>
     <div class="wheel-mask"></div>
     <div class="wheel-center-line"></div>
@@ -360,28 +360,22 @@ onUnmounted(() => {
   height: 80px;
   overflow: hidden;
   border-radius: var(--radius-default);
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(146, 84, 222, 0.15);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
 }
 
 .wheel-list {
   height: 100%;
   overflow-y: scroll;
-  /* 自定义滚动控制，不使用原生 snap */
   touch-action: none;
 }
 
-/* 顶部和底部占位空间，高度为容器高度的一半减去一个item高度的一半 */
 .wheel-spacer {
-  height: calc(40px - 14px);
-  /* (80px / 2) - (28px / 2) = 26px */
   flex-shrink: 0;
 }
 
 .wheel-item {
-  height: 28px;
-  line-height: 28px;
   text-align: center;
   color: var(--color-text-tertiary);
   font-size: 13px;
@@ -408,20 +402,19 @@ onUnmounted(() => {
   bottom: 0;
   pointer-events: none;
   background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.9),
-      rgba(255, 255, 255, 0.0) 30%,
-      rgba(255, 255, 255, 0.0) 70%,
-      rgba(255, 255, 255, 0.9));
+      color-mix(in srgb, var(--color-surface-elevated) 90%, transparent) 0%,
+      transparent 30%,
+      transparent 70%,
+      color-mix(in srgb, var(--color-surface-elevated) 90%, transparent) 100%);
 }
 
-/* 中心指示线（可选） */
 .wheel-center-line {
   position: absolute;
   left: 8px;
   right: 8px;
   top: 50%;
   height: 1px;
-  background: rgba(146, 84, 222, 0.3);
+  background: var(--color-brand-primary-light);
   pointer-events: none;
   transform: translateY(-0.5px);
 }
