@@ -8,8 +8,8 @@
 |----------|-------|
 | Enum Types | 1 |
 | Functions | 6 |
-| Triggers | 2 |
-| Tables | 13 |
+| Triggers | 3 |
+| Tables | 14 |
 | Views | 12 |
 | Storage Buckets | 2 |
 | Edge Functions | 3 |
@@ -392,6 +392,28 @@ Shared cache for AI vocabulary assistant responses. No `user_id` — all authent
 |--------|-----------|------|
 | anyone_can_read | SELECT | `true` (all authenticated users) |
 | insert_with_owner | INSERT | `created_by = auth.uid()` |
+
+### course_progress
+
+Course completion checkbox progress (cross-device sync).
+
+```sql
+CREATE TABLE course_progress (
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  course text NOT NULL,
+  progress jsonb NOT NULL DEFAULT '{}',
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, course)
+);
+```
+
+**Trigger:** `trg_course_progress_updated_at` → `update_updated_at()`
+
+**RLS Policies:**
+
+| Policy | Operation | Rule |
+|--------|-----------|------|
+| users_own_progress | ALL | `auth.uid() = user_id` |
 
 ---
 

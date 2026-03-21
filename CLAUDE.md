@@ -120,10 +120,10 @@ shared/
 
 **迁移规范**：`supabase/migrations/` 中 baseline 文件（`00000000000*`）记录初始状态，不可修改；Schema 变更只通过新增迁移文件（时间戳前缀）实现。二者不可混用。
 
-- 13 张表：words, words_relations, current_progress, user_config, relation_generation_log, speaking_topics, speaking_questions, speaking_records, writing_folders, writing_prompts, writing_sessions, review_history, ai_prompt_cache
+- 14 张表：words, words_relations, current_progress, user_config, relation_generation_log, speaking_topics, speaking_questions, speaking_records, writing_folders, writing_prompts, writing_sessions, review_history, ai_prompt_cache, course_progress
 - 12 个视图：stats_words_raw, stats_next/spell_next_review_distribution, stats_elapsed_time/review_count/added_date/interval_distribution, stats_mastered_overview, stats_daily_activity, stats_hourly_distribution, word_source_stats, relation_stats, stats_interval_distribution
 - 6 个函数：update_updated_at(), get_daily_spell_loads(), handle_new_user(), delete_words_cascade(), batch_reschedule_review(), batch_reschedule_spell()
-- 2 个触发器：trg_user_config_updated_at, on_auth_user_created
+- 3 个触发器：trg_user_config_updated_at, on_auth_user_created, trg_course_progress_updated_at
 - 2 个 Storage Bucket：speaking-audios, writing-images
 - 3 个 Edge Functions：adjust-max-prep-days, delete-source, fetch-definition
 
