@@ -4,6 +4,7 @@
 
 无需认证，参数最少化。通过 (word, user_id, source) 唯一约束操作单词。
 """
+import json
 import unicodedata
 from datetime import date, timezone, datetime
 
@@ -28,25 +29,28 @@ def _get_utc_today() -> date:
 
 
 def _parse_params():
-    """解析并校验三个必填参数，返回 (user_id, word, source) 或 (None, None, error_response)"""
+    """解析并校验三个必填参数，返回 (user_id, word, source, data, None) 或 (..., error_response)"""
     data = request.get_json(silent=True) or {}
     user_id = (data.get("user_id") or "").strip()
     word_raw = (data.get("word") or "").strip()
     source = (data.get("source") or "").strip()
 
     if not user_id or not word_raw or not source:
-        return None, None, None, api_error("user_id, word, source are all required")
+        return None, None, None, None, api_error("user_id, word, source are all required")
 
-    return user_id, _normalize_word(word_raw), source, None
+    return user_id, _normalize_word(word_raw), source, data, None
 
 
 @external_bp.route("/words", methods=["POST"])
 def add_word():
     """新增单词"""
     result = _parse_params()
-    if result[3] is not None:
-        return result[3]
-    user_id, word, source, _ = result
+    if result[4] is not None:
+        return result[4]
+    user_id, word, source, data, _ = result
+
+    definition_text = (data.get("definition") or "").strip()
+    definition_value = json.dumps({"definitions": [definition_text]}) if definition_text else "{}"
 
     today = _get_utc_today()
 
@@ -61,7 +65,7 @@ def add_word():
                     "user_id": user_id,
                     "word": word,
                     "source": source,
-                    "definition": "{}",
+                    "definition": definition_value,
                     "date_added": today,
                     "next_review": today,
                     "stop_review": 0,
@@ -79,9 +83,9 @@ def add_word():
 def delete_word():
     """删除单词"""
     result = _parse_params()
-    if result[3] is not None:
-        return result[3]
-    user_id, word, source, _ = result
+    if result[4] is not None:
+        return result[4]
+    user_id, word, source, _, _ = result
 
     with get_session() as session:
         row = session.execute(
