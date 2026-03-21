@@ -1005,7 +1005,7 @@ const resumeProgress = () => {
 .progress-fill {
   stroke: var(--primitive-copper-500);
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: stroke-dashoffset 0.15s ease-out;
 }
 
 .progress-center {

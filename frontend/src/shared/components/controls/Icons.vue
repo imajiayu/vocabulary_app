@@ -19,6 +19,8 @@ export type IconName = 'menu' | 'plus' | 'expand' | 'close' | 'delete' | 'check'
   | 'list-tree' | 'text-cursor' | 'sparkle' | 'arrows-right-left'
   // Decorative
   | 'flourish' | 'diamond'
+  // External nav
+  | 'globe' | 'legal'
 </script>
 
 <script setup lang="ts">
@@ -91,6 +93,8 @@ const iconPaths = {
   // ── Decorative icons ──
   flourish: "M12 2C10 6 6 8 2 8c4 2 8 4 10 8 2-4 6-6 10-8-4 0-8-2-10-6z",
   diamond: "M12 2l4 8-4 8-4-8 4-8z",
+  globe: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z",
+  legal: "M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zM8 13h8v2H8v-2zm0 4h8v2H8v-2zm0-8h3v2H8V9z",
 }
 </script>
 

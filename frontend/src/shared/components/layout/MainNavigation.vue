@@ -56,6 +56,42 @@
       <UserProfile :expanded="expanded" />
     </div>
 
+    <!-- 外部链接 -->
+    <div class="nav-external">
+      <a href="/uk/" class="chapter-tab chapter-tab--external">
+        <span class="chapter-mark">
+          <svg class="mark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M2 12h20" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+        </span>
+        <transition name="label-slide">
+          <span v-show="expanded" class="chapter-label">
+            <span class="label-chinese">英国生活</span>
+            <span class="label-english">UK Life</span>
+          </span>
+        </transition>
+      </a>
+      <a href="/legal/" class="chapter-tab chapter-tab--external">
+        <span class="chapter-mark">
+          <svg class="mark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+        </span>
+        <transition name="label-slide">
+          <span v-show="expanded" class="chapter-label">
+            <span class="label-chinese">法律信息</span>
+            <span class="label-english">Legal</span>
+          </span>
+        </transition>
+      </a>
+    </div>
+
     <!-- 底部设置 -->
     <div class="nav-colophon">
       <button
@@ -385,6 +421,28 @@ const switchTab = (tabId: string) => {
 }
 
 /* 展开时用户区域样式：保持与收起时相同的 padding，避免头像位移 */
+
+/* ── 外部链接区域 ── */
+.nav-external {
+  padding: 8px 0;
+  border-top: 1px solid var(--primitive-paper-400);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chapter-tab--external {
+  text-decoration: none;
+  color: inherit;
+}
+
+.chapter-tab--external .chapter-mark {
+  color: var(--primitive-ink-400);
+}
+
+.chapter-tab--external:hover .chapter-mark {
+  color: var(--primitive-copper-500);
+}
 
 .nav-colophon {
   padding: 8px 0 16px;

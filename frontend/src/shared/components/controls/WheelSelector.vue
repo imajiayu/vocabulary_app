@@ -61,6 +61,45 @@ const WHEEL_SENSITIVITY = 0.4
 const SNAP_THRESHOLD = 0.5
 const SNAP_SPEED = 0.15
 
+// ── 3D 视觉更新（直接操控 DOM，不走 Vue 响应式） ──────────────
+
+let cachedItems: NodeListOf<HTMLElement> | null = null
+watch(validValues, () => { cachedItems = null })
+
+const updateItemVisuals = () => {
+  const container = wheelRef.value
+  if (!container) return
+
+  const centerY = currentScrollTop + CONTAINER_HEIGHT / 2
+  if (!cachedItems) {
+    cachedItems = container.querySelectorAll('.wheel-item')
+  }
+  const items = cachedItems
+
+  for (let i = 0; i < items.length; i++) {
+    const itemCenterY = SPACER_HEIGHT.value + i * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
+    const normalizedDist = (itemCenterY - centerY) / ITEM_HEIGHT.value
+    const absNorm = Math.abs(normalizedDist)
+
+    // 超出可视范围的直接隐藏
+    if (absNorm > 5) {
+      items[i].style.transform = ''
+      items[i].style.opacity = '0'
+      continue
+    }
+
+    // 3D 旋转：中心上方的向后倾，下方的向前倾
+    const rotateX = Math.max(-55, Math.min(55, normalizedDist * -16))
+    // 渐进缩小
+    const scale = Math.max(0.75, 1 - absNorm * 0.07)
+    // 渐进透明
+    const opacity = Math.max(0.08, 1 - absNorm * 0.4)
+
+    items[i].style.transform = `perspective(300px) rotateX(${rotateX.toFixed(1)}deg) scale(${scale.toFixed(3)})`
+    items[i].style.opacity = opacity.toFixed(2)
+  }
+}
+
 // 根据滚动位置计算当前值
 const getValueFromScroll = (scrollTop: number): number => {
   const containerCenter = wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT
@@ -116,6 +155,7 @@ const animate = () => {
     }
 
     wheelRef.value.scrollTop = currentScrollTop
+    updateItemVisuals()
 
     // 实时更新值（提供颗粒感反馈）
     const currentValue = getValueFromScroll(currentScrollTop)
@@ -133,11 +173,13 @@ const animate = () => {
     if (Math.abs(diff) > 0.5) {
       currentScrollTop += diff * SNAP_SPEED
       wheelRef.value.scrollTop = currentScrollTop
+      updateItemVisuals()
       animationId = requestAnimationFrame(animate)
     } else {
       // 吸附完成
       currentScrollTop = targetScrollTop
       wheelRef.value.scrollTop = currentScrollTop
+      updateItemVisuals()
       animationId = null
     }
     return
@@ -220,6 +262,7 @@ const onTouchMove = (e: TouchEvent) => {
 
   if (wheelRef.value) {
     wheelRef.value.scrollTop = currentScrollTop
+    updateItemVisuals()
   }
 
   if (timeDelta > 0) {
@@ -260,6 +303,7 @@ const setScrollPosition = (value: number) => {
   currentScrollTop = getScrollFromValue(value)
   targetScrollTop = currentScrollTop
   wheelRef.value.scrollTop = currentScrollTop
+  updateItemVisuals()
 }
 
 // 初始化滚轮位置
@@ -346,7 +390,7 @@ onUnmounted(() => {
       <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
     </div>
     <div class="wheel-mask"></div>
-    <div class="wheel-center-line"></div>
+    <div class="wheel-selection" :style="{ height: ITEM_HEIGHT + 'px' }"></div>
   </div>
 </template>
 
@@ -361,7 +405,7 @@ onUnmounted(() => {
   overflow: hidden;
   border-radius: var(--radius-default);
   background: var(--color-surface-elevated);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm), inset 0 1px 3px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--color-border-light);
 }
 
@@ -378,10 +422,14 @@ onUnmounted(() => {
 .wheel-item {
   text-align: center;
   color: var(--color-text-tertiary);
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
   font-size: 13px;
-  transition: color .2s ease, font-size .2s ease;
+  transition: color 0.15s ease;
   flex-shrink: 0;
   user-select: none;
+  transform-origin: center center;
+  backface-visibility: hidden;
 }
 
 .wheel-item.active {
@@ -402,20 +450,22 @@ onUnmounted(() => {
   bottom: 0;
   pointer-events: none;
   background: linear-gradient(180deg,
-      color-mix(in srgb, var(--color-surface-elevated) 90%, transparent) 0%,
-      transparent 30%,
-      transparent 70%,
-      color-mix(in srgb, var(--color-surface-elevated) 90%, transparent) 100%);
+      color-mix(in srgb, var(--color-surface-elevated) 98%, transparent) 0%,
+      transparent 22%,
+      transparent 78%,
+      color-mix(in srgb, var(--color-surface-elevated) 98%, transparent) 100%);
 }
 
-.wheel-center-line {
+.wheel-selection {
   position: absolute;
-  left: 8px;
-  right: 8px;
+  left: 5px;
+  right: 5px;
   top: 50%;
-  height: 1px;
+  transform: translateY(-50%);
   background: var(--color-brand-primary-light);
+  border-radius: var(--radius-xs);
+  border-top: 1px solid var(--color-brand-primary-border);
+  border-bottom: 1px solid var(--color-brand-primary-border);
   pointer-events: none;
-  transform: translateY(-0.5px);
 }
 </style>

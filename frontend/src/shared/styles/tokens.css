@@ -106,6 +106,7 @@
   --color-brand-primary: var(--primitive-copper-500);
   --color-brand-primary-hover: var(--primitive-gold-500);
   --color-brand-primary-light: rgba(153, 107, 61, 0.12);
+  --color-brand-primary-border: rgba(153, 107, 61, 0.18);
   --color-brand-secondary: var(--primitive-olive-500);
   --color-brand-secondary-light: rgba(93, 122, 93, 0.12);
 

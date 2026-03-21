@@ -27,17 +27,33 @@
           <UserProfile :expanded="true" />
         </div>
 
-        <!-- 导航按钮 -->
-        <button
-          v-for="tab in tabs"
-          :key="tab.value"
-          :class="['mobile-nav-item', { active: activeTab === tab.value }]"
-          @click="handleTabChange(tab.value)"
-        >
-          <AppIcon :name="tab.icon" class="nav-icon-svg" />
-          <span class="nav-label">{{ tab.label }}</span>
-          <span v-if="activeTab === tab.value" class="nav-indicator"></span>
-        </button>
+        <!-- 可滚动导航区域 -->
+        <div class="mobile-nav-scroll">
+          <!-- 导航按钮 -->
+          <button
+            v-for="tab in tabs"
+            :key="tab.value"
+            :class="['mobile-nav-item', { active: activeTab === tab.value }]"
+            @click="handleTabChange(tab.value)"
+          >
+            <AppIcon :name="tab.icon" class="nav-icon-svg" />
+            <span class="nav-label">{{ tab.label }}</span>
+            <span v-if="activeTab === tab.value" class="nav-indicator"></span>
+          </button>
+
+          <!-- 外部链接分隔线 -->
+          <span class="mobile-nav-divider"></span>
+
+          <!-- 外部链接 -->
+          <a href="/uk/" class="mobile-nav-item mobile-nav-item--external">
+            <AppIcon name="globe" class="nav-icon-svg" />
+            <span class="nav-label">UK</span>
+          </a>
+          <a href="/legal/" class="mobile-nav-item mobile-nav-item--external">
+            <AppIcon name="legal" class="nav-icon-svg" />
+            <span class="nav-label">法律</span>
+          </a>
+        </div>
       </div>
     </nav>
 
@@ -401,8 +417,7 @@ onMounted(() => {
 .mobile-nav-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  gap: 0;
   background-color: var(--primitive-paper-50);
   border-radius: 16px;
   padding: 6px 10px;
@@ -413,10 +428,40 @@ onMounted(() => {
   border: 1px solid var(--primitive-paper-300);
   pointer-events: auto;
   margin: 0 auto;
+  max-width: 100%;
   transition:
     background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-nav-scroll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--primitive-paper-400);
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+.mobile-nav-item--external {
+  text-decoration: none;
+  color: inherit;
 }
 
 /* 移动端导航主题色 */
@@ -470,6 +515,7 @@ onMounted(() => {
   user-select: none;
   outline: none;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .mobile-nav-item .nav-icon-svg {
