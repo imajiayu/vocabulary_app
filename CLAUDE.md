@@ -40,7 +40,7 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 复习/拼写单词列表 | Frontend → Supabase | 前端获取 ID + 分页加载 |
 | 关系生成 | Backend（线程 + SSE） | CPU 密集 + NLTK 依赖 |
 | TTS 音频缓存 | Frontend → Backend → 文件系统 | nginx 静态服务 + 避免重复 API 调用 |
-| 外部工具 API | External Tool → Backend → Supabase | 无需认证，供 iOS 快捷指令等外部调用 |
+| 课程词汇添加 | Course Page → Supabase | 课程页面直连 Supabase（复用主站登录会话） |
 | 关系清空 | Frontend → Supabase | 按类型批量删除 |
 | 统计数据 | Frontend → Supabase Views | 直接查询视图 |
 | 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
@@ -213,7 +213,7 @@ courses/
 - **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色）
 - **tts.js** — 自动读取 `<html lang>` 选择语言和语速（uk-UA 0.85x / en-US 0.95x）
 - **exercise.js** — 选择题 + 翻译题 + AI 批改 + localStorage 持久化（翻译功能仅在有 `.translation-exercise` 元素时激活）
-- **vocab.js** — 按 URL 路径（`/uk/` 或 `/legal/`）自动选择 user_id 和 source，调用 `/api/external/words`
+- **vocab.js** — 从 Supabase 认证会话获取 user_id，用户可通过下拉框选择 source，直接调 Supabase REST API 添加词汇
 
 每个课程的 `lessons/templates` 是指向 `../../shared` 的符号链接，确保本地预览和服务器部署路径一致。
 
@@ -235,4 +235,4 @@ courses/
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
 - 当前版本号 `v1.5.1`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 修改 `courses/shared/` 中的 templates 会同时影响两套课程
-- 修改 `/api/external/words` 端点会影响两套课程的词汇添加功能
+- 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Flask 应用入口
-- relations 图查询 API + 外部工具 API（单词 CRUD，无需认证）
+- relations 图查询 API + TTS 缓存
 - 其他功能已迁移到前端直连 Supabase
 """
 import logging
@@ -13,8 +13,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from backend.exceptions import AppError
 from backend.middleware.user_context import init_user_context
 
-# 无需认证的路径前缀
-_PUBLIC_PATHS = {"/api/health", "/api/external/words"}
+# 无需认证的路径
+_PUBLIC_PATHS = {"/api/health"}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -34,10 +34,8 @@ def create_app():
     # 注册蓝图
     from backend.api.generation import generation_bp
     from backend.api.tts_cache import tts_cache_bp
-    from backend.api.external import external_bp
     app.register_blueprint(generation_bp)
     app.register_blueprint(tts_cache_bp)
-    app.register_blueprint(external_bp)
 
     cors_origins = os.environ.get("CORS_ORIGINS", "*")
     origins = [o.strip() for o in cors_origins.split(",")] if cors_origins != "*" else "*"

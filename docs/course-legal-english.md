@@ -85,6 +85,7 @@
 <h2>7. 今日小结</h2>
 <!-- 用 class="summary-box" 包裹 -->
 
+<script src="templates/auth.js"></script>
 <script src="templates/tts.js"></script>
 <script src="templates/exercise.js"></script>
 </body>
