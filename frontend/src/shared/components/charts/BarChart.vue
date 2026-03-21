@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
-import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
+import { onMounted, watch } from 'vue'
+import { type EChartsOption } from '@/shared/config/echarts'
+import { useEcharts } from '@/shared/composables/useEcharts'
 
 interface Props {
   labels: (string | number)[]
@@ -12,13 +13,11 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const elRef = ref<HTMLDivElement | null>(null)
-let chart: ECharts | null = null
-let ro: ResizeObserver | null = null
+const { elRef, ensureChart } = useEcharts()
 
 const render = () => {
-  if (!elRef.value) return
-  if (!chart) chart = init(elRef.value)
+  const chart = ensureChart()
+  if (!chart) return
 
   const color = props.barColor ?? 'rgba(75,192,192,0.8)'
   const option: EChartsOption = {
@@ -34,7 +33,7 @@ const render = () => {
       bottom: '15%',
       containLabel: true
     },
-    tooltip: { 
+    tooltip: {
       trigger: 'axis',
       backgroundColor: 'rgba(50,50,50,0.9)',
       borderColor: 'rgba(50,50,50,0.9)',
@@ -45,30 +44,30 @@ const render = () => {
       data: props.labels as any,
       name: props.axisLabel,
       axisTick: { alignWithLabel: true },
-      axisLabel: { 
+      axisLabel: {
         rotate: props.labels.length > 8 ? 45 : 0,
         fontSize: 11
       }
     },
-    yAxis: { 
-      type: 'value', 
+    yAxis: {
+      type: 'value',
       min: 0,
       axisLabel: { fontSize: 11 }
     },
     series: [{
       type: 'bar',
       data: props.values,
-      itemStyle: { 
-        color, 
+      itemStyle: {
+        color,
         opacity: props.transparent ? 0.7 : 1,
         borderRadius: [4, 4, 0, 0]
       },
-      emphasis: { 
-        itemStyle: { 
+      emphasis: {
+        itemStyle: {
           opacity: 0.9,
           shadowBlur: 10,
           shadowColor: 'rgba(0,0,0,0.3)'
-        } 
+        }
       },
       barMaxWidth: Math.min(60, Math.max(20, 400 / props.labels.length))
     }]
@@ -77,26 +76,8 @@ const render = () => {
   chart.setOption(option, true)
 }
 
-onMounted(() => {
-  render()
-  ro = new ResizeObserver(() => {
-    if (chart) {
-      chart.resize()
-    }
-  })
-  if (elRef.value) ro.observe(elRef.value)
-})
-
-onBeforeUnmount(() => { 
-  chart?.dispose(); 
-  chart = null; 
-  ro?.disconnect(); 
-  ro = null 
-})
-
-watch(() => [props.labels, props.values, props.barColor], () => {
-  render()
-}, { deep: true })
+onMounted(render)
+watch(() => [props.labels, props.values, props.barColor], render, { deep: true })
 </script>
 
 <template>

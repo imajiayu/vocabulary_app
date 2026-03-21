@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { watch, onMounted, onBeforeUnmount, ref } from 'vue'
-import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
+import { watch, onMounted } from 'vue'
+import { type EChartsOption } from '@/shared/config/echarts'
+import { useEcharts } from '@/shared/composables/useEcharts'
 
 interface Props {
   labels: string[]
@@ -10,9 +11,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const elRef = ref<HTMLDivElement | null>(null)
-let chart: ECharts | null = null
-let ro: ResizeObserver | null = null
+const { elRef, ensureChart } = useEcharts(() => setTimeout(render, 100))
 
 const render = () => {
   if (!elRef.value) return
@@ -98,29 +97,10 @@ const render = () => {
     }]
   }
 
-  if (!chart) chart = init(elRef.value)
-  chart.setOption(option, true)
+  ensureChart()!.setOption(option, true)
 }
 
-onMounted(() => {
-  render()
-  ro = new ResizeObserver(() => {
-    if (chart) {
-      chart.resize()
-      // 重新渲染以重新计算布局
-      setTimeout(render, 100)
-    }
-  })
-  if (elRef.value) ro.observe(elRef.value)
-})
-
-onBeforeUnmount(() => {
-  chart?.dispose()
-  chart = null
-  ro?.disconnect()
-  ro = null
-})
-
+onMounted(render)
 watch(() => [props.labels, props.values, props.colors], render)
 </script>
 

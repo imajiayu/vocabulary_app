@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { watch, computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import { init, type ECharts, type EChartsOption } from '@/shared/config/echarts'
+import { watch, computed, onMounted } from 'vue'
+import { type EChartsOption } from '@/shared/config/echarts'
 import type { LineSeriesOption } from 'echarts/charts'
 import { palette, borderColors } from '@/shared/config/chartColors'
+import { useEcharts } from '@/shared/composables/useEcharts'
 
 interface LineSeries {
   name?: string
@@ -18,9 +19,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const elRef = ref<HTMLDivElement | null>(null)
-let chart: ECharts | null = null
-let ro: ResizeObserver | null = null
+const { elRef, ensureChart } = useEcharts()
 
 // 对齐 labels 和 values
 const processedData = computed(() => {
@@ -42,8 +41,8 @@ const processedData = computed(() => {
 })
 
 const render = () => {
-  if (!elRef.value) return
-  if (!chart) chart = init(elRef.value)
+  const chart = ensureChart()
+  if (!chart) return
 
   const { mergedLabels, processedSeries } = processedData.value
   const finalSeries: EChartsOption['series'] = []
@@ -90,35 +89,27 @@ const render = () => {
       borderColor: 'rgba(50,50,50,0.9)',
       textStyle: { color: '#fff' },
       axisPointer: { type: 'cross', lineStyle: { color: '#999' } },
-      // 关键：添加 confine 属性，将 tooltip 限制在图表区域内
       confine: true,
-      // 自定义 position 函数，实现智能定位
       position: function (point, _params, _dom, _rect, size) {
-        // point: 鼠标位置 [x, y]
-        // size: {contentSize: [width, height], viewSize: [width, height]}
         const [mouseX, mouseY] = point
         const tooltipWidth = size.contentSize[0]
         const tooltipHeight = size.contentSize[1]
         const viewWidth = size.viewSize[0]
         const viewHeight = size.viewSize[1]
-        
-        let x = mouseX + 10 // 默认在鼠标右侧
-        let y = mouseY + 10 // 默认在鼠标下方
-        
-        // 如果右侧空间不够，则显示在左侧
+
+        let x = mouseX + 10
+        let y = mouseY + 10
+
         if (x + tooltipWidth > viewWidth) {
           x = mouseX - tooltipWidth - 10
         }
-        
-        // 如果下方空间不够，则显示在上方
         if (y + tooltipHeight > viewHeight) {
           y = mouseY - tooltipHeight - 10
         }
-        
-        // 确保不会超出左边界和上边界
+
         x = Math.max(10, x)
         y = Math.max(10, y)
-        
+
         return [x, y]
       }
     },
@@ -145,23 +136,7 @@ const render = () => {
   chart.setOption(option, true)
 }
 
-onMounted(() => {
-  render()
-  ro = new ResizeObserver(() => {
-    if (chart) {
-      chart.resize()
-    }
-  })
-  if (elRef.value) ro.observe(elRef.value)
-})
-
-onBeforeUnmount(() => {
-  chart?.dispose();
-  chart = null;
-  ro?.disconnect();
-  ro = null
-})
-
+onMounted(render)
 watch(() => props.series, render, { deep: true })
 </script>
 
