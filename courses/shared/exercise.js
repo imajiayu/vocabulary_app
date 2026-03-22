@@ -2,7 +2,7 @@
 
 (function () {
   // --- localStorage 持久化工具 ---
-  var STATE_VERSION = 5;
+  var STATE_VERSION = 6;
   var pageKey = 'exercise_v' + STATE_VERSION + '_' + location.pathname;
 
   // 清除旧版本数据
@@ -13,28 +13,13 @@
     }
   } catch (e) {}
 
-  // AI 批改结果缓存（避免刷新页面重复调 API）
-  var _aiFeedbackCache = {};
-
   function saveState() {
-    var state = { radio: {}, textarea: {}, graded: {}, translationGraded: {}, aiFeedback: _aiFeedbackCache };
+    var state = { radio: {}, textarea: {} };
     document.querySelectorAll('.quiz-item input[type="radio"]:checked').forEach(function (r) {
       state.radio[r.name] = r.value;
     });
     document.querySelectorAll('.translate-item textarea').forEach(function (ta, i) {
       state.textarea['t' + i] = ta.value;
-    });
-    document.querySelectorAll('.exercise').forEach(function (ex, i) {
-      var btn = ex.querySelector('.grade-btn');
-      if (btn && btn.disabled && btn.textContent.indexOf('得分') >= 0) {
-        state.graded['ex' + i] = true;
-      }
-    });
-    document.querySelectorAll('.translation-exercise').forEach(function (ex, i) {
-      var btn = ex.querySelector('.check-translation-btn');
-      if (btn && btn.disabled) {
-        state.translationGraded['tex' + i] = true;
-      }
     });
     try { localStorage.setItem(pageKey, JSON.stringify(state)); } catch (e) {}
   }
@@ -250,21 +235,17 @@
         });
       }
 
-      if (saved && saved.graded && saved.graded['ex' + exIdx]) {
-        triggerGrade(exercise, items, btn, total);
-      } else {
-        exercise.addEventListener('change', function () {
-          var answered = exercise.querySelectorAll('.quiz-item input[type="radio"]:checked').length;
-          btn.disabled = answered < total;
-          saveState();
-        });
+      exercise.addEventListener('change', function () {
         var answered = exercise.querySelectorAll('.quiz-item input[type="radio"]:checked').length;
         btn.disabled = answered < total;
-        btn.addEventListener('click', function () {
-          triggerGrade(exercise, items, btn, total);
-          saveState();
-        });
-      }
+        saveState();
+      });
+      var answered = exercise.querySelectorAll('.quiz-item input[type="radio"]:checked').length;
+      btn.disabled = answered < total;
+      btn.addEventListener('click', function () {
+        triggerGrade(exercise, items, btn, total);
+        saveState();
+      });
     });
 
     function triggerGrade(exercise, items, btn, total) {
@@ -326,33 +307,24 @@
         });
       }
 
-      // 恢复 AI 批改缓存
-      if (saved && saved.aiFeedback) {
-        _aiFeedbackCache = saved.aiFeedback;
-      }
-
-      if (saved && saved.translationGraded && saved.translationGraded['tex' + texIdx]) {
-        restoreTranslationFeedback(items, btn, texIdx);
-      } else {
-        exercise.addEventListener('input', function () {
-          var filled = 0;
-          items.forEach(function (item) {
-            var input = item.querySelector('textarea');
-            if (input && input.value.trim()) filled++;
-          });
-          btn.disabled = filled < items.length;
-          saveState();
-        });
+      exercise.addEventListener('input', function () {
         var filled = 0;
         items.forEach(function (item) {
           var input = item.querySelector('textarea');
           if (input && input.value.trim()) filled++;
         });
         btn.disabled = filled < items.length;
-        btn.addEventListener('click', function () {
-          triggerTranslationGrade(items, btn, texIdx);
-        });
-      }
+        saveState();
+      });
+      var filled = 0;
+      items.forEach(function (item) {
+        var input = item.querySelector('textarea');
+        if (input && input.value.trim()) filled++;
+      });
+      btn.disabled = filled < items.length;
+      btn.addEventListener('click', function () {
+        triggerTranslationGrade(items, btn, texIdx);
+      });
     });
 
     // --- DeepSeek AI 批改 ---
@@ -492,33 +464,6 @@
       });
     }
 
-    function restoreTranslationFeedback(items, btn, texIdx) {
-      btn.textContent = '✅ AI 批改完成';
-      btn.disabled = true;
-
-      items.forEach(function (item, itemIdx) {
-        var input = item.querySelector('textarea');
-        if (input) input.disabled = true;
-
-        var cacheKey = 'tex' + texIdx + '_t' + itemIdx;
-        var cached = _aiFeedbackCache[cacheKey];
-        if (!cached) return;
-
-        var old = item.querySelector('.translate-feedback');
-        if (old) old.remove();
-
-        if (cached.type === 'ai' && cached.data) {
-          var feedbackDiv = document.createElement('div');
-          feedbackDiv.className = 'translate-feedback';
-          item.appendChild(feedbackDiv);
-          renderAIFeedback(feedbackDiv, cached.data, cached.reference || '');
-        } else if (cached.type === 'local') {
-          var userText = input ? input.value.trim() : '';
-          if (userText) buildGradeFeedback(item, userText);
-        }
-      });
-    }
-
     function triggerTranslationGrade(items, btn, texIdx) {
       btn.textContent = '⏳ AI 批改中...';
       btn.disabled = true;
@@ -559,18 +504,14 @@
         item.appendChild(feedbackDiv);
 
         // 调用 DeepSeek API，失败降级到本地 rubric
-        var itemIdx = Array.prototype.indexOf.call(items, item);
-        var cacheKey = 'tex' + texIdx + '_t' + itemIdx;
         var p = callDeepSeek(source, userText, reference, rubric, direction)
           .then(function (result) {
-            _aiFeedbackCache[cacheKey] = { type: 'ai', data: result, reference: reference };
             renderAIFeedback(feedbackDiv, result, reference);
           })
           .catch(function (err) {
             console.warn('DeepSeek API failed, falling back to local rubric:', err);
             while (feedbackDiv.firstChild) feedbackDiv.removeChild(feedbackDiv.firstChild);
             buildGradeFeedback(item, userText);
-            _aiFeedbackCache[cacheKey] = { type: 'local' };
           });
 
         promises.push(p);
