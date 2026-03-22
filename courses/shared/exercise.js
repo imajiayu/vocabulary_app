@@ -350,7 +350,7 @@
         });
         btn.disabled = filled < items.length;
         btn.addEventListener('click', function () {
-          triggerTranslationGrade(items, btn);
+          triggerTranslationGrade(items, btn, texIdx);
         });
       }
     });
@@ -519,7 +519,7 @@
       });
     }
 
-    function triggerTranslationGrade(items, btn) {
+    function triggerTranslationGrade(items, btn, texIdx) {
       btn.textContent = '⏳ AI 批改中...';
       btn.disabled = true;
 
