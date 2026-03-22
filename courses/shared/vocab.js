@@ -83,7 +83,7 @@ async function renderSourceSelector(addBtn) {
   let sources = [];
   try {
     const resp = await window.CourseAuth.supabaseFetch(
-      '/rest/v1/word_source_stats?select=source&order=source'
+      '/rest/v1/word_source_stats?select=source&user_id=eq.' + authUserId + '&order=source'
     );
     const rows = await resp.json();
     if (Array.isArray(rows)) {

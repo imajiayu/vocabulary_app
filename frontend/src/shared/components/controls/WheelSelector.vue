@@ -21,19 +21,16 @@ const ITEM_HEIGHT = computed(() => props.itemHeight ?? 28)
 const MIN = computed(() => props.min ?? 1)
 const STEP = computed(() => props.step ?? 1)
 const CONTAINER_HEIGHT = 80
-// spacer 高度由容器和 item 高度自动派生，不再硬编码
 const SPACER_HEIGHT = computed(() => (CONTAINER_HEIGHT - ITEM_HEIGHT.value) / 2)
 
 const displayMaxValue = computed(() => props.displayMax ?? props.max)
 
-// 将任意值钳位到最近的合法 step 值
 const clampToStep = (value: number): number => {
   const clamped = Math.max(MIN.value, Math.min(value, props.max))
   const steps = Math.round((clamped - MIN.value) / STEP.value)
   return MIN.value + steps * STEP.value
 }
 
-// 生成所有显示值的数组（包括禁用的）
 const validValues = computed(() => {
   const result: number[] = []
   for (let v = MIN.value; v <= displayMaxValue.value; v += STEP.value) {
@@ -42,12 +39,69 @@ const validValues = computed(() => {
   return result
 })
 
-// 判断某个值是否禁用（超过可滚动的最大值）
 const isDisabled = (value: number) => value > props.max
 
 const wheelRef = ref<HTMLDivElement | null>(null)
 
-// 滚动状态
+// ── 虚拟滚动（超过阈值时只渲染可视区域 ± buffer） ──────────────
+
+const VIRTUAL_THRESHOLD = 50
+const BUFFER_COUNT = 5
+
+const useVirtual = computed(() => validValues.value.length > VIRTUAL_THRESHOLD)
+const totalContentHeight = computed(() =>
+  validValues.value.length * ITEM_HEIGHT.value + SPACER_HEIGHT.value * 2
+)
+
+let virtualStart = 0
+let virtualEnd = 0
+const visibleItems = ref<number[]>([])
+
+const computeVisibleRange = (scrollTop: number): [number, number] => {
+  const total = validValues.value.length
+  if (!useVirtual.value || total === 0) return [0, total]
+
+  const startIdx = Math.floor((scrollTop - SPACER_HEIGHT.value) / ITEM_HEIGHT.value)
+  const endIdx = Math.ceil((scrollTop + CONTAINER_HEIGHT - SPACER_HEIGHT.value) / ITEM_HEIGHT.value)
+
+  return [
+    Math.max(0, startIdx - BUFFER_COUNT),
+    Math.min(total, endIdx + BUFFER_COUNT),
+  ]
+}
+
+const updateVirtualWindow = (scrollTop: number): boolean => {
+  if (!useVirtual.value || !wheelRef.value) return false
+
+  const [newStart, newEnd] = computeVisibleRange(scrollTop)
+  if (newStart === virtualStart && newEnd === virtualEnd) return false
+
+  virtualStart = newStart
+  virtualEnd = newEnd
+  visibleItems.value = validValues.value.slice(newStart, newEnd)
+
+  const total = validValues.value.length
+  wheelRef.value.style.paddingTop = (SPACER_HEIGHT.value + newStart * ITEM_HEIGHT.value) + 'px'
+  wheelRef.value.style.paddingBottom = (SPACER_HEIGHT.value + (total - newEnd) * ITEM_HEIGHT.value) + 'px'
+
+  cachedItems = null
+  return true
+}
+
+/** 同步设 scrollTop + 更新视觉；虚拟窗口变化时延迟到 nextTick 等 Vue 渲染新 DOM */
+const syncScrollAndVisuals = () => {
+  if (!wheelRef.value) return
+  const windowChanged = updateVirtualWindow(currentScrollTop)
+  wheelRef.value.scrollTop = currentScrollTop
+  if (windowChanged) {
+    nextTick(updateItemVisuals)
+  } else {
+    updateItemVisuals()
+  }
+}
+
+// ── 滚动状态 ──────────────────────────────────────────────
+
 let currentScrollTop = 0
 let targetScrollTop = 0
 let velocity = 0
@@ -55,7 +109,6 @@ let animationId: number | null = null
 let lastWheelTime = 0
 let accumulatedDelta = 0
 
-// 配置参数
 const FRICTION = 0.92
 const WHEEL_SENSITIVITY = 0.4
 const SNAP_THRESHOLD = 0.5
@@ -64,43 +117,56 @@ const SNAP_SPEED = 0.15
 // ── 3D 视觉更新（直接操控 DOM，不走 Vue 响应式） ──────────────
 
 let cachedItems: NodeListOf<HTMLElement> | null = null
-watch(validValues, () => { cachedItems = null })
+
+watch(validValues, () => {
+  cachedItems = null
+  // 虚拟模式下强制重算窗口
+  virtualStart = -1
+  virtualEnd = -1
+  if (useVirtual.value) {
+    updateVirtualWindow(currentScrollTop)
+  }
+})
 
 const updateItemVisuals = () => {
   const container = wheelRef.value
   if (!container) return
 
   const centerY = currentScrollTop + CONTAINER_HEIGHT / 2
-  if (!cachedItems) {
-    cachedItems = container.querySelectorAll('.wheel-item')
-  }
-  const items = cachedItems
+
+  // 虚拟模式下不缓存（DOM 频繁变化），非虚拟模式保持缓存
+  const items = useVirtual.value
+    ? container.querySelectorAll<HTMLElement>('.wheel-item')
+    : (cachedItems ?? (cachedItems = container.querySelectorAll<HTMLElement>('.wheel-item')))
+
+  const baseIndex = useVirtual.value ? virtualStart : 0
 
   for (let i = 0; i < items.length; i++) {
-    const itemCenterY = SPACER_HEIGHT.value + i * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
+    const globalIndex = baseIndex + i
+    const itemCenterY = SPACER_HEIGHT.value + globalIndex * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
     const normalizedDist = (itemCenterY - centerY) / ITEM_HEIGHT.value
     const absNorm = Math.abs(normalizedDist)
 
-    // 超出可视范围的直接隐藏
     if (absNorm > 5) {
       items[i].style.transform = ''
       items[i].style.opacity = '0'
       continue
     }
 
-    // 3D 旋转：中心上方的向后倾，下方的向前倾
     const rotateX = Math.max(-55, Math.min(55, normalizedDist * -16))
-    // 渐进缩小
-    const scale = Math.max(0.75, 1 - absNorm * 0.07)
-    // 渐进透明
-    const opacity = Math.max(0.08, 1 - absNorm * 0.4)
+    // 中心项放大（scale 代替 font-size 变化，只触发 composite 不触发 layout）
+    const isCenter = absNorm < 0.5
+    const baseScale = Math.max(0.75, 1 - absNorm * 0.07)
+    const scale = isCenter ? baseScale * 1.07 : baseScale
+    const opacity = isCenter ? 1.0 : Math.max(0.08, 1 - absNorm * 0.4)
 
     items[i].style.transform = `perspective(300px) rotateX(${rotateX.toFixed(1)}deg) scale(${scale.toFixed(3)})`
     items[i].style.opacity = opacity.toFixed(2)
   }
 }
 
-// 根据滚动位置计算当前值
+// ── 滚动位置计算 ──────────────────────────────────────────
+
 const getValueFromScroll = (scrollTop: number): number => {
   const containerCenter = wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT
   const centerPosition = scrollTop + containerCenter / 2
@@ -109,7 +175,6 @@ const getValueFromScroll = (scrollTop: number): number => {
   return Math.max(MIN.value, Math.min(rawValue, props.max))
 }
 
-// 根据值计算滚动位置
 const getScrollFromValue = (value: number): number => {
   const aligned = clampToStep(value)
   const containerCenter = (wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT) / 2
@@ -118,13 +183,38 @@ const getScrollFromValue = (value: number): number => {
   return Math.max(0, elementCenter - containerCenter)
 }
 
-// 计算最大滚动位置
 const getMaxScroll = (): number => {
+  if (useVirtual.value) {
+    return Math.max(0, totalContentHeight.value - CONTAINER_HEIGHT)
+  }
   if (!wheelRef.value) return 0
   return wheelRef.value.scrollHeight - wheelRef.value.clientHeight
 }
 
-// 吸附到最近的项目
+// ── rAF 渲染调度（touchmove 只更新数值，DOM 操作合并到单次 rAF） ──
+
+let renderFrameId: number | null = null
+
+const scheduleRender = () => {
+  if (renderFrameId === null) {
+    renderFrameId = requestAnimationFrame(renderFrame)
+  }
+}
+
+const renderFrame = () => {
+  renderFrameId = null
+  if (!wheelRef.value) return
+
+  syncScrollAndVisuals()
+
+  const currentValue = getValueFromScroll(currentScrollTop)
+  if (currentValue !== props.modelValue) {
+    emit('update:modelValue', currentValue)
+  }
+}
+
+// ── 吸附 ──────────────────────────────────────────────────
+
 const snapToNearest = () => {
   const value = getValueFromScroll(currentScrollTop)
   targetScrollTop = getScrollFromValue(value)
@@ -134,18 +224,17 @@ const snapToNearest = () => {
   }
 }
 
-// 动画循环
+// ── 动画循环（惯性 + 吸附，已在 rAF 内运行） ─────────────────
+
 const animate = () => {
   if (!wheelRef.value) return
 
   const maxScroll = getMaxScroll()
 
-  // 应用速度
   if (Math.abs(velocity) > 0.1) {
     currentScrollTop += velocity
     velocity *= FRICTION
 
-    // 边界检测
     if (currentScrollTop < 0) {
       currentScrollTop = 0
       velocity = 0
@@ -154,32 +243,25 @@ const animate = () => {
       velocity = 0
     }
 
-    wheelRef.value.scrollTop = currentScrollTop
-    updateItemVisuals()
+    syncScrollAndVisuals()
 
-    // 实时更新值（提供颗粒感反馈）
     const currentValue = getValueFromScroll(currentScrollTop)
     if (currentValue !== props.modelValue) {
       emit('update:modelValue', currentValue)
     }
   }
 
-  // 速度足够低时开始吸附
   if (Math.abs(velocity) < SNAP_THRESHOLD) {
     snapToNearest()
 
-    // 平滑吸附动画
     const diff = targetScrollTop - currentScrollTop
     if (Math.abs(diff) > 0.5) {
       currentScrollTop += diff * SNAP_SPEED
-      wheelRef.value.scrollTop = currentScrollTop
-      updateItemVisuals()
+      syncScrollAndVisuals()
       animationId = requestAnimationFrame(animate)
     } else {
-      // 吸附完成
       currentScrollTop = targetScrollTop
-      wheelRef.value.scrollTop = currentScrollTop
-      updateItemVisuals()
+      syncScrollAndVisuals()
       animationId = null
     }
     return
@@ -188,7 +270,8 @@ const animate = () => {
   animationId = requestAnimationFrame(animate)
 }
 
-// 处理滚轮/触控板事件
+// ── 滚轮/触控板事件 ──────────────────────────────────────
+
 const onWheel = (e: WheelEvent) => {
   e.preventDefault()
 
@@ -196,24 +279,20 @@ const onWheel = (e: WheelEvent) => {
   const timeDelta = now - lastWheelTime
   lastWheelTime = now
 
-  // 检测是否是新的滚动手势（间隔超过 100ms 重置累积）
   if (timeDelta > 100) {
     accumulatedDelta = 0
   }
 
   let delta = e.deltaY
 
-  // 规范化 delta（处理不同设备的差异）
   if (e.deltaMode === 1) {
     delta *= ITEM_HEIGHT.value
   } else if (e.deltaMode === 2) {
     delta *= ITEM_HEIGHT.value * 3
   }
 
-  // 累积 delta 以实现更平滑的手势
   accumulatedDelta += delta * WHEEL_SENSITIVITY
 
-  // 对于小的增量，累积后再应用（提供颗粒感）
   if (Math.abs(accumulatedDelta) >= ITEM_HEIGHT.value * 0.3) {
     velocity += accumulatedDelta * 0.08
     accumulatedDelta = 0
@@ -221,24 +300,26 @@ const onWheel = (e: WheelEvent) => {
     velocity += delta * WHEEL_SENSITIVITY * 0.05
   }
 
-  // 限制最大速度
   velocity = Math.max(-15, Math.min(15, velocity))
 
-  // 启动动画
   if (!animationId) {
     animationId = requestAnimationFrame(animate)
   }
 }
 
-// 处理触摸事件
+// ── 触摸事件（touchmove 只更新数值，DOM 操作交给 scheduleRender）──
+
 let touchLastY = 0
 let touchLastTime = 0
 
 const onTouchStart = (e: TouchEvent) => {
-  // 停止当前动画
   if (animationId) {
     cancelAnimationFrame(animationId)
     animationId = null
+  }
+  if (renderFrameId !== null) {
+    cancelAnimationFrame(renderFrameId)
+    renderFrameId = null
   }
   velocity = 0
 
@@ -254,31 +335,38 @@ const onTouchMove = (e: TouchEvent) => {
   const timeDelta = now - touchLastTime
 
   const delta = touchLastY - touchY
-
   currentScrollTop += delta
 
   const maxScroll = getMaxScroll()
   currentScrollTop = Math.max(0, Math.min(currentScrollTop, maxScroll))
 
-  if (wheelRef.value) {
-    wheelRef.value.scrollTop = currentScrollTop
-    updateItemVisuals()
-  }
-
   if (timeDelta > 0) {
     velocity = delta / timeDelta * 16
   }
 
-  const currentValue = getValueFromScroll(currentScrollTop)
-  if (currentValue !== props.modelValue) {
-    emit('update:modelValue', currentValue)
-  }
-
   touchLastY = touchY
   touchLastTime = now
+
+  // 不同步操作 DOM，合并到下一帧
+  scheduleRender()
 }
 
 const onTouchEnd = () => {
+  // 取消待执行的渲染帧，做一次 final render
+  if (renderFrameId !== null) {
+    cancelAnimationFrame(renderFrameId)
+    renderFrameId = null
+  }
+
+  if (wheelRef.value) {
+    syncScrollAndVisuals()
+
+    const currentValue = getValueFromScroll(currentScrollTop)
+    if (currentValue !== props.modelValue) {
+      emit('update:modelValue', currentValue)
+    }
+  }
+
   if (Math.abs(velocity) > 0.5) {
     animationId = requestAnimationFrame(animate)
   } else {
@@ -290,7 +378,8 @@ const onTouchEnd = () => {
   }
 }
 
-// 设置滚轮位置（无动画）
+// ── 位置设置与初始化 ──────────────────────────────────────
+
 const setScrollPosition = (value: number) => {
   if (!wheelRef.value) return
 
@@ -302,11 +391,21 @@ const setScrollPosition = (value: number) => {
 
   currentScrollTop = getScrollFromValue(value)
   targetScrollTop = currentScrollTop
-  wheelRef.value.scrollTop = currentScrollTop
-  updateItemVisuals()
+
+  if (useVirtual.value) {
+    updateVirtualWindow(currentScrollTop)
+    // 虚拟模式需等 Vue 渲染新 DOM 后再设 scrollTop
+    nextTick(() => {
+      if (!wheelRef.value) return
+      wheelRef.value.scrollTop = currentScrollTop
+      updateItemVisuals()
+    })
+  } else {
+    wheelRef.value.scrollTop = currentScrollTop
+    updateItemVisuals()
+  }
 }
 
-// 初始化滚轮位置
 const initPosition = () => {
   if (props.max >= MIN.value) {
     nextTick(() => {
@@ -315,13 +414,13 @@ const initPosition = () => {
   }
 }
 
-// 监听外部 modelValue 变化（含 step 对齐修正）
+// ── Watchers ──────────────────────────────────────────────
+
 watch(
   () => props.modelValue,
   (newValue) => {
     const aligned = clampToStep(newValue)
 
-    // 如果外部传入的值未对齐 step，修正它
     if (aligned !== newValue) {
       emit('update:modelValue', aligned)
       return
@@ -333,7 +432,6 @@ watch(
   }
 )
 
-// 监听 max 变化，确保在数据加载完成后初始化位置
 watch(
   () => props.max,
   () => {
@@ -360,9 +458,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (animationId) {
-    cancelAnimationFrame(animationId)
-  }
+  if (animationId) cancelAnimationFrame(animationId)
+  if (renderFrameId !== null) cancelAnimationFrame(renderFrameId)
 
   const el = wheelRef.value
   if (el) {
@@ -377,17 +474,32 @@ onUnmounted(() => {
 <template>
   <div class="wheel" @click.stop>
     <div class="wheel-list scrollbar-hidden" ref="wheelRef">
-      <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
-      <div
-        class="wheel-item"
-        v-for="value in validValues"
-        :key="value"
-        :class="{ active: value === modelValue, disabled: isDisabled(value) }"
-        :style="{ height: ITEM_HEIGHT + 'px', lineHeight: ITEM_HEIGHT + 'px' }"
-      >
-        {{ value }}
-      </div>
-      <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
+      <!-- 非虚拟模式：spacer + 全量渲染 -->
+      <template v-if="!useVirtual">
+        <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
+        <div
+          class="wheel-item"
+          v-for="value in validValues"
+          :key="value"
+          :class="{ disabled: isDisabled(value) }"
+          :style="{ height: ITEM_HEIGHT + 'px', lineHeight: ITEM_HEIGHT + 'px' }"
+        >
+          {{ value }}
+        </div>
+        <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
+      </template>
+      <!-- 虚拟模式：padding 撑高度，只渲染可视窗口 -->
+      <template v-else>
+        <div
+          class="wheel-item"
+          v-for="value in visibleItems"
+          :key="value"
+          :class="{ disabled: isDisabled(value) }"
+          :style="{ height: ITEM_HEIGHT + 'px', lineHeight: ITEM_HEIGHT + 'px' }"
+        >
+          {{ value }}
+        </div>
+      </template>
     </div>
     <div class="wheel-mask"></div>
     <div class="wheel-selection" :style="{ height: ITEM_HEIGHT + 'px' }"></div>
@@ -421,21 +533,16 @@ onUnmounted(() => {
 
 .wheel-item {
   text-align: center;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-primary);
   font-family: var(--font-data);
   font-variant-numeric: tabular-nums;
-  font-size: 13px;
-  transition: color 0.15s ease;
+  font-size: 14px;
+  font-weight: 600;
   flex-shrink: 0;
   user-select: none;
   transform-origin: center center;
   backface-visibility: hidden;
-}
-
-.wheel-item.active {
-  color: var(--color-text-primary);
-  font-weight: 600;
-  font-size: 15px;
+  will-change: transform, opacity;
 }
 
 .wheel-item.disabled {

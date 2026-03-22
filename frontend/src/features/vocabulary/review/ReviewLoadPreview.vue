@@ -63,13 +63,16 @@ import { computed, watch, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import { useSettings } from '@/shared/composables/useSettings'
+import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
 import { addDays, getUtcToday } from '@/shared/utils/date'
 
 const reviewStore = useReviewStore()
 const { mode, notification, reviewLoadsCache, spellLoadsCache } = storeToRefs(reviewStore)
 const { settings: userSettings, loadSettings } = useSettings()
+const { currentSource, initializeFromData } = useSourceSelectionReadOnly()
 
 loadSettings()
+initializeFromData()
 
 const modeClass = computed(() =>
   mode.value === 'mode_spelling' ? 'mode-spelling' : 'mode-review'
@@ -79,11 +82,9 @@ const loadsCache = computed(() =>
   mode.value === 'mode_spelling' ? spellLoadsCache.value : reviewLoadsCache.value
 )
 
-const currentSource = sessionStorage.getItem('currentSource') || ''
-
 const dailyLimit = computed(() => {
   if (!userSettings.value) return Infinity
-  const sourceLearning = userSettings.value.sourceSettings[currentSource]?.learning
+  const sourceLearning = userSettings.value.sourceSettings[currentSource.value]?.learning
   return mode.value === 'mode_spelling'
     ? sourceLearning?.dailySpellLimit ?? 50
     : sourceLearning?.dailyReviewLimit ?? 50
