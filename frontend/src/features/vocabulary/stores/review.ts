@@ -201,6 +201,7 @@ export const useReviewStore = defineStore('review', () => {
     // 状态
     wordQueue: queue.wordQueue,
     currentIndex: queue.currentIndex,
+    currentSource: queue.currentSource,
     mode,
     audioType,
     isLoading: queue.isLoading,

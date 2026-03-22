@@ -335,6 +335,15 @@ tbody tr:last-child td { border-bottom: none; }
   font-size: 0.95em;
 }
 
+/* 选项中的 .term 必须重置为普通样式，避免暗示答案 */
+.quiz-options .term {
+  font-weight: inherit;
+  color: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  padding: 0;
+}
+
 .quiz-options label:hover {
   background: var(--highlight);
   border-color: var(--accent);

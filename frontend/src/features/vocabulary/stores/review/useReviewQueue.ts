@@ -207,7 +207,7 @@ export function useReviewQueue() {
     isLoading.value = true
 
     try {
-      await loadSettings()
+      await Promise.all([loadSettings(), initializeSource()])
 
       const data = await api.progress.getRestoreDataDirect()
 

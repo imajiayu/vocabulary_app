@@ -649,10 +649,10 @@
             <span class="save-bar-text">有未保存的修改</span>
           </div>
           <div class="save-bar-actions">
-            <button class="save-bar-discard" @click="discardChanges" :disabled="isSaving">
+            <button class="save-bar-discard" @click="discardChanges" :disabled="isSaving || isDeleting">
               放弃修改
             </button>
-            <button class="save-bar-save" @click="saveAllSettings" :disabled="isSaving">
+            <button class="save-bar-save" @click="saveAllSettings" :disabled="isSaving || isDeleting">
               <span v-if="isSaving" class="save-bar-spinner"></span>
               {{ isSaving ? '保存中...' : '保存设置' }}
             </button>
@@ -1149,6 +1149,10 @@ const confirmDeleteSource = async (source: string) => {
     delete localSources.value[source]
     if (globalSettings.value) delete globalSettings.value.sourceSettings[source]
     localSourceOrder.value = localSourceOrder.value.filter(s => s !== source)
+    if (globalSettings.value?.sources) {
+      delete globalSettings.value.sources.customSources[source]
+      globalSettings.value.sources.sourceOrder = localSourceOrder.value
+    }
     if (activeTab.value === source) {
       activeTab.value = localSourceOrder.value[0] || '__global__'
     }

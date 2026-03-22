@@ -63,29 +63,30 @@ import { computed, watch, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
 import { useSettings } from '@/shared/composables/useSettings'
-import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
 import { addDays, getUtcToday } from '@/shared/utils/date'
 
 const reviewStore = useReviewStore()
-const { mode, notification, reviewLoadsCache, spellLoadsCache } = storeToRefs(reviewStore)
+const { mode, notification, reviewLoadsCache, spellLoadsCache, currentSource } = storeToRefs(reviewStore)
 const { settings: userSettings, loadSettings } = useSettings()
-const { currentSource, initializeFromData } = useSourceSelectionReadOnly()
 
 loadSettings()
-initializeFromData()
+
+const isSpellMode = computed(() =>
+  mode.value === 'mode_spelling' || mode.value === 'mode_skilled_spelling'
+)
 
 const modeClass = computed(() =>
-  mode.value === 'mode_spelling' ? 'mode-spelling' : 'mode-review'
+  isSpellMode.value ? 'mode-spelling' : 'mode-review'
 )
 
 const loadsCache = computed(() =>
-  mode.value === 'mode_spelling' ? spellLoadsCache.value : reviewLoadsCache.value
+  isSpellMode.value ? spellLoadsCache.value : reviewLoadsCache.value
 )
 
 const dailyLimit = computed(() => {
   if (!userSettings.value) return Infinity
   const sourceLearning = userSettings.value.sourceSettings[currentSource.value]?.learning
-  return mode.value === 'mode_spelling'
+  return isSpellMode.value
     ? sourceLearning?.dailySpellLimit ?? 50
     : sourceLearning?.dailyReviewLimit ?? 50
 })

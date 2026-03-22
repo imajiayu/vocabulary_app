@@ -93,11 +93,12 @@
 - 词汇表格中的英文术语单元格（用 `class="term"` 而非 td class）
 - 语法/规则讲解中的英文术语
 - 练习题 `.quiz-prompt` 中的英文术语
-- 练习选项 `<label>` 中的英文术语
 - 提示框中的英文术语
 - `.grammar-box` 中的英文术语
 
-**唯一例外**：`.en-text` 包裹的完整例句（由 tts.js 自动拆词处理），其内部不再嵌套 `.term`。
+**例外（禁止使用 `.term`）**：
+1. `.en-text` 包裹的完整例句（由 tts.js 自动拆词处理），其内部不再嵌套 `.term`
+2. **练习选项 `<label>` 中禁止使用 `<span class="term">`**——`.term` 有加粗 + 强调色样式，若部分选项使用而另一部分不使用，会直接暗示正确答案。选项文本一律使用纯文本
 
 ### 词汇表标记
 
@@ -161,9 +162,9 @@
   <div class="quiz-item" data-answer="subject matter" data-explanation="subject matter = 标的/标的物">
     <div class="quiz-prompt">1. 标的物</div>
     <div class="quiz-options">
-      <label><input type="radio" name="m1" value="subject matter"> <span class="term">subject matter</span></label>
-      <label><input type="radio" name="m1" value="deliverables"> <span class="term">deliverables</span></label>
-      <label><input type="radio" name="m1" value="milestone"> <span class="term">milestone</span></label>
+      <label><input type="radio" name="m1" value="subject matter"> subject matter</label>
+      <label><input type="radio" name="m1" value="deliverables"> deliverables</label>
+      <label><input type="radio" name="m1" value="milestone"> milestone</label>
     </div>
   </div>
   <button class="grade-btn" disabled>判题</button>
@@ -178,7 +179,7 @@
   <div class="quiz-item" data-answer="perform" data-explanation="perform obligations = 履行义务">
     <div class="quiz-prompt">1. The Provider shall ____ the Services.</div>
     <div class="quiz-options">
-      <label><input type="radio" name="a1" value="perform"> <span class="term">perform</span></label>
+      <label><input type="radio" name="a1" value="perform"> perform</label>
       <label><input type="radio" name="a1" value="performing"> performing</label>
       <label><input type="radio" name="a1" value="performed"> performed</label>
     </div>
