@@ -2,7 +2,7 @@
 
 (function () {
   // --- localStorage 持久化工具 ---
-  var STATE_VERSION = 6;
+  var STATE_VERSION = 7;
   var pageKey = 'exercise_v' + STATE_VERSION + '_' + location.pathname;
 
   // 清除旧版本数据
@@ -13,21 +13,42 @@
     }
   } catch (e) {}
 
+  // 模块级状态（持久化到 localStorage）
+  var currentState = {
+    radio: {},
+    textarea: {},
+    quizGraded: [],
+    translateGraded: [],
+    aiResults: {}
+  };
+
   function saveState() {
-    var state = { radio: {}, textarea: {} };
+    currentState.radio = {};
     document.querySelectorAll('.quiz-item input[type="radio"]:checked').forEach(function (r) {
-      state.radio[r.name] = r.value;
+      currentState.radio[r.name] = r.value;
     });
+    currentState.textarea = {};
     document.querySelectorAll('.translate-item textarea').forEach(function (ta, i) {
-      state.textarea['t' + i] = ta.value;
+      currentState.textarea['t' + i] = ta.value;
     });
-    try { localStorage.setItem(pageKey, JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem(pageKey, JSON.stringify(currentState)); } catch (e) {}
   }
 
   function loadState() {
     try {
       var raw = localStorage.getItem(pageKey);
-      return raw ? JSON.parse(raw) : null;
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        currentState = {
+          radio: parsed.radio || {},
+          textarea: parsed.textarea || {},
+          quizGraded: parsed.quizGraded || [],
+          translateGraded: parsed.translateGraded || [],
+          aiResults: parsed.aiResults || {}
+        };
+        return currentState;
+      }
+      return null;
     } catch (e) { return null; }
   }
 
@@ -131,7 +152,7 @@
       feedbackDiv.className = 'translate-feedback';
       item.appendChild(feedbackDiv);
     }
-    feedbackDiv.innerHTML = '';
+    feedbackDiv.textContent = '';
 
     // 评分
     var grade = null;
@@ -149,50 +170,114 @@
       var pct = grade.total > 0 ? Math.round(grade.score / grade.total * 100) : 0;
       var emoji = pct >= 90 ? '🎉' : pct >= 70 ? '👍' : pct >= 50 ? '💪' : '📚';
 
-      var scoreHtml = '<div class="grade-score"><strong>' + emoji + ' 评分：' + pct + '分</strong>';
-      if (pct >= 70) scoreHtml += ' 核心意思正确！';
-      scoreHtml += '</div>';
-      feedbackDiv.innerHTML += scoreHtml;
+      var scoreDiv = document.createElement('div');
+      scoreDiv.className = 'grade-score';
+      var scoreStrong = document.createElement('strong');
+      scoreStrong.textContent = emoji + ' 评分：' + pct + '分';
+      scoreDiv.appendChild(scoreStrong);
+      if (pct >= 70) scoreDiv.appendChild(document.createTextNode(' 核心意思正确！'));
+      feedbackDiv.appendChild(scoreDiv);
 
       // 逐条批改
-      var detailHtml = '<div class="grade-details">';
+      var detailsDiv = document.createElement('div');
+      detailsDiv.className = 'grade-details';
       grade.results.forEach(function (r) {
+        var itemDiv = document.createElement('div');
         if (r.status === 'perfect') {
-          detailHtml += '<div class="grade-item grade-perfect">✅ <code>' + r.en + '</code> → ' + r.ideal + ' ✓</div>';
+          itemDiv.className = 'grade-item grade-perfect';
+          var code = document.createElement('code');
+          code.textContent = r.en;
+          itemDiv.appendChild(document.createTextNode('✅ '));
+          itemDiv.appendChild(code);
+          itemDiv.appendChild(document.createTextNode(' → ' + r.ideal + ' ✓'));
         } else if (r.status === 'acceptable') {
-          detailHtml += '<div class="grade-item grade-acceptable">⚠️ <code>' + r.en + '</code> → 你译为「' + (r.acceptText || '') + '」';
-          detailHtml += '<br>&nbsp;&nbsp;&nbsp;&nbsp;✅ 更规范的法律表达：<em>' + r.ideal + '</em>';
-          if (r.note) detailHtml += '<br>&nbsp;&nbsp;&nbsp;&nbsp;💡 ' + r.note;
-          detailHtml += '</div>';
+          itemDiv.className = 'grade-item grade-acceptable';
+          var code = document.createElement('code');
+          code.textContent = r.en;
+          itemDiv.appendChild(document.createTextNode('⚠️ '));
+          itemDiv.appendChild(code);
+          itemDiv.appendChild(document.createTextNode(' → 你译为「' + (r.acceptText || '') + '」'));
+          var br1 = document.createElement('br');
+          itemDiv.appendChild(br1);
+          var em1 = document.createElement('em');
+          em1.textContent = r.ideal;
+          itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0✅ 更规范的法律表达：'));
+          itemDiv.appendChild(em1);
+          if (r.note) {
+            var br2 = document.createElement('br');
+            itemDiv.appendChild(br2);
+            itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0💡 ' + r.note));
+          }
         } else if (r.status === 'error') {
-          detailHtml += '<div class="grade-item grade-error">❌ <code>' + r.en + '</code> → 你译为「' + (r.errorText || '') + '」← 翻译有误';
-          detailHtml += '<br>&nbsp;&nbsp;&nbsp;&nbsp;✅ 正确翻译：<em>' + r.ideal + '</em>';
-          if (r.note) detailHtml += '<br>&nbsp;&nbsp;&nbsp;&nbsp;💡 ' + r.note;
-          detailHtml += '</div>';
+          itemDiv.className = 'grade-item grade-error';
+          var code = document.createElement('code');
+          code.textContent = r.en;
+          itemDiv.appendChild(document.createTextNode('❌ '));
+          itemDiv.appendChild(code);
+          itemDiv.appendChild(document.createTextNode(' → 你译为「' + (r.errorText || '') + '」← 翻译有误'));
+          var br1 = document.createElement('br');
+          itemDiv.appendChild(br1);
+          var em1 = document.createElement('em');
+          em1.textContent = r.ideal;
+          itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0✅ 正确翻译：'));
+          itemDiv.appendChild(em1);
+          if (r.note) {
+            var br2 = document.createElement('br');
+            itemDiv.appendChild(br2);
+            itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0💡 ' + r.note));
+          }
         } else {
-          detailHtml += '<div class="grade-item grade-missing">❌ <code>' + r.en + '</code> → 遗漏';
-          detailHtml += '<br>&nbsp;&nbsp;&nbsp;&nbsp;✅ 应译为：<em>' + r.ideal + '</em>';
-          if (r.note) detailHtml += '<br>&nbsp;&nbsp;&nbsp;&nbsp;💡 ' + r.note;
-          detailHtml += '</div>';
+          itemDiv.className = 'grade-item grade-missing';
+          var code = document.createElement('code');
+          code.textContent = r.en;
+          itemDiv.appendChild(document.createTextNode('❌ '));
+          itemDiv.appendChild(code);
+          itemDiv.appendChild(document.createTextNode(' → 遗漏'));
+          var br1 = document.createElement('br');
+          itemDiv.appendChild(br1);
+          var em1 = document.createElement('em');
+          em1.textContent = r.ideal;
+          itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0✅ 应译为：'));
+          itemDiv.appendChild(em1);
+          if (r.note) {
+            var br2 = document.createElement('br');
+            itemDiv.appendChild(br2);
+            itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0💡 ' + r.note));
+          }
         }
+        detailsDiv.appendChild(itemDiv);
       });
-      detailHtml += '</div>';
-      feedbackDiv.innerHTML += detailHtml;
+      feedbackDiv.appendChild(detailsDiv);
     }
 
     // 参考译文
     if (reference) {
-      feedbackDiv.innerHTML += '<div class="grade-reference"><strong>📖 参考译文：</strong><blockquote>' + reference + '</blockquote></div>';
+      var refDiv = document.createElement('div');
+      refDiv.className = 'grade-reference';
+      var refStrong = document.createElement('strong');
+      refStrong.textContent = '📖 参考译文：';
+      refDiv.appendChild(refStrong);
+      var bq = document.createElement('blockquote');
+      bq.textContent = reference;
+      refDiv.appendChild(bq);
+      feedbackDiv.appendChild(refDiv);
     }
 
     // 关键知识点（仅在没有 rubric 时从 key-points 提取）
     if (keyPoints && !rubricStr) {
-      var kpHtml = '<div class="grade-keypoints"><strong>💡 关键知识点：</strong><ul>';
+      var kpDiv = document.createElement('div');
+      kpDiv.className = 'grade-keypoints';
+      var kpStrong = document.createElement('strong');
+      kpStrong.textContent = '💡 关键知识点：';
+      kpDiv.appendChild(kpStrong);
+      var ul = document.createElement('ul');
       keyPoints.split('；').filter(Boolean).forEach(function (kp) {
-        kpHtml += '<li>' + kp.trim() + '</li>';
+        var li = document.createElement('li');
+        li.textContent = kp.trim();
+        ul.appendChild(li);
       });
-      kpHtml += '</ul></div>';
-      feedbackDiv.innerHTML += kpHtml;
+      kpDiv.appendChild(ul);
+      feedbackDiv.appendChild(kpDiv);
     }
   }
 
@@ -243,12 +328,17 @@
       var answered = exercise.querySelectorAll('.quiz-item input[type="radio"]:checked').length;
       btn.disabled = answered < total;
       btn.addEventListener('click', function () {
-        triggerGrade(exercise, items, btn, total);
+        triggerGrade(exercise, items, btn, total, exIdx);
         saveState();
       });
+
+      // 恢复已判题的结果
+      if (saved && saved.quizGraded && saved.quizGraded.indexOf(exIdx) >= 0) {
+        triggerGrade(exercise, items, btn, total, exIdx);
+      }
     });
 
-    function triggerGrade(exercise, items, btn, total) {
+    function triggerGrade(exercise, items, btn, total, exIdx) {
       exercise.querySelectorAll('.quiz-result').forEach(function (el) { el.remove(); });
       exercise.querySelectorAll('.correct-answer, .wrong-answer').forEach(function (el) {
         el.classList.remove('correct-answer', 'wrong-answer');
@@ -288,24 +378,33 @@
           if (radio.value === answer) label.classList.add('correct-answer');
           else if (radio.checked) label.classList.add('wrong-answer');
         });
-        item.querySelectorAll('input[type="radio"]').forEach(function (r) { r.disabled = true; });
       });
-      btn.textContent = '得分：' + correct + ' / ' + total;
-      btn.disabled = true;
+      btn.textContent = '重新判题 · ' + correct + '/' + total;
+      btn.disabled = false;
+      if (currentState.quizGraded.indexOf(exIdx) < 0) {
+        currentState.quizGraded.push(exIdx);
+      }
     }
 
     /* ---- 翻译题（详细批改） ---- */
+    var allTranslateItems = document.querySelectorAll('.translate-item');
+    var globalItemMap = new Map();
+    allTranslateItems.forEach(function (item, i) {
+      globalItemMap.set(item, i);
+    });
+
+    // 恢复 textarea（仅执行一次）
+    if (saved && saved.textarea) {
+      allTranslateItems.forEach(function (item, i) {
+        var ta = item.querySelector('textarea');
+        if (ta && saved.textarea['t' + i]) ta.value = saved.textarea['t' + i];
+      });
+    }
+
     document.querySelectorAll('.translation-exercise').forEach(function (exercise, texIdx) {
       var items = exercise.querySelectorAll('.translate-item');
       var btn = exercise.querySelector('.check-translation-btn');
       if (!items.length || !btn) return;
-
-      // 恢复 textarea
-      if (saved && saved.textarea) {
-        document.querySelectorAll('.translate-item textarea').forEach(function (ta, i) {
-          if (saved.textarea['t' + i]) ta.value = saved.textarea['t' + i];
-        });
-      }
 
       exercise.addEventListener('input', function () {
         var filled = 0;
@@ -325,7 +424,37 @@
       btn.addEventListener('click', function () {
         triggerTranslationGrade(items, btn, texIdx);
       });
+
+      // 恢复已批改的结果
+      if (saved && saved.translateGraded && saved.translateGraded.indexOf(texIdx) >= 0) {
+        restoreTranslationFeedback(items, btn);
+      }
     });
+
+    function restoreTranslationFeedback(items, btn) {
+      items.forEach(function (item) {
+        var globalIdx = globalItemMap.get(item);
+        var savedResult = currentState.aiResults['' + globalIdx];
+        if (!savedResult) return;
+
+        var input = item.querySelector('textarea');
+        var userText = input ? input.value.trim() : '';
+        if (!userText) return;
+
+        var reference = item.getAttribute('data-reference') || '';
+
+        if (savedResult === 'fallback') {
+          buildGradeFeedback(item, userText);
+        } else {
+          var feedbackDiv = document.createElement('div');
+          feedbackDiv.className = 'translate-feedback';
+          item.appendChild(feedbackDiv);
+          renderAIFeedback(feedbackDiv, savedResult, reference);
+        }
+      });
+      btn.textContent = '重新批改';
+      btn.disabled = false;
+    }
 
     // --- DeepSeek AI 批改 ---
     var DEEPSEEK_API_KEY = 'sk-089516ac71dd4ba79013056613441d1b';
@@ -396,44 +525,104 @@
       var pct = data.score || 0;
       var emoji = pct >= 90 ? '🎉' : pct >= 70 ? '👍' : pct >= 50 ? '💪' : '📚';
 
-      var html = '<div class="grade-score"><strong>' + emoji + ' AI 评分：' + pct + ' 分</strong>';
-      if (data.summary) html += ' — ' + data.summary;
-      html += '</div>';
+      // 清空并用 DOM 方法构建
+      feedbackDiv.textContent = '';
 
+      // 评分
+      var scoreDiv = document.createElement('div');
+      scoreDiv.className = 'grade-score';
+      var scoreStrong = document.createElement('strong');
+      scoreStrong.textContent = emoji + ' AI 评分：' + pct + ' 分';
+      scoreDiv.appendChild(scoreStrong);
+      if (data.summary) scoreDiv.appendChild(document.createTextNode(' — ' + data.summary));
+      feedbackDiv.appendChild(scoreDiv);
+
+      // 逐条批改
       if (data.items && data.items.length) {
-        html += '<div class="grade-details">';
+        var detailsDiv = document.createElement('div');
+        detailsDiv.className = 'grade-details';
         data.items.forEach(function (r) {
+          var itemDiv = document.createElement('div');
+          var code = document.createElement('code');
+          code.textContent = r.term;
           if (r.status === 'perfect') {
-            html += '<div class="grade-item grade-perfect">✅ <code>' + r.term + '</code> → ' + r.idealTranslation + ' ✓</div>';
+            itemDiv.className = 'grade-item grade-perfect';
+            itemDiv.appendChild(document.createTextNode('✅ '));
+            itemDiv.appendChild(code);
+            itemDiv.appendChild(document.createTextNode(' → ' + r.idealTranslation + ' ✓'));
           } else if (r.status === 'acceptable') {
-            html += '<div class="grade-item grade-acceptable">⚠️ <code>' + r.term + '</code> → 你译为「' + (r.userTranslation || '') + '」';
-            html += '<br>&nbsp;&nbsp;&nbsp;&nbsp;✅ 更规范的法律表达：<em>' + r.idealTranslation + '</em>';
-            if (r.note) html += '<br>&nbsp;&nbsp;&nbsp;&nbsp;💡 ' + r.note;
-            html += '</div>';
+            itemDiv.className = 'grade-item grade-acceptable';
+            itemDiv.appendChild(document.createTextNode('⚠️ '));
+            itemDiv.appendChild(code);
+            itemDiv.appendChild(document.createTextNode(' → 你译为「' + (r.userTranslation || '') + '」'));
+            itemDiv.appendChild(document.createElement('br'));
+            var em = document.createElement('em');
+            em.textContent = r.idealTranslation;
+            itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0✅ 更规范的法律表达：'));
+            itemDiv.appendChild(em);
+            if (r.note) {
+              itemDiv.appendChild(document.createElement('br'));
+              itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0💡 ' + r.note));
+            }
           } else if (r.status === 'error') {
-            html += '<div class="grade-item grade-error">❌ <code>' + r.term + '</code> → 你译为「' + (r.userTranslation || '') + '」';
-            html += '<br>&nbsp;&nbsp;&nbsp;&nbsp;✅ 正确翻译：<em>' + r.idealTranslation + '</em>';
-            if (r.note) html += '<br>&nbsp;&nbsp;&nbsp;&nbsp;💡 ' + r.note;
-            html += '</div>';
+            itemDiv.className = 'grade-item grade-error';
+            itemDiv.appendChild(document.createTextNode('❌ '));
+            itemDiv.appendChild(code);
+            itemDiv.appendChild(document.createTextNode(' → 你译为「' + (r.userTranslation || '') + '」'));
+            itemDiv.appendChild(document.createElement('br'));
+            var em = document.createElement('em');
+            em.textContent = r.idealTranslation;
+            itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0✅ 正确翻译：'));
+            itemDiv.appendChild(em);
+            if (r.note) {
+              itemDiv.appendChild(document.createElement('br'));
+              itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0💡 ' + r.note));
+            }
           } else {
-            html += '<div class="grade-item grade-missing">❌ <code>' + r.term + '</code> → 遗漏';
-            html += '<br>&nbsp;&nbsp;&nbsp;&nbsp;✅ 应译为：<em>' + r.idealTranslation + '</em>';
-            if (r.note) html += '<br>&nbsp;&nbsp;&nbsp;&nbsp;💡 ' + r.note;
-            html += '</div>';
+            itemDiv.className = 'grade-item grade-missing';
+            itemDiv.appendChild(document.createTextNode('❌ '));
+            itemDiv.appendChild(code);
+            itemDiv.appendChild(document.createTextNode(' → 遗漏'));
+            itemDiv.appendChild(document.createElement('br'));
+            var em = document.createElement('em');
+            em.textContent = r.idealTranslation;
+            itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0✅ 应译为：'));
+            itemDiv.appendChild(em);
+            if (r.note) {
+              itemDiv.appendChild(document.createElement('br'));
+              itemDiv.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0💡 ' + r.note));
+            }
           }
+          detailsDiv.appendChild(itemDiv);
         });
-        html += '</div>';
+        feedbackDiv.appendChild(detailsDiv);
       }
 
+      // 总评
       if (data.overallComments) {
-        html += '<div class="grade-keypoints"><strong>💡 总评：</strong><p>' + data.overallComments + '</p></div>';
+        var commentsDiv = document.createElement('div');
+        commentsDiv.className = 'grade-keypoints';
+        var commentsStrong = document.createElement('strong');
+        commentsStrong.textContent = '💡 总评：';
+        commentsDiv.appendChild(commentsStrong);
+        var p = document.createElement('p');
+        p.textContent = data.overallComments;
+        commentsDiv.appendChild(p);
+        feedbackDiv.appendChild(commentsDiv);
       }
 
+      // 参考译文
       if (reference) {
-        html += '<div class="grade-reference"><strong>📖 参考译文：</strong><blockquote>' + reference + '</blockquote></div>';
+        var refDiv = document.createElement('div');
+        refDiv.className = 'grade-reference';
+        var refStrong = document.createElement('strong');
+        refStrong.textContent = '📖 参考译文：';
+        refDiv.appendChild(refStrong);
+        var bq = document.createElement('blockquote');
+        bq.textContent = reference;
+        refDiv.appendChild(bq);
+        feedbackDiv.appendChild(refDiv);
       }
-
-      feedbackDiv.innerHTML = html;
     }
 
     function callDeepSeek(source, userTranslation, reference, rubric, direction) {
@@ -475,12 +664,13 @@
         if (old) old.remove();
         var input = item.querySelector('textarea');
         var userText = input ? input.value.trim() : '';
-        if (input) input.disabled = true;
 
         if (!userText) {
           promises.push(Promise.resolve());
           return;
         }
+
+        var globalIdx = globalItemMap.get(item);
 
         // 收集题目数据
         var sourceEl = item.querySelector('.source-text');
@@ -500,25 +690,36 @@
         // 显示加载状态
         var feedbackDiv = document.createElement('div');
         feedbackDiv.className = 'translate-feedback';
-        feedbackDiv.innerHTML = '<div class="grade-score" style="text-align:center;">⏳ DeepSeek AI 正在批改...</div>';
+        var loadingDiv = document.createElement('div');
+        loadingDiv.className = 'grade-score';
+        loadingDiv.style.textAlign = 'center';
+        loadingDiv.textContent = '⏳ DeepSeek AI 正在批改...';
+        feedbackDiv.appendChild(loadingDiv);
         item.appendChild(feedbackDiv);
 
         // 调用 DeepSeek API，失败降级到本地 rubric
         var p = callDeepSeek(source, userText, reference, rubric, direction)
           .then(function (result) {
             renderAIFeedback(feedbackDiv, result, reference);
+            currentState.aiResults['' + globalIdx] = result;
           })
           .catch(function (err) {
             console.warn('DeepSeek API failed, falling back to local rubric:', err);
-            while (feedbackDiv.firstChild) feedbackDiv.removeChild(feedbackDiv.firstChild);
+            feedbackDiv.textContent = '';
+            feedbackDiv.remove();
             buildGradeFeedback(item, userText);
+            currentState.aiResults['' + globalIdx] = 'fallback';
           });
 
         promises.push(p);
       });
 
       Promise.all(promises).then(function () {
-        btn.textContent = '✅ AI 批改完成';
+        btn.textContent = '重新批改';
+        btn.disabled = false;
+        if (currentState.translateGraded.indexOf(texIdx) < 0) {
+          currentState.translateGraded.push(texIdx);
+        }
         saveState();
       });
     }

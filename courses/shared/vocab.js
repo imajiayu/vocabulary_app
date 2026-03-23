@@ -100,6 +100,12 @@ async function renderSourceSelector(addBtn) {
 
   if (sources.length === 0) return;
 
+  // 校验缓存的 source 是否仍存在（用户可能已删除或重命名）
+  if (!sources.includes(selectedSource)) {
+    selectedSource = sources[0];
+    try { localStorage.setItem(SOURCE_STORAGE_KEY, selectedSource); } catch (e) {}
+  }
+
   // 创建下拉框
   const container = addBtn.parentElement;
   const wrapper = document.createElement('div');

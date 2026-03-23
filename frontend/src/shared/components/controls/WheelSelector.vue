@@ -42,6 +42,8 @@ const validValues = computed(() => {
 const isDisabled = (value: number) => value > props.max
 
 const wheelRef = ref<HTMLDivElement | null>(null)
+const topSpacerRef = ref<HTMLDivElement | null>(null)
+const bottomSpacerRef = ref<HTMLDivElement | null>(null)
 
 // ── 虚拟滚动（超过阈值时只渲染可视区域 ± buffer） ──────────────
 
@@ -70,8 +72,19 @@ const computeVisibleRange = (scrollTop: number): [number, number] => {
   ]
 }
 
+/** 用 spacer div 撑高度（不用 container padding，避免 border-box 下 scrollHeight 异常） */
+const updateSpacerHeights = (start: number, end: number) => {
+  const total = validValues.value.length
+  if (topSpacerRef.value) {
+    topSpacerRef.value.style.height = (SPACER_HEIGHT.value + start * ITEM_HEIGHT.value) + 'px'
+  }
+  if (bottomSpacerRef.value) {
+    bottomSpacerRef.value.style.height = (SPACER_HEIGHT.value + (total - end) * ITEM_HEIGHT.value) + 'px'
+  }
+}
+
 const updateVirtualWindow = (scrollTop: number): boolean => {
-  if (!useVirtual.value || !wheelRef.value) return false
+  if (!useVirtual.value) return false
 
   const [newStart, newEnd] = computeVisibleRange(scrollTop)
   if (newStart === virtualStart && newEnd === virtualEnd) return false
@@ -79,25 +92,10 @@ const updateVirtualWindow = (scrollTop: number): boolean => {
   virtualStart = newStart
   virtualEnd = newEnd
   visibleItems.value = validValues.value.slice(newStart, newEnd)
-
-  const total = validValues.value.length
-  wheelRef.value.style.paddingTop = (SPACER_HEIGHT.value + newStart * ITEM_HEIGHT.value) + 'px'
-  wheelRef.value.style.paddingBottom = (SPACER_HEIGHT.value + (total - newEnd) * ITEM_HEIGHT.value) + 'px'
+  updateSpacerHeights(newStart, newEnd)
 
   cachedItems = null
   return true
-}
-
-/** 同步设 scrollTop + 更新视觉；虚拟窗口变化时延迟到 nextTick 等 Vue 渲染新 DOM */
-const syncScrollAndVisuals = () => {
-  if (!wheelRef.value) return
-  const windowChanged = updateVirtualWindow(currentScrollTop)
-  wheelRef.value.scrollTop = currentScrollTop
-  if (windowChanged) {
-    nextTick(updateItemVisuals)
-  } else {
-    updateItemVisuals()
-  }
 }
 
 // ── 滚动状态 ──────────────────────────────────────────────
@@ -113,6 +111,41 @@ const FRICTION = 0.92
 const WHEEL_SENSITIVITY = 0.4
 const SNAP_THRESHOLD = 0.5
 const SNAP_SPEED = 0.15
+
+// ── 同步初始化虚拟窗口（确保首帧有内容） ──────────────────────
+
+if (useVirtual.value && validValues.value.length > 0) {
+  const aligned = clampToStep(props.modelValue)
+  const itemIndex = Math.round((aligned - MIN.value) / STEP.value)
+  const elementCenter = SPACER_HEIGHT.value + itemIndex * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
+  const initialScroll = Math.max(0, elementCenter - CONTAINER_HEIGHT / 2)
+
+  const [start, end] = computeVisibleRange(initialScroll)
+  virtualStart = start
+  virtualEnd = end
+  visibleItems.value = validValues.value.slice(start, end)
+  // spacer DOM 还不存在，onMounted 时会通过 updateSpacerHeights 同步
+
+  currentScrollTop = initialScroll
+  targetScrollTop = initialScroll
+}
+
+/** 同步设 scrollTop + 更新视觉；虚拟窗口变化时延迟到 nextTick 等 Vue 渲染新 DOM */
+const syncScrollAndVisuals = () => {
+  if (!wheelRef.value) return
+  const windowChanged = updateVirtualWindow(currentScrollTop)
+  if (windowChanged) {
+    // 虚拟窗口变化 → visibleItems 已更新（Vue 待渲染），需等 DOM 就绪再设 scrollTop
+    nextTick(() => {
+      if (!wheelRef.value) return
+      wheelRef.value.scrollTop = currentScrollTop
+      updateItemVisuals()
+    })
+  } else {
+    wheelRef.value.scrollTop = currentScrollTop
+    updateItemVisuals()
+  }
+}
 
 // ── 3D 视觉更新（直接操控 DOM，不走 Vue 响应式） ──────────────
 
@@ -168,8 +201,7 @@ const updateItemVisuals = () => {
 // ── 滚动位置计算 ──────────────────────────────────────────
 
 const getValueFromScroll = (scrollTop: number): number => {
-  const containerCenter = wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT
-  const centerPosition = scrollTop + containerCenter / 2
+  const centerPosition = scrollTop + CONTAINER_HEIGHT / 2
   const itemIndex = Math.round((centerPosition - SPACER_HEIGHT.value) / ITEM_HEIGHT.value - 0.5)
   const rawValue = MIN.value + Math.max(0, itemIndex) * STEP.value
   return Math.max(MIN.value, Math.min(rawValue, props.max))
@@ -177,18 +209,13 @@ const getValueFromScroll = (scrollTop: number): number => {
 
 const getScrollFromValue = (value: number): number => {
   const aligned = clampToStep(value)
-  const containerCenter = (wheelRef.value?.clientHeight ?? CONTAINER_HEIGHT) / 2
   const itemIndex = Math.round((aligned - MIN.value) / STEP.value)
   const elementCenter = SPACER_HEIGHT.value + itemIndex * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
-  return Math.max(0, elementCenter - containerCenter)
+  return Math.max(0, elementCenter - CONTAINER_HEIGHT / 2)
 }
 
 const getMaxScroll = (): number => {
-  if (useVirtual.value) {
-    return Math.max(0, totalContentHeight.value - CONTAINER_HEIGHT)
-  }
-  if (!wheelRef.value) return 0
-  return wheelRef.value.scrollHeight - wheelRef.value.clientHeight
+  return Math.max(0, totalContentHeight.value - CONTAINER_HEIGHT)
 }
 
 // ── rAF 渲染调度（touchmove 只更新数值，DOM 操作合并到单次 rAF） ──
@@ -444,6 +471,11 @@ watch(
 )
 
 onMounted(() => {
+  // 虚拟模式：同步设置 spacer 高度（setup 阶段已填充 visibleItems）
+  if (useVirtual.value) {
+    updateSpacerHeights(virtualStart, virtualEnd)
+  }
+
   if (props.max >= MIN.value) {
     initPosition()
   }
@@ -488,8 +520,9 @@ onUnmounted(() => {
         </div>
         <div class="wheel-spacer" :style="{ height: SPACER_HEIGHT + 'px' }"></div>
       </template>
-      <!-- 虚拟模式：padding 撑高度，只渲染可视窗口 -->
+      <!-- 虚拟模式：spacer div 撑高度，只渲染可视窗口 -->
       <template v-else>
+        <div ref="topSpacerRef" class="wheel-spacer"></div>
         <div
           class="wheel-item"
           v-for="value in visibleItems"
@@ -499,6 +532,7 @@ onUnmounted(() => {
         >
           {{ value }}
         </div>
+        <div ref="bottomSpacerRef" class="wheel-spacer"></div>
       </template>
     </div>
     <div class="wheel-mask"></div>
