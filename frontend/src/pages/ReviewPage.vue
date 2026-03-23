@@ -131,6 +131,7 @@ import WordSideBar from '@/features/vocabulary/sidebar/WordSideBar.vue'
 import ReviewRightPanel from '@/features/vocabulary/review/ReviewRightPanel.vue'
 import ReviewSpeedIndicator from '@/features/vocabulary/review/ReviewSpeedIndicator.vue'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
+import { useToast } from '@/shared/composables/useToast'
 import { provideReviewContext } from '@/features/vocabulary/review/context'
 import { logger } from '@/shared/utils/logger'
 
@@ -295,6 +296,7 @@ const {
   shuffle,
   globalIndex,
   notification,
+  persistError,
   graduatedWords,
   graduatedCount,
   initialWordCount,
@@ -308,6 +310,14 @@ provideReviewContext({
   shuffle,
   submitResult: reviewStore.submitResult,
   stopReviewWord: reviewStore.stopReviewWord,
+})
+
+const toast = useToast()
+watch(persistError, (err) => {
+  if (err) {
+    toast.error(err, { duration: 8000 })
+    persistError.value = null
+  }
 })
 
 const loadingText = ref('加载中...')

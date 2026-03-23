@@ -57,6 +57,7 @@ export function useReviewResult() {
     show: false,
     data: null
   })
+  const persistError = ref<string | null>(null)
 
   // 负荷缓存：会话内复用
   const reviewLoadsCache = ref<number[] | null>(null)
@@ -94,11 +95,11 @@ export function useReviewResult() {
       stop_review: pd.should_stop_review ? 1 : ctx.wordForCalc.stop_review,
     })
 
-    persistReviewResult(calcResult.persistData, {
+    await persistReviewResult(calcResult.persistData, {
       source: ctx.source,
       elapsed_time: Math.round(ctx.result.elapsed_time ?? 3),
       score: calcResult.persistData.score,
-    }).catch(err => log.error('Failed to persist review result:', err))
+    })
   }
 
   // === 模式 2：拼写练习 ===
@@ -126,11 +127,11 @@ export function useReviewResult() {
       stop_spell: calcResult.persistData.should_stop_spell ? 1 : ctx.wordForCalc.stop_spell,
     })
 
-    persistSpellingResult(calcResult.persistData, {
+    await persistSpellingResult(calcResult.persistData, {
       source: ctx.source,
       elapsed_time: Math.round((ctx.result.spelling_data?.inputAnalysis?.totalTypingTime ?? 0) / 1000),
       score: ctx.result.remembered ? 5 : 1,
-    }).catch(err => log.error('Failed to persist spelling result:', err))
+    })
   }
 
   // === 模式 3：已掌握复习 ===
@@ -139,10 +140,10 @@ export function useReviewResult() {
 
     if (ctx.result.remembered) {
       // 记住了：更新 last_review + remember_count
-      api.words.updateWordDirect(ctx.wordId, {
+      await api.words.updateWordDirect(ctx.wordId, {
         last_review: today,
         remember_count: ctx.wordForCalc.remember_count + 1,
-      }).catch(err => log.error('Failed to update last_review:', err))
+      })
       return
     }
 
@@ -195,8 +196,7 @@ export function useReviewResult() {
       }
     }
 
-    api.words.updateWordDirect(ctx.wordId, updatePayload)
-      .catch(err => log.error('Failed to persist mastered review result:', err))
+    await api.words.updateWordDirect(ctx.wordId, updatePayload)
   }
 
   // === 模式 4：已熟练拼写 ===
@@ -217,8 +217,7 @@ export function useReviewResult() {
     if (!needsReset) {
       // remembered 且 totalScore >= 0.55：只更新 last_spell 检查时间
       const today = new Date().toISOString().split('T')[0]
-      api.words.updateWordDirect(ctx.wordId, { last_spell: today })
-        .catch(err => log.error('Failed to update last_spell:', err))
+      await api.words.updateWordDirect(ctx.wordId, { last_spell: today })
       return
     }
 
@@ -277,8 +276,7 @@ export function useReviewResult() {
       }
     }
 
-    api.words.updateWordDirect(ctx.wordId, updatePayload)
-      .catch(err => log.error('Failed to persist skilled spelling reset:', err))
+    await api.words.updateWordDirect(ctx.wordId, updatePayload)
   }
 
   // === 主调度函数 ===
@@ -312,6 +310,7 @@ export function useReviewResult() {
       api.stats.invalidateCache(ctx.source)
       debouncedUpdateProgressIndex(globalIndex)
     } catch (err) {
+      persistError.value = '结果保存失败，请检查网络连接后重试'
       log.error('Failed to calculate/persist result:', err)
     }
   }
@@ -353,6 +352,7 @@ export function useReviewResult() {
   const reset = () => {
     wordResults.value.clear()
     notification.value = { show: false, data: null }
+    persistError.value = null
     reviewLoadsCache.value = null
     spellLoadsCache.value = null
   }
@@ -360,6 +360,7 @@ export function useReviewResult() {
   return {
     wordResults,
     notification,
+    persistError,
     reviewLoadsCache,
     spellLoadsCache,
     closeNotification,

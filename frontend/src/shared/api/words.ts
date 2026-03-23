@@ -677,6 +677,7 @@ export class WordsApi {
         .eq('user_id', userId)
         .eq('stop_review', 0)
         .eq('source', source)
+        .not('next_review', 'is', null)
         .order('ease_factor', { ascending: true })
         .order('repetition', { ascending: true })
         .limit(lowEfExtraCount)
@@ -730,50 +731,54 @@ export class WordsApi {
       source,
     }
 
-    // 3 个独立查询按优先级分组获取，避免 PostgREST 默认行数限制（1000）
-    // 导致高优先级单词被截断丢失
-    const [dueResult, neverSpelledResult, notYetDueResult] = await Promise.all([
+    // 3 个独立查询按优先级分组获取，使用 paginateSupabase 突破 PostgREST 1000 行限制
+    type SpellRow = Record<string, unknown>
+    const [dueRows, neverSpelledRows, notYetDueRows] = await Promise.all([
       // P0: 到期（spell_next_review <= today）
-      supabase
-        .from('words')
-        .select('id, word')
-        .eq('user_id', baseFilter.user_id)
-        .eq('stop_spell', baseFilter.stop_spell)
-        .eq('source', baseFilter.source)
-        .or('repetition.gte.3,spell_strength.not.is.null')
-        .not('spell_next_review', 'is', null)
-        .lte('spell_next_review', today),
+      paginateSupabase<SpellRow>((from, to) =>
+        supabase
+          .from('words')
+          .select('id, word')
+          .eq('user_id', baseFilter.user_id)
+          .eq('stop_spell', baseFilter.stop_spell)
+          .eq('source', baseFilter.source)
+          .or('repetition.gte.3,spell_strength.not.is.null')
+          .not('spell_next_review', 'is', null)
+          .lte('spell_next_review', today)
+          .range(from, to),
+        1000, '获取到期拼写单词失败'
+      ),
 
       // P1: 从未拼写（spell_next_review IS NULL）
-      supabase
-        .from('words')
-        .select('id, word')
-        .eq('user_id', baseFilter.user_id)
-        .eq('stop_spell', baseFilter.stop_spell)
-        .eq('source', baseFilter.source)
-        .or('repetition.gte.3,spell_strength.not.is.null')
-        .is('spell_next_review', null),
+      paginateSupabase<SpellRow>((from, to) =>
+        supabase
+          .from('words')
+          .select('id, word')
+          .eq('user_id', baseFilter.user_id)
+          .eq('stop_spell', baseFilter.stop_spell)
+          .eq('source', baseFilter.source)
+          .or('repetition.gte.3,spell_strength.not.is.null')
+          .is('spell_next_review', null)
+          .range(from, to),
+        1000, '获取未拼写单词失败'
+      ),
 
       // P2: 未到期（spell_next_review > today）
-      supabase
-        .from('words')
-        .select('id, word')
-        .eq('user_id', baseFilter.user_id)
-        .eq('stop_spell', baseFilter.stop_spell)
-        .eq('source', baseFilter.source)
-        .or('repetition.gte.3,spell_strength.not.is.null')
-        .gt('spell_next_review', today),
+      paginateSupabase<SpellRow>((from, to) =>
+        supabase
+          .from('words')
+          .select('id, word')
+          .eq('user_id', baseFilter.user_id)
+          .eq('stop_spell', baseFilter.stop_spell)
+          .eq('source', baseFilter.source)
+          .or('repetition.gte.3,spell_strength.not.is.null')
+          .gt('spell_next_review', today)
+          .range(from, to),
+        1000, '获取未到期拼写单词失败'
+      ),
     ])
 
-    throwIfError(dueResult.error, '获取到期拼写单词失败')
-    throwIfError(neverSpelledResult.error, '获取未拼写单词失败')
-    throwIfError(notYetDueResult.error, '获取未到期拼写单词失败')
-
-    const groups = [
-      dueResult.data || [],
-      neverSpelledResult.data || [],
-      notYetDueResult.data || [],
-    ]
+    const groups = [dueRows, neverSpelledRows, notYetDueRows]
 
     // Fisher-Yates 洗牌辅助函数
     const shuffleArray = <T>(arr: T[]): T[] => {
