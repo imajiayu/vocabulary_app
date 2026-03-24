@@ -723,7 +723,6 @@
         saveState();
       });
     }
-  });
   } // end _initExercises
 
   if (document.readyState === 'loading') {
