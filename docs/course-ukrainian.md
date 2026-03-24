@@ -222,8 +222,8 @@
 - `.grammar-box` 中的乌克兰语例词
 
 **词组 vs 单词规则**：
-- **词汇预载课（w*d1）**：词组可作为整体标记（如 `<span class="uk-word">чоловічий рід</span>`）
-- **其他课程（w*d2~d7）**：一律标记单个单词，不标记词组（如 `<span class="uk-word">чоловічий</span> <span class="uk-word">рід</span>`）
+- **词汇预载课（w*d1）中定义的词组**，在所有课时中都保持词组整体标记（如 `<span class="uk-word">чоловічий рід</span>`）
+- **不在 d1 词汇表中的词**，一律按单个单词标记（如 `<span class="uk-word">чоловічий</span> <span class="uk-word">рід</span>`）
 
 **例句处理**：`.uk-text` 包裹的完整例句由 tts.js 自动拆词为可点击单词，其内部不再嵌套 `.uk-word`。拆出的每个单词同样支持气泡交互。
 

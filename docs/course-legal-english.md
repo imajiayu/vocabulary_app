@@ -187,8 +187,8 @@
 - `.grammar-box` 中的英文术语
 
 **词组 vs 单词规则**：
-- **词汇预载课（w*d1）**：词组可作为整体标记（如 `<span class="term">operative provisions</span>`）
-- **其他课程（w*d2~d7）**：一律标记单个单词，不标记词组（如 `<span class="term">operative</span> <span class="term">provisions</span>`）
+- **词汇预载课（w*d1）中定义的词组**，在所有课时中都保持词组整体标记（如 `<span class="term">operative provisions</span>`）
+- **不在 d1 词汇表中的词**，一律按单个单词标记（如 `<span class="term">operative</span> <span class="term">provisions</span>`）
 
 **例外（禁止使用 `.term`）**：
 1. `.en-text` 包裹的完整例句（由 tts.js 自动拆词处理），其内部不再嵌套 `.term`。拆出的每个单词同样支持气泡交互
