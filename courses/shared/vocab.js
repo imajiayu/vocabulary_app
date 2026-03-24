@@ -40,7 +40,7 @@ function injectAddButtons() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function _initVocab() {
   const addBtn = document.getElementById('add-all-btn');
   if (!addBtn) return;
 
@@ -77,7 +77,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   await checkExistingWords();
 
   addBtn.addEventListener('click', addAllWords);
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _initVocab);
+} else {
+  _initVocab();
+}
 
 async function renderSourceSelector(addBtn) {
   let sources = [];

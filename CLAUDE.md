@@ -182,20 +182,20 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 
 ## 课程模块 `courses/`
 
-本仓库还包含两套语言课程（纯静态 HTML），通过 `courses/shared/` 共享 templates。
+本仓库还包含两套语言课程，通过 `courses/shared/` 共享 templates。新课时采用 **JSON 数据驱动**架构（JSON 数据 + 薄壳 HTML + 共享渲染器），已有课时为传统完整 HTML。
 
 ### 目录结构
 
 ```
 courses/
-  shared/               # 统一 templates（auth.js, lesson.css, nav.js, progress.js, tts.js, exercise.js, vocab.js）
+  shared/               # 统一 templates（9 个文件）
   ukrainian/            # 乌克兰语语法课程
-    lessons/            # HTML 课程文件 + templates 符号链接
+    lessons/            # 课程文件（.json + .html）+ templates 符号链接 + vocab-index.json
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
     vocabulary/         # 推荐词汇表
   legal-english/        # 法律英语词汇课程
-    lessons/            # HTML 课程文件 + templates 符号链接
+    lessons/            # 课程文件（.json + .html）+ templates 符号链接 + vocab-index.json
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
     mistakes.md         # 错题库
@@ -210,14 +210,16 @@ courses/
 
 ### 共享 Templates 机制
 
-`courses/shared/` 下的 7 个文件被两套课程共用：
+`courses/shared/` 下的 9 个文件被两套课程共用：
 - **auth.js** — 从 localStorage 读取主站 Supabase 登录会话，提供 `CourseAuth.getAuth()` 和 `CourseAuth.supabaseFetch()` 封装
-- **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色），引入 Lora 衬线字体用于标题
+- **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色），含单词交互气泡样式
 - **nav.js** — 自动注入顶部导航栏（课程首页显示"← IELTS Study 主页"，课时页显示"← 课程名"+ 主页链接）
 - **progress.js** — checkbox 进度跨设备同步（纯 Supabase `course_progress` 表读写，未登录时仅当前会话有效）
-- **tts.js** — 自动读取 `<html lang>` 选择语言和语速（uk-UA 0.85x / en-US 0.95x）
+- **tts.js** — 双语音频源：英语走有道词典 API（免费），乌克兰语走服务器缓存（`/tts-cache/`）+ Google Cloud TTS + 自动上传缓存
 - **exercise.js** — 选择题 + 翻译题 + AI 批改 + localStorage 持久化（翻译功能仅在有 `.translation-exercise` 元素时激活）
 - **vocab.js** — 从 Supabase 认证会话获取 user_id，用户可通过下拉框选择 source，直接调 Supabase REST API 添加词汇
+- **renderer.js** — JSON 数据驱动渲染器，读取 `.json` 课时数据构建完整 DOM，自动加载所需脚本（tts/exercise/vocab/nav）
+- **wordInteraction.js** — 单词点击浮动气泡（释义查找、发音、source 选择、添加到单词库），释义从 `vocab-index.json` 或 Supabase 获取
 
 每个课程的 `lessons/templates` 是指向 `../../shared` 的符号链接，确保本地预览和服务器部署路径一致。
 
@@ -240,3 +242,4 @@ courses/
 - 当前版本号 `v1.6.3`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 修改 `courses/shared/` 中的 templates 会同时影响两套课程
 - 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录
+- 新课时使用 JSON 数据驱动架构（详见各课程生成指令文档），生成新词汇后需更新对应课程的 `vocab-index.json`

@@ -299,7 +299,7 @@
   }
 
   // --- 主逻辑 ---
-  document.addEventListener('DOMContentLoaded', function () {
+  function _initExercises() {
     var saved = loadState();
     addResetButton();
 
@@ -724,4 +724,11 @@
       });
     }
   });
+  } // end _initExercises
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _initExercises);
+  } else {
+    _initExercises();
+  }
 })();

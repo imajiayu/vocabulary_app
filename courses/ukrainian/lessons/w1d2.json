@@ -1,0 +1,224 @@
+{
+  "title": "第1周 第2天 — 乌克兰语名词的三种性别",
+  "objective": "了解乌克兰语名词分为阳性、阴性、中性三种语法性别，掌握通过词尾判断名词性别的基本规则。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "为什么要学名词性别？" },
+        { "type": "p", "html": "在乌克兰语中，<strong>每个名词都有固定的语法性别</strong>（<span class=\"uk-word\">рід</span>），分为三种：" },
+        {
+          "type": "table",
+          "headers": ["性别", "乌克兰语名称", "缩写"],
+          "firstColWord": false,
+          "rows": [
+            ["阳性", "<span class=\"uk-word\">чоловічий рід</span>", "ч.р."],
+            ["阴性", "<span class=\"uk-word\">жіночий рід</span>", "ж.р."],
+            ["中性", "<span class=\"uk-word\">середній рід</span>", "с.р."]
+          ]
+        },
+        { "type": "p", "text": "名词的性别会影响后续要学的很多语法内容：" },
+        {
+          "type": "ul",
+          "items": [
+            "形容词的词尾（第7周会学）",
+            "动词过去时的词尾（第11周会学）",
+            "名词在不同格中的变化形式（第3-10周会学）"
+          ]
+        },
+        { "type": "p", "html": "所以，<strong>学好名词性别是学习整个乌克兰语语法的基础</strong>！好消息是：大多数情况下，看词尾就能判断性别。" },
+
+        { "type": "h3", "text": "规则一：辅音字母结尾 → 阳性" },
+        { "type": "p", "html": "大多数以<strong>辅音字母</strong>结尾的名词是阳性。这是最常见、最容易判断的规则。" },
+        { "type": "p", "text": "什么是辅音字母？除了元音字母（а, е, є, и, і, ї, о, у, ю, я）以外的字母都是辅音字母。常见的辅音结尾有：-л, -н, -р, -к, -с, -г, -т, -б, -ц 等。" },
+        { "type": "p", "text": "来看几个例子：" },
+        {
+          "type": "table",
+          "headers": ["例词", "词尾", "中文", "性别"],
+          "firstColWord": true,
+          "rows": [
+            ["стіл", "-л（辅音）", "桌子", "阳性"],
+            ["хліб", "-б（辅音）", "面包", "阳性"],
+            ["дім", "-м（辅音）", "家", "阳性"],
+            ["кіт", "-т（辅音）", "猫", "阳性"],
+            ["час", "-с（辅音）", "时间", "阳性"],
+            ["парк", "-к（辅音）", "公园", "阳性"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>类比英语：</strong>英语中没有名词性别，但乌克兰语、俄语、德语等语言都有。你可以把\"辅音结尾→阳性\"当作默认规则来记忆——遇到辅音结尾的词，先假设它是阳性，大概率是对的！" },
+
+        { "type": "h3", "text": "规则二：-а/-я 结尾 → 阴性" },
+        { "type": "p", "html": "大多数以 <strong>-а</strong> 或 <strong>-я</strong> 结尾的名词是阴性。" },
+        {
+          "type": "table",
+          "headers": ["例词", "词尾", "中文", "性别"],
+          "firstColWord": true,
+          "rows": [
+            ["книга", "-а", "书", "阴性"],
+            ["вода", "-а", "水", "阴性"],
+            ["країна", "-а", "国家", "阴性"],
+            ["земля", "-я", "土地", "阴性"],
+            ["сім'я", "-я", "家庭", "阴性"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆口诀：</strong>词尾带\"а\"或\"я\"，性别就是\"她\"（<span class=\"uk-word\">вона</span>）！" },
+
+        { "type": "h3", "text": "规则三：-о/-е 结尾 → 中性" },
+        { "type": "p", "html": "大多数以 <strong>-о</strong> 或 <strong>-е</strong> 结尾的名词是中性。" },
+        {
+          "type": "table",
+          "headers": ["例词", "词尾", "中文", "性别"],
+          "firstColWord": true,
+          "rows": [
+            ["молоко", "-о", "牛奶", "中性"],
+            ["місто", "-о", "城市", "中性"],
+            ["яблуко", "-о", "苹果", "中性"],
+            ["море", "-е", "海", "中性"],
+            ["серце", "-е", "心脏", "中性"]
+          ]
+        },
+
+        { "type": "h3", "text": "三大规则总结" },
+        { "type": "grammar-box", "html": "<p><strong>乌克兰语名词性别判断三大规则：</strong></p><ul><li>辅音结尾 → <strong>阳性</strong>（对应代词 <span class=\"uk-word\">він</span> — 他）</li><li>-а / -я 结尾 → <strong>阴性</strong>（对应代词 <span class=\"uk-word\">вона</span> — 她）</li><li>-о / -е 结尾 → <strong>中性</strong>（对应代词 <span class=\"uk-word\">воно</span> — 它）</li></ul>" },
+        { "type": "tip", "html": "<strong>代词小技巧：</strong>你可以把阳性名词想象成\"他\"（<span class=\"uk-word\">він</span>），阴性想象成\"她\"（<span class=\"uk-word\">вона</span>），中性想象成\"它\"（<span class=\"uk-word\">воно</span>）。在乌克兰语中确实用这些代词来指代对应性别的名词！" },
+
+        { "type": "h3", "text": "关于例外的预告" },
+        { "type": "p", "text": "这三条规则覆盖了绝大多数情况，但也有少数例外：" },
+        {
+          "type": "ul",
+          "items": [
+            "有些以 -я 结尾的名词是中性（如 <span class=\"uk-word\">завдання</span> 作业、<span class=\"uk-word\">питання</span> 问题）——第4天会学",
+            "有些以 -а/-о 结尾的名词是阳性（如 <span class=\"uk-word\">тато</span> 爸爸、<span class=\"uk-word\">батько</span> 父亲）——第6天会学",
+            "有些以软音符号 -ь 结尾的名词——第5天会学"
+          ]
+        },
+        { "type": "p", "text": "今天先把三大基本规则记牢，后面几天再逐步学习例外情况。" },
+        { "type": "error-warn", "html": "<strong>中文母语者常犯的错误：</strong><ol><li><strong>不要根据\"含义\"判断性别！</strong>比如 <span class=\"uk-word\">стіл</span>（桌子）是阳性，不是因为桌子有什么\"男性特征\"，而纯粹因为它以辅音结尾。<span class=\"uk-word\">вода</span>（水）是阴性，也跟水本身无关，只因为它以 -а 结尾。</li><li><strong>性别是语法概念，不是生物性别。</strong>中文没有语法性别，所以这个概念一开始可能不习惯。记住：看词尾，不看含义！</li></ol>" }
+      ]
+    },
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "intro": "用最简单的句式来熟悉这些新词汇。<strong>点击单个单词听发音，点击整句播放按钮听整句。</strong>",
+      "groups": [
+        {
+          "heading": "阳性名词例句",
+          "items": [
+            { "text": "Це стіл.", "translation": "这是桌子。" },
+            { "text": "Стілець тут.", "translation": "椅子在这里。" },
+            { "text": "Це телефон.", "translation": "这是电话。" },
+            { "text": "Комп'ютер там.", "translation": "电脑在那里。" },
+            { "text": "Автобус тут.", "translation": "公交车在这里。" },
+            { "text": "Це потяг.", "translation": "这是火车。" },
+            { "text": "Магазин там.", "translation": "商店在那里。" }
+          ]
+        },
+        {
+          "heading": "阴性名词例句",
+          "items": [
+            { "text": "Це школа.", "translation": "这是学校。" },
+            { "text": "Робота тут.", "translation": "工作在这里。" },
+            { "text": "Це кухня.", "translation": "这是厨房。" },
+            { "text": "Машина там.", "translation": "汽车在那里。" },
+            { "text": "Це газета.", "translation": "这是报纸。" },
+            { "text": "Квартира тут.", "translation": "公寓在这里。" }
+          ]
+        },
+        {
+          "heading": "中性名词例句",
+          "items": [
+            { "text": "Це вікно.", "translation": "这是窗户。" },
+            { "text": "Це слово.", "translation": "这是一个单词。" },
+            { "text": "Озеро там.", "translation": "湖在那里。" },
+            { "text": "Небо тут.", "translation": "天空在这里。" },
+            { "text": "Це село.", "translation": "这是村庄。" },
+            { "text": "Море там.", "translation": "海在那里。" },
+            { "text": "Поле тут.", "translation": "田野在这里。" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：判断名词性别（10题）",
+          "instruction": "请判断以下名词的性别：",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\">парк</span>", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "парк 以辅音 -к 结尾 → 阳性" },
+            { "prompt": "<span class=\"uk-word\">школа</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "школа 以 -а 结尾 → 阴性" },
+            { "prompt": "<span class=\"uk-word\">молоко</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "молоко 以 -о 结尾 → 中性" },
+            { "prompt": "<span class=\"uk-word\">хліб</span>", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "хліб 以辅音 -б 结尾 → 阳性" },
+            { "prompt": "<span class=\"uk-word\">книга</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "книга 以 -а 结尾 → 阴性" },
+            { "prompt": "<span class=\"uk-word\">вікно</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "вікно 以 -о 结尾 → 中性" },
+            { "prompt": "<span class=\"uk-word\">кіт</span>", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "кіт 以辅音 -т 结尾 → 阳性" },
+            { "prompt": "<span class=\"uk-word\">вода</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "вода 以 -а 结尾 → 阴性" },
+            { "prompt": "<span class=\"uk-word\">місто</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "місто 以 -о 结尾 → 中性" },
+            { "prompt": "<span class=\"uk-word\">газета</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "газета 以 -а 结尾 → 阴性" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：更多性别判断（10题）",
+          "instruction": "继续判断以下名词的性别：",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\">магазин</span>", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "магазин 以辅音 -н 结尾 → 阳性" },
+            { "prompt": "<span class=\"uk-word\">мова</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "мова 以 -а 结尾 → 阴性" },
+            { "prompt": "<span class=\"uk-word\">озеро</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "озеро 以 -о 结尾 → 中性" },
+            { "prompt": "<span class=\"uk-word\">автобус</span>", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "автобус 以辅音 -с 结尾 → 阳性" },
+            { "prompt": "<span class=\"uk-word\">кухня</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "кухня 以 -я 结尾 → 阴性" },
+            { "prompt": "<span class=\"uk-word\">небо</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "небо 以 -о 结尾 → 中性" },
+            { "prompt": "<span class=\"uk-word\">ресторан</span>", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "ресторан 以辅音 -н 结尾 → 阳性" },
+            { "prompt": "<span class=\"uk-word\">вулиця</span>", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "вулиця 以 -я 结尾 → 阴性" },
+            { "prompt": "<span class=\"uk-word\">село</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "село 以 -о 结尾 → 中性" },
+            { "prompt": "<span class=\"uk-word\">море</span>", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "море 以 -е 结尾 → 中性" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：选择正确的代词（5题）",
+          "instruction": "根据名词的性别，选择对应的代词：<span class=\"uk-word\">він</span>（他/阳性）、<span class=\"uk-word\">вона</span>（她/阴性）、<span class=\"uk-word\">воно</span>（它/中性）",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\">стіл</span> — це _____.", "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"], "answer": "він", "explanation": "стіл 以辅音结尾 → 阳性 → він" },
+            { "prompt": "<span class=\"uk-word\">книга</span> — це _____.", "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"], "answer": "вона", "explanation": "книга 以 -а 结尾 → 阴性 → вона" },
+            { "prompt": "<span class=\"uk-word\">молоко</span> — це _____.", "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"], "answer": "воно", "explanation": "молоко 以 -о 结尾 → 中性 → воно" },
+            { "prompt": "<span class=\"uk-word\">школа</span> — це _____.", "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"], "answer": "вона", "explanation": "школа 以 -а 结尾 → 阴性 → вона" },
+            { "prompt": "<span class=\"uk-word\">поле</span> — це _____.", "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"], "answer": "воно", "explanation": "поле 以 -е 结尾 → 中性 → воно" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：选出不同类的词（5题）",
+          "instruction": "每组有一个词的性别与其他三个不同，请找出来：",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\">стіл</span>, <span class=\"uk-word\">книга</span>, <span class=\"uk-word\">парк</span>, <span class=\"uk-word\">магазин</span>", "options": ["<span class=\"uk-word\">стіл</span>", "<span class=\"uk-word\">книга</span>", "<span class=\"uk-word\">парк</span>", "<span class=\"uk-word\">магазин</span>"], "answer": "книга", "explanation": "книга 是阴性（-а 结尾），其余三个都是阳性（辅音结尾）" },
+            { "prompt": "<span class=\"uk-word\">школа</span>, <span class=\"uk-word\">робота</span>, <span class=\"uk-word\">слово</span>, <span class=\"uk-word\">газета</span>", "options": ["<span class=\"uk-word\">школа</span>", "<span class=\"uk-word\">робота</span>", "<span class=\"uk-word\">слово</span>", "<span class=\"uk-word\">газета</span>"], "answer": "слово", "explanation": "слово 是中性（-о 结尾），其余三个都是阴性（-а 结尾）" },
+            { "prompt": "<span class=\"uk-word\">молоко</span>, <span class=\"uk-word\">місто</span>, <span class=\"uk-word\">кухня</span>, <span class=\"uk-word\">яблуко</span>", "options": ["<span class=\"uk-word\">молоко</span>", "<span class=\"uk-word\">місто</span>", "<span class=\"uk-word\">кухня</span>", "<span class=\"uk-word\">яблуко</span>"], "answer": "кухня", "explanation": "кухня 是阴性（-я 结尾），其余三个都是中性（-о 结尾）" },
+            { "prompt": "<span class=\"uk-word\">потяг</span>, <span class=\"uk-word\">вулиця</span>, <span class=\"uk-word\">автобус</span>, <span class=\"uk-word\">урок</span>", "options": ["<span class=\"uk-word\">потяг</span>", "<span class=\"uk-word\">вулиця</span>", "<span class=\"uk-word\">автобус</span>", "<span class=\"uk-word\">урок</span>"], "answer": "вулиця", "explanation": "вулиця 是阴性（-я 结尾），其余三个都是阳性（辅音结尾）" },
+            { "prompt": "<span class=\"uk-word\">вікно</span>, <span class=\"uk-word\">море</span>, <span class=\"uk-word\">озеро</span>, <span class=\"uk-word\">мова</span>", "options": ["<span class=\"uk-word\">вікно</span>", "<span class=\"uk-word\">море</span>", "<span class=\"uk-word\">озеро</span>", "<span class=\"uk-word\">мова</span>"], "answer": "мова", "explanation": "мова 是阴性（-а 结尾），其余三个都是中性（-о/-е 结尾）" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：词尾判断规则（5题）",
+          "instruction": "根据词尾规则，判断以下词尾对应的性别：",
+          "questions": [
+            { "prompt": "一个名词以 -а 结尾，它最可能是什么性别？", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "-а 结尾 → 阴性" },
+            { "prompt": "一个名词以 -о 结尾，它最可能是什么性别？", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "-о 结尾 → 中性" },
+            { "prompt": "一个名词以 -к 结尾，它最可能是什么性别？", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "辅音 -к 结尾 → 阳性" },
+            { "prompt": "一个名词以 -е 结尾，它最可能是什么性别？", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "-е 结尾 → 中性" },
+            { "prompt": "一个名词以 -я 结尾，它最可能是什么性别？", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "-я 结尾的名词大多是阴性（少数如 -ння/-ття 结尾的是中性，后面会学）" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天学习了乌克兰语名词性别的三大基本规则：</strong></p><ol><li><strong>辅音结尾 → 阳性</strong>（<span class=\"uk-word\">він</span>）：如 <span class=\"uk-word\">стіл</span>（桌子）、<span class=\"uk-word\">парк</span>（公园）、<span class=\"uk-word\">телефон</span>（电话）</li><li><strong>-а/-я 结尾 → 阴性</strong>（<span class=\"uk-word\">вона</span>）：如 <span class=\"uk-word\">школа</span>（学校）、<span class=\"uk-word\">кухня</span>（厨房）、<span class=\"uk-word\">машина</span>（汽车）</li><li><strong>-о/-е 结尾 → 中性</strong>（<span class=\"uk-word\">воно</span>）：如 <span class=\"uk-word\">вікно</span>（窗户）、<span class=\"uk-word\">море</span>（海）、<span class=\"uk-word\">небо</span>（天空）</li></ol><p><strong>核心要点：</strong>看词尾判性别，不要看含义！性别是语法概念，不是生物概念。</p><p><strong>下节预告：</strong>明天将深入学习阴性名词的 -а/-я 结尾特征，并做更多阳性与阴性的对比练习。</p>"
+    }
+  ]
+}

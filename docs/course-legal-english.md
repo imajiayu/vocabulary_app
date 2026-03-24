@@ -34,11 +34,128 @@
 
 `courses/legal-english/progress.md` 仍然用于记录当前周次/天数、薄弱点、待复习内容，供 Claude 生成课程时参考。
 
-## 课程格式模板（HTML）
+## 课程格式
 
-每节课使用 HTML 格式，引用共享样式和脚本。
+课程支持两种格式：**JSON 数据驱动**（推荐）和传统 HTML。新课程一律使用 JSON 格式。
 
-### HTML 结构骨架
+### JSON 格式（推荐）
+
+每个课时由两个文件组成：
+
+1. **`wXdY.json`** — 纯内容数据（Claude 生成此文件）
+2. **`wXdY.html`** — 薄壳 HTML（复制模板，改文件名即可）
+
+**薄壳 HTML 模板**：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="templates/lesson.css">
+</head>
+<body>
+<script src="templates/auth.js"></script>
+<script src="templates/renderer.js"></script>
+<script>CourseRenderer.load('wXdY.json')</script>
+</body>
+</html>
+```
+
+**JSON 结构**（以法律英语课时为例）：
+
+```json
+{
+  "title": "第X周 第Y天 — 课程标题（English Title）",
+  "objective": "本课学习目标",
+  "sections": [
+    {
+      "type": "vocab-table",
+      "heading": "1. 核心词汇",
+      "intro": "说明文字",
+      "columns": ["英文", "音标", "中文", "常见搭配"],
+      "rows": [
+        ["subject matter", "/ˈsʌbdʒekt ˈmætər/", "标的；标的物", "the subject matter of this Agreement"]
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        { "type": "p", "html": "段落，可含 <span class=\"term\">术语</span>" },
+        { "type": "table", "headers": [...], "rows": [...] },
+        { "type": "tip", "html": "..." }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "4. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1",
+          "sentence": "Subject to the terms hereof, Provider shall deliver the Goods.",
+          "structure": ["<em>Subject to...</em> — 介词短语作状语", "..."],
+          "translation": "根据本协议条款，提供方应交付货物。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "6. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语选择",
+          "questions": [
+            {
+              "prompt": "The Provider shall ____ the Services.",
+              "options": ["perform", "performing", "performed"],
+              "answer": "perform",
+              "explanation": "perform obligations = 履行义务"
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习：英译中",
+          "questions": [
+            {
+              "source": "Subject to the terms and conditions hereof, Provider shall provide the Services.",
+              "reference": "根据本协议的条款和条件，提供方应提供服务。",
+              "rubric": [
+                {"en": "Subject to", "ideal": "根据/依据", "accept": ["按照"], "wrong": ["受制于"], "note": "..."}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "7. 今日小结",
+      "html": "<p>要点总结...</p><p><strong>下节预告：</strong>...</p>"
+    }
+  ]
+}
+```
+
+**JSON section types**：
+- `vocab-preload` — 词汇预载（d1 页面），含 `groups[].words[]`
+- `vocab-table` — 词汇表格（自定义列），含 `columns` + `rows`（第一列自动加 `.term` 可点击）
+- `grammar` — 语法/讲解，含 `blocks[]`（支持 p, h3, h4, table, ul, ol, tip, note, error-warn, grammar-box, details）
+- `examples` — 例句，含 `groups[].items[]`（text + translation）
+- `exercises` — 练习题，含 `groups[]`（style: quiz / translation），翻译题支持 rubric
+- `summary` — 小结
+- `sentence-analysis` — 长难句拆解，含 `items[]`（sentence, structure, translation）
+
+**blocks 中的 html 字段**支持内联标签：`<span class="term">`, `<strong>`, `<em>`, `<code>`。
+
+**生成新课时后**，如果包含新词汇，需更新 `courses/legal-english/lessons/vocab-index.json`（单词→释义映射，供单词交互气泡使用）。
+
+### 传统 HTML 格式（已有课程）
+
+已有课程仍为完整 HTML。结构骨架：
 
 ```html
 <!DOCTYPE html>
@@ -50,37 +167,10 @@
   <link rel="stylesheet" href="templates/lesson.css">
 </head>
 <body>
-
-<h1>第X周 第Y天 — 课程标题（English Title）</h1>
-
-<div class="objective">
-  <strong>学习目标：</strong>（1-2句话描述本课目标）
-</div>
-
-<p>上节回顾：（简要回顾上节课重点，2-3句话）</p>
-
-<h2>1. 核心词汇</h2>
-<!-- 词汇表格，英文术语用 class="term" 可点击发音 -->
-
-<h2>2. 固定搭配</h2>
-<!-- 法律固定搭配表格，含例句 -->
-
-<h2>3. 词汇辨析</h2>
-<!-- 易混淆词组的对比分析 -->
-
-<h2>4. 长难句解析</h2>
-<!-- 2-3 个真实合同长难句拆解，class="sentence-analysis" -->
-
-<h2>5. 单词记忆</h2>
-<!-- 5a. 闪卡自测 + 5b. 配对选择题 -->
-
-<h2>6. 练习题</h2>
-<!-- 选择题 + 翻译题，所有答案预先生成 -->
-
-<h2>7. 今日小结</h2>
-<!-- 用 class="summary-box" 包裹 -->
-
+<!-- 课程内容 -->
+<script src="templates/auth.js"></script>
 <script src="templates/tts.js"></script>
+<script src="templates/wordInteraction.js"></script>
 <script src="templates/exercise.js"></script>
 <script src="templates/nav.js"></script>
 </body>

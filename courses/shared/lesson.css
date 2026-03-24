@@ -926,3 +926,99 @@ code {
 
   .quiz-options { flex-direction: column; }
 }
+
+/* --- 单词交互气泡 --- */
+.word-popover {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  padding: 12px 16px;
+  min-width: 160px;
+  max-width: 280px;
+  transition: opacity 0.15s ease;
+}
+
+.word-popover-word {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.word-popover-def {
+  font-size: 0.93em;
+  color: var(--text-light);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.word-popover-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 0.88em;
+  color: var(--text-light);
+}
+
+.word-popover-source-select {
+  flex: 1;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.95em;
+  font-family: inherit;
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+.word-popover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.word-popover-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card-bg);
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.15s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.word-popover-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: scale(1.1);
+}
+
+.word-popover-btn:active { transform: scale(0.95); }
+.word-popover-btn:disabled { opacity: 0.5; cursor: wait; }
+
+.word-popover-added {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+  color: #fff !important;
+  cursor: default;
+}
+
+.word-popover-no-auth {
+  width: auto;
+  border-radius: 18px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: var(--text-light);
+  border-color: var(--warning);
+}

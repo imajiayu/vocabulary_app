@@ -76,11 +76,111 @@
 
 `courses/ukrainian/progress.md` 仍然用于记录当前周次/天数、薄弱点、待复习内容，供 Claude 生成课程时参考。
 
-## 课程格式模板（HTML）
+## 课程格式
 
-每节课使用 HTML 格式，引用共享样式和脚本。
+课程支持两种格式：**JSON 数据驱动**（推荐）和传统 HTML。新课程一律使用 JSON 格式。
 
-### HTML 结构骨架
+### JSON 格式（推荐）
+
+每个课时由两个文件组成：
+
+1. **`wXdY.json`** — 纯内容数据（Claude 生成此文件）
+2. **`wXdY.html`** — 薄壳 HTML（复制模板，改文件名即可）
+
+**薄壳 HTML 模板**（13 行，写一次永不变）：
+
+```html
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="templates/lesson.css">
+</head>
+<body>
+<script src="templates/auth.js"></script>
+<script src="templates/renderer.js"></script>
+<script>CourseRenderer.load('wXdY.json')</script>
+</body>
+</html>
+```
+
+**JSON 结构**（以语法课为例）：
+
+```json
+{
+  "title": "第X周 第Y天 — 课程标题",
+  "objective": "本课学习目标描述",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "小标题" },
+        { "type": "p", "html": "段落，可含 <span class=\"uk-word\">乌克兰语</span>" },
+        { "type": "table", "headers": ["例词", "词尾", "性别"], "firstColWord": true, "rows": [...] },
+        { "type": "tip", "html": "<strong>记忆技巧：</strong>..." },
+        { "type": "note", "html": "注意事项..." },
+        { "type": "error-warn", "html": "<strong>常见错误：</strong>..." },
+        { "type": "grammar-box", "html": "规则总结..." },
+        { "type": "ul", "items": ["要点1", "要点2"] }
+      ]
+    },
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "阳性名词例句",
+          "items": [
+            { "text": "Це стіл.", "translation": "这是桌子。" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：判断名词性别（10题）",
+          "instruction": "说明文字",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\">парк</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "парк 以辅音 -к 结尾 → 阳性"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>要点</strong></p><ol><li>...</li></ol><p><strong>下节预告：</strong>...</p>"
+    }
+  ]
+}
+```
+
+**JSON section types**：
+- `vocab-preload` — 词汇预载（d1 页面），含 `groups[].words[]`
+- `vocab-table` — 词汇表格（自定义列），含 `columns` + `rows`
+- `grammar` — 语法讲解，含 `blocks[]`（支持 p, h3, h4, table, ul, ol, tip, note, error-warn, grammar-box, details）
+- `examples` — 例句，含 `groups[].items[]`（text + translation）
+- `exercises` — 练习题，含 `groups[]`（style: quiz / translation）
+- `summary` — 小结
+
+**blocks 中的 html 字段**支持内联标签：`<span class="uk-word">`, `<strong>`, `<em>`, `<code>`。
+
+**生成新课时后**，如果包含新词汇，需更新 `courses/ukrainian/lessons/vocab-index.json`（单词→释义映射，供单词交互气泡使用）。
+
+### 传统 HTML 格式（已有课程）
+
+已有课程仍为完整 HTML。结构骨架：
 
 ```html
 <!DOCTYPE html>
@@ -92,30 +192,10 @@
   <link rel="stylesheet" href="templates/lesson.css">
 </head>
 <body>
-
-<h1>第X周 第Y天 — 课程标题</h1>
-
-<div class="objective">
-  <strong>学习目标：</strong>（1-2句话描述本课目标）
-</div>
-
-<!-- 如有前置词汇需求，在此插入 <div class="note"> -->
-
-<h2>1. 语法讲解</h2>
-<!-- 用中文清晰讲解语法规则，配合乌克兰语示例 -->
-<!-- 使用 class="grammar-box" 包裹规则总结 -->
-<!-- 使用 class="tip" / class="note" / class="error-warn" 包裹提示 -->
-
-<h2>2. 例句</h2>
-<!-- 乌克兰语部分用 <span class="uk-text">，JS 自动拆词并插入播放按钮 -->
-
-<h2>3. 练习题</h2>
-<!-- 用 class="exercise" 包裹每组练习，交互式 radio 判题 -->
-
-<h2>4. 今日小结</h2>
-<!-- 用 class="summary-box" 包裹 -->
-
+<!-- 课程内容 -->
+<script src="templates/auth.js"></script>
 <script src="templates/tts.js"></script>
+<script src="templates/wordInteraction.js"></script>
 <script src="templates/exercise.js"></script>
 <script src="templates/nav.js"></script>
 </body>
