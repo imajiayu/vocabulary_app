@@ -263,7 +263,7 @@
   function showPopover(wordEl) {
     var pop = createPopover();
     var word = wordEl.textContent.trim()
-      .replace(/[.,!?;:…—–\-"'«»()"'。，！？：；]/g, '').trim();
+      .replace(/[.,!?;:…—–\-"«»()"。，！？：；]/g, '').trim();
     if (!word) return;
 
     activeWordEl = wordEl;
