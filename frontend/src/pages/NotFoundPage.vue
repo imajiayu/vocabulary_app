@@ -36,15 +36,11 @@
         </div>
 
         <!-- 主标题 -->
-        <h1 class="main-title">此页已佚</h1>
-
-        <!-- 拉丁文装饰引用 -->
-        <p class="latin-quote">Pagina non inventa</p>
+        <h1 class="main-title">页面不存在</h1>
 
         <!-- 说明文字 -->
         <div class="description">
-          <p class="desc-line">您翻阅的这一页似乎已从书卷中遗失</p>
-          <p class="desc-line desc-line--sub">或许是被时光磨蚀，或许从未被写下</p>
+          <p class="desc-line">请检查地址是否正确</p>
         </div>
 
         <!-- 墨水渍装饰 -->
@@ -355,17 +351,6 @@ function goHome() {
   animation: fade-in-up 0.6s ease 0.35s both;
 }
 
-/* ── 拉丁文引用 ── */
-.latin-quote {
-  font-family: var(--font-serif);
-  font-size: 13px;
-  font-style: italic;
-  color: var(--primitive-ink-300);
-  letter-spacing: 0.08em;
-  margin: 0 0 28px;
-  animation: fade-in-up 0.6s ease 0.4s both;
-}
-
 /* ── 说明文字 ── */
 .description {
   margin-bottom: 32px;
@@ -574,7 +559,6 @@ function goHome() {
   .page-number-area,
   .ornamental-rule,
   .main-title,
-  .latin-quote,
   .description,
   .ink-blot,
   .return-btn,
