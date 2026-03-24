@@ -143,11 +143,7 @@
     var span = document.createElement('span');
     span.className = 'tts-word';
     span.textContent = word;
-    span.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var clean = stripPunct(this.textContent);
-      if (clean) speak(clean, this);
-    });
+    // 点击交互由 wordInteraction.js 统一处理（弹出气泡）
     return span;
   }
 

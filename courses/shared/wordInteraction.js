@@ -311,7 +311,8 @@
 
   // --- 绑定事件 ---
   function bindWords() {
-    document.querySelectorAll(wordSelector).forEach(function (el) {
+    // .uk-word / .term + .tts-word（句子中拆出的单词）
+    document.querySelectorAll(wordSelector + ', .tts-word').forEach(function (el) {
       if (el.dataset.wordBound) return;
       if (el.closest('.quiz-options')) return;
       el.dataset.wordBound = '1';
