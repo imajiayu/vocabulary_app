@@ -75,8 +75,10 @@
       (group.words || []).forEach(function (w) {
         var row = el('div', 'vocab-row');
         row.dataset.word = w.word;
+        var wordSpan = el('span', wordClass, w.word);
+        if (w.def) wordSpan.setAttribute('data-def', w.def);
         append(row,
-          el('span', wordClass, w.word),
+          wordSpan,
           el('span', 'vocab-def', w.def),
           el('span', 'vocab-status')
         );
@@ -380,6 +382,7 @@
       if (hasExercise) scripts.push('templates/exercise.js');
       if (hasVocab) scripts.push('templates/vocab.js');
       scripts.push('templates/nav.js');
+      scripts.push('templates/chat.js');
 
       // 顺序加载（确保依赖关系）
       return scripts.reduce(function (chain, src) {

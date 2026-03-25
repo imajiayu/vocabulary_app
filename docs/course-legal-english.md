@@ -151,7 +151,15 @@
 
 **blocks 中的 html 字段**支持内联标签：`<span class="term">`, `<strong>`, `<em>`, `<code>`。
 
-**生成新课时后**，如果包含新词汇，需更新 `courses/legal-english/lessons/vocab-index.json`（单词→释义映射，供单词交互气泡使用）。
+**所有 `.term` 元素必须带 `data-def` 属性**，包含该术语的中文释义。这是单词点击气泡显示释义的唯一来源。示例：
+```html
+<span class="term" data-def="对价；约因">consideration</span>
+```
+JSON 中的 html 字段同理：
+```json
+{ "type": "p", "html": "<span class=\"term\" data-def=\"对价；约因\">consideration</span> 是合同成立的要素" }
+```
+vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动输出为 `data-def`，无需在 html 中重复标注。
 
 ### 传统 HTML 格式（已有课程）
 
@@ -179,7 +187,7 @@
 
 ### 英文术语可点击标记规范
 
-**课程中出现的所有英文法律术语**都必须用 `<span class="term">` 包裹，使其可点击（弹出气泡：释义 + 发音 + 添加到单词库）。包括但不限于：
+**课程中出现的所有英文法律术语**都必须用 `<span class="term" data-def="释义">` 包裹，使其可点击（弹出气泡：释义 + 发音 + 添加到单词库）。`data-def` 是释义的唯一来源，必须填写。包括但不限于：
 - 词汇表格中的英文术语单元格（用 `class="term"` 而非 td class）
 - 语法/规则讲解中的英文术语
 - 练习题 `.quiz-prompt` 中的英文术语

@@ -188,14 +188,14 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 
 ```
 courses/
-  shared/               # 统一 templates（9 个文件）
+  shared/               # 统一 templates（10 个文件）
   ukrainian/            # 乌克兰语语法课程
-    lessons/            # 课程文件（.json + .html）+ templates 符号链接 + vocab-index.json
+    lessons/            # 课程文件（.json + .html）+ templates 符号链接
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
     vocabulary/         # 推荐词汇表
   legal-english/        # 法律英语词汇课程
-    lessons/            # 课程文件（.json + .html）+ templates 符号链接 + vocab-index.json
+    lessons/            # 课程文件（.json + .html）+ templates 符号链接
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
     mistakes.md         # 错题库
@@ -210,7 +210,7 @@ courses/
 
 ### 共享 Templates 机制
 
-`courses/shared/` 下的 9 个文件被两套课程共用：
+`courses/shared/` 下的 10 个文件被两套课程共用：
 - **auth.js** — 从 localStorage 读取主站 Supabase 登录会话，提供 `CourseAuth.getAuth()` 和 `CourseAuth.supabaseFetch()` 封装
 - **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色），含单词交互气泡样式
 - **nav.js** — 自动注入顶部导航栏（课程首页显示"← IELTS Study 主页"，课时页显示"← 课程名"+ 主页链接）
@@ -218,8 +218,9 @@ courses/
 - **tts.js** — 双语音频源：英语走有道词典 API（免费），乌克兰语走服务器缓存（`/tts-cache/`）+ Google Cloud TTS + 自动上传缓存
 - **exercise.js** — 选择题 + 翻译题 + AI 批改 + localStorage 持久化（翻译功能仅在有 `.translation-exercise` 元素时激活）
 - **vocab.js** — 从 Supabase 认证会话获取 user_id，用户可通过下拉框选择 source，直接调 Supabase REST API 添加词汇
-- **renderer.js** — JSON 数据驱动渲染器，读取 `.json` 课时数据构建完整 DOM，自动加载所需脚本（tts/exercise/vocab/nav）
-- **wordInteraction.js** — 单词点击浮动气泡（释义查找、发音、source 选择、添加到单词库），释义从 `vocab-index.json` 或 Supabase 获取
+- **renderer.js** — JSON 数据驱动渲染器，读取 `.json` 课时数据构建完整 DOM，自动加载所需脚本（tts/exercise/vocab/nav/chat）
+- **wordInteraction.js** — 单词点击浮动气泡（释义、发音、source 选择、添加到单词库），释义从元素 `data-def` 属性读取（同步，零延迟）
+- **chat.js** — AI 实时答疑浮动聊天窗口（DeepSeek 流式调用），两套课程使用不同 base prompt，支持选中页面文字作为上下文提问
 
 每个课程的 `lessons/templates` 是指向 `../../shared` 的符号链接，确保本地预览和服务器部署路径一致。
 
@@ -239,7 +240,7 @@ courses/
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v1.6.3`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v1.7.2`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 修改 `courses/shared/` 中的 templates 会同时影响两套课程
 - 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录
-- 新课时使用 JSON 数据驱动架构（详见各课程生成指令文档），生成新词汇后需更新对应课程的 `vocab-index.json`
+- 新课时使用 JSON 数据驱动架构（详见各课程生成指令文档），所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义

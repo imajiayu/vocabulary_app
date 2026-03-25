@@ -177,7 +177,16 @@
 
 **blocks 中的 html 字段**支持内联标签：`<span class="uk-word">`, `<strong>`, `<em>`, `<code>`。
 
-**生成新课时后**，如果包含新词汇，需更新 `courses/ukrainian/lessons/vocab-index.json`（单词→释义映射，供单词交互气泡使用）。
+**所有 `.uk-word` 元素必须带 `data-def` 属性**，包含该词在当前语境下的中文释义。这是单词点击气泡显示释义的唯一来源。词形变化的释义应标注语法信息（如"桌子（与格）"）。示例：
+```html
+<span class="uk-word" data-def="桌子">стіл</span>
+<span class="uk-word" data-def="桌子（与格）">столу</span>
+```
+JSON 中的 html 字段同理：
+```json
+{ "type": "p", "html": "Це <span class=\"uk-word\" data-def=\"桌子\">стіл</span>" }
+```
+vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动输出为 `data-def`，无需在 html 中重复标注。
 
 ### 传统 HTML 格式（已有课程）
 
@@ -214,8 +223,8 @@
 
 ### 乌克兰语可点击标记规范
 
-**课程中出现的所有乌克兰语单词**都必须用 `<span class="uk-word">` 包裹，使其可点击（弹出气泡：释义 + 发音 + 添加到单词库）。包括但不限于：
-- 语法讲解正文中的例词（如"以辅音结尾的名词是阳性，如 `<span class="uk-word">стіл</span>`"）
+**课程中出现的所有乌克兰语单词**都必须用 `<span class="uk-word" data-def="释义">` 包裹，使其可点击（弹出气泡：释义 + 发音 + 添加到单词库）。`data-def` 是释义的唯一来源，必须填写。包括但不限于：
+- 语法讲解正文中的例词（如"以辅音结尾的名词是阳性，如 `<span class="uk-word" data-def="桌子">стіл</span>`"）
 - 语法表格中的乌克兰语单元格
 - 练习题 `.quiz-prompt` 中的乌克兰语单词
 - 练习选项 `<label>` 中的乌克兰语单词

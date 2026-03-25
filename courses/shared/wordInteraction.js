@@ -3,7 +3,7 @@
  *
  * 功能：显示释义、发音、选择 source、添加到单词库
  * 依赖：auth.js（可选）、tts.js（CourseTTS.speak）
- * 释义来源：vocab-index.json → Supabase words 表（无第三来源）
+ * 释义来源：元素 data-def 属性 → Supabase words 表
  * source 选择与 vocab.js 共享 localStorage key（vocab_selected_source）
  */
 (function () {
@@ -55,61 +55,6 @@
       });
   }
 
-  // --- 词汇索引（从 vocab-index.json 加载）---
-  var vocabIndex = null;
-  var vocabIndexLoading = null;
-
-  function loadVocabIndex() {
-    if (vocabIndex) return Promise.resolve(vocabIndex);
-    if (vocabIndexLoading) return vocabIndexLoading;
-    vocabIndexLoading = fetch('vocab-index.json').then(function (r) {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    }).then(function (data) {
-      vocabIndex = data;
-      return data;
-    }).catch(function () {
-      vocabIndex = {};
-      return vocabIndex;
-    });
-    return vocabIndexLoading;
-  }
-
-  // --- Supabase 释义查找（fallback）---
-  var supabaseDefCache = {};
-
-  function fetchSupabaseDef(word) {
-    var key = word.toLowerCase();
-    if (key in supabaseDefCache) return Promise.resolve(supabaseDefCache[key]);
-    var auth = window.CourseAuth && window.CourseAuth.getAuth();
-    if (!auth) return Promise.resolve(null);
-    return window.CourseAuth.supabaseFetch(
-      '/rest/v1/words?select=definition&word=eq.' +
-      encodeURIComponent(key) + '&user_id=eq.' + auth.userId + '&limit=1'
-    ).then(function (r) { return r.json(); })
-      .then(function (rows) {
-        var def = null;
-        if (Array.isArray(rows) && rows.length > 0 && rows[0].definition) {
-          def = rows[0].definition;
-        }
-        supabaseDefCache[key] = def;
-        return def;
-      }).catch(function () { return null; });
-  }
-
-  function lookupDef(word) {
-    return loadVocabIndex().then(function (index) {
-      var key = word.normalize('NFC');
-      if (index[key]) return index[key];
-      var lower = key.toLowerCase();
-      if (index[lower]) return index[lower];
-      for (var k in index) {
-        if (k.toLowerCase() === lower) return index[k];
-      }
-      return fetchSupabaseDef(word);
-    });
-  }
-
   // --- 添加单词到 Supabase ---
   function addWord(word, def) {
     var auth = window.CourseAuth && window.CourseAuth.getAuth();
@@ -156,7 +101,7 @@
     // 释义
     var defDiv = document.createElement('div');
     defDiv.className = 'word-popover-def';
-    defDiv.textContent = '加载中…';
+    defDiv.textContent = '';
     root.appendChild(defDiv);
     popoverRefs.def = defDiv;
 
@@ -227,7 +172,7 @@
       addBtn.textContent = '…';
       var word = popoverRefs.word.textContent;
       var def = popoverRefs.def.textContent;
-      if (def === '加载中…' || def === '无释义') def = '';
+      if (def === '无释义') def = '';
       addWord(word, def).then(function () {
         addBtn.textContent = '✓';
         addBtn.classList.add('word-popover-added');
@@ -268,7 +213,7 @@
 
     activeWordEl = wordEl;
     popoverRefs.word.textContent = word;
-    popoverRefs.def.textContent = '加载中…';
+    popoverRefs.def.textContent = '';
 
     // 重置添加按钮
     popoverRefs.addBtn.disabled = false;
@@ -294,11 +239,8 @@
     pop.style.top = (top + window.scrollY) + 'px';
     pop.style.opacity = '1';
 
-    // 查找释义
-    lookupDef(word).then(function (def) {
-      if (activeWordEl !== wordEl) return;
-      popoverRefs.def.textContent = def || '无释义';
-    });
+    // 释义：直接从 data-def 属性读取
+    popoverRefs.def.textContent = wordEl.getAttribute('data-def') || '无释义';
   }
 
   function hidePopover() {
@@ -338,7 +280,6 @@
 
   // --- 初始化 ---
   function init() {
-    loadVocabIndex();
     loadSourceList();
     bindWords();
   }

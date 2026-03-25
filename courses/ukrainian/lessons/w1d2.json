@@ -251,8 +251,8 @@
         {
           "type": "ul",
           "items": [
-            "有些以 -я 结尾的名词是中性（如 <span class=\"uk-word\">завдання</span> 作业、<span class=\"uk-word\">питання</span> 问题）——第4天会学",
-            "有些以 -а/-о 结尾的名词是阳性（如 <span class=\"uk-word\">тато</span> 爸爸、<span class=\"uk-word\">батько</span> 父亲）——第6天会学",
+            "有些以 -я 结尾的名词是中性（如 <span class=\"uk-word\" data-def=\"作业\">завдання</span> 作业、<span class=\"uk-word\" data-def=\"问题\">питання</span> 问题）——第4天会学",
+            "有些以 -а/-о 结尾的名词是阳性（如 <span class=\"uk-word\" data-def=\"爸爸\">тато</span> 爸爸、<span class=\"uk-word\" data-def=\"父亲\">батько</span> 父亲）——第6天会学",
             "有些以软音符号 -ь 结尾的名词——第5天会学"
           ]
         },
@@ -262,7 +262,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>中文母语者常犯的错误：</strong><ol><li><strong>不要根据\"含义\"判断性别！</strong>比如 <span class=\"uk-word\">стіл</span>（桌子）是阳性，不是因为桌子有什么\"男性特征\"，而纯粹因为它以辅音结尾。<span class=\"uk-word\">вода</span>（水）是阴性，也跟水本身无关，只因为它以 -а 结尾。</li><li><strong>性别是语法概念，不是生物性别。</strong>中文没有语法性别，所以这个概念一开始可能不习惯。记住：看词尾，不看含义！</li></ol>"
+          "html": "<strong>中文母语者常犯的错误：</strong><ol><li><strong>不要根据\"含义\"判断性别！</strong>比如 <span class=\"uk-word\" data-def=\"桌子\">стіл</span>（桌子）是阳性，不是因为桌子有什么\"男性特征\"，而纯粹因为它以辅音结尾。<span class=\"uk-word\" data-def=\"水\">вода</span>（水）是阴性，也跟水本身无关，只因为它以 -а 结尾。</li><li><strong>性别是语法概念，不是生物性别。</strong>中文没有语法性别，所以这个概念一开始可能不习惯。记住：看词尾，不看含义！</li></ol>"
         }
       ]
     },
@@ -276,7 +276,7 @@
           "instruction": "请判断以下名词的性别：",
           "questions": [
             {
-              "prompt": "<span class=\"uk-word\">парк</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"公园\">парк</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -286,7 +286,7 @@
               "explanation": "парк 以辅音 -к 结尾 → 阳性"
             },
             {
-              "prompt": "<span class=\"uk-word\">школа</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"学校\">школа</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -296,7 +296,7 @@
               "explanation": "школа 以 -а 结尾 → 阴性"
             },
             {
-              "prompt": "<span class=\"uk-word\">молоко</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"牛奶\">молоко</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -306,7 +306,7 @@
               "explanation": "молоко 以 -о 结尾 → 中性"
             },
             {
-              "prompt": "<span class=\"uk-word\">хліб</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"面包\">хліб</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -316,7 +316,7 @@
               "explanation": "хліб 以辅音 -б 结尾 → 阳性"
             },
             {
-              "prompt": "<span class=\"uk-word\">книга</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"书\">книга</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -326,7 +326,7 @@
               "explanation": "книга 以 -а 结尾 → 阴性"
             },
             {
-              "prompt": "<span class=\"uk-word\">вікно</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">вікно</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -336,7 +336,7 @@
               "explanation": "вікно 以 -о 结尾 → 中性"
             },
             {
-              "prompt": "<span class=\"uk-word\">кіт</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"猫\">кіт</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -346,7 +346,7 @@
               "explanation": "кіт 以辅音 -т 结尾 → 阳性"
             },
             {
-              "prompt": "<span class=\"uk-word\">вода</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"水\">вода</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -356,7 +356,7 @@
               "explanation": "вода 以 -а 结尾 → 阴性"
             },
             {
-              "prompt": "<span class=\"uk-word\">місто</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"城市\">місто</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -366,7 +366,7 @@
               "explanation": "місто 以 -о 结尾 → 中性"
             },
             {
-              "prompt": "<span class=\"uk-word\">газета</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"报纸\">газета</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -383,7 +383,7 @@
           "instruction": "继续判断以下名词的性别：",
           "questions": [
             {
-              "prompt": "<span class=\"uk-word\">магазин</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"商店\">магазин</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -393,7 +393,7 @@
               "explanation": "магазин 以辅音 -н 结尾 → 阳性"
             },
             {
-              "prompt": "<span class=\"uk-word\">мова</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"语言\">мова</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -403,7 +403,7 @@
               "explanation": "мова 以 -а 结尾 → 阴性"
             },
             {
-              "prompt": "<span class=\"uk-word\">озеро</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"湖\">озеро</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -413,7 +413,7 @@
               "explanation": "озеро 以 -о 结尾 → 中性"
             },
             {
-              "prompt": "<span class=\"uk-word\">автобус</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"公交车\">автобус</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -423,7 +423,7 @@
               "explanation": "автобус 以辅音 -с 结尾 → 阳性"
             },
             {
-              "prompt": "<span class=\"uk-word\">кухня</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"厨房\">кухня</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -433,7 +433,7 @@
               "explanation": "кухня 以 -я 结尾 → 阴性"
             },
             {
-              "prompt": "<span class=\"uk-word\">небо</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"天空\">небо</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -443,7 +443,7 @@
               "explanation": "небо 以 -о 结尾 → 中性"
             },
             {
-              "prompt": "<span class=\"uk-word\">ресторан</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"餐厅\">ресторан</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -453,7 +453,7 @@
               "explanation": "ресторан 以辅音 -н 结尾 → 阳性"
             },
             {
-              "prompt": "<span class=\"uk-word\">вулиця</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"街道\">вулиця</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -463,7 +463,7 @@
               "explanation": "вулиця 以 -я 结尾 → 阴性"
             },
             {
-              "prompt": "<span class=\"uk-word\">село</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"村庄\">село</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -473,7 +473,7 @@
               "explanation": "село 以 -о 结尾 → 中性"
             },
             {
-              "prompt": "<span class=\"uk-word\">море</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"海\">море</span>",
               "options": [
                 "阳性",
                 "阴性",
@@ -490,7 +490,7 @@
           "instruction": "根据名词的性别，选择对应的代词：<span class=\"uk-word\">він</span>（他/阳性）、<span class=\"uk-word\">вона</span>（她/阴性）、<span class=\"uk-word\">воно</span>（它/中性）",
           "questions": [
             {
-              "prompt": "<span class=\"uk-word\">стіл</span> — це _____.",
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span> — це _____.",
               "options": [
                 "<span class=\"uk-word\">він</span>",
                 "<span class=\"uk-word\">вона</span>",
@@ -500,7 +500,7 @@
               "explanation": "стіл 以辅音结尾 → 阳性 → він"
             },
             {
-              "prompt": "<span class=\"uk-word\">книга</span> — це _____.",
+              "prompt": "<span class=\"uk-word\" data-def=\"书\">книга</span> — це _____.",
               "options": [
                 "<span class=\"uk-word\">він</span>",
                 "<span class=\"uk-word\">вона</span>",
@@ -510,7 +510,7 @@
               "explanation": "книга 以 -а 结尾 → 阴性 → вона"
             },
             {
-              "prompt": "<span class=\"uk-word\">молоко</span> — це _____.",
+              "prompt": "<span class=\"uk-word\" data-def=\"牛奶\">молоко</span> — це _____.",
               "options": [
                 "<span class=\"uk-word\">він</span>",
                 "<span class=\"uk-word\">вона</span>",
@@ -520,7 +520,7 @@
               "explanation": "молоко 以 -о 结尾 → 中性 → воно"
             },
             {
-              "prompt": "<span class=\"uk-word\">школа</span> — це _____.",
+              "prompt": "<span class=\"uk-word\" data-def=\"学校\">школа</span> — це _____.",
               "options": [
                 "<span class=\"uk-word\">він</span>",
                 "<span class=\"uk-word\">вона</span>",
@@ -530,7 +530,7 @@
               "explanation": "школа 以 -а 结尾 → 阴性 → вона"
             },
             {
-              "prompt": "<span class=\"uk-word\">поле</span> — це _____.",
+              "prompt": "<span class=\"uk-word\" data-def=\"田野\">поле</span> — це _____.",
               "options": [
                 "<span class=\"uk-word\">він</span>",
                 "<span class=\"uk-word\">вона</span>",
@@ -547,56 +547,56 @@
           "instruction": "每组有一个词的性别与其他三个不同，请找出来：",
           "questions": [
             {
-              "prompt": "<span class=\"uk-word\">стіл</span>, <span class=\"uk-word\">книга</span>, <span class=\"uk-word\">парк</span>, <span class=\"uk-word\">магазин</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"书\">книга</span>, <span class=\"uk-word\" data-def=\"公园\">парк</span>, <span class=\"uk-word\" data-def=\"商店\">магазин</span>",
               "options": [
-                "<span class=\"uk-word\">стіл</span>",
-                "<span class=\"uk-word\">книга</span>",
-                "<span class=\"uk-word\">парк</span>",
-                "<span class=\"uk-word\">магазин</span>"
+                "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>",
+                "<span class=\"uk-word\" data-def=\"书\">книга</span>",
+                "<span class=\"uk-word\" data-def=\"公园\">парк</span>",
+                "<span class=\"uk-word\" data-def=\"商店\">магазин</span>"
               ],
               "answer": "книга",
               "explanation": "книга 是阴性（-а 结尾），其余三个都是阳性（辅音结尾）"
             },
             {
-              "prompt": "<span class=\"uk-word\">школа</span>, <span class=\"uk-word\">робота</span>, <span class=\"uk-word\">слово</span>, <span class=\"uk-word\">газета</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"工作\">робота</span>, <span class=\"uk-word\" data-def=\"单词\">слово</span>, <span class=\"uk-word\" data-def=\"报纸\">газета</span>",
               "options": [
-                "<span class=\"uk-word\">школа</span>",
-                "<span class=\"uk-word\">робота</span>",
-                "<span class=\"uk-word\">слово</span>",
-                "<span class=\"uk-word\">газета</span>"
+                "<span class=\"uk-word\" data-def=\"学校\">школа</span>",
+                "<span class=\"uk-word\" data-def=\"工作\">робота</span>",
+                "<span class=\"uk-word\" data-def=\"单词\">слово</span>",
+                "<span class=\"uk-word\" data-def=\"报纸\">газета</span>"
               ],
               "answer": "слово",
               "explanation": "слово 是中性（-о 结尾），其余三个都是阴性（-а 结尾）"
             },
             {
-              "prompt": "<span class=\"uk-word\">молоко</span>, <span class=\"uk-word\">місто</span>, <span class=\"uk-word\">кухня</span>, <span class=\"uk-word\">яблуко</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"牛奶\">молоко</span>, <span class=\"uk-word\" data-def=\"城市\">місто</span>, <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"苹果\">яблуко</span>",
               "options": [
-                "<span class=\"uk-word\">молоко</span>",
-                "<span class=\"uk-word\">місто</span>",
-                "<span class=\"uk-word\">кухня</span>",
-                "<span class=\"uk-word\">яблуко</span>"
+                "<span class=\"uk-word\" data-def=\"牛奶\">молоко</span>",
+                "<span class=\"uk-word\" data-def=\"城市\">місто</span>",
+                "<span class=\"uk-word\" data-def=\"厨房\">кухня</span>",
+                "<span class=\"uk-word\" data-def=\"苹果\">яблуко</span>"
               ],
               "answer": "кухня",
               "explanation": "кухня 是阴性（-я 结尾），其余三个都是中性（-о 结尾）"
             },
             {
-              "prompt": "<span class=\"uk-word\">потяг</span>, <span class=\"uk-word\">вулиця</span>, <span class=\"uk-word\">автобус</span>, <span class=\"uk-word\">урок</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"火车\">потяг</span>, <span class=\"uk-word\" data-def=\"街道\">вулиця</span>, <span class=\"uk-word\" data-def=\"公交车\">автобус</span>, <span class=\"uk-word\" data-def=\"课\">урок</span>",
               "options": [
-                "<span class=\"uk-word\">потяг</span>",
-                "<span class=\"uk-word\">вулиця</span>",
-                "<span class=\"uk-word\">автобус</span>",
-                "<span class=\"uk-word\">урок</span>"
+                "<span class=\"uk-word\" data-def=\"火车\">потяг</span>",
+                "<span class=\"uk-word\" data-def=\"街道\">вулиця</span>",
+                "<span class=\"uk-word\" data-def=\"公交车\">автобус</span>",
+                "<span class=\"uk-word\" data-def=\"课\">урок</span>"
               ],
               "answer": "вулиця",
               "explanation": "вулиця 是阴性（-я 结尾），其余三个都是阳性（辅音结尾）"
             },
             {
-              "prompt": "<span class=\"uk-word\">вікно</span>, <span class=\"uk-word\">море</span>, <span class=\"uk-word\">озеро</span>, <span class=\"uk-word\">мова</span>",
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\" data-def=\"海\">море</span>, <span class=\"uk-word\" data-def=\"湖\">озеро</span>, <span class=\"uk-word\" data-def=\"语言\">мова</span>",
               "options": [
-                "<span class=\"uk-word\">вікно</span>",
-                "<span class=\"uk-word\">море</span>",
-                "<span class=\"uk-word\">озеро</span>",
-                "<span class=\"uk-word\">мова</span>"
+                "<span class=\"uk-word\" data-def=\"窗户\">вікно</span>",
+                "<span class=\"uk-word\" data-def=\"海\">море</span>",
+                "<span class=\"uk-word\" data-def=\"湖\">озеро</span>",
+                "<span class=\"uk-word\" data-def=\"语言\">мова</span>"
               ],
               "answer": "мова",
               "explanation": "мова 是阴性（-а 结尾），其余三个都是中性（-о/-е 结尾）"
@@ -665,7 +665,7 @@
     {
       "type": "summary",
       "heading": "3. 今日小结",
-      "html": "<p><strong>今天学习了乌克兰语名词性别的三大基本规则：</strong></p><ol><li><strong>辅音结尾 → 阳性</strong>（<span class=\"uk-word\">він</span>）：如 <span class=\"uk-word\">стіл</span>（桌子）、<span class=\"uk-word\">парк</span>（公园）、<span class=\"uk-word\">телефон</span>（电话）</li><li><strong>-а/-я 结尾 → 阴性</strong>（<span class=\"uk-word\">вона</span>）：如 <span class=\"uk-word\">школа</span>（学校）、<span class=\"uk-word\">кухня</span>（厨房）、<span class=\"uk-word\">машина</span>（汽车）</li><li><strong>-о/-е 结尾 → 中性</strong>（<span class=\"uk-word\">воно</span>）：如 <span class=\"uk-word\">вікно</span>（窗户）、<span class=\"uk-word\">море</span>（海）、<span class=\"uk-word\">небо</span>（天空）</li></ol><p><strong>核心要点：</strong>看词尾判性别，不要看含义！性别是语法概念，不是生物概念。</p><p><strong>下节预告：</strong>明天将深入学习阴性名词的 -а/-я 结尾特征，并做更多阳性与阴性的对比练习。</p>"
+      "html": "<p><strong>今天学习了乌克兰语名词性别的三大基本规则：</strong></p><ol><li><strong>辅音结尾 → 阳性</strong>（<span class=\"uk-word\">він</span>）：如 <span class=\"uk-word\" data-def=\"桌子\">стіл</span>（桌子）、<span class=\"uk-word\" data-def=\"公园\">парк</span>（公园）、<span class=\"uk-word\" data-def=\"电话\">телефон</span>（电话）</li><li><strong>-а/-я 结尾 → 阴性</strong>（<span class=\"uk-word\">вона</span>）：如 <span class=\"uk-word\" data-def=\"学校\">школа</span>（学校）、<span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）、<span class=\"uk-word\" data-def=\"汽车\">машина</span>（汽车）</li><li><strong>-о/-е 结尾 → 中性</strong>（<span class=\"uk-word\">воно</span>）：如 <span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）、<span class=\"uk-word\" data-def=\"海\">море</span>（海）、<span class=\"uk-word\" data-def=\"天空\">небо</span>（天空）</li></ol><p><strong>核心要点：</strong>看词尾判性别，不要看含义！性别是语法概念，不是生物概念。</p><p><strong>下节预告：</strong>明天将深入学习阴性名词的 -а/-я 结尾特征，并做更多阳性与阴性的对比练习。</p>"
     }
   ]
 }
