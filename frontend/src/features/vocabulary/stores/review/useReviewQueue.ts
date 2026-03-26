@@ -96,6 +96,8 @@ export function useReviewQueue() {
     try {
       if (resetQueue || !currentSource.value) {
         await initializeSource()
+        // source 确定后重新读取 shuffle 设置（首次进入时 initializeShuffle 在 source 初始化前执行，会读到空 source 导致 shuffle=false）
+        await initializeShuffleFromData(currentSource.value)
       }
 
       if (mode === 'mode_lapse') {
