@@ -40,6 +40,7 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 | `generators/` | 5种关系生成器（synonym, antonym, root, confused, topic） |
 | `generators/base.py` | BaseGenerator 基类（进度回调 + 停止信号 + 增量保存，flush_threshold 可配置） |
 | `generators/data.py` | 统一数据源（反义词对、词根、易混淆词） |
+| `generators/wordnet_utils.py` | WordNet 公共工具函数（词形还原、同义词查询等） |
 | `services/generation_service.py` | 生成任务管理（线程安全锁 + atexit 优雅关闭 + 已完成任务清理） |
 | `models/word.py` | SQLAlchemy 模型（Word, WordRelation, RelationGenerationLog） |
 | `extensions.py` | 数据库 session 管理（显式连接池参数） |

@@ -85,6 +85,7 @@ api/tts_cache.py              # TTS 音频缓存保存/删除（文件系统，S
 generators/                   # 5种关系生成器
   base.py                     # BaseGenerator（进度回调 + 停止信号 + 增量保存）
   data.py                     # 统一数据源（反义词对、词根、易混淆词）
+  wordnet_utils.py            # WordNet 公共工具函数
   synonym_generator.py        # 同义词（WordNet + 语义相似度）
   antonym_generator.py        # 反义词（WordNet + 手工 + 形态学）
   root_generator.py           # 词根（拉丁/希腊词根 + 词干）
@@ -106,7 +107,7 @@ shared/
   core/             # SM-2 算法、拼写强度算法、负荷均衡（TypeScript）
   services/         # 业务编排（wordResultService）+ AI 服务（DeepSeek, Google STT）
   types/            # TypeScript 类型
-  composables/      # 可组合函数（14 个）
+  composables/      # 可组合函数（15 个）
   components/       # 通用组件（base, charts, controls, feedback, layout）
   config/           # 配置（env, supabase, echarts, sourceLanguage）
   constants/        # 常量（version.ts）
@@ -240,7 +241,7 @@ courses/
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v1.7.2`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v1.7.4`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 修改 `courses/shared/` 中的 templates 会同时影响两套课程
 - 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录
 - 新课时使用 JSON 数据驱动架构（详见各课程生成指令文档），所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义
