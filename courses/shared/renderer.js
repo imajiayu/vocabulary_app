@@ -218,6 +218,7 @@
           var qItem = el('div', 'quiz-item');
           qItem.dataset.answer = q.answer;
           qItem.dataset.explanation = q.explanation || '';
+          if (q.hints) qItem.dataset.hints = JSON.stringify(q.hints);
 
           qItem.appendChild(el('div', 'quiz-prompt',
             (qIdx + 1) + '. ' + (q.prompt || '')));
@@ -243,6 +244,42 @@
 
         exDiv.appendChild(el('button', 'grade-btn', '判题')).disabled = true;
         frag.appendChild(exDiv);
+
+      } else if (group.style === 'fill-blank') {
+        var fbDiv = el('div', 'exercise fill-blank-exercise');
+        if (group.title) fbDiv.appendChild(el('h3', '', group.title));
+        if (group.instruction) fbDiv.appendChild(el('p', '', group.instruction));
+
+        (group.questions || []).forEach(function (q, qIdx) {
+          var fbItem = el('div', 'fill-blank-item');
+          fbItem.dataset.answer = q.answer;
+          if (q.accept) fbItem.dataset.accept = JSON.stringify(q.accept);
+          fbItem.dataset.explanation = q.explanation || '';
+          if (q.hints) fbItem.dataset.hints = JSON.stringify(q.hints);
+
+          // 构建 prompt，将 ____ 替换为 input
+          var promptDiv = el('div', 'fill-blank-prompt');
+          var promptText = (qIdx + 1) + '. ' + (q.prompt || '');
+          var parts = promptText.split('____');
+          for (var pi = 0; pi < parts.length; pi++) {
+            var span = document.createElement('span');
+            setContent(span, parts[pi]);
+            promptDiv.appendChild(span);
+            if (pi < parts.length - 1) {
+              var input = document.createElement('input');
+              input.type = 'text';
+              input.className = 'fill-blank-input';
+              input.autocomplete = 'off';
+              input.spellcheck = false;
+              promptDiv.appendChild(input);
+            }
+          }
+          fbItem.appendChild(promptDiv);
+          fbDiv.appendChild(fbItem);
+        });
+
+        fbDiv.appendChild(el('button', 'grade-btn', '判题')).disabled = true;
+        frag.appendChild(fbDiv);
 
       } else if (group.style === 'translation') {
         var texDiv = el('div', 'exercise translation-exercise');

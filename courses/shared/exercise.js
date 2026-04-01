@@ -2,7 +2,7 @@
 
 (function () {
   // --- localStorage 持久化工具 ---
-  var STATE_VERSION = 7;
+  var STATE_VERSION = 8;
   var pageKey = 'exercise_v' + STATE_VERSION + '_' + location.pathname;
 
   // 清除旧版本数据
@@ -17,9 +17,12 @@
   var currentState = {
     radio: {},
     textarea: {},
+    fillBlank: {},
     quizGraded: [],
+    fillBlankGraded: [],
     translateGraded: [],
-    aiResults: {}
+    aiResults: {},
+    hintsUsed: {}
   };
 
   function saveState() {
@@ -30,6 +33,10 @@
     currentState.textarea = {};
     document.querySelectorAll('.translate-item textarea').forEach(function (ta, i) {
       currentState.textarea['t' + i] = ta.value;
+    });
+    currentState.fillBlank = {};
+    document.querySelectorAll('.fill-blank-item .fill-blank-input').forEach(function (inp, i) {
+      currentState.fillBlank['fb' + i] = inp.value;
     });
     try { localStorage.setItem(pageKey, JSON.stringify(currentState)); } catch (e) {}
   }
@@ -42,14 +49,37 @@
         currentState = {
           radio: parsed.radio || {},
           textarea: parsed.textarea || {},
+          fillBlank: parsed.fillBlank || {},
           quizGraded: parsed.quizGraded || [],
+          fillBlankGraded: parsed.fillBlankGraded || [],
           translateGraded: parsed.translateGraded || [],
-          aiResults: parsed.aiResults || {}
+          aiResults: parsed.aiResults || {},
+          hintsUsed: parsed.hintsUsed || {}
         };
         return currentState;
       }
       return null;
     } catch (e) { return null; }
+  }
+
+  // --- Levenshtein 距离（填空题模糊匹配） ---
+  function levenshtein(a, b) {
+    var m = a.length, n = b.length;
+    var dp = [];
+    for (var i = 0; i <= m; i++) {
+      dp[i] = [i];
+      for (var j = 1; j <= n; j++) {
+        dp[i][j] = i === 0 ? j : 0;
+      }
+    }
+    for (var i = 1; i <= m; i++) {
+      for (var j = 1; j <= n; j++) {
+        dp[i][j] = a[i-1] === b[j-1]
+          ? dp[i-1][j-1]
+          : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+      }
+    }
+    return dp[m][n];
   }
 
   // --- 文本工具 ---
@@ -383,6 +413,182 @@
       btn.disabled = false;
       if (currentState.quizGraded.indexOf(exIdx) < 0) {
         currentState.quizGraded.push(exIdx);
+      }
+    }
+
+    /* ---- 渐进提示系统 ---- */
+    function setupHints(item, itemKey) {
+      var hintsStr = item.getAttribute('data-hints');
+      if (!hintsStr) return;
+      var hints;
+      try { hints = JSON.parse(hintsStr); } catch (e) { return; }
+      if (!hints.length) return;
+
+      var shown = (currentState.hintsUsed[itemKey] || 0);
+      var hintContainer = document.createElement('div');
+      hintContainer.className = 'hint-container';
+
+      // 恢复已显示的提示
+      for (var h = 0; h < shown && h < hints.length; h++) {
+        var box = document.createElement('div');
+        box.className = 'hint-box';
+        box.textContent = '\uD83D\uDCA1 提示 ' + (h + 1) + '：' + hints[h];
+        hintContainer.appendChild(box);
+      }
+
+      if (shown < hints.length) {
+        var hintBtn = document.createElement('button');
+        hintBtn.className = 'hint-btn';
+        hintBtn.textContent = '\uD83D\uDCA1 看提示（' + (shown + 1) + '/' + hints.length + '）';
+        hintBtn.addEventListener('click', function () {
+          var idx = currentState.hintsUsed[itemKey] || 0;
+          if (idx >= hints.length) return;
+          var box = document.createElement('div');
+          box.className = 'hint-box';
+          box.textContent = '\uD83D\uDCA1 提示 ' + (idx + 1) + '：' + hints[idx];
+          hintContainer.insertBefore(box, hintBtn);
+          idx++;
+          currentState.hintsUsed[itemKey] = idx;
+          if (idx >= hints.length) {
+            hintBtn.remove();
+          } else {
+            hintBtn.textContent = '\uD83D\uDCA1 看提示（' + (idx + 1) + '/' + hints.length + '）';
+          }
+          saveState();
+        });
+        hintContainer.appendChild(hintBtn);
+      }
+
+      item.appendChild(hintContainer);
+    }
+
+    // 为 quiz 题目添加提示
+    document.querySelectorAll('.quiz-item').forEach(function (item, i) {
+      setupHints(item, 'quiz_' + i);
+    });
+
+    /* ---- 填空题 ---- */
+    document.querySelectorAll('.fill-blank-exercise').forEach(function (exercise, exIdx) {
+      var items = exercise.querySelectorAll('.fill-blank-item');
+      var btn = exercise.querySelector('.grade-btn');
+      if (!items.length || !btn) return;
+
+      var total = items.length;
+
+      // 恢复已保存的输入
+      if (saved && saved.fillBlank) {
+        var globalOffset = 0;
+        document.querySelectorAll('.fill-blank-item').forEach(function (it, gi) {
+          if (!exercise.contains(it)) return;
+          var inp = it.querySelector('.fill-blank-input');
+          if (inp && saved.fillBlank['fb' + gi]) inp.value = saved.fillBlank['fb' + gi];
+        });
+      }
+
+      // 添加提示
+      items.forEach(function (item, i) {
+        setupHints(item, 'fb_' + exIdx + '_' + i);
+      });
+
+      exercise.addEventListener('input', function () {
+        var filled = 0;
+        items.forEach(function (item) {
+          var inp = item.querySelector('.fill-blank-input');
+          if (inp && inp.value.trim()) filled++;
+        });
+        btn.disabled = filled < total;
+        saveState();
+      });
+      var filled = 0;
+      items.forEach(function (item) {
+        var inp = item.querySelector('.fill-blank-input');
+        if (inp && inp.value.trim()) filled++;
+      });
+      btn.disabled = filled < total;
+      btn.addEventListener('click', function () {
+        triggerFillBlankGrade(exercise, items, btn, total, exIdx);
+        saveState();
+      });
+
+      // 恢复已判题的结果
+      if (saved && saved.fillBlankGraded && saved.fillBlankGraded.indexOf(exIdx) >= 0) {
+        triggerFillBlankGrade(exercise, items, btn, total, exIdx);
+      }
+    });
+
+    function triggerFillBlankGrade(exercise, items, btn, total, exIdx) {
+      exercise.querySelectorAll('.fill-blank-result').forEach(function (el) { el.remove(); });
+      items.forEach(function (item) {
+        var inp = item.querySelector('.fill-blank-input');
+        if (inp) inp.classList.remove('fb-correct', 'fb-wrong');
+      });
+
+      var correct = 0;
+      items.forEach(function (item) {
+        var answer = (item.getAttribute('data-answer') || '').trim();
+        var acceptStr = item.getAttribute('data-accept');
+        var explanation = item.getAttribute('data-explanation') || '';
+        var inp = item.querySelector('.fill-blank-input');
+        var userVal = inp ? inp.value.trim() : '';
+
+        // 构建所有可接受答案列表
+        var accepted = [answer.toLowerCase()];
+        if (acceptStr) {
+          try {
+            JSON.parse(acceptStr).forEach(function (a) {
+              accepted.push(a.toLowerCase().trim());
+            });
+          } catch (e) {}
+        }
+
+        var userNorm = userVal.toLowerCase();
+        var isCorrect = false;
+
+        // 精确匹配
+        for (var ai = 0; ai < accepted.length; ai++) {
+          if (userNorm === accepted[ai]) { isCorrect = true; break; }
+        }
+
+        // 模糊匹配（长词允许 Levenshtein <= 1）
+        if (!isCorrect && userNorm.length > 4) {
+          for (var ai = 0; ai < accepted.length; ai++) {
+            if (accepted[ai].length > 4 && levenshtein(userNorm, accepted[ai]) <= 1) {
+              isCorrect = true;
+              break;
+            }
+          }
+        }
+
+        var result = document.createElement('div');
+        result.className = 'fill-blank-result';
+        var strong = document.createElement('strong');
+        if (isCorrect) {
+          correct++;
+          result.classList.add('correct');
+          strong.textContent = '\u2705 正确！';
+          result.appendChild(strong);
+          if (inp) inp.classList.add('fb-correct');
+        } else {
+          result.classList.add('wrong');
+          strong.textContent = '\u274C 错误';
+          result.appendChild(strong);
+          if (userVal) {
+            result.appendChild(document.createTextNode('（你填了 ' + userVal + '）'));
+          }
+          result.appendChild(document.createTextNode('。正确答案：'));
+          var answerStrong = document.createElement('strong');
+          answerStrong.textContent = answer;
+          result.appendChild(answerStrong);
+          if (inp) inp.classList.add('fb-wrong');
+        }
+        if (explanation) result.appendChild(document.createTextNode(' — ' + explanation));
+        item.appendChild(result);
+      });
+
+      btn.textContent = '重新判题 · ' + correct + '/' + total;
+      btn.disabled = false;
+      if (currentState.fillBlankGraded.indexOf(exIdx) < 0) {
+        currentState.fillBlankGraded.push(exIdx);
       }
     }
 
@@ -723,6 +929,93 @@
         saveState();
       });
     }
+    /* ---- 练习结果持久化到 Supabase ---- */
+    // course_progress 表结构: (user_id uuid, course text, progress jsonb, updated_at)
+    // PK = (user_id, course)，course 值为 "ukrainian" 或 "legal-english"
+    // progress JSONB 已有 checkbox 数据（如 {"w1d1": true, ...}），
+    // 我们在其中追加 "_exercises" 键存放各课时的练习结果
+    function persistToSupabase() {
+      if (typeof CourseAuth === 'undefined') return;
+      var auth = CourseAuth.getAuth();
+      if (!auth || !auth.userId || !auth.accessToken) return;
+
+      // 检测课程名
+      var path = location.pathname;
+      var courseName = '';
+      if (path.indexOf('/uk/') === 0 || path.indexOf('/ukrainian/') !== -1) courseName = 'ukrainian';
+      else if (path.indexOf('/legal/') === 0 || path.indexOf('/legal-english/') !== -1) courseName = 'legal-english';
+      if (!courseName) return;
+
+      // 提取课时编号（如 w2d5）
+      var lessonMatch = path.match(/\/(w\d+d\d+)/);
+      if (!lessonMatch) return;
+      var lessonId = lessonMatch[1];
+
+      // 收集练习结果摘要
+      var results = { timestamp: new Date().toISOString(), quiz: [], fillBlank: [], translation: [] };
+
+      document.querySelectorAll('.quiz-item').forEach(function (item, i) {
+        var answer = item.getAttribute('data-answer') || '';
+        var selected = item.querySelector('input[type="radio"]:checked');
+        var userAnswer = selected ? selected.value : '';
+        if (userAnswer) {
+          results.quiz.push({ idx: i, correct: userAnswer === answer, answer: answer, user: userAnswer });
+        }
+      });
+
+      document.querySelectorAll('.fill-blank-item').forEach(function (item, i) {
+        var answer = (item.getAttribute('data-answer') || '').trim();
+        var inp = item.querySelector('.fill-blank-input');
+        var userVal = inp ? inp.value.trim() : '';
+        if (userVal) {
+          results.fillBlank.push({ idx: i, correct: userVal.toLowerCase() === answer.toLowerCase(), answer: answer, user: userVal });
+        }
+      });
+
+      document.querySelectorAll('.translate-item').forEach(function (item, i) {
+        var globalIdx = globalItemMap.get(item);
+        var aiResult = currentState.aiResults['' + globalIdx];
+        if (aiResult && aiResult !== 'fallback' && aiResult.score !== undefined) {
+          results.translation.push({ idx: i, score: aiResult.score });
+        }
+      });
+
+      // 读取现有 progress → 合并 → upsert
+      var url = '/rest/v1/course_progress?user_id=eq.' + auth.userId + '&course=eq.' + encodeURIComponent(courseName);
+      CourseAuth.supabaseFetch(url, { method: 'GET' })
+        .then(function (res) { return res.json(); })
+        .then(function (rows) {
+          var existing = rows.length ? (rows[0].progress || {}) : {};
+          // 在 _exercises 子键下按课时存储
+          if (!existing._exercises) existing._exercises = {};
+          existing._exercises[lessonId] = results;
+          var payload = {
+            user_id: auth.userId,
+            course: courseName,
+            progress: existing
+          };
+          return CourseAuth.supabaseFetch('/rest/v1/course_progress', {
+            method: 'POST',
+            headers: { 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify(payload)
+          });
+        })
+        .catch(function (e) { console.warn('Exercise persist failed:', e); });
+    }
+
+    // 在判题完成后触发持久化
+    var origSaveState = saveState;
+    saveState = function () {
+      origSaveState();
+      // 延迟持久化（避免每次输入都写远端）
+      clearTimeout(saveState._timer);
+      saveState._timer = setTimeout(function () {
+        if (currentState.quizGraded.length || currentState.fillBlankGraded.length || currentState.translateGraded.length) {
+          persistToSupabase();
+        }
+      }, 3000);
+    };
+
   } // end _initExercises
 
   if (document.readyState === 'loading') {

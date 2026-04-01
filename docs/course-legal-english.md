@@ -112,7 +112,22 @@
               "prompt": "The Provider shall ____ the Services.",
               "options": ["perform", "performing", "performed"],
               "answer": "perform",
-              "explanation": "perform obligations = 履行义务"
+              "explanation": "perform obligations = 履行义务",
+              "hints": ["shall 后面接什么形式？"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习B：填空题",
+          "instruction": "根据语境填入最合适的法律英语术语。",
+          "questions": [
+            {
+              "prompt": "The Provider ____ deliver the Goods within 30 days.",
+              "answer": "shall",
+              "accept": ["shall"],
+              "explanation": "shall = 法律义务用词",
+              "hints": ["表示义务的情态动词", "在法律翻译中译为「应」"]
             }
           ]
         },
@@ -145,7 +160,7 @@
 - `vocab-table` — 词汇表格（自定义列），含 `columns` + `rows`（第一列自动加 `.term` 可点击）
 - `grammar` — 语法/讲解，含 `blocks[]`（支持 p, h3, h4, table, ul, ol, tip, note, error-warn, grammar-box, details）
 - `examples` — 例句，含 `groups[].items[]`（text + translation）
-- `exercises` — 练习题，含 `groups[]`（style: quiz / translation），翻译题支持 rubric
+- `exercises` — 练习题，含 `groups[]`（style: quiz / fill-blank / translation），翻译题支持 rubric
 - `summary` — 小结
 - `sentence-analysis` — 长难句拆解，含 `items[]`（sentence, structure, translation）
 
@@ -329,17 +344,74 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 
 注意：`data-rubric` 值用单引号包裹，JSON 内用双引号。如 JSON 值中含单引号（如 arm's），使用 `&apos;` 转义。
 
+### 填空题格式（JSON）
+
+填空题要求学生主动回忆术语，比选择题记忆效果更好。`prompt` 中用 `____`（4 个下划线）标记填空位置，renderer.js 会自动替换为输入框。
+
+```json
+{
+  "style": "fill-blank",
+  "title": "练习B：术语填空",
+  "instruction": "根据语境填入最合适的法律英语术语。",
+  "questions": [
+    {
+      "prompt": "The Provider ____ deliver the Goods within 30 days.",
+      "answer": "shall",
+      "accept": ["shall"],
+      "explanation": "shall = 法律义务用词，表示「应」",
+      "hints": ["表示义务的情态动词", "在法律翻译中译为「应」"]
+    },
+    {
+      "prompt": "All disputes arising ____ this Agreement shall be settled by arbitration.",
+      "answer": "out of",
+      "accept": ["out of", "from", "under"],
+      "explanation": "arising out of = 因……产生的，是合同争议解决条款的常见用语"
+    }
+  ]
+}
+```
+
+字段说明：
+- `prompt`：题目文本，`____` 处自动渲染为输入框
+- `answer`：标准答案
+- `accept`：可接受的替代答案数组（判题时均视为正确）
+- `explanation`：答案解析
+- `hints`（可选）：渐进提示数组，学生答错或卡住时可逐条查看
+
+判题逻辑：精确匹配（不区分大小写）+ 长词（>4 字符）允许 1 个字符偏差（Levenshtein 距离 ≤ 1）。
+
+### 渐进提示（hints）
+
+选择题和填空题均支持可选的 `hints` 数组。学生可在作答过程中点击「看提示」按钮逐条查看，辅助思考而非直接给出答案。
+
+```json
+{
+  "prompt": "Which word expresses a mandatory obligation?",
+  "options": ["shall", "may", "will", "can"],
+  "answer": "shall",
+  "explanation": "shall 在法律英语中表示强制义务",
+  "hints": ["这个词在中文法律翻译中通常译为「应」", "它不是表示未来时态的词"]
+}
+```
+
+提示编写原则：
+- 每题 1-2 条提示，由模糊到具体（第一条给方向，第二条更直接）
+- 提示引导思考，不直接包含答案
+- 较简单的题目可不加 hints
+
 ## 生成后质量检查
 
 课程生成完成后，必须逐题检查以下内容：
 
-1. **选项与答案匹配**：`data-answer` 的值必须与某个 `<input value="...">` **完全一致**（区分大小写、单复数、时态）。常见错误：
-   - 大小写不一致（如 `data-answer="as used herein"` vs `value="As used herein"`）
-   - 单复数不一致（如 `data-answer="operative provisions"` vs `value="operative provision"`）
-   - 动词形态不一致（如 `data-answer="enter into"` vs `value="entered into"`）
-2. **答案解析完整性**：`data-explanation` 不仅要解释正确答案为什么对，还要说明**其他选项为什么不对**。格式示例：
+1. **选项与答案匹配**（选择题）：`data-answer` / `answer` 的值必须与某个选项**完全一致**（区分大小写、单复数、时态）。常见错误：
+   - 大小写不一致（如 `answer: "as used herein"` vs 选项 `"As used herein"`）
+   - 单复数不一致（如 `answer: "operative provisions"` vs 选项 `"operative provision"`）
+   - 动词形态不一致（如 `answer: "enter into"` vs 选项 `"entered into"`）
+2. **填空题答案合理**：`answer` 是最标准的答案，`accept` 包含所有合理的替代答案。确保 `prompt` 中有且仅有一个 `____` 占位符
+3. **答案解析完整性**：`explanation` 不仅要解释正确答案为什么对，还要说明**其他选项为什么不对**。格式示例：
    - `"perform = 履行（义务）。performing 是进行时形式，此处需要动词原形；performed 是过去式，shall 后接原形。"`
-3. **答案正确性**：确认每道题的正确答案本身是正确的，不存在知识性错误
+4. **答案正确性**：确认每道题的正确答案本身是正确的，不存在知识性错误
+5. **JSON 中的引号**：JSON 值中不得出现未转义的双引号 `"`。中文引号改用 `「」`，或使用 `\"`
 
 ## 教学原则
 
@@ -349,8 +421,10 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
   - 每课 **12-18 个核心术语**
   - 每课 **6-8 个固定搭配**
   - 每课 **2-3 个长难句解析**
-  - 每课 **15-20 道练习题**（含选择题、翻译题）
+  - 每课 **15-20 道练习题**，**至少 3 种练习类型**（选择题 + 填空题 + 翻译题）
+  - 每课至少 **5 道填空题**（主动回忆比选择题记忆效果翻倍）
   - 每课 **2-3 道翻译题**（英译中/中译英各半，答案全部预生成）
+  - 较难题目须提供 `hints` 数组（1-2 条渐进提示）
 - **循序渐进**：严格按 `courses/legal-english/curriculum.md` 的周次主题推进，不跳跃
 - **严格范围控制**：每周第2-7天课程中出现的词汇，必须限定在**本周第1天词汇预载课 + 往期已教过的词汇**范围内。练习题只能涉及当天及之前已教过的内容
 - **复习优先**：每节新课开头简要回顾上节课的重点

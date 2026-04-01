@@ -482,6 +482,96 @@ tbody tr:last-child td { border-bottom: none; }
   border-bottom-color: var(--accent-hover);
 }
 
+/* --- 填空练习（交互式） --- */
+.fill-blank-exercise {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 20px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.fill-blank-exercise h3 { margin-top: 0; color: var(--accent); }
+
+.fill-blank-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.fill-blank-item:last-of-type { border-bottom: none; margin-bottom: 12px; }
+
+.fill-blank-prompt {
+  font-size: 1.02em;
+  line-height: 2.2;
+}
+
+.fill-blank-input {
+  border: none;
+  border-bottom: 2px solid var(--accent);
+  padding: 4px 8px;
+  font-size: 1em;
+  font-family: inherit;
+  width: 140px;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 2px;
+}
+.fill-blank-input:focus {
+  outline: none;
+  border-bottom-color: var(--accent-hover);
+}
+.fill-blank-input.fb-correct {
+  border-bottom-color: var(--success);
+  color: var(--success);
+}
+.fill-blank-input.fb-wrong {
+  border-bottom-color: #dc2626;
+  color: #dc2626;
+}
+
+.fill-blank-result {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.93em;
+  line-height: 1.6;
+}
+.fill-blank-result.correct {
+  background: #f0fdf4;
+  border-left: 3px solid var(--success);
+}
+.fill-blank-result.wrong {
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+}
+
+/* --- 渐进提示 --- */
+.hint-btn {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 12px;
+  font-size: 0.88em;
+  color: var(--warning);
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.hint-btn:hover { background: #fef3c7; }
+
+.hint-box {
+  background: #fffbeb;
+  border-left: 3px solid var(--warning);
+  padding: 8px 14px;
+  margin-top: 6px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9em;
+  color: #92400e;
+  line-height: 1.6;
+}
+
 /* --- 翻译练习（法律英语） --- */
 .translation-exercise {
   background: var(--card-bg);

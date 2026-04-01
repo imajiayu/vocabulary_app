@@ -294,17 +294,96 @@
       parts.push('章节结构：\n' + sections.join('\n'));
     }
 
+    // 提取词汇表（前 30 个术语）
+    var vocabTerms = [];
+    document.querySelectorAll('.vocab-row, table tbody tr').forEach(function (row) {
+      if (vocabTerms.length >= 30) return;
+      var word = row.querySelector('.uk-word, .term');
+      if (word) {
+        var def = word.getAttribute('data-def') || '';
+        vocabTerms.push(word.textContent.trim() + (def ? '（' + def + '）' : ''));
+      }
+    });
+    if (vocabTerms.length) parts.push('本课词汇：' + vocabTerms.join('、'));
+
+    // 提取语法规则要点
+    var grammarParts = [];
+    document.querySelectorAll('.grammar-box, .tip').forEach(function (box) {
+      if (grammarParts.length >= 5) return;
+      var text = box.textContent.trim().slice(0, 200);
+      if (text) grammarParts.push(text);
+    });
+    if (grammarParts.length) parts.push('语法要点：\n' + grammarParts.join('\n'));
+
+    // 提取错误警告
+    var errorWarns = [];
+    document.querySelectorAll('.error-warn').forEach(function (warn) {
+      if (errorWarns.length >= 3) return;
+      errorWarns.push(warn.textContent.trim().slice(0, 150));
+    });
+    if (errorWarns.length) parts.push('常见错误提醒：\n' + errorWarns.join('\n'));
+
     var context = parts.join('\n');
-    if (context.length > 2000) context = context.slice(0, 2000) + '\u2026';
+    if (context.length > 3000) context = context.slice(0, 3000) + '\u2026';
     return context;
+  }
+
+  function extractExerciseResults() {
+    var STATE_VERSION = 8;
+    var stateKey = 'exercise_v' + STATE_VERSION + '_' + location.pathname;
+    try {
+      var raw = localStorage.getItem(stateKey);
+      if (!raw) return '';
+      var state = JSON.parse(raw);
+      var wrongItems = [];
+
+      // 检查 quiz 错误
+      document.querySelectorAll('.quiz-item').forEach(function (item, i) {
+        var answer = item.getAttribute('data-answer') || '';
+        var radioName = item.querySelector('input[type="radio"]');
+        if (!radioName) return;
+        var name = radioName.name;
+        var userAnswer = state.radio && state.radio[name];
+        if (userAnswer && userAnswer !== answer) {
+          var prompt = item.querySelector('.quiz-prompt');
+          wrongItems.push('选择题 ' + (i+1) + '：' +
+            (prompt ? prompt.textContent.trim().slice(0, 80) : '') +
+            '（你选了 ' + userAnswer + '，正确答案：' + answer + '）');
+        }
+      });
+
+      // 检查填空错误
+      document.querySelectorAll('.fill-blank-item').forEach(function (item, i) {
+        var answer = (item.getAttribute('data-answer') || '').trim();
+        var key = 'fb' + i;
+        var userVal = state.fillBlank && state.fillBlank[key];
+        if (userVal && userVal.toLowerCase().trim() !== answer.toLowerCase()) {
+          var prompt = item.querySelector('.fill-blank-prompt');
+          wrongItems.push('填空题 ' + (i+1) + '：' +
+            (prompt ? prompt.textContent.trim().slice(0, 80) : '') +
+            '（你填了 ' + userVal + '，正确答案：' + answer + '）');
+        }
+      });
+
+      if (wrongItems.length) {
+        return '\n\n学生做错的练习题：\n' + wrongItems.join('\n');
+      }
+    } catch (e) {}
+    return '';
   }
 
   function buildSystemPrompt() {
     var context = extractLessonContext();
+    var exerciseResults = extractExerciseResults();
+    var prompt = basePrompt;
     if (context) {
-      return basePrompt + '\n\n当前课时信息：\n' + context;
+      prompt += '\n\n当前课时信息：\n' + context;
     }
-    return basePrompt;
+    if (exerciseResults) {
+      prompt += exerciseResults;
+      prompt += '\n\n当学生提问时，如果问题与做错的题目相关，可以主动关联分析，帮助他们理解错误原因。';
+    }
+    return prompt;
   }
 
   // --- 简易 Markdown 渲染 ---
