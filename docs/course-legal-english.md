@@ -329,6 +329,18 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 
 注意：`data-rubric` 值用单引号包裹，JSON 内用双引号。如 JSON 值中含单引号（如 arm's），使用 `&apos;` 转义。
 
+## 生成后质量检查
+
+课程生成完成后，必须逐题检查以下内容：
+
+1. **选项与答案匹配**：`data-answer` 的值必须与某个 `<input value="...">` **完全一致**（区分大小写、单复数、时态）。常见错误：
+   - 大小写不一致（如 `data-answer="as used herein"` vs `value="As used herein"`）
+   - 单复数不一致（如 `data-answer="operative provisions"` vs `value="operative provision"`）
+   - 动词形态不一致（如 `data-answer="enter into"` vs `value="entered into"`）
+2. **答案解析完整性**：`data-explanation` 不仅要解释正确答案为什么对，还要说明**其他选项为什么不对**。格式示例：
+   - `"perform = 履行（义务）。performing 是进行时形式，此处需要动词原形；performed 是过去式，shall 后接原形。"`
+3. **答案正确性**：确认每道题的正确答案本身是正确的，不存在知识性错误
+
 ## 教学原则
 
 - **语言**：用中文讲解所有语法和说明
