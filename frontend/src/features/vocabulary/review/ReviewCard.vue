@@ -4,7 +4,7 @@
     <div class="card-body">
       <!-- 单词展示区域 - 使用动态定位实现平滑过渡 -->
       <div class="word-presenter" :class="{ 'to-header': showDefinition }">
-        <span class="word-text" @click="playAudio">{{ word.word }}</span>
+        <span class="word-text" @click="!showDefinition && playAudio()">{{ word.word }}</span>
         <div class="word-hint" :class="{ 'hidden': showDefinition }">点击播放发音</div>
       </div>
 

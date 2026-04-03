@@ -263,32 +263,30 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   /**
    * 删除单词
    */
-  async function deleteWord(): Promise<boolean> {
+  function deleteWord(): boolean {
     if (!currentWord.value) return false
 
     const wordId = currentWord.value.id
     const wordText = currentWord.value.word
     const wordSource = currentWord.value.source
-    try {
-      await api.words.deleteWordDirect(wordId)
 
-      // 清理 TTS 缓存（fire-and-forget）
+    // 乐观删除：立即触发回调 + 关闭浮窗，网络请求异步完成
+    onWordDeletedCallbacks.value.forEach(cb => cb(wordId))
+    close()
+
+    // 异步：DB 删除 + TTS 缓存清理
+    api.words.deleteWordDirect(wordId).then(() => {
       if (wordSource) {
         const { settings } = useSettings()
         const customSources = settings.value?.sources?.customSources || {}
         const ttsLang = getSourceLangConfig(wordSource, customSources).ttsLang
         if (ttsLang) deleteTtsCache([wordText], wordSource)
       }
-
-      // 触发删除回调
-      onWordDeletedCallbacks.value.forEach(cb => cb(wordId))
-
-      close()
-      return true
-    } catch (error) {
+    }).catch(error => {
       log.error('删除单词失败:', error)
-      return false
-    }
+    })
+
+    return true
   }
 
   /**

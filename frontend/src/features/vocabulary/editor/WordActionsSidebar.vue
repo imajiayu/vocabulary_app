@@ -147,11 +147,11 @@ const saveButtonText = computed(() => {
   }
 });
 
-const handleDelete = async () => {
+const handleDelete = () => {
   if (!confirm('确定要删除这个单词吗？')) {
     return;
   }
-  await store.deleteWord(); // deleteWord is still async (not optimistic)
+  store.deleteWord();
 };
 
 const handleSave = () => {
