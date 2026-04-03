@@ -1,0 +1,1874 @@
+[
+  {
+    "word": "спати",
+    "definition": "sleep, sleeping, to sleep"
+  },
+  {
+    "word": "вчора",
+    "definition": "yesterday"
+  },
+  {
+    "word": "позавчора",
+    "definition": "the day before yesterday"
+  },
+  {
+    "word": "сказати",
+    "definition": "say, said (past), tell, to say"
+  },
+  {
+    "word": "все",
+    "definition": "everything"
+  },
+  {
+    "word": "про",
+    "definition": "about, of"
+  },
+  {
+    "word": "бути",
+    "definition": "be, being, to be"
+  },
+  {
+    "word": "грати",
+    "definition": "playing, play, played, plays, to play, starring"
+  },
+  {
+    "word": "колір",
+    "definition": "color"
+  },
+  {
+    "word": "фіолетовий",
+    "definition": "purple"
+  },
+  {
+    "word": "який",
+    "definition": "what is, which is, that, what a, who, which, what"
+  },
+  {
+    "word": "оранжевий",
+    "definition": "orange"
+  },
+  {
+    "word": "синій",
+    "definition": "blue, is blue"
+  },
+  {
+    "word": "коричневий",
+    "definition": "brown"
+  },
+  {
+    "word": "білий",
+    "definition": "white"
+  },
+  {
+    "word": "рожевий",
+    "definition": "pink, is pink"
+  },
+  {
+    "word": "чорний",
+    "definition": "black, is black"
+  },
+  {
+    "word": "жовтий",
+    "definition": "yellow"
+  },
+  {
+    "word": "сірий",
+    "definition": "gray, grey, is gray"
+  },
+  {
+    "word": "червоний",
+    "definition": "red, is red"
+  },
+  {
+    "word": "зелений",
+    "definition": "green"
+  },
+  {
+    "word": "туфлі",
+    "definition": "shoes"
+  },
+  {
+    "word": "чоботи",
+    "definition": "boots"
+  },
+  {
+    "word": "кросівки",
+    "definition": "sneakers"
+  },
+  {
+    "word": "одяг",
+    "definition": "clothes"
+  },
+  {
+    "word": "взуття",
+    "definition": "footwear, shoes"
+  },
+  {
+    "word": "новий",
+    "definition": "new, is new"
+  },
+  {
+    "word": "старий",
+    "definition": "old, is old"
+  },
+  {
+    "word": "зручний",
+    "definition": "convenient, comfortable, is convenient"
+  },
+  {
+    "word": "пасує",
+    "definition": "suit, fits, suits, fit"
+  },
+  {
+    "word": "сорочка",
+    "definition": "shirt"
+  },
+  {
+    "word": "куртка",
+    "definition": "jacket, coat"
+  },
+  {
+    "word": "спідниця",
+    "definition": "skirt"
+  },
+  {
+    "word": "сукня",
+    "definition": "dress, gown"
+  },
+  {
+    "word": "шорти",
+    "definition": "shorts"
+  },
+  {
+    "word": "пальто",
+    "definition": "coat, overcoat"
+  },
+  {
+    "word": "купити",
+    "definition": "buy"
+  },
+  {
+    "word": "костюм",
+    "definition": "suit, costume"
+  },
+  {
+    "word": "светр",
+    "definition": "sweater, jumper, pullover"
+  },
+  {
+    "word": "футболка",
+    "definition": "t-shirt, jersey"
+  },
+  {
+    "word": "улюблений",
+    "definition": "favorite, favourite"
+  },
+  {
+    "word": "цікавий",
+    "definition": "interesting, curious, entertaining"
+  },
+  {
+    "word": "дорогий",
+    "definition": "expensive"
+  },
+  {
+    "word": "дешевий",
+    "definition": "cheap"
+  },
+  {
+    "word": "чи",
+    "definition": "or, if"
+  },
+  {
+    "word": "гарячий",
+    "definition": "hot"
+  },
+  {
+    "word": "чайник",
+    "definition": "teapot, kettle"
+  },
+  {
+    "word": "холодний",
+    "definition": "cold, a cold"
+  },
+  {
+    "word": "холодильник",
+    "definition": "fridge, refrigerator"
+  },
+  {
+    "word": "ніж",
+    "definition": "knife; than (conjunction)"
+  },
+  {
+    "word": "полиця",
+    "definition": "shelf"
+  },
+  {
+    "word": "крісло",
+    "definition": "armchair, chair"
+  },
+  {
+    "word": "стілець",
+    "definition": "chair"
+  },
+  {
+    "word": "вікно",
+    "definition": "window"
+  },
+  {
+    "word": "чашка",
+    "definition": "cup"
+  },
+  {
+    "word": "тарілка",
+    "definition": "plate"
+  },
+  {
+    "word": "стіл",
+    "definition": "table, desk"
+  },
+  {
+    "word": "окуляри",
+    "definition": "glasses"
+  },
+  {
+    "word": "ось",
+    "definition": "here"
+  },
+  {
+    "word": "твій",
+    "definition": "your, yours"
+  },
+  {
+    "word": "наш",
+    "definition": "our, ours"
+  },
+  {
+    "word": "рюкзак",
+    "definition": "backpack"
+  },
+  {
+    "word": "парасоля",
+    "definition": "umbrella"
+  },
+  {
+    "word": "ключ",
+    "definition": "key"
+  },
+  {
+    "word": "сумка",
+    "definition": "bag"
+  },
+  {
+    "word": "кухня",
+    "definition": "kitchen, cuisine"
+  },
+  {
+    "word": "квартира",
+    "definition": "apartment, flat"
+  },
+  {
+    "word": "спальня",
+    "definition": "bedroom"
+  },
+  {
+    "word": "кімната",
+    "definition": "room"
+  },
+  {
+    "word": "Денвер",
+    "definition": "Denver"
+  },
+  {
+    "word": "Київ",
+    "definition": "Kyiv"
+  },
+  {
+    "word": "жити",
+    "definition": "live, to live"
+  },
+  {
+    "word": "Одеса",
+    "definition": "Odesa"
+  },
+  {
+    "word": "столиця",
+    "definition": "capital"
+  },
+  {
+    "word": "Атланта",
+    "definition": "Atlanta"
+  },
+  {
+    "word": "парк",
+    "definition": "park"
+  },
+  {
+    "word": "аеропорт",
+    "definition": "airport"
+  },
+  {
+    "word": "банк",
+    "definition": "bank"
+  },
+  {
+    "word": "на",
+    "definition": "on, to, for, at, in"
+  },
+  {
+    "word": "на пошті",
+    "definition": "at the post office"
+  },
+  {
+    "word": "на вокзалі",
+    "definition": "at the train station"
+  },
+  {
+    "word": "стадіон",
+    "definition": "stadium"
+  },
+  {
+    "word": "вокзал",
+    "definition": "train station, station"
+  },
+  {
+    "word": "пошта",
+    "definition": "post office, mail"
+  },
+  {
+    "word": "басейн",
+    "definition": "pool, swimming pool"
+  },
+  {
+    "word": "офіс",
+    "definition": "office"
+  },
+  {
+    "word": "університет",
+    "definition": "university"
+  },
+  {
+    "word": "магазин",
+    "definition": "store, shop"
+  },
+  {
+    "word": "кінотеатр",
+    "definition": "cinema, movie theater"
+  },
+  {
+    "word": "ресторан",
+    "definition": "restaurant"
+  },
+  {
+    "word": "Хрещатик",
+    "definition": "Khreshchatyk"
+  },
+  {
+    "word": "шукати",
+    "definition": "look for, searches, searching, seek"
+  },
+  {
+    "word": "турист",
+    "definition": "tourist"
+  },
+  {
+    "word": "готель",
+    "definition": "hotel"
+  },
+  {
+    "word": "великий",
+    "definition": "large, great, big, grand"
+  },
+  {
+    "word": "маленький",
+    "definition": "small, little"
+  },
+  {
+    "word": "центр",
+    "definition": "center, centre"
+  },
+  {
+    "word": "вулиця",
+    "definition": "street"
+  },
+  {
+    "word": "вчити",
+    "definition": "learn, study, learning"
+  },
+  {
+    "word": "мова",
+    "definition": "language"
+  },
+  {
+    "word": "говорити",
+    "definition": "speak, to talk, chat, talk, talking, saying"
+  },
+  {
+    "word": "бачити",
+    "definition": "see, seeing, sees, to see"
+  },
+  {
+    "word": "працювати",
+    "definition": "work, working, to work"
+  },
+  {
+    "word": "подорож",
+    "definition": "trip, journey"
+  },
+  {
+    "word": "візит",
+    "definition": "visit"
+  },
+  {
+    "word": "планувати",
+    "definition": "plan, to plan (infinitive)"
+  },
+  {
+    "word": "зустріч",
+    "definition": "meeting, appointment"
+  },
+  {
+    "word": "блог",
+    "definition": "blog"
+  },
+  {
+    "word": "радіо",
+    "definition": "radio"
+  },
+  {
+    "word": "журнал",
+    "definition": "magazine, journal"
+  },
+  {
+    "word": "слухати",
+    "definition": "listen to, listen, listening, to listen to"
+  },
+  {
+    "word": "музика",
+    "definition": "music, the music, is music"
+  },
+  {
+    "word": "книга",
+    "definition": "book"
+  },
+  {
+    "word": "знати",
+    "definition": "know, to know, knowing"
+  },
+  {
+    "word": "англійська",
+    "definition": "English, is English"
+  },
+  {
+    "word": "думати",
+    "definition": "think, thinking"
+  },
+  {
+    "word": "українська",
+    "definition": "Ukrainian, is Ukrainian"
+  },
+  {
+    "word": "вегетаріанець",
+    "definition": "vegetarian"
+  },
+  {
+    "word": "замовити",
+    "definition": "order, reserve, book"
+  },
+  {
+    "word": "вегетаріанка",
+    "definition": "vegetarian"
+  },
+  {
+    "word": "вегетаріанці",
+    "definition": "vegetarians, vegetarian"
+  },
+  {
+    "word": "туалет",
+    "definition": "bathroom, restroom, toilet"
+  },
+  {
+    "word": "меню",
+    "definition": "menu"
+  },
+  {
+    "word": "офіціант",
+    "definition": "waiter"
+  },
+  {
+    "word": "принесіть",
+    "definition": "bring (imperative)"
+  },
+  {
+    "word": "дайте",
+    "definition": "give (imperative)"
+  },
+  {
+    "word": "офіціантка",
+    "definition": "waitress"
+  },
+  {
+    "word": "рахунок",
+    "definition": "check, account, bill"
+  },
+  {
+    "word": "друга",
+    "definition": "friend, second"
+  },
+  {
+    "word": "сина",
+    "definition": "son"
+  },
+  {
+    "word": "Віктора",
+    "definition": "Viktor (Genitive)"
+  },
+  {
+    "word": "батька",
+    "definition": "father"
+  },
+  {
+    "word": "брата",
+    "definition": "brother"
+  },
+  {
+    "word": "молока",
+    "definition": "milk"
+  },
+  {
+    "word": "сала",
+    "definition": "salo, lard, pork fat"
+  },
+  {
+    "word": "вина",
+    "definition": "wine"
+  },
+  {
+    "word": "м'яса",
+    "definition": "meat"
+  },
+  {
+    "word": "масла",
+    "definition": "butter"
+  },
+  {
+    "word": "цукор",
+    "definition": "sugar"
+  },
+  {
+    "word": "риби",
+    "definition": "fish"
+  },
+  {
+    "word": "лимону",
+    "definition": "lemon"
+  },
+  {
+    "word": "піци",
+    "definition": "pizzas, pizza"
+  },
+  {
+    "word": "без",
+    "definition": "without"
+  },
+  {
+    "word": "кави",
+    "definition": "coffee"
+  },
+  {
+    "word": "сиру",
+    "definition": "cheese"
+  },
+  {
+    "word": "немає",
+    "definition": "no, don't have, there is/are no"
+  },
+  {
+    "word": "води",
+    "definition": "water"
+  },
+  {
+    "word": "у вас немає",
+    "definition": "you do not have"
+  },
+  {
+    "word": "роботи",
+    "definition": "work, job"
+  },
+  {
+    "word": "у мене немає",
+    "definition": "I do not have, I don't have"
+  },
+  {
+    "word": "сестрою",
+    "definition": "sister"
+  },
+  {
+    "word": "подругою",
+    "definition": "female friend"
+  },
+  {
+    "word": "другом",
+    "definition": "friend"
+  },
+  {
+    "word": "мамою",
+    "definition": "mom, mother, mama"
+  },
+  {
+    "word": "батьком",
+    "definition": "father, dad"
+  },
+  {
+    "word": "тіткою",
+    "definition": "aunt"
+  },
+  {
+    "word": "з ким",
+    "definition": "Who ... with?"
+  },
+  {
+    "word": "дядьком",
+    "definition": "uncle"
+  },
+  {
+    "word": "братом",
+    "definition": "brother"
+  },
+  {
+    "word": "з чим",
+    "definition": "What...with, What are/is ... with"
+  },
+  {
+    "word": "капустою",
+    "definition": "cabbage (Instr.)"
+  },
+  {
+    "word": "картоплею",
+    "definition": "potato (Instr.)"
+  },
+  {
+    "word": "рибою",
+    "definition": "fish (Instr.)"
+  },
+  {
+    "word": "ковбасою",
+    "definition": "sausage (Instr.)"
+  },
+  {
+    "word": "з цукром",
+    "definition": "with sugar"
+  },
+  {
+    "word": "м'ясом",
+    "definition": "meat (Instr.)"
+  },
+  {
+    "word": "маслом",
+    "definition": "butter (Instr.)"
+  },
+  {
+    "word": "сиром",
+    "definition": "cheese (Instr.)"
+  },
+  {
+    "word": "майонезом",
+    "definition": "mayonnaise"
+  },
+  {
+    "word": "лимоном",
+    "definition": "lemon (Instr.)"
+  },
+  {
+    "word": "газом",
+    "definition": "gas (Instr.)"
+  },
+  {
+    "word": "молоком",
+    "definition": "milk"
+  },
+  {
+    "word": "їжа",
+    "definition": "food"
+  },
+  {
+    "word": "дорого",
+    "definition": "expensive"
+  },
+  {
+    "word": "дешево",
+    "definition": "cheaply, cheap"
+  },
+  {
+    "word": "ці",
+    "definition": "the, these"
+  },
+  {
+    "word": "сало",
+    "definition": "lard"
+  },
+  {
+    "word": "овочі",
+    "definition": "vegetables"
+  },
+  {
+    "word": "бутерброд",
+    "definition": "sandwich"
+  },
+  {
+    "word": "фрукти",
+    "definition": "fruit, fruits"
+  },
+  {
+    "word": "торт",
+    "definition": "cake"
+  },
+  {
+    "word": "на сніданок",
+    "definition": "for breakfast"
+  },
+  {
+    "word": "на обід",
+    "definition": "for lunch"
+  },
+  {
+    "word": "мюслі",
+    "definition": "muesli"
+  },
+  {
+    "word": "сніданок",
+    "definition": "breakfast"
+  },
+  {
+    "word": "обід",
+    "definition": "lunch"
+  },
+  {
+    "word": "десерт",
+    "definition": "dessert"
+  },
+  {
+    "word": "вечеря",
+    "definition": "dinner"
+  },
+  {
+    "word": "кашу",
+    "definition": "porridge"
+  },
+  {
+    "word": "піцу",
+    "definition": "pizza"
+  },
+  {
+    "word": "рибу",
+    "definition": "fish"
+  },
+  {
+    "word": "каву",
+    "definition": "coffee"
+  },
+  {
+    "word": "воду",
+    "definition": "water"
+  },
+  {
+    "word": "ковбасу",
+    "definition": "sausage"
+  },
+  {
+    "word": "кава",
+    "definition": "coffee"
+  },
+  {
+    "word": "вода",
+    "definition": "water"
+  },
+  {
+    "word": "піца",
+    "definition": "pizza"
+  },
+  {
+    "word": "каша",
+    "definition": "porridge"
+  },
+  {
+    "word": "риба",
+    "definition": "fish"
+  },
+  {
+    "word": "ковбаса",
+    "definition": "sausage"
+  },
+  {
+    "word": "салат",
+    "definition": "salad"
+  },
+  {
+    "word": "макарони",
+    "definition": "pasta"
+  },
+  {
+    "word": "масло",
+    "definition": "butter"
+  },
+  {
+    "word": "сир",
+    "definition": "cheese"
+  },
+  {
+    "word": "яйця",
+    "definition": "eggs"
+  },
+  {
+    "word": "вино",
+    "definition": "wine"
+  },
+  {
+    "word": "вареники",
+    "definition": "dumplings"
+  },
+  {
+    "word": "майонез",
+    "definition": "mayonnaise"
+  },
+  {
+    "word": "за професією",
+    "definition": "by profession"
+  },
+  {
+    "word": "робота",
+    "definition": "job, work"
+  },
+  {
+    "word": "професія",
+    "definition": "profession"
+  },
+  {
+    "word": "безробітний",
+    "definition": "unemployed"
+  },
+  {
+    "word": "медсестра",
+    "definition": "nurse"
+  },
+  {
+    "word": "лікар",
+    "definition": "doctor"
+  },
+  {
+    "word": "перекладач",
+    "definition": "interpreter, translator"
+  },
+  {
+    "word": "викладач",
+    "definition": "professor, teacher"
+  },
+  {
+    "word": "учитель",
+    "definition": "teacher, tutor"
+  },
+  {
+    "word": "водій",
+    "definition": "driver"
+  },
+  {
+    "word": "пенсіонерка",
+    "definition": "pensioner (female)"
+  },
+  {
+    "word": "пенсіонер",
+    "definition": "pensioner, retired"
+  },
+  {
+    "word": "секретарка",
+    "definition": "secretary"
+  },
+  {
+    "word": "директор",
+    "definition": "director, director general, principal"
+  },
+  {
+    "word": "психолог",
+    "definition": "psychologist"
+  },
+  {
+    "word": "секретар",
+    "definition": "secretary"
+  },
+  {
+    "word": "продавець",
+    "definition": "salesperson, clerk, salesman, saleswoman"
+  },
+  {
+    "word": "журналістка",
+    "definition": "journalist"
+  },
+  {
+    "word": "менеджер",
+    "definition": "manager"
+  },
+  {
+    "word": "журналіст",
+    "definition": "journalist"
+  },
+  {
+    "word": "актор",
+    "definition": "actor"
+  },
+  {
+    "word": "програміст",
+    "definition": "programmer"
+  },
+  {
+    "word": "бізнесмен",
+    "definition": "businessman"
+  },
+  {
+    "word": "інженер",
+    "definition": "engineer"
+  },
+  {
+    "word": "дизайнер",
+    "definition": "designer"
+  },
+  {
+    "word": "актриса",
+    "definition": "actress"
+  },
+  {
+    "word": "письменниця",
+    "definition": "writer"
+  },
+  {
+    "word": "письменник",
+    "definition": "writer"
+  },
+  {
+    "word": "театр",
+    "definition": "theater"
+  },
+  {
+    "word": "комп'ютери",
+    "definition": "computers"
+  },
+  {
+    "word": "баскетбол",
+    "definition": "basketball"
+  },
+  {
+    "word": "банджо",
+    "definition": "banjo"
+  },
+  {
+    "word": "піаніно",
+    "definition": "piano"
+  },
+  {
+    "word": "теніс",
+    "definition": "tennis"
+  },
+  {
+    "word": "футбол",
+    "definition": "soccer, football"
+  },
+  {
+    "word": "грати на",
+    "definition": "play, to play"
+  },
+  {
+    "word": "шахи",
+    "definition": "chess"
+  },
+  {
+    "word": "грати у",
+    "definition": "playing, play, to play"
+  },
+  {
+    "word": "любити",
+    "definition": "like, loves, likes, love, loving"
+  },
+  {
+    "word": "читати",
+    "definition": "read, reading"
+  },
+  {
+    "word": "писати",
+    "definition": "write"
+  },
+  {
+    "word": "подорожувати",
+    "definition": "travel, traveling"
+  },
+  {
+    "word": "бігати",
+    "definition": "run, to run"
+  },
+  {
+    "word": "готувати",
+    "definition": "cook, make, prepare"
+  },
+  {
+    "word": "співати",
+    "definition": "sing, singing"
+  },
+  {
+    "word": "фотографувати",
+    "definition": "take pictures"
+  },
+  {
+    "word": "танцювати",
+    "definition": "dance"
+  },
+  {
+    "word": "робити",
+    "definition": "do, make"
+  },
+  {
+    "word": "кіно",
+    "definition": "cinema, movies, movie"
+  },
+  {
+    "word": "ваше",
+    "definition": "your, yours"
+  },
+  {
+    "word": "вебдизайн",
+    "definition": "web design"
+  },
+  {
+    "word": "хобі",
+    "definition": "hobby, hobbies"
+  },
+  {
+    "word": "історія",
+    "definition": "history, story"
+  },
+  {
+    "word": "література",
+    "definition": "literature"
+  },
+  {
+    "word": "спорт",
+    "definition": "sport, sports"
+  },
+  {
+    "word": "мільйони",
+    "definition": "millions, million"
+  },
+  {
+    "word": "сто тисяч",
+    "definition": "one hundred thousand"
+  },
+  {
+    "word": "мільйонів",
+    "definition": "million, millions"
+  },
+  {
+    "word": "тисяч",
+    "definition": "thousand, thousands"
+  },
+  {
+    "word": "один мільярд",
+    "definition": "one billion"
+  },
+  {
+    "word": "один мільйон",
+    "definition": "one million"
+  },
+  {
+    "word": "дев'ятсот",
+    "definition": "nine hundred"
+  },
+  {
+    "word": "п'ять тисяч",
+    "definition": "five thousand"
+  },
+  {
+    "word": "дві тисячі",
+    "definition": "two thousand"
+  },
+  {
+    "word": "вісімсот",
+    "definition": "eight hundred"
+  },
+  {
+    "word": "шістсот",
+    "definition": "six hundred"
+  },
+  {
+    "word": "тисяча",
+    "definition": "thousand"
+  },
+  {
+    "word": "п'ятсот",
+    "definition": "five hundred"
+  },
+  {
+    "word": "двісті",
+    "definition": "two hundred"
+  },
+  {
+    "word": "чотириста",
+    "definition": "four hundred"
+  },
+  {
+    "word": "триста",
+    "definition": "three hundred"
+  },
+  {
+    "word": "цей обід коштує",
+    "definition": "This lunch costs"
+  },
+  {
+    "word": "цей суп коштує",
+    "definition": "This soup costs"
+  },
+  {
+    "word": "доларів",
+    "definition": "dollars"
+  },
+  {
+    "word": "це коштує",
+    "definition": "It costs"
+  },
+  {
+    "word": "гривень",
+    "definition": "hryvnias"
+  },
+  {
+    "word": "гривні",
+    "definition": "hryvnias"
+  },
+  {
+    "word": "години",
+    "definition": "hours"
+  },
+  {
+    "word": "долари",
+    "definition": "dollars"
+  },
+  {
+    "word": "долар",
+    "definition": "dollar"
+  },
+  {
+    "word": "година",
+    "definition": "hour"
+  },
+  {
+    "word": "гривня",
+    "definition": "hryvnya, hryvnia"
+  },
+  {
+    "word": "шістдесят",
+    "definition": "sixty"
+  },
+  {
+    "word": "вісімдесят",
+    "definition": "eighty"
+  },
+  {
+    "word": "сто",
+    "definition": "hundred"
+  },
+  {
+    "word": "дев'яносто",
+    "definition": "ninety"
+  },
+  {
+    "word": "сімдесят",
+    "definition": "seventy"
+  },
+  {
+    "word": "сорок",
+    "definition": "forty"
+  },
+  {
+    "word": "двадцять",
+    "definition": "twenty"
+  },
+  {
+    "word": "тридцять",
+    "definition": "thirty"
+  },
+  {
+    "word": "п'ятдесят",
+    "definition": "fifty"
+  },
+  {
+    "word": "сімнадцять",
+    "definition": "seventeen"
+  },
+  {
+    "word": "вісімнадцять",
+    "definition": "eighteen"
+  },
+  {
+    "word": "машин",
+    "definition": "cars, machines, automobiles"
+  },
+  {
+    "word": "дев'ятнадцять",
+    "definition": "nineteen"
+  },
+  {
+    "word": "п'ятнадцять",
+    "definition": "fifteen"
+  },
+  {
+    "word": "шістнадцять",
+    "definition": "sixteen"
+  },
+  {
+    "word": "чотирнадцять",
+    "definition": "fourteen"
+  },
+  {
+    "word": "тринадцять",
+    "definition": "thirteen"
+  },
+  {
+    "word": "десять",
+    "definition": "ten"
+  },
+  {
+    "word": "дев'ять",
+    "definition": "nine"
+  },
+  {
+    "word": "одинадцять",
+    "definition": "eleven"
+  },
+  {
+    "word": "номер",
+    "definition": "number, hotel room"
+  },
+  {
+    "word": "дванадцять",
+    "definition": "twelve"
+  },
+  {
+    "word": "вісім",
+    "definition": "eight"
+  },
+  {
+    "word": "мені",
+    "definition": "me, I (in Dative case)"
+  },
+  {
+    "word": "шість",
+    "definition": "six"
+  },
+  {
+    "word": "тобі",
+    "definition": "you, to you"
+  },
+  {
+    "word": "студентів",
+    "definition": "students, male students"
+  },
+  {
+    "word": "скільки",
+    "definition": "how much, how many"
+  },
+  {
+    "word": "п'ять",
+    "definition": "five"
+  },
+  {
+    "word": "студентки",
+    "definition": "students, female students"
+  },
+  {
+    "word": "чотири",
+    "definition": "four"
+  },
+  {
+    "word": "три",
+    "definition": "three"
+  },
+  {
+    "word": "два",
+    "definition": "two"
+  },
+  {
+    "word": "одне",
+    "definition": "one, one (with neuter nouns), a/an"
+  },
+  {
+    "word": "у мене",
+    "definition": "I have, my"
+  },
+  {
+    "word": "один",
+    "definition": "one, one (with masculine nouns), a, a/an, alone"
+  },
+  {
+    "word": "одна",
+    "definition": "one, one (with feminine nouns), a/an"
+  },
+  {
+    "word": "молодший",
+    "definition": "younger"
+  },
+  {
+    "word": "старший",
+    "definition": "older"
+  },
+  {
+    "word": "молодша",
+    "definition": "younger"
+  },
+  {
+    "word": "старша",
+    "definition": "older"
+  },
+  {
+    "word": "онук",
+    "definition": "grandson"
+  },
+  {
+    "word": "хлопець",
+    "definition": "boy, boyfriend, guy"
+  },
+  {
+    "word": "онука",
+    "definition": "granddaughter"
+  },
+  {
+    "word": "дівчина",
+    "definition": "girl, girlfriend"
+  },
+  {
+    "word": "бабуся",
+    "definition": "grandmother"
+  },
+  {
+    "word": "дідусь",
+    "definition": "grandfather"
+  },
+  {
+    "word": "ваш",
+    "definition": "your (masculine), yours"
+  },
+  {
+    "word": "ваша",
+    "definition": "your, yours"
+  },
+  {
+    "word": "ваші",
+    "definition": "your, your (plural), yours"
+  },
+  {
+    "word": "у мене є",
+    "definition": "I have"
+  },
+  {
+    "word": "у вас є",
+    "definition": "you have, do you have"
+  },
+  {
+    "word": "заєць",
+    "definition": "hare"
+  },
+  {
+    "word": "свиня",
+    "definition": "pig"
+  },
+  {
+    "word": "миша",
+    "definition": "mouse"
+  },
+  {
+    "word": "ведмідь",
+    "definition": "bear"
+  },
+  {
+    "word": "тварина",
+    "definition": "animal"
+  },
+  {
+    "word": "кінь",
+    "definition": "horse"
+  },
+  {
+    "word": "слон",
+    "definition": "elephant"
+  },
+  {
+    "word": "птах",
+    "definition": "bird"
+  },
+  {
+    "word": "павук",
+    "definition": "spider"
+  },
+  {
+    "word": "будь ласка",
+    "definition": "please, you are welcome"
+  },
+  {
+    "word": "дякую",
+    "definition": "Thanks, Thank you"
+  },
+  {
+    "word": "погано",
+    "definition": "bad, badly"
+  },
+  {
+    "word": "добре",
+    "definition": "well, fine, good, OK, all right"
+  },
+  {
+    "word": "мені теж",
+    "definition": "me too, nice to meet you too"
+  },
+  {
+    "word": "вибачте",
+    "definition": "sorry, excuse me"
+  },
+  {
+    "word": "як",
+    "definition": "how, as, like"
+  },
+  {
+    "word": "дуже приємно",
+    "definition": "nice to meet you"
+  },
+  {
+    "word": "мене звати",
+    "definition": "My name is"
+  },
+  {
+    "word": "Віктор",
+    "definition": "Victor"
+  },
+  {
+    "word": "Вікторія",
+    "definition": "Victoria"
+  },
+  {
+    "word": "вас звати",
+    "definition": "your name is, is your name"
+  },
+  {
+    "word": "мене звуть",
+    "definition": "My name is"
+  },
+  {
+    "word": "привіт",
+    "definition": "hello, hi"
+  },
+  {
+    "word": "до побачення",
+    "definition": "goodbye, bye"
+  },
+  {
+    "word": "добрий день",
+    "definition": "Good day, Hello (formal)"
+  },
+  {
+    "word": "кафе",
+    "definition": "cafe"
+  },
+  {
+    "word": "фото",
+    "definition": "photo, photos"
+  },
+  {
+    "word": "телефон",
+    "definition": "telephone, phone"
+  },
+  {
+    "word": "фонтан",
+    "definition": "fountain"
+  },
+  {
+    "word": "дуже",
+    "definition": "very, really"
+  },
+  {
+    "word": "зараз",
+    "definition": "now"
+  },
+  {
+    "word": "дружина",
+    "definition": "wife"
+  },
+  {
+    "word": "друзі",
+    "definition": "friends"
+  },
+  {
+    "word": "теж",
+    "definition": "too, also"
+  },
+  {
+    "word": "подруга",
+    "definition": "friend, girlfriend, female friend"
+  },
+  {
+    "word": "друг",
+    "definition": "friend, male friend"
+  },
+  {
+    "word": "бізнес",
+    "definition": "business"
+  },
+  {
+    "word": "що",
+    "definition": "what, that"
+  },
+  {
+    "word": "борщ",
+    "definition": "borscht, borsch"
+  },
+  {
+    "word": "хочу",
+    "definition": "want, (I) want"
+  },
+  {
+    "word": "пити",
+    "definition": "drink"
+  },
+  {
+    "word": "їсти",
+    "definition": "eat"
+  },
+  {
+    "word": "машина",
+    "definition": "car, machine"
+  },
+  {
+    "word": "школа",
+    "definition": "school"
+  },
+  {
+    "word": "шапка",
+    "definition": "hat"
+  },
+  {
+    "word": "машини",
+    "definition": "cars, machines"
+  },
+  {
+    "word": "місто",
+    "definition": "city, town"
+  },
+  {
+    "word": "чиє",
+    "definition": "whose, whose (neutral)"
+  },
+  {
+    "word": "село",
+    "definition": "village"
+  },
+  {
+    "word": "п'єте",
+    "definition": "drink"
+  },
+  {
+    "word": "моє",
+    "definition": "my, mine, is my"
+  },
+  {
+    "word": "сім'я",
+    "definition": "family"
+  },
+  {
+    "word": "брати",
+    "definition": "take, brothers"
+  },
+  {
+    "word": "сестри",
+    "definition": "sisters, sister"
+  },
+  {
+    "word": "сестра",
+    "definition": "sister"
+  },
+  {
+    "word": "брат",
+    "definition": "brother"
+  },
+  {
+    "word": "чиї",
+    "definition": "whose, whose (plural)"
+  },
+  {
+    "word": "батьки",
+    "definition": "parents"
+  },
+  {
+    "word": "батько",
+    "definition": "father"
+  },
+  {
+    "word": "люблю",
+    "definition": "like, love"
+  },
+  {
+    "word": "люди",
+    "definition": "people, humans"
+  },
+  {
+    "word": "суп",
+    "definition": "soup"
+  },
+  {
+    "word": "п'ю",
+    "definition": "drink, (I) drink / am drinking"
+  },
+  {
+    "word": "але",
+    "definition": "but"
+  },
+  {
+    "word": "любите",
+    "definition": "Like, you like, love, you love"
+  },
+  {
+    "word": "молоко",
+    "definition": "milk"
+  },
+  {
+    "word": "м'ясо",
+    "definition": "meat"
+  },
+  {
+    "word": "хліб",
+    "definition": "bread"
+  },
+  {
+    "word": "чоловік",
+    "definition": "man, husband"
+  },
+  {
+    "word": "сіль",
+    "definition": "salt"
+  },
+  {
+    "word": "ви",
+    "definition": "did you, are you, you're, you are, do you, you"
+  },
+  {
+    "word": "тут",
+    "definition": "here"
+  },
+  {
+    "word": "будинок",
+    "definition": "house, building"
+  },
+  {
+    "word": "студенти",
+    "definition": "students"
+  },
+  {
+    "word": "вона",
+    "definition": "she, her, it"
+  },
+  {
+    "word": "вони",
+    "definition": "they"
+  },
+  {
+    "word": "студентка",
+    "definition": "student, female student"
+  },
+  {
+    "word": "студент",
+    "definition": "student"
+  },
+  {
+    "word": "він",
+    "definition": "he, it"
+  },
+  {
+    "word": "чий",
+    "definition": "whose"
+  },
+  {
+    "word": "моя",
+    "definition": "my, my (feminine), mine (feminine)"
+  },
+  {
+    "word": "чия",
+    "definition": "whose"
+  },
+  {
+    "word": "чай",
+    "definition": "tea"
+  },
+  {
+    "word": "мій",
+    "definition": "my, my... (masc.), mine (masc.)"
+  },
+  {
+    "word": "дядько",
+    "definition": "uncle"
+  },
+  {
+    "word": "сік",
+    "definition": "juice"
+  },
+  {
+    "word": "сад",
+    "definition": "garden"
+  },
+  {
+    "word": "син",
+    "definition": "son"
+  },
+  {
+    "word": "донька",
+    "definition": "daughter"
+  },
+  {
+    "word": "не",
+    "definition": "not, do not, is not, am not, are not, did not"
+  },
+  {
+    "word": "ти",
+    "definition": "did you, are you, you're, you are, do you, you"
+  },
+  {
+    "word": "мати",
+    "definition": "mother, have, to have, mom"
+  },
+  {
+    "word": "ми",
+    "definition": "we"
+  },
+  {
+    "word": "дід",
+    "definition": "grandfather, grandpa, granddad, granddaddy"
+  },
+  {
+    "word": "це",
+    "definition": "it, this, the, that"
+  },
+  {
+    "word": "я",
+    "definition": "I, I am"
+  },
+  {
+    "word": "хто",
+    "definition": "who"
+  },
+  {
+    "word": "тітка",
+    "definition": "aunt, auntie"
+  },
+  {
+    "word": "Тома",
+    "definition": "Tom, Toma, Tom's"
+  },
+  {
+    "word": "де",
+    "definition": "where"
+  },
+  {
+    "word": "мед",
+    "definition": "honey"
+  },
+  {
+    "word": "дім",
+    "definition": "home, house"
+  },
+  {
+    "word": "мама",
+    "definition": "mom, mother"
+  },
+  {
+    "word": "тато",
+    "definition": "dad, father"
+  },
+  {
+    "word": "там",
+    "definition": "there"
+  },
+  {
+    "word": "так",
+    "definition": "yes, so, like this"
+  },
+  {
+    "word": "та",
+    "definition": "and, that"
+  },
+  {
+    "word": "її",
+    "definition": "her, it"
+  },
+  {
+    "word": "річ",
+    "definition": "thing"
+  },
+  {
+    "word": "в",
+    "definition": "in, to, at"
+  },
+  {
+    "word": "з",
+    "definition": "with, from, of"
+  },
+  {
+    "word": "сімсот",
+    "definition": "seven hundred"
+  },
+  {
+    "word": "сім",
+    "definition": "seven"
+  },
+  {
+    "word": "вам",
+    "definition": "you, you (formal singular; plural. Dative case)"
+  },
+  {
+    "word": "рік",
+    "definition": "year, a year"
+  },
+  {
+    "word": "так собі",
+    "definition": "so so"
+  },
+  {
+    "word": "у",
+    "definition": "in, to, on, at, into"
+  },
+  {
+    "word": "є",
+    "definition": "there is, there are"
+  },
+  {
+    "word": "мої",
+    "definition": "my, my ... (plural), mine (plural)"
+  },
+  {
+    "word": "їсте",
+    "definition": "eat, (you plural/formal) eat/are eating"
+  },
+  {
+    "word": "їм",
+    "definition": "eat, (pronoun) them"
+  },
+  {
+    "word": "ні",
+    "definition": "no"
+  },
+  {
+    "word": "а",
+    "definition": "and, but"
+  },
+  {
+    "word": "кіт",
+    "definition": "cat"
+  },
+  {
+    "word": "вже",
+    "definition": "already, yet (in questions)"
+  },
+  {
+    "word": "його",
+    "definition": "his, him, its"
+  }
+]
