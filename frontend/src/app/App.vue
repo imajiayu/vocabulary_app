@@ -4,21 +4,23 @@
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
         <Transition :name="transitionName" mode="out-in">
-          <Suspense>
-            <template #default>
-              <component :is="Component" :key="route.path" />
-            </template>
-            <template #fallback>
-              <div class="page-loading">
-                <div class="page-loading-content">
-                  <BaseSkeleton width="200px" height="32px" />
-                  <BaseSkeleton width="100%" height="120px" />
-                  <BaseSkeleton width="80%" height="20px" />
-                  <BaseSkeleton width="60%" height="20px" />
+          <div :key="route.path" class="page-wrapper">
+            <Suspense>
+              <template #default>
+                <component :is="Component" />
+              </template>
+              <template #fallback>
+                <div class="page-loading">
+                  <div class="page-loading-content">
+                    <BaseSkeleton width="200px" height="32px" />
+                    <BaseSkeleton width="100%" height="120px" />
+                    <BaseSkeleton width="80%" height="20px" />
+                    <BaseSkeleton width="60%" height="20px" />
+                  </div>
                 </div>
-              </div>
-            </template>
-          </Suspense>
+              </template>
+            </Suspense>
+          </div>
         </Transition>
       </template>
     </RouterView>
@@ -92,6 +94,12 @@ html.hide-scrollbar body {
 html.hide-scrollbar::-webkit-scrollbar,
 html.hide-scrollbar body::-webkit-scrollbar {
   display: none;
+}
+
+/* 路由页面包裹层 */
+.page-wrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* 页面加载骨架屏 */
