@@ -320,7 +320,6 @@ function renderAll() {
   statsEl.textContent = '';
   var statsData = [
     { value: completed, label: '已完成课程' },
-    { value: '~' + (completed * 17), label: '已学词汇' },
     { value: Math.round(completed / totalLessons * 100) + '%', label: '总体进度' }
   ];
   statsData.forEach(function(s) {
