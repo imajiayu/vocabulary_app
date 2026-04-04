@@ -518,17 +518,26 @@ onBeforeUnmount(() => {
 }
 
 .word-presenter.to-header .word-text {
-  /* 过渡后：缩小为页眉大小，变为主题色 */
+  /* 过渡后：缩小为页眉大小，变为主题色，移除可点击暗示 */
   font-size: clamp(1.75rem, 5vw, 2.5rem);
   color: var(--color-primary);
+  cursor: default;
 }
 
 .word-text:hover {
   transform: scale(1.02);
 }
 
+.word-presenter.to-header .word-text:hover {
+  transform: none;
+}
+
 .word-text:active {
   transform: scale(0.98);
+}
+
+.word-presenter.to-header .word-text:active {
+  transform: none;
 }
 
 .word-hint {
