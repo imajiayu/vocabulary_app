@@ -1,0 +1,427 @@
+{
+  "title": "第3周 第5天 — 宾格：阴性名词",
+  "objective": "掌握阴性名词的宾格变化 —— 也是整个第3周最规则、最简单的一类：-а → -у，-я → -ю，-ь 结尾不变。重要特点是 阴性宾格不区分有生命无生命。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "回顾：前两天的宾格" },
+        { "type": "p", "html": "前两天我们学了阳性名词的宾格：" },
+        { "type": "ul", "items": [
+          "<strong>无生命阳性</strong> → 不变化（Я бачу <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.）",
+          "<strong>有生命阳性</strong> → 加 -а / -я（Я бачу <span class=\"uk-word\" data-def=\"兄弟（宾格）\">брата</span>.，Я бачу <span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span>.）"
+        ] },
+        { "type": "p", "html": "阳性名词把「有生命」和「无生命」分得很清楚 —— 这两类的宾格形式完全不同。<strong>但今天要学的阴性名词不一样</strong> —— 它根本不在乎这个区分。" },
+
+        { "type": "h3", "text": "阴性宾格的最大特点：不区分有生命无生命" },
+        { "type": "grammar-box", "html": "<p><strong>阴性名词的宾格规则适用于所有阴性词，无论是「妈妈」「姐姐」还是「书」「水」</strong>，全部按下面的规则变化：</p><ul><li><span class=\"uk-word\" data-def=\"-а 结尾\">-а</span> 结尾 → 换成 <strong>-у</strong>（мама → маму, книга → книгу）</li><li><span class=\"uk-word\" data-def=\"-я 结尾\">-я</span> 结尾 → 换成 <strong>-ю</strong>（пісня → пісню, земля → землю）</li><li><span class=\"uk-word\" data-def=\"-ь 结尾\">-ь</span> 结尾的阴性 → <strong>不变</strong>（ніч → ніч）</li></ul>" },
+        { "type": "tip", "html": "<strong>这是好消息：</strong>阴性宾格是<strong>整个宾格学习中最规则、最简单的</strong>。两条变化规则 + 一条「不变」规则，10 分钟就能掌握。" },
+
+        { "type": "h3", "text": "规则一：-а 结尾 → -у" },
+        { "type": "p", "html": "把字典原形最后的 -а 换成 -у。这个规则适用于<strong>所有 -а 结尾的阴性名词</strong>，不管它指的是物品、动物还是人。" },
+        {
+          "type": "table",
+          "headers": ["主格", "中文", "宾格", "类别"],
+          "firstColWord": true,
+          "rows": [
+            ["мама", "妈妈", "<span class=\"uk-word\" data-def=\"妈妈（宾格）\">маму</span>", "人（有生命）"],
+            ["сестра", "姐妹", "<span class=\"uk-word\" data-def=\"姐妹（宾格）\">сестру</span>", "人（有生命）"],
+            ["книга", "书", "<span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span>", "物品（无生命）"],
+            ["вода", "水", "<span class=\"uk-word\" data-def=\"水（宾格）\">воду</span>", "物质（无生命）"],
+            ["кава", "咖啡", "<span class=\"uk-word\" data-def=\"咖啡（宾格）\">каву</span>", "物质（无生命）"],
+            ["машина", "汽车", "<span class=\"uk-word\" data-def=\"汽车（宾格）\">машину</span>", "物品（无生命）"],
+            ["квітка", "花", "<span class=\"uk-word\" data-def=\"花（宾格）\">квітку</span>", "植物（无生命）"],
+            ["риба", "鱼", "<span class=\"uk-word\" data-def=\"鱼（宾格）\">рибу</span>", "动物（仍按 -а→-у）"]
+          ]
+        },
+        { "type": "note", "html": "<strong>注意 риба（鱼）：</strong>鱼是动物 —— 也就是有生命的，但因为它是阴性，所以仍然按 -а → -у 的规则变化。<strong>「阴性 + 有生命」和「阴性 + 无生命」用完全相同的形式</strong>。这是阴性最爽的一点。" },
+
+        { "type": "h3", "text": "规则二：-я 结尾 → -ю" },
+        { "type": "p", "html": "原理一样 —— 把 -я 换成 -ю。" },
+        {
+          "type": "table",
+          "headers": ["主格", "中文", "宾格"],
+          "firstColWord": true,
+          "rows": [
+            ["земля", "土地", "<span class=\"uk-word\" data-def=\"土地（宾格）\">землю</span>"],
+            ["сім'я", "家庭", "<span class=\"uk-word\" data-def=\"家庭（宾格）\">сім'ю</span>"],
+            ["пісня", "歌", "<span class=\"uk-word\" data-def=\"歌（宾格）\">пісню</span>"],
+            ["кухня", "厨房", "<span class=\"uk-word\" data-def=\"厨房（宾格）\">кухню</span>"],
+            ["вулиця", "街道", "<span class=\"uk-word\" data-def=\"街道（宾格）\">вулицю</span>"],
+            ["сукня", "裙子", "<span class=\"uk-word\" data-def=\"裙子（宾格）\">сукню</span>"],
+            ["мрія", "梦想", "<span class=\"uk-word\" data-def=\"梦想（宾格）\">мрію</span>"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆窍门：</strong>把 -а / -я 想象成「字典戴的帽子」 —— 当名词变成「被作用的对象」时，把帽子换成 -у / -ю。形式上「软的换成软的」（я→ю），「硬的换成硬的」（а→у）。" },
+
+        { "type": "h3", "text": "规则三：-ь 结尾的阴性 → 不变" },
+        { "type": "p", "html": "记得第1周第5天学过的「软音符号 -ь 结尾」名词吗？这一类阴性名词的宾格<strong>和主格完全相同</strong>。" },
+        {
+          "type": "table",
+          "headers": ["主格", "中文", "宾格", "变化"],
+          "firstColWord": true,
+          "rows": [
+            ["ніч", "夜晚", "<span class=\"uk-word\" data-def=\"夜晚（宾格）\">ніч</span>", "不变"],
+            ["сіль", "盐", "<span class=\"uk-word\" data-def=\"盐（宾格）\">сіль</span>", "不变"],
+            ["осінь", "秋天", "<span class=\"uk-word\" data-def=\"秋天（宾格）\">осінь</span>", "不变"],
+            ["любов", "爱", "<span class=\"uk-word\" data-def=\"爱（宾格）\">любов</span>", "不变"],
+            ["радість", "喜悦", "<span class=\"uk-word\" data-def=\"喜悦（宾格）\">радість</span>", "不变"],
+            ["відповідь", "回答", "<span class=\"uk-word\" data-def=\"回答（宾格）\">відповідь</span>", "不变"]
+          ]
+        },
+        { "type": "note", "html": "<strong>提示：</strong>-ість 结尾的抽象名词（радість, можливість, новість 等）都是 -ь 结尾的阴性，宾格全部不变。这是阴性宾格中最容易的一类。" },
+
+        { "type": "h3", "text": "三条规则汇总" },
+        { "type": "grammar-box", "html": "<p><strong>阴性宾格速查表：</strong></p><table><thead><tr><th>主格词尾</th><th>宾格词尾</th><th>例</th></tr></thead><tbody><tr><td>-а</td><td><strong>-у</strong></td><td>мама → маму</td></tr><tr><td>-я</td><td><strong>-ю</strong></td><td>пісня → пісню</td></tr><tr><td>-ь</td><td><strong>不变</strong></td><td>ніч → ніч</td></tr></tbody></table><p><strong>记忆口诀：</strong>「а 变 у，я 变 ю，ь 不变」—— 三步走，搞定阴性宾格。</p>" },
+
+        { "type": "h3", "text": "实际造句的力量" },
+        { "type": "p", "html": "今天学完阴性宾格后，你的造句能力会有一个大跃升 —— 因为乌克兰语日常对话中很多核心名词都是阴性 -а 结尾的：" },
+        {
+          "type": "ul",
+          "items": [
+            "饮品：<span class=\"uk-word\" data-def=\"咖啡\">кава</span>, <span class=\"uk-word\" data-def=\"水\">вода</span>",
+            "食物：<span class=\"uk-word\" data-def=\"披萨\">піца</span>, <span class=\"uk-word\" data-def=\"粥\">каша</span>, <span class=\"uk-word\" data-def=\"鱼\">риба</span>, <span class=\"uk-word\" data-def=\"土豆\">картопля</span>",
+            "家人：<span class=\"uk-word\" data-def=\"妈妈\">мама</span>, <span class=\"uk-word\" data-def=\"姐妹\">сестра</span>, <span class=\"uk-word\" data-def=\"奶奶\">бабуся</span>, <span class=\"uk-word\" data-def=\"女儿\">донька</span>",
+            "环境：<span class=\"uk-word\" data-def=\"汽车\">машина</span>, <span class=\"uk-word\" data-def=\"街道\">вулиця</span>, <span class=\"uk-word\" data-def=\"山\">гора</span>, <span class=\"uk-word\" data-def=\"河\">річка</span>",
+            "阅读物：<span class=\"uk-word\" data-def=\"书\">книга</span>, <span class=\"uk-word\" data-def=\"报纸\">газета</span>"
+          ]
+        },
+
+        { "type": "h3", "text": "中文母语者常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要因为「妈妈是人」就给阴性加 -а / -я。</strong>「我爱妈妈」是 <span class=\"uk-text\">Я люблю <strong>маму</strong>.</span>，<strong>不</strong>是 «Я люблю мама»，更<strong>不</strong>是 «Я люблю маму».... 等等，对，是 маму。但<strong>千万不要</strong>错误地写成 «мамa» 或 «мамі»。把 -а 换成 -у，就是这么简单。</li><li><strong>不要把阴性宾格规则混淆成属格。</strong>属格也用类似的词尾，但<strong>第6周才学</strong>。今天只记一件事：阴性宾格 = а→у / я→ю / ь→不变。</li><li><strong>不要漏掉 -я → -ю。</strong>「我喝什么」类的句子里，-я 结尾的也得变。「我爱土地」是 <span class=\"uk-text\">Я люблю <strong>землю</strong>.</span> —— 不是 «землі» 也不是 «земля»。</li></ol>" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "「我喝 / 我吃」 + 阴性食物饮品",
+          "items": [
+            { "text": "Я п'ю каву.", "translation": "我喝咖啡。" },
+            { "text": "Я п'ю воду.", "translation": "我喝水。" },
+            { "text": "Я їм піцу.", "translation": "我吃披萨。" },
+            { "text": "Я їм кашу.", "translation": "我吃粥。" },
+            { "text": "Я їм рибу.", "translation": "我吃鱼。" },
+            { "text": "Я їм картоплю.", "translation": "我吃土豆。" },
+            { "text": "Я їм моркву.", "translation": "我吃胡萝卜。" }
+          ]
+        },
+        {
+          "heading": "「我读 / 我写 / 我知道」 + 阅读物",
+          "items": [
+            { "text": "Я читаю книгу.", "translation": "我读书。" },
+            { "text": "Я читаю газету.", "translation": "我读报纸。" },
+            { "text": "Я пишу пісню.", "translation": "我写歌。" },
+            { "text": "Я знаю мову.", "translation": "我懂这门语言。" }
+          ]
+        },
+        {
+          "heading": "「我看见」 + 环境中的事物",
+          "items": [
+            { "text": "Я бачу машину.", "translation": "我看见汽车。" },
+            { "text": "Я бачу гору.", "translation": "我看见山。" },
+            { "text": "Я бачу річку.", "translation": "我看见河。" },
+            { "text": "Я бачу квітку.", "translation": "我看见花。" },
+            { "text": "Я бачу школу.", "translation": "我看见学校。" }
+          ]
+        },
+        {
+          "heading": "「我爱 / 我看见」 + 阴性的人",
+          "items": [
+            { "text": "Я люблю маму.", "translation": "我爱妈妈。" },
+            { "text": "Я люблю сестру.", "translation": "我爱姐姐。" },
+            { "text": "Я люблю сім'ю.", "translation": "我爱家人。" },
+            { "text": "Я бачу подругу.", "translation": "我看见女性朋友。" },
+            { "text": "Я бачу доньку.", "translation": "我看见女儿。" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：选出正确的阴性宾格（10题）",
+          "instruction": "下面每题给出一个阴性名词的主格，从选项中选出正确的宾格形式。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"妈妈\">мама</span> 的宾格是？",
+              "options": ["мама", "маму", "мамi", "мамою"],
+              "answer": "маму",
+              "explanation": "-а → -у。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"书\">книга</span> 的宾格是？",
+              "options": ["книга", "книгу", "книгi", "книги"],
+              "answer": "книгу",
+              "explanation": "-а → -у。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"咖啡\">кава</span> 的宾格是？",
+              "options": ["кава", "каві", "каву", "кавою"],
+              "answer": "каву",
+              "explanation": "-а → -у。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"歌\">пісня</span> 的宾格是？",
+              "options": ["пісня", "пісню", "пісні", "пісен"],
+              "answer": "пісню",
+              "explanation": "-я → -ю。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"家庭\">сім'я</span> 的宾格是？",
+              "options": ["сім'я", "сім'ї", "сім'ю", "сім'єю"],
+              "answer": "сім'ю",
+              "explanation": "-я → -ю。",
+              "hints": ["软词尾换成软词尾"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"夜晚\">ніч</span> 的宾格是？",
+              "options": ["ніч", "ночу", "ночі", "ніччю"],
+              "answer": "ніч",
+              "explanation": "-ь 结尾的阴性宾格 = 主格，不变。",
+              "hints": ["这一类宾格不变"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"水\">вода</span> 的宾格是？",
+              "options": ["вода", "воду", "воді", "водою"],
+              "answer": "воду",
+              "explanation": "-а → -у。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"鱼\">риба</span> 的宾格是？",
+              "options": ["риба", "рибу", "риби", "рибою"],
+              "answer": "рибу",
+              "explanation": "-а → -у。<strong>注意：鱼是动物（有生命），但因为是阴性，仍按规则变 -у，不像阳性那样要加 -а。</strong>",
+              "hints": ["阴性宾格不区分有生命/无生命"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"喜悦\">радість</span> 的宾格是？",
+              "options": ["радість", "радості", "радосту", "радістю"],
+              "answer": "радість",
+              "explanation": "-ість 结尾的阴性，宾格不变。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"土地\">земля</span> 的宾格是？",
+              "options": ["земля", "землю", "землі", "земеля"],
+              "answer": "землю",
+              "explanation": "-я → -ю。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：宾格还是主格？（8题）",
+          "instruction": "判断下面句子中加粗的阴性名词处于哪个格。",
+          "questions": [
+            {
+              "prompt": "Це <span class=\"uk-word\" data-def=\"咖啡\">кава</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "Це 后面是主格 → кава。"
+            },
+            {
+              "prompt": "Я п'ю <span class=\"uk-word\" data-def=\"咖啡（宾格）\">каву</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "каву 是 кава 的宾格（-а → -у）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"妈妈\">Мама</span> тут.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "мама 是主语 → 主格。"
+            },
+            {
+              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"妈妈（宾格）\">маму</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "маму 是宾语 → 宾格。"
+            },
+            {
+              "prompt": "Це <span class=\"uk-word\" data-def=\"书\">книга</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "Це 后面是主格 → книга。"
+            },
+            {
+              "prompt": "Я читаю <span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "книгу 是宾语 → 宾格。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"歌\">Пісня</span> тут.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "пісня 是主语 → 主格。"
+            },
+            {
+              "prompt": "Я пишу <span class=\"uk-word\" data-def=\"歌（宾格）\">пісню</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "пісню 是宾语 → 宾格（-я → -ю）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 C：阴性宾格规则巩固（5题）",
+          "instruction": "概念巩固。",
+          "questions": [
+            {
+              "prompt": "阴性 -а 结尾名词的宾格词尾是？",
+              "options": ["-а（不变）", "-у", "-я", "-i"],
+              "answer": "-у",
+              "explanation": "阴性 -а → -у。这是最常用的规则。"
+            },
+            {
+              "prompt": "阴性 -я 结尾名词的宾格词尾是？",
+              "options": ["-я（不变）", "-у", "-ю", "-i"],
+              "answer": "-ю",
+              "explanation": "阴性 -я → -ю。「软的换软的」。"
+            },
+            {
+              "prompt": "阴性 -ь 结尾名词的宾格是？",
+              "options": ["不变", "去 -ь 加 -а", "去 -ь 加 -у", "加 -ом"],
+              "answer": "不变",
+              "explanation": "-ь 结尾的阴性，宾格 = 主格 = 不变。"
+            },
+            {
+              "prompt": "下面哪一句是错的？",
+              "options": ["Я бачу маму.", "Я люблю книгу.", "Я бачу мама.", "Я п'ю воду."],
+              "answer": "Я бачу мама.",
+              "explanation": "「我看见妈妈」中 мама 是宾语，必须用宾格 маму。其他三句正确。",
+              "hints": ["宾语必须用宾格", "妈妈是 -а 结尾的阴性，宾格变什么？"]
+            },
+            {
+              "prompt": "阴性宾格规则区分有生命/无生命吗？",
+              "options": ["区分", "不区分", "只区分动物", "只区分人"],
+              "answer": "不区分",
+              "explanation": "这是阴性宾格的最大特点。无论 рибу（鱼）还是 каву（咖啡），都是 -а→-у。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：写出宾格形式（10题）",
+          "instruction": "把括号里的阴性名词改成正确的宾格形式填入。",
+          "questions": [
+            {
+              "prompt": "Я п'ю ____. (кава)",
+              "answer": "каву",
+              "accept": ["каву", "Каву"],
+              "explanation": "-а → -у → каву。"
+            },
+            {
+              "prompt": "Я п'ю ____. (вода)",
+              "answer": "воду",
+              "accept": ["воду", "Воду"],
+              "explanation": "-а → -у → воду。"
+            },
+            {
+              "prompt": "Я люблю ____. (мама)",
+              "answer": "маму",
+              "accept": ["маму", "Маму"],
+              "explanation": "-а → -у → маму。"
+            },
+            {
+              "prompt": "Я читаю ____. (книга)",
+              "answer": "книгу",
+              "accept": ["книгу", "Книгу"],
+              "explanation": "-а → -у → книгу。"
+            },
+            {
+              "prompt": "Я їм ____. (риба)",
+              "answer": "рибу",
+              "accept": ["рибу", "Рибу"],
+              "explanation": "-а → -у → рибу。<strong>鱼是动物，但阴性宾格不区分。</strong>",
+              "hints": ["不要因为鱼是动物就加 -а，那是阳性的规则"]
+            },
+            {
+              "prompt": "Я їм ____. (піца)",
+              "answer": "піцу",
+              "accept": ["піцу", "Піцу"],
+              "explanation": "-а → -у → піцу。"
+            },
+            {
+              "prompt": "Я бачу ____. (машина)",
+              "answer": "машину",
+              "accept": ["машину", "Машину"],
+              "explanation": "-а → -у → машину。"
+            },
+            {
+              "prompt": "Я пишу ____. (пісня)",
+              "answer": "пісню",
+              "accept": ["пісню", "Пісню"],
+              "explanation": "-я → -ю → пісню。",
+              "hints": ["软词尾 -я 换成软词尾 -ю"]
+            },
+            {
+              "prompt": "Я люблю ____. (сім'я)",
+              "answer": "сім'ю",
+              "accept": ["сім'ю", "Сім'ю"],
+              "explanation": "-я → -ю → сім'ю。"
+            },
+            {
+              "prompt": "Я бачу ____. (ніч)",
+              "answer": "ніч",
+              "accept": ["ніч", "Ніч"],
+              "explanation": "-ь 结尾的阴性，宾格不变 → ніч。",
+              "hints": ["这是 -ь 结尾的阴性", "宾格不变"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 E：补全完整句子（5题）",
+          "instruction": "把括号里的中文翻译成阴性宾格形式填入。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____. (姐姐)",
+              "answer": "сестру",
+              "accept": ["сестру", "Сестру"],
+              "explanation": "姐姐 = сестра → сестру（宾格）。"
+            },
+            {
+              "prompt": "Я їм ____. (粥)",
+              "answer": "кашу",
+              "accept": ["кашу", "Кашу"],
+              "explanation": "粥 = каша → кашу（宾格）。"
+            },
+            {
+              "prompt": "Я бачу ____. (山)",
+              "answer": "гору",
+              "accept": ["гору", "Гору"],
+              "explanation": "山 = гора → гору（宾格）。"
+            },
+            {
+              "prompt": "Я бачу ____. (花)",
+              "answer": "квітку",
+              "accept": ["квітку", "Квітку"],
+              "explanation": "花 = квітка → квітку（宾格）。植物是无生命，但阴性反正不区分。"
+            },
+            {
+              "prompt": "Я знаю ____. (语言)",
+              "answer": "мову",
+              "accept": ["мову", "Мову"],
+              "explanation": "语言 = мова → мову（宾格）。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>阴性宾格三大规则</strong>：① -а → <strong>-у</strong>（мама → маму）；② -я → <strong>-ю</strong>（пісня → пісню）；③ -ь → <strong>不变</strong>（ніч → ніч）。</li><li><strong>阴性宾格的最大特点：不区分有生命无生命</strong>。无论是 рибу（鱼）还是 каву（咖啡），无论是 маму（妈妈）还是 книгу（书），全部按同一套规则。这让阴性成为整个宾格中最简单的一类。</li><li><strong>记忆口诀</strong>：「а 变 у，я 变 ю，ь 不变」 —— 三步搞定。</li><li>能造的句子大爆发：Я п'ю каву / воду，Я їм рибу / піцу，Я люблю маму / сестру，Я читаю книгу / газету，Я бачу машину / гору / квітку……</li></ol><p><strong>下节预告：</strong>明天是宾格的最后一类 —— <strong>中性名词</strong>。又有好消息：和无生命阳性一样，<strong>中性宾格 = 主格</strong>，全部不变化！明天还会做<strong>三种性别的综合对比</strong>，把第3周到目前为止学的所有规则放在一起练。</p>"
+    }
+  ]
+}

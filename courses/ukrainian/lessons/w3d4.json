@@ -1,0 +1,439 @@
+{
+  "title": "第3周 第4天 — 宾格：有生命阳性名词",
+  "objective": "掌握有生命阳性名词的宾格变化规则 —— 辅音结尾加 -а / 软变化加 -я / -о结尾的特例阳性变 -а。这是乌克兰语第一种「真正要变形」的格变化，请用心记。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "回顾：昨天学了什么" },
+        { "type": "p", "html": "昨天我们学了宾格 (<span class=\"uk-word\" data-def=\"宾格\">Знахідний</span>) 的概念，以及第一种最简单的情况：<strong>无生命阳性名词的宾格 = 主格</strong>。比如「Я читаю <span class=\"uk-word\" data-def=\"杂志（宾格）\">журнал</span>.」中的 журнал 不需要任何变化。" },
+        { "type": "p", "html": "今天的内容相对昨天难一些，因为我们要学第一种<strong>真正要变形</strong>的情况 —— 有生命阳性名词。但好消息是：规则非常清晰，只要弄懂三种小情况，就能稳稳掌握。" },
+
+        { "type": "h3", "text": "为什么有生命名词要变形？" },
+        { "type": "p", "html": "回想昨天的提示：<strong>提问词不同</strong>，往往意味着<strong>形式也不同</strong>。" },
+        {
+          "type": "table",
+          "headers": ["主格提问", "宾格提问", "形式关系"],
+          "firstColWord": false,
+          "rows": [
+            ["хто? (谁)", "кого? (把谁?)", "<strong>不同</strong> → 形式要变"],
+            ["що? (什么)", "що? (把什么?)", "相同 → 形式不变（昨天的规则）"]
+          ]
+        },
+        { "type": "p", "html": "<span class=\"uk-word\" data-def=\"谁（宾格）\">кого?</span> 长得已经和 <span class=\"uk-word\" data-def=\"谁\">хто?</span> 不一样了 —— 这暗示着所有「人和动物」类的名词，做宾语时都会换一个形态。" },
+
+        { "type": "h3", "text": "核心规则：有生命阳性宾格 = 主格 + а / -я" },
+        { "type": "grammar-box", "html": "<p><strong>变化逻辑：</strong>看主格词尾，加上对应的宾格词尾。</p><ul><li><strong>硬辅音结尾</strong>（-б, -в, -г, -д, -к, -л, -м, -н, -п, -р, -с, -т, -ф, -х, -ц, -ш 等） → 直接加 <strong>-а</strong>。</li><li><strong>软音符号 -ь 结尾</strong> → 把 -ь 去掉，加 <strong>-я</strong>。</li><li><strong>-й 结尾</strong> → 把 -й 去掉，加 <strong>-я</strong>。</li><li><strong>特例：以 -о 结尾但本质是阳性的人物词</strong>（如 тато, батько）→ 把 -о 去掉，加 <strong>-а</strong>。</li></ul>" },
+
+        { "type": "h4", "text": "情况一：硬辅音结尾 → + а" },
+        {
+          "type": "table",
+          "headers": ["主格（字典原形）", "中文", "宾格", "变化"],
+          "firstColWord": true,
+          "rows": [
+            ["брат", "兄弟", "<span class=\"uk-word\" data-def=\"兄弟（宾格）\">брата</span>", "+а"],
+            ["друг", "朋友", "<span class=\"uk-word\" data-def=\"朋友（宾格）\">друга</span>", "+а"],
+            ["студент", "大学生", "<span class=\"uk-word\" data-def=\"大学生（宾格）\">студента</span>", "+а"],
+            ["син", "儿子", "<span class=\"uk-word\" data-def=\"儿子（宾格）\">сина</span>", "+а"],
+            ["хлопчик", "男孩", "<span class=\"uk-word\" data-def=\"男孩（宾格）\">хлопчика</span>", "+а"],
+            ["сусід", "邻居", "<span class=\"uk-word\" data-def=\"邻居（宾格）\">сусіда</span>", "+а"],
+            ["лев", "狮子", "<span class=\"uk-word\" data-def=\"狮子（宾格）\">лева</span>", "+а"],
+            ["кролик", "兔子", "<span class=\"uk-word\" data-def=\"兔子（宾格）\">кролика</span>", "+а"],
+            ["птах", "鸟", "<span class=\"uk-word\" data-def=\"鸟（宾格）\">птаха</span>", "+а"],
+            ["чоловік", "男人/丈夫", "<span class=\"uk-word\" data-def=\"丈夫（宾格）\">чоловіка</span>", "+а"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆口诀：</strong>「人和动物，宾格 +а」 —— 直接在字典原形后面贴一个 а 即可。" },
+
+        { "type": "h4", "text": "情况二：软音符号 -ь 结尾 → -ь 变 -я" },
+        {
+          "type": "table",
+          "headers": ["主格", "中文", "宾格", "变化"],
+          "firstColWord": true,
+          "rows": [
+            ["вчитель", "老师", "<span class=\"uk-word\" data-def=\"老师（宾格）\">вчителя</span>", "-ь → -я"],
+            ["учень", "学生（中小学）", "<span class=\"uk-word\" data-def=\"学生（宾格）\">учня</span>", "-ь → -я + e 脱落"],
+            ["гість", "客人", "<span class=\"uk-word\" data-def=\"客人（宾格）\">гостя</span>", "-ь → -я + i→o"],
+            ["кінь", "马", "<span class=\"uk-word\" data-def=\"马（宾格）\">коня</span>", "-ь → -я + i→o"],
+            ["ведмідь", "熊", "<span class=\"uk-word\" data-def=\"熊（宾格）\">ведмедя</span>", "-ь → -я + i→e"]
+          ]
+        },
+        { "type": "note", "html": "<strong>飘忽元音又出现了：</strong>第2周学复数时遇到过这种现象。<strong>规则一句话：</strong>当一个名词从单数（闭音节）变成有词尾的形式（开音节），词干里的 <strong>і / е</strong> 经常会脱落或变成 <strong>о / е</strong>。<br><br>看：<br>• <span class=\"uk-word\" data-def=\"学生\">учень</span>（学生）→ <span class=\"uk-word\" data-def=\"学生（宾格）\">учня</span>：е 脱落<br>• <span class=\"uk-word\" data-def=\"马\">кінь</span>（马）→ <span class=\"uk-word\" data-def=\"马（宾格）\">коня</span>：і → о<br>• <span class=\"uk-word\" data-def=\"客人\">гість</span>（客人）→ <span class=\"uk-word\" data-def=\"客人（宾格）\">гостя</span>：і → о<br>• <span class=\"uk-word\" data-def=\"熊\">ведмідь</span>（熊）→ <span class=\"uk-word\" data-def=\"熊（宾格）\">ведмедя</span>：і → е<br><br>不要试图记规则 —— 接触次数多了自然就熟悉了。" },
+
+        { "type": "h4", "text": "情况三：「飘忽元音」的硬辅音例子" },
+        { "type": "p", "html": "硬辅音结尾的有生命名词，也可能出现飘忽元音：" },
+        {
+          "type": "table",
+          "headers": ["主格", "中文", "宾格", "变化"],
+          "firstColWord": true,
+          "rows": [
+            ["кіт", "猫", "<span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span>", "i→o, +а"],
+            ["пес", "狗（雄性）", "<span class=\"uk-word\" data-def=\"狗（宾格）\">пса</span>", "е 脱落, +а"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>重点记忆：</strong>这两个超常用的动物词必须背下来 —— <strong>кіт → кота</strong>（猫），<strong>пес → пса</strong>（狗）。" },
+
+        { "type": "h4", "text": "情况四：-о 结尾的「假阴性」阳性人物词" },
+        { "type": "p", "html": "还记得第1周末学过的那一组「看着像阴性/中性，其实是阳性」的人物词吗？这些词的宾格也按阳性规则变 —— 把 -о 换成 -а。" },
+        {
+          "type": "table",
+          "headers": ["主格", "中文", "宾格", "变化"],
+          "firstColWord": true,
+          "rows": [
+            ["тато", "爸爸", "<span class=\"uk-word\" data-def=\"爸爸（宾格）\">тата</span>", "-о → -а"],
+            ["батько", "父亲", "<span class=\"uk-word\" data-def=\"父亲（宾格）\">батька</span>", "-о → -а"],
+            ["дядько", "叔叔", "<span class=\"uk-word\" data-def=\"叔叔（宾格）\">дядька</span>", "-о → -а"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆方法：</strong>把它们当成普通的辅音结尾阳性 —— 先在心里把 -о 「擦掉」，露出辅音 (тат-, батьк-, дядьк-)，然后加 а 即可。" },
+
+        { "type": "h3", "text": "三种情况合在一起：心法图" },
+        { "type": "grammar-box", "html": "<p><strong>有生命阳性宾格速查：</strong></p><ol><li><strong>硬辅音 / -о</strong> 结尾 → 加 <strong>а</strong>（брат → брата、тато → тата）</li><li><strong>-ь / -й</strong> 结尾 → 换成 <strong>я</strong>（вчитель → вчителя）</li><li>词干含 <strong>i / е</strong> 的可能<strong>飘忽</strong>（кіт → кота、пес → пса）</li></ol><p>这就是今天要掌握的全部。其他类型 —— 阴性、中性、复数 —— 会在后面几天逐一学习。</p>" },
+
+        { "type": "h3", "text": "可以造的句子" },
+        { "type": "p", "html": "现在你能用 5 个动词的「我」形式 + 任何<strong>有生命阳性宾语</strong>造句：" },
+        {
+          "type": "ul",
+          "items": [
+            "Я бачу <strong>X</strong>. — 我看见 X（人/动物）",
+            "Я люблю <strong>X</strong>. — 我喜欢 / 爱 X（人/动物）",
+            "Я знаю <strong>X</strong>. — 我认识 / 知道 X（人）",
+            "Я маю <strong>X</strong>. — 我有 X（更适合物品，但 «我有兄弟» 也可以）"
+          ]
+        },
+
+        { "type": "h3", "text": "中文母语者常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要忘了变形！</strong>「我看见兄弟」绝对不能说成 <span class=\"uk-text\">Я бачу брат.</span> —— 必须说 <span class=\"uk-text\">Я бачу <strong>брата</strong>.</span> 这是中文母语者最容易犯的错。中文「兄弟」永远是「兄弟」，但乌克兰语<strong>有生命的人/动物</strong>作宾语必须加 -а。</li><li><strong>不要把无生命也加 -а。</strong>昨天学的「Я бачу <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.」中的 стіл 是无生命的，宾格 = 主格 = стіл，<strong>不</strong>能写成 «Я бачу стола»（虽然语法上 -а 形式存在，但那是属格，第6周才学）。<br><strong>判断标准只有一个：是不是人/动物。</strong></li><li><strong>飘忽元音是真实存在的。</strong>「我看见猫」是 <span class=\"uk-text\">Я бачу <strong>кота</strong>.</span> —— 不是 «кіта»。再说一遍：кіт → кота，пес → пса。背下来。</li></ol>" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "「我看见」 + 人",
+          "items": [
+            { "text": "Я бачу брата.", "translation": "我看见兄弟。" },
+            { "text": "Я бачу друга.", "translation": "我看见朋友。" },
+            { "text": "Я бачу студента.", "translation": "我看见大学生。" },
+            { "text": "Я бачу хлопчика.", "translation": "我看见男孩。" },
+            { "text": "Я бачу сина.", "translation": "我看见儿子。" },
+            { "text": "Я бачу учня.", "translation": "我看见学生。" },
+            { "text": "Я бачу вчителя.", "translation": "我看见老师。" }
+          ]
+        },
+        {
+          "heading": "「我看见」 + 动物",
+          "items": [
+            { "text": "Я бачу кота.", "translation": "我看见猫。" },
+            { "text": "Я бачу пса.", "translation": "我看见狗。" },
+            { "text": "Я бачу птаха.", "translation": "我看见鸟。" },
+            { "text": "Я бачу коня.", "translation": "我看见马。" },
+            { "text": "Я бачу ведмедя.", "translation": "我看见熊。" },
+            { "text": "Я бачу лева.", "translation": "我看见狮子。" },
+            { "text": "Я бачу кролика.", "translation": "我看见兔子。" }
+          ]
+        },
+        {
+          "heading": "「我爱 / 我有」 + 家人",
+          "items": [
+            { "text": "Я люблю тата.", "translation": "我爱爸爸。" },
+            { "text": "Я люблю батька.", "translation": "我爱父亲。" },
+            { "text": "Я люблю брата.", "translation": "我爱兄弟。" },
+            { "text": "Я люблю сина.", "translation": "我爱儿子。" },
+            { "text": "Я маю брата.", "translation": "我有一个兄弟。" },
+            { "text": "Я маю друга.", "translation": "我有一个朋友。" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：选出正确的宾格形式（10题）",
+          "instruction": "下面每题给出一个有生命阳性名词的主格，从选项中选出正确的宾格形式。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"兄弟\">брат</span> 的宾格是？",
+              "options": ["брат", "брата", "брату", "брате"],
+              "answer": "брата",
+              "explanation": "硬辅音结尾，直接加 -а。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"朋友\">друг</span> 的宾格是？",
+              "options": ["друг", "друга", "другу", "друзя"],
+              "answer": "друга",
+              "explanation": "硬辅音结尾，加 -а。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"学生（中小学）\">учень</span> 的宾格是？",
+              "options": ["учень", "учня", "ученя", "учня"],
+              "answer": "учня",
+              "explanation": "-ь 结尾，去 -ь 加 -я；同时 e 脱落（飘忽元音）。",
+              "hints": ["先去掉 -ь，加 -я", "注意词干里的 e 会脱落"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"猫\">кіт</span> 的宾格是？",
+              "options": ["кіт", "кіта", "кота", "коти"],
+              "answer": "кота",
+              "explanation": "硬辅音结尾加 -а，但词干 i 在开音节中变 о（飘忽元音）→ кота。",
+              "hints": ["先变 i → o，再加 -а", "这是必背词形之一"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"狗（雄性）\">пес</span> 的宾格是？",
+              "options": ["пес", "песа", "пса", "псі"],
+              "answer": "пса",
+              "explanation": "硬辅音结尾加 -а，词干 e 脱落 → пса。",
+              "hints": ["先让 e 脱落，再加 -а", "这是必背词形之一"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"爸爸\">тато</span> 的宾格是？",
+              "options": ["тато", "тата", "татi", "тату"],
+              "answer": "тата",
+              "explanation": "-о 结尾的阳性人物词，把 -о 换成 -а。",
+              "hints": ["这是阳性「假阴性」-о 词", "把 -о 当作伪装，下面是辅音"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"父亲\">батько</span> 的宾格是？",
+              "options": ["батько", "батька", "батьки", "батьку"],
+              "answer": "батька",
+              "explanation": "-о 结尾的阳性人物词，-о → -а。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"马\">кінь</span> 的宾格是？",
+              "options": ["кінь", "коня", "кіня", "кінa"],
+              "answer": "коня",
+              "explanation": "-ь 结尾，去 -ь 加 -я；同时 i → o → коня。",
+              "hints": ["闭音节 i 在开音节里变 о", "ь 换成 я"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"狮子\">лев</span> 的宾格是？",
+              "options": ["лев", "лева", "леву", "льва"],
+              "answer": "лева",
+              "explanation": "硬辅音结尾，加 -а。这个词没有飘忽元音。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"儿子\">син</span> 的宾格是？",
+              "options": ["син", "сина", "синa", "сину"],
+              "answer": "сина",
+              "explanation": "硬辅音结尾，加 -а → сина。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：宾格还是主格？（8题）",
+          "instruction": "判断下面句子中加粗的有生命名词处于哪个格。",
+          "questions": [
+            {
+              "prompt": "Це <span class=\"uk-word\" data-def=\"兄弟\">брат</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "Це 后面的名词永远是主格 → брат。"
+            },
+            {
+              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"兄弟（宾格）\">брата</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "брата 是宾格形式（主格 + а）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"猫\">Кіт</span> тут.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "кіт 是主语 = 主格。"
+            },
+            {
+              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "кота 是 кіт 的宾格形式（i→o + а）。"
+            },
+            {
+              "prompt": "Це <span class=\"uk-word\" data-def=\"爸爸\">тато</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "тато 在 Це 后面 = 主格（-о 结尾的字典原形）。"
+            },
+            {
+              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"爸爸（宾格）\">тата</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "тата 是 тато 的宾格（-о → -а）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师\">Вчитель</span> тут.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "вчитель 是主语 = 主格（字典原形）。"
+            },
+            {
+              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"老师（宾格）\">вчителя</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "вчителя 是 вчитель 的宾格（-ь → -я）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 C：变化规则识别（5题）",
+          "instruction": "概念巩固。",
+          "questions": [
+            {
+              "prompt": "硬辅音结尾的有生命阳性名词，宾格怎么变？",
+              "options": ["不变", "加 -а", "加 -у", "加 -и"],
+              "answer": "加 -а",
+              "explanation": "брат → брата，студент → студента，лев → лева。"
+            },
+            {
+              "prompt": "-ь 结尾的有生命阳性名词，宾格怎么变？",
+              "options": ["不变", "去 -ь 加 -а", "去 -ь 加 -я", "加 -ом"],
+              "answer": "去 -ь 加 -я",
+              "explanation": "вчитель → вчителя，учень → учня。"
+            },
+            {
+              "prompt": "下面哪个词不属于有生命名词？",
+              "options": ["брат（兄弟）", "кіт（猫）", "стіл（桌子）", "птах（鸟）"],
+              "answer": "стіл（桌子）",
+              "explanation": "桌子是物品 → 无生命。其他三个都是人或动物 → 有生命。",
+              "hints": ["有生命 = 人或动物", "物品和植物是无生命"]
+            },
+            {
+              "prompt": "тато（爸爸）属于哪一类？",
+              "options": ["无生命阳性", "有生命阳性（特殊 -о 结尾）", "有生命阴性", "中性"],
+              "answer": "有生命阳性（特殊 -о 结尾）",
+              "explanation": "尽管 -о 结尾，但 тато 表示「爸爸」是男性 → 有生命阳性。宾格变 тата。"
+            },
+            {
+              "prompt": "「Я бачу пса.」中的 пса 是哪个词的宾格？",
+              "options": ["пес（狗）", "пас（带）", "піс（沙）", "пис（写）"],
+              "answer": "пес（狗）",
+              "explanation": "пес → пса（e 脱落）。这是必背的飘忽元音变化。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：写出宾格形式（10题）",
+          "instruction": "把括号里的有生命阳性名词改成正确的宾格形式填入。",
+          "questions": [
+            {
+              "prompt": "Я бачу ____. (брат)",
+              "answer": "брата",
+              "accept": ["брата", "Брата"],
+              "explanation": "брат + а = брата（硬辅音 + а）。"
+            },
+            {
+              "prompt": "Я бачу ____. (друг)",
+              "answer": "друга",
+              "accept": ["друга", "Друга"],
+              "explanation": "друг + а = друга。"
+            },
+            {
+              "prompt": "Я люблю ____. (син)",
+              "answer": "сина",
+              "accept": ["сина", "Сина"],
+              "explanation": "син + а = сина。"
+            },
+            {
+              "prompt": "Я бачу ____. (кіт)",
+              "answer": "кота",
+              "accept": ["кота", "Кота"],
+              "explanation": "кіт → кота（i→o + а）。",
+              "hints": ["飘忽元音：i 变 o"]
+            },
+            {
+              "prompt": "Я бачу ____. (пес)",
+              "answer": "пса",
+              "accept": ["пса", "Пса"],
+              "explanation": "пес → пса（е 脱落 + а）。",
+              "hints": ["飘忽元音：е 脱落"]
+            },
+            {
+              "prompt": "Я люблю ____. (тато)",
+              "answer": "тата",
+              "accept": ["тата", "Тата"],
+              "explanation": "тато → тата（-о → -а，「假阴性」阳性人物词）。"
+            },
+            {
+              "prompt": "Я бачу ____. (учень)",
+              "answer": "учня",
+              "accept": ["учня", "Учня"],
+              "explanation": "учень → учня（-ь → -я，e 脱落）。",
+              "hints": ["先去 -ь 加 -я", "再让 е 脱落"]
+            },
+            {
+              "prompt": "Я бачу ____. (кінь)",
+              "answer": "коня",
+              "accept": ["коня", "Коня"],
+              "explanation": "кінь → коня（-ь → -я + i→o）。"
+            },
+            {
+              "prompt": "Я бачу ____. (ведмідь)",
+              "answer": "ведмедя",
+              "accept": ["ведмедя", "Ведмедя"],
+              "explanation": "ведмідь → ведмедя（-ь → -я + i→e）。",
+              "hints": ["先去 -ь 加 -я", "i 在开音节变成 е"]
+            },
+            {
+              "prompt": "Я бачу ____. (лев)",
+              "answer": "лева",
+              "accept": ["лева", "Лева"],
+              "explanation": "лев + а = лева（硬辅音 + а，无飘忽元音）。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 E：补全完整句子（5题）",
+          "instruction": "把括号里的中文翻译成宾格形式填入。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____. (兄弟)",
+              "answer": "брата",
+              "accept": ["брата", "Брата"],
+              "explanation": "兄弟 = брат → брата（宾格）。"
+            },
+            {
+              "prompt": "Я бачу ____. (狗)",
+              "answer": "пса",
+              "accept": ["пса", "Пса"],
+              "explanation": "狗（雄性）= пес → пса（宾格，e 脱落）。"
+            },
+            {
+              "prompt": "Я бачу ____. (老师)",
+              "answer": "вчителя",
+              "accept": ["вчителя", "Вчителя", "учителя", "Учителя"],
+              "explanation": "老师 = вчитель → вчителя（宾格，-ь → -я）。"
+            },
+            {
+              "prompt": "Я люблю ____. (儿子)",
+              "answer": "сина",
+              "accept": ["сина", "Сина"],
+              "explanation": "儿子 = син → сина（宾格）。"
+            },
+            {
+              "prompt": "Я маю ____. (朋友)",
+              "answer": "друга",
+              "accept": ["друга", "Друга"],
+              "explanation": "朋友 = друг → друга（宾格）。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>有生命阳性宾格规则：</strong>① 硬辅音 + <strong>а</strong>（брат → брата）；② -ь / -й → 换成 <strong>я</strong>（учень → учня）；③ -о 结尾的「假阴性」阳性人物词 → 换成 <strong>а</strong>（тато → тата）。</li><li><strong>飘忽元音常常出现：</strong>кіт → <strong>кота</strong>（i→o），пес → <strong>пса</strong>（e 脱落），кінь → <strong>коня</strong>（i→o），ведмідь → <strong>ведмедя</strong>（i→e）。这些是最常用动词宾语，必须背下来。</li><li><strong>关键判断：「是人或动物吗？」</strong>是 → 用今天的规则；不是 → 用昨天的规则（不变化）。<strong>植物算无生命</strong>，不要混淆。</li><li>已经能造很多句子了：「Я бачу друга」「Я люблю тата」「Я маю брата」……</li></ol><p><strong>下节预告：</strong>明天学<strong>阴性宾格</strong>。好消息是 —— 阴性变化最规则、最容易：<span class=\"uk-text\">-а → -у</span>（книга → книгу），<span class=\"uk-text\">-я → -ю</span>（пісня → пісню）。而且<strong>不区分有生命无生命</strong>！这意味着「我喝咖啡」「我爱妈妈」明天就都能说了。</p>"
+    }
+  ]
+}

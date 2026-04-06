@@ -1,0 +1,407 @@
+{
+  "title": "第3周 第3天 — 宾格入门：无生命阳性名词",
+  "objective": "认识乌克兰语的第二个格 —— 宾格（Знахідний），并掌握它最简单的一种情况：无生命阳性名词的宾格 = 主格（不变化）。从今天起，你将能造出真正的「主谓宾」句子，比如「我读杂志」「我喝茶」。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "回顾：昨天的核心收获" },
+        { "type": "p", "html": "昨天我们学了两件事：①「格」是什么 —— 名词在句中扮演不同角色时会改变词尾；②<strong>主格</strong> (<span class=\"uk-word\" data-def=\"主格\">Називний</span>) —— 字典原形，作主语，回答 <span class=\"uk-word\" data-def=\"谁\">хто?</span> / <span class=\"uk-word\" data-def=\"什么\">що?</span>。" },
+        { "type": "p", "html": "我们还提到一个重要概念：乌克兰语区分<strong>有生命名词</strong>（人和动物，用 <span class=\"uk-word\" data-def=\"谁\">хто?</span> 提问）和<strong>无生命名词</strong>（物品、植物、抽象词，用 <span class=\"uk-word\" data-def=\"什么\">що?</span> 提问）。请记住这个分类 —— 今天就要用到。" },
+
+        { "type": "h3", "text": "什么是宾格？" },
+        { "type": "p", "html": "宾格 (<span class=\"uk-word\" data-def=\"宾格\">Знахідний відмінок</span>) 是表示<strong>直接宾语</strong>的格 —— 也就是「动作的承受者」「我把谁/把什么怎么样」中的「谁/什么」。" },
+        { "type": "p", "html": "用中文来理解就是：" },
+        {
+          "type": "table",
+          "headers": ["中文", "主语 = 主格", "动词", "宾语 = 宾格"],
+          "firstColWord": false,
+          "rows": [
+            ["我 读 杂志。", "我", "读", "杂志"],
+            ["我 喝 茶。", "我", "喝", "茶"],
+            ["我 看见 桌子。", "我", "看见", "桌子"]
+          ]
+        },
+        { "type": "p", "html": "中文里宾语的形式不变（杂志就是杂志），但乌克兰语的宾语需要用<strong>宾格形式</strong>。好消息是 —— 今天我们要学的这一类，<strong>宾格形式和主格完全一样</strong>，所以等于零变化！" },
+
+        { "type": "h3", "text": "宾格的提问词" },
+        { "type": "grammar-box", "html": "<p><strong>宾格回答的问题：</strong></p><ul><li>有生命：<span class=\"uk-word\" data-def=\"谁（宾格）\">кого?</span>（把谁？）—— 例：我看见<strong>谁</strong>？我看见<strong>朋友</strong>。</li><li>无生命：<span class=\"uk-word\" data-def=\"什么\">що?</span>（什么？）—— 例：我喝<strong>什么</strong>？我喝<strong>茶</strong>。</li></ul>" },
+        { "type": "tip", "html": "<strong>注意：</strong>宾格的<strong>无生命提问词 que? 和主格相同</strong>（都是 <span class=\"uk-word\" data-def=\"什么\">що?</span>），这其实是个线索 —— 提问词相同，往往意味着名词形式也一样。<br>而<strong>有生命的提问词不同了</strong>（主格 хто? → 宾格 кого?），暗示着有生命名词的宾格形式会变化（这是明天的内容）。" },
+
+        { "type": "h3", "text": "今天的核心规则" },
+        { "type": "grammar-box", "html": "<p><strong>无生命阳性名词的宾格 = 主格（完全相同）</strong></p><p>也就是说：当你在句子里要把一个无生命的阳性名词当成「直接宾语」时，<strong>不需要做任何改变</strong>，直接用字典原形即可。</p>" },
+        { "type": "p", "html": "举例对比：" },
+        {
+          "type": "table",
+          "headers": ["主格句（X 在/是 …）", "宾格句（我 + 动词 + X）", "X 的形式"],
+          "firstColWord": false,
+          "rows": [
+            ["Це <span class=\"uk-word\" data-def=\"杂志\">журнал</span>.", "Я читаю <span class=\"uk-word\" data-def=\"杂志（宾格=主格）\">журнал</span>.", "完全相同"],
+            ["<span class=\"uk-word\" data-def=\"茶\">Чай</span> тут.", "Я п'ю <span class=\"uk-word\" data-def=\"茶（宾格=主格）\">чай</span>.", "完全相同"],
+            ["<span class=\"uk-word\" data-def=\"桌子\">Стіл</span> там.", "Я бачу <span class=\"uk-word\" data-def=\"桌子（宾格=主格）\">стіл</span>.", "完全相同"],
+            ["Це <span class=\"uk-word\" data-def=\"礼物\">подарунок</span>.", "Я купую <span class=\"uk-word\" data-def=\"礼物（宾格=主格）\">подарунок</span>.", "完全相同"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>为什么这样？</strong>这是乌克兰语的一个历史巧合 —— 早期斯拉夫语言中，无生命名词的主格和宾格本来就长得不一样，但经过几百年演变，无生命阳性名词的两种形式合并了。所以你今天「学」的其实是<strong>「不用学」</strong>。" },
+
+        { "type": "h3", "text": "现在你能造的句型" },
+        { "type": "p", "html": "主谓宾结构：<strong>Я + 动词 + 无生命阳性名词</strong>。本周我们已经预载了 5 个动词的「我」形式，加上之前学过的，可以使用这些动词造句：" },
+        {
+          "type": "table",
+          "headers": ["动词「我」形式", "中文", "搭配什么样的宾语自然？"],
+          "firstColWord": true,
+          "rows": [
+            ["читаю", "我读", "杂志、信、字典、课本"],
+            ["пишу", "我写", "信、诗、笔记本"],
+            ["їм", "我吃", "面包、汤、沙拉、蛋糕"],
+            ["п'ю", "我喝", "茶、果汁"],
+            ["бачу", "我看见", "任何看得见的物品"],
+            ["купую", "我买", "礼物、面包、字典、笔"],
+            ["люблю", "我喜欢", "茶、电影、剧院"],
+            ["маю", "我有", "电脑、电话、钥匙、笔"],
+            ["знаю", "我知道", "课、词"]
+          ]
+        },
+
+        { "type": "h3", "text": "怎么判断「这是不是无生命阳性」" },
+        { "type": "p", "html": "三步走：" },
+        {
+          "type": "ol",
+          "items": [
+            "看词尾判断<strong>性别</strong>：辅音结尾 / -ь 结尾 → 阳性（第1周已学）。",
+            "看含义判断<strong>有生命/无生命</strong>：是人或动物吗？是 → 有生命；不是 → 无生命。",
+            "如果两个条件都满足（阳性 + 无生命），就用<strong>今天的规则</strong>：宾格 = 主格。"
+          ]
+        },
+        { "type": "note", "html": "<strong>软音符号 -ь 结尾的阳性也适用</strong>：例如 <span class=\"uk-word\" data-def=\"日子\">день</span>（日子）、<span class=\"uk-word\" data-def=\"月份\">місяць</span>（月份）、<span class=\"uk-word\" data-def=\"酒店\">готель</span>（酒店）—— 它们都是无生命阳性，宾格也保持不变：「Я люблю день.」「Я бачу готель.」。" },
+
+        { "type": "h3", "text": "中文母语者常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要把所有名词都「不变」。</strong>今天我们学的是「无生命阳性」这<strong>一种</strong>情况。其他类别（有生命阳性、阴性、复数）后面几天会有变化。今天的规则只适用于<strong>无生命阳性单数</strong>。</li><li><strong>注意区分动物和物品。</strong>「猫」<span class=\"uk-word\" data-def=\"猫\">кіт</span>、「狗」<span class=\"uk-word\" data-def=\"狗\">пес</span> 这些虽然词尾是辅音（看起来像今天的规则），但它们是<strong>有生命的</strong>，明天才学。所以「Я бачу кіт」是错的 —— 正确的形式 кота 是明天的内容。</li><li><strong>动词形式不能乱用。</strong>本周只学了「我」（я）+ 动词的固定形式。「他读」「她读」的形式还没学，不要试着自己造 —— 第4周才会系统讲。</li></ol>" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "「我吃 / 我喝」（食物饮料）",
+          "items": [
+            { "text": "Я їм хліб.", "translation": "我吃面包。" },
+            { "text": "Я їм суп.", "translation": "我喝汤。" },
+            { "text": "Я їм салат.", "translation": "我吃沙拉。" },
+            { "text": "Я їм торт.", "translation": "我吃蛋糕。" },
+            { "text": "Я п'ю сік.", "translation": "我喝果汁。" },
+            { "text": "Я п'ю чай.", "translation": "我喝茶。" }
+          ]
+        },
+        {
+          "heading": "「我读 / 我写」（阅读物）",
+          "items": [
+            { "text": "Я читаю журнал.", "translation": "我读杂志。" },
+            { "text": "Я читаю словник.", "translation": "我看字典。" },
+            { "text": "Я читаю лист.", "translation": "我读这封信。" },
+            { "text": "Я пишу лист.", "translation": "我写信。" },
+            { "text": "Я пишу вірш.", "translation": "我写诗。" }
+          ]
+        },
+        {
+          "heading": "「我看见」（环境中的物品）",
+          "items": [
+            { "text": "Я бачу стіл.", "translation": "我看见桌子。" },
+            { "text": "Я бачу автобус.", "translation": "我看见公交车。" },
+            { "text": "Я бачу магазин.", "translation": "我看见商店。" },
+            { "text": "Я бачу музей.", "translation": "我看见博物馆。" },
+            { "text": "Я бачу будинок.", "translation": "我看见这栋楼。" }
+          ]
+        },
+        {
+          "heading": "「我有 / 我买 / 我喜欢」",
+          "items": [
+            { "text": "Я маю комп'ютер.", "translation": "我有电脑。" },
+            { "text": "Я маю телефон.", "translation": "我有手机。" },
+            { "text": "Я маю рюкзак.", "translation": "我有背包。" },
+            { "text": "Я купую подарунок.", "translation": "我买礼物。" },
+            { "text": "Я купую словник.", "translation": "我买字典。" },
+            { "text": "Я люблю чай.", "translation": "我喜欢茶。" },
+            { "text": "Я люблю фільм.", "translation": "我喜欢这部电影。" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：判断主格还是宾格（8题）",
+          "instruction": "下面句子中加粗的名词处于哪个格？",
+          "questions": [
+            {
+              "prompt": "Це <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "Це 后面的名词永远是主格。"
+            },
+            {
+              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "动词后面的直接宾语用宾格。这里 стіл 是「我看见」的对象。",
+              "hints": ["谁是这个动作的承受者？"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"杂志\">Журнал</span> тут.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "журнал 是这个句子的主语 —— 「杂志在这里」中的「杂志」。"
+            },
+            {
+              "prompt": "Я читаю <span class=\"uk-word\" data-def=\"杂志\">журнал</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "журнал 是「读」这个动作的承受者 → 宾格。"
+            },
+            {
+              "prompt": "Я п'ю <span class=\"uk-word\" data-def=\"茶\">чай</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "чай 是「喝」的对象 → 宾格。注意：чай 是无生命阳性，所以宾格 = 主格。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"汤\">Суп</span> тут.",
+              "options": ["主格", "宾格"],
+              "answer": "主格",
+              "explanation": "суп 是主语 —— 「汤在这里」。"
+            },
+            {
+              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"电影\">фільм</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "фільм 是「喜欢」的对象 → 宾格。"
+            },
+            {
+              "prompt": "Я маю <span class=\"uk-word\" data-def=\"电脑\">комп'ютер</span>.",
+              "options": ["主格", "宾格"],
+              "answer": "宾格",
+              "explanation": "комп'ютер 是「有」的对象 → 宾格（无生命阳性，形式不变）。",
+              "hints": ["「我有 X」中的 X 是动作的承受者吗？是的", "无生命阳性宾格 = 主格"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：找出宾语（8题）",
+          "instruction": "选出每个句子中作直接宾语的名词。",
+          "questions": [
+            {
+              "prompt": "Я читаю <span class=\"uk-word\" data-def=\"字典\">словник</span>.",
+              "options": ["я", "читаю", "словник"],
+              "answer": "словник",
+              "explanation": "「我读字典」—— 字典是「读」的对象。"
+            },
+            {
+              "prompt": "Я їм <span class=\"uk-word\" data-def=\"面包\">хліб</span>.",
+              "options": ["я", "їм", "хліб"],
+              "answer": "хліб",
+              "explanation": "хліб 是「吃」的对象 → 直接宾语。"
+            },
+            {
+              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"博物馆\">музей</span>.",
+              "options": ["я", "бачу", "музей"],
+              "answer": "музей",
+              "explanation": "музей 是「看见」的对象 → 直接宾语。"
+            },
+            {
+              "prompt": "Я купую <span class=\"uk-word\" data-def=\"礼物\">подарунок</span>.",
+              "options": ["я", "купую", "подарунок"],
+              "answer": "подарунок",
+              "explanation": "подарунок 是「买」的对象 → 直接宾语。"
+            },
+            {
+              "prompt": "Я пишу <span class=\"uk-word\" data-def=\"信\">лист</span>.",
+              "options": ["я", "пишу", "лист"],
+              "answer": "лист",
+              "explanation": "лист 是「写」的对象 → 直接宾语。"
+            },
+            {
+              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"蛋糕\">торт</span>.",
+              "options": ["я", "люблю", "торт"],
+              "answer": "торт",
+              "explanation": "торт 是「喜欢」的对象 → 直接宾语。"
+            },
+            {
+              "prompt": "Я маю <span class=\"uk-word\" data-def=\"手机\">телефон</span>.",
+              "options": ["я", "маю", "телефон"],
+              "answer": "телефон",
+              "explanation": "телефон 是「有」的对象 → 直接宾语。"
+            },
+            {
+              "prompt": "Я знаю <span class=\"uk-word\" data-def=\"课\">урок</span>.",
+              "options": ["я", "знаю", "урок"],
+              "answer": "урок",
+              "explanation": "урок 是「知道」的对象 → 直接宾语。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 C：宾格规则巩固（5题）",
+          "instruction": "选择正确的概念答案。",
+          "questions": [
+            {
+              "prompt": "宾格的乌克兰语名称是？",
+              "options": ["Називний", "Знахідний", "Родовий", "Орудний"],
+              "answer": "Знахідний",
+              "explanation": "宾格 = Знахідний відмінок。",
+              "hints": ["昨天的 7 格表里能找到答案"]
+            },
+            {
+              "prompt": "无生命阳性名词的宾格形式与什么相同？",
+              "options": ["属格", "主格", "工具格", "完全不同"],
+              "answer": "主格",
+              "explanation": "今天的核心规则：无生命阳性名词的宾格 = 主格（不变化）。"
+            },
+            {
+              "prompt": "无生命名词的宾格用哪个提问词？",
+              "options": ["хто?", "кого?", "що?", "чий?"],
+              "answer": "що?",
+              "explanation": "无生命的提问词永远是 що?（无论主格还是宾格都一样）。"
+            },
+            {
+              "prompt": "下面哪个动词后面会接宾格？",
+              "options": ["бути（是）", "читати（读）", "Це（这是）", "тут（这里）"],
+              "answer": "читати（读）",
+              "explanation": "及物动词（如 читати, їсти, бачити, любити）后面接直接宾语 → 宾格。",
+              "hints": ["「读」需要一个承受动作的对象"]
+            },
+            {
+              "prompt": "「Я бачу автобус.」中的 автобус 是？",
+              "options": ["主语，主格", "宾语，宾格", "宾语，主格", "主语，宾格"],
+              "answer": "宾语，宾格",
+              "explanation": "автобус 是「看见」的对象 → 宾语，用宾格（恰好与主格同形，因为是无生命阳性）。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：补全宾语（10题）",
+          "instruction": "根据括号里的中文提示，填入正确的乌克兰语宾格形式。本课所有名词都是无生命阳性，所以宾格 = 字典原形。",
+          "questions": [
+            {
+              "prompt": "Я читаю ____. (杂志)",
+              "answer": "журнал",
+              "accept": ["журнал", "Журнал"],
+              "explanation": "журнал 是无生命阳性，宾格 = 主格 = журнал。"
+            },
+            {
+              "prompt": "Я п'ю ____. (茶)",
+              "answer": "чай",
+              "accept": ["чай", "Чай"],
+              "explanation": "чай 是无生命阳性，宾格不变。"
+            },
+            {
+              "prompt": "Я їм ____. (面包)",
+              "answer": "хліб",
+              "accept": ["хліб", "Хліб"],
+              "explanation": "хліб 是无生命阳性，宾格 = 主格。"
+            },
+            {
+              "prompt": "Я купую ____. (礼物)",
+              "answer": "подарунок",
+              "accept": ["подарунок", "Подарунок"],
+              "explanation": "подарунок 是无生命阳性，宾格不变。"
+            },
+            {
+              "prompt": "Я бачу ____. (公交车)",
+              "answer": "автобус",
+              "accept": ["автобус", "Автобус"],
+              "explanation": "автобус 是无生命阳性，宾格 = 主格。"
+            },
+            {
+              "prompt": "Я маю ____. (手机)",
+              "answer": "телефон",
+              "accept": ["телефон", "Телефон"],
+              "explanation": "телефон 是无生命阳性，宾格不变。",
+              "hints": ["手机这个词在第1周学过", "无生命阳性宾格 = 字典原形"]
+            },
+            {
+              "prompt": "Я люблю ____. (电影)",
+              "answer": "фільм",
+              "accept": ["фільм", "Фільм"],
+              "explanation": "фільм 是无生命阳性，宾格不变。"
+            },
+            {
+              "prompt": "Я пишу ____. (诗)",
+              "answer": "вірш",
+              "accept": ["вірш", "Вірш"],
+              "explanation": "вірш 是无生命阳性，宾格 = 主格。",
+              "hints": ["第2周学过这个词，意思是「诗」"]
+            },
+            {
+              "prompt": "Я їм ____. (蛋糕)",
+              "answer": "торт",
+              "accept": ["торт", "Торт"],
+              "explanation": "торт 是无生命阳性，宾格不变。"
+            },
+            {
+              "prompt": "Я бачу ____. (酒店)",
+              "answer": "готель",
+              "accept": ["готель", "Готель"],
+              "explanation": "готель 是无生命阳性（以软音符号 -ь 结尾），宾格 = 主格。",
+              "hints": ["以 -ь 结尾，但是阳性", "-ь 结尾的无生命阳性，宾格也不变"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 E：写出动词「我 + ...」形式（5题）",
+          "instruction": "本周学过的 5 个动词的「我」形式 —— 这是接下来几天造句的工具，先确保都记住。",
+          "questions": [
+            {
+              "prompt": "我读：____ + 宾语",
+              "answer": "читаю",
+              "accept": ["читаю", "Читаю"],
+              "explanation": "читати（读）的「我」形式是 читаю。",
+              "hints": ["原形 читати，去 -ти 加 -ю"]
+            },
+            {
+              "prompt": "我写：____ + 宾语",
+              "answer": "пишу",
+              "accept": ["пишу", "Пишу"],
+              "explanation": "писати（写）的「我」形式是 пишу。",
+              "hints": ["这个词形与原形 писати 略有不同（с → ш）", "下周学动词变位时会讲为什么"]
+            },
+            {
+              "prompt": "我看见：____ + 宾语",
+              "answer": "бачу",
+              "accept": ["бачу", "Бачу"],
+              "explanation": "бачити（看见）的「我」形式是 бачу。"
+            },
+            {
+              "prompt": "我买：____ + 宾语",
+              "answer": "купую",
+              "accept": ["купую", "Купую"],
+              "explanation": "купувати（买）的「我」形式是 купую。"
+            },
+            {
+              "prompt": "我喜欢/爱：____ + 宾语",
+              "answer": "люблю",
+              "accept": ["люблю", "Люблю"],
+              "explanation": "любити（爱/喜欢）的「我」形式是 люблю。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>宾格 (Знахідний відмінок)</strong> 表示直接宾语 —— 动作的承受者。提问词：有生命用 <span class=\"uk-word\" data-def=\"谁（宾格）\">кого?</span>，无生命用 <span class=\"uk-word\" data-def=\"什么\">що?</span>。</li><li><strong>核心规则：无生命阳性名词的宾格 = 主格（不变化）。</strong>无论辅音结尾还是 -ь 结尾的阳性名词，只要是无生命的，作宾语时形式都不变。</li><li><strong>能造的句型：</strong>Я + 动词 + 无生命阳性宾语。例如 Я читаю журнал, Я п'ю чай, Я бачу музей。</li><li><strong>注意区分：</strong>同样是「стіл」，在「Це стіл.」里是主格，在「Я бачу стіл.」里是宾格 —— 形式相同，但语法身份不同。</li></ol><p><strong>下节预告：</strong>明天我们就要打开「真正会变形」的盒子 —— <strong>有生命阳性名词的宾格</strong>。简单来说：当宾语是「人」或「动物」时，阳性名词要在词尾加上 <strong>-а 或 -я</strong>。比如「我看见兄弟」是 <span class=\"uk-text\">Я бачу брата.</span>（брат → брата）。明天见！</p>"
+    }
+  ]
+}
