@@ -1071,18 +1071,28 @@ const resetSection = (section: string) => {
 const setAccent = async (accent: 'us' | 'uk') => {
   const source = activeTab.value
   if (source === '__global__' || !globalSettings.value?.sourceSettings[source]) return
+  const oldAccent = globalSettings.value.sourceSettings[source].accent
   globalSettings.value.sourceSettings[source].accent = accent
+  // 同步 patch 快照，与响应式变更在同一 tick 内完成，避免 save bar 闪现
+  patchSnapshot(snap => {
+    const ss = snap.sourceSettings as Record<string, Record<string, unknown>> | undefined
+    if (ss?.[source]) ss[source].accent = accent
+  })
   try {
     // 只传 accent，避免意外将未保存的 learning 修改写入 DB
     await updateSettings({
       sourceSettings: { [source]: { accent } as SourceSpecificSettings }
     })
-    patchSnapshot(snap => {
-      const ss = snap.sourceSettings as Record<string, Record<string, unknown>> | undefined
-      if (ss?.[source]) ss[source].accent = accent
-    })
     showToast('口音设置已保存')
   } catch (error) {
+    // 回滚响应式状态和快照
+    if (globalSettings.value?.sourceSettings[source]) {
+      globalSettings.value.sourceSettings[source].accent = oldAccent
+    }
+    patchSnapshot(snap => {
+      const ss = snap.sourceSettings as Record<string, Record<string, unknown>> | undefined
+      if (ss?.[source]) ss[source].accent = oldAccent
+    })
     logger.error('保存口音设置失败:', error)
   }
 }
@@ -1113,6 +1123,11 @@ const addSource = async () => {
   if (globalSettings.value) {
     globalSettings.value.sourceSettings[name] = createDefaultSourceSettings()
   }
+  // 同步 patch 快照，与响应式变更在同一 tick 内完成，避免 save bar 闪现
+  patchSnapshot(snap => {
+    const ss = snap.sourceSettings as Record<string, unknown> | undefined
+    if (ss) ss[name] = JSON.parse(JSON.stringify(createDefaultSourceSettings()))
+  })
 
   try {
     await updateSettings({
@@ -1123,15 +1138,16 @@ const addSource = async () => {
       sourceSettings: { [name]: createDefaultSourceSettings() },
     })
     activeTab.value = name
-    patchSnapshot(snap => {
-      const ss = snap.sourceSettings as Record<string, unknown> | undefined
-      if (ss) ss[name] = JSON.parse(JSON.stringify(createDefaultSourceSettings()))
-    })
     showToast(`已添加来源"${name}"`)
   } catch (error) {
     delete localSources.value[name]
     localSourceOrder.value = localSourceOrder.value.filter(s => s !== name)
     if (globalSettings.value) delete globalSettings.value.sourceSettings[name]
+    // 回滚快照
+    patchSnapshot(snap => {
+      const ss = snap.sourceSettings as Record<string, unknown> | undefined
+      if (ss) delete ss[name]
+    })
     logger.error('添加来源失败:', error)
     alert('添加失败，请重试')
   }
@@ -1153,14 +1169,15 @@ const confirmDeleteSource = async (source: string) => {
       delete globalSettings.value.sources.customSources[source]
       globalSettings.value.sources.sourceOrder = localSourceOrder.value
     }
-    if (activeTab.value === source) {
-      activeTab.value = localSourceOrder.value[0] || '__global__'
-    }
-    await loadSourceStats()
+    // 同步 patch 快照，与响应式变更在同一 tick 内完成，避免 await 期间 save bar 闪现
     patchSnapshot(snap => {
       const ss = snap.sourceSettings as Record<string, unknown> | undefined
       if (ss) delete ss[source]
     })
+    if (activeTab.value === source) {
+      activeTab.value = localSourceOrder.value[0] || '__global__'
+    }
+    await loadSourceStats()
     showToast(`已删除来源"${source}"`)
   } catch (error) {
     logger.error('删除来源失败:', error)

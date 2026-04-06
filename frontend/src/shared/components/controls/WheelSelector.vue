@@ -20,8 +20,10 @@ const emit = defineEmits<{
 const ITEM_HEIGHT = computed(() => props.itemHeight ?? 28)
 const MIN = computed(() => props.min ?? 1)
 const STEP = computed(() => props.step ?? 1)
-const CONTAINER_HEIGHT = 80
-const SPACER_HEIGHT = computed(() => (CONTAINER_HEIGHT - ITEM_HEIGHT.value) / 2)
+// 容器高度从真实 DOM 读取，避免父组件覆盖 .wheel 高度时（如 SettingsPage 改成 60px）
+// 与硬编码值不一致导致选中条与 item 中心对不齐
+const containerHeight = ref(80)
+const SPACER_HEIGHT = computed(() => (containerHeight.value - ITEM_HEIGHT.value) / 2)
 
 const displayMaxValue = computed(() => props.displayMax ?? props.max)
 
@@ -64,7 +66,7 @@ const computeVisibleRange = (scrollTop: number): [number, number] => {
   if (!useVirtual.value || total === 0) return [0, total]
 
   const startIdx = Math.floor((scrollTop - SPACER_HEIGHT.value) / ITEM_HEIGHT.value)
-  const endIdx = Math.ceil((scrollTop + CONTAINER_HEIGHT - SPACER_HEIGHT.value) / ITEM_HEIGHT.value)
+  const endIdx = Math.ceil((scrollTop + containerHeight.value - SPACER_HEIGHT.value) / ITEM_HEIGHT.value)
 
   return [
     Math.max(0, startIdx - BUFFER_COUNT),
@@ -118,7 +120,7 @@ if (useVirtual.value && validValues.value.length > 0) {
   const aligned = clampToStep(props.modelValue)
   const itemIndex = Math.round((aligned - MIN.value) / STEP.value)
   const elementCenter = SPACER_HEIGHT.value + itemIndex * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
-  const initialScroll = Math.max(0, elementCenter - CONTAINER_HEIGHT / 2)
+  const initialScroll = Math.max(0, elementCenter - containerHeight.value / 2)
 
   const [start, end] = computeVisibleRange(initialScroll)
   virtualStart = start
@@ -165,7 +167,7 @@ const updateItemVisuals = () => {
   const container = wheelRef.value
   if (!container) return
 
-  const centerY = currentScrollTop + CONTAINER_HEIGHT / 2
+  const centerY = currentScrollTop + containerHeight.value / 2
 
   // 虚拟模式下不缓存（DOM 频繁变化），非虚拟模式保持缓存
   const items = useVirtual.value
@@ -201,7 +203,7 @@ const updateItemVisuals = () => {
 // ── 滚动位置计算 ──────────────────────────────────────────
 
 const getValueFromScroll = (scrollTop: number): number => {
-  const centerPosition = scrollTop + CONTAINER_HEIGHT / 2
+  const centerPosition = scrollTop + containerHeight.value / 2
   const itemIndex = Math.round((centerPosition - SPACER_HEIGHT.value) / ITEM_HEIGHT.value - 0.5)
   const rawValue = MIN.value + Math.max(0, itemIndex) * STEP.value
   return Math.max(MIN.value, Math.min(rawValue, props.max))
@@ -211,11 +213,11 @@ const getScrollFromValue = (value: number): number => {
   const aligned = clampToStep(value)
   const itemIndex = Math.round((aligned - MIN.value) / STEP.value)
   const elementCenter = SPACER_HEIGHT.value + itemIndex * ITEM_HEIGHT.value + ITEM_HEIGHT.value / 2
-  return Math.max(0, elementCenter - CONTAINER_HEIGHT / 2)
+  return Math.max(0, elementCenter - containerHeight.value / 2)
 }
 
 const getMaxScroll = (): number => {
-  return Math.max(0, totalContentHeight.value - CONTAINER_HEIGHT)
+  return Math.max(0, totalContentHeight.value - containerHeight.value)
 }
 
 // ── rAF 渲染调度（touchmove 只更新数值，DOM 操作合并到单次 rAF） ──
@@ -470,7 +472,32 @@ watch(
   }
 )
 
+let resizeObserver: ResizeObserver | null = null
+
 onMounted(() => {
+  const el = wheelRef.value
+  if (el) {
+    // 从真实 DOM 读取容器高度（父组件可能用 :deep 覆盖 .wheel 高度）
+    const measured = el.clientHeight
+    if (measured > 0) {
+      containerHeight.value = measured
+    }
+
+    // 监听尺寸变化（响应式断点 / 父容器布局变化）
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        if (!wheelRef.value) return
+        const next = wheelRef.value.clientHeight
+        if (next > 0 && next !== containerHeight.value) {
+          containerHeight.value = next
+          // 高度变化后重新对齐选中项
+          nextTick(() => setScrollPosition(props.modelValue))
+        }
+      })
+      resizeObserver.observe(el)
+    }
+  }
+
   // 虚拟模式：同步设置 spacer 高度（setup 阶段已填充 visibleItems）
   if (useVirtual.value) {
     updateSpacerHeights(virtualStart, virtualEnd)
@@ -480,7 +507,6 @@ onMounted(() => {
     initPosition()
   }
 
-  const el = wheelRef.value
   if (el) {
     el.addEventListener('wheel', onWheel, { passive: false })
     el.addEventListener('touchstart', onTouchStart, { passive: true })
@@ -492,6 +518,8 @@ onMounted(() => {
 onUnmounted(() => {
   if (animationId) cancelAnimationFrame(animationId)
   if (renderFrameId !== null) cancelAnimationFrame(renderFrameId)
+  resizeObserver?.disconnect()
+  resizeObserver = null
 
   const el = wheelRef.value
   if (el) {

@@ -7,18 +7,18 @@
  * - source 由用户在页面上通过下拉框选择（从 Supabase 获取已有 source 列表）
  * - 未登录时禁用添加功能
  */
-// 按 URL 路径决定默认 source 和是否发送 definition
+// 按 URL 路径决定当前课程对应的语言、以及是否发送 definition
 const COURSE_DEFAULTS = {
-  '/uk/':    { defaultSource: 'UKA',   sendDef: false },
-  '/legal/': { defaultSource: 'IELTS', sendDef: true  }
+  '/uk/':    { sendDef: false, lang: 'uk' },
+  '/legal/': { sendDef: true,  lang: 'en' }
 };
 
 const courseCfg = Object.entries(COURSE_DEFAULTS).find(([p]) => location.pathname.startsWith(p))?.[1];
 
 const SOURCE_STORAGE_KEY = 'vocab_selected_source';
 let selectedSource = (() => {
-  try { return localStorage.getItem(SOURCE_STORAGE_KEY) || courseCfg?.defaultSource || ''; }
-  catch (e) { return courseCfg?.defaultSource || ''; }
+  try { return localStorage.getItem(SOURCE_STORAGE_KEY) || ''; }
+  catch (e) { return ''; }
 })();
 let authUserId = null;
 
@@ -88,20 +88,25 @@ if (document.readyState === 'loading') {
 async function renderSourceSelector(addBtn) {
   let sources = [];
   try {
+    // 从 user_config 读取 source 列表和语言映射（而非 word_source_stats 视图，
+    // 后者依赖 words 表聚合，count=0 的 source 不会出现）
     const resp = await window.CourseAuth.supabaseFetch(
-      '/rest/v1/word_source_stats?select=source&user_id=eq.' + authUserId + '&order=source'
+      '/rest/v1/user_config?select=config&user_id=eq.' + authUserId
     );
     const rows = await resp.json();
-    if (Array.isArray(rows)) {
-      sources = rows.map(r => r.source).filter(Boolean);
-    }
+    const cfg = Array.isArray(rows) && rows[0]?.config ? rows[0].config : {};
+    const customSources = cfg.sources?.customSources || {};
+    const order = Array.isArray(cfg.sources?.sourceOrder) && cfg.sources.sourceOrder.length > 0
+      ? cfg.sources.sourceOrder
+      : Object.keys(customSources);
+    // 按当前课程语言过滤（/uk/ 只列 lang=uk，/legal/ 只列 lang=en）
+    const targetLang = courseCfg?.lang;
+    sources = order.filter(s => {
+      if (!customSources[s]) return false;
+      return targetLang ? customSources[s] === targetLang : true;
+    });
   } catch (e) {
     console.warn('获取 source 列表失败', e);
-  }
-
-  // 确保默认 source 在列表中
-  if (courseCfg?.defaultSource && !sources.includes(courseCfg.defaultSource)) {
-    sources.unshift(courseCfg.defaultSource);
   }
 
   if (sources.length === 0) return;

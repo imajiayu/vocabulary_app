@@ -9,7 +9,7 @@
 (function () {
   var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
   var wordSelector = lang === 'uk' ? '.uk-word' : '.term';
-  var DEFAULT_SOURCE = lang === 'uk' ? 'UKA' : 'IELTS';
+  var COURSE_LANG = lang === 'uk' ? 'uk' : 'en';
   var SOURCE_STORAGE_KEY = 'vocab_selected_source';
 
   // --- Source 管理（与 vocab.js 共享）---
@@ -17,11 +17,12 @@
   var sourceListLoaded = false;
 
   function getSelectedSource() {
-    try {
-      return localStorage.getItem(SOURCE_STORAGE_KEY) || DEFAULT_SOURCE;
-    } catch (e) {
-      return DEFAULT_SOURCE;
-    }
+    var stored;
+    try { stored = localStorage.getItem(SOURCE_STORAGE_KEY); } catch (e) { stored = null; }
+    // 仅当 localStorage 值仍存在于当前语言的 source 列表中才返回它；
+    // 否则退回 sourceList[0]（没有则空串，由调用方判断）
+    if (stored && sourceList.indexOf(stored) >= 0) return stored;
+    return sourceList[0] || '';
   }
 
   function setSelectedSource(val) {
@@ -32,24 +33,29 @@
     if (sourceListLoaded) return Promise.resolve(sourceList);
     var auth = window.CourseAuth && window.CourseAuth.getAuth();
     if (!auth) {
-      sourceList = [DEFAULT_SOURCE];
+      sourceList = [];
       sourceListLoaded = true;
       return Promise.resolve(sourceList);
     }
+    // 从 user_config 读取 source 列表和语言映射（而非 word_source_stats 视图，
+    // 后者依赖 words 表聚合，count=0 的 source 不会出现）
     return window.CourseAuth.supabaseFetch(
-      '/rest/v1/word_source_stats?select=source&user_id=eq.' + auth.userId + '&order=source'
+      '/rest/v1/user_config?select=config&user_id=eq.' + auth.userId
     ).then(function (r) { return r.json(); })
       .then(function (rows) {
-        if (Array.isArray(rows)) {
-          sourceList = rows.map(function (r) { return r.source; }).filter(Boolean);
-        }
-        if (sourceList.indexOf(DEFAULT_SOURCE) < 0) {
-          sourceList.unshift(DEFAULT_SOURCE);
-        }
+        var cfg = (Array.isArray(rows) && rows[0] && rows[0].config) || {};
+        var customSources = (cfg.sources && cfg.sources.customSources) || {};
+        var order = (cfg.sources && Array.isArray(cfg.sources.sourceOrder) && cfg.sources.sourceOrder.length > 0)
+          ? cfg.sources.sourceOrder
+          : Object.keys(customSources);
+        // 按当前课程语言过滤（乌克兰语课程只列 lang=uk，法律英语只列 lang=en）
+        sourceList = order.filter(function (s) {
+          return customSources[s] === COURSE_LANG;
+        });
         sourceListLoaded = true;
         return sourceList;
       }).catch(function () {
-        sourceList = [DEFAULT_SOURCE];
+        sourceList = [];
         sourceListLoaded = true;
         return sourceList;
       });
