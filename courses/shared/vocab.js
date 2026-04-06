@@ -229,7 +229,7 @@ function buildBody(row) {
     source: selectedSource,
     date_added: today,
     next_review: today,
-    stop_review: false
+    stop_review: 0
   };
   if (courseCfg?.sendDef) {
     body.definition = (row.querySelector('.vocab-def')?.textContent || '').trim();
