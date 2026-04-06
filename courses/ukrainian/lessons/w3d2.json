@@ -1,0 +1,414 @@
+{
+  "title": "第3周 第2天 — 什么是「格」？主格 Називний 入门",
+  "objective": "理解乌克兰语「格」（відмінок）的核心概念，掌握 7 个格的全貌，重点学会主格（Називний）的功能 —— 表示句子的主语，回答 хто? / що?。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "回顾：第2周我们走到了哪里" },
+        { "type": "p", "html": "上周我们用 5 天时间彻底拿下了名词的<strong>性别</strong>和<strong>复数</strong>。到现在为止，遇到一个新名词，你应该能：①看词尾判断它是阳/阴/中性；②变出它的复数形式。这两点是接下来所有语法的地基。" },
+        { "type": "p", "html": "但你可能注意到一件事：到目前为止，我们造的句子都非常简单 —— <span class=\"uk-word\" data-def=\"这是\">Це</span> + 名词、名词 + <span class=\"uk-word\" data-def=\"在这里\">тут</span>/<span class=\"uk-word\" data-def=\"在那里\">там</span>。为什么不能像中文一样自由地说「我读书」「我喝水」？因为乌克兰语遇到这种「主谓宾」结构时，<strong>名词的形式会变</strong> —— 这就是「格」要解决的问题。" },
+
+        { "type": "h3", "text": "中文 vs 乌克兰语：词序 vs 词形" },
+        { "type": "p", "html": "请看一组中文句子：" },
+        {
+          "type": "table",
+          "headers": ["中文句子", "意思"],
+          "firstColWord": false,
+          "rows": [
+            ["我 爱 妈妈", "「我」是主语，「妈妈」是宾语"],
+            ["妈妈 爱 我", "「妈妈」是主语，「我」是宾语"]
+          ]
+        },
+        { "type": "p", "html": "中文里「我」和「妈妈」这两个词<strong>本身完全不变</strong>，靠<strong>位置</strong>来区分谁是主语、谁是宾语 —— 谁在动词前面谁就是主语。" },
+        { "type": "p", "html": "乌克兰语恰好相反：" },
+        {
+          "type": "table",
+          "headers": ["乌克兰语", "中文", "说明"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"uk-word\" data-def=\"我（主格）\">Я</span> люблю <span class=\"uk-word\" data-def=\"妈妈（宾格）\">маму</span>.", "我爱妈妈", "「我」用主格 я，「妈妈」用宾格 маму"],
+            ["<span class=\"uk-word\" data-def=\"妈妈（主格）\">Мама</span> любить <span class=\"uk-word\" data-def=\"我（宾格）\">мене</span>.", "妈妈爱我", "「妈妈」用主格 мама，「我」用宾格 мене"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>核心区别：</strong>中文用<strong>位置</strong>区分主语和宾语，乌克兰语用<strong>词形</strong>。你看：<span class=\"uk-word\" data-def=\"妈妈（主格）\">мама</span> 当主语是这个样子，当宾语就变成了 <span class=\"uk-word\" data-def=\"妈妈（宾格）\">маму</span>。这种「同一个词换不同衣服」的现象，就叫做<strong>格的变化</strong>。" },
+
+        { "type": "h3", "text": "「格」（відмінок）究竟是什么？" },
+        { "type": "p", "html": "<strong>「格」就是名词在句子里扮演不同角色时穿的不同衣服。</strong>" },
+        { "type": "p", "html": "更准确的说法：名词根据它在句中的<strong>语法功能</strong>（是主语、是宾语、是工具、是地点……）改变词尾，每一种功能对应一种「格」。" },
+        { "type": "p", "html": "举个直观例子。看名词 <span class=\"uk-word\" data-def=\"书\">книга</span>（书）在不同句子里的样子：" },
+        {
+          "type": "table",
+          "headers": ["乌克兰语", "中文", "格（无需现在记住）"],
+          "firstColWord": false,
+          "rows": [
+            ["Це <span class=\"uk-word\" data-def=\"书（主格）\">книга</span>.", "这是书。", "主格 — 主语"],
+            ["Я читаю <span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span>.", "我读书。", "宾格 — 直接宾语"],
+            ["Це сторінка <span class=\"uk-word\" data-def=\"书的（属格）\">книги</span>.", "这是书的一页。", "属格 — 表所属"],
+            ["Я пишу про <span class=\"uk-word\" data-def=\"关于书（宾格）\">книгу</span>.", "我写关于书的事。", "宾格 — 介词宾语"],
+            ["Це малюнок у <span class=\"uk-word\" data-def=\"在书里（方位格）\">книзі</span>.", "这是书里的一幅画。", "方位格 — 表位置"]
+          ]
+        },
+        { "type": "note", "html": "<strong>不要慌！</strong>上面这些变化形式（книгу、книги、книзі）都是后面几周才会逐一学的内容。<strong>今天的目标只有一个</strong>：理解「同一个名词在不同位置会变换词尾」这件事是<strong>真实存在</strong>的，并且认识第一种格 —— 主格。" },
+
+        { "type": "h3", "text": "乌克兰语 7 个格 —— 全景图" },
+        { "type": "p", "html": "乌克兰语一共有 <strong>7 个格</strong>。先看一遍全貌，对它们建立印象 —— <strong>不要求今天背下来</strong>，未来 8 周会一个一个教。" },
+        {
+          "type": "table",
+          "headers": ["编号", "乌克兰语名称", "中文", "提问词", "主要功能"],
+          "firstColWord": false,
+          "rows": [
+            ["1", "<span class=\"uk-word\" data-def=\"主格\">Називний</span>", "主格", "хто? що? (谁? 什么?)", "句子的主语 —— 「谁/什么」做这件事"],
+            ["2", "<span class=\"uk-word\" data-def=\"属格\">Родовий</span>", "属格", "кого? чого? (谁的? 什么的?)", "所有关系；否定；部分含义；某些介词后"],
+            ["3", "<span class=\"uk-word\" data-def=\"与格\">Давальний</span>", "与格", "кому? чому? (给谁? 给什么?)", "间接宾语 —— 给/对某人"],
+            ["4", "<span class=\"uk-word\" data-def=\"宾格\">Знахідний</span>", "宾格", "кого? що? (谁? 什么?)", "直接宾语 —— 「把谁/把什么」"],
+            ["5", "<span class=\"uk-word\" data-def=\"工具格\">Орудний</span>", "工具格", "ким? чим? (用谁? 用什么?)", "工具、伴随；某些介词后"],
+            ["6", "<span class=\"uk-word\" data-def=\"方位格\">Місцевий</span>", "方位格", "на/у кому? на/у чому?", "位置（在…里/上）；只能跟介词"],
+            ["7", "<span class=\"uk-word\" data-def=\"呼格\">Кличний</span>", "呼格", "—（没有提问词）", "直接称呼某人 —— 「妈妈！」「老师！」"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆口诀：</strong>主、属、与、宾、工、方、呼 —— 七格走天下。<br>对应英文/俄语学习者熟悉的术语：Nominative、Genitive、Dative、Accusative、Instrumental、Locative、Vocative。" },
+        { "type": "note", "html": "<strong>好消息：</strong>呼格（Кличний）使用频率较低，主要用于直接称呼某人。乌克兰语里日常最重要、出现频率最高的是<strong>主格、宾格、属格</strong>这三个，而我们接下来 4 周会重点学这几个。" },
+
+        { "type": "h3", "text": "今天的主角：主格（Називний відмінок）" },
+        { "type": "p", "html": "主格 (<span class=\"uk-word\" data-def=\"主格\">Називний відмінок</span>) 是 7 个格里最简单也最重要的一个。它有三个核心要点：" },
+        { "type": "grammar-box", "html": "<p><strong>主格三大要点：</strong></p><ol><li><strong>形式：</strong>主格 = <strong>字典里查到的原形</strong>。你之前两周学的所有名词词尾（辅音 / -а / -я / -о / -е / -ь），全部都是主格形式。换句话说 —— <strong>主格不需要变形</strong>！</li><li><strong>功能：</strong>主格表示句子的<strong>主语</strong>，也就是「谁/什么 在做这件事 / 是什么样的」。</li><li><strong>提问词：</strong>有生命的用 <span class=\"uk-word\" data-def=\"谁\">хто?</span>（谁），无生命的用 <span class=\"uk-word\" data-def=\"什么\">що?</span>（什么）。回答得出来的就是主格。</li></ol>" },
+
+        { "type": "h3", "text": "хто? 还是 що? —— 有生命 vs 无生命" },
+        { "type": "p", "html": "乌克兰语把名词分成<strong>有生命</strong>（істота）和<strong>无生命</strong>（неістота）两类，这个区分在主格里看不出区别，但在<strong>宾格</strong>（明天和第4天会学）里非常关键，所以今天就先学会区分。" },
+        {
+          "type": "table",
+          "headers": ["类别", "提问词", "包含什么", "例子"],
+          "firstColWord": false,
+          "rows": [
+            ["有生命", "<span class=\"uk-word\" data-def=\"谁\">хто?</span>", "人 + 动物", "<span class=\"uk-word\" data-def=\"妈妈\">мама</span>, <span class=\"uk-word\" data-def=\"医生\">лікар</span>, <span class=\"uk-word\" data-def=\"猫\">кіт</span>, <span class=\"uk-word\" data-def=\"狗（雄性）\">пес</span>, <span class=\"uk-word\" data-def=\"鸟\">птах</span>"],
+            ["无生命", "<span class=\"uk-word\" data-def=\"什么\">що?</span>", "物品 + 抽象概念 + 植物 + 自然现象", "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"书\">книга</span>, <span class=\"uk-word\" data-def=\"水\">вода</span>, <span class=\"uk-word\" data-def=\"花\">квітка</span>, <span class=\"uk-word\" data-def=\"风\">вітер</span>"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>有点反直觉：</strong>植物虽然「活着」，但乌克兰语把它们归为<strong>无生命</strong>，用 <span class=\"uk-word\" data-def=\"什么\">що?</span> 提问。所以 <span class=\"uk-word\" data-def=\"花\">квітка</span>（花）是无生命，<span class=\"uk-word\" data-def=\"猫\">кіт</span>（猫）是有生命。这跟英语的 who/what 划分基本一致 —— 动物和人用 who，植物和物品用 what。" },
+
+        { "type": "h3", "text": "主格出现在哪些位置？" },
+        { "type": "p", "html": "主格主要在三种位置出现，都是你已经接触过的句型：" },
+        { "type": "h4", "text": "① 「Це + 名词」 — 这是…" },
+        { "type": "p", "html": "Це 后面的名词永远是主格。这是最常见的句型之一。" },
+        { "type": "h4", "text": "② 「名词 + тут / там」 — …在这里/那里" },
+        { "type": "p", "html": "句子的主语一定用主格。这种句子里，бути（是/在）的现在时被省略了。" },
+        { "type": "h4", "text": "③ 「主语 — 名词」 — …是…（等同句）" },
+        { "type": "p", "html": "「Я — студент.」（我是学生。）这种句子两边都是主格，中间用破折号代替了 бути。两个名词都用字典原形。" },
+        { "type": "note", "html": "<strong>注意：</strong>乌克兰语里 бути（是）的现在时通常省略不说。所以「我是学生」直接写成 <span class=\"uk-text\">Я — студент.</span>，中间用一个破折号代替「是」。书面语用破折号，口语里这个破折号是停顿。" },
+
+        { "type": "h3", "text": "中文母语者常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要以为乌克兰语单词永远不变。</strong>从这周开始你会发现，名词词尾会跟着「角色」变。<span class=\"uk-word\" data-def=\"书（主格）\">книга</span>（书）当主语是这个样子，当宾语会变成 <span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span>。这是正常的，不是打错字。</li><li><strong>不要把字典查到的形式硬塞到任何位置。</strong>字典上写的是<strong>主格</strong>形式 —— 这是这个词的「身份证照片」。它在句子里扮演不同角色时，会换不同的「衣服」。</li><li><strong>「我喜欢猫」不能直接说成「Я люблю кіт」</strong>，要说 <span class=\"uk-text\">Я люблю кота.</span> —— кота 是 кіт 的宾格形式，我们第4天会学。今天不用记这个变化，只要知道<strong>名词会变</strong>就够了。</li></ol>" },
+
+        { "type": "h3", "text": "今天能造的句子" },
+        { "type": "p", "html": "因为我们今天只学了主格，所以暂时还只能用之前两周的三种句型。<strong>下一节课</strong>开始，你就能造出真正的「主谓宾」句子，比如「我读书」「我喝咖啡」。" },
+        {
+          "type": "ul",
+          "items": [
+            "Це + 名词。 —— 这是某物 / 某人。",
+            "名词 + тут / там。 —— 某物 / 某人在这里 / 那里。",
+            "主语 — 名词。 —— X 是 Y。"
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "「Це + 名词」介绍事物或人",
+          "items": [
+            { "text": "Це стіл.", "translation": "这是桌子。" },
+            { "text": "Це книга.", "translation": "这是书。" },
+            { "text": "Це молоко.", "translation": "这是牛奶。" },
+            { "text": "Це кава.", "translation": "这是咖啡。" },
+            { "text": "Це піца.", "translation": "这是披萨。" },
+            { "text": "Це мама.", "translation": "这是妈妈。" },
+            { "text": "Це мій син.", "translation": "这是我儿子。" }
+          ]
+        },
+        {
+          "heading": "「名词 + тут / там」描述位置",
+          "items": [
+            { "text": "Стіл тут.", "translation": "桌子在这里。" },
+            { "text": "Книга там.", "translation": "书在那里。" },
+            { "text": "Кіт тут.", "translation": "猫在这里。" },
+            { "text": "Хліб там.", "translation": "面包在那里。" },
+            { "text": "Сонце там.", "translation": "太阳在那里。" },
+            { "text": "Діти тут.", "translation": "孩子们在这里。" }
+          ]
+        },
+        {
+          "heading": "「主语 — 名词」简单等同句",
+          "items": [
+            { "text": "Я — студент.", "translation": "我是大学生。" },
+            { "text": "Він — лікар.", "translation": "他是医生。" },
+            { "text": "Вона — мама.", "translation": "她是妈妈。" },
+            { "text": "Ми — друзі.", "translation": "我们是朋友。" },
+            { "text": "Хто це? — Це Іван.", "translation": "这是谁？— 这是 Іван。" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：找出主语（10题）",
+          "instruction": "在下面每个句子中，找出充当主语的词。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">Стіл</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["стіл", "тут", "没有主语"],
+              "answer": "стіл",
+              "explanation": "стіл 是名词主语；тут 是位置副词。",
+              "hints": ["主语回答「谁/什么 在哪里」", "тут 不是名词，它的意思是「在这里」"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"书\">Книга</span> <span class=\"uk-word\" data-def=\"在那里\">там</span>.",
+              "options": ["книга", "там", "це"],
+              "answer": "книга",
+              "explanation": "книга 是主语，там 是位置副词。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"猫\">Кіт</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["кіт", "тут", "没有主语"],
+              "answer": "кіт",
+              "explanation": "кіт 是主语 —— 猫是有生命名词。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"妈妈\">Мама</span> і <span class=\"uk-word\" data-def=\"爸爸\">тато</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["мама і тато", "тут", "тато"],
+              "answer": "мама і тато",
+              "explanation": "复合主语：мама 和 тато 一起做主语，i 是连词「和」。",
+              "hints": ["主语可以是两个并列的名词", "连词 i 表示「和」"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"我（主格）\">Я</span> — <span class=\"uk-word\" data-def=\"大学生\">студент</span>.",
+              "options": ["я", "студент", "—"],
+              "answer": "я",
+              "explanation": "я（我）是主语；студент 通过破折号说明「我」是什么。",
+              "hints": ["「X — Y」结构里，X 是主语，Y 是描述", "破折号代替了被省略的「是」"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"他\">Він</span> — <span class=\"uk-word\" data-def=\"医生\">лікар</span>.",
+              "options": ["він", "лікар", "没有主语"],
+              "answer": "він",
+              "explanation": "він（他）是主语；лікар 是表语。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"孩子们\">Діти</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["діти", "тут", "це"],
+              "answer": "діти",
+              "explanation": "діти（孩子们，复数）是主语。",
+              "hints": ["复数名词同样可以作主语", "діти 是 дитина 的不规则复数"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">Вікно</span> <span class=\"uk-word\" data-def=\"在那里\">там</span>.",
+              "options": ["вікно", "там", "没有主语"],
+              "answer": "вікно",
+              "explanation": "вікно（窗户）是主语，是中性名词。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"我们\">Ми</span> — <span class=\"uk-word\" data-def=\"朋友们\">друзі</span>.",
+              "options": ["ми", "друзі", "—"],
+              "answer": "ми",
+              "explanation": "ми（我们）是主语；друзі 是表语。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"咖啡\">Кава</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["кава", "тут", "це"],
+              "answer": "кава",
+              "explanation": "кава（咖啡）是主语，阴性名词。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：хто? 还是 що?（8题）",
+          "instruction": "请判断下列名词应该用 хто?（谁）还是 що?（什么）来提问。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"妈妈\">мама</span>",
+              "options": ["хто?", "що?"],
+              "answer": "хто?",
+              "explanation": "人是有生命名词，用 хто? 提问。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "物品是无生命，用 що? 提问。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"猫\">кіт</span>",
+              "options": ["хто?", "що?"],
+              "answer": "хто?",
+              "explanation": "动物是有生命名词，用 хто? 提问。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"花\">квітка</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "植物虽然「活着」，但乌克兰语把它归为无生命，用 що? 提问。",
+              "hints": ["想想英语：what flower? 还是 who flower?"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"医生\">лікар</span>",
+              "options": ["хто?", "що?"],
+              "answer": "хто?",
+              "explanation": "лікар 是人，用 хто? 提问。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"水\">вода</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "вода 是物质，无生命，用 що? 提问。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"狗（雄性）\">пес</span>",
+              "options": ["хто?", "що?"],
+              "answer": "хто?",
+              "explanation": "狗是动物，用 хто? 提问。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"风\">вітер</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "自然现象属于无生命，用 що? 提问。",
+              "hints": ["即使是会动、有「生命感」的现象，语法上也是无生命"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 C：关于「格」的概念（5题）",
+          "instruction": "巩固今天学过的概念。",
+          "questions": [
+            {
+              "prompt": "乌克兰语一共有几个格？",
+              "options": ["5 个", "6 个", "7 个", "8 个"],
+              "answer": "7 个",
+              "explanation": "乌克兰语有 7 个格：主、属、与、宾、工、方、呼。"
+            },
+            {
+              "prompt": "「主格」的乌克兰语名称是？",
+              "options": ["Називний", "Родовий", "Знахідний", "Орудний"],
+              "answer": "Називний",
+              "explanation": "主格 = Називний відмінок。其他选项是属格、宾格、工具格。",
+              "hints": ["Назив- 这个词根和「叫做、命名」相关，主格就是「字典上叫的那个名字」"]
+            },
+            {
+              "prompt": "字典里查到的名词形式属于哪个格？",
+              "options": ["属格", "主格", "宾格", "看名词不同而不同"],
+              "answer": "主格",
+              "explanation": "字典里写的永远是主格形式 —— 主格 = 字典原形。"
+            },
+            {
+              "prompt": "在「<span class=\"uk-text\">Це <span class=\"uk-word\" data-def=\"书\">книга</span>.</span>」中，книга 是哪个格？",
+              "options": ["主格", "宾格", "属格", "工具格"],
+              "answer": "主格",
+              "explanation": "Це 后面的名词永远用主格，且 книга 就是字典原形。"
+            },
+            {
+              "prompt": "下面哪个提问词对应主格？",
+              "options": ["кому? чому?", "хто? що?", "ким? чим?", "кого? чого?"],
+              "answer": "хто? що?",
+              "explanation": "主格的提问词是 хто?（谁，有生命）/ що?（什么，无生命）。其他选项分别是与格、工具格、属格的提问词。",
+              "hints": ["主格回答「谁/什么」", "хто 是「谁」的意思"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：用主格补全 Це 句（5题）",
+          "instruction": "根据括号里的中文提示，写出对应的乌克兰语主格名词（即字典原形）。",
+          "questions": [
+            {
+              "prompt": "Це ____. (桌子)",
+              "answer": "стіл",
+              "accept": ["стіл", "Стіл"],
+              "explanation": "стіл = 桌子（阳性，主格）。Це 后面的名词永远用主格 = 字典原形。",
+              "hints": ["这是阳性名词，以辅音结尾"]
+            },
+            {
+              "prompt": "Це ____. (书)",
+              "answer": "книга",
+              "accept": ["книга", "Книга"],
+              "explanation": "книга = 书（阴性，主格）。"
+            },
+            {
+              "prompt": "Це ____. (咖啡)",
+              "answer": "кава",
+              "accept": ["кава", "Кава"],
+              "explanation": "кава = 咖啡（阴性，主格）。"
+            },
+            {
+              "prompt": "Це ____. (儿子)",
+              "answer": "син",
+              "accept": ["син", "Син"],
+              "explanation": "син = 儿子（阳性，有生命，主格）。",
+              "hints": ["儿子是有生命阳性名词，以辅音 -н 结尾"]
+            },
+            {
+              "prompt": "Це ____. (牛奶)",
+              "answer": "молоко",
+              "accept": ["молоко", "Молоко"],
+              "explanation": "молоко = 牛奶（中性，主格）。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 E：用代词作主语（5题）",
+          "instruction": "根据括号里的中文提示，填入正确的人称代词主格形式（я / ти / він / вона / воно / ми / ви / вони）。",
+          "questions": [
+            {
+              "prompt": "____ — мама. (她)",
+              "answer": "Вона",
+              "accept": ["Вона", "вона"],
+              "explanation": "「她是妈妈。」мама 阴性 → 用 вона（她）。"
+            },
+            {
+              "prompt": "____ — тато. (他)",
+              "answer": "Він",
+              "accept": ["Він", "він"],
+              "explanation": "「他是爸爸。」тато 表示男性 → 用 він（他）。"
+            },
+            {
+              "prompt": "____ — Іван. (我)",
+              "answer": "Я",
+              "accept": ["Я", "я"],
+              "explanation": "「我是 Іван。」第一人称单数 → я。",
+              "hints": ["「我」的乌克兰语主格形式很短"]
+            },
+            {
+              "prompt": "____ — друзі. (我们)",
+              "answer": "Ми",
+              "accept": ["Ми", "ми"],
+              "explanation": "「我们是朋友们。」第一人称复数 → ми。"
+            },
+            {
+              "prompt": "____ — лікар. (他)",
+              "answer": "Він",
+              "accept": ["Він", "він"],
+              "explanation": "「他是医生。」лікар 是男性医生 → 用 він（他）。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>「格」是什么</strong> —— 名词在句中扮演不同角色（主语 / 宾语 / 工具 / 地点……）时，会改变词尾。这是乌克兰语和中文最大的不同。</li><li><strong>乌克兰语有 7 个格</strong>：主格 (<span class=\"uk-word\" data-def=\"主格\">Називний</span>)、属格 (<span class=\"uk-word\" data-def=\"属格\">Родовий</span>)、与格 (<span class=\"uk-word\" data-def=\"与格\">Давальний</span>)、宾格 (<span class=\"uk-word\" data-def=\"宾格\">Знахідний</span>)、工具格 (<span class=\"uk-word\" data-def=\"工具格\">Орудний</span>)、方位格 (<span class=\"uk-word\" data-def=\"方位格\">Місцевий</span>)、呼格 (<span class=\"uk-word\" data-def=\"呼格\">Кличний</span>)。今天只是「认个脸」，不用记功能。</li><li><strong>主格 (Називний)</strong>：① 形式 = 字典原形；② 功能 = 句子的主语；③ 提问词 = <span class=\"uk-word\" data-def=\"谁\">хто?</span> (有生命) / <span class=\"uk-word\" data-def=\"什么\">що?</span> (无生命)。</li><li><strong>三种已学会的主格句式</strong>：「Це + 名词」、「名词 + тут/там」、「主语 — 名词」。</li></ol><p><strong>下节预告：</strong>明天我们正式开始学第二个格 —— 宾格 (<span class=\"uk-word\" data-def=\"宾格\">Знахідний</span>)，从最简单的一种开始：<strong>无生命阳性名词的宾格</strong>。好消息是 —— 这种名词的宾格形式和主格<strong>完全一样</strong>，不需要任何变化！这意味着明天你就能造出 <span class=\"uk-text\">Я люблю торт.</span>（我喜欢蛋糕。） 这样的真正主谓宾句子。</p>"
+    }
+  ]
+}
