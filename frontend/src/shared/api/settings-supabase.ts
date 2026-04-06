@@ -182,6 +182,15 @@ export class SettingsSupabaseApi {
       }
     }
 
+    // 剔除 sourceSettings 中不在 customSources 里的孤立条目
+    // 防御：deleteSource 失败/旧版本/并发写入可能在 DB 残留孤立条目，
+    // 而 updateSettings 的 deepMerge 会把这些孤立条目持续保留到 DB，形成自愈循环
+    for (const key of Object.keys(merged.sourceSettings)) {
+      if (!sourceKeys.has(key)) {
+        delete merged.sourceSettings[key]
+      }
+    }
+
     return merged
   }
 
@@ -225,7 +234,16 @@ export class SettingsSupabaseApi {
       }
     }
 
-    // 4. 保存到数据库（upsert）
+    // 4. 写入前一致性兜底：剔除 sourceSettings 中不在 customSources 里的孤立条目
+    // 防御：避免 deepMerge 把 base 中的孤立条目持续写回 DB
+    const validSourceKeys = new Set(Object.keys(mergedConfig.sources?.customSources ?? {}))
+    for (const key of Object.keys(mergedConfig.sourceSettings)) {
+      if (!validSourceKeys.has(key)) {
+        delete mergedConfig.sourceSettings[key]
+      }
+    }
+
+    // 5. 保存到数据库（upsert）
     const { error } = await supabase
       .from('user_config')
       .upsert({ user_id: userId, config: mergedConfig }, { onConflict: 'user_id' })
