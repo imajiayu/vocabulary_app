@@ -71,7 +71,10 @@
     /* 聊天窗口 */
     '#course-chat-window {',
     '  display: none; position: fixed; bottom: 80px; right: 24px; z-index: 10001;',
-    '  width: 400px; max-height: 520px; border-radius: 12px;',
+    '  width: 400px; height: 520px;',
+    '  min-width: 320px; min-height: 360px;',
+    '  max-width: 95vw; max-height: 90vh;',
+    '  border-radius: 12px;',
     '  background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e2dd);',
     '  box-shadow: 0 8px 32px rgba(0,0,0,0.15);',
     '  flex-direction: column; overflow: hidden;',
@@ -79,6 +82,21 @@
     '  font-size: 14px; line-height: 1.6;',
     '}',
     '#course-chat-window.open { display: flex; }',
+
+    /* 拖拽调整大小手柄（左上角，因窗口锚定在右下角） */
+    '#course-chat-resize-corner {',
+    '  position: absolute; top: 0; left: 0; width: 18px; height: 18px;',
+    '  cursor: nwse-resize; z-index: 10003;',
+    '  background-image: linear-gradient(135deg, transparent 0%, transparent 40%, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.85) 50%, transparent 50%, transparent 65%, rgba(255,255,255,0.85) 65%, rgba(255,255,255,0.85) 75%, transparent 75%);',
+    '}',
+    '#course-chat-resize-top {',
+    '  position: absolute; top: 0; left: 18px; right: 0; height: 4px;',
+    '  cursor: ns-resize; z-index: 10003;',
+    '}',
+    '#course-chat-resize-left {',
+    '  position: absolute; top: 18px; left: 0; bottom: 0; width: 4px;',
+    '  cursor: ew-resize; z-index: 10003;',
+    '}',
 
     /* 标题栏 */
     '.chat-header {',
@@ -96,8 +114,8 @@
 
     /* 消息列表 */
     '.chat-messages {',
-    '  flex: 1; overflow-y: auto; padding: 12px 14px;',
-    '  min-height: 200px; max-height: 360px;',
+    '  flex: 1 1 auto; overflow-y: auto; padding: 12px 14px;',
+    '  min-height: 0;',
     '}',
     '.chat-msg { margin-bottom: 12px; display: flex; }',
     '.chat-msg.user { justify-content: flex-end; }',
@@ -191,11 +209,13 @@
     /* 移动端 */
     '@media (max-width: 600px) {',
     '  #course-chat-window.open {',
-    '    width: 100%; height: 100%; bottom: 0; right: 0;',
-    '    border-radius: 0; max-height: none;',
+    '    width: 100% !important; height: 100% !important; bottom: 0; right: 0;',
+    '    max-width: none; max-height: none;',
+    '    border-radius: 0;',
     '  }',
-    '  .chat-messages { max-height: none; flex: 1; }',
+    '  .chat-messages { flex: 1; }',
     '  #course-chat-fab { bottom: 16px; right: 16px; }',
+    '  #course-chat-resize-corner, #course-chat-resize-top, #course-chat-resize-left { display: none; }',
     '}',
   ].join('\n');
   document.head.appendChild(style);
@@ -220,6 +240,32 @@
   // 聊天窗口
   var win = document.createElement('div');
   win.id = 'course-chat-window';
+
+  // 拖拽调整大小手柄
+  var resizeCorner = document.createElement('div');
+  resizeCorner.id = 'course-chat-resize-corner';
+  resizeCorner.title = '拖动调整大小';
+  win.appendChild(resizeCorner);
+
+  var resizeTop = document.createElement('div');
+  resizeTop.id = 'course-chat-resize-top';
+  resizeTop.title = '拖动调整高度';
+  win.appendChild(resizeTop);
+
+  var resizeLeft = document.createElement('div');
+  resizeLeft.id = 'course-chat-resize-left';
+  resizeLeft.title = '拖动调整宽度';
+  win.appendChild(resizeLeft);
+
+  // 恢复保存的尺寸
+  try {
+    var savedSize = localStorage.getItem('course_chat_size');
+    if (savedSize) {
+      var s = JSON.parse(savedSize);
+      if (s && s.w) win.style.width = s.w + 'px';
+      if (s && s.h) win.style.height = s.h + 'px';
+    }
+  } catch (e) { /* 忽略 */ }
 
   // 标题栏
   var header = el('div', 'chat-header');
@@ -635,6 +681,80 @@
   // ESC 关闭
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && isOpen) toggleChat();
+  });
+
+  // --- 拖拽调整大小 ---
+  // 窗口锚定在右下角，拖动左上手柄向上/向左可放大尺寸
+  var resizeState = null; // { mode: 'corner'|'top'|'left', startX, startY, startW, startH }
+
+  function clampSize(w, h) {
+    var minW = 320, minH = 360;
+    var maxW = Math.max(minW, Math.floor(window.innerWidth * 0.95));
+    var maxH = Math.max(minH, Math.floor(window.innerHeight * 0.9));
+    return {
+      w: Math.max(minW, Math.min(maxW, w)),
+      h: Math.max(minH, Math.min(maxH, h))
+    };
+  }
+
+  function beginResize(mode, e) {
+    e.preventDefault();
+    var rect = win.getBoundingClientRect();
+    resizeState = {
+      mode: mode,
+      startX: e.clientX,
+      startY: e.clientY,
+      startW: rect.width,
+      startH: rect.height
+    };
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = mode === 'corner' ? 'nwse-resize'
+      : (mode === 'top' ? 'ns-resize' : 'ew-resize');
+    // 清掉任何残留选区，避免 mouseup 后误触"问 AI"气泡
+    try {
+      var sel = window.getSelection();
+      if (sel) sel.removeAllRanges();
+    } catch (_) { /* 忽略 */ }
+  }
+
+  // 失焦兜底：alt-tab / 鼠标移出窗口导致 mouseup 丢失时强制结束拖拽
+  function cancelResize() {
+    if (!resizeState) return;
+    resizeState = null;
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  }
+  window.addEventListener('blur', cancelResize);
+
+  resizeCorner.addEventListener('mousedown', function (e) { beginResize('corner', e); });
+  resizeTop.addEventListener('mousedown', function (e) { beginResize('top', e); });
+  resizeLeft.addEventListener('mousedown', function (e) { beginResize('left', e); });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!resizeState) return;
+    var dx = resizeState.startX - e.clientX; // 向左拖 → 加宽
+    var dy = resizeState.startY - e.clientY; // 向上拖 → 加高
+    var newW = resizeState.startW;
+    var newH = resizeState.startH;
+    if (resizeState.mode === 'corner' || resizeState.mode === 'left') newW = resizeState.startW + dx;
+    if (resizeState.mode === 'corner' || resizeState.mode === 'top') newH = resizeState.startH + dy;
+    var clamped = clampSize(newW, newH);
+    win.style.width = clamped.w + 'px';
+    win.style.height = clamped.h + 'px';
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!resizeState) return;
+    resizeState = null;
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+    try {
+      var rect = win.getBoundingClientRect();
+      localStorage.setItem('course_chat_size', JSON.stringify({
+        w: Math.round(rect.width),
+        h: Math.round(rect.height)
+      }));
+    } catch (e) { /* 忽略 */ }
   });
 
   // --- 文本选中交互 ---

@@ -63,7 +63,7 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 ## 环境变量
 
 ```
-DATABASE_URL=postgresql://...    # Supabase 连接串
+DATABASE_URL=postgresql://...    # Supabase 连接串（pooler 模式 6543，密码已 URL-encode）
 SUPABASE_URL=https://xxx.supabase.co  # JWKS endpoint base URL
 SUPABASE_JWT_SECRET=...          # HS256 回退验证密钥
 TTS_CACHE_DIR=/opt/vocabulary_app/tts-cache  # TTS 音频缓存目录
@@ -71,8 +71,25 @@ CORS_ORIGINS=*                   # 允许的来源（逗号分隔，默认 *）
 FLASK_DEBUG=0                    # 调试模式（仅开发环境设为 1）
 ```
 
+`DATABASE_URL` 形如 `postgresql://postgres.{project_ref}:{password}@aws-0-us-west-2.pooler.supabase.com:6543/postgres`，从 Supabase Dashboard → Project Settings → Database → Connection string (Transaction pooler) 复制，密码即数据库密码。
+
 ## 本地运行
 
 ```bash
 source .venv/bin/activate && python -m backend.app
 ```
+
+## 本地直连数据库（运维 / 数据补录）
+
+`backend/.env` 的 `DATABASE_URL` 在本机直接可用（pooler 模式），psycopg2 即可连接。一次性脚本模板：
+
+```python
+import psycopg2
+from dotenv import dotenv_values
+v = dotenv_values('backend/.env')
+conn = psycopg2.connect(v['DATABASE_URL'], connect_timeout=10)
+# ... cur.execute(...) ...
+conn.close()
+```
+
+注意：写操作请显式 `conn.autocommit = False` 并手动 `commit()` / `rollback()`，避免误操作；批量写入前先 dry-run 打印预览。
