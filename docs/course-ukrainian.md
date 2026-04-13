@@ -252,6 +252,8 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 
 **例句处理**：`.uk-text` 包裹的完整例句由 tts.js 自动拆词为可点击单词，其内部不再嵌套 `.uk-word`。拆出的每个单词同样支持气泡交互。
 
+**练习题加粗规范**：`.quiz-prompt` 默认 `font-weight: normal`，不会自动加粗。如果练习说明（instruction）中提到"加粗的名词/单词"，必须在对应 prompt 中用 `<strong>` 标签显式包裹目标词，例如：`"prompt": "Це <strong><span class=\"uk-word\" data-def=\"桌子\">стіл</span></strong>."`。否则学生无法区分哪个词是需要关注的目标词。
+
 ### 交互练习标记
 
 每道题用 `.quiz-item` 包裹，答案和解析存在 `data-answer` / `data-explanation` 属性中。每个 `.exercise` 末尾放判题按钮。`exercise.js` 自动处理判题逻辑。

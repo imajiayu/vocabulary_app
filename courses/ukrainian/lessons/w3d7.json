@@ -52,62 +52,62 @@
           "instruction": "判断下面句子中加粗的名词处于哪个格。",
           "questions": [
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"书\">книга</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"书\">книга</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "Це 后面的名词是主格。"
             },
             {
-              "prompt": "Я читаю <span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span>.",
+              "prompt": "Я читаю <strong><span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "动词 читаю 的对象 → 宾格。形式上看：книга → книгу。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"猫\">Кіт</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"猫\">Кіт</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "кіт 是主语 → 主格。"
             },
             {
-              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span>.",
+              "prompt": "Я бачу <strong><span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "宾语 → 宾格。кіт→кота 是有生命阳性的飘忽元音变化。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"咖啡\">Кава</span> там.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"咖啡\">Кава</span></strong> там.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "кава 是主语 → 主格。"
             },
             {
-              "prompt": "Я п'ю <span class=\"uk-word\" data-def=\"咖啡（宾格）\">каву</span>.",
+              "prompt": "Я п'ю <strong><span class=\"uk-word\" data-def=\"咖啡（宾格）\">каву</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "宾语 → 宾格。кава → каву（-а→-у）。"
             },
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"窗户\">вікно</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"窗户\">вікно</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "Це 后面是主格。中性宾格也是 вікно，但这里的位置告诉我们是主格。"
             },
             {
-              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"窗户（宾格=主格）\">вікно</span>.",
+              "prompt": "Я бачу <strong><span class=\"uk-word\" data-def=\"窗户（宾格=主格）\">вікно</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "动词 бачу 的对象 → 宾格。中性宾格的形式恰好和主格一样。",
               "hints": ["看「位置」而不是「形式」 —— 它在动词后面，所以一定是宾格"]
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"老师\">Вчитель</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"老师\">Вчитель</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "вчитель 是主语 → 主格 = 字典原形。"
             },
             {
-              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"老师（宾格）\">вчителя</span>.",
+              "prompt": "Я бачу <strong><span class=\"uk-word\" data-def=\"老师（宾格）\">вчителя</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "宾语 → 宾格。вчитель → вчителя（-ь → -я）。"

@@ -217,6 +217,8 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 1. `.en-text` 包裹的完整例句（由 tts.js 自动拆词处理），其内部不再嵌套 `.term`。拆出的每个单词同样支持气泡交互
 2. **练习选项 `<label>` 中禁止使用 `<span class="term">`**——`.term` 有加粗 + 强调色样式，若部分选项使用而另一部分不使用，会直接暗示正确答案。选项文本一律使用纯文本
 
+**练习题加粗规范**：`.quiz-prompt` 默认 `font-weight: normal`，不会自动加粗。如果练习说明（instruction）中提到"加粗的词/术语"，必须在对应 prompt 中用 `<strong>` 标签显式包裹目标词。否则学生无法区分哪个词是需要关注的目标词。
+
 ### 词汇表标记
 
 ```html

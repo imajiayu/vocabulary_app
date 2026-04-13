@@ -232,49 +232,49 @@
           "instruction": "判断下面句子中加粗的有生命名词处于哪个格。",
           "questions": [
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"兄弟\">брат</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"兄弟\">брат</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "Це 后面的名词永远是主格 → брат。"
             },
             {
-              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"兄弟（宾格）\">брата</span>.",
+              "prompt": "Я бачу <strong><span class=\"uk-word\" data-def=\"兄弟（宾格）\">брата</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "брата 是宾格形式（主格 + а）。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"猫\">Кіт</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"猫\">Кіт</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "кіт 是主语 = 主格。"
             },
             {
-              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span>.",
+              "prompt": "Я люблю <strong><span class=\"uk-word\" data-def=\"猫（宾格）\">кота</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "кота 是 кіт 的宾格形式（i→o + а）。"
             },
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"爸爸\">тато</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"爸爸\">тато</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "тато 在 Це 后面 = 主格（-о 结尾的字典原形）。"
             },
             {
-              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"爸爸（宾格）\">тата</span>.",
+              "prompt": "Я люблю <strong><span class=\"uk-word\" data-def=\"爸爸（宾格）\">тата</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "тата 是 тато 的宾格（-о → -а）。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"老师\">Вчитель</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"老师\">Вчитель</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "вчитель 是主语 = 主格（字典原形）。"
             },
             {
-              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"老师（宾格）\">вчителя</span>.",
+              "prompt": "Я бачу <strong><span class=\"uk-word\" data-def=\"老师（宾格）\">вчителя</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "вчителя 是 вчитель 的宾格（-ь → -я）。"

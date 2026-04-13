@@ -241,7 +241,7 @@ courses/
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v1.7.9`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v1.8.6`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 修改 `courses/shared/` 中的 templates 会同时影响两套课程
 - 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录
 - 新课时使用 JSON 数据驱动架构（详见各课程生成指令文档），所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义

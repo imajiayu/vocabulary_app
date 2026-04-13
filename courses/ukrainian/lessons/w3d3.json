@@ -141,50 +141,50 @@
           "instruction": "下面句子中加粗的名词处于哪个格？",
           "questions": [
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"桌子\">стіл</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "Це 后面的名词永远是主格。"
             },
             {
-              "prompt": "Я бачу <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.",
+              "prompt": "Я бачу <strong><span class=\"uk-word\" data-def=\"桌子\">стіл</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "动词后面的直接宾语用宾格。这里 стіл 是「我看见」的对象。",
               "hints": ["谁是这个动作的承受者？"]
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"杂志\">Журнал</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"杂志\">Журнал</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "журнал 是这个句子的主语 —— 「杂志在这里」中的「杂志」。"
             },
             {
-              "prompt": "Я читаю <span class=\"uk-word\" data-def=\"杂志\">журнал</span>.",
+              "prompt": "Я читаю <strong><span class=\"uk-word\" data-def=\"杂志\">журнал</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "журнал 是「读」这个动作的承受者 → 宾格。"
             },
             {
-              "prompt": "Я п'ю <span class=\"uk-word\" data-def=\"茶\">чай</span>.",
+              "prompt": "Я п'ю <strong><span class=\"uk-word\" data-def=\"茶\">чай</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "чай 是「喝」的对象 → 宾格。注意：чай 是无生命阳性，所以宾格 = 主格。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"汤\">Суп</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"汤\">Суп</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "суп 是主语 —— 「汤在这里」。"
             },
             {
-              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"电影\">фільм</span>.",
+              "prompt": "Я люблю <strong><span class=\"uk-word\" data-def=\"电影\">фільм</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "фільм 是「喜欢」的对象 → 宾格。"
             },
             {
-              "prompt": "Я маю <span class=\"uk-word\" data-def=\"电脑\">комп'ютер</span>.",
+              "prompt": "Я маю <strong><span class=\"uk-word\" data-def=\"电脑\">комп'ютер</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "комп'ютер 是「有」的对象 → 宾格（无生命阳性，形式不变）。",

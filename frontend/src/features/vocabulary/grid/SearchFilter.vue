@@ -16,7 +16,7 @@
           :value="searchQuery"
           @input="$emit('searchChange', ($event.target as HTMLInputElement).value)"
           type="text"
-          placeholder="输入单词或中文释义..."
+          placeholder="输入单词或释义..."
           class="search-input"
         />
         <button

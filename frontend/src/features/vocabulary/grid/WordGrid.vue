@@ -151,7 +151,10 @@ const filteredWords = computed(() => {
             if (isChinese) {
                 return word.definition.definitions?.join('\n').includes(query);
             } else {
-                return word.word.normalize('NFC').toLowerCase().includes(query);
+                // 同时匹配单词和释义（释义可能是英文）
+                const wordMatch = word.word.normalize('NFC').toLowerCase().includes(query);
+                const defMatch = word.definition.definitions?.join('\n').toLowerCase().includes(query);
+                return wordMatch || defMatch;
             }
         }
         return true;
@@ -163,15 +166,28 @@ const sortedWords = computed(() => {
 
     // Special sorting for search results first
     if (props.searchQuery) {
-        const query = props.searchQuery.trim().toLowerCase();
+        const query = props.searchQuery.normalize('NFC').trim().toLowerCase();
         const isChinese = /[\u4e00-\u9fa5]/.test(query);
         wordsToSort.sort((a, b) => {
-            const aText = isChinese ? a.definition.definitions?.join('\n').toLowerCase() : a.word.toLowerCase();
-            const bText = isChinese ? b.definition.definitions?.join('\n').toLowerCase() : b.word.toLowerCase();
-            const aStartsWith = aText?.startsWith(query);
-            const bStartsWith = bText?.startsWith(query);
-            if (aStartsWith && !bStartsWith) return -1;
-            if (!aStartsWith && bStartsWith) return 1;
+            if (isChinese) {
+                const aText = a.definition.definitions?.join('\n').toLowerCase() ?? '';
+                const bText = b.definition.definitions?.join('\n').toLowerCase() ?? '';
+                const aStartsWith = aText.startsWith(query);
+                const bStartsWith = bText.startsWith(query);
+                if (aStartsWith && !bStartsWith) return -1;
+                if (!aStartsWith && bStartsWith) return 1;
+            } else {
+                // 单词匹配优先于释义匹配，各自内部按 startsWith 排序
+                const aWordMatch = a.word.normalize('NFC').toLowerCase().includes(query);
+                const bWordMatch = b.word.normalize('NFC').toLowerCase().includes(query);
+                if (aWordMatch !== bWordMatch) return aWordMatch ? -1 : 1;
+                const aText = aWordMatch ? a.word.normalize('NFC').toLowerCase() : (a.definition.definitions?.join('\n').toLowerCase() ?? '');
+                const bText = bWordMatch ? b.word.normalize('NFC').toLowerCase() : (b.definition.definitions?.join('\n').toLowerCase() ?? '');
+                const aStartsWith = aText.startsWith(query);
+                const bStartsWith = bText.startsWith(query);
+                if (aStartsWith && !bStartsWith) return -1;
+                if (!aStartsWith && bStartsWith) return 1;
+            }
             return 0;
         });
         return wordsToSort; // Return immediately after applying search-specific sorting

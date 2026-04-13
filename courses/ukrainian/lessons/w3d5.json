@@ -221,49 +221,49 @@
           "instruction": "判断下面句子中加粗的阴性名词处于哪个格。",
           "questions": [
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"咖啡\">кава</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"咖啡\">кава</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "Це 后面是主格 → кава。"
             },
             {
-              "prompt": "Я п'ю <span class=\"uk-word\" data-def=\"咖啡（宾格）\">каву</span>.",
+              "prompt": "Я п'ю <strong><span class=\"uk-word\" data-def=\"咖啡（宾格）\">каву</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "каву 是 кава 的宾格（-а → -у）。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"妈妈\">Мама</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"妈妈\">Мама</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "мама 是主语 → 主格。"
             },
             {
-              "prompt": "Я люблю <span class=\"uk-word\" data-def=\"妈妈（宾格）\">маму</span>.",
+              "prompt": "Я люблю <strong><span class=\"uk-word\" data-def=\"妈妈（宾格）\">маму</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "маму 是宾语 → 宾格。"
             },
             {
-              "prompt": "Це <span class=\"uk-word\" data-def=\"书\">книга</span>.",
+              "prompt": "Це <strong><span class=\"uk-word\" data-def=\"书\">книга</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "Це 后面是主格 → книга。"
             },
             {
-              "prompt": "Я читаю <span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span>.",
+              "prompt": "Я читаю <strong><span class=\"uk-word\" data-def=\"书（宾格）\">книгу</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "книгу 是宾语 → 宾格。"
             },
             {
-              "prompt": "<span class=\"uk-word\" data-def=\"歌\">Пісня</span> тут.",
+              "prompt": "<strong><span class=\"uk-word\" data-def=\"歌\">Пісня</span></strong> тут.",
               "options": ["主格", "宾格"],
               "answer": "主格",
               "explanation": "пісня 是主语 → 主格。"
             },
             {
-              "prompt": "Я пишу <span class=\"uk-word\" data-def=\"歌（宾格）\">пісню</span>.",
+              "prompt": "Я пишу <strong><span class=\"uk-word\" data-def=\"歌（宾格）\">пісню</span></strong>.",
               "options": ["主格", "宾格"],
               "answer": "宾格",
               "explanation": "пісню 是宾语 → 宾格（-я → -ю）。"
