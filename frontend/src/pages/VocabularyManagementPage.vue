@@ -33,16 +33,43 @@
                     <!-- 搜索和筛选 -->
                     <div class="control-item">
                         <SearchFilter
-                            :search-query="searchQuery"
-                            :filter-status="filterStatus"
-                            :stats="stats"
-                            :source-filter="sourceFilter"
+                            :source="filters.source.value"
+                            :search="filters.search.value"
+                            :review-status="filters.reviewStatus.value"
+                            :spell-status="filters.spellStatus.value"
+                            :review-counts="filters.reviewCounts.value"
+                            :spell-counts="filters.spellCounts.value"
+                            :advanced-filter-count="filters.activeAdvancedFilterCount.value"
+                            :advanced-expanded="advancedExpanded"
                             :all-words="words"
-                            @search-change="searchQuery = $event"
-                            @filter-change="filterStatus = $event"
-                            @source-change="sourceFilter = $event" />
+                            @update:source="filters.source.value = $event"
+                            @update:search="filters.search.value = $event"
+                            @update:review-status="filters.reviewStatus.value = $event as any"
+                            @update:spell-status="filters.spellStatus.value = $event as any"
+                            @toggle-advanced="advancedExpanded = !advancedExpanded" />
                     </div>
                 </div>
+
+                <!-- 高级筛选面板（独立渲染，不影响上方两栏等高） -->
+                <AdvancedFilterPanel
+                    :expanded="advancedExpanded"
+                    :lapse-only="filters.lapseOnly.value"
+                    :overdue-only="filters.overdueOnly.value"
+                    :lapse-counts="filters.lapseCounts.value"
+                    :overdue-counts="filters.overdueCounts.value"
+                    :ease-preset="filters.easePreset.value"
+                    :date-added-preset="filters.dateAddedPreset.value"
+                    :date-added-custom="filters.dateAddedCustom.value"
+                    :last-review-preset="filters.lastReviewPreset.value"
+                    :has-active-advanced-filters="filters.activeAdvancedFilterCount.value > 0"
+                    @update:lapse-only="filters.lapseOnly.value = $event"
+                    @update:overdue-only="filters.overdueOnly.value = $event"
+                    @update:ease-preset="filters.easePreset.value = $event"
+                    @update:date-added-preset="filters.dateAddedPreset.value = $event"
+                    @update:date-added-custom="filters.dateAddedCustom.value = $event"
+                    @update:last-review-preset="filters.lastReviewPreset.value = $event"
+                    @reset-advanced="filters.resetAdvancedFilters()"
+                    @close="advancedExpanded = false" />
                 <!-- 单词网格 -->
                 <div class="words-section">
                     <!-- 批量加载进度指示器 -->
@@ -93,9 +120,8 @@
                     <WordGrid
                         ref="wordGridRef"
                         :words="words"
-                        :search-query="searchQuery"
-                        :filter-status="filterStatus"
-                        :source-filter="sourceFilter"
+                        :filtered-words="filters.filteredWords.value"
+                        :search-query="filters.search.value"
                         @show-detail="handleShowDetail"
                         @batch-delete="handleBatchDelete" />
                 </div>
@@ -110,10 +136,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useBreakpoint } from '@/shared/composables/useBreakpoint';
 import WordInsertForm from '@/features/vocabulary/editor/WordInsertForm.vue';
 import SearchFilter from '@/features/vocabulary/grid/SearchFilter.vue';
+import AdvancedFilterPanel from '@/features/vocabulary/grid/AdvancedFilterPanel.vue';
 import WordGrid from '@/features/vocabulary/grid/WordGrid.vue';
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue';
 import LoadAdjustmentModal from '@/features/vocabulary/editor/LoadAdjustmentModal.vue';
@@ -121,8 +148,8 @@ import Loading from '@/shared/components/feedback/Loading.vue'
 import PageLayout from '@/shared/components/layout/PageLayout.vue';
 import type { Word, SourceLang } from '@/shared/types';
 import { normalizeWordText } from '@/shared/config/sourceLanguage';
-import { useWordStats } from '@/shared/composables/useWordStats';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
+import { useWordFilters } from '@/features/vocabulary/grid/useWordFilters';
 import { api } from '@/shared/api';
 import { useSettings } from '@/shared/composables/useSettings';
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor';
@@ -132,6 +159,8 @@ import { useDefinitionProgress } from '@/features/vocabulary/editor/composables'
 
 const words = ref<Word[]>([]);
 const defProgress = useDefinitionProgress();
+const filters = useWordFilters(words);
+const advancedExpanded = ref(false);
 
 // O(1) word lookup by id — rebuilt lazily when words array changes
 let _wordIndexMap: Map<number, number> | null = null
@@ -147,9 +176,6 @@ function getWordIndex(wordId: number): number {
   return _wordIndexMap.get(wordId) ?? -1
 }
 function invalidateWordIndex() { _wordIndexMap = null }
-const searchQuery = ref('');
-const filterStatus = ref('all');
-const sourceFilter = ref<string>('all'); // 新增来源筛选
 
 // Word Editor Store
 const wordEditorStore = useWordEditorStore();
@@ -170,17 +196,6 @@ const shouldStopLoading = ref(false); // 控制是否停止后台加载
 
 // Use read-only composable to get WordIndex selection
 const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
-
-// 使用 word stats composable
-const { allStats, getStatsBySource } = useWordStats(words);
-
-// 统计数据 - 基于来源筛选后的结果
-const stats = computed(() => {
-    if (sourceFilter.value === 'all') {
-        return allStats.value;
-    }
-    return getStatsBySource(sourceFilter.value);
-});
 
 // 分批加载单词的函数
 const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
@@ -273,7 +288,7 @@ onMounted(async () => {
 
         // Set initial source filter based on WordIndex selection
         if (currentSource.value) {
-            sourceFilter.value = currentSource.value;
+            filters.source.value = currentSource.value;
         }
 
         // 从settings加载批次大小（使用缓存）
@@ -301,7 +316,7 @@ onMounted(async () => {
 
 // 打开负荷调整
 const handleOpenLoadAdjustment = () => {
-    loadAdjustmentRef.value?.open(sourceFilter.value)
+    loadAdjustmentRef.value?.open(filters.source.value)
 }
 
 // 显示详情 - 使用 store.open() 打开模态框
@@ -476,6 +491,7 @@ onUnmounted(() => {
 
 .top-controls {
     display: flex;
+    align-items: stretch;
     gap: var(--space-4);
     margin-bottom: 0;
 }
@@ -483,13 +499,9 @@ onUnmounted(() => {
 .control-item {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-    /* 子元素高度拉伸 */
 }
 
-/* 统一内部控件高度 */
-.control-item>* {
+.control-item > * {
     flex: 1;
 }
 
@@ -596,6 +608,7 @@ onUnmounted(() => {
 @media (max-width: 768px) {
     .top-controls {
         flex-direction: column;
+        align-items: stretch;
         gap: var(--space-4);
     }
 

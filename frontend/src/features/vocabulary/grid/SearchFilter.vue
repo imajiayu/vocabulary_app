@@ -1,27 +1,27 @@
 <template>
   <div class="search-filter-container">
-    <!-- 来源筛选 tabs -->
+    <!-- Tier 1: Source tabs -->
     <SwitchTab
-      :model-value="sourceFilter"
+      :model-value="source"
       :tabs="sourceTabs"
       container-class="secondary-theme"
       :show-indicator="true"
-      @change="handleSourceChange"
+      @change="$emit('update:source', $event)"
     />
 
-    <!-- 搜索框 -->
+    <!-- Tier 1: Search box -->
     <div class="search-box">
       <div class="input-with-clear">
         <input
-          :value="searchQuery"
-          @input="$emit('searchChange', ($event.target as HTMLInputElement).value)"
+          :value="search"
+          @input="$emit('update:search', ($event.target as HTMLInputElement).value)"
           type="text"
           placeholder="输入单词或释义..."
           class="search-input"
         />
         <button
-          v-if="searchQuery.trim()"
-          @click="$emit('searchChange', '')"
+          v-if="search.trim()"
+          @click="$emit('update:search', '')"
           class="clear-button"
           type="button"
         >
@@ -30,90 +30,78 @@
       </div>
     </div>
 
-    <!-- 筛选按钮 -->
-    <SwitchTab
-      :model-value="filterStatus"
-      :tabs="filterTabs"
-      container-class="filter-theme"
-      :show-indicator="true"
-      @change="handleFilterChange"
+    <!-- Tier 1.5: Toggle bar (review/spell status + advanced toggle) -->
+    <FilterToggleBar
+      :review-status="reviewStatus"
+      :spell-status="spellStatus"
+      :review-counts="reviewCounts"
+      :spell-counts="spellCounts"
+      :advanced-filter-count="advancedFilterCount"
+      :advanced-expanded="advancedExpanded"
+      @update:review-status="$emit('update:reviewStatus', $event)"
+      @update:spell-status="$emit('update:spellStatus', $event)"
+      @toggle-advanced="$emit('toggleAdvanced')"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { useWordStats, type Word } from '@/shared/composables/useWordStats';
-import SwitchTab from '@/shared/components/controls/SwitchTab.vue';
-import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
-
-interface Stats {
-  total: number;
-  remembered: number;
-  unremembered: number;
-}
+import { computed, onMounted } from 'vue'
+import SwitchTab from '@/shared/components/controls/SwitchTab.vue'
+import FilterToggleBar from './FilterToggleBar.vue'
+import { useWordStats, type Word } from '@/shared/composables/useWordStats'
+import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
+import type { ReviewStatus, SpellStatus } from './useWordFilters'
 
 interface Props {
-  searchQuery: string;
-  filterStatus: string;
-  stats: Stats;
-  sourceFilter: string;
-  allWords?: Array<{ source: string; stop_review?: number; ease_factor: number; }>;
+  // Tier 1
+  source: string
+  search: string
+  // Tier 1.5
+  reviewStatus: ReviewStatus
+  spellStatus: SpellStatus
+  // Tier 1.5 counts
+  reviewCounts: { total: number; unremembered: number; remembered: number }
+  spellCounts: { total: number; spelling: number; stopped: number }
+  // Advanced state
+  advancedFilterCount: number
+  advancedExpanded: boolean
+  // All words for source tab counts
+  allWords?: Array<{ source: string }>
 }
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-// 使用 source selection composable 获取 availableSources
-const { availableSources, initializeFromData } = useSourceSelectionReadOnly();
+defineEmits<{
+  'update:source': [value: string]
+  'update:search': [value: string]
+  'update:reviewStatus': [value: string]
+  'update:spellStatus': [value: string]
+  toggleAdvanced: []
+}>()
+
+// Source tabs
+const { availableSources, initializeFromData } = useSourceSelectionReadOnly()
 
 onMounted(async () => {
-  await initializeFromData();
-});
+  await initializeFromData()
+})
 
-const wordsRef = computed(() => (props.allWords || []) as Word[]);
-const { allStats } = useWordStats(wordsRef);
+const wordsRef = computed(() => (props.allWords || []) as Word[])
+const { allStats } = useWordStats(wordsRef)
 
-const emit = defineEmits<{
-  searchChange: [value: string];
-  filterChange: [status: string];
-  sourceChange: [source: string];
-}>();
-
-// 来源选项卡数据 - 基于 allWords 动态计算
 const sourceTabs = computed(() => {
-  const tabs = [
-    { value: 'all', label: `全部 ${allStats.value.total}` }
-  ];
+  const tabs = [{ value: 'all', label: `全部 ${allStats.value.total}` }]
 
   if (availableSources.value && availableSources.value.length > 0) {
-    availableSources.value.forEach(source => {
-      const count = wordsRef.value.filter(w => w.source === source).length;
-      tabs.push({
-        value: source,
-        label: `${source} ${count}`
-      });
-    });
+    availableSources.value.forEach((source) => {
+      const count = wordsRef.value.filter((w) => w.source === source).length
+      tabs.push({ value: source, label: `${source} ${count}` })
+    })
   }
 
-  return tabs;
-});
-
-// 筛选选项卡数据
-const filterTabs = computed(() => [
-  { value: 'all', label: `全部 ${props.stats.total}` },
-  { value: 'unremembered', label: `学习中 ${props.stats.unremembered}` },
-  { value: 'remembered', label: `已掌握 ${props.stats.remembered}` }
-]);
-
-// 处理来源切换
-const handleSourceChange = (source: string) => {
-  emit('sourceChange', source);
-};
-
-// 处理筛选切换
-const handleFilterChange = (status: string) => {
-  emit('filterChange', status);
-};
+  return tabs
+})
 </script>
 
 <style scoped>
@@ -122,15 +110,16 @@ const handleFilterChange = (status: string) => {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--color-border-light);
-  padding: var(--space-6);
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  height: 100%;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
 }
 
 .search-box {
-  flex: 1;
+  flex: 0;
 }
 
 .input-with-clear {
@@ -190,7 +179,7 @@ const handleFilterChange = (status: string) => {
   color: var(--color-text-secondary);
 }
 
-/* 移动端响应式适配 */
+/* Mobile */
 @media (max-width: 768px) {
   .search-filter-container {
     padding: var(--space-4);
@@ -216,7 +205,7 @@ const handleFilterChange = (status: string) => {
   }
 }
 
-/* 横屏适配 */
+/* Landscape */
 @media (max-height: 500px) and (orientation: landscape) {
   .search-filter-container {
     padding: var(--space-3);

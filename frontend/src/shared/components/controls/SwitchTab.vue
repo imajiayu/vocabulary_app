@@ -103,9 +103,22 @@ const indicatorWidth = computed(() => {
   return `${tabWidths.value[tabIndex]}px`
 })
 
-// 为filter-theme计算指示器的动态背景颜色和阴影
+// 为filter-theme/spell-filter-theme计算指示器的动态背景颜色和阴影
 const indicatorBackground = computed(() => {
   const containerClass = props.containerClass || ''
+
+  if (containerClass.includes('spell-filter-theme')) {
+    switch (props.modelValue) {
+      case 'all':
+        return 'var(--gradient-primary)'
+      case 'spelling':
+        return 'var(--color-edit)'
+      case 'stopped':
+        return 'var(--primitive-copper-500, #996b3d)'
+      default:
+        return 'var(--gradient-primary)'
+    }
+  }
 
   if (containerClass.includes('filter-theme')) {
     switch (props.modelValue) {
@@ -123,9 +136,22 @@ const indicatorBackground = computed(() => {
   return undefined
 })
 
-// 为filter-theme计算指示器的动态阴影
+// 为filter-theme/spell-filter-theme计算指示器的动态阴影
 const indicatorBoxShadow = computed(() => {
   const containerClass = props.containerClass || ''
+
+  if (containerClass.includes('spell-filter-theme')) {
+    switch (props.modelValue) {
+      case 'all':
+        return '0 1px 6px rgba(153, 107, 61, 0.2)'
+      case 'spelling':
+        return '0 1px 6px rgba(153, 107, 61, 0.25)'
+      case 'stopped':
+        return '0 1px 6px rgba(153, 107, 61, 0.3)'
+      default:
+        return '0 1px 6px rgba(153, 107, 61, 0.2)'
+    }
+  }
 
   if (containerClass.includes('filter-theme')) {
     switch (props.modelValue) {
@@ -374,6 +400,21 @@ onUnmounted(() => {
 }
 
 .switch-tab-container.filter-theme .switch-tab:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Spell filter theme — 与 filter-theme 相同基础样式，指示器颜色由 JS 动态控制 */
+.switch-tab-container.spell-filter-theme {
+  background: rgba(0, 0, 0, 0.05);
+  gap: 4px;
+}
+
+.switch-tab-container.spell-filter-theme .switch-tab {
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+}
+
+.switch-tab-container.spell-filter-theme .switch-tab:hover:not(.active) {
   background: rgba(0, 0, 0, 0.04);
 }
 

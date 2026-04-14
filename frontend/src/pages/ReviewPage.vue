@@ -1,15 +1,14 @@
 <template>
-  <div class="review-page" :class="{ 'is-completed': isCompleted }">
+  <div class="review-page" :class="{ 'is-completed': isCompleted, 'no-sidebar': isCompleted && sidebarWords.length === 0 }">
     <!-- 右侧面板（通知 + AI 助手）- 桌面端固定 / 移动端浮动 -->
     <ReviewRightPanel
-      v-if="!isCompleted"
       :notification-data="notification.data"
-      :current-word="currentWord"
+      :current-word="displayWord"
     />
 
     <!-- 侧边栏 -->
     <WordSideBar
-      v-if="displayIndex <= displayTotal && !isCompleted"
+      v-if="(!isCompleted && displayIndex <= displayTotal) || (isCompleted && sidebarWords.length > 0)"
       :words="sidebarWords"
       :remember-history="wordResults"
       :mode="mode"
@@ -424,6 +423,13 @@ const sidebarWords = computed(() => {
   return reviewStore.wordQueue.slice(0, currentIndex.value)
 })
 
+// 完成后回退到队列末尾单词，供 AI 助手和右侧面板使用
+const displayWord = computed(() => {
+  if (currentWord.value) return currentWord.value
+  const queue = reviewStore.wordQueue
+  return queue.length > 0 ? queue[queue.length - 1] : null
+})
+
 // 方法
 const initializeFromRoute = async () => {
   try {
@@ -566,11 +572,10 @@ onUnmounted(() => {
   }
 }
 
-/* 完成后取消侧边栏 padding，让完成屏幕居中 */
+/* Lapse 完成后 sidebar 不显示，取消左侧 padding */
 @media (min-width: 769px) {
-  .review-page.is-completed {
+  .review-page.no-sidebar {
     padding-left: 0;
-    padding-right: 0;
   }
 }
 

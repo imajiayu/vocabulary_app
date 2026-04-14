@@ -93,9 +93,8 @@ const log = logger.create('WordGrid');
 
 interface Props {
     words: Word[];
+    filteredWords: Word[];
     searchQuery: string;
-    filterStatus: string;
-    sourceFilter: string;
 }
 
 const props = defineProps<Props>();
@@ -127,42 +126,10 @@ const sortOrderIndex = ref(0); // 0 升序，1 降序
 const hasUserSorted = ref(false); // 用户是否主动切换过排序
 const newWordIds = ref(new Set<number>()); // 新增单词的 ID 集合
 
-// 首先根据来源筛选
-const filteredBySourceWords = computed(() => {
-    if (props.sourceFilter === 'all') {
-        return props.words;
-    }
-    return props.words.filter(word => word.source === props.sourceFilter);
-});
-
-const filteredWords = computed(() => {
-    return filteredBySourceWords.value.filter(word => {
-        const isRemembered = word.stop_review === 1;
-
-        // 状态过滤
-        if (props.filterStatus === 'remembered' && !isRemembered) return false;
-        if (props.filterStatus === 'unremembered' && isRemembered) return false;
-
-        // 搜索过滤（NFC 规范化确保 Unicode 字符一致匹配）
-        if (props.searchQuery) {
-            const query = props.searchQuery.normalize('NFC').trim().toLowerCase();
-            const isChinese = /[\u4e00-\u9fa5]/.test(query);
-
-            if (isChinese) {
-                return word.definition.definitions?.join('\n').includes(query);
-            } else {
-                // 同时匹配单词和释义（释义可能是英文）
-                const wordMatch = word.word.normalize('NFC').toLowerCase().includes(query);
-                const defMatch = word.definition.definitions?.join('\n').toLowerCase().includes(query);
-                return wordMatch || defMatch;
-            }
-        }
-        return true;
-    });
-});
+// filteredWords is now passed as a prop from the parent (via useWordFilters composable)
 
 const sortedWords = computed(() => {
-    let wordsToSort = [...filteredWords.value];
+    let wordsToSort = [...props.filteredWords];
 
     // Special sorting for search results first
     if (props.searchQuery) {
@@ -248,7 +215,7 @@ const sortedWords = computed(() => {
 const visibleWords = computed(() => sortedWords.value.slice(0, renderCount.value));
 
 // 筛选/搜索/排序条件变化时重置 renderCount（加载新数据时不重置，避免列表闪回）
-watch([() => props.searchQuery, () => props.filterStatus, () => props.sourceFilter, sortFieldIndex, sortOrderIndex], () => {
+watch([() => props.filteredWords, () => props.searchQuery, sortFieldIndex, sortOrderIndex], () => {
   renderCount.value = RENDER_BATCH;
 });
 
@@ -307,7 +274,7 @@ const getSortFieldName = (field: string) => {
     }
 };
 
-const getDisplayCount = () => filteredWords.value.length;
+const getDisplayCount = () => props.filteredWords.length;
 
 // 多选模式切换
 const toggleSelectionMode = () => {
