@@ -119,6 +119,7 @@ import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
 import WordTooltip from '@/features/vocabulary/grid/WordTooltip.vue'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
+import { useReviewStore } from '@/features/vocabulary/stores/review'
 
 interface Props {
   words: Word[]
@@ -154,6 +155,7 @@ const isHovering = ref(false)
 
 // Store
 const wordEditorStore = useWordEditorStore()
+const reviewStore = useReviewStore()
 const { requestPause, releasePause } = useTimerPause()
 
 // Lapse level 常量（与 useLapseSession 保持一致）
@@ -161,8 +163,9 @@ const LAPSE_MAX_LEVEL = 4
 
 // Computed
 const isLapseMode = computed(() => props.mode === 'mode_lapse')
-const isSpellingMode = computed(() => props.mode === 'mode_spelling')
-const hasSecondaryActions = computed(() => props.mode === 'mode_review')
+// 完成状态下按钮栏/键盘已消失，不再叠加对应偏移，让侧边栏落回默认底部
+const isSpellingMode = computed(() => !reviewStore.isCompleted && props.mode === 'mode_spelling')
+const hasSecondaryActions = computed(() => !reviewStore.isCompleted && props.mode === 'mode_review')
 const useTransition = computed(() => displayedWords.value.length <= 50)
 
 const displayedWords = computed(() => {

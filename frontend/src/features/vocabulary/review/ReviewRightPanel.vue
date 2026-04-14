@@ -711,8 +711,9 @@ const { requestPause, releasePause } = useTimerPause()
 const reviewStore = useReviewStore()
 
 const isLapseMode = computed(() => reviewStore.mode === 'mode_lapse')
-const isSpellingMode = computed(() => reviewStore.mode === 'mode_spelling')
-const hasSecondaryActions = computed(() => reviewStore.mode === 'mode_review')
+// 完成状态下按钮栏/键盘已消失，不再叠加对应偏移，让面板落回默认底部
+const isSpellingMode = computed(() => !reviewStore.isCompleted && reviewStore.mode === 'mode_spelling')
+const hasSecondaryActions = computed(() => !reviewStore.isCompleted && reviewStore.mode === 'mode_review')
 
 // 各模式的面板可见性：
 //   mode_review:           通知 ✓  负荷 ✓
