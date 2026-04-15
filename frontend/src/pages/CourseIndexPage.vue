@@ -1,6 +1,6 @@
 <template>
-  <div class="course-index-page" :data-course="config.theme">
-    <CourseTopBar :config="config" />
+  <div class="course-index-page" :class="{ embedded }" :data-course="config.theme">
+    <CourseTopBar v-if="!embedded" :config="config" />
 
     <main class="course-index-main">
       <!-- Hero：课程名 + 副标题 + 进度环 -->
@@ -164,9 +164,12 @@ import CourseTopBar from '@/features/courses/components/navigation/CourseTopBar.
 import '@/features/courses/styles/course.css'
 import '@/features/courses/styles/course-themes.css'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   courseId: string
-}>()
+  embedded?: boolean
+}>(), {
+  embedded: false
+})
 
 const { config } = useCourseConfig(props.courseId)
 const { lessons, futureWeeks, weekTitles } = getLessonsByCourse(props.courseId)
@@ -234,6 +237,11 @@ onMounted(() => {
   background: var(--color-surface-page);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+}
+
+.course-index-page.embedded {
+  min-height: auto;
+  width: 100%;
 }
 
 .course-index-main {

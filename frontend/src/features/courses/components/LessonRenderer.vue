@@ -1,6 +1,6 @@
 <template>
   <article class="course-content" :data-course="config.theme">
-    <h1>{{ lesson.title }}</h1>
+    <h1 v-html="wrap(lesson.title)" />
 
     <div v-if="lesson.objective" class="course-objective">
       <strong>学习目标：</strong><span v-html="wrap(lesson.objective)" />

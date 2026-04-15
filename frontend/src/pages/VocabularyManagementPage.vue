@@ -70,8 +70,25 @@
                     @update:last-review-preset="filters.lastReviewPreset.value = $event"
                     @reset-advanced="filters.resetAdvancedFilters()"
                     @close="advancedExpanded = false" />
-                <!-- 单词网格 -->
+                <!-- 单词网格 / 表格 -->
                 <div class="words-section">
+                    <!-- 视图切换 -->
+                    <div class="view-toggle-bar">
+                        <button
+                            class="view-toggle-btn"
+                            :class="{ active: viewMode === 'grid' }"
+                            @click="switchView('grid')">
+                            <LayoutGrid class="view-icon" />
+                            <span>卡片</span>
+                        </button>
+                        <button
+                            class="view-toggle-btn"
+                            :class="{ active: viewMode === 'table' }"
+                            @click="switchView('table')">
+                            <TableIcon class="view-icon" />
+                            <span>表格</span>
+                        </button>
+                    </div>
                     <!-- 批量加载进度指示器 -->
                     <div v-if="hasMoreWords || isLoadingMore" class="loading-progress">
                         <div class="progress-info">
@@ -118,12 +135,20 @@
                     </div>
 
                     <WordGrid
+                        v-if="viewMode === 'grid'"
                         ref="wordGridRef"
                         :words="words"
                         :filtered-words="filters.filteredWords.value"
                         :search-query="filters.search.value"
                         @show-detail="handleShowDetail"
                         @batch-delete="handleBatchDelete" />
+                    <WordTable
+                        v-else
+                        ref="wordTableRef"
+                        :filtered-words="filters.filteredWords.value"
+                        :search-query="filters.search.value"
+                        @saved="handleTableRowSaved"
+                        @dirty-change="tableDirtyCount = $event" />
                 </div>
 
             <!-- 详情弹窗 - 使用 store 管理状态 -->
@@ -142,6 +167,8 @@ import WordInsertForm from '@/features/vocabulary/editor/WordInsertForm.vue';
 import SearchFilter from '@/features/vocabulary/grid/SearchFilter.vue';
 import AdvancedFilterPanel from '@/features/vocabulary/grid/AdvancedFilterPanel.vue';
 import WordGrid from '@/features/vocabulary/grid/WordGrid.vue';
+import WordTable from '@/features/vocabulary/grid/WordTable.vue';
+import { LayoutGrid, Table as TableIcon } from 'lucide-vue-next';
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue';
 import LoadAdjustmentModal from '@/features/vocabulary/editor/LoadAdjustmentModal.vue';
 import Loading from '@/shared/components/feedback/Loading.vue'
@@ -181,7 +208,30 @@ function invalidateWordIndex() { _wordIndexMap = null }
 const wordEditorStore = useWordEditorStore();
 const isLoading = ref(true);
 const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引用
+const wordTableRef = ref<InstanceType<typeof WordTable>>(); // WordTable 组件引用
 const loadAdjustmentRef = ref<InstanceType<typeof LoadAdjustmentModal>>(); // 负荷调整组件引用
+
+// 视图模式：卡片网格 vs Excel 表格编辑
+const viewMode = ref<'grid' | 'table'>('grid');
+const tableDirtyCount = ref(0);
+
+const switchView = (mode: 'grid' | 'table') => {
+    if (mode === viewMode.value) return;
+    if (viewMode.value === 'table' && tableDirtyCount.value > 0) {
+        if (!confirm(`表格中有 ${tableDirtyCount.value} 项未保存的变更，切换视图将丢弃，是否继续？`)) {
+            return;
+        }
+    }
+    viewMode.value = mode;
+};
+
+// 表格视图保存某一行后，同步回 words 数组（让卡片视图、modal 拿到最新数据）
+const handleTableRowSaved = (updatedWord: Word) => {
+    const index = getWordIndex(updatedWord.id);
+    if (index !== -1) {
+        words.value[index] = updatedWord;
+    }
+};
 
 // 使用全局设置管理
 const { settings, loadSettings } = useSettings();
@@ -361,6 +411,8 @@ const handleShowDetail = (word: Word) => {
         if (index !== -1) {
             words.value[index] = updatedWord;
         }
+        // 若表格视图正显示此单词，同步 draft，避免与服务端不一致
+        wordTableRef.value?.syncWord(updatedWord);
     });
 };
 
@@ -511,6 +563,43 @@ onUnmounted(() => {
     box-shadow: var(--shadow-md);
     border: 1px solid var(--color-border-light);
     padding: var(--space-6);
+}
+
+.view-toggle-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: var(--space-4);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+}
+.view-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-xs);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-ui);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+.view-toggle-btn:hover {
+    color: var(--color-text-primary);
+}
+.view-toggle-btn.active {
+    background: var(--color-surface-card);
+    color: var(--color-brand-primary);
+    box-shadow: var(--shadow-sm);
+}
+.view-icon {
+    width: 14px;
+    height: 14px;
 }
 
 /* 批量加载进度指示器 */

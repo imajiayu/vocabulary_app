@@ -91,8 +91,15 @@ const nextLesson = computed(() =>
 )
 
 // Provide 给兄弟组件 WordPopover / CourseChat / CourseTopBar
+// 标题可能包含 HTML 标签（如 <span class="term">），面包屑/AI 提示词只需要纯文本
 provide('courseConfig', config.value)
-provide('lessonTitle', computed(() => lesson.value?.title || ''))
+provide('lessonTitle', computed(() => {
+  const raw = lesson.value?.title || ''
+  if (!raw) return ''
+  const tmp = document.createElement('div')
+  tmp.innerHTML = raw
+  return tmp.textContent || ''
+}))
 </script>
 
 <style scoped>

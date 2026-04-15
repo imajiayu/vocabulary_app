@@ -49,16 +49,11 @@
         <!-- 活动状态的书签丝带 -->
         <span v-if="activeTab === tab.id" class="ribbon-marker"></span>
       </button>
-    </div>
 
-    <!-- 用户选择（藏书票） -->
-    <div class="nav-stamps">
-      <UserProfile :expanded="expanded" />
-    </div>
-
-    <!-- 外部链接 -->
-    <div class="nav-external">
-      <a href="/uk/" class="chapter-tab chapter-tab--external">
+      <button
+        :class="['chapter-tab', { active: activeTab === 'course-uk' }]"
+        @click="switchTab('course-uk')"
+      >
         <span class="chapter-mark">
           <svg class="mark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
             <circle cx="12" cy="12" r="10" />
@@ -72,8 +67,13 @@
             <span class="label-english">Ukrainian</span>
           </span>
         </transition>
-      </a>
-      <a href="/legal/" class="chapter-tab chapter-tab--external">
+        <span v-if="activeTab === 'course-uk'" class="ribbon-marker"></span>
+      </button>
+
+      <button
+        :class="['chapter-tab', { active: activeTab === 'course-legal' }]"
+        @click="switchTab('course-legal')"
+      >
         <span class="chapter-mark">
           <svg class="mark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -89,7 +89,13 @@
             <span class="label-english">Legal English</span>
           </span>
         </transition>
-      </a>
+        <span v-if="activeTab === 'course-legal'" class="ribbon-marker"></span>
+      </button>
+    </div>
+
+    <!-- 用户选择（藏书票） -->
+    <div class="nav-stamps">
+      <UserProfile :expanded="expanded" />
     </div>
 
     <!-- 底部设置 -->
@@ -421,28 +427,6 @@ const switchTab = (tabId: string) => {
 }
 
 /* 展开时用户区域样式：保持与收起时相同的 padding，避免头像位移 */
-
-/* ── 外部链接区域 ── */
-.nav-external {
-  padding: 8px 0;
-  border-top: 1px solid var(--primitive-paper-400);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.chapter-tab--external {
-  text-decoration: none;
-  color: inherit;
-}
-
-.chapter-tab--external .chapter-mark {
-  color: var(--primitive-ink-400);
-}
-
-.chapter-tab--external:hover .chapter-mark {
-  color: var(--primitive-copper-500);
-}
 
 .nav-colophon {
   padding: 8px 0 16px;

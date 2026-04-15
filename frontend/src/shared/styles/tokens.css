@@ -236,6 +236,7 @@
   --color-bg-tertiary: var(--primitive-paper-300);
   --color-bg-overlay: rgba(255, 253, 247, 0.97);
   --color-bg-tooltip: rgba(45, 55, 72, 0.92);
+  --color-overlay-modal: rgba(26, 32, 44, 0.45);
   --color-bg-page: var(--primitive-paper-200);
 
   /* ── 颜色 - 边框（温暖灰调） ── */

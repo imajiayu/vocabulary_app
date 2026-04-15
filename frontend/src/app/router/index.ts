@@ -30,7 +30,6 @@ const SpeakingPage = lazyPage(() => import('@/pages/SpeakingPage.vue'))
 const WritingPage = lazyPage(() => import('@/pages/WritingPage.vue'))
 const SettingsPage = lazyPage(() => import('@/pages/SettingsPage.vue'))
 const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage.vue'))
-const CourseIndexPage = lazyPage(() => import('@/pages/CourseIndexPage.vue'))
 const CourseLessonPage = lazyPage(() => import('@/pages/CourseLessonPage.vue'))
 
 const routes = [
@@ -88,6 +87,7 @@ const routes = [
     meta: { title: '设置', depth: 1 }
   },
   // ── 课程路由 ──
+  // 课程 index 页面作为 HomePage 的 tab 渲染（通过 meta.defaultTab 标识）
   {
     path: '/uk',
     redirect: '/uk/'
@@ -95,9 +95,8 @@ const routes = [
   {
     path: '/uk/',
     name: 'course-uk-index',
-    component: CourseIndexPage,
-    props: { courseId: 'ukrainian' },
-    meta: { title: '乌克兰语课程', depth: 1 }
+    component: HomePage,
+    meta: { title: '乌克兰语课程', depth: 0, defaultTab: 'course-uk' }
   },
   {
     path: '/uk/:lessonId',
@@ -116,9 +115,8 @@ const routes = [
   {
     path: '/legal/',
     name: 'course-legal-index',
-    component: CourseIndexPage,
-    props: { courseId: 'legal-english' },
-    meta: { title: '法律英语课程', depth: 1 }
+    component: HomePage,
+    meta: { title: '法律英语课程', depth: 0, defaultTab: 'course-legal' }
   },
   {
     path: '/legal/:lessonId',

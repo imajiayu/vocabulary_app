@@ -7,7 +7,8 @@
       'is-mobile': isMobile,
       'is-speaking': activeTab === 'speaking',
       'is-writing': activeTab === 'writing',
-      'is-settings': activeTab === 'settings'
+      'is-settings': activeTab === 'settings',
+      'is-course': activeTab === 'course-uk' || activeTab === 'course-legal'
     }"
   >
     <!-- 桌面端主导航栏 -->
@@ -29,9 +30,9 @@
 
         <!-- 可滚动导航区域 -->
         <div class="mobile-nav-scroll">
-          <!-- 导航按钮 -->
+          <!-- 主导航按钮：单词、口语、写作 -->
           <button
-            v-for="tab in tabs"
+            v-for="tab in primaryTabs"
             :key="tab.value"
             :class="['mobile-nav-item', { active: activeTab === tab.value }]"
             @click="handleTabChange(tab.value)"
@@ -41,18 +42,33 @@
             <span v-if="activeTab === tab.value" class="nav-indicator"></span>
           </button>
 
-          <!-- 外部链接分隔线 -->
-          <span class="mobile-nav-divider"></span>
-
-          <!-- 外部链接 -->
-          <a href="/uk/" class="mobile-nav-item mobile-nav-item--external">
+          <!-- 课程入口 -->
+          <button
+            :class="['mobile-nav-item', { active: activeTab === 'course-uk' }]"
+            @click="handleTabChange('course-uk')"
+          >
             <AppIcon name="globe" class="nav-icon-svg" />
             <span class="nav-label">UK</span>
-          </a>
-          <a href="/legal/" class="mobile-nav-item mobile-nav-item--external">
+            <span v-if="activeTab === 'course-uk'" class="nav-indicator"></span>
+          </button>
+          <button
+            :class="['mobile-nav-item', { active: activeTab === 'course-legal' }]"
+            @click="handleTabChange('course-legal')"
+          >
             <AppIcon name="legal" class="nav-icon-svg" />
             <span class="nav-label">法律</span>
-          </a>
+            <span v-if="activeTab === 'course-legal'" class="nav-indicator"></span>
+          </button>
+
+          <!-- 设置（始终放在最后，与桌面端一致） -->
+          <button
+            :class="['mobile-nav-item', { active: activeTab === 'settings' }]"
+            @click="handleTabChange('settings')"
+          >
+            <AppIcon name="settings" class="nav-icon-svg" />
+            <span class="nav-label">设置</span>
+            <span v-if="activeTab === 'settings'" class="nav-indicator"></span>
+          </button>
         </div>
       </div>
     </nav>
@@ -100,6 +116,20 @@
           class="writing-index"
           :selected-prompt="selectedPrompt"
         />
+        <CourseIndexPage
+          v-else-if="activeTab === 'course-uk'"
+          key="course-uk"
+          course-id="ukrainian"
+          embedded
+          class="course-index-embedded"
+        />
+        <CourseIndexPage
+          v-else-if="activeTab === 'course-legal'"
+          key="course-legal"
+          course-id="legal-english"
+          embedded
+          class="course-index-embedded"
+        />
         <SettingsPage
           v-else-if="activeTab === 'settings'"
           key="settings"
@@ -114,10 +144,12 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useBreakpoint } from '@/shared/composables/useBreakpoint'
+import { useRoute, useRouter } from 'vue-router'
 import WordIndex from '@/features/vocabulary/index/WordIndex.vue'
 import SpeakingIndex from '@/pages/SpeakingPage.vue'
 import WritingIndex from '@/pages/WritingPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
+import CourseIndexPage from '@/pages/CourseIndexPage.vue'
 import SpeakingSidebar from '@/features/speaking/components/SpeakingSidebar.vue'
 import WritingSidebar from '@/features/writing/components/WritingSidebar.vue'
 import MainNavigation from '@/shared/components/layout/MainNavigation.vue'
@@ -129,7 +161,26 @@ import { createWritingContext } from '@/features/writing/composables'
 import { api } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
 
-const activeTab = ref(localStorage.getItem('activeTab') || 'words')
+const route = useRoute()
+const router = useRouter()
+
+// Tab ↔ URL path 映射（课程 tab 对应独立路径，其他 tab 共享 /）
+const TAB_TO_PATH: Record<string, string> = {
+  'course-uk': '/uk/',
+  'course-legal': '/legal/'
+}
+
+// URL 是课程 tab 的唯一权威来源：访问 / 时，即便 localStorage 残留课程 tab 也不读取，
+// 否则会把用户对根路径的明确意图覆盖成自动跳转到 /uk/ 或 /legal/。
+const COURSE_TABS = new Set(['course-uk', 'course-legal'])
+function resolveInitialTab(): string {
+  const fromRoute = route.meta.defaultTab as string | undefined
+  if (fromRoute) return fromRoute
+  const stored = localStorage.getItem('activeTab')
+  if (stored && !COURSE_TABS.has(stored)) return stored
+  return 'words'
+}
+const activeTab = ref(resolveInitialTab())
 
 // 根据当前 tab 计算导航主题色类名
 const navThemeClass = computed(() => `theme-${activeTab.value}`)
@@ -141,13 +192,39 @@ const navExpanded = ref(false)
 const { isMobile } = useBreakpoint()
 const writingSidebarRef = ref<InstanceType<typeof WritingSidebar> | null>(null)
 
-// Tab 数据
-const tabs: Array<{ value: string, label: string, icon: 'book' | 'mic' | 'writing' | 'settings' }> = [
+// 移动端底部导航主 tab（课程入口和设置在模板中单独渲染以控制顺序）
+const primaryTabs: Array<{ value: string, label: string, icon: 'book' | 'mic' | 'writing' }> = [
   { value: 'words', label: '单词', icon: 'book' },
   { value: 'speaking', label: '口语', icon: 'mic' },
-  { value: 'writing', label: '写作', icon: 'writing' },
-  { value: 'settings', label: '设置', icon: 'settings' }
+  { value: 'writing', label: '写作', icon: 'writing' }
 ]
+
+// 切换 tab 时同步更新 URL（课程 tab 路径为 /uk/ 或 /legal/，其他为 /）
+const syncUrlForTab = (tabId: string) => {
+  const targetPath = TAB_TO_PATH[tabId] || '/'
+  if (route.path !== targetPath) {
+    router.replace({ path: targetPath, query: route.query, hash: route.hash }).catch(() => {})
+  }
+}
+
+// 监听路由变化：用户直接访问 /uk/ /legal/ 或通过浏览器前进后退切换时同步 activeTab
+const PATH_TO_TAB: Record<string, string> = {
+  '/uk/': 'course-uk',
+  '/legal/': 'course-legal'
+}
+watch(() => route.path, (newPath) => {
+  const mappedTab = PATH_TO_TAB[newPath]
+  if (mappedTab) {
+    if (activeTab.value !== mappedTab) {
+      activeTab.value = mappedTab
+      localStorage.setItem('activeTab', mappedTab)
+    }
+  } else if (newPath === '/' && (activeTab.value === 'course-uk' || activeTab.value === 'course-legal')) {
+    // URL 回到 / 但 activeTab 仍是课程 tab，回退到单词
+    activeTab.value = 'words'
+    localStorage.setItem('activeTab', 'words')
+  }
+})
 
 // localStorage键名
 const SELECTED_QUESTION_KEY = 'selectedQuestion'
@@ -210,6 +287,7 @@ const handleTabChange = (tabId: string) => {
   // 这里只处理立即切换的情况
   activeTab.value = tabId
   localStorage.setItem('activeTab', tabId)
+  syncUrlForTab(tabId)
 
   if (tabId === 'speaking') {
     // 进入口语练习时，重置侧边栏状态，但保持selectedQuestion用于恢复
@@ -296,6 +374,7 @@ watch(activeTab, (newTab, oldTab) => {
     setTimeout(() => {
       activeTab.value = 'words'
       localStorage.setItem('activeTab', 'words')
+      syncUrlForTab('words')
       isDelayingSwitchToWords.value = false // 清除延迟标志
       sidebarDisappearing.value = false // 清除消失标志
     }, animationDelay)
@@ -449,19 +528,6 @@ onMounted(() => {
 
 .mobile-nav-scroll::-webkit-scrollbar {
   display: none;
-}
-
-.mobile-nav-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--primitive-paper-400);
-  flex-shrink: 0;
-  margin: 0 2px;
-}
-
-.mobile-nav-item--external {
-  text-decoration: none;
-  color: inherit;
 }
 
 /* 移动端导航主题色 */
@@ -643,6 +709,17 @@ onMounted(() => {
 /* 设置页面需要 sticky 定位，必须解除 overflow 限制 */
 .app-container.is-settings .main-container {
   overflow: visible;
+}
+
+/* 课程 index 页面：内容由上至下排列，允许自然流式滚动 */
+.app-container.is-course .main-container {
+  overflow: visible;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.course-index-embedded {
+  width: 100%;
 }
 
 /* 移动端主内容区域 - 统一 padding 为 0，由各页面组件自己处理内边距 */
