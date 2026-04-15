@@ -1,0 +1,467 @@
+{
+  "title": "第2周 第3天 — 保证与陈述（Representations & Warranties）",
+  "objective": "掌握合同中\u201c陈述与保证\u201d条款（Representations & Warranties）的核心术语和固定搭配，理解 representation 与 warranty 的法律区别，能够准确阅读和翻译 R&W 条款。",
+  "sections": [
+    {
+      "type": "grammar",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "上节回顾：第2周第1天我们学习了合同中最重要的情态助动词——<span class=\"term\" data-def=\"应当（义务）\">shall</span>（义务）、<span class=\"term\" data-def=\"可以（权利/许可）\">may</span>（权利/许可）、<span class=\"term\" data-def=\"必须（强制要求）\">must</span>（强制要求）的法律含义区分，以及 <span class=\"term\" data-def=\"义务\">obligation</span>、<span class=\"term\" data-def=\"关税；税\">duty</span>、<span class=\"term\" data-def=\"权利\">right</span>、<span class=\"term\" data-def=\"权利/应享权益\">entitlement</span>、<span class=\"term\" data-def=\"自由裁量权\">discretion</span>、<span class=\"term\" data-def=\"有约束力的\">binding</span>、<span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span> 等权利义务相关术语。今天我们将进入合同中最重要的条款类型之一——陈述与保证条款（Representations & Warranties），这是商务合同的核心组成部分。"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>错题回顾：</strong><br><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = <strong>实质条款</strong>（非\u201c执行条款\u201d）——operative 在法律英语中 = 实质性的。今天学习的 R&W 条款正是 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 的重要组成部分。</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = <strong>完全有效</strong>——法律固定搭配，不可简化。R&W 条款中经常出现类似的固定表达，请注意积累。</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "1. 核心词汇",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["英文", "音标", "中文", "常见搭配"],
+          "firstColWord": true,
+          "rows": [
+            ["<span class=\"term\" data-def=\"陈述/声明\">representation</span>", "/ˌreprɪzenˈteɪʃn/", "陈述（对事实的声明）", "make a representation; false representation"],
+            ["<span class=\"term\" data-def=\"保证/担保\">warranty</span>", "/ˈwɒrənti/", "保证（对事实的担保承诺）", "<span class=\"term\" data-def=\"违反保证\">breach of warranty</span>; express warranty"],
+            ["<span class=\"term\" data-def=\"陈述/声明（动词）\">represent</span>", "/ˌreprɪˈzent/", "陈述；声明（动词）", "each Party represents that..."],
+            ["<span class=\"term\" data-def=\"保证/担保（动词）\">warrant</span>", "/ˈwɒrənt/", "保证；担保（动词）", "the Seller warrants that..."],
+            ["<span class=\"term\" data-def=\"契约/承诺\">covenant</span>", "/ˈkʌvənənt/", "承诺；契约（面向未来的承诺）", "covenants and agrees; affirmative covenant"],
+            ["<span class=\"term\" data-def=\"承诺/保证\">undertake</span>", "/ˌʌndəˈteɪk/", "承诺；保证（动词）", "undertake to perform; undertake an obligation"],
+            ["<span class=\"term\" data-def=\"承诺/保证（名词）\">undertaking</span>", "/ˌʌndəˈteɪkɪŋ/", "承诺；保证（名词）", "written undertaking; binding undertaking"],
+            ["<span class=\"term\" data-def=\"保证/担保\">assurance</span>", "/əˈʃʊərəns/", "保证；担保", "provide assurance; further assurances"],
+            ["<span class=\"term\" data-def=\"保证/担保\">guarantee</span>", "/ˌɡærənˈtiː/", "保证；担保（侧重结果担保）", "guarantee of performance; personal guarantee"],
+            ["<span class=\"term\" data-def=\"担保/保证书（法律书面）\">guaranty</span>", "/ˌɡærənˈtiː/", "担保；保证书（名词，法律书面用法）", "guaranty agreement; guaranty of payment"],
+            ["<span class=\"term\" data-def=\"质押/承诺\">pledge</span>", "/pledʒ/", "质押；承诺", "pledge of assets; pledge to comply"],
+            ["<span class=\"term\" data-def=\"证明/认证\">certify</span>", "/ˈsɜːrtɪfaɪ/", "证明；证实", "certify that; certified copy"],
+            ["<span class=\"term\" data-def=\"确认/承认\">acknowledge</span>", "/əkˈnɒlɪdʒ/", "确认；承认（对已知事实的认可）", "acknowledge and agree; acknowledge receipt"],
+            ["<span class=\"term\" data-def=\"声明/宣布\">declare</span>", "/dɪˈkleər/", "声明；宣布", "declare a default; declare and warrant"],
+            ["<span class=\"term\" data-def=\"确认/断言\">affirm</span>", "/əˈfɜːrm/", "确认；断言", "affirm the representations; affirm and ratify"],
+            ["<span class=\"term\" data-def=\"据…所知\">to the best of one's knowledge</span>", "/tuː ðə best ʌv wʌnz ˈnɒlɪdʒ/", "据某人所知（限定陈述范围的表达）", "to the best of its knowledge and belief"],
+            ["<span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span>", "/æz ʌv ðə deɪt hɪərˈɒv/", "截至本协议签署之日", "true and correct <span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span>"]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>词源记忆：</strong><span class=\"term\" data-def=\"保证/担保（动词）\">warrant</span> 来自古法语 warantir（保护、保证），与日常英语的\u201c搜查令\u201d（search warrant）同源——两者都有\u201c官方保证/授权\u201d的含义。<span class=\"term\" data-def=\"契约/承诺\">covenant</span> 来自拉丁语 convenire（走到一起、同意），暗含\u201c双方达成一致的庄重承诺\u201d之意。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["搭配", "中文", "例句"],
+          "rows": [
+            ["<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>", "陈述与保证", "<p class=\"example\"><span class=\"en-text\">The representations and warranties of each Party shall survive the Closing for a period of two (2) years.</span><span class=\"translation\">— 各方的陈述与保证在交割后存续两（2）年。</span></p>"],
+            ["make a <span class=\"term\" data-def=\"陈述/声明\">representation</span>", "作出陈述", "<p class=\"example\"><span class=\"en-text\">No Party has made any representation not expressly set forth herein.</span><span class=\"translation\">— 任何一方均未作出本协议未明确载明的陈述。</span></p>"],
+            ["<span class=\"term\" data-def=\"违反保证\">breach of warranty</span>", "违反保证", "<p class=\"example\"><span class=\"en-text\">In the event of a breach of warranty, the non-breaching Party shall be entitled to seek damages.</span><span class=\"translation\">— 如发生违反保证的情形，非违约方有权寻求损害赔偿。</span></p>"],
+            ["<span class=\"term\" data-def=\"契约/承诺\">covenants</span> and <span class=\"term\" data-def=\"同意\">agrees</span>", "承诺并同意", "<p class=\"example\"><span class=\"en-text\">The Seller covenants and agrees to maintain all required licenses during the term of this Agreement.</span><span class=\"translation\">— 卖方承诺并同意在本协议期限内维持所有所需许可证。</span></p>"],
+            ["<span class=\"term\" data-def=\"据…所知\">to the best of its knowledge</span>", "据其所知", "<p class=\"example\"><span class=\"en-text\">To the best of its knowledge, the Company is in compliance with all applicable laws.</span><span class=\"translation\">— 据公司所知，公司遵守所有适用法律。</span></p>"],
+            ["<span class=\"term\" data-def=\"在所有重大方面真实且正确\">true and correct in all material respects</span>", "在所有重大方面真实且正确", "<p class=\"example\"><span class=\"en-text\">The representations and warranties shall be true and correct in all material respects as of the Closing Date.</span><span class=\"translation\">— 陈述与保证在交割日在所有重大方面应真实且正确。</span></p>"],
+            ["each Party <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that", "各方陈述并保证", "<p class=\"example\"><span class=\"en-text\">Each Party represents and warrants that it has the full power and authority to enter into this Agreement.</span><span class=\"translation\">— 各方陈述并保证其拥有签订本协议的全部权力和授权。</span></p>"],
+            ["<span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span>", "截至本协议签署之日", "<p class=\"example\"><span class=\"en-text\">As of the date hereof, there is no pending litigation against the Company.</span><span class=\"translation\">— 截至本协议签署之日，不存在针对公司的未决诉讼。</span></p>"]
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. 词汇辨析",
+      "blocks": [
+        {
+          "type": "h3",
+          "html": "3a. representation vs. warranty（本课重点）"
+        },
+        {
+          "type": "p",
+          "html": "这是合同法中最重要的区分之一。虽然实务中两者常并列使用（<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>），但法律上有本质区别："
+        },
+        {
+          "type": "table",
+          "headers": ["维度", "<span class=\"term\" data-def=\"陈述/声明\">representation</span>（陈述）", "<span class=\"term\" data-def=\"保证/担保\">warranty</span>（保证）"],
+          "rows": [
+            ["<strong>性质</strong>", "对<strong>事实</strong>的声明——\u201c事情是这样的\u201d", "对事实的<strong>担保承诺</strong>——\u201c我保证事情是这样的\u201d"],
+            ["<strong>时间指向</strong>", "主要指向<strong>过去和现在</strong>的事实状态", "可涵盖<strong>过去、现在和未来</strong>"],
+            ["<strong>违反后果</strong>", "对方可主张<strong>misrepresentation</strong>（虚假陈述），严重的可<strong>撤销合同</strong>（rescission）", "对方可主张<strong><span class=\"term\" data-def=\"违反保证\">breach of warranty</span></strong>（违反保证），可要求<strong>损害赔偿</strong>（damages）"],
+            ["<strong>举证</strong>", "需证明<strong>依赖</strong>（reliance）——即对方确实依赖了该陈述才签约", "无需证明依赖，只需证明保证内容不实"],
+            ["<strong>类比</strong>", "类似于\u201c我说的是事实\u201d", "类似于\u201c我以合同保证这是事实\u201d"]
+          ]
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>中文母语者易错点：</strong>中文合同中\u201c陈述与保证\u201d常被笼统翻译，但在英美法中，两者的法律后果截然不同。违反 representation 可能导致合同被撤销（rescission），而违反 warranty 通常只能要求赔偿（damages）。翻译时应保持两者的区分，不可互换。"
+        },
+        {
+          "type": "h3",
+          "html": "3b. covenant vs. warranty"
+        },
+        {
+          "type": "table",
+          "headers": ["维度", "<span class=\"term\" data-def=\"契约/承诺\">covenant</span>（承诺/契约）", "<span class=\"term\" data-def=\"保证/担保\">warranty</span>（保证）"],
+          "rows": [
+            ["<strong>性质</strong>", "对<strong>未来行为</strong>的承诺——\u201c我将会做/不做某事\u201d", "对<strong>事实状态</strong>的担保——\u201c我保证某事是真实的\u201d"],
+            ["<strong>时间指向</strong>", "面向<strong>未来</strong>", "面向<strong>过去和现在</strong>（也可延伸至未来）"],
+            ["<strong>举例</strong>", "\u201c卖方承诺在交割前维持正常经营\u201d", "\u201c卖方保证其拥有资产的合法所有权\u201d"],
+            ["<strong>违反后果</strong>", "breach of covenant — 违约（可要求赔偿或特定履行）", "<span class=\"term\" data-def=\"违反保证\">breach of warranty</span> — 违反保证（可要求赔偿）"]
+          ]
+        },
+        {
+          "type": "grammar-box",
+          "html": "<strong>合同中的典型句式对比：</strong><ul><li><span class=\"term\" data-def=\"保证/担保\">warranty</span>（保证事实）：The Seller <strong>warrants</strong> that it has good and marketable title to the Assets.（卖方<strong>保证</strong>其对资产拥有良好且可转让的所有权。）</li><li><span class=\"term\" data-def=\"契约/承诺\">covenant</span>（承诺行为）：The Seller <strong>covenants</strong> to maintain the Assets in good condition prior to Closing.（卖方<strong>承诺</strong>在交割前保持资产的良好状态。）</li></ul>"
+        },
+        {
+          "type": "h3",
+          "html": "3c. guarantee vs. guaranty"
+        },
+        {
+          "type": "table",
+          "headers": ["维度", "<span class=\"term\" data-def=\"保证/担保\">guarantee</span>", "<span class=\"term\" data-def=\"担保/保证书（法律书面）\">guaranty</span>"],
+          "rows": [
+            ["<strong>词性</strong>", "可作<strong>名词和动词</strong>", "仅作<strong>名词</strong>（法律书面用法）"],
+            ["<strong>用法</strong>", "通用，既可用于日常也可用于法律文件", "专用于<strong>法律文书</strong>，尤其是担保合同"],
+            ["<strong>搭配</strong>", "guarantee of performance（履行担保）", "guaranty agreement（担保协议）；guaranty of payment（付款担保）"],
+            ["<strong>关系</strong>", "两者含义相同，<span class=\"term\" data-def=\"担保/保证书（法律书面）\">guaranty</span> 是 <span class=\"term\" data-def=\"保证/担保\">guarantee</span> 的法律正式写法。在美国法律实务中，书面担保文件倾向用 guaranty，日常交流和合同一般条款多用 guarantee。", ""]
+          ]
+        },
+        {
+          "type": "h3",
+          "html": "3d. acknowledge vs. represent"
+        },
+        {
+          "type": "table",
+          "headers": ["维度", "<span class=\"term\" data-def=\"确认/承认\">acknowledge</span>（确认）", "<span class=\"term\" data-def=\"陈述/声明（动词）\">represent</span>（陈述）"],
+          "rows": [
+            ["<strong>性质</strong>", "对<strong>已知事实</strong>的认可——\u201c我知道并接受\u201d", "对<strong>事实</strong>的主动声明——\u201c我声称事情是这样的\u201d"],
+            ["<strong>法律风险</strong>", "<strong>较低</strong>——仅表示知悉，不承担事实真伪的责任", "<strong>较高</strong>——如陈述不实，可构成虚假陈述（misrepresentation）"],
+            ["<strong>典型场景</strong>", "确认已收到文件、确认已阅读条款", "声明公司合法成立、声明无未决诉讼"],
+            ["<strong>举例</strong>", "The Buyer <strong>acknowledges</strong> that the Goods are sold \u201cas is.\u201d（买方<strong>确认</strong>货物以\u201c现状\u201d出售。）", "The Seller <strong>represents</strong> that it has clear title to the Goods.（卖方<strong>陈述</strong>其对货物拥有清晰的所有权。）"]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>实务提示：</strong>起草合同时，如果你代表的一方对某事实不确定，应使用 <span class=\"term\" data-def=\"确认/承认\">acknowledge</span> 而非 <span class=\"term\" data-def=\"陈述/声明（动词）\">represent</span>——前者仅表示\u201c我知道这件事\u201d，后者则意味着\u201c我声明这是事实\u201d，一旦不实将承担法律后果。"
+        }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "4. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1",
+          "sentence": "Each Party hereby represents and warrants to the other Party that, as of the date hereof, it is duly organized, validly existing and in good standing under the laws of the jurisdiction of its incorporation, and has full corporate power and authority to execute, deliver and perform its obligations under this Agreement.",
+          "structure": [
+            "<em>Each Party hereby represents and warrants to the other Party that...</em> — 主句：\u201c各方特此向另一方陈述并保证……\u201d。<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> 是 R&W 条款的标志性动词搭配。",
+            "<em><span class=\"term\" data-def=\"自…起/截至\">as of</span> the date hereof</em> — 时间状语，\u201c截至本协议签署之日\u201d。<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement。",
+            "<em>it is <span class=\"term\" data-def=\"依法设立\">duly organized</span>, validly existing and in good standing under the laws of...</em> — that 从句第一层含义：公司的合法设立状态。<span class=\"term\" data-def=\"依法设立\">duly organized</span>（依法组建）、<span class=\"term\" data-def=\"合法地/有效地\">validly</span> <span class=\"term\" data-def=\"存续的/现存的\">existing</span>（合法存续）、<span class=\"term\" data-def=\"信誉良好/合规存续\">in good standing</span>（信誉良好/合规存续）是三个并列的公司状态描述。",
+            "<em>the jurisdiction of its incorporation</em> — \u201c其注册成立地的司法管辖区\u201d。",
+            "<em>and has full corporate power and authority to execute, deliver and perform its obligations</em> — that 从句第二层含义：公司拥有签订并履行合同的权力。<span class=\"term\" data-def=\"签署\">execute</span>（签署）、<span class=\"term\" data-def=\"交付\">deliver</span>（交付）、<span class=\"term\" data-def=\"履行\">perform</span>（履行）三个动词并列。"
+          ],
+          "translation": "各方特此向另一方陈述并保证：截至本协议签署之日，其系根据其注册成立地司法管辖区的法律依法组建、合法存续且信誉良好的实体，并拥有签署、交付及履行本协议项下义务的全部公司权力和授权。"
+        },
+        {
+          "title": "例句 2",
+          "sentence": "The Seller represents, warrants and covenants that, to the best of its knowledge and belief, the Intellectual Property licensed hereunder does not infringe upon or misappropriate any third party's intellectual property rights, and that the Seller shall indemnify and hold harmless the Buyer from any claims arising out of a breach of this warranty.",
+          "structure": [
+            "<em>The Seller represents, warrants and covenants that...</em> — 三个动词并列，涵盖了陈述（represent）、保证（warrant）和承诺（covenant）三个层次。",
+            "<em>to the best of its knowledge and belief</em> — 知识限定语，\u201c据其所知所信\u201d。这一表达限定了卖方的陈述范围——如果卖方确实不知情，则不构成虚假陈述。",
+            "<em>the Intellectual Property licensed hereunder</em> — \u201c本协议项下许可的知识产权\u201d。<span class=\"term\" data-def=\"在本协议项下\">hereunder</span> = under this Agreement。",
+            "<em>does not infringe upon or misappropriate</em> — \u201c不侵犯或盗用\u201d。<span class=\"term\" data-def=\"侵犯\">infringe</span>（侵权）和 <span class=\"term\" data-def=\"盗用\">misappropriate</span>（盗用）是知识产权领域的核心术语。",
+            "<em>any third party&apos;s intellectual property rights</em> — \u201c任何第三方的知识产权\u201d。",
+            "<em>and that the Seller shall indemnify and <span class=\"term\" data-def=\"使免受损害\">hold harmless</span> the Buyer</em> — 第二个 that 从句，承诺部分：\u201c卖方应赔偿买方并使其免受损害\u201d。<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span> 是赔偿条款的固定搭配。",
+            "<em>from any claims arising out of a breach of this warranty</em> — \u201c因违反本保证而产生的任何索赔\u201d。"
+          ],
+          "translation": "卖方陈述、保证并承诺：据其所知所信，本协议项下许可的知识产权不侵犯或盗用任何第三方的知识产权；且卖方应就因违反本保证而产生的任何索赔对买方进行赔偿并使其免受损害。"
+        },
+        {
+          "title": "例句 3",
+          "sentence": "The representations and warranties set forth in this Article V shall be true and correct in all material respects as of the date hereof and as of the Closing Date as though made on and as of such date, and shall survive the Closing for a period of eighteen (18) months following the Closing Date.",
+          "structure": [
+            "<em>The <span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> in this Article V</em> — 主语，\u201c本第五条规定的陈述与保证\u201d。<span class=\"term\" data-def=\"规定/载明\">set forth</span> = 规定/载明。",
+            "<em>shall be <span class=\"term\" data-def=\"在所有重大方面真实且正确\">true and correct in all material respects</span></em> — 谓语，\u201c在所有重大方面应真实且正确\u201d。in all <span class=\"term\" data-def=\"重大的/实质性的\">material</span> <span class=\"term\" data-def=\"方面\">respects</span> 是 R&W 条款中最常见的限定语之一。",
+            "<em><span class=\"term\" data-def=\"自…起/截至\">as of</span> the date hereof and <span class=\"term\" data-def=\"自…起/截至\">as of</span> the Closing Date</em> — 双重时间限定：\u201c截至本协议签署之日和截至交割日\u201d。R&W 需要在<strong>两个时间点</strong>都为真。",
+            "<em>as though made on and <span class=\"term\" data-def=\"自…起/截至\">as of</span> such date</em> — \u201c如同于该日作出\u201d——视为在交割日重新作出该陈述。",
+            "<em>and shall survive the Closing for a period of eighteen (18) months</em> — \u201c并在交割后存续十八（18）个月\u201d。<span class=\"term\" data-def=\"存续/继续有效\">survive</span>（存续）表示合同终止/交割后该条款继续有效。"
+          ],
+          "translation": "本第五条所载的陈述与保证在所有重大方面应于本协议签署之日和交割日均为真实且正确（如同于该日重新作出），并在交割后存续十八（18）个月。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "5. 单词记忆",
+      "blocks": [
+        { "type": "h3", "html": "5a. 闪卡自测" },
+        { "type": "p", "html": "看到英文术语，想一想中文意思，然后点击展开答案：" },
+        {
+          "type": "grammar-box",
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"陈述/声明\">representation</span></summary><div class=\"answer-content\">陈述（对事实的声明，违反可构成虚假陈述 misrepresentation）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保证/担保\">warranty</span></summary><div class=\"answer-content\">保证（对事实的担保承诺，违反可要求损害赔偿）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"契约/承诺\">covenant</span></summary><div class=\"answer-content\">承诺；契约（面向未来的行为承诺）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"承诺/保证（名词）\">undertaking</span></summary><div class=\"answer-content\">承诺；保证（名词形式）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保证/担保\">guarantee</span></summary><div class=\"answer-content\">保证；担保（侧重结果担保，可作名词和动词）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"担保/保证书（法律书面）\">guaranty</span></summary><div class=\"answer-content\">担保；保证书（仅作名词，法律书面正式用法）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"质押/承诺\">pledge</span></summary><div class=\"answer-content\">质押；承诺</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"证明/认证\">certify</span></summary><div class=\"answer-content\">证明；证实</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"确认/承认\">acknowledge</span></summary><div class=\"answer-content\">确认；承认（对已知事实的认可，不承担事实真伪的责任）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"声明/宣布\">declare</span></summary><div class=\"answer-content\">声明；宣布</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"确认/断言\">affirm</span></summary><div class=\"answer-content\">确认；断言</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"据…所知\">to the best of one's knowledge</span></summary><div class=\"answer-content\">据某人所知（限定陈述范围，降低法律风险）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span></summary><div class=\"answer-content\">截至本协议签署之日</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保证/担保\">assurance</span></summary><div class=\"answer-content\">保证；担保（further assurances = 进一步保证）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"在所有重大方面真实且正确\">true and correct in all material respects</span></summary><div class=\"answer-content\">在所有重大方面真实且正确</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"违反保证\">breach of warranty</span></summary><div class=\"answer-content\">违反保证</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"陈述/声明（动词）\">represent</span></summary><div class=\"answer-content\">陈述；声明（动词，法律含义非\u201c代表\u201d）</div></details></div></div>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "5b. 配对选择：看中文选英文",
+      "style": "quiz",
+      "questions": [
+        {
+          "prompt": "1. 陈述（对事实的声明）",
+          "options": ["representation", "warranty", "covenant"],
+          "answer": "representation",
+          "explanation": "representation = 陈述（对事实的声明），区别于 warranty（保证/担保）。"
+        },
+        {
+          "prompt": "2. 承诺；契约（面向未来的行为承诺）",
+          "options": ["warranty", "covenant", "pledge"],
+          "answer": "covenant",
+          "explanation": "covenant = 承诺/契约（面向未来的行为承诺），区别于 warranty（对事实状态的保证）。"
+        },
+        {
+          "prompt": "3. 确认；承认（对已知事实的认可，风险较低）",
+          "options": ["represent", "acknowledge", "certify"],
+          "answer": "acknowledge",
+          "explanation": "acknowledge = 确认/承认（对已知事实的认可，不承担事实真伪的责任），区别于 represent（主动声明事实，需承担责任）。"
+        },
+        {
+          "prompt": "4. 担保；保证书（仅作名词，法律书面正式写法）",
+          "options": ["guarantee", "guaranty", "assurance"],
+          "answer": "guaranty",
+          "explanation": "guaranty 是法律书面正式用法，仅作名词，常见于担保协议标题（guaranty agreement）。guarantee 可作名词和动词。"
+        },
+        {
+          "prompt": "5. 据其所知（限定陈述范围的表达）",
+          "options": [
+            "<span class=\"term\" data-def=\"自…起/截至\">as of</span> the date hereof",
+            "to the best of its knowledge",
+            "in all material respects"
+          ],
+          "answer": "to the best of its knowledge",
+          "explanation": "to the best of its knowledge = 据其所知。这一限定语降低了陈述方的法律风险——如果确实不知情，则不构成虚假陈述。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "6. 练习题",
+      "style": "quiz",
+      "intro": "练习A：术语选择。选择最恰当的词语填入空白处。",
+      "questions": [
+        {
+          "prompt": "1. Each Party ______ that it has the legal capacity to <span class=\"term\" data-def=\"签订/订立\">enter into</span> this Agreement.",
+          "options": ["represents and warrants", "acknowledges and confirms", "declares and states"],
+          "answer": "represents and warrants",
+          "explanation": "represents and warrants = 陈述并保证，是 R&W 条款的标志性动词搭配。"
+        },
+        {
+          "prompt": "2. In the event of a ______, the Buyer shall be entitled to seek damages.",
+          "options": [
+            "<span class=\"term\" data-def=\"违反保证\">breach of warranty</span>",
+            "breach of representation",
+            "breach of covenant"
+          ],
+          "answer": "breach of warranty",
+          "explanation": "breach of warranty = 违反保证。违反 warranty 的法律后果是对方可要求损害赔偿（damages）。"
+        },
+        {
+          "prompt": "3. The Seller ______ to maintain all required licenses during the term of this Agreement.",
+          "options": ["represents and warrants", "covenants and agrees", "acknowledges and confirms"],
+          "answer": "covenants and agrees",
+          "explanation": "covenants and agrees = 承诺并同意。covenant 是面向未来的行为承诺，与 agrees 搭配使用强调双重约束力。"
+        },
+        {
+          "prompt": "4. ______, the Company is not a party to any pending litigation.",
+          "options": [
+            "<span class=\"term\" data-def=\"自…起/截至\">As of</span> the date hereof",
+            "To the best of its knowledge",
+            "In all material respects"
+          ],
+          "answer": "To the best of its knowledge",
+          "explanation": "To the best of its knowledge = 据其所知，限定陈述范围——如果公司确实不知情，则不构成虚假陈述。As of the date hereof 表示\u2018截至本协议签订日\u2019，是时间限定语而非知识范围限定；In all material respects 表示\u2018在所有重大方面\u2019，限定程度而非知识范围。"
+        },
+        {
+          "prompt": "5. The <span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span> shall be ______ <span class=\"term\" data-def=\"自…起/截至\">as of</span> the Closing Date.",
+          "options": [
+            "valid and effective",
+            "<span class=\"term\" data-def=\"在所有重大方面真实且正确\">true and correct in all material respects</span>",
+            "in full force and effect"
+          ],
+          "answer": "true and correct in all material respects",
+          "explanation": "true and correct in all material respects = 在所有重大方面真实且正确。这是 R&W 条款中最常见的真实性限定语。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "练习B：选词填空",
+      "style": "quiz",
+      "questions": [
+        {
+          "prompt": "6. The Seller ______ that it has good and marketable title to all of the Assets.",
+          "options": ["warrants", "covenants", "acknowledges"],
+          "answer": "warrants",
+          "explanation": "warrant = 保证/担保。这里是对资产所有权这一事实状态的保证，应用 warrant 而非 covenant（covenant 面向未来行为）。"
+        },
+        {
+          "prompt": "7. The Buyer ______ that the Goods are sold on an \u201cas is\u201d basis.",
+          "options": ["represents", "acknowledges", "warrants"],
+          "answer": "acknowledges",
+          "explanation": "acknowledge = 确认/承认。买方只是认可货物的现状销售条件，不是声明某事实为真，因此用 acknowledge 而非 represent。"
+        },
+        {
+          "prompt": "8. The Contractor ______ to comply with all applicable environmental regulations.",
+          "options": ["represents", "certifies", "undertakes"],
+          "answer": "undertakes",
+          "explanation": "undertake = 承诺/保证。undertakes to comply 表示承诺将遵守，是对未来行为的保证。"
+        },
+        {
+          "prompt": "9. The authorized representative ______ that all information provided herein is accurate and complete.",
+          "options": ["pledges", "certifies", "declares"],
+          "answer": "certifies",
+          "explanation": "certify = 证明/证实。certify that the information is accurate 表示正式证实信息准确，通常用于需要出具书面证明的场合。"
+        },
+        {
+          "prompt": "10. The <span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span> contained herein shall ______ the Closing for a period of twenty-four (24) months.",
+          "options": ["outlast", "survive", "remain"],
+          "answer": "survive",
+          "explanation": "survive = 存续。representations and warranties shall survive the Closing 表示陈述与保证在交割后继续有效，这是 R&W 条款的标准存续表达。（第1周第5天已学）"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "练习C：理解与辨析",
+      "style": "quiz",
+      "questions": [
+        {
+          "prompt": "11. <span class=\"term\" data-def=\"陈述/声明\">representation</span> 与 <span class=\"term\" data-def=\"保证/担保\">warranty</span> 在违反后果上的核心区别是什么？",
+          "options": [
+            "两者完全相同，没有区别",
+            "representation 违反可导致合同被撤销，warranty 违反只能要求赔偿",
+            "warranty 违反可导致合同被撤销，representation 违反只能要求赔偿"
+          ],
+          "answer": "representation 违反可导致合同被撤销，warranty 违反只能要求赔偿",
+          "explanation": "这是 representation 与 warranty 最核心的法律区别。违反 representation（虚假陈述/misrepresentation）的救济包括撤销合同（rescission）；违反 warranty（breach of warranty）的救济主要是损害赔偿（damages）。"
+        },
+        {
+          "prompt": "12. <span class=\"term\" data-def=\"契约/承诺\">covenant</span> 与 <span class=\"term\" data-def=\"保证/担保\">warranty</span> 的主要区别是什么？",
+          "options": [
+            "covenant 面向未来行为，warranty 面向事实状态",
+            "covenant 只能用于名词，warranty 只能用于动词",
+            "两者含义相同，可以互换使用"
+          ],
+          "answer": "covenant 面向未来行为，warranty 面向事实状态",
+          "explanation": "covenant 是对未来将做/不做某事的承诺（如：承诺维持经营许可），warranty 是对事实状态的担保（如：保证拥有合法所有权）。"
+        },
+        {
+          "prompt": "13. 在 R&W 条款中使用 <span class=\"term\" data-def=\"据…所知\">to the best of its knowledge</span> 的目的是什么？",
+          "options": [
+            "加强陈述的效力",
+            "限定陈述范围，降低法律风险",
+            "表示陈述只在签约日有效"
+          ],
+          "answer": "限定陈述范围，降低法律风险",
+          "explanation": "to the best of its knowledge 是知识限定语，将陈述范围限定在\u2018据其所知\u2019，如果陈述方确实不知情，则不构成虚假陈述。对被保证方不利，对陈述方有利。"
+        },
+        {
+          "prompt": "14. <span class=\"term\" data-def=\"确认/承认\">acknowledge</span> 与 <span class=\"term\" data-def=\"陈述/声明（动词）\">represent</span> 的法律风险差异是？",
+          "options": [
+            "acknowledge 风险更高",
+            "两者风险相同",
+            "acknowledge 仅表示知悉，represent 需对事实真伪负责"
+          ],
+          "answer": "acknowledge 仅表示知悉，represent 需对事实真伪负责",
+          "explanation": "acknowledge = 确认/承认（对已知事实的认可，不承担事实真伪的责任）；represent = 陈述/声明（主动声明事实，如不实可构成 misrepresentation）。实务中，代表不确定事实的一方应争取用 acknowledge。"
+        },
+        {
+          "prompt": "15. R&W 条款（<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>）属于合同结构中的哪个部分？（错题回顾）",
+          "options": [
+            "鉴于条款（recitals）",
+            "通用条款（boilerplate）",
+            "实质条款（<span class=\"term\" data-def=\"实质条款\">operative provisions</span>）"
+          ],
+          "answer": "实质条款（operative provisions）",
+          "explanation": "operative provisions = 实质条款/正文条款（错题回顾）。R&W 条款（representations and warranties）属于合同的 operative provisions（实质条款）部分。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "翻译练习A：英译中",
+      "style": "translation",
+      "intro": "将以下 R&W 合同条款翻译为中文，注意术语的准确翻译。",
+      "questions": [
+        {
+          "source": "1. <span class=\"en-text\">Each Party hereby represents and warrants to the other Party that, as of the date hereof: (a) it is duly organized, validly existing and in good standing under the laws of the jurisdiction of its incorporation; and (b) it has full corporate power and authority to execute, deliver and perform its obligations under this Agreement.</span>",
+          "reference": "各方特此向另一方陈述并保证：截至本协议签署之日：(a) 其系根据其注册成立地司法管辖区的法律依法组建、合法存续且信誉良好的实体；及 (b) 其拥有签署、交付及履行本协议项下义务的全部公司权力和授权。",
+          "rubric": [
+            { "en": "represents and warrants", "ideal": "陈述并保证", "accept": ["声明并保证"], "wrong": ["代表并保证", "表示并保证"], "note": "represent 在法律英语中 = 陈述/声明，不是\u201c代表\u201d" },
+            { "en": "as of the date hereof", "ideal": "截至本协议签署之日", "accept": ["自本协议之日起"], "wrong": ["到目前为止"], "note": "as of = 截至；hereof = of this Agreement（本协议的）" },
+            { "en": "duly organized, validly existing and in good standing", "ideal": "依法组建、合法存续且信誉良好", "accept": ["正式组建、有效存续且资信良好"], "wrong": ["正常运营"], "note": "三个并列的公司状态描述，需完整翻译" },
+            { "en": "the jurisdiction of its incorporation", "ideal": "其注册成立地的司法管辖区", "accept": ["其设立地管辖区"], "wrong": ["它的管辖地"], "note": "jurisdiction = 司法管辖区；incorporation = 注册成立" },
+            { "en": "full corporate power and authority", "ideal": "全部公司权力和授权", "accept": ["充分的公司权力与权限"], "wrong": ["全部权力"], "note": "corporate power and authority 是法律固定搭配" },
+            { "en": "execute, deliver and perform", "ideal": "签署、交付及履行", "accept": ["签署、交付和履行"], "wrong": ["执行、递送和完成"], "note": "execute = 签署（非\u201c执行\u201d，第1周已学）" }
+          ]
+        },
+        {
+          "source": "2. <span class=\"en-text\">The Seller represents and warrants that, to the best of its knowledge and belief, (i) the Intellectual Property does not infringe upon any third party's rights, and (ii) there is no pending or threatened litigation relating to the Intellectual Property as of the date hereof.</span>",
+          "reference": "卖方陈述并保证：据其所知所信，(i) 该知识产权不侵犯任何第三方的权利，且 (ii) 截至本协议签署之日，不存在与该知识产权相关的未决或受到威胁的诉讼。",
+          "rubric": [
+            { "en": "represents and warrants", "ideal": "陈述并保证", "accept": ["声明并保证"], "wrong": ["代表并保证"], "note": "represent = 陈述（法律用语），非\u201c代表\u201d" },
+            { "en": "to the best of its knowledge and belief", "ideal": "据其所知所信", "accept": ["据其所知和所信"], "wrong": ["尽其所知", "以其最好的知识"], "note": "to the best of = 据……所……，知识限定语" },
+            { "en": "does not infringe upon", "ideal": "不侵犯", "accept": ["未侵犯"], "wrong": ["不违反"], "note": "infringe upon = 侵犯（知识产权专用术语）" },
+            { "en": "any third party's rights", "ideal": "任何第三方的权利", "accept": ["第三方权利"], "note": "third party = 第三方" },
+            { "en": "pending or threatened litigation", "ideal": "未决或受到威胁的诉讼", "accept": ["未决的或已威胁提起的诉讼"], "wrong": ["正在进行的诉讼"], "note": "pending = 未决的；threatened = 受到威胁的/已威胁提起的" },
+            { "en": "as of the date hereof", "ideal": "截至本协议签署之日", "accept": ["自本协议之日起"], "wrong": ["在今天"], "note": "as of the date hereof 是 R&W 条款的时间限定标准表达" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "翻译练习B：中译英",
+      "style": "translation",
+      "intro": "将以下中文条款翻译为英文合同用语。",
+      "questions": [
+        {
+          "source": "1. 买方确认货物以\u201c现状\u201d出售，卖方不对货物的适销性或特定用途的适用性作出任何明示或默示的保证。",
+          "reference": "The Buyer acknowledges that the Goods are sold on an \u201cas is\u201d basis, and the Seller makes no express or implied warranty as to the merchantability or fitness for a particular purpose of the Goods.",
+          "rubric": [
+            { "en": "买方确认", "ideal": "The Buyer acknowledges", "accept": ["Buyer acknowledges that"], "wrong": ["The Buyer represents", "The Buyer warrants"], "note": "\u201c确认\u201d应用 acknowledge（仅表示知悉），不是 represent 或 warrant" },
+            { "en": "以现状出售", "ideal": "sold on an as is basis", "accept": ["sold as is"], "wrong": ["sold in current condition"], "note": "as is = 现状（法律固定表达）" },
+            { "en": "不作出任何明示或默示的保证", "ideal": "makes no express or implied warranty", "accept": ["does not make any express or implied warranty"], "wrong": ["没有保证"], "note": "express warranty（明示保证）与 implied warranty（默示保证）是法律基本概念" },
+            { "en": "适销性", "ideal": "merchantability", "accept": [], "wrong": ["可销售性", "市场性"], "note": "merchantability 是法律专业术语，不可意译" },
+            { "en": "特定用途的适用性", "ideal": "fitness for a particular purpose", "accept": ["suitability for a particular purpose"], "wrong": ["特殊用途的适合"], "note": "fitness for a particular purpose 是法律固定搭配（UCC标准术语）" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "7. 今日小结",
+      "blocks": [
+        { "type": "h3", "html": "本课要点" },
+        {
+          "type": "ol",
+          "items": [
+            "<strong>核心区分——<span class=\"term\" data-def=\"陈述/声明\">representation</span> vs. <span class=\"term\" data-def=\"保证/担保\">warranty</span>：</strong>representation 是对事实的陈述，违反可导致合同被撤销（rescission）；warranty 是对事实的担保，违反只能要求赔偿（damages）。实务中两者并列使用（<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>），为被保证方提供双重保护。",
+            "<strong><span class=\"term\" data-def=\"契约/承诺\">covenant</span> 面向未来：</strong>covenant 是对未来行为的承诺（\u201c我将做/不做某事\u201d），区别于 warranty 对事实状态的保证（\u201c事情确实如此\u201d）。",
+            "<strong><span class=\"term\" data-def=\"确认/承认\">acknowledge</span> vs. <span class=\"term\" data-def=\"陈述/声明（动词）\">represent</span>：</strong>acknowledge 仅表示知悉，法律风险低；represent 声明事实为真，如不实将承担虚假陈述的法律后果。起草合同时应根据客户立场选择用词。",
+            "<strong>知识限定语——<span class=\"term\" data-def=\"据…所知\">to the best of its knowledge</span>：</strong>限定陈述范围为\u201c据其所知\u201d，降低陈述方的法律风险。对被保证方不利。",
+            "<strong>R&W 条款的时间与范围限定：</strong><span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span>（截至签约日）、<span class=\"term\" data-def=\"在所有重大方面真实且正确\">true and correct in all material respects</span>（在所有重大方面真实正确）、<span class=\"term\" data-def=\"存续/继续有效\">survive</span> the <span class=\"term\" data-def=\"交割\">Closing</span>（交割后存续）。",
+            "<strong><span class=\"term\" data-def=\"保证/担保\">guarantee</span> vs. <span class=\"term\" data-def=\"担保/保证书（法律书面）\">guaranty</span>：</strong>含义相同，guaranty 是法律正式书面用法（仅名词），guarantee 通用（可作名词和动词）。"
+          ]
+        },
+        { "type": "h3", "html": "明日预告" },
+        {
+          "type": "p",
+          "html": "第2周第3天将学习<strong>条件与前提</strong>（Conditions & Conditions Precedent），包括 <span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）、<span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（后续条件）、<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>（以……为条件）等核心术语。R&W 条款中\u201c陈述与保证在交割日为真\u201d这一要求，本身就是交割的 <span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件），两者紧密关联。"
+        }
+      ]
+    }
+  ]
+}

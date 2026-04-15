@@ -1,0 +1,692 @@
+{
+  "title": "第1周 第6天 — 常见例外与特殊名词",
+  "objective": "<strong>学习目标：</strong>掌握词尾不符合常规性别规则的特殊名词，学会综合判断名词性别的策略。认识“自然性别优先”原则、以 -а/-я 结尾的阳性词、以及不变化的外来词。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "回顾",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "过去四天，我们学习了乌克兰语名词性别判断的完整基础规则体系。快速回顾："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n已学规则总结（第1-4天）：\n\n第1天：辅音结尾 → 阳性\n   стіл, парк, хліб, магазин, телефон\n\n第2天：-а/-я 结尾 → 阴性\n   школа, робота, мова（-а）\n   кухня, надія, пісня（单辅音+я = 阴性）\n\n第3天：-о/-е 结尾 → 中性\n   вікно, слово, місто（-о）\n   море, поле, серце（-е）\n   завдання, питання, життя（-ння/-ття = 中性）\n\n第4天：-ь 结尾 → 可阳可阴，需记忆\n   -ість → 阴性（радість, можливість）\n   指男性 → 阳性（вчитель, гість）\n   -ов 结尾 → 常阴性（любов, кров）\n</pre>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>快速检验：</strong>你还记得这些词的性别吗？<br><span class=\"uk-word\" data-def=\"作业\">завдання</span> → 中性（-ння）|<span class=\"uk-word\" data-def=\"喜悦\">радість</span> → 阴性（-ість）|<span class=\"uk-word\" data-def=\"石头\">камінь</span> → 阳性（记忆）|<span class=\"uk-word\" data-def=\"厨房\">кухня</span> → 阴性（单辅音+я）"
+        },
+        {
+          "type": "p",
+          "html": "这些规则能覆盖绝大多数名词。但今天我们要学习那些<strong>“违反”这些规则的特殊名词</strong>——它们的词尾看起来像一种性别，实际却是另一种。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "1.1 核心原则：自然性别优先于词尾规则"
+        },
+        {
+          "type": "p",
+          "html": "在乌克兰语中，有一个凌驾于一切词尾规则之上的原则："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n核心原则：自然性别优先！\n\n如果一个名词指代的是男性（爸爸、叔叔、爷爷等），\n即使它的词尾看起来像阴性（-а/-я）或中性（-о），\n它仍然是阳性！\n\n词尾规则是“一般规律”，自然性别是“最高法则”。\n</pre>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>类比理解：</strong>想象你在给人分类——看到一个名字叫“花花”的人（听起来很女性化），但这个人其实是男的。你不会因为名字像女性就把他归为女性，对吧？乌克兰语也一样：词的“名字”（词尾）可以骗你，但它指代的人的性别才是最终标准。"
+        },
+        {
+          "type": "h3",
+          "text": "1.2 第一类特殊名词：以 -о 结尾但是阳性"
+        },
+        {
+          "type": "p",
+          "html": "按照我们第3天学的规则，-о 结尾 → 中性。但以下这些词以 -о 结尾却是<strong>阳性</strong>："
+        },
+        {
+          "type": "table",
+          "headers": [
+            "乌克兰语",
+            "发音提示",
+            "中文",
+            "为什么是阳性？"
+          ],
+          "firstColWord": true,
+          "rows": [
+            [
+              "<span class=\"uk-word\" data-def=\"爸爸\">тато</span>",
+              "tato",
+              "爸爸",
+              "指男性 → 阳性！"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"父亲\">батько</span>",
+              "batko",
+              "父亲",
+              "指男性 → 阳性！"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"爷爷\">дідо</span>",
+              "dido",
+              "爷爷（口语）",
+              "指男性 → 阳性！"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"叔叔\">дядько</span>",
+              "dyadko",
+              "叔叔",
+              "指男性 → 阳性！"
+            ]
+          ]
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n规律总结：-о 结尾的亲属称谓（指男性）→ 阳性\n\nтато（爸爸）、батько（父亲）、дідо（爷爷）、дядько（叔叔）\n\n这些词都指男性家庭成员，自然性别优先 → 阳性！\n\n记忆口诀：“爸爸叔叔爷爷，虽然穿了中性的衣服（-о），\n但他们是男人，所以是阳性！”\n</pre>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>中文母语者常见错误：</strong>看到 <span class=\"uk-word\" data-def=\"爸爸\">тато</span> 以 -о 结尾，就判断为中性。错！<span class=\"uk-word\" data-def=\"爸爸\">тато</span> 是“爸爸”，指男性，所以是阳性。记住：<strong>人的性别 &gt; 词尾规则</strong>。"
+        },
+        {
+          "type": "note",
+          "html": "<strong>对比记忆：</strong><br><span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸）→ 以 -о 结尾 → 但是<strong>阳性</strong>（指男性）<br><span class=\"uk-word\" data-def=\"牛奶\">молоко</span>（牛奶）→ 以 -о 结尾 → <strong>中性</strong>（不是人，正常规则）<br><span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）→ 以 -о 结尾 → <strong>中性</strong>（不是人，正常规则）<br>只有指代<strong>男性的人</strong>时，-о 结尾才例外变成阳性。"
+        },
+        {
+          "type": "h3",
+          "text": "1.3 第二类特殊名词：以 -а/-я 结尾但是阳性"
+        },
+        {
+          "type": "p",
+          "html": "按照第2天的规则，-а/-я 结尾 → 阴性。但以下这些词以 -а/-я 结尾却是<strong>阳性</strong>："
+        },
+        {
+          "type": "h4",
+          "text": "A. 指代男性的职业/头衔"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "乌克兰语",
+            "发音提示",
+            "中文",
+            "为什么是阳性？"
+          ],
+          "firstColWord": true,
+          "rows": [
+            [
+              "<span class=\"uk-word\" data-def=\"法官\">суддя</span>",
+              "suddya",
+              "法官",
+              "历史上指男性 → 阳性"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"军事长官\">воєвода</span>",
+              "voyevoda",
+              "军事长官",
+              "古代军事头衔 → 阳性"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"士官长\">старшина</span>",
+              "starshyna",
+              "士官长",
+              "军衔 → 阳性"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"村长\">староста</span>",
+              "starosta",
+              "村长/班长",
+              "历史上指男性 → 阳性"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>记忆技巧：</strong>这些词大多是古老的职位头衔（法官、军官、村长），在古代几乎都是男性担任，所以语法上定为阳性。虽然词尾看起来像阴性，但“人的性别 &gt; 词尾规则”。"
+        },
+        {
+          "type": "h4",
+          "text": "B. 男性名字"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "乌克兰语",
+            "发音提示",
+            "中文",
+            "为什么是阳性？"
+          ],
+          "firstColWord": true,
+          "rows": [
+            [
+              "<span class=\"uk-word\">Микола</span>",
+              "mykola",
+              "尼古拉（男名）",
+              "男人的名字 → 阳性"
+            ],
+            [
+              "<span class=\"uk-word\">Ілля</span>",
+              "illya",
+              "伊利亚（男名）",
+              "男人的名字 → 阳性"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "html": "这很好理解——<span class=\"uk-word\">Микола</span> 是个男人名字，虽然以 -а 结尾（看起来像阴性），但因为是男性的名字，所以语法上是阳性。"
+        },
+        {
+          "type": "h4",
+          "text": "C. 两性通用词"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "乌克兰语",
+            "发音提示",
+            "中文",
+            "说明"
+          ],
+          "firstColWord": true,
+          "rows": [
+            [
+              "<span class=\"uk-word\" data-def=\"同事\">колега</span>",
+              "koleha",
+              "同事",
+              "指男同事→阳性；指女同事→阴性"
+            ]
+          ]
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n两性通用词：колега（同事）\n\n指男同事 → 阳性\n指女同事 → 阴性\n\n用法取决于你说的那个同事是男是女。\n这种词在乌克兰语中不多，记住 колега 就好。\n</pre>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>中文母语者注意：</strong>看到 <span class=\"uk-word\" data-def=\"法官\">суддя</span>（法官）以 -я 结尾，很容易判断为阴性。但它是阳性！因为这个词历史上指代男性。同样，<span class=\"uk-word\">Микола</span> 以 -а 结尾，但它是男性名字，所以是阳性。遇到这类词，先想想它指的是什么人。"
+        },
+        {
+          "type": "h3",
+          "text": "1.4 第三类特殊名词：不变化的外来词"
+        },
+        {
+          "type": "p",
+          "html": "乌克兰语从其他语言（主要是法语、英语、意大利语）借来了一些词，这些词<strong>不按乌克兰语规则变化</strong>，在所有语法场景中保持原形不变。"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "乌克兰语",
+            "发音提示",
+            "中文",
+            "来源"
+          ],
+          "firstColWord": true,
+          "rows": [
+            [
+              "<span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>",
+              "kafe",
+              "咖啡馆",
+              "法语 cafe"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"出租车\">таксі</span>",
+              "taksi",
+              "出租车",
+              "英语 taxi"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"地铁\">метро</span>",
+              "metro",
+              "地铁",
+              "法语 metro"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"广播\">радіо</span>",
+              "radio",
+              "广播",
+              "拉丁语 radio"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"电影\">кіно</span>",
+              "kino",
+              "电影/电影院",
+              "德语 Kino"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"菜单\">меню</span>",
+              "menyu",
+              "菜单",
+              "法语 menu"
+            ],
+            [
+              "<span class=\"uk-word\" data-def=\"评委团\">журі</span>",
+              "zhuri",
+              "评委团",
+              "法语 jury"
+            ]
+          ]
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n外来词规律：不变化的外来词 → 通常是中性！\n\nкафе, таксі, метро, радіо, кіно, меню, журі → 全部中性\n\n如何识别外来词？\n1. 以元音结尾但不像乌克兰语原生词（-е/-і/-о/-ю）\n2. 发音像外语（cafe, taxi, metro...）\n3. 在句子中词形永远不变\n\n记忆口诀：“外来的客人很中立（中性）！”\n</pre>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>为什么外来词是中性？</strong>这是乌克兰语（以及俄语等斯拉夫语言）的惯例——当一个外来词无法归入传统的阳性/阴性模式时，就默认归为中性。可以理解为“不确定性别就放到中性”。"
+        },
+        {
+          "type": "note",
+          "html": "<strong>对比理解：</strong><br><span class=\"uk-word\" data-def=\"地铁\">метро</span>（地铁）→ 以 -о 结尾 → <strong>中性</strong>（外来词，恰好也符合 -о → 中性规则）<br><span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>（咖啡馆）→ 以 -е 结尾 → <strong>中性</strong>（外来词，看起来像普通中性但它不变化）<br><span class=\"uk-word\" data-def=\"出租车\">таксі</span>（出租车）→ 以 -і 结尾 → <strong>中性</strong>（外来词，词尾特殊，一看就不是原生词）<br><span class=\"uk-word\" data-def=\"菜单\">меню</span>（菜单）→ 以 -ю 结尾 → <strong>中性</strong>（外来词，正常乌克兰语名词不以 -ю 结尾）"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易混淆点：</strong><span class=\"uk-word\" data-def=\"地铁\">метро</span> 和 <span class=\"uk-word\" data-def=\"爸爸\">тато</span> 都以 -о 结尾，但性别不同！<br><span class=\"uk-word\" data-def=\"地铁\">метро</span>（地铁）= 中性（外来词/非人）<br><span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸）= 阳性（指男性，自然性别优先）<br>区分方法：<strong>指男性的人 → 阳性；其他 -о 结尾 → 中性</strong>。"
+        },
+        {
+          "type": "h3",
+          "text": "1.5 完整性别判断决策树（截至第5天）"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n名词性别完整判断流程：\n\n第一步：这个词指代男性的人吗？\n  → 是 → 阳性！（不管词尾是什么）\n     例：тато(-о), батько(-о), суддя(-я), Микола(-а)\n\n第二步：这个词是不变化的外来词吗？\n  → 是 → 中性！\n     例：кафе, таксі, метро, меню\n\n第三步：看词尾（常规规则）\n  辅音结尾 → 阳性（стіл, парк）\n  -а/-я 结尾 → 阴性（школа, кухня）\n  -о/-е 结尾 → 中性（вікно, море）\n  -ння/-ття 结尾 → 中性（завдання, життя）\n  -ь 结尾 → 看具体情况：\n    -ість → 阴性（радість）\n    指男性 → 阳性（вчитель）\n    其他 → 需记忆\n</pre>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "2. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：判断特殊名词的性别（10题）",
+          "instruction": "以下名词的词尾“看起来”像某种性别，但实际可能不同。请判断它们的真实性别：",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "тато 指爸爸（男性），自然性别优先 → 阳性，虽然以 -о 结尾。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>（咖啡馆）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "кафе 是外来词（法语 cafe），不变化 → 中性。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"法官\">суддя</span>（法官）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "суддя 是法官，历史上指男性的职位 → 阳性，虽然以 -я 结尾。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"出租车\">таксі</span>（出租车）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "таксі 是外来词（英语 taxi），不变化 → 中性。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"父亲\">батько</span>（父亲）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "батько 指父亲（男性），自然性别优先 → 阳性，虽然以 -о 结尾。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\">Микола</span>（尼古拉）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "Микола 是男性名字，自然性别优先 → 阳性，虽然以 -а 结尾。"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"菜单\">меню</span>（菜单）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "меню 是外来词（法语 menu），不变化 → 中性。"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"叔叔\">дядько</span>（叔叔）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "дядько 指叔叔（男性），自然性别优先 → 阳性。"
+            },
+            {
+              "prompt": "9. <span class=\"uk-word\" data-def=\"广播\">радіо</span>（广播）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "радіо 是外来词（拉丁语 radio），不变化 → 中性。"
+            },
+            {
+              "prompt": "10. <span class=\"uk-word\" data-def=\"村长\">староста</span>（村长/班长）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "староста 指村长/班长，历史上指男性的职位 → 阳性。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：同样以 -о 结尾，阳性还是中性？（5题）",
+          "instruction": "以下词都以 -о 结尾，请判断它们是阳性还是中性：",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）",
+              "options": [
+                "阳性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "вікно（窗户）不指人，以 -о 结尾 → 中性。正常规则。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸）",
+              "options": [
+                "阳性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "тато 指爸爸（男性），自然性别优先 → 阳性！"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"地铁\">метро</span>（地铁）",
+              "options": [
+                "阳性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "метро 是外来词，不变化 → 中性。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"父亲\">батько</span>（父亲）",
+              "options": [
+                "阳性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "батько 指父亲（男性），自然性别优先 → 阳性！"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"单词\">слово</span>（单词）",
+              "options": [
+                "阳性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "слово（单词）不指人，以 -о 结尾 → 中性。正常规则。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：同样以 -а/-я 结尾，阳性还是阴性？（5题）",
+          "instruction": "以下词都以 -а 或 -я 结尾，请判断它们是阳性还是阴性：",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"学校\">школа</span>（学校）",
+              "options": [
+                "阳性",
+                "阴性"
+              ],
+              "answer": "阴性",
+              "explanation": "школа 指学校（不是人），以 -а 结尾 → 阴性。正常规则。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"军事长官\">воєвода</span>（军事长官）",
+              "options": [
+                "阳性",
+                "阴性"
+              ],
+              "answer": "阳性",
+              "explanation": "воєвода 指军事长官（男性职位），自然性别优先 → 阳性！"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）",
+              "options": [
+                "阳性",
+                "阴性"
+              ],
+              "answer": "阴性",
+              "explanation": "кухня 指厨房（不是人），以 -я 结尾 → 阴性。正常规则。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\">Ілля</span>（伊利亚）",
+              "options": [
+                "阳性",
+                "阴性"
+              ],
+              "answer": "阳性",
+              "explanation": "Ілля 是男性名字，自然性别优先 → 阳性！"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"士官长\">старшина</span>（士官长）",
+              "options": [
+                "阳性",
+                "阴性"
+              ],
+              "answer": "阳性",
+              "explanation": "старшина 指士官长（男性军衔），自然性别优先 → 阳性！"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：找出不同类（5题）",
+          "instruction": "每组三个词中，有一个的性别与其他两个不同，找出来：",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"窗户\">вікно</span> / <span class=\"uk-word\" data-def=\"爸爸\">тато</span> / <span class=\"uk-word\" data-def=\"牛奶\">молоко</span>",
+              "options": [
+                "вікно",
+                "тато",
+                "молоко"
+              ],
+              "answer": "тато",
+              "explanation": "тато 是阳性（指爸爸），而 вікно 和 молоко 是中性。三个都以 -о 结尾，但 тато 是特例！"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"厨房\">кухня</span> / <span class=\"uk-word\" data-def=\"法官\">суддя</span> / <span class=\"uk-word\" data-def=\"歌曲\">пісня</span>",
+              "options": [
+                "кухня",
+                "суддя",
+                "пісня"
+              ],
+              "answer": "суддя",
+              "explanation": "суддя 是阳性（指法官），而 кухня 和 пісня 是阴性。三个都以 -я 结尾，但 суддя 是特例！"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"地铁\">метро</span> / <span class=\"uk-word\" data-def=\"电影\">кіно</span> / <span class=\"uk-word\" data-def=\"叔叔\">дядько</span>",
+              "options": [
+                "метро",
+                "кіно",
+                "дядько"
+              ],
+              "answer": "дядько",
+              "explanation": "дядько 是阳性（指叔叔），而 метро 和 кіно 是中性。三个都以 -о 结尾，但 дядько 是特例！"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"学校\">школа</span> / <span class=\"uk-word\">Микола</span> / <span class=\"uk-word\" data-def=\"工作\">робота</span>",
+              "options": [
+                "школа",
+                "Микола",
+                "робота"
+              ],
+              "answer": "Микола",
+              "explanation": "Микола 是阳性（男性名字），而 школа 和 робота 是阴性。三个都以 -а 结尾，但 Микола 是特例！"
+            },
+            {
+              "prompt": "5. 哪个是不变化的外来词？ <span class=\"uk-word\" data-def=\"海\">море</span> / <span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span> / <span class=\"uk-word\" data-def=\"田野\">поле</span>",
+              "options": [
+                "море",
+                "кафе",
+                "поле"
+              ],
+              "answer": "кафе",
+              "explanation": "кафе 是不变化的外来词（中性），而 море 和 поле 是乌克兰语原生中性词。虽然三个都是中性，但 кафе 是唯一的外来词。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：综合性别大挑战（10题）",
+          "instruction": "混合前五天所有学过的词汇，判断性别。这是最终的综合测试！",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"公园\">парк</span>（公园）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "парк 以辅音 -к 结尾 → 阳性。第1天规则。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"父亲\">батько</span>（父亲）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "батько 指父亲（男性），自然性别优先 → 阳性。第5天特殊规则。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"作业\">завдання</span>（任务）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "завдання 以 -ння 结尾 → 中性。第3天规则。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"喜悦\">радість</span>（喜悦）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阴性",
+              "explanation": "радість 以 -ість 结尾 → 阴性。第4天规则。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"电影\">кіно</span>（电影）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "кіно 是外来词，不变化 → 中性。第5天特殊规则。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"语言\">мова</span>（语言）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阴性",
+              "explanation": "мова 以 -а 结尾 → 阴性。第2天规则。"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"爷爷\">дідо</span>（爷爷）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "дідо 指爷爷（男性），自然性别优先 → 阳性。第5天特殊规则。"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"老师\">вчитель</span>（老师）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阳性",
+              "explanation": "вчитель 指男老师，以 -ь 结尾的阳性名词。第4天规则。"
+            },
+            {
+              "prompt": "9. <span class=\"uk-word\" data-def=\"出租车\">таксі</span>（出租车）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "中性",
+              "explanation": "таксі 是外来词（英语 taxi），不变化 → 中性。第5天特殊规则。"
+            },
+            {
+              "prompt": "10. <span class=\"uk-word\" data-def=\"爱\">любов</span>（爱）",
+              "options": [
+                "阳性",
+                "阴性",
+                "中性"
+              ],
+              "answer": "阴性",
+              "explanation": "любов 以 -ов 结尾 → 阴性。第4天规则。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "3. 今日小结",
+      "html": "<h3>第5天总结</h3><p>今天我们学习了三类“违反”常规词尾规则的特殊名词：</p><ul><li><strong>第一类：以 -о 结尾但是阳性</strong> — 指男性的亲属称谓<br><span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸）、<span class=\"uk-word\" data-def=\"父亲\">батько</span>（父亲）、<span class=\"uk-word\" data-def=\"爷爷\">дідо</span>（爷爷）、<span class=\"uk-word\" data-def=\"叔叔\">дядько</span>（叔叔）</li><li><strong>第二类：以 -а/-я 结尾但是阳性</strong> — 指男性的职业/头衔 + 男性名字<br><span class=\"uk-word\" data-def=\"法官\">суддя</span>（法官）、<span class=\"uk-word\" data-def=\"军事长官\">воєвода</span>（军事长官）、<span class=\"uk-word\" data-def=\"士官长\">старшина</span>（士官长）、<span class=\"uk-word\" data-def=\"村长\">староста</span>（村长）<br><span class=\"uk-word\">Микола</span>（尼古拉）、<span class=\"uk-word\">Ілля</span>（伊利亚）<br>两性词：<span class=\"uk-word\" data-def=\"同事\">колега</span>（同事，看指谁）</li><li><strong>第三类：不变化的外来词 → 中性</strong><br><span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>、<span class=\"uk-word\" data-def=\"出租车\">таксі</span>、<span class=\"uk-word\" data-def=\"地铁\">метро</span>、<span class=\"uk-word\" data-def=\"广播\">радіо</span>、<span class=\"uk-word\" data-def=\"电影\">кіно</span>、<span class=\"uk-word\" data-def=\"菜单\">меню</span>、<span class=\"uk-word\" data-def=\"评委团\">журі</span></li></ul><h4>核心原则：自然性别 &gt; 词尾规则</h4><p>指代男性的词，不管词尾是什么，都是阳性。外来词无法归类时默认中性。</p><h4>完整性别判断规则（截至第5天）：</h4><pre>\n第一步：指男性的人？→ 阳性（тато, суддя, Микола）\n第二步：不变化的外来词？→ 中性（кафе, таксі, метро）\n第三步：看词尾\n  辅音结尾 → 阳性（стіл, парк）\n  -а/-я 结尾 → 阴性（школа, кухня）\n  -о/-е 结尾 → 中性（вікно, море）\n  -ння/-ття 结尾 → 中性（завдання, життя）\n  -ь 结尾 → 可能阳性或阴性\n    -ість → 阴性（радість）\n    指男性 → 阳性（вчитель）\n    -ов → 阴性（любов）\n    其他 → 需记忆\n</pre><p>明天是<strong>复习日</strong>，我们将综合练习本周所有内容，巩固这些规则！</p>"
+    }
+  ]
+}

@@ -456,8 +456,15 @@ export class WordsApi {
   /**
    * 创建新单词
    * @param lbParams 可选负荷均衡参数，传入时会将 next_review 分散到未来
+   * @param options.definition 可选预填释义（课程模块用；主站默认 '{}' 后续爬取）
    */
-  static async createWordDirect(wordText: string, source: string, lbParams?: ImportLoadBalanceParams, lang?: SourceLang): Promise<Word> {
+  static async createWordDirect(
+    wordText: string,
+    source: string,
+    lbParams?: ImportLoadBalanceParams,
+    lang?: SourceLang,
+    options?: { definition?: DefinitionObject }
+  ): Promise<Word> {
     const userId = getCurrentUserId()
     const word = lang ? normalizeWordText(wordText, lang) : wordText.normalize('NFC').trim().toLowerCase()
     const today = new Date().toISOString().split('T')[0]
@@ -474,12 +481,16 @@ export class WordsApi {
       lbParams.loadsWithToday[chosenDay - 1]++
     }
 
+    const definitionStr = options?.definition
+      ? JSON.stringify(options.definition)
+      : '{}'
+
     const { data, error } = await supabase
       .from('words')
       .insert({
         user_id: userId,
         word,
-        definition: '{}',
+        definition: definitionStr,
         source,
         date_added: today,
         next_review: nextReview,

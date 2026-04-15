@@ -181,24 +181,33 @@ VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
 
 - **[数据库 Schema](docs/database-schema.md)** — 表、视图、函数、Storage、Edge Functions 完整定义
 
-## 课程模块 `courses/`
+## 课程模块
 
-本仓库还包含两套语言课程，通过 `courses/shared/` 共享 templates。新课时采用 **JSON 数据驱动**架构（JSON 数据 + 薄壳 HTML + 共享渲染器），已有课时为传统完整 HTML。
+两套语言课程已完全融入 Vue 前端，作为 `features/courses/` 模块。课时数据以 JSON 格式存储在 `frontend/public/{uk,legal}/*.json`，由 Vue 组件 `LessonRenderer` 渲染。
 
 ### 目录结构
 
 ```
-courses/
-  shared/               # 统一 templates（10 个文件）
-  ukrainian/            # 乌克兰语语法课程
-    lessons/            # 课程文件（.json + .html）+ templates 符号链接
+frontend/
+  public/
+    uk/                 # 乌克兰语课时 JSON（21 个）
+    legal/              # 法律英语课时 JSON（19 个）
+  src/features/courses/
+    components/         # LessonRenderer + sections/blocks/exercises/interactions
+    composables/        # useLessonData / useCourseConfig / useCourseProgress / useExerciseState / useCourseExerciseSync / useCourseTts
+    data/               # courses.ts（课程配置）+ lessons.ts（课时索引）
+    types/              # lesson.ts + course.ts
+    utils/              # grading.ts（Rubric 评分算法）
+    styles/             # course.css + course-themes.css（映射到设计系统 token）
+
+courses/                # 仅保留学习资料，不再作为页面源
+  ukrainian/
     curriculum.md       # 12 周课程大纲
     progress.md         # 当前进度
     vocabulary/         # 推荐词汇表
-  legal-english/        # 法律英语词汇课程
-    lessons/            # 课程文件（.json + .html）+ templates 符号链接
-    curriculum.md       # 12 周课程大纲
-    progress.md         # 当前进度
+  legal-english/
+    curriculum.md
+    progress.md
     mistakes.md         # 错题库
     vocabulary/         # 已学词汇库
 ```
@@ -207,33 +216,47 @@ courses/
 
 - 乌克兰语：`https://mieltsm.top/uk/`
 - 法律英语：`https://mieltsm.top/legal/`
-- nginx 配置参考：`docs/nginx-courses.conf`
+- 路由定义：`frontend/src/app/router/index.ts`（`/uk/:lessonId?` 和 `/legal/:lessonId?`）
 
-### 共享 Templates 机制
+### Vue 组件架构
 
-`courses/shared/` 下的 10 个文件被两套课程共用：
-- **auth.js** — 从 localStorage 读取主站 Supabase 登录会话，提供 `CourseAuth.getAuth()` 和 `CourseAuth.supabaseFetch()` 封装
-- **lesson.css** — 用 `:lang(uk)` / `:lang(en)` 切换主题色（乌克兰语蓝色、法律英语深蓝色），含单词交互气泡样式
-- **nav.js** — 自动注入顶部导航栏（课程首页显示"← IELTS Study 主页"，课时页显示"← 课程名"+ 主页链接）
-- **progress.js** — checkbox 进度跨设备同步（纯 Supabase `course_progress` 表读写，未登录时仅当前会话有效）
-- **tts.js** — 双语音频源：英语走有道词典 API（免费），乌克兰语走服务器缓存（`/tts-cache/`）+ Google Cloud TTS + 自动上传缓存
-- **exercise.js** — 选择题 + 填空题 + 翻译题 + AI 批改 + 渐进提示 + localStorage 持久化 + Supabase 练习结果持久化
-- **vocab.js** — 从 Supabase 认证会话获取 user_id，用户可通过下拉框选择 source，直接调 Supabase REST API 添加词汇
-- **renderer.js** — JSON 数据驱动渲染器，读取 `.json` 课时数据构建完整 DOM，自动加载所需脚本（tts/exercise/vocab/nav/chat）
-- **wordInteraction.js** — 单词点击浮动气泡（释义、发音、source 选择、添加到单词库），释义从元素 `data-def` 属性读取（同步，零延迟）
-- **chat.js** — AI 实时答疑浮动聊天窗口（DeepSeek 流式调用），两套课程使用不同 base prompt，支持选中页面文字作为上下文提问，感知课程词汇/语法/错题
+| 旧 Template（已废弃） | 新 Vue 组件/Composable |
+|---|---|
+| `auth.js` | 复用主站 `useAuth.ts` |
+| `lesson.css` | `styles/course.css` + `styles/course-themes.css`（`data-course="ukrainian\|legal-english"` 切换主题色） |
+| `nav.js` | Vue Router + `CourseLessonPage` 面包屑 |
+| `progress.js` | `useCourseProgress.ts`（Supabase `course_progress` 表） |
+| `tts.js` | `useCourseTts.ts` → `shared/utils/audio/audioPlayer.ts` |
+| `exercise.js` | `QuizExercise` / `FillBlankExercise` / `TranslationExercise` + `useExerciseState.ts`（URL 无关 key + Supabase 同步）|
+| `vocab.js` | `VocabPreloadSection.vue` |
+| `renderer.js` | `LessonRenderer.vue`（JSON → Vue 组件树） |
+| `wordInteraction.js` | `WordPopover.vue` |
+| `chat.js` | `CourseChat.vue`（复用 `shared/services/deepseek.ts` 的 `streamDeepSeek`） |
 
-每个课程的 `lessons/templates` 是指向 `../../shared` 的符号链接，确保本地预览和服务器部署路径一致。
+### 持久化架构
+
+课程练习状态采用**URL 无关 + 向前兼容 + Supabase 真相源**设计：
+- **Storage key**：`exercise.${courseId}.${lessonId}`（不与 URL 耦合，未来重构 URL 结构不丢数据）
+- **Envelope 格式**：`{ schemaVersion, updatedAt, data, ...unknownFields }`，未知字段透传保存
+- **Supabase 持久化**：完整练习状态（含 AI 批改结果）上行到 `course_progress.progress._exercises[lessonId]`
+- **合并策略**：加载时比较 localStorage 与 Supabase 的 `updatedAt`，取较新的；同时保留较旧的一方被更新到最新
+- 实现：`frontend/src/features/courses/composables/useExerciseState.ts` + `useCourseExerciseSync.ts`
 
 ### 课程生成
 
-课程由 Claude Code 在本地生成，详见：
+课程由 Claude Code 在本地生成，输出 JSON 到 `frontend/public/{uk,legal}/wXdY.json`，详见：
 - **[乌克兰语课程生成指令](docs/course-ukrainian.md)**
 - **[法律英语课程生成指令](docs/course-legal-english.md)**
 
+新增课时需同步更新 `frontend/src/features/courses/data/lessons.ts` 的课时索引数据。
+
 ### 课程部署
 
-课程是纯静态文件，push 到 main 后由 GitHub Actions 自动部署（随 `git reset --hard` 拉取，无需构建步骤）。
+课程 JSON 文件随前端构建进入 `dist/{uk,legal}/`，由标准 SPA `try_files` 伺服：
+- 访问 `/uk/w3d1.json` → 直接返回 JSON 文件
+- 访问 `/uk/w3d1` → fallback 到 `index.html` → Vue Router 接管
+
+不需要任何课程专属的 nginx location 块。部署走 GitHub Actions（`.github/workflows/deploy.yml`）。
 
 ## 注意事项
 
@@ -242,6 +265,6 @@ courses/
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
 - 当前版本号 `v1.8.6`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
-- 修改 `courses/shared/` 中的 templates 会同时影响两套课程
-- 课程页面通过 `courses/shared/auth.js` 复用主站的 Supabase 登录会话（同域 localStorage 共享），用户需先在主站登录
-- 新课时使用 JSON 数据驱动架构（详见各课程生成指令文档），所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义
+- 课程页面复用主站的 Supabase 登录会话，用户需先在主站登录；未登录仍可浏览但练习无法同步到云端
+- 课时 JSON 的所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义（单词点击气泡需要）
+- 新增课时同步更新 `frontend/src/features/courses/data/lessons.ts` 的索引数据

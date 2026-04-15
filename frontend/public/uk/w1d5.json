@@ -1,0 +1,477 @@
+{
+  "title": "第1周 第5天 — 软音符号(ь)结尾的名词",
+  "objective": "<strong>学习目标：</strong>掌握以软音符号(ь)结尾的名词的性别判断方法，了解阳性和阴性 -ь 结尾名词的常见模式，记住 -ість 结尾总是阴性的核心规则。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "回顾",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "前三天我们学习了名词性别的基本判断规则，来快速回顾一下："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n第1天 — 阳性（чоловічий рід）：\n  以辅音结尾 → <span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"公园\">парк</span>, <span class=\"uk-word\" data-def=\"公交车\">автобус</span>, <span class=\"uk-word\" data-def=\"电话\">телефон</span>\n\n第2天 — 阴性（жіночий рід）：\n  以 -а 结尾 → <span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"工作\">робота</span>, <span class=\"uk-word\" data-def=\"汽车\">машина</span>\n  以 -я 结尾（单辅音+-я）→ <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"歌曲\">пісня</span>, <span class=\"uk-word\" data-def=\"希望\">надія</span>\n\n第3天 — 中性（середній рід）：\n  以 -о 结尾 → <span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\" data-def=\"单词\">слово</span>, <span class=\"uk-word\" data-def=\"湖\">озеро</span>\n  以 -е 结尾 → <span class=\"uk-word\" data-def=\"海\">море</span>, <span class=\"uk-word\" data-def=\"太阳\">сонце</span>, <span class=\"uk-word\" data-def=\"地方\">місце</span>\n  以 -ння/-ття 结尾 → <span class=\"uk-word\" data-def=\"作业\">завдання</span>, <span class=\"uk-word\" data-def=\"生命\">життя</span>（双辅音+-я → 中性）\n</pre>"
+        },
+        {
+          "type": "p",
+          "html": "到目前为止，我们可以根据词尾判断大多数名词的性别。但有一种情况我们还没处理——当名词以<strong>软音符号 <span class=\"uk-word\">ь</span></strong> 结尾时，它可能是阳性，也可能是阴性！这就是今天要攻克的难点。"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>为什么难？</strong>因为 -ь 不像 -а、-о、-е 那样能直接指向某个性别。以 -ь 结尾的名词，阳性和阴性都有，必须学会区分模式并记忆常见词。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "1.1 什么是软音符号 ь？"
+        },
+        {
+          "type": "p",
+          "html": "<span class=\"uk-word\">ь</span>（软音符号）本身不发音，它的作用是让前面的辅音\"变软\"（即腭化）。比如："
+        },
+        {
+          "type": "ul",
+          "items": [
+            "<span class=\"uk-word\" data-def=\"天\">день</span>（白天）——末尾的 <strong>н</strong> 被软化，发音更柔和",
+            "<span class=\"uk-word\" data-def=\"盐\">сіль</span>（盐）——末尾的 <strong>л</strong> 被软化",
+            "<span class=\"uk-word\" data-def=\"石头\">камінь</span>（石头）——末尾的 <strong>н</strong> 被软化"
+          ]
+        },
+        {
+          "type": "p",
+          "html": "关键问题是：以 -ь 结尾的名词，<strong>怎么判断性别</strong>？"
+        },
+        {
+          "type": "h3",
+          "text": "1.2 -ь 结尾名词的性别分布"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n以 -ь 结尾的名词性别判断：\n\n┌──────────┬─────────────────────────────────────────────────┐\n│  阳性     │  指人的男性角色、时间概念、自然界具体事物          │\n│  <span class=\"uk-word\">він</span>     │  <span class=\"uk-word\" data-def=\"老师\">вчитель</span>, <span class=\"uk-word\" data-def=\"客人\">гість</span>, <span class=\"uk-word\" data-def=\"天\">день</span>, <span class=\"uk-word\" data-def=\"月份\">місяць</span>                │\n├──────────┼─────────────────────────────────────────────────┤\n│  阴性     │  以 -ість 结尾的词、抽象情感/品质、部分自然现象    │\n│  <span class=\"uk-word\">вона</span>    │  <span class=\"uk-word\" data-def=\"喜悦\">радість</span>, <span class=\"uk-word\" data-def=\"爱\">любов</span>, <span class=\"uk-word\" data-def=\"夜晚\">ніч</span>, <span class=\"uk-word\" data-def=\"秋天\">осінь</span>                  │\n└──────────┴─────────────────────────────────────────────────┘\n</pre>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>核心难点：</strong>-ь 结尾名词没有像 -а→阴性、-о→中性 那样的一刀切规则。你需要掌握一些模式和常见词。好消息是，有一条<strong>100%可靠</strong>的规则可以帮你搞定很大一部分！"
+        },
+        {
+          "type": "h3",
+          "text": "1.3 黄金规则：-ість 结尾 → 总是阴性！"
+        },
+        {
+          "type": "p",
+          "html": "这是今天<strong>最重要的一条规则</strong>，务必牢记："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n★ 黄金规则 ★\n\n以 -ість 结尾的名词 → 100% 阴性（没有例外！）\n\n<span class=\"uk-word\" data-def=\"喜悦\">радість</span>（喜悦）     → 阴性\n<span class=\"uk-word\" data-def=\"可能性\">можливість</span>（可能性） → 阴性\n<span class=\"uk-word\" data-def=\"新闻\">новість</span>（新闻）     → 阴性\n<span class=\"uk-word\" data-def=\"速度\">швидкість</span>（速度）   → 阴性\n<span class=\"uk-word\" data-def=\"温柔\">ніжність</span>（温柔）    → 阴性\n<span class=\"uk-word\" data-def=\"青春\">молодість</span>（青春）   → 阴性\n</pre>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>类比记忆：</strong>-ість 相当于英语的 <strong>-ness / -ity</strong> 后缀。比如：<br>possible → possibility（可能性）≈ <span class=\"uk-word\" data-def=\"可能性\">можливість</span><br>young → youth/youthfulness ≈ <span class=\"uk-word\" data-def=\"青春\">молодість</span>（青春）<br>quick → quickness ≈ <span class=\"uk-word\" data-def=\"速度\">швидкість</span>（速度）<br>这些抽象品质名词在乌克兰语中<strong>全部是阴性</strong>。"
+        },
+        {
+          "type": "note",
+          "html": "<strong>为什么这条规则这么有用？</strong>因为 -ість 结尾的名词数量极多！乌克兰语中大量表示品质、特征、状态的抽象名词都用 -ість 构成。记住这一条，你就能正确判断数百个词的性别。"
+        },
+        {
+          "type": "h3",
+          "text": "1.4 阴性 -ь 结尾的其他常见词"
+        },
+        {
+          "type": "p",
+          "html": "除了 -ість 之外，还有一些常见的阴性 -ь 结尾名词。它们没有统一的词尾模式，需要逐个记忆："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n阴性 -ь 结尾名词（非 -ість 类）：\n\n自然/时间类：\n  <span class=\"uk-word\" data-def=\"夜晚\">ніч</span>（夜晚）    <span class=\"uk-word\" data-def=\"秋天\">осінь</span>（秋天）    <span class=\"uk-word\" data-def=\"影子\">тінь</span>（影子）\n\n情感/抽象类：\n  <span class=\"uk-word\" data-def=\"爱\">любов</span>（爱）     <span class=\"uk-word\" data-def=\"血\">кров</span>（血）      <span class=\"uk-word\" data-def=\"死亡\">смерть</span>（死亡）\n\n已学过的：\n  <span class=\"uk-word\" data-def=\"回答\">відповідь</span>（回答）  <span class=\"uk-word\" data-def=\"盐\">сіль</span>（盐）      <span class=\"uk-word\" data-def=\"旅行\">подорож</span>（旅行）\n</pre>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>助记口诀——\"夜、秋、影、爱、血、死\"都是阴性：</strong><br>想象一个场景：在一个<strong>秋天</strong>的<strong>夜晚</strong>，<strong>影子</strong>中有<strong>爱</strong>与<strong>血</strong>和<strong>死亡</strong>的故事……这些充满情感和自然意象的词，都是阴性。<br>中文口诀记：<strong>\"夜秋影，爱血死\"</strong>——六个阴性 -ь 结尾词。"
+        },
+        {
+          "type": "h3",
+          "text": "1.5 以 -ов 结尾的阴性名词"
+        },
+        {
+          "type": "p",
+          "html": "注意 <span class=\"uk-word\" data-def=\"爱\">любов</span>（爱）和 <span class=\"uk-word\" data-def=\"血\">кров</span>（血）这两个词，它们以 <strong>-ов</strong> 结尾。这类词很少，但都是阴性。记住这两个就够了。"
+        },
+        {
+          "type": "h3",
+          "text": "1.6 阳性 -ь 结尾名词的常见模式"
+        },
+        {
+          "type": "p",
+          "html": "接下来看阳性。以 -ь 结尾的阳性名词有几个比较明显的类别："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n阳性 -ь 结尾名词常见类别：\n\n① 以 -тель 结尾 → 表示\"做某事的人\"：\n  <span class=\"uk-word\" data-def=\"老师\">вчитель</span>（老师）— 来自\"教\"\n\n② 指男性的人：\n  <span class=\"uk-word\" data-def=\"客人\">гість</span>（客人）— 默认指男性客人\n\n③ 时间/天体：\n  <span class=\"uk-word\" data-def=\"天\">день</span>（白天/天）\n  <span class=\"uk-word\" data-def=\"月份\">місяць</span>（月份/月亮）\n\n④ 自然界具体事物：\n  <span class=\"uk-word\" data-def=\"石头\">камінь</span>（石头）\n  <span class=\"uk-word\" data-def=\"火\">вогонь</span>（火）\n</pre>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>-тель 结尾 → 阳性！</strong><br>这是另一条非常实用的规则。-тель 结尾的词通常表示\"做某事的人\"，类似英语的 -er/-or。<br><span class=\"uk-word\" data-def=\"老师\">вчитель</span>（老师）= 教的人<br>这类词<strong>全部是阳性</strong>。"
+        },
+        {
+          "type": "h3",
+          "text": "1.7 -ь 结尾名词的性别判断流程"
+        },
+        {
+          "type": "p",
+          "html": "总结一个实用的判断流程："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n-ь 结尾名词性别判断流程：\n\n第一步：以 -ість 结尾？ → 阴性（100%可靠）\n   <span class=\"uk-word\" data-def=\"喜悦\">радість</span>, <span class=\"uk-word\" data-def=\"可能性\">можливість</span>, <span class=\"uk-word\" data-def=\"新闻\">новість</span>...\n\n第二步：以 -тель 结尾？ → 阳性（指人的男性角色）\n   <span class=\"uk-word\" data-def=\"老师\">вчитель</span>...\n\n第三步：都不是？ → 需要记忆常见词！\n\n常见阳性：<span class=\"uk-word\" data-def=\"天\">день</span>, <span class=\"uk-word\" data-def=\"客人\">гість</span>, <span class=\"uk-word\" data-def=\"月份\">місяць</span>, <span class=\"uk-word\" data-def=\"石头\">камінь</span>, <span class=\"uk-word\" data-def=\"火\">вогонь</span>\n常见阴性：<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>, <span class=\"uk-word\" data-def=\"盐\">сіль</span>, <span class=\"uk-word\" data-def=\"秋天\">осінь</span>, <span class=\"uk-word\" data-def=\"影子\">тінь</span>, <span class=\"uk-word\" data-def=\"爱\">любов</span>, <span class=\"uk-word\" data-def=\"血\">кров</span>, <span class=\"uk-word\" data-def=\"死亡\">смерть</span>, <span class=\"uk-word\" data-def=\"回答\">відповідь</span>, <span class=\"uk-word\" data-def=\"旅行\">подорож</span>\n</pre>"
+        },
+        {
+          "type": "h3",
+          "text": "1.8 阳性 vs 阴性 -ь 结尾对比"
+        },
+        {
+          "type": "p",
+          "html": "把阳性和阴性的 -ь 结尾名词放在一起对比："
+        },
+        {
+          "type": "table",
+          "headers": ["阳性 -ь（<span class=\"uk-word\">він</span>）", "阴性 -ь（<span class=\"uk-word\">вона</span>）"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"uk-word\" data-def=\"天\">день</span>（白天）", "<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>（夜晚）"],
+            ["<span class=\"uk-word\" data-def=\"老师\">вчитель</span>（老师）", "<span class=\"uk-word\" data-def=\"爱\">любов</span>（爱）"],
+            ["<span class=\"uk-word\" data-def=\"客人\">гість</span>（客人）", "<span class=\"uk-word\" data-def=\"秋天\">осінь</span>（秋天）"],
+            ["<span class=\"uk-word\" data-def=\"月份\">місяць</span>（月/月亮）", "<span class=\"uk-word\" data-def=\"影子\">тінь</span>（影子）"],
+            ["<span class=\"uk-word\" data-def=\"石头\">камінь</span>（石头）", "<span class=\"uk-word\" data-def=\"盐\">сіль</span>（盐）"],
+            ["<span class=\"uk-word\" data-def=\"火\">вогонь</span>（火）", "<span class=\"uk-word\" data-def=\"血\">кров</span>（血）"],
+            ["", "<span class=\"uk-word\" data-def=\"死亡\">смерть</span>（死亡）"],
+            ["", "<span class=\"uk-word\" data-def=\"喜悦\">радість</span>（喜悦）"],
+            ["", "<span class=\"uk-word\" data-def=\"可能性\">можливість</span>（可能性）"]
+          ]
+        },
+        {
+          "type": "note",
+          "html": "<strong>观察：</strong>阴性 -ь 结尾名词的数量比阳性多得多。特别是加上所有 -ість 结尾的词，阴性阵营非常庞大。所以如果你拿不准一个 -ь 结尾名词的性别，猜阴性的正确概率更高——但最好还是记住具体的词！"
+        },
+        {
+          "type": "h3",
+          "text": "1.9 有趣的对比：день vs ніч"
+        },
+        {
+          "type": "p",
+          "html": "<span class=\"uk-word\" data-def=\"天\">день</span>（白天）是<strong>阳性</strong>，<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>（夜晚）是<strong>阴性</strong>。这对\"白天和黑夜\"恰好一阳一阴。"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>联想记忆：</strong><br><span class=\"uk-word\" data-def=\"天\">день</span>（白天）→ 阳光 → <strong>阳</strong>性 → <span class=\"uk-word\">він</span><br><span class=\"uk-word\" data-def=\"夜晚\">ніч</span>（夜晚）→ 月光（柔和）→ <strong>阴</strong>性 → <span class=\"uk-word\">вона</span><br>\"<strong>阳光的白天，阴柔的夜晚</strong>\"——记住这对词。"
+        },
+        {
+          "type": "h3",
+          "text": "1.10 更新完整规则表"
+        },
+        {
+          "type": "p",
+          "html": "加上今天学的内容，我们的性别判断规则表更完整了："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>\n乌克兰语名词性别判断 — 更新版：\n\n┌──────────┬───────────────────────────────────────────────────┐\n│  阳性     │  辅音结尾 → <span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"公园\">парк</span>, <span class=\"uk-word\" data-def=\"公交车\">автобус</span>                 │\n│  <span class=\"uk-word\">він</span>     │  -ь 结尾（部分） → <span class=\"uk-word\" data-def=\"天\">день</span>, <span class=\"uk-word\" data-def=\"老师\">вчитель</span>, <span class=\"uk-word\" data-def=\"客人\">гість</span>          │\n├──────────┼───────────────────────────────────────────────────┤\n│  阴性     │  -а 结尾 → <span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"工作\">робота</span>                         │\n│  <span class=\"uk-word\">вона</span>    │  -я 结尾（单辅音+-я） → <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"希望\">надія</span>              │\n│          │  -ь 结尾（部分） → <span class=\"uk-word\" data-def=\"夜晚\">ніч</span>, <span class=\"uk-word\" data-def=\"爱\">любов</span>, <span class=\"uk-word\" data-def=\"喜悦\">радість</span>          │\n│          │  ★ -ість 结尾 → 100% 阴性！                       │\n├──────────┼───────────────────────────────────────────────────┤\n│  中性     │  -о 结尾 → <span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\" data-def=\"单词\">слово</span>                           │\n│  <span class=\"uk-word\">воно</span>    │  -е 结尾 → <span class=\"uk-word\" data-def=\"海\">море</span>, <span class=\"uk-word\" data-def=\"太阳\">сонце</span>                            │\n│          │  -ння/-ття 结尾 → <span class=\"uk-word\" data-def=\"作业\">завдання</span>, <span class=\"uk-word\" data-def=\"生命\">життя</span>                │\n└──────────┴───────────────────────────────────────────────────┘\n</pre>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "2. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：-ь 结尾名词是阳性还是阴性？（8题）",
+          "instruction": "判断以下名词是<strong>阳性</strong>还是<strong>阴性</strong>。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"天\">день</span>（白天）",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "день（白天）是阳性。记忆：阳光的白天→阳性。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"夜晚\">ніч</span>（夜晚）",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "ніч（夜晚）是阴性。记忆：阴柔的夜晚→阴性。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"喜悦\">радість</span>（喜悦）",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "радість 以 -ість 结尾，100% 阴性！"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"老师\">вчитель</span>（老师）",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "вчитель 以 -тель 结尾，表示'做某事的人'，阳性。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"爱\">любов</span>（爱）",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "любов（爱）是阴性，-ов 结尾→阴性。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"客人\">гість</span>（客人）",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "гість（客人）是阳性，需要记忆。"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"秋天\">осінь</span>（秋天）",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "осінь（秋天）是阴性。口诀'夜秋影'。"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"可能性\">можливість</span>（可能性）",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "можливість 以 -ість 结尾，100% 阴性！"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：-ість 结尾名词性别判断（5题）",
+          "instruction": "以下都是以 -ість 结尾的名词。它们的性别是什么？（巩固黄金规则）",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"新闻\">новість</span>（新闻）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "новість = 新闻，-ість 结尾→阴性。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"温柔\">ніжність</span>（温柔）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "ніжність = 温柔，-ість 结尾→阴性。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"青春\">молодість</span>（青春）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "молодість = 青春，-ість 结尾→阴性。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"速度\">швидкість</span>（速度）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "швидкість = 速度，-ість 结尾→阴性。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"喜悦\">радість</span>（喜悦）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "радість = 喜悦，-ість 结尾→阴性。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 C：综合性别判断（10题）",
+          "instruction": "结合前四天所学的全部规则，判断以下名词的性别。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"石头\">камінь</span>（石头）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "камінь 以 -ь 结尾，是需要记忆的阳性名词。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "вікно 以 -о 结尾，中性（第3天规则）。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"影子\">тінь</span>（影子）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "тінь（影子）以 -ь 结尾，阴性。口诀'夜秋影'。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"学校\">школа</span>（学校）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "школа 以 -а 结尾，阴性（第2天规则）。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"火\">вогонь</span>（火）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "вогонь（火）以 -ь 结尾，阳性，需要记忆。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"作业\">завдання</span>（作业）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "завдання 以 -ння 结尾（双辅音），中性（第3天规则）。"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"血\">кров</span>（血）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "кров（血）以 -ов 结尾，阴性。口诀'爱血死'。"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"商店\">магазин</span>（商店）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "магазин 以辅音 -н 结尾，阳性（第1天规则）。"
+            },
+            {
+              "prompt": "9. <span class=\"uk-word\" data-def=\"死亡\">смерть</span>（死亡）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "смерть（死亡）以 -ь 结尾，阴性。口诀'爱血死'。"
+            },
+            {
+              "prompt": "10. <span class=\"uk-word\" data-def=\"海\">море</span>（海）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "море 以 -е 结尾，中性（第3天规则）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 D：用代词替代名词（6题）",
+          "instruction": "用 <span class=\"uk-word\">він</span>（阳性）、<span class=\"uk-word\">вона</span>（阴性）或 <span class=\"uk-word\">воно</span>（中性）替代以下名词：",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"天\">День</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">він</span>",
+              "explanation": "день（白天）是阳性 → він。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"夜晚\">Ніч</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "ніч（夜晚）是阴性 → вона。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"喜悦\">Радість</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "радість 以 -ість 结尾，阴性 → вона。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"月份\">Місяць</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">він</span>",
+              "explanation": "місяць（月亮）以 -ь 结尾，阳性 → він。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"爱\">Любов</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "любов（爱）是阴性 → вона。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"老师\">Вчитель</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">він</span>",
+              "explanation": "вчитель 以 -тель 结尾，阳性 → він。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：找出不同性别的词（5题）",
+          "instruction": "每组中有一个词的性别与其他三个不同，找出它。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"夜晚\">ніч</span> / <span class=\"uk-word\" data-def=\"天\">день</span> / <span class=\"uk-word\" data-def=\"秋天\">осінь</span> / <span class=\"uk-word\" data-def=\"影子\">тінь</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>", "<span class=\"uk-word\" data-def=\"天\">день</span>", "<span class=\"uk-word\" data-def=\"秋天\">осінь</span>", "<span class=\"uk-word\" data-def=\"影子\">тінь</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"天\">день</span>",
+              "explanation": "ніч、осінь、тінь 都是阴性（-ь 结尾），день 虽也以 -ь 结尾但是阳性。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"老师\">вчитель</span> / <span class=\"uk-word\" data-def=\"客人\">гість</span> / <span class=\"uk-word\" data-def=\"爱\">любов</span> / <span class=\"uk-word\" data-def=\"石头\">камінь</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"老师\">вчитель</span>", "<span class=\"uk-word\" data-def=\"客人\">гість</span>", "<span class=\"uk-word\" data-def=\"爱\">любов</span>", "<span class=\"uk-word\" data-def=\"石头\">камінь</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"爱\">любов</span>",
+              "explanation": "вчитель、гість、камінь 都是阳性（-ь 结尾），любов 是阴性。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"喜悦\">радість</span> / <span class=\"uk-word\" data-def=\"新闻\">новість</span> / <span class=\"uk-word\" data-def=\"火\">вогонь</span> / <span class=\"uk-word\" data-def=\"可能性\">можливість</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"喜悦\">радість</span>", "<span class=\"uk-word\" data-def=\"新闻\">новість</span>", "<span class=\"uk-word\" data-def=\"火\">вогонь</span>", "<span class=\"uk-word\" data-def=\"可能性\">можливість</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"火\">вогонь</span>",
+              "explanation": "радість、новість、можливість 都是阴性（-ість 结尾），вогонь 是阳性。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"天\">день</span> / <span class=\"uk-word\" data-def=\"月份\">місяць</span> / <span class=\"uk-word\" data-def=\"太阳\">сонце</span> / <span class=\"uk-word\" data-def=\"客人\">гість</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"天\">день</span>", "<span class=\"uk-word\" data-def=\"月份\">місяць</span>", "<span class=\"uk-word\" data-def=\"太阳\">сонце</span>", "<span class=\"uk-word\" data-def=\"客人\">гість</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"太阳\">сонце</span>",
+              "explanation": "день、місяць、гість 都是阳性，сонце 是中性（-е 结尾）。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"死亡\">смерть</span> / <span class=\"uk-word\" data-def=\"血\">кров</span> / <span class=\"uk-word\" data-def=\"公园\">парк</span> / <span class=\"uk-word\" data-def=\"秋天\">осінь</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"死亡\">смерть</span>", "<span class=\"uk-word\" data-def=\"血\">кров</span>", "<span class=\"uk-word\" data-def=\"公园\">парк</span>", "<span class=\"uk-word\" data-def=\"秋天\">осінь</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"公园\">парк</span>",
+              "explanation": "смерть、кров、осінь 都是阴性，парк 是阳性（辅音结尾）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 F：规则判断（5题）",
+          "instruction": "根据今天学的规则回答以下问题。",
+          "questions": [
+            {
+              "prompt": "1. 以 -ість 结尾的名词是什么性别？",
+              "options": ["阳性", "阴性", "可能是阳性或阴性"],
+              "answer": "阴性",
+              "explanation": "以 -ість 结尾的名词100%是阴性，没有例外。"
+            },
+            {
+              "prompt": "2. 以 -тель 结尾的名词通常是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "以 -тель 结尾的名词表示'做某事的人'，是阳性。"
+            },
+            {
+              "prompt": "3. 以 -ь 结尾的名词是什么性别？",
+              "options": ["一定是阳性", "一定是阴性", "可能是阳性或阴性"],
+              "answer": "可能是阳性或阴性",
+              "explanation": "以 -ь 结尾的名词可能是阳性（如 день），也可能是阴性（如 ніч），需要具体记忆或使用 -ість/-тель 等子规则。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"天\">день</span>（白天）是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "день（白天）是阳性，ніч（夜晚）是阴性。'阳光的白天，阴柔的夜晚'。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"可能性\">можливість</span> 用哪个代词指代？",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "阴性名词用 вона 指代。-ість 结尾的名词是阴性 → вона。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "3. 今日小结",
+      "html": "<ol><li><strong>-ь 结尾名词可以是阳性或阴性</strong>，不能仅凭词尾一刀切判断，需要记忆或借助模式。</li><li><strong>黄金规则：-ість 结尾 → 100% 阴性</strong>（如 <span class=\"uk-word\" data-def=\"喜悦\">радість</span>、<span class=\"uk-word\" data-def=\"可能性\">можливість</span>、<span class=\"uk-word\" data-def=\"新闻\">новість</span>）。这条规则没有例外，可以放心使用。</li><li><strong>-тель 结尾 → 阳性</strong>（如 <span class=\"uk-word\" data-def=\"老师\">вчитель</span>），表示\"做某事的人\"。</li><li><strong>常见阳性 -ь 结尾词</strong>：<span class=\"uk-word\" data-def=\"天\">день</span>（白天）、<span class=\"uk-word\" data-def=\"客人\">гість</span>（客人）、<span class=\"uk-word\" data-def=\"月份\">місяць</span>（月）、<span class=\"uk-word\" data-def=\"石头\">камінь</span>（石头）、<span class=\"uk-word\" data-def=\"火\">вогонь</span>（火）。</li><li><strong>常见阴性 -ь 结尾词</strong>：<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>（夜）、<span class=\"uk-word\" data-def=\"秋天\">осінь</span>（秋天）、<span class=\"uk-word\" data-def=\"影子\">тінь</span>（影子）、<span class=\"uk-word\" data-def=\"爱\">любов</span>（爱）、<span class=\"uk-word\" data-def=\"血\">кров</span>（血）、<span class=\"uk-word\" data-def=\"死亡\">смерть</span>（死亡）。</li><li><strong>助记口诀</strong>：\"夜秋影，爱血死\"——六个阴性常见词。</li><li><strong>день vs ніч 对比</strong>：白天=阳性，夜晚=阴性。\"阳光的白天，阴柔的夜晚\"。</li><li>本课新学 <strong>18 个词汇</strong>（6 阳性 + 12 阴性）。</li><li>明天将学习<strong>常见例外与特殊名词</strong>（如 <span class=\"uk-word\" data-def=\"爸爸\">тато</span>、<span class=\"uk-word\" data-def=\"父亲\">батько</span> 等阳性特例）。</li></ol>"
+    }
+  ]
+}

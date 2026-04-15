@@ -30,6 +30,8 @@ const SpeakingPage = lazyPage(() => import('@/pages/SpeakingPage.vue'))
 const WritingPage = lazyPage(() => import('@/pages/WritingPage.vue'))
 const SettingsPage = lazyPage(() => import('@/pages/SettingsPage.vue'))
 const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage.vue'))
+const CourseIndexPage = lazyPage(() => import('@/pages/CourseIndexPage.vue'))
+const CourseLessonPage = lazyPage(() => import('@/pages/CourseLessonPage.vue'))
 
 const routes = [
   {
@@ -84,6 +86,49 @@ const routes = [
     name: 'settings',
     component: SettingsPage,
     meta: { title: '设置', depth: 1 }
+  },
+  // ── 课程路由 ──
+  {
+    path: '/uk',
+    redirect: '/uk/'
+  },
+  {
+    path: '/uk/',
+    name: 'course-uk-index',
+    component: CourseIndexPage,
+    props: { courseId: 'ukrainian' },
+    meta: { title: '乌克兰语课程', depth: 1 }
+  },
+  {
+    path: '/uk/:lessonId',
+    name: 'course-uk-lesson',
+    component: CourseLessonPage,
+    props: (route: RouteLocationNormalized) => ({
+      courseId: 'ukrainian',
+      lessonId: route.params.lessonId
+    }),
+    meta: { title: '乌克兰语课程', depth: 2 }
+  },
+  {
+    path: '/legal',
+    redirect: '/legal/'
+  },
+  {
+    path: '/legal/',
+    name: 'course-legal-index',
+    component: CourseIndexPage,
+    props: { courseId: 'legal-english' },
+    meta: { title: '法律英语课程', depth: 1 }
+  },
+  {
+    path: '/legal/:lessonId',
+    name: 'course-legal-lesson',
+    component: CourseLessonPage,
+    props: (route: RouteLocationNormalized) => ({
+      courseId: 'legal-english',
+      lessonId: route.params.lessonId
+    }),
+    meta: { title: '法律英语课程', depth: 2 }
   },
   {
     path: '/:pathMatch(.*)*',

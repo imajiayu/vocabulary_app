@@ -17,51 +17,26 @@
 2. **参考大纲**：对照 `courses/legal-english/curriculum.md` 确定今天的教学内容
 3. **检查错题**：读取 `courses/legal-english/mistakes.md`，在新课程中针对性复习
 4. **生成课程**：
-   - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载课（`courses/legal-english/lessons/w*d1.html`）了解已教过哪些词汇，并通过 Supabase REST API 查询背单词 App 中的已知词汇（user_id 和 source 从课程上下文确定）。确保新词汇不与已教内容重复。生成词汇页面，列出本周所有新术语（含中文释义），引用 `templates/vocab.js` 实现一键添加到背单词App
-   - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载课（`courses/legal-english/lessons/wXd1.html`）确认本周允许使用的词汇范围。在 `courses/legal-english/lessons/` 目录下创建以周次天数命名的 `.html` 文件（如 `w3d5.html`）。生成后对照 `courses/legal-english/curriculum.md` 检查每道练习题是否超纲
+   - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载 JSON（`frontend/public/legal/w*d1.json`）了解已教过哪些词汇，并通过 Supabase REST API 查询背单词 App 中的已知词汇。确保新词汇不与已教内容重复。列出本周所有新术语（含中文释义）到 `sections[0]` 的 `vocab-preload` 类型
+   - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载 JSON（`frontend/public/legal/wXd1.json`）确认本周允许使用的词汇范围。在 `frontend/public/legal/` 目录下创建以周次天数命名的 `.json` 文件（如 `w3d5.json`）。生成后对照 `courses/legal-english/curriculum.md` 检查每道练习题是否超纲
    - **复习日（第7天）**：巩固本周内容，不引入新知识点
 5. **更新进度**：课程生成后更新 `courses/legal-english/progress.md`（推进天数、记录完成的课程）
 6. **更新词汇**：将课程中的新词汇追加到 `courses/legal-english/vocabulary/known_words.md`
-7. **更新索引页**：在 `courses/legal-english/lessons/index.html` 的 `lessons` 数组中，将对应条目的 `file` 从 `null` 改为实际文件名（如 `"w3d5.html"`）
+7. **更新课时索引**：在 `frontend/src/features/courses/data/lessons.ts` 的 `legalEnglishLessons` 数组中新增或更新对应条目
 
 ## 部署方式
 
-课程生成后 git commit && git push 即可自动部署，访问 https://mieltsm.top/legal/
+课程生成后 git commit && git push 即可自动部署（GitHub Actions 触发前端构建），访问 https://mieltsm.top/legal/
 
 ## 进度追踪
 
-课程完成进度通过 `courses/legal-english/lessons/index.html` 中每课右侧的 **checkbox** 由用户手动标记，状态保存在浏览器 localStorage（key: `legal_english_progress`）。不再使用日期自动判断完成状态。
+课程完成进度通过 Vue 的 `CourseIndexPage` 的 checkbox 由用户手动标记，状态保存在 Supabase `course_progress` 表（跨设备同步）。
 
 `courses/legal-english/progress.md` 仍然用于记录当前周次/天数、薄弱点、待复习内容，供 Claude 生成课程时参考。
 
 ## 课程格式
 
-课程支持两种格式：**JSON 数据驱动**（推荐）和传统 HTML。新课程一律使用 JSON 格式。
-
-### JSON 格式（推荐）
-
-每个课时由两个文件组成：
-
-1. **`wXdY.json`** — 纯内容数据（Claude 生成此文件）
-2. **`wXdY.html`** — 薄壳 HTML（复制模板，改文件名即可）
-
-**薄壳 HTML 模板**：
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="templates/lesson.css">
-</head>
-<body>
-<script src="templates/auth.js"></script>
-<script src="templates/renderer.js"></script>
-<script>CourseRenderer.load('wXdY.json')</script>
-</body>
-</html>
-```
+每个课时是一个独立的 JSON 文件，存储在 `frontend/public/legal/wXdY.json`，由 `LessonRenderer.vue` 组件解析渲染。**不需要**配套的 HTML 文件、薄壳、或任何 script 标签。
 
 **JSON 结构**（以法律英语课时为例）：
 
@@ -174,31 +149,7 @@ JSON 中的 html 字段同理：
 ```json
 { "type": "p", "html": "<span class=\"term\" data-def=\"对价；约因\">consideration</span> 是合同成立的要素" }
 ```
-vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动输出为 `data-def`，无需在 html 中重复标注。
-
-### 传统 HTML 格式（已有课程）
-
-已有课程仍为完整 HTML。结构骨架：
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第X周 第Y天 — 课程标题（English Title）</title>
-  <link rel="stylesheet" href="templates/lesson.css">
-</head>
-<body>
-<!-- 课程内容 -->
-<script src="templates/auth.js"></script>
-<script src="templates/tts.js"></script>
-<script src="templates/wordInteraction.js"></script>
-<script src="templates/exercise.js"></script>
-<script src="templates/nav.js"></script>
-</body>
-</html>
-```
+vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSection.vue` 自动输出为 `data-def`，无需在 html 中重复标注。
 
 ### 英文术语可点击标记规范
 
@@ -348,7 +299,7 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 
 ### 填空题格式（JSON）
 
-填空题要求学生主动回忆术语，比选择题记忆效果更好。`prompt` 中用 `____`（4 个下划线）标记填空位置，renderer.js 会自动替换为输入框。
+填空题要求学生主动回忆术语，比选择题记忆效果更好。`prompt` 中用 `____`（4 个下划线）标记填空位置，`FillBlankExercise.vue` 会自动替换为输入框。
 
 ```json
 {
@@ -451,4 +402,5 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 - 学习进度：`courses/legal-english/progress.md`
 - 错题库：`courses/legal-english/mistakes.md`
 - 词汇库：`courses/legal-english/vocabulary/known_words.md`
-- 每日课程：`courses/legal-english/lessons/wXdY.html`（如 `w1d2.html` = 第1周第2天）
+- **每日课程 JSON**：`frontend/public/legal/wXdY.json`（如 `w1d2.json` = 第1周第2天）
+- **课时索引数据**：`frontend/src/features/courses/data/lessons.ts`（`legalEnglishLessons` 数组，新增课时须同步更新）

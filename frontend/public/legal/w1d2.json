@@ -1,0 +1,450 @@
+{
+  "title": "第1周 第2天 — 合同总体结构",
+  "objective": "掌握英文商务合同的总体结构框架，识别并理解合同各组成部分的英文名称及其功能，为后续逐层深入学习奠定基础。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 核心词汇",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "英文商务合同的结构高度标准化。无论是股权收购协议、服务合同还是保密协议，其骨架基本一致。以下 12 个术语构成了合同结构的核心词汇。"
+        },
+        {
+          "type": "table",
+          "headers": ["英文", "音标", "中文", "常见搭配"],
+          "firstColWord": false,
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"合同标题\">title</span>",
+              "/ˈtaɪtl/",
+              "合同标题；所有权",
+              "contract title; title of the agreement; title page"
+            ],
+            [
+              "<span class=\"term\" data-def=\"前言/序言\">preamble</span>",
+              "/priːˈæmbəl/",
+              "序文；前言",
+              "the preamble of this Agreement; preamble clause; as <span class=\"term\" data-def=\"规定/载明\">set forth</span> in the preamble"
+            ],
+            [
+              "<span class=\"term\" data-def=\"鉴于条款\">recitals</span>",
+              "/rɪˈsaɪtəlz/",
+              "鉴于条款；背景叙述",
+              "the recitals hereto; recitals section; as described in the recitals"
+            ],
+            [
+              "<span class=\"term\" data-def=\"定义条款\">definitions</span>",
+              "/ˌdefɪˈnɪʃənz/",
+              "定义条款",
+              "definitions and interpretation; as defined in Article 1; defined terms"
+            ],
+            [
+              "<span class=\"term\" data-def=\"实质条款\">operative provisions</span>",
+              "/ˈɒpərətɪv prəˈvɪʒənz/",
+              "实质性条款；正文条款",
+              "the <span class=\"term\" data-def=\"实质条款\">operative provisions</span> of this Agreement; key <span class=\"term\" data-def=\"实质条款\">operative provisions</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span>",
+              "/ˈbɔɪlərpleɪt/",
+              "通用条款；标准条款",
+              "boilerplate clauses; boilerplate provisions; standard boilerplate language"
+            ],
+            [
+              "<span class=\"term\" data-def=\"附表/附件\">schedules</span>",
+              "/ˈʃedjuːlz/",
+              "附件；附表",
+              "schedules attached hereto; as set out in Schedule A; schedule of deliverables"
+            ],
+            [
+              "<span class=\"term\" data-def=\"条款\">clause</span>",
+              "/klɔːz/",
+              "条款",
+              "termination clause; <span class=\"term\" data-def=\"违约金条款；惩罚性条款\">penalty clause</span>; pursuant to Clause 5.2"
+            ],
+            [
+              "<span class=\"term\" data-def=\"规定/条款\">provision</span>",
+              "/prəˈvɪʒən/",
+              "规定；条款",
+              "general provisions; <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> the provisions of; key provisions"
+            ],
+            [
+              "<span class=\"term\" data-def=\"条（合同中的大条）\">article</span>",
+              "/ˈɑːrtɪkəl/",
+              "条；章",
+              "Article 3 of this Agreement; under this Article; article by article"
+            ],
+            [
+              "<span class=\"term\" data-def=\"修正案/修改\">amendment</span>",
+              "/əˈmendmənt/",
+              "修正案；修订",
+              "amendment to the Agreement; first amendment; amendment and restatement"
+            ],
+            [
+              "<span class=\"term\" data-def=\"签署/执行\">execution</span>",
+              "/ˌeksɪˈkjuːʃən/",
+              "签署；执行",
+              "execution of this Agreement; execution copy; upon execution"
+            ]
+          ]
+        },
+        {
+          "type": "note",
+          "html": "<strong>辨析：clause vs. provision vs. article</strong><br>三者均可译为\u201c条款\u201d，但使用场景有别。<strong>Article</strong> 通常指合同的大章节编号（如 Article 1, Article 2），层级最高。<strong>Clause</strong> 指具体的条文，偏口语化，也常用于指某一特定条款（如 termination clause）。<strong>Provision</strong> 最为通用，既可指单条条款，也可泛指一组条款（如 general provisions），语域最正式。"
+        }
+      ]
+    },
+    {
+      "type": "examples",
+      "heading": "2. 例句与语境",
+      "groups": [
+        {
+          "heading": "2.1 合同标题与序言",
+          "items": [
+            {
+              "text": "This Share Purchase Agreement (\u201cAgreement\u201d) is entered into as of January 15, 2026.",
+              "translation": "本《股权收购协议》（以下简称\u201c本协议\u201d）于2026年1月15日签订。"
+            },
+            {
+              "text": "The preamble identifies the parties to this Agreement and the date of execution.",
+              "translation": "序文载明本协议的当事人及签署日期。"
+            },
+            {
+              "text": "The recitals set forth the background and purpose of the transaction contemplated herein.",
+              "translation": "鉴于条款阐述了本协议所述交易的背景和目的。"
+            },
+            {
+              "text": "Unless otherwise defined herein, capitalized terms used in this Agreement shall have the meanings ascribed to them in Article 1 (Definitions).",
+              "translation": "除本协议另有定义外，本协议中使用的大写术语应具有第一条（定义）中赋予的含义。"
+            }
+          ]
+        },
+        {
+          "heading": "2.2 合同正文与结构",
+          "items": [
+            {
+              "text": "The operative provisions of this Agreement shall become effective upon execution by both parties.",
+              "translation": "本协议的实质性条款自双方签署后生效。"
+            },
+            {
+              "text": "Each article of this Agreement addresses a distinct aspect of the parties' rights and obligations.",
+              "translation": "本协议各条分别针对当事人权利义务的不同方面。"
+            },
+            {
+              "text": "The Seller's obligations under Clause 4.2 are subject to the conditions set forth in Article 6.",
+              "translation": "卖方在第4.2条项下的义务须受第六条所列条件的约束。"
+            },
+            {
+              "text": "Any amendment to this Agreement shall be in writing and duly executed by all parties hereto.",
+              "translation": "对本协议的任何修订均须以书面形式作出，并经全体当事人正式签署。"
+            }
+          ]
+        },
+        {
+          "heading": "2.3 通用条款与附件",
+          "items": [
+            {
+              "text": "The boilerplate provisions, including severability and entire agreement clauses, are contained in Article 12.",
+              "translation": "通用条款，包括可分割性条款和完整协议条款，载于第十二条。"
+            },
+            {
+              "text": "The schedules attached hereto shall form an integral part of this Agreement.",
+              "translation": "本协议所附附件构成本协议不可分割的组成部分。"
+            },
+            {
+              "text": "The provisions of this Agreement shall survive the execution and delivery of the closing documents.",
+              "translation": "本协议之条款在交割文件签署交付后继续有效。"
+            },
+            {
+              "text": "This Agreement has been executed in two counterparts, each of which shall be deemed an original.",
+              "translation": "本协议一式两份签署，每份均视为正本。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "3. 长难句拆解",
+      "items": [
+        {
+          "title": "长难句 1",
+          "sentence": "Unless otherwise defined herein, capitalized terms used in this Agreement shall have the meanings ascribed to them in Article 1 (Definitions), and any reference to a \u201cClause\u201d or \u201cArticle\u201d shall be construed as a reference to a clause or article of this Agreement.",
+          "structure": [
+            "<strong>条件状语：</strong>Unless otherwise defined herein — 除非本协议另有定义",
+            "<strong>主句1：</strong>capitalized terms ... shall have the meanings ascribed to them in Article 1 — 大写术语具有第一条中的含义",
+            "<strong>并列主句2：</strong>any reference to a \u201cClause\u201d or \u201cArticle\u201d shall be construed as ... — 对\u201c条款\u201d或\u201c条\u201d的提及应解释为……",
+            "<strong>关键搭配：</strong><span class=\"collocation\">ascribed to</span>（赋予）；<span class=\"collocation\">construed as</span>（解释为）"
+          ],
+          "translation": "除本协议另有定义外，本协议中使用的大写术语应具有第一条（定义）中赋予其的含义，且对\u201c条款\u201d或\u201c条\u201d的任何引用均应被解释为对本协议中相应条款或条的引用。"
+        },
+        {
+          "title": "长难句 2",
+          "sentence": "The Schedules and Exhibits attached hereto and referred to herein are hereby incorporated in and made a part of this Agreement with the same force and effect as if set forth in full in the body hereof.",
+          "structure": [
+            "<strong>主语：</strong>The Schedules and Exhibits — 附件和附录",
+            "<strong>后置定语1：</strong>attached hereto — 附于本协议的",
+            "<strong>后置定语2：</strong>and referred to herein — 并在本协议中提及的",
+            "<strong>谓语：</strong>are hereby incorporated in and made a part of this Agreement — 特此纳入本协议并成为其组成部分",
+            "<strong>状语：</strong>with the same force and effect as if <span class=\"term\" data-def=\"规定/载明\">set forth</span> in full in the body hereof — 具有与在本协议正文中全文载入同等的效力",
+            "<strong>关键搭配：</strong><span class=\"collocation\">attached hereto</span>（附于本协议）；<span class=\"collocation\">incorporated in</span>（纳入）；<span class=\"collocation\">with the same force and effect</span>（具有同等效力）"
+          ],
+          "translation": "附于本协议并在本协议中提及的各附件和附录，特此纳入本协议并构成其组成部分，与在本协议正文中全文载入具有同等效力。"
+        },
+        {
+          "title": "长难句 3",
+          "sentence": "No amendment, modification, or waiver of any provision of this Agreement shall be effective unless it is in writing and signed by the party against whom enforcement of such amendment, modification, or waiver is sought.",
+          "structure": [
+            "<strong>主语：</strong>No amendment, modification, or waiver of any provision of this Agreement — 对本协议任何条款的修订、修改或弃权",
+            "<strong>谓语：</strong>shall be effective — 不具有效力",
+            "<strong>条件状语：</strong>unless it is in writing and signed by the party — 除非以书面形式作出并经该方签署",
+            "<strong>定语从句：</strong>against whom enforcement of such amendment, modification, or waiver is sought — 被请求执行该修订、修改或弃权的一方",
+            "<strong>关键搭配：</strong><span class=\"collocation\">waiver of any provision</span>（对条款的弃权）；<span class=\"collocation\">enforcement is sought</span>（请求执行）"
+          ],
+          "translation": "对本协议任何条款的修订、修改或弃权，除非以书面形式作出并经被请求执行该修订、修改或弃权的一方签署，否则不具有效力。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "4. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语匹配",
+          "instruction": "选择各术语的正确中文释义。",
+          "questions": [
+            {
+              "prompt": "preamble",
+              "options": ["通用条款", "序文", "附件", "修订"],
+              "answer": "序文",
+              "explanation": "preamble 是合同开头段，载明当事人信息和签约日期。"
+            },
+            {
+              "prompt": "recitals",
+              "options": ["定义条款", "实质性条款", "鉴于条款", "签署"],
+              "answer": "鉴于条款",
+              "explanation": "recitals 是合同序言部分的背景叙述，通常以 WHEREAS 开头。"
+            },
+            {
+              "prompt": "boilerplate",
+              "options": ["附件", "通用条款", "条款", "修正案"],
+              "answer": "通用条款",
+              "explanation": "boilerplate 指合同尾部的标准化条款，如管辖法律、可分割性、完整协议等。"
+            },
+            {
+              "prompt": "execution（合同语境）",
+              "options": ["执行死刑", "签署", "履行", "终止"],
+              "answer": "签署",
+              "explanation": "execution 在合同语境中主要指合同的正式签署，而非日常意义的\u2018执行\u2019。"
+            },
+            {
+              "prompt": "schedules（合同语境）",
+              "options": ["时间表", "条款", "日程", "附件"],
+              "answer": "附件",
+              "explanation": "schedules 是附在合同正文之后的补充文件，包含具体细节、清单或技术参数等。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：选词填空",
+          "instruction": "根据语境选择最恰当的术语。",
+          "questions": [
+            {
+              "prompt": "The ______ of this Agreement describe the background of the transaction and the parties' intent.",
+              "options": ["schedules", "recitals", "boilerplate", "amendments"],
+              "answer": "recitals",
+              "explanation": "合同的背景叙述部分称为 recitals。"
+            },
+            {
+              "prompt": "No ______ to this Agreement shall be valid unless executed in writing by both parties.",
+              "options": ["provision", "execution", "amendment", "preamble"],
+              "answer": "amendment",
+              "explanation": "对合同的书面变更称为 amendment。"
+            },
+            {
+              "prompt": "The ______ set out the rights and obligations of the Buyer and the Seller under this Agreement.",
+              "options": ["definitions", "boilerplate", "<span class=\"term\" data-def=\"实质条款\">operative provisions</span>", "recitals"],
+              "answer": "operative provisions",
+              "explanation": "合同的核心权利义务条款称为 operative provisions。"
+            },
+            {
+              "prompt": "All capitalized terms used herein shall have the meanings <span class=\"term\" data-def=\"规定/载明\">set forth</span> in the ______ section.",
+              "options": ["preamble", "definitions", "schedules", "boilerplate"],
+              "answer": "definitions",
+              "explanation": "合同中统一约定术语含义的部分称为 definitions。"
+            },
+            {
+              "prompt": "This Agreement shall become effective upon ______ by all parties.",
+              "options": ["amendment", "provision", "recital", "execution"],
+              "answer": "execution",
+              "explanation": "合同的正式签署在法律英语中称为 execution。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：长难句理解",
+          "instruction": "阅读句子并选择最准确的理解。",
+          "questions": [
+            {
+              "prompt": "\u201cThe schedules attached hereto shall form an integral part of this Agreement.\u201d 该句表达的含义是：",
+              "options": [
+                "A. 附件仅供参考，不具有约束力",
+                "B. 附件需另行签署方可生效",
+                "C. 附件构成本协议不可分割的组成部分",
+                "D. 附件的效力高于合同正文"
+              ],
+              "answer": "C",
+              "explanation": "\u2018integral part\u2019 表示附件与正文具有同等法律地位，不可单独分割。"
+            },
+            {
+              "prompt": "\u201cAny amendment to this Agreement shall be in writing and duly executed by all parties hereto.\u201d 根据该条款，修订协议需满足：",
+              "options": [
+                "A. 只需口头约定",
+                "B. 书面形式且经全体当事人签署",
+                "C. 一方书面通知即可",
+                "D. 仲裁庭批准"
+              ],
+              "answer": "B",
+              "explanation": "该句明确修订必须满足两个条件：书面形式 + 双方签署，缺一不可。"
+            },
+            {
+              "prompt": "\u201cThe Schedules ... are hereby incorporated in and made a part of this Agreement with the same force and effect as if <span class=\\\"term\\\" data-def=\\\"规定/载明\\\">set forth</span> in full in the body hereof.\u201d 此处 \u201cwith the same force and effect\u201d 意味着：",
+              "options": [
+                "A. 附件与正文具有同等法律效力",
+                "B. 附件需要额外授权",
+                "C. 附件效力低于正文",
+                "D. 附件可随时单方面修改"
+              ],
+              "answer": "A",
+              "explanation": "\u2018with the same force and effect as if set forth in full in the body hereof\u2019 明确附件效力等同正文。"
+            },
+            {
+              "prompt": "下列哪项最准确地描述了 boilerplate clauses 的功能？",
+              "options": [
+                "A. 规定合同当事人的核心交易义务",
+                "B. 叙述合同签订的背景和目的",
+                "C. 定义合同中使用的专有术语",
+                "D. 规定适用于各类合同的标准化通用条款"
+              ],
+              "answer": "D",
+              "explanation": "boilerplate 特指合同末尾的标准化通用条款，如管辖法律、通知、可分割性等。"
+            },
+            {
+              "prompt": "英文商务合同的标准结构排列顺序正确的是：",
+              "options": [
+                "A. Title → Definitions → Preamble → <span class=\"term\" data-def=\"实质条款\">Operative Provisions</span> → Boilerplate",
+                "B. Title → Preamble → Recitals → Definitions → <span class=\"term\" data-def=\"实质条款\">Operative Provisions</span> → Boilerplate → Schedules",
+                "C. Recitals → Title → Definitions → Boilerplate → Schedules",
+                "D. Preamble → Title → <span class=\"term\" data-def=\"实质条款\">Operative Provisions</span> → Recitals → Definitions"
+              ],
+              "answer": "B",
+              "explanation": "合同标准结构依次为：标题 → 序文 → 鉴于条款 → 定义 → 实质性条款 → 通用条款 → 附件。"
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习D：英译中翻译",
+          "instruction": "将以下合同条款翻译为中文，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "The operative provisions of this Agreement shall become effective upon execution by both parties and shall remain in full force and effect until terminated in accordance with Article 8.",
+              "reference": "本协议的实质性条款自双方签署后生效，并持续完全有效直至依据第八条终止。",
+              "rubric": [
+                {"en": "operative provisions", "ideal": "实质性条款", "accept": ["正文条款"], "wrong": ["操作条款"], "note": "operative provisions 特指合同核心权利义务条款"},
+                {"en": "upon execution", "ideal": "自签署后", "accept": ["签署时"], "wrong": ["执行后"], "note": "在合同语境中 execution = 签署"},
+                {"en": "in full force and effect", "ideal": "完全有效", "accept": ["持续有效"], "wrong": ["全面生效"], "note": "固定搭配，表示条款完整有效"},
+                {"en": "in accordance with", "ideal": "依据/根据", "accept": ["按照"], "wrong": ["同意"], "note": "合同中表示依照某条款规定"}
+              ]
+            },
+            {
+              "source": "In the event of any conflict between the provisions of the body of this Agreement and the schedules attached hereto, the provisions of the body of this Agreement shall prevail.",
+              "reference": "如本协议正文条款与所附附件之间存在任何冲突，以本协议正文条款为准。",
+              "rubric": [
+                {"en": "in the event of", "ideal": "如发生/若出现", "accept": ["在…情况下"], "wrong": ["在…事件中"], "note": "合同中表示条件假设的固定表述"},
+                {"en": "any conflict between", "ideal": "…之间的任何冲突", "accept": ["任何不一致"], "wrong": ["战斗"], "note": "conflict 在合同中表示条款间的矛盾/不一致"},
+                {"en": "body of this Agreement", "ideal": "本协议正文", "accept": ["协议主体"], "wrong": ["协议身体"], "note": "body = 合同的主体/正文部分"},
+                {"en": "shall prevail", "ideal": "以…为准/优先适用", "accept": ["优先"], "wrong": ["流行"], "note": "prevail 在合同中表示效力优先"}
+              ]
+            },
+            {
+              "source": "Each article, clause, and provision of this Agreement is severable, and if any part is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.",
+              "reference": "本协议的每一条、款及规定均可分割，若任何部分被认定为无效或不可执行，其余条款应继续完全有效。",
+              "rubric": [
+                {"en": "severable", "ideal": "可分割的", "accept": ["可分离"], "wrong": ["分开的"], "note": "severability 是合同通用条款核心概念"},
+                {"en": "held to be invalid", "ideal": "被认定为无效", "accept": ["被判定无效"], "wrong": ["保持无效"], "note": "held = 裁定/认定（法律术语）"},
+                {"en": "unenforceable", "ideal": "不可执行的", "accept": ["无法强制执行"], "wrong": ["不能使用"], "note": "unenforceable = 法律上无法强制履行"},
+                {"en": "remaining provisions", "ideal": "其余条款", "accept": ["剩余条款"], "wrong": ["留下的规定"], "note": "remaining provisions 表示被保留有效的条款"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "5. 翻译练习",
+      "groups": [
+        {
+          "style": "translation",
+          "title": "翻译练习：英译中",
+          "instruction": "将以下合同条款翻译为中文，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "This Agreement is entered into as of March 1, 2026, by and between ABC Corporation, a corporation organized and existing under the laws of the State of Delaware (hereinafter referred to as the 'Buyer'), and XYZ Trading Company, a corporation organized and existing under the laws of the People's Republic of China (hereinafter referred to as the 'Seller').",
+              "reference": "本协议由特拉华州根据法律组织设立的ABC公司（以下简称\u201c买方\u201d）与中华人民共和国根据法律组织设立的XYZ贸易公司（以下简称\u201c卖方\u201d）于2026年3月1日订立。",
+              "rubric": [
+                {"en": "entered into as of", "ideal": "于...订立", "accept": ["于...生效"], "wrong": ["进入"], "note": "entered into = 订立/缔结，as of 表示时间起点"},
+                {"en": "by and between", "ideal": "由...和...", "accept": ["由...及..."], "wrong": ["在...之间"], "note": "by and between 是合同序文的固定表述，引出当事人"},
+                {"en": "corporation organized and existing under the laws", "ideal": "根据法律组织设立的公司", "accept": ["依据法律成立的公司"], "wrong": ["按照法律建立"], "note": "该短语描述公司的法律地位与注册管辖区"},
+                {"en": "hereinafter referred to as", "ideal": "以下简称", "accept": ["以下记为"], "wrong": ["之后称为"], "note": "hereinafter = 下文；referred to as = 称为，合同中用于首次定义当事人简称"}
+              ]
+            },
+            {
+              "source": "The preamble of this Agreement identifies the parties and sets forth the date of execution. All capitalized terms used herein shall have the meanings ascribed to them in Article 1, unless otherwise defined herein.",
+              "reference": "本协议的序文载明当事人及签署日期。本协议中使用的所有大写术语应具有第一条中赋予的含义，除非本协议另有定义。",
+              "rubric": [
+                {"en": "preamble", "ideal": "序文", "accept": ["前言"], "wrong": ["导言"], "note": "preamble 特指合同开头部分，含当事人、日期等基本信息"},
+                {"en": "identifies", "ideal": "载明/规定", "accept": ["确认"], "wrong": ["找到"], "note": "identify 在合同中表示正式规定或确定"},
+                {"en": "ascribed to", "ideal": "赋予", "accept": ["分配给"], "wrong": ["描述"], "note": "ascribe to = 归属于/赋予，用于定义术语含义"},
+                {"en": "unless otherwise defined herein", "ideal": "除非...另有定义", "accept": ["如无其他定义"], "wrong": ["如果没有定义"], "note": "否则条款的完整表述，用于术语定义"}
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习：中译英",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "本协议由下述双方根据各自的法律权限于2026年3月1日订立。以下各方统称为\u201c当事人\u201d。",
+              "reference": "This Agreement is entered into as of March 1, 2026, by and between the parties hereinafter set forth, each acting within its lawful authority. The parties hereto are collectively referred to as the 'Parties'.",
+              "rubric": [
+                {"en": "根据各自的法律权限", "ideal": "acting within its lawful authority", "accept": ["pursuant to their legal authority", "in accordance with their legal capacity"], "wrong": ["according to law"], "note": "lawful authority 表示法律授权或法律能力"},
+                {"en": "下述双方", "ideal": "the parties hereinafter set forth", "accept": ["the following parties"], "wrong": ["the parties below"], "note": "hereinafter set forth 是合同中的固定表述"},
+                {"en": "统称为", "ideal": "are collectively referred to as", "accept": ["shall be collectively called"], "wrong": ["are called together"], "note": "collectively = 统称；referred to as = 称为"},
+                {"en": "当事人", "ideal": "the Parties", "accept": ["the parties to this Agreement"], "wrong": ["participants"], "note": "Parties (大写) 是合同中对签署方的正式称呼"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "6. 今日小结",
+      "points": [
+        "<strong>合同七段式结构</strong>：Title → Preamble → Recitals → Definitions → <span class=\"term\" data-def=\"实质条款\">Operative Provisions</span> → Boilerplate → Schedules，这是英文商务合同的标准骨架。",
+        "<strong>三个\u201c条款\u201d辨析</strong>：article（大章节编号）＞ clause（具体条文）≈ provision（最通用的正式用语）。",
+        "<strong>amendment 与 execution</strong>：amendment 指对已签合同的修订变更；execution 在合同语境中特指正式签署，而非日常语义的\u201c执行\u201d。",
+        "<strong>boilerplate 不等于不重要</strong>：虽是\u201c标准条款\u201d，但管辖法律、争议解决、可分割性等条款直接影响合同的可执行性，实务中须逐条审查。",
+        "<strong>schedules 的法律地位</strong>：附件经\u201cincorporated herein\u201d条款纳入后，与合同正文具有同等效力。"
+      ]
+    }
+  ]
+}

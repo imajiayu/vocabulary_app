@@ -1,0 +1,487 @@
+{
+  "title": "第1周 第3天 — 阴性名词：-а/-я 结尾规则",
+  "objective": "<strong>学习目标：</strong>深入掌握阴性名词的两种词尾（-а 和 -я）的分布规律，理解 -а 结尾和 -я 结尾的各种形态变体，并通过大量阳性与阴性的对比练习巩固性别判断能力。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "回顾",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "昨天我们学习了乌克兰语名词性别判断的三条核心规则，快速复习一下："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>辅音结尾    → 阳性 (він)    例：стіл, парк, магазин\n-а / -я 结尾 → 阴性 (вона)  例：школа, кухня, вулиця\n-о / -е 结尾 → 中性 (воно)  例：вікно, море, село</pre>"
+        },
+        {
+          "type": "p",
+          "html": "昨天学的重点词汇，你还记得它们的性别吗？"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>（桌子）— 辅音结尾 → 阳性",
+            "<span class=\"uk-word\" data-def=\"学校\">школа</span>（学校）— -а 结尾 → 阴性",
+            "<span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）— -о 结尾 → 中性",
+            "<span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）— -я 结尾 → 阴性",
+            "<span class=\"uk-word\" data-def=\"海\">море</span>（海）— -е 结尾 → 中性"
+          ]
+        },
+        {
+          "type": "p",
+          "html": "今天，我们要<strong>深入研究阴性名词</strong>，搞清楚 -а 和 -я 这两种结尾到底有什么规律。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "阴性名词的两大阵营：-а 结尾 vs -я 结尾"
+        },
+        {
+          "type": "p",
+          "html": "乌克兰语阴性名词绝大多数以 <strong>-а</strong> 或 <strong>-я</strong> 结尾，但它们并不是随机分布的，而是有规律可循的。让我们逐一来看。"
+        },
+        {
+          "type": "h4",
+          "text": "第一类：-а 结尾的阴性名词（最常见）"
+        },
+        {
+          "type": "p",
+          "html": "以 <strong>-а</strong> 结尾是阴性名词最典型的形态。这类词的倒数第二个字母通常是<strong>硬辅音</strong>。常见的词尾组合有："
+        },
+        {
+          "type": "table",
+          "headers": ["词尾组合", "例词", "中文"],
+          "firstColWord": false,
+          "rows": [
+            ["-ка", "<span class=\"uk-word\" data-def=\"星星\">зірка</span>", "星星"],
+            ["-ка", "<span class=\"uk-word\" data-def=\"药店\">аптека</span>", "药店"],
+            ["-ка", "<span class=\"uk-word\" data-def=\"页面\">сторінка</span>", "页面"],
+            ["-та", "<span class=\"uk-word\" data-def=\"地图\">карта</span>", "地图"],
+            ["-та", "<span class=\"uk-word\" data-def=\"工作\">робота</span>", "工作"],
+            ["-га", "<span class=\"uk-word\" data-def=\"路\">дорога</span>", "路/道路"],
+            ["-на", "<span class=\"uk-word\" data-def=\"汽车\">машина</span>", "汽车"],
+            ["-ра", "<span class=\"uk-word\" data-def=\"公寓\">квартира</span>", "公寓"],
+            ["-ща", "<span class=\"uk-word\" data-def=\"广场\">площа</span>", "广场"],
+            ["-ва", "<span class=\"uk-word\" data-def=\"事情\">справа</span>", "事情"]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>记忆口诀：</strong>硬辅音 + а = 最标准的阴性名词。这就像中文里\"花\"、\"家\"、\"大\"押同一个韵母一样自然。看到 -ка、-та、-на、-ра、-га 这些结尾，基本可以放心判断为阴性。"
+        },
+        {
+          "type": "h4",
+          "text": "第二类：-я 结尾的阴性名词"
+        },
+        {
+          "type": "p",
+          "html": "以 <strong>-я</strong> 结尾的阴性名词也非常多。-я 通常出现在<strong>软辅音</strong>或特定辅音组合之后。常见的词尾组合有："
+        },
+        {
+          "type": "table",
+          "headers": ["词尾组合", "例词", "中文", "说明"],
+          "firstColWord": false,
+          "rows": [
+            ["-ня", "<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>", "歌曲", "н 软化"],
+            ["-ня", "<span class=\"uk-word\" data-def=\"医院\">лікарня</span>", "医院", "н 软化"],
+            ["-ня", "<span class=\"uk-word\" data-def=\"锻造铺\">кузня</span>", "铁匠铺", "н 软化"],
+            ["-ня", "<span class=\"uk-word\" data-def=\"面包店\">пекарня</span>", "面包店", "н 软化"],
+            ["-ця", "<span class=\"uk-word\" data-def=\"街道\">вулиця</span>", "街道", "ц 软化"],
+            ["-ця", "<span class=\"uk-word\" data-def=\"车站\">станція</span>", "车站", "ц 软化"],
+            ["-ія", "<span class=\"uk-word\" data-def=\"历史\">історія</span>", "历史", "外来词常见"],
+            ["-ія", "<span class=\"uk-word\" data-def=\"职业\">професія</span>", "职业", "外来词常见"],
+            ["-ія", "<span class=\"uk-word\" data-def=\"线路\">лінія</span>", "线", "外来词常见"],
+            ["-ія", "<span class=\"uk-word\" data-def=\"希望\">надія</span>", "希望", "д 软化"],
+            ["-ія", "<span class=\"uk-word\" data-def=\"梦想\">мрія</span>", "梦想", "р 软化"]
+          ]
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p><strong>-ня 词尾总结：</strong>很多表示\"场所\"的阴性名词以 -ня 结尾，比如：</p><ul><li><span class=\"uk-word\" data-def=\"医院\">лікарня</span>（医院）— 治病的地方</li><li><span class=\"uk-word\" data-def=\"面包店\">пекарня</span>（面包店）— 烤面包的地方</li><li><span class=\"uk-word\" data-def=\"锻造铺\">кузня</span>（铁匠铺）— 打铁的地方</li><li><span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）— 做饭的地方（第1天学过）</li></ul><p>记住：<strong>-ня 结尾 = 某种\"场所/工坊\"</strong>，这个规律能帮你快速记忆！</p>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p><strong>-ія 词尾总结：</strong>很多源自拉丁语/希腊语的外来词以 -ія 结尾，比如：</p><ul><li><span class=\"uk-word\" data-def=\"历史\">історія</span>（历史）— 对应英语 history</li><li><span class=\"uk-word\" data-def=\"职业\">професія</span>（职业）— 对应英语 profession</li><li><span class=\"uk-word\" data-def=\"车站\">станція</span>（车站）— 对应英语 station</li><li><span class=\"uk-word\" data-def=\"线路\">лінія</span>（线）— 对应英语 line</li></ul><p>如果你认识这些英语单词，就能轻松记住乌克兰语对应词！它们都是<strong>阴性</strong>。</p>"
+        },
+        {
+          "type": "h3",
+          "text": "-а 和 -я 的本质区别"
+        },
+        {
+          "type": "p",
+          "html": "为什么同样是阴性名词，有的用 -а，有的用 -я？关键在于<strong>前面那个辅音是硬还是软</strong>："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<pre>硬辅音 + а → школа, робота, дорога, зірка, карта\n软辅音 + я → пісня, кухня, лікарня, вулиця, надія</pre>"
+        },
+        {
+          "type": "p",
+          "html": "你不需要现在完全搞清楚哪些辅音是\"硬\"哪些是\"软\"——只需要记住<strong>两种词尾都指向阴性</strong>就够了。随着词汇量增加，你会自然感受到这个规律。"
+        },
+        {
+          "type": "h3",
+          "text": "容易混淆的情况：-я 结尾，到底是阴性还是中性？"
+        },
+        {
+          "type": "p",
+          "html": "昨天我们学过，有些中性名词也以 -я 结尾，比如 <span class=\"uk-word\" data-def=\"作业\">завдання</span>（作业）和 <span class=\"uk-word\" data-def=\"生命\">життя</span>（生活）。怎么区分？"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p><strong>关键区分法：</strong></p><pre>-ння / -ття / -ззя 结尾 → 中性   例：завдання, питання, життя\n其他 -я 结尾          → 阴性   例：пісня, надія, кухня, мрія</pre>"
+        },
+        {
+          "type": "note",
+          "html": "<strong>简单理解：</strong>中性的 -я 结尾词通常是\"双辅音 + я\"（如 -нн+я、-тт+я），看起来更\"重\"。而阴性的 -я 结尾词通常是\"单辅音 + я\"（如 -н+я、-ц+я、-і+я），看起来更\"轻\"。"
+        },
+        {
+          "type": "h3",
+          "text": "预告：-ь 结尾的阴性名词"
+        },
+        {
+          "type": "p",
+          "html": "今天的新词汇里有两个特殊的词："
+        },
+        {
+          "type": "ul",
+          "items": [
+            "<span class=\"uk-word\" data-def=\"回答\">відповідь</span>（回答）— 以 -ь 结尾，但它是<strong>阴性</strong>",
+            "<span class=\"uk-word\" data-def=\"旅行\">подорож</span>（旅行）— 以 -ж 结尾，也是<strong>阴性</strong>"
+          ]
+        },
+        {
+          "type": "p",
+          "html": "以软音符号 -ь 结尾的名词可能是阳性也可能是阴性，这是一个需要特别记忆的难点。第4天会专门讲解这个话题，今天先记住这两个词是阴性就好。"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>中文母语者常犯错误：</strong><ol><li><strong>把 -ія 结尾的词误判为中性</strong>：<span class=\"uk-word\" data-def=\"历史\">історія</span>、<span class=\"uk-word\" data-def=\"职业\">професія</span> 虽然看起来以 -я 结尾，但它们是 -ія 结尾，不是 -ння/-ття，所以是<strong>阴性</strong>。</li><li><strong>忘记 -ня 结尾也是阴性</strong>：<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>、<span class=\"uk-word\" data-def=\"医院\">лікарня</span> 以 -ня 结尾，是阴性，不要和 -ння（中性）搞混。注意 -ня 只有一个 н，-ння 有两个 н。</li><li><strong>把 -ка/-та 结尾的词性别搞错</strong>：<span class=\"uk-word\" data-def=\"车站\">зупинка</span>、<span class=\"uk-word\" data-def=\"错误\">помилка</span>、<span class=\"uk-word\" data-def=\"假期\">відпустка</span> 都以 -ка 结尾 → 阴性。不要因为词比较长就犹豫。</li></ol>"
+        },
+        {
+          "type": "h3",
+          "text": "阳性 vs 阴性速查对比"
+        },
+        {
+          "type": "p",
+          "html": "把第1天的阳性词和今天的阴性词放在一起对比，感受一下词尾的区别："
+        },
+        {
+          "type": "table",
+          "headers": ["阳性（辅音结尾）", "中文", "阴性（-а/-я 结尾）", "中文"],
+          "firstColWord": true,
+          "rows": [
+            ["магазин", "商店", "<span class=\"uk-word\" data-def=\"药店\">аптека</span>", "药店"],
+            ["ресторан", "餐厅", "<span class=\"uk-word\" data-def=\"面包店\">пекарня</span>", "面包店"],
+            ["парк", "公园", "<span class=\"uk-word\" data-def=\"广场\">площа</span>", "广场"],
+            ["потяг", "火车", "<span class=\"uk-word\" data-def=\"车站\">станція</span>", "车站"],
+            ["урок", "课程", "<span class=\"uk-word\" data-def=\"历史\">історія</span>", "历史"]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>对比记忆法：</strong>阳性名词像是\"话到嘴边戛然而止\"（辅音收尾，声音偏短促），阴性名词像是\"余音绕梁\"（-а/-я 收尾，声音偏柔和悠长）。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "2. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：判断名词性别 — 今天的新词（10题）",
+          "instruction": "判断以下今天学的新阴性名词的性别：",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"星星\">зірка</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ка）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ня）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"图书馆\">бібліотека</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ка）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"历史\">історія</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ія）结尾 → 阴性（不是中性的 -ння/-ття）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"医院\">лікарня</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ня）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"广场\">площа</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ща）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"车站\">станція</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ія）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"错误\">помилка</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ка）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"职业\">професія</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ія）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"假期\">відпустка</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ка）结尾 → 阴性"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：阳性 vs 阴性对比判断（10题）",
+          "instruction": "混合了第1天的阳性词和今天的阴性词，请判断性别：",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"商店\">магазин</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "以辅音 -н 结尾 → 阳性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"路\">дорога</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-га）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"火车\">потяг</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "以辅音 -г 结尾 → 阳性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"希望\">надія</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ія）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"餐厅\">ресторан</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "以辅音 -н 结尾 → 阳性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"药店\">аптека</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ка）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"课\">урок</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "以辅音 -к 结尾 → 阳性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"车站\">зупинка</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "以 -а（-ка）结尾 → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"电脑\">комп'ютер</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阳性",
+              "explanation": "以辅音 -р 结尾 → 阳性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"面包店\">пекарня</span>",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "以 -я（-ня）结尾 → 阴性"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：选择正确的代词 він/вона/воно（5题）",
+          "instruction": "根据名词的性别，选择对应的代词：",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"路\">Дорога</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "дорога 以 -а 结尾 → 阴性 → вона"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"公园\">Парк</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">він</span>",
+              "explanation": "парк 以辅音 -к 结尾 → 阳性 → він"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"歌曲\">Пісня</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "пісня 以 -я（-ня）结尾 → 阴性 → вона"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">Вікно</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">воно</span>",
+              "explanation": "вікно 以 -о 结尾 → 中性 → воно"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">Церква</span> — це _____.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "<span class=\"uk-word\">вона</span>",
+              "explanation": "церква 以 -а 结尾 → 阴性 → вона"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：选出不同类的词（5题）",
+          "instruction": "每组有一个词的性别与其他不同，请找出来：",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"路\">дорога</span>, <span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"药店\">аптека</span>, <span class=\"uk-word\" data-def=\"广场\">площа</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"路\">дорога</span>", "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>", "<span class=\"uk-word\" data-def=\"药店\">аптека</span>", "<span class=\"uk-word\" data-def=\"广场\">площа</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>",
+              "explanation": "стіл 是阳性（辅音结尾），其余三个都是阴性（-а/-я 结尾）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>, <span class=\"uk-word\" data-def=\"医院\">лікарня</span>, <span class=\"uk-word\" data-def=\"村庄\">село</span>, <span class=\"uk-word\" data-def=\"厨房\">кухня</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>", "<span class=\"uk-word\" data-def=\"医院\">лікарня</span>", "<span class=\"uk-word\" data-def=\"村庄\">село</span>", "<span class=\"uk-word\" data-def=\"厨房\">кухня</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"村庄\">село</span>",
+              "explanation": "село 是中性（-о 结尾），其余三个都是阴性（-я 结尾）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"星星\">зірка</span>, <span class=\"uk-word\" data-def=\"火车\">потяг</span>, <span class=\"uk-word\" data-def=\"错误\">помилка</span>, <span class=\"uk-word\" data-def=\"历史\">історія</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"星星\">зірка</span>", "<span class=\"uk-word\" data-def=\"火车\">потяг</span>", "<span class=\"uk-word\" data-def=\"错误\">помилка</span>", "<span class=\"uk-word\" data-def=\"历史\">історія</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"火车\">потяг</span>",
+              "explanation": "потяг 是阳性（辅音 -г 结尾），其余三个都是阴性（-ка/-ія 结尾）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"车站\">станція</span>, <span class=\"uk-word\" data-def=\"海\">море</span>, <span class=\"uk-word\" data-def=\"职业\">професія</span>, <span class=\"uk-word\" data-def=\"页面\">сторінка</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"车站\">станція</span>", "<span class=\"uk-word\" data-def=\"海\">море</span>", "<span class=\"uk-word\" data-def=\"职业\">професія</span>", "<span class=\"uk-word\" data-def=\"页面\">сторінка</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"海\">море</span>",
+              "explanation": "море 是中性（-е 结尾），其余三个都是阴性（-ія/-ка 结尾）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"地图\">карта</span>, <span class=\"uk-word\" data-def=\"公交车\">автобус</span>, <span class=\"uk-word\" data-def=\"梦想\">мрія</span>, <span class=\"uk-word\" data-def=\"希望\">надія</span>",
+              "options": ["<span class=\"uk-word\" data-def=\"地图\">карта</span>", "<span class=\"uk-word\" data-def=\"公交车\">автобус</span>", "<span class=\"uk-word\" data-def=\"梦想\">мрія</span>", "<span class=\"uk-word\" data-def=\"希望\">надія</span>"],
+              "answer": "<span class=\"uk-word\" data-def=\"公交车\">автобус</span>",
+              "explanation": "автобус 是阳性（辅音 -с 结尾），其余三个都是阴性"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：阴性 -а vs -я 词尾分类（5题）",
+          "instruction": "以下都是阴性名词，请判断它的词尾是 -а 还是 -я：",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>（歌曲）",
+              "options": ["-а 结尾", "-я 结尾"],
+              "answer": "-я 结尾",
+              "explanation": "пісня 以 -ня 结尾 → -я 词尾"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"路\">дорога</span>（路）",
+              "options": ["-а 结尾", "-я 结尾"],
+              "answer": "-а 结尾",
+              "explanation": "дорога 以 -га 结尾 → -а 词尾"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"历史\">історія</span>（历史）",
+              "options": ["-а 结尾", "-я 结尾"],
+              "answer": "-я 结尾",
+              "explanation": "історія 以 -ія 结尾 → -я 词尾"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"车站\">зупинка</span>（站）",
+              "options": ["-а 结尾", "-я 结尾"],
+              "answer": "-а 结尾",
+              "explanation": "зупинка 以 -ка 结尾 → -а 词尾"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"梦想\">мрія</span>（梦想）",
+              "options": ["-а 结尾", "-я 结尾"],
+              "answer": "-я 结尾",
+              "explanation": "мрія 以 -ія 结尾 → -я 词尾"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习F：阴性 vs 中性 — -я 结尾辨析（5题）",
+          "instruction": "以下名词都以 -я 结尾，请判断它们是阴性还是中性：",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"希望\">надія</span>（希望）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "надія 以 -ія 结尾（单辅音 + я） → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"作业\">завдання</span>（作业）",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "завдання 以 -ння 结尾（双辅音 нн + я） → 中性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "кухня 以 -ня 结尾（单辅音 н + я） → 阴性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"生命\">життя</span>（生活）",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "життя 以 -ття 结尾（双辅音 тт + я） → 中性"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"医院\">лікарня</span>（医院）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "лікарня 以 -ня 结尾（单辅音 н + я） → 阴性"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "3. 今日小结",
+      "html": "<ol><li><strong>阴性名词有两种典型词尾</strong>：-а（硬辅音后）和 -я（软辅音后），两者都指向阴性</li><li><strong>-а 结尾常见形态</strong>：-ка（<span class=\"uk-word\" data-def=\"星星\">зірка</span>, <span class=\"uk-word\" data-def=\"药店\">аптека</span>）、-та（<span class=\"uk-word\" data-def=\"地图\">карта</span>）、-на（<span class=\"uk-word\" data-def=\"汽车\">машина</span>）、-га（<span class=\"uk-word\" data-def=\"路\">дорога</span>）、-ща（<span class=\"uk-word\" data-def=\"广场\">площа</span>）、-ва（<span class=\"uk-word\" data-def=\"事情\">справа</span>）</li><li><strong>-я 结尾常见形态</strong>：-ня（<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>, <span class=\"uk-word\" data-def=\"医院\">лікарня</span>, <span class=\"uk-word\" data-def=\"面包店\">пекарня</span>）、-ця（<span class=\"uk-word\" data-def=\"街道\">вулиця</span>, <span class=\"uk-word\" data-def=\"车站\">станція</span>）、-ія（<span class=\"uk-word\" data-def=\"历史\">історія</span>, <span class=\"uk-word\" data-def=\"职业\">професія</span>, <span class=\"uk-word\" data-def=\"希望\">надія</span>, <span class=\"uk-word\" data-def=\"梦想\">мрія</span>）</li><li><strong>-ня 场所规律</strong>：-ня 结尾常表示\"场所/工坊\"（<span class=\"uk-word\" data-def=\"医院\">лікарня</span>, <span class=\"uk-word\" data-def=\"面包店\">пекарня</span>, <span class=\"uk-word\" data-def=\"锻造铺\">кузня</span>, <span class=\"uk-word\" data-def=\"厨房\">кухня</span>）</li><li><strong>-ія 外来词规律</strong>：源自拉丁语/希腊语的外来词多以 -ія 结尾（<span class=\"uk-word\" data-def=\"历史\">історія</span>, <span class=\"uk-word\" data-def=\"职业\">професія</span>, <span class=\"uk-word\" data-def=\"车站\">станція</span>, <span class=\"uk-word\" data-def=\"线路\">лінія</span>）</li><li><strong>区分阴性和中性的 -я</strong>：-ння/-ття → 中性；其他 -я → 阴性</li><li><strong>下节预告</strong>：明天将深入学习中性名词的 -о/-е/-я 结尾规则，并做三种性别的综合辨析练习</li></ol>"
+    }
+  ]
+}

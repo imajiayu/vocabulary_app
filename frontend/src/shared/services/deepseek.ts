@@ -15,6 +15,8 @@ export interface ChatMessage {
 export interface DeepSeekOptions {
   temperature?: number
   maxTokens?: number
+  /** 强制返回 JSON 对象（非流式专用） */
+  jsonMode?: boolean
 }
 
 /**
@@ -105,7 +107,8 @@ export async function callDeepSeek(
       messages,
       temperature: options.temperature ?? 1.0,
       stream: false,
-      ...(options.maxTokens ? { max_tokens: options.maxTokens } : {})
+      ...(options.maxTokens ? { max_tokens: options.maxTokens } : {}),
+      ...(options.jsonMode ? { response_format: { type: 'json_object' } } : {})
     })
   })
 

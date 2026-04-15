@@ -1,0 +1,290 @@
+{
+  "title": "第2周 第5天 — 名词复数：中性名词复数 (-а/-я)",
+  "objective": "<strong>学习目标：</strong>掌握中性名词的复数变化规则（-о→-а、-е→-я、-ння/-ття 同形、外来词不变），学会15个新中性名词，并能综合运用三种性别的复数规则。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 回顾：阳性与阴性名词复数",
+      "blocks": [
+        {
+          "type": "grammar-box",
+          "html": "<h3>前两节课要点回顾</h3><table><thead><tr><th>性别</th><th>词尾</th><th>复数规则</th><th>示例</th></tr></thead><tbody><tr><td>阳性</td><td>硬辅音</td><td>加 -и</td><td><span class=\"uk-word\" data-def=\"兄弟\">брат</span> → <span class=\"uk-word\">брати</span></td></tr><tr><td>阳性</td><td>软辅音/嘶嘶音</td><td>加 -і</td><td><span class=\"uk-word\" data-def=\"铅笔\">олівець</span> → <span class=\"uk-word\">олівці</span></td></tr><tr><td>阴性</td><td>-а</td><td>去-а 加-и</td><td><span class=\"uk-word\" data-def=\"学校\">школа</span> → <span class=\"uk-word\">школи</span></td></tr><tr><td>阴性</td><td>-я</td><td>去-я 加-і</td><td><span class=\"uk-word\" data-def=\"厨房\">кухня</span> → <span class=\"uk-word\">кухні</span></td></tr><tr><td>阴性</td><td>-ь</td><td>去-ь 加-і</td><td><span class=\"uk-word\" data-def=\"喜悦\">радість</span> → <span class=\"uk-word\">радості</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>回忆口诀：</strong>阳性硬辅加-и、软辅加-і；阴性硬-а配-и、软-я配-і、-ь配-і。核心规律就是<strong>硬配-и，软配-і</strong>。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 语法讲解：中性名词复数规则",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "今天是名词复数系列的最后一课！中性名词的复数变化与阳性、阴性有明显不同。中性名词复数的标志性词尾是 <strong>-а</strong> 和 <strong>-я</strong>（而不是 -и/-і）。"
+        },
+        {
+          "type": "note",
+          "html": "<strong>有趣的对比：</strong>阴性名词以 -а/-я 结尾，复数变成 -и/-і；中性名词以 -о/-е 结尾，复数反而变成 -а/-я。可以说，<strong>中性名词的复数词尾看起来像阴性名词的单数词尾</strong>！不要搞混了。"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>规则1：-о 结尾 → 去掉 -о，加 -а</h3><p>这是最常见的中性复数规则。以 -о 结尾的中性名词，复数时把 -о 换成 -а。</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td class=\"uk-word\" data-def=\"窗户\">вікно</td><td class=\"uk-word\">вікна</td><td>窗户</td></tr><tr><td class=\"uk-word\" data-def=\"单词\">слово</td><td class=\"uk-word\">слова</td><td>单词</td></tr><tr><td class=\"uk-word\" data-def=\"湖\">озеро</td><td class=\"uk-word\">озера</td><td>湖</td></tr><tr><td class=\"uk-word\" data-def=\"村庄\">село</td><td class=\"uk-word\">села</td><td>村庄</td></tr><tr><td class=\"uk-word\" data-def=\"镜子\">дзеркало</td><td class=\"uk-word\">дзеркала</td><td>镜子</td></tr></tbody></table><p><strong>记忆技巧：</strong>中性名词 -о → -а，就是把最后一个字母\"倒过来\"：о 是圆的，а 是尖的。圆变尖！</p>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>注意不可数名词！</strong><p>有些以 -о 结尾的中性名词是<strong>不可数名词</strong>，没有复数形式：</p><ul><li><span class=\"uk-word\" data-def=\"牛奶\">молоко</span>（牛奶）— 不可数，无复数</li><li><span class=\"uk-word\" data-def=\"油/黄油\">масло</span>（黄油/油）— 通常不可数</li></ul><p>这和中文/英文一样，\"牛奶\"\"黄油\"本身就不说\"很多个牛奶\"。</p>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>规则2：-е 结尾 → 去掉 -е，加 -я</h3><p>以 -е 结尾的中性名词，复数时把 -е 换成 -я。</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td class=\"uk-word\" data-def=\"海\">море</td><td class=\"uk-word\">моря</td><td>海</td></tr><tr><td class=\"uk-word\" data-def=\"田野\">поле</td><td class=\"uk-word\">поля</td><td>田野</td></tr><tr><td class=\"uk-word\" data-def=\"心脏\">серце</td><td class=\"uk-word\">серця</td><td>心脏</td></tr><tr><td class=\"uk-word\" data-def=\"地方\">місце</td><td class=\"uk-word\">місця</td><td>地方</td></tr><tr><td class=\"uk-word\" data-def=\"太阳\">сонце</td><td class=\"uk-word\">сонця</td><td>太阳</td></tr></tbody></table><p><strong>记忆技巧：</strong>-е → -я，和规则1是配对的：硬 -о 配硬 -а，软 -е 配软 -я。还是<strong>硬配硬，软配软</strong>的规律！</p>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>中性复数的核心规律：</strong><ul><li>硬元音 -о → 硬元音 -а：<span class=\"uk-word\" data-def=\"窗户\">вікно</span> → <span class=\"uk-word\">вікна</span></li><li>软元音 -е → 软元音 -я：<span class=\"uk-word\" data-def=\"海\">море</span> → <span class=\"uk-word\">моря</span></li></ul><p>这和之前学的\"硬配-и、软配-і\"是同一个大规律的延伸。乌克兰语里，<strong>硬软配对</strong>无处不在！</p>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>规则3：-ння / -ття 结尾 → 复数形式与单数相同！</h3><p>以 <strong>-ння</strong> 或 <strong>-ття</strong> 结尾的中性名词，复数形式和单数<strong>完全一样</strong>，需要靠语境来区分。</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td class=\"uk-word\" data-def=\"作业\">завдання</td><td class=\"uk-word\" data-def=\"作业\">завдання</td><td>作业/任务</td></tr><tr><td class=\"uk-word\" data-def=\"问题\">питання</td><td class=\"uk-word\" data-def=\"问题\">питання</td><td>问题</td></tr><tr><td class=\"uk-word\" data-def=\"知识\">знання</td><td class=\"uk-word\" data-def=\"知识\">знання</td><td>知识</td></tr><tr><td class=\"uk-word\" data-def=\"生命\">життя</td><td class=\"uk-word\" data-def=\"生命\">життя</td><td>生命</td></tr><tr><td class=\"uk-word\" data-def=\"感觉\">почуття</td><td class=\"uk-word\" data-def=\"感觉\">почуття</td><td>感觉</td></tr></tbody></table><p><strong>记忆技巧：</strong>-ння/-ття 结尾的词\"太长了，懒得变\"。单复数同形，靠上下文判断。这类词在中文里也类似 — \"一个问题\"和\"很多问题\"，\"问题\"这个词本身没变。</p>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>规则4：不变化的外来词 → 复数也不变！</h3><p>我们在第1周学过的不变化外来词（中性），它们的复数和单数<strong>完全一样</strong>。</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td class=\"uk-word\" data-def=\"咖啡馆\">кафе</td><td class=\"uk-word\" data-def=\"咖啡馆\">кафе</td><td>咖啡馆</td></tr><tr><td class=\"uk-word\" data-def=\"地铁\">метро</td><td class=\"uk-word\" data-def=\"地铁\">метро</td><td>地铁</td></tr><tr><td class=\"uk-word\" data-def=\"出租车\">таксі</td><td class=\"uk-word\" data-def=\"出租车\">таксі</td><td>出租车</td></tr><tr><td class=\"uk-word\" data-def=\"电影\">кіно</td><td class=\"uk-word\" data-def=\"电影\">кіно</td><td>电影</td></tr><tr><td class=\"uk-word\" data-def=\"菜单\">меню</td><td class=\"uk-word\" data-def=\"菜单\">меню</td><td>菜单</td></tr><tr><td class=\"uk-word\" data-def=\"广播\">радіо</td><td class=\"uk-word\" data-def=\"广播\">радіо</td><td>广播</td></tr></tbody></table><p><strong>记忆技巧：</strong>外来词\"入乡不随俗\"，来到乌克兰语也不肯变化。单数复数都一样，全靠语境。</p>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>中性复数规则总结</h3><table><thead><tr><th>词尾</th><th>变化方式</th><th>示例</th></tr></thead><tbody><tr><td>-о</td><td>去 -о 加 -а</td><td><span class=\"uk-word\" data-def=\"窗户\">вікно</span> → <span class=\"uk-word\">вікна</span></td></tr><tr><td>-е</td><td>去 -е 加 -я</td><td><span class=\"uk-word\" data-def=\"海\">море</span> → <span class=\"uk-word\">моря</span></td></tr><tr><td>-ння</td><td>不变（同形）</td><td><span class=\"uk-word\" data-def=\"作业\">завдання</span> → <span class=\"uk-word\" data-def=\"作业\">завдання</span></td></tr><tr><td>-ття</td><td>不变（同形）</td><td><span class=\"uk-word\" data-def=\"生命\">життя</span> → <span class=\"uk-word\" data-def=\"生命\">життя</span></td></tr><tr><td>外来词</td><td>不变（同形）</td><td><span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span> → <span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>三种性别复数规则总对比</h3><table><thead><tr><th>性别</th><th>单数词尾</th><th>复数词尾</th><th>示例</th></tr></thead><tbody><tr><td>阳性</td><td>硬辅音</td><td>+и</td><td><span class=\"uk-word\" data-def=\"兄弟\">брат</span> → <span class=\"uk-word\">брати</span></td></tr><tr><td>阳性</td><td>软辅音/嘶嘶音</td><td>+і</td><td><span class=\"uk-word\" data-def=\"铅笔\">олівець</span> → <span class=\"uk-word\">олівці</span></td></tr><tr><td>阴性</td><td>-а</td><td>-и</td><td><span class=\"uk-word\" data-def=\"学校\">школа</span> → <span class=\"uk-word\">школи</span></td></tr><tr><td>阴性</td><td>-я</td><td>-і</td><td><span class=\"uk-word\" data-def=\"厨房\">кухня</span> → <span class=\"uk-word\">кухні</span></td></tr><tr><td>阴性</td><td>-ь</td><td>-і</td><td><span class=\"uk-word\" data-def=\"喜悦\">радість</span> → <span class=\"uk-word\">радості</span></td></tr><tr><td>中性</td><td>-о</td><td>-а</td><td><span class=\"uk-word\" data-def=\"窗户\">вікно</span> → <span class=\"uk-word\">вікна</span></td></tr><tr><td>中性</td><td>-е</td><td>-я</td><td><span class=\"uk-word\" data-def=\"海\">море</span> → <span class=\"uk-word\">моря</span></td></tr><tr><td>中性</td><td>-ння/-ття</td><td>同形</td><td><span class=\"uk-word\" data-def=\"作业\">завдання</span> → <span class=\"uk-word\" data-def=\"作业\">завдання</span></td></tr><tr><td>中性</td><td>外来词</td><td>同形</td><td><span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span> → <span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易混淆警告：中性复数 -а 和阴性单数 -а</strong><p>中性名词的复数词尾是 -а，这和阴性名词的单数词尾一样！不要搞混：</p><ul><li><span class=\"uk-word\">вікна</span> — 是 <span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）的<strong>复数</strong>，不是阴性单数</li><li><span class=\"uk-word\" data-def=\"学校\">школа</span> — 是阴性名词的<strong>单数</strong></li></ul><p>区分方法：看这个词你是否认识。如果认识它的单数形式（如 <span class=\"uk-word\" data-def=\"窗户\">вікно</span>），就知道 <span class=\"uk-word\">вікна</span> 是它的复数。</p>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "下面共有 <strong>28 道题</strong>，分为 5 组练习，覆盖中性名词复数规则及三种性别的综合比较。"
+        }
+      ],
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：选出正确的中性名词复数形式（8题）",
+          "instruction": "根据中性名词复数规则，选出正确的复数形式。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）的复数是？",
+              "options": ["<span class=\"uk-word\">вікна</span>", "<span class=\"uk-word\">вікни</span>", "<span class=\"uk-word\" data-def=\"窗户\">вікно</span>"],
+              "answer": "вікна",
+              "explanation": "вікно 以 -о 结尾 → 去-о 加-а → вікна"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"床\">ліжко</span>（床）的复数是？",
+              "options": ["<span class=\"uk-word\">ліжки</span>", "<span class=\"uk-word\">ліжка</span>", "<span class=\"uk-word\" data-def=\"床\">ліжко</span>"],
+              "answer": "ліжка",
+              "explanation": "ліжко 以 -о 结尾 → 去-о 加-а → ліжка"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"海\">море</span>（海）的复数是？",
+              "options": ["<span class=\"uk-word\">морі</span>", "<span class=\"uk-word\">моря</span>", "<span class=\"uk-word\">мора</span>"],
+              "answer": "моря",
+              "explanation": "море 以 -е 结尾 → 去-е 加-я → моря"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"地方\">місце</span>（地方）的复数是？",
+              "options": ["<span class=\"uk-word\">місця</span>", "<span class=\"uk-word\">місці</span>", "<span class=\"uk-word\">місца</span>"],
+              "answer": "місця",
+              "explanation": "місце 以 -е 结尾 → 去-е 加-я → місця"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桨\">весло</span>（桨）的复数是？",
+              "options": ["<span class=\"uk-word\">весла</span>", "<span class=\"uk-word\">весли</span>", "<span class=\"uk-word\" data-def=\"桨\">весло</span>"],
+              "answer": "весла",
+              "explanation": "весло 以 -о 结尾 → 去-о 加-а → весла"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"翅膀\">крило</span>（翅膀）的复数是？",
+              "options": ["<span class=\"uk-word\">крила</span>", "<span class=\"uk-word\">крилі</span>", "<span class=\"uk-word\" data-def=\"翅膀\">крило</span>"],
+              "answer": "крила",
+              "explanation": "крило 以 -о 结尾 → 去-о 加-а → крила"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"数字\">число</span>（数字）的复数是？",
+              "options": ["<span class=\"uk-word\">числи</span>", "<span class=\"uk-word\">числа</span>", "<span class=\"uk-word\" data-def=\"数字\">число</span>"],
+              "answer": "числа",
+              "explanation": "число 以 -о 结尾 → 去-о 加-а → числа"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"心脏\">серце</span>（心脏）的复数是？",
+              "options": ["<span class=\"uk-word\">серці</span>", "<span class=\"uk-word\">серця</span>", "<span class=\"uk-word\">серца</span>"],
+              "answer": "серця",
+              "explanation": "серце 以 -е 结尾 → 去-е 加-я → серця"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：三种性别复数对比（5题）",
+          "instruction": "给出一个名词，先判断性别，再选正确的复数形式。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"单词\">слово</span>（单词）的复数是？",
+              "options": ["<span class=\"uk-word\">слови</span>", "<span class=\"uk-word\">слова</span>", "<span class=\"uk-word\">слові</span>"],
+              "answer": "слова",
+              "explanation": "слово 是中性（-о 结尾），复数 -о→-а → слова"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"盘子\">тарілка</span>（盘子）的复数是？",
+              "options": ["<span class=\"uk-word\">тарілки</span>", "<span class=\"uk-word\" data-def=\"盘子\">тарілка</span>", "<span class=\"uk-word\">тарілкі</span>"],
+              "answer": "тарілки",
+              "explanation": "тарілка 是阴性（-ка 结尾），复数 -ка→-ки → тарілки"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"建筑\">будинок</span>（房子）的复数是？",
+              "options": ["<span class=\"uk-word\">будинки</span>", "<span class=\"uk-word\">будинка</span>", "<span class=\"uk-word\">будинкі</span>"],
+              "answer": "будинки",
+              "explanation": "будинок 是阳性（辅音结尾），复数加 -и → будинки"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"田野\">поле</span>（田野）的复数是？",
+              "options": ["<span class=\"uk-word\">полі</span>", "<span class=\"uk-word\">поля</span>", "<span class=\"uk-word\">поли</span>"],
+              "answer": "поля",
+              "explanation": "поле 是中性（-е 结尾），复数 -е→-я → поля"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"裙子\">сукня</span>（连衣裙）的复数是？",
+              "options": ["<span class=\"uk-word\" data-def=\"裙子\">сукня</span>", "<span class=\"uk-word\">сукні</span>", "<span class=\"uk-word\">сукна</span>"],
+              "answer": "сукні",
+              "explanation": "сукня 是阴性（-я 结尾），复数 -я→-і → сукні"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：不变化名词识别（5题）",
+          "instruction": "以下每组四个名词中，哪个名词的复数形式<strong>不变化</strong>（和单数相同）？",
+          "questions": [
+            {
+              "prompt": "哪个名词复数不变化？",
+              "options": ["<span class=\"uk-word\" data-def=\"窗户\">вікно</span>", "<span class=\"uk-word\" data-def=\"村庄\">село</span>", "<span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>", "<span class=\"uk-word\" data-def=\"扶手椅\">крісло</span>"],
+              "answer": "кафе",
+              "explanation": "кафе 是不变化的外来词，复数仍然是 кафе。其他三个：вікно→вікна，село→села，крісло→крісла"
+            },
+            {
+              "prompt": "哪个名词复数不变化？",
+              "options": ["<span class=\"uk-word\" data-def=\"单词\">слово</span>", "<span class=\"uk-word\" data-def=\"作业\">завдання</span>", "<span class=\"uk-word\" data-def=\"湖\">озеро</span>", "<span class=\"uk-word\" data-def=\"桶\">відро</span>"],
+              "answer": "завдання",
+              "explanation": "завдання 以 -ння 结尾，复数同形。其他三个：слово→слова，озеро→озера，відро→відра"
+            },
+            {
+              "prompt": "哪个名词复数不变化？",
+              "options": ["<span class=\"uk-word\" data-def=\"床\">ліжко</span>", "<span class=\"uk-word\" data-def=\"桨\">весло</span>", "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>", "<span class=\"uk-word\" data-def=\"数字\">число</span>"],
+              "answer": "пальто",
+              "explanation": "пальто 是外来词，复数不变化。其他三个：ліжко→ліжка，весло→весла，число→числа"
+            },
+            {
+              "prompt": "哪个名词复数不变化？",
+              "options": ["<span class=\"uk-word\" data-def=\"海\">море</span>", "<span class=\"uk-word\" data-def=\"心脏\">серце</span>", "<span class=\"uk-word\" data-def=\"地铁\">метро</span>", "<span class=\"uk-word\" data-def=\"地方\">місце</span>"],
+              "answer": "метро",
+              "explanation": "метро 是外来词，复数不变化。其他三个：море→моря，серце→серця，місце→місця"
+            },
+            {
+              "prompt": "哪个名词复数不变化？",
+              "options": ["<span class=\"uk-word\" data-def=\"翅膀\">крило</span>", "<span class=\"uk-word\" data-def=\"公告/通知\">оголошення</span>", "<span class=\"uk-word\" data-def=\"轮子\">колесо</span>", "<span class=\"uk-word\" data-def=\"巢\">гніздо</span>"],
+              "answer": "оголошення",
+              "explanation": "оголошення 以 -ння 结尾，复数同形。其他三个：крило→крила，колесо→колеса，гніздо→гнізда"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：-о/-е 复数转换专项（5题）",
+          "instruction": "判断以下中性名词应该用 -а 还是 -я 作为复数词尾。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"村庄\">село</span>（村庄）→ сел___",
+              "options": ["-а（села）", "-я（селя）"],
+              "answer": "-а",
+              "explanation": "село 以 -о 结尾 → 复数加 -а → села"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"田野\">поле</span>（田野）→ пол___",
+              "options": ["-а（пола）", "-я（поля）"],
+              "answer": "-я",
+              "explanation": "поле 以 -е 结尾 → 复数加 -я → поля"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"湖\">озеро</span>（湖）→ озер___",
+              "options": ["-а（озера）", "-я（озеря）"],
+              "answer": "-а",
+              "explanation": "озеро 以 -о 结尾 → 复数加 -а → озера"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"太阳\">сонце</span>（太阳）→ сонц___",
+              "options": ["-а（сонца）", "-я（сонця）"],
+              "answer": "-я",
+              "explanation": "сонце 以 -е 结尾 → 复数加 -я → сонця"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"镜子\">дзеркало</span>（镜子）→ дзеркал___",
+              "options": ["-а（дзеркала）", "-я（дзеркаля）"],
+              "answer": "-а",
+              "explanation": "дзеркало 以 -о 结尾 → 复数加 -а → дзеркала"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：终极综合 — 三种性别复数混合（5题）",
+          "instruction": "混合阳性、阴性、中性名词，选出正确的复数形式。这是本课的终极挑战！",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桶\">відро</span>（桶）的复数是？",
+              "options": ["<span class=\"uk-word\">відри</span>", "<span class=\"uk-word\">відра</span>", "<span class=\"uk-word\">відрі</span>"],
+              "answer": "відра",
+              "explanation": "відро 是中性（-о 结尾），复数 -о→-а → відра"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"礼物\">подарунок</span>（礼物）的复数是？",
+              "options": ["<span class=\"uk-word\">подарунки</span>", "<span class=\"uk-word\">подарунка</span>", "<span class=\"uk-word\">подарункі</span>"],
+              "answer": "подарунки",
+              "explanation": "подарунок 是阳性（辅音结尾），复数加 -и → подарунки"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"勺子\">ложка</span>（勺子）的复数是？",
+              "options": ["<span class=\"uk-word\">ложкі</span>", "<span class=\"uk-word\">ложки</span>", "<span class=\"uk-word\" data-def=\"勺子\">ложка</span>"],
+              "answer": "ложки",
+              "explanation": "ложка 是阴性（-ка 结尾），复数 -ка→-ки → ложки"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">запитання</span>（提问）的复数是？",
+              "options": ["<span class=\"uk-word\">запитання</span>", "<span class=\"uk-word\">запитанні</span>", "<span class=\"uk-word\">запитана</span>"],
+              "answer": "запитання",
+              "explanation": "запитання 以 -ння 结尾，中性名词，复数同形 → запитання"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"学生\">учень</span>（学生）的复数是？",
+              "options": ["<span class=\"uk-word\">учені</span>", "<span class=\"uk-word\">учні</span>", "<span class=\"uk-word\">учни</span>"],
+              "answer": "учні",
+              "explanation": "учень 是阳性（-ь 结尾），复数去 -ь 加 -і → учні"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<h3>中性名词复数 — 四大规则</h3><ol><li><strong>-о 结尾 → 去-о 加-а</strong>：<span class=\"uk-word\" data-def=\"窗户\">вікно</span>→<span class=\"uk-word\">вікна</span>，<span class=\"uk-word\" data-def=\"扶手椅\">крісло</span>→<span class=\"uk-word\">крісла</span>，<span class=\"uk-word\" data-def=\"轮子\">колесо</span>→<span class=\"uk-word\">колеса</span></li><li><strong>-е 结尾 → 去-е 加-я</strong>：<span class=\"uk-word\" data-def=\"海\">море</span>→<span class=\"uk-word\">моря</span>，<span class=\"uk-word\" data-def=\"心脏\">серце</span>→<span class=\"uk-word\">серця</span>，<span class=\"uk-word\" data-def=\"地方\">місце</span>→<span class=\"uk-word\">місця</span></li><li><strong>-ння/-ття 结尾 → 不变</strong>：<span class=\"uk-word\" data-def=\"作业\">завдання</span>→<span class=\"uk-word\" data-def=\"作业\">завдання</span>，<span class=\"uk-word\" data-def=\"生命\">життя</span>→<span class=\"uk-word\" data-def=\"生命\">життя</span></li><li><strong>外来词 → 不变</strong>：<span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>→<span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>，<span class=\"uk-word\" data-def=\"大衣\">пальто</span>→<span class=\"uk-word\" data-def=\"大衣\">пальто</span></li></ol><p><strong>三种性别复数的总口诀：</strong></p><ul><li>阳性：硬辅+и，软辅+і</li><li>阴性：-а→-и，-я→-і，-ь→-і</li><li>中性：-о→-а，-е→-я，-ння/-ття/外来词不变</li></ul><p><strong>核心规律：硬配硬（-о↔-а，辅音+и），软配软（-е↔-я，软辅+і）。</strong></p><p><strong>今日新词汇：</strong>15个中性名词（家具、物品、抽象名词类）</p><p><strong>下节课预告：</strong>第5天我们将综合复习三种性别的复数形式，通过大量练习巩固所学内容！</p>"
+    }
+  ]
+}

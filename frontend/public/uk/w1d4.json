@@ -1,0 +1,367 @@
+{
+  "title": "第1周 第4天 — 中性名词：-о/-е/-я 结尾规则",
+  "objective": "<strong>学习目标：</strong>深入掌握乌克兰语中性名词的三种词尾特征（-о、-е、-я），重点学会区分 -я 结尾的阴性名词与中性名词，并能对阳性、阴性、中性三种性别进行综合辨析。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "回顾",
+      "blocks": [
+        { "type": "p", "html": "前两天我们分别学习了<strong>阳性</strong>和<strong>阴性</strong>名词的判断规则：" },
+        { "type": "grammar-box", "html": "<pre>\n第1天 — 阳性（чоловічий рід）：\n  以辅音结尾 → <span class=\"uk-word\" data-def=\"桌子\">стіл</span>(-л), <span class=\"uk-word\" data-def=\"公园\">парк</span>(-к), <span class=\"uk-word\" data-def=\"公交车\">автобус</span>(-с), <span class=\"uk-word\" data-def=\"电话\">телефон</span>(-н)\n\n第2天 — 阴性（жіночий рід）：\n  以 -а 结尾 → <span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"工作\">робота</span>, <span class=\"uk-word\" data-def=\"汽车\">машина</span>, <span class=\"uk-word\" data-def=\"星星\">зірка</span>\n  以 -я 结尾 → <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"歌曲\">пісня</span>, <span class=\"uk-word\" data-def=\"希望\">надія</span>, <span class=\"uk-word\" data-def=\"街道\">вулиця</span>\n</pre>" },
+        { "type": "p", "html": "今天要补全拼图的最后一块：<strong>中性名词</strong>（середній рід）！学完今天，你就掌握了判断名词性别的完整规则体系。" },
+        { "type": "tip", "html": "<strong>快速回忆口诀：</strong>辅音找阳性，-а/-я 找阴性，-о/-е 找中性。今天我们要在这个基础上加一条特殊规则！" }
+      ]
+    },
+
+    {
+      "type": "grammar",
+      "heading": "1. 语法讲解",
+      "blocks": [
+        { "type": "h3", "text": "1.1 中性名词的三种词尾" },
+        { "type": "p", "html": "中性名词有<strong>三种</strong>词尾形式：" },
+        { "type": "grammar-box", "html": "<pre>\n中性名词词尾规则（середній рід）：\n\n┌─────────────────┬──────────────────────────────────────────────┐\n│  词尾            │  说明                                        │\n├─────────────────┼──────────────────────────────────────────────┤\n│  -о             │  最常见！约占中性名词的 60%以上                 │\n│  -е             │  第二常见                                      │\n│  -я（-ння/-ття） │  特殊形式：仅限双辅音 + я                      │\n└─────────────────┴──────────────────────────────────────────────┘\n\n代词对应：<span class=\"uk-word\">воно</span>（它）\n</pre>" },
+
+        { "type": "h3", "text": "1.2 以 -о 结尾的中性名词（最常见）" },
+        { "type": "p", "html": "这是中性名词最典型、最容易识别的形式。看到 <strong>-о 结尾</strong>，几乎可以直接判断为中性。" },
+        { "type": "p", "html": "<strong>常见模式：</strong>" },
+        {
+          "type": "ul",
+          "items": [
+            "单音节或双音节：<span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）、<span class=\"uk-word\" data-def=\"单词\">слово</span>（单词）、<span class=\"uk-word\" data-def=\"天空\">небо</span>（天空）",
+            "三音节：<span class=\"uk-word\" data-def=\"湖\">озеро</span>（湖）、<span class=\"uk-word\" data-def=\"树\">дерево</span>（树）、<span class=\"uk-word\" data-def=\"苹果\">яблуко</span>（苹果）",
+            "-ло 后缀：<span class=\"uk-word\" data-def=\"身体\">тіло</span>（身体）、<span class=\"uk-word\" data-def=\"油/黄油\">масло</span>（黄油/油）、<span class=\"uk-word\" data-def=\"村庄\">село</span>（村庄）、<span class=\"uk-word\" data-def=\"扶手椅\">крісло</span>（扶手椅）"
+          ]
+        },
+        { "type": "note", "html": "<strong>与阳性特例的区分：</strong><span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸）和 <span class=\"uk-word\" data-def=\"父亲\">батько</span>（父亲）虽然也以 -о 结尾，但它们是<strong>阳性特例</strong>（指男性的称呼）。这类特例非常少，除了人称特例外，-о 结尾基本都是中性。" },
+        { "type": "tip", "html": "<strong>记忆窍门：</strong>-о 结尾 → 中性。这跟代词 <span class=\"uk-word\">воно</span>（它）的词尾一致！<span class=\"uk-word\">воно</span> 指代中性名词，都是 -о 结尾。" },
+
+        { "type": "h3", "text": "1.3 以 -е 结尾的中性名词" },
+        { "type": "p", "html": "以 -е 结尾的中性名词也很常见，常出现在以下模式中：" },
+        { "type": "grammar-box", "html": "<pre>\n-е 结尾中性名词常见组合：\n\n-це  →  <span class=\"uk-word\" data-def=\"心脏\">серце</span>（心脏）、<span class=\"uk-word\" data-def=\"鸡蛋\">яйце</span>（鸡蛋）、<span class=\"uk-word\" data-def=\"太阳\">сонце</span>（太阳）\n-ре  →  <span class=\"uk-word\" data-def=\"海\">море</span>（海）\n-ле  →  <span class=\"uk-word\" data-def=\"田野\">поле</span>（田野）\n-ще  →  <span class=\"uk-word\" data-def=\"地方\">місце</span>（地方/座位）、<span class=\"uk-word\" data-def=\"姓氏\">прізвище</span>（姓氏）\n</pre>" },
+        { "type": "note", "html": "<strong>好消息：</strong>-е 结尾只出现在中性名词中，不会与阴性（-а/-я）或阳性（辅音）混淆。所以看到 -е 结尾 → 直接判断为中性！" },
+        { "type": "tip", "html": "<strong>记忆技巧：</strong>-це 结尾的名词特别多中性词！<span class=\"uk-word\" data-def=\"心脏\">серце</span>（心脏）、<span class=\"uk-word\" data-def=\"鸡蛋\">яйце</span>（鸡蛋）、<span class=\"uk-word\" data-def=\"太阳\">сонце</span>（太阳）——想象「太阳、心脏、鸡蛋」这三样圆圆的东西，都是中性 -це 结尾。" },
+
+        { "type": "h3", "text": "1.4 以 -я 结尾的中性名词（重点难点！）" },
+        { "type": "p", "html": "这是今天<strong>最关键</strong>的内容！" },
+        { "type": "p", "html": "第2天我们学过 -я 结尾通常是<strong>阴性</strong>：<span class=\"uk-word\" data-def=\"厨房\">кухня</span>、<span class=\"uk-word\" data-def=\"歌曲\">пісня</span>、<span class=\"uk-word\" data-def=\"希望\">надія</span>... 但有一些 -я 结尾的名词是<strong>中性</strong>的！" },
+        { "type": "p", "html": "怎么区分呢？关键看 <strong>-я 前面的部分</strong>：" },
+        { "type": "grammar-box", "html": "<pre>\n-я 结尾名词的性别判断：\n\n┌─────────────────┬────────┬─────────────────────────────────┐\n│  词尾模式        │  性别   │  例词                           │\n├─────────────────┼────────┼─────────────────────────────────┤\n│  -ння           │  中性   │  <span class=\"uk-word\" data-def=\"作业\">завдання</span>, <span class=\"uk-word\" data-def=\"问题\">питання</span>, <span class=\"uk-word\" data-def=\"学习\">навчання</span>    │\n│  -ття           │  中性   │  <span class=\"uk-word\" data-def=\"生命\">життя</span>, <span class=\"uk-word\" data-def=\"鞋子\">взуття</span>                  │\n│  -м'я           │  中性   │  <span class=\"uk-word\" data-def=\"名字\">ім'я</span>                          │\n│  -ччя/-сся      │  中性   │  <span class=\"uk-word\" data-def=\"脸\">обличчя</span>, <span class=\"uk-word\" data-def=\"头发\">волосся</span>              │\n├─────────────────┼────────┼─────────────────────────────────┤\n│  -ня（单 н）     │  阴性   │  <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"歌曲\">пісня</span>, <span class=\"uk-word\" data-def=\"医院\">лікарня</span>       │\n│  -ія            │  阴性   │  <span class=\"uk-word\" data-def=\"希望\">надія</span>, <span class=\"uk-word\" data-def=\"历史\">історія</span>, <span class=\"uk-word\" data-def=\"职业\">професія</span>     │\n│  -ця            │  阴性   │  <span class=\"uk-word\" data-def=\"街道\">вулиця</span>, <span class=\"uk-word\" data-def=\"车站\">станція</span>              │\n│  -ля            │  阴性   │  <span class=\"uk-word\" data-def=\"土地\">земля</span>                         │\n└─────────────────┴────────┴─────────────────────────────────┘\n</pre>" },
+        { "type": "error-warn", "html": "<strong>这是中文母语者最易混淆的重点！</strong><p>记住核心区分法：<strong>双辅音 + -я = 中性</strong>（-ння、-ття、-ччя、-сся），<strong>单辅音/元音 + -я = 阴性</strong>（-ня、-ія、-ця、-ля）。</p><p>对比：</p><ul><li><span class=\"uk-word\" data-def=\"学习\">навчання</span>（学习）= навча<strong>ння</strong> → 双 н + я → <strong>中性</strong></li><li><span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）= кух<strong>ня</strong> → 单 н + я → <strong>阴性</strong></li><li><span class=\"uk-word\" data-def=\"生命\">життя</span>（生活）= жи<strong>ття</strong> → 双 т + я → <strong>中性</strong></li><li><span class=\"uk-word\" data-def=\"希望\">надія</span>（希望）= наді<strong>я</strong> → 元音 + я → <strong>阴性</strong></li></ul>" },
+        { "type": "tip", "html": "<strong>助记口诀：</strong>「双辅中，单辅阴」——双辅音（нн、тт、чч、сс）加 -я 是中性，单辅音加 -я 是阴性。" },
+
+        { "type": "h3", "text": "1.5 -ння 中性名词的来源" },
+        { "type": "p", "html": "很多 -ння 结尾的中性名词是从<strong>动词</strong>派生来的（类似中文的「学习」既是动词也是名词）：" },
+        {
+          "type": "table",
+          "headers": ["动词", "", "中性名词（-ння）", "中文"],
+          "firstColWord": true,
+          "rows": [
+            ["<span class=\"uk-word\">навчати</span>", "→", "<span class=\"uk-word\" data-def=\"学习\">навчання</span>", "学习/教育"],
+            ["<span class=\"uk-word\">питати</span>", "→", "<span class=\"uk-word\" data-def=\"问题\">питання</span>", "问题/提问"],
+            ["<span class=\"uk-word\">читати</span>", "→", "<span class=\"uk-word\" data-def=\"阅读\">читання</span>", "阅读"],
+            ["<span class=\"uk-word\">кохати</span>", "→", "<span class=\"uk-word\" data-def=\"爱情\">кохання</span>", "爱情"],
+            ["<span class=\"uk-word\">оповідати</span>", "→", "<span class=\"uk-word\" data-def=\"故事\">оповідання</span>", "故事/短篇小说"]
+          ]
+        },
+        { "type": "note", "html": "<strong>规律小结：</strong>如果一个 -ння 结尾的词看起来像某个动词的名词形式，它几乎一定是中性。这个规律非常稳定！" },
+
+        { "type": "h3", "text": "1.6 特殊中性名词：ім'я" },
+        { "type": "p", "html": "<span class=\"uk-word\" data-def=\"名字\">ім'я</span>（名字）是一个需要特别记忆的中性名词。它以 -м'я 结尾，不属于 -ння/-ття 模式，但仍然是中性。这是极少数的特例之一。" },
+
+        { "type": "h3", "text": "1.7 三种性别综合对比" },
+        { "type": "p", "html": "学完三天，我们把所有规则汇总：" },
+        { "type": "grammar-box", "html": "<pre>\n乌克兰语名词性别判断 — 完整规则：\n\n┌──────────┬───────────────────────────────────────────┐\n│  阳性     │  辅音结尾                                  │\n│  <span class=\"uk-word\">він</span>     │  <span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"公园\">парк</span>, <span class=\"uk-word\" data-def=\"公交车\">автобус</span>, <span class=\"uk-word\" data-def=\"电话\">телефон</span>          │\n├──────────┼───────────────────────────────────────────┤\n│  阴性     │  -а / -я（单辅音+-я）结尾                   │\n│  <span class=\"uk-word\">вона</span>    │  <span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"工作\">робота</span>, <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"希望\">надія</span>          │\n├──────────┼───────────────────────────────────────────┤\n│  中性     │  -о / -е / -ння / -ття 结尾                │\n│  <span class=\"uk-word\">воно</span>    │  <span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\" data-def=\"海\">море</span>, <span class=\"uk-word\" data-def=\"学习\">навчання</span>, <span class=\"uk-word\" data-def=\"生命\">життя</span>          │\n└──────────┴───────────────────────────────────────────┘\n\n特例（需记忆）：\n  <span class=\"uk-word\" data-def=\"爸爸\">тато</span>、<span class=\"uk-word\" data-def=\"父亲\">батько</span> → 阳性（指男性）\n  <span class=\"uk-word\" data-def=\"名字\">ім'я</span> → 中性（-м'я 结尾）\n</pre>" },
+        { "type": "tip", "html": "<strong>终极判断流程：</strong><br>1. 以辅音结尾？→ 阳性<br>2. 以 -а 结尾？→ 阴性<br>3. 以 -о 结尾？→ 中性（除了 <span class=\"uk-word\" data-def=\"爸爸\">тато</span>/<span class=\"uk-word\" data-def=\"父亲\">батько</span>）<br>4. 以 -е 结尾？→ 中性<br>5. 以 -я 结尾？→ 看前面：双辅音 = 中性，其他 = 阴性<br>6. 以 -ь 结尾？→ 需要记忆（第4天学习）" }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "2. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：中性名词词尾分类（6题）",
+          "instruction": "判断以下中性名词是以 -о、-е 还是 -я 结尾。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"窗户\">вікно</span>（窗户）",
+              "options": ["-о", "-е", "-я"],
+              "answer": "-о",
+              "explanation": "вікно 以 -о 结尾，最常见的中性名词词尾。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"海\">море</span>（海）",
+              "options": ["-о", "-е", "-я"],
+              "answer": "-е",
+              "explanation": "море 以 -е 结尾。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"作业\">завдання</span>（作业）",
+              "options": ["-о", "-е", "-я"],
+              "answer": "-я",
+              "explanation": "завдання 以 -ння 结尾，属于 -я 类中性名词。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"太阳\">сонце</span>（太阳）",
+              "options": ["-о", "-е", "-я"],
+              "answer": "-е",
+              "explanation": "сонце 以 -це 结尾，属于 -е 类中性名词。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"油/黄油\">масло</span>（黄油）",
+              "options": ["-о", "-е", "-я"],
+              "answer": "-о",
+              "explanation": "масло 以 -о 结尾。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"生命\">життя</span>（生活）",
+              "options": ["-о", "-е", "-я"],
+              "answer": "-я",
+              "explanation": "життя 以 -ття 结尾，属于 -я 类中性名词。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：-я 结尾名词是阴性还是中性？（8题）",
+          "instruction": "这是今天的重点难点！判断以下 -я 结尾的名词是<strong>阴性</strong>还是<strong>中性</strong>。记住：「双辅中，单辅阴」。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"学习\">навчання</span>（学习）",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "навчання = навча-ння，双辅音 нн + -я → 中性。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"厨房\">кухня</span>（厨房）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "кухня = кух-ня，单辅音 н + -я → 阴性。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"生命\">життя</span>（生活）",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "життя = жи-ття，双辅音 тт + -я → 中性。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"希望\">надія</span>（希望）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "надія = наді-я，元音 і + -я → 阴性（-ія 模式）。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"问题\">питання</span>（问题）",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "питання = пита-ння，双辅音 нн + -я → 中性。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"歌曲\">пісня</span>（歌曲）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "пісня = піс-ня，单辅音 н + -я → 阴性。"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"鞋子\">взуття</span>（鞋子）",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "взуття = взу-ття，双辅音 тт + -я → 中性。"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"街道\">вулиця</span>（街道）",
+              "options": ["阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "вулиця = вули-ця，单辅音 ц + -я → 阴性。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 C：三种性别综合判断（10题）",
+          "instruction": "判断以下名词的性别，三种性别都有！",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"树\">дерево</span>（树）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "дерево 以 -о 结尾，中性。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"学校\">школа</span>（学校）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "школа 以 -а 结尾，阴性。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"商店\">магазин</span>（商店）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "магазин 以辅音 -н 结尾，阳性。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"太阳\">сонце</span>（太阳）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "сонце 以 -е 结尾（-це 组合），中性。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"医院\">лікарня</span>（医院）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "лікарня 以 -ня 结尾（单辅音 н），阴性。"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"爱情\">кохання</span>（爱情）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "кохання 以 -ння 结尾（双辅音 нн），中性。"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"火车\">потяг</span>（火车）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "потяг 以辅音 -г 结尾，阳性。"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"地方\">місце</span>（地方）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "місце 以 -е 结尾（-це 组合），中性。"
+            },
+            {
+              "prompt": "9. <span class=\"uk-word\" data-def=\"路\">дорога</span>（路）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "дорога 以 -а 结尾，阴性。"
+            },
+            {
+              "prompt": "10. <span class=\"uk-word\" data-def=\"名字\">ім'я</span>（名字）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "ім'я 以 -м'я 结尾，特殊中性名词。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 D：用代词替代名词（5题）",
+          "instruction": "用 <span class=\"uk-word\">він</span>（阳性）、<span class=\"uk-word\">вона</span>（阴性）、<span class=\"uk-word\">воно</span>（中性）替代名词：",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"湖\">Озеро</span> — це _____.",
+              "options": ["він", "вона", "воно"],
+              "answer": "воно",
+              "explanation": "озеро 以 -о 结尾，中性 → воно。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"工作\">Робота</span> — це _____.",
+              "options": ["він", "вона", "воно"],
+              "answer": "вона",
+              "explanation": "робота 以 -а 结尾，阴性 → вона。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"学习\">Навчання</span> — це _____.",
+              "options": ["він", "вона", "воно"],
+              "answer": "воно",
+              "explanation": "навчання 以 -ння 结尾，中性 → воно。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"课\">Урок</span> — це _____.",
+              "options": ["він", "вона", "воно"],
+              "answer": "він",
+              "explanation": "урок 以辅音 -к 结尾，阳性 → він。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"太阳\">Сонце</span> — це _____.",
+              "options": ["він", "вона", "воно"],
+              "answer": "воно",
+              "explanation": "сонце 以 -е 结尾，中性 → воно。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：找出不同性别的词（5题）",
+          "instruction": "每组中有一个词的性别与其他三个不同，找出它。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"窗户\">вікно</span> / <span class=\"uk-word\" data-def=\"湖\">озеро</span> / <span class=\"uk-word\" data-def=\"公园\">парк</span> / <span class=\"uk-word\" data-def=\"天空\">небо</span>",
+              "options": ["вікно", "озеро", "парк", "небо"],
+              "answer": "парк",
+              "explanation": "вікно、озеро、небо 都是中性（-о 结尾），парк 是阳性（辅音结尾）。"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"学校\">школа</span> / <span class=\"uk-word\" data-def=\"工作\">робота</span> / <span class=\"uk-word\" data-def=\"海\">море</span> / <span class=\"uk-word\" data-def=\"汽车\">машина</span>",
+              "options": ["школа", "робота", "море", "машина"],
+              "answer": "море",
+              "explanation": "школа、робота、машина 都是阴性（-а 结尾），море 是中性（-е 结尾）。"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"学习\">навчання</span> / <span class=\"uk-word\" data-def=\"厨房\">кухня</span> / <span class=\"uk-word\" data-def=\"问题\">питання</span> / <span class=\"uk-word\" data-def=\"爱情\">кохання</span>",
+              "options": ["навчання", "кухня", "питання", "кохання"],
+              "answer": "кухня",
+              "explanation": "навчання、питання、кохання 都是中性（-ння 结尾），кухня 是阴性（-ня 结尾，单辅音）。"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"身体\">тіло</span> / <span class=\"uk-word\" data-def=\"油/黄油\">масло</span> / <span class=\"uk-word\" data-def=\"桌子\">стіл</span> / <span class=\"uk-word\" data-def=\"村庄\">село</span>",
+              "options": ["тіло", "масло", "стіл", "село"],
+              "answer": "стіл",
+              "explanation": "тіло、масло、село 都是中性（-о 结尾），стіл 是阳性（辅音结尾）。"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"太阳\">сонце</span> / <span class=\"uk-word\" data-def=\"星星\">зірка</span> / <span class=\"uk-word\" data-def=\"田野\">поле</span> / <span class=\"uk-word\" data-def=\"地方\">місце</span>",
+              "options": ["сонце", "зірка", "поле", "місце"],
+              "answer": "зірка",
+              "explanation": "сонце、поле、місце 都是中性（-е 结尾），зірка 是阴性（-а 结尾）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 F：规则判断（5题）",
+          "instruction": "根据今天学的规则回答以下问题。",
+          "questions": [
+            {
+              "prompt": "1. 以 -о 结尾的名词通常是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "-о 结尾是中性名词最常见的词尾。"
+            },
+            {
+              "prompt": "2. 以 -ння 结尾的名词是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "-ння 是双辅音 + -я，中性名词的标志。"
+            },
+            {
+              "prompt": "3. 以 -ня（单 н）结尾的名词是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "-ня 是单辅音 + -я，阴性名词的词尾。"
+            },
+            {
+              "prompt": "4. 以 -ття 结尾的名词是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "-ття 是双辅音 тт + -я，中性名词。"
+            },
+            {
+              "prompt": "5. 中性名词用哪个代词指代？",
+              "options": ["він", "вона", "воно"],
+              "answer": "воно",
+              "explanation": "中性名词用 воно 指代。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "3. 今日小结",
+      "html": "<ol><li><strong>中性名词有三种词尾</strong>：<strong>-о</strong>（最常见：<span class=\"uk-word\" data-def=\"窗户\">вікно</span>、<span class=\"uk-word\" data-def=\"单词\">слово</span>、<span class=\"uk-word\" data-def=\"身体\">тіло</span>）、<strong>-е</strong>（<span class=\"uk-word\" data-def=\"海\">море</span>、<span class=\"uk-word\" data-def=\"太阳\">сонце</span>、<span class=\"uk-word\" data-def=\"地方\">місце</span>）、<strong>-я</strong>（仅限 -ння/-ття/-ччя/-сся/-м'я 形式）。</li><li><strong>区分 -я 结尾的关键</strong>：「双辅中，单辅阴」——<span class=\"uk-word\" data-def=\"学习\">навчання</span>（双 нн → 中性） vs <span class=\"uk-word\" data-def=\"厨房\">кухня</span>（单 н → 阴性）；<span class=\"uk-word\" data-def=\"生命\">життя</span>（双 тт → 中性） vs <span class=\"uk-word\" data-def=\"希望\">надія</span>（元音 + -я → 阴性）。</li><li><strong>-ння 中性名词</strong>多由动词派生：<span class=\"uk-word\">навчати</span> → <span class=\"uk-word\" data-def=\"学习\">навчання</span>，<span class=\"uk-word\">читати</span> → <span class=\"uk-word\" data-def=\"阅读\">читання</span>。</li><li><strong>三性别完整规则</strong>：辅音 → 阳性，-а/-я（单辅音）→ 阴性，-о/-е/-ння/-ття → 中性。</li><li>本课新学 <strong>18 个中性名词</strong>。</li><li>明天将学习 <strong>-ь（软音符号）结尾</strong>的名词——它们可能是阳性也可能是阴性，需要特别注意。</li></ol>"
+    }
+  ]
+}

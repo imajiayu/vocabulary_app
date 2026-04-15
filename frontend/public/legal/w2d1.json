@@ -1,0 +1,110 @@
+{
+  "title": "第2周 第1天 — 本周词汇预载",
+  "objective": "本周主题：权利与义务条款（Rights & Obligations）。本页列出第2周课程中将要用到的新增术语（第1周词汇继续使用）。请点击下方按钮一键添加到背单词 App。",
+  "sections": [
+    {
+      "type": "vocab-preload",
+      "groups": [
+        {
+          "heading": "Day 2 — 情态动词的法律含义",
+          "words": [
+            { "word": "obligation", "def": "义务" },
+            { "word": "duty", "def": "关税；税" },
+            { "word": "right", "def": "权利" },
+            { "word": "entitlement", "def": "权利/应享权益" },
+            { "word": "discretion", "def": "自由裁量权" },
+            { "word": "mandatory", "def": "强制性的" },
+            { "word": "compulsory", "def": "强制的/必须的" },
+            { "word": "binding", "def": "有约束力的" },
+            { "word": "enforceable", "def": "可执行的/可强制执行的" },
+            { "word": "consent", "def": "同意/许可" },
+            { "word": "at one's sole discretion", "def": "由…全权决定" },
+            { "word": "is entitled to", "def": "有权…" },
+            { "word": "duty of care", "def": "注意义务" },
+            { "word": "fiduciary duty", "def": "信义义务/受托义务" }
+          ]
+        },
+        {
+          "heading": "Day 3 — 保证与陈述",
+          "words": [
+            { "word": "representation", "def": "陈述/声明" },
+            { "word": "warranty", "def": "保证/担保" },
+            { "word": "covenant", "def": "契约/承诺" },
+            { "word": "undertake", "def": "承诺/保证" },
+            { "word": "undertaking", "def": "承诺/保证（名词）" },
+            { "word": "assurance", "def": "保证/担保" },
+            { "word": "guarantee", "def": "保证/担保" },
+            { "word": "pledge", "def": "质押/承诺" },
+            { "word": "certify", "def": "证明/认证" },
+            { "word": "acknowledge", "def": "确认/承认" },
+            { "word": "to the best of one's knowledge", "def": "据…所知" },
+            { "word": "representations and warranties", "def": "陈述与保证" },
+            { "word": "breach of warranty", "def": "违反保证" },
+            { "word": "true and correct in all material respects", "def": "在所有重大方面真实且正确" },
+            { "word": "represents and warrants", "def": "声明并保证" },
+            { "word": "in good standing", "def": "合法存续/信誉良好" }
+          ]
+        },
+        {
+          "heading": "Day 4 — 条件与前提",
+          "words": [
+            { "word": "condition precedent", "def": "先决条件" },
+            { "word": "condition subsequent", "def": "解除条件" },
+            { "word": "subject to", "def": "以…为条件/受…约束" },
+            { "word": "provided that", "def": "但是/前提是" },
+            { "word": "contingent upon", "def": "取决于/以…为条件" },
+            { "word": "prerequisite", "def": "先决条件/前提" },
+            { "word": "fulfill", "def": "履行/满足" },
+            { "word": "waive", "def": "放弃（权利）" },
+            { "word": "in the event that", "def": "如果/在…情况下" },
+            { "word": "upon the occurrence of", "def": "在…发生时" },
+            { "word": "provided, however, that", "def": "但是/但书" }
+          ]
+        },
+        {
+          "heading": "Day 5 — 豁免与责任限制",
+          "words": [
+            { "word": "waiver", "def": "弃权/放弃声明" },
+            { "word": "limitation of liability", "def": "责任限制" },
+            { "word": "cap", "def": "上限" },
+            { "word": "disclaimer", "def": "免责声明" },
+            { "word": "indemnify", "def": "赔偿/补偿" },
+            { "word": "hold harmless", "def": "使免受损害" },
+            { "word": "negligence", "def": "过失/疏忽" },
+            { "word": "gross negligence", "def": "重大过失" },
+            { "word": "willful misconduct", "def": "故意不当行为" },
+            { "word": "consequential damages", "def": "间接损害赔偿" },
+            { "word": "in no event shall", "def": "在任何情况下不得" },
+            { "word": "aggregate", "def": "累计的/总计的" },
+            { "word": "indemnify and hold harmless", "def": "赔偿并使免受损害" },
+            { "word": "direct damages", "def": "直接损害" },
+            { "word": "incidental damages", "def": "附带损害" },
+            { "word": "irreparable harm", "def": "不可弥补的损害" },
+            { "word": "disclaimer of warranties", "def": "保证免责声明" }
+          ]
+        },
+        {
+          "heading": "Day 6 — 保密条款",
+          "words": [
+            { "word": "confidential information", "def": "保密信息" },
+            { "word": "non-disclosure", "def": "保密/不披露" },
+            { "word": "proprietary", "def": "专有的/所有权的" },
+            { "word": "trade secret", "def": "商业秘密" },
+            { "word": "permitted disclosure", "def": "允许的披露" },
+            { "word": "receiving party", "def": "接收方" },
+            { "word": "disclosing party", "def": "披露方" },
+            { "word": "injunctive relief", "def": "禁令救济" },
+            { "word": "breach of confidentiality", "def": "违反保密义务" },
+            { "word": "return of materials", "def": "退还资料" },
+            { "word": "proprietary information", "def": "专有信息" },
+            { "word": "unauthorized disclosure", "def": "未经授权的披露" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "html": "<p><strong>本周新增约 60 个术语和搭配。</strong>添加完毕后即可进入第2天的课程，学习 shall/may/must 的法律含义区分。</p><p>本周课程中会同时使用第1周和第2周的词汇。点击任意术语可以听发音。</p>"
+    }
+  ]
+}

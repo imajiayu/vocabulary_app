@@ -1,0 +1,344 @@
+{
+  "title": "第1周 第5天 — 合同标的与履行义务（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span> & Performance）",
+  "objective": "掌握合同标的条款与履行义务条款中的核心词汇和固定搭配，理解 <span class=\"term\" data-def=\"标的/主题\">subject matter</span>、deliverables、<span class=\"term\" data-def=\"工作范围\">scope of work</span>、milestone 等术语在商务合同中的精确含义，掌握 provide/furnish/render 和 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>/<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 的区别，能够准确阅读和翻译涉及合同标的与履行义务的条款。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 核心词汇",
+      "blocks": [
+        { "type": "p", "html": "上节回顾：第3天学习了定义条款（Definitions Clause），掌握了 <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>、<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>、<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>、<span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\" data-def=\"其中的/该…的\">thereof</span> 等法律表达。今天进入合同正文的核心——标的条款（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span>）和履行义务（Performance Obligations），它们回答了\u201c合同各方需要做什么、怎么做、何时做\u201d这三个根本问题。" },
+        { "type": "error-warn", "html": "<strong>上次错题回顾：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质性条款（非\u201c执行条款\u201d）——今天学的履行义务条款就属于 <span class=\"term\" data-def=\"实质条款\">operative provisions</span></li><li><span class=\"term\">in full force and effect</span> = 完全有效（法律固定搭配，不可简化为\u201c有效\u201d）</li><li><span class=\"term\">attached hereto</span> = 附于本协议的（hereto 不可省略）</li></ul>" },
+        {
+          "type": "table",
+          "headers": ["英文", "音标", "中文", "常见搭配"],
+          "firstColWord": true,
+          "rows": [
+            ["subject matter", "/ˈsʌbdʒekt ˈmætər/", "标的；标的物", "the <span class=\"term\" data-def=\"标的/主题\">subject matter</span> of this Agreement; <span class=\"term\" data-def=\"标的/主题\">subject matter</span> jurisdiction"],
+            ["deliverables", "/dɪˈlɪvərəblz/", "交付物；应交付成果", "the Services and Deliverables; key deliverables; deliverables schedule"],
+            ["performance", "/pərˈfɔːrməns/", "履行；执行", "performance of obligations; performance standards; specific performance"],
+            ["obligation", "/ˌɒblɪˈɡeɪʃən/", "义务；责任", "contractual obligations; discharge of obligations; perform obligations"],
+            ["due diligence", "/djuː ˈdɪlɪdʒəns/", "尽职调查；审慎调查", "conduct <span class=\"term\" data-def=\"尽职调查\">due diligence</span>; <span class=\"term\" data-def=\"尽职调查\">due diligence</span> period; <span class=\"term\" data-def=\"尽职调查\">due diligence</span> review"],
+            ["scope of work", "/skoʊp əv wɜːrk/", "工作范围", "within the <span class=\"term\" data-def=\"工作范围\">scope of work</span>; scope of Services; statement of work (SOW)"],
+            ["milestone", "/ˈmaɪlstoʊn/", "里程碑；阶段节点", "key milestones; milestone payments; milestone schedule"],
+            ["deliver", "/dɪˈlɪvər/", "交付；递交", "deliver the Goods; deliver notice; deliver on time"],
+            ["provide", "/prəˈvaɪd/", "提供（最通用）", "provide the Services; provide access to; provide assistance"],
+            ["furnish", "/ˈfɜːrnɪʃ/", "提供；供应（信息/文件）", "furnish information; furnish documentation; furnish evidence"],
+            ["render", "/ˈrendər/", "提供；作出（服务/协助）", "render services; render assistance; render a decision"],
+            ["turnkey", "/ˈtɜːrnkiː/", "交钥匙（的）；整包", "turnkey project; turnkey solution; on a turnkey basis"],
+            ["specifications", "/ˌspesɪfɪˈkeɪʃənz/", "规格；技术规范", "technical specifications; conform to specifications; detailed specifications"],
+            ["compliance", "/kəmˈplaɪəns/", "合规；遵守", "compliance with applicable Laws; in compliance with; compliance obligations"],
+            ["workmanlike", "/ˈwɜːrkmənlaɪk/", "专业的；符合行业水准的", "in a professional and workmanlike manner; workmanlike quality"]
+          ]
+        },
+        { "type": "note", "html": "<strong>多义词辨析：performance</strong><ul><li>日常英语：表演；性能；表现</li><li>法律英语\u2460：<strong>履行</strong>——performance of obligations = 义务的履行</li><li>法律英语\u2461：<strong>specific performance</strong> = 实际履行/强制履行（一种衡平法救济方式，法院命令违约方实际履行合同义务）</li></ul>" },
+        { "type": "note", "html": "<strong>多义词辨析：deliver</strong><ul><li>日常英语：递送、投递（快递）</li><li>法律英语\u2460：<strong>交付</strong>——deliver the Goods = 交付货物（合同义务）</li><li>法律英语\u2461：<strong>递交</strong>——deliver notice = 递送通知（程序要求）</li><li>法律英语\u2462：<strong>签署交付</strong>——execute and deliver this Agreement = 签署并交付本协议（回顾第2天：execute = 签署）</li></ul>" }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["英文表达", "中文翻译", "例句"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>", "根据……；须经……", "<span class=\"en-text\">Subject to the terms and conditions of this Agreement, Provider shall provide the Services.</span>"],
+            ["<span class=\"term\" data-def=\"根据/依照\">in accordance with</span>", "按照……；根据……", "<span class=\"en-text\">Contractor shall perform the Services in accordance with the Specifications set forth in Exhibit A.</span>"],
+            ["to the <span class=\"term\" data-def=\"满足（条件）\">satisfaction</span> of", "令……满意", "<span class=\"en-text\">All Deliverables shall be provided to the reasonable satisfaction of Client.</span>"],
+            ["<span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span>", "时间至关重要（法律效力：迟延即构成违约）", "<span class=\"en-text\">Time is of the essence with respect to all dates and deadlines set forth in this Agreement.</span>"],
+            ["<span class=\"term\" data-def=\"尽最大努力\">best efforts</span>", "最大努力（义务程度最高）", "<span class=\"en-text\">Provider shall use its best efforts to complete the Services by the Target Date.</span>"],
+            ["<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>", "合理努力（考虑成本和可行性）", "<span class=\"en-text\">Each party shall use reasonable efforts to cooperate with the other in the performance of this Agreement.</span>"],
+            ["upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of", "收到……后", "<span class=\"en-text\">Upon receipt of the advance payment, Supplier shall commence delivery within five (5) Business Days.</span>"],
+            ["in a <span class=\"term\" data-def=\"专业的\">professional</span> and <span class=\"term\" data-def=\"符合工艺标准的\">workmanlike</span> manner", "以专业且符合行业水准的方式", "<span class=\"en-text\">Contractor shall perform the Services in a professional and workmanlike manner consistent with industry standards.</span>"]
+          ]
+        },
+        { "type": "error-warn", "html": "<strong>中文母语者易错点：<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 的翻译</strong><br><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 有两种常见含义，中文母语者容易混淆：<ul><li><strong>\u2460 根据/依据</strong>（前置条件）：<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms hereof... = 根据本协议条款……</li><li><strong>\u2461 须经/以……为条件</strong>（限制条件）：<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> approval by the Board... = 须经董事会批准……</li></ul>常见错误：将 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 译为\u201c受制于\u201d或\u201c服从于\u201d——语气过重，不符合法律翻译规范。" }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. 词汇辨析",
+      "blocks": [
+        { "type": "h3", "text": "3a. provide vs. furnish vs. render" },
+        { "type": "p", "html": "这三个词都有\u201c提供\u201d之意，但在法律合同中的使用场景有细微区别：" },
+        {
+          "type": "table",
+          "headers": ["术语", "典型搭配", "使用场景"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\">provide</span>", "provide services / goods / access", "最通用，适用于一切\u201c提供\u201d场景"],
+            ["<span class=\"term\">furnish</span>", "furnish information / documents / evidence", "侧重提供信息、文件、证据等，含\u201c供查阅/使用\u201d之意"],
+            ["<span class=\"term\">render</span>", "render services / assistance / a judgment", "侧重提供专业服务、协助或作出判断/裁决"]
+          ]
+        },
+        { "type": "p", "html": "<span class=\"en-text\">The Consultant shall render professional advisory services to the Client and shall furnish all reports and documentation necessary for Client's review.</span> <em>— 顾问应向客户提供专业咨询服务，并应提供客户审查所需的所有报告和文件。</em>" },
+        { "type": "h3", "text": "3b. best efforts vs. reasonable efforts" },
+        { "type": "p", "html": "这两个搭配在法律英语中代表不同程度的努力义务，区别极为重要：" },
+        {
+          "type": "table",
+          "headers": ["术语", "义务程度", "含义"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"尽最大努力\">best efforts</span>", "最高", "义务方必须用尽一切合理手段，即使需要牺牲自身部分利益"],
+            ["<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>", "中等", "义务方需采取合理步骤，但可以考虑自身成本和可行性"],
+            ["<span class=\"term\" data-def=\"商业上\">commercially</span> <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>", "中等", "义务方需采取在商业上合理的步骤（美国合同中常见）"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>实务提示：</strong>合同起草时，<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 对义务方最不利，<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 最为宽松。如果你代表义务方（如服务提供商），应尽量争取使用 <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 而非 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>。" },
+        { "type": "h3", "text": "3c. subject matter vs. object" },
+        {
+          "type": "table",
+          "headers": ["术语", "含义", "使用场景"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"标的/主题\">subject matter</span>", "标的物；合同所涉事项", "普通法合同中最常见的表达，指合同权利义务所指向的具体事物"],
+            ["object", "标的；目的", "更常见于大陆法系或国际合同，可能与 purpose（目的）重叠"]
+          ]
+        },
+        { "type": "p", "html": "<span class=\"en-text\">The subject matter of this Agreement is the provision of software development services as described in the Statement of Work attached hereto as Exhibit A.</span> <em>— 本协议的标的是提供作为附件A附于本协议的工作说明书中所述的软件开发服务。</em>" }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "4. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1",
+          "sentence": "Subject to the terms and conditions hereof, Provider shall provide the Services and Deliverables described in Exhibit A (Statement of Work) in accordance with the timeline and milestones set forth therein.",
+          "structure": [
+            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms and conditions hereof</em> — 介词短语作状语，\u201c根据本协议条款\u201d；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（回顾第3天）",
+            "<em>Provider shall provide the Services and Deliverables</em> — 主句，<span class=\"term\">shall</span> 表示义务",
+            "<em>described in Exhibit A (Statement of Work)</em> — 过去分词作后置定语，修饰 Services and Deliverables",
+            "<em><span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the timeline and milestones</em> — 方式状语，\u201c按照时间表和里程碑\u201d",
+            "<em><span class=\"term\" data-def=\"规定/载明\">set forth</span> therein</em> — 过去分词作后置定语，修饰 timeline and milestones；<span class=\"term\">therein</span> = in Exhibit A（在其中）"
+          ],
+          "translation": "根据本协议条款，提供方应按照附件A（工作说明书）中规定的时间表和里程碑，提供该附件中所述的服务及交付物。"
+        },
+        {
+          "title": "例句 2",
+          "sentence": "Contractor shall perform the Services with the degree of skill and diligence that would be exercised by a reasonably competent contractor experienced in providing services similar in scope and complexity to the Services, and shall comply with all applicable Laws and regulations.",
+          "structure": [
+            "<em>Contractor shall perform the Services</em> — 主句",
+            "<em>with the degree of skill and diligence</em> — 方式状语，\u201c以……的技能和勤勉程度\u201d",
+            "<em>that would be exercised by a reasonably competent contractor</em> — 定语从句，修饰 skill and diligence，\u201c合理称职的承包商所应具有的\u201d",
+            "<em>experienced in providing services similar in scope and complexity to the Services</em> — 过去分词短语作后置定语，修饰 contractor，\u201c在提供与本服务范围和复杂程度相似的服务方面有经验的\u201d",
+            "<em>and shall comply with all applicable Laws and regulations</em> — 并列谓语"
+          ],
+          "translation": "承包方应以在提供与本服务范围和复杂程度相似的服务方面具有经验的合理称职承包商所应具有的技能和勤勉程度履行服务，并应遵守所有适用法律法规。"
+        },
+        {
+          "title": "例句 3",
+          "sentence": "No failure or delay by either party in exercising any right or remedy hereunder shall operate as a waiver thereof, nor shall any single or partial exercise of any such right or remedy preclude any other or further exercise thereof or the exercise of any other right or remedy.",
+          "structure": [
+            "<em>No failure or delay ... shall operate as a waiver</em> — 主句，\u201c任何未行使或延迟行使……不构成对……的放弃\u201d",
+            "<em>by either party</em> — 介词短语作后置定语，\u201c任何一方的\u201d",
+            "<em>in exercising any right or remedy hereunder</em> — 介词短语作状语；<span class=\"term\">hereunder</span> = under this Agreement（在本协议项下）",
+            "<em>thereof</em> — 指代 any right or remedy（= of that right or remedy，对该权利或救济的）",
+            "<em>nor shall any single or partial exercise ... preclude</em> — <strong>nor 引导的否定倒装句</strong>，\u201c任何一次或部分行使也不得排除\u201d",
+            "<em>any other or further exercise thereof</em> — \u201c其进一步或其他行使\u201d"
+          ],
+          "translation": "任何一方未能或延迟行使本协议项下的任何权利或救济，不构成对该权利或救济的放弃；任何一次或部分行使任何此等权利或救济，不排除其进一步或其他行使，也不排除行使任何其他权利或救济。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "5. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语选择",
+          "instruction": "选择正确的中文释义。",
+          "questions": [
+            {
+              "prompt": "<span class=\"term\" data-def=\"交付成果\">deliverables</span>",
+              "options": ["递送方式", "交付物；应交付成果", "交付地址", "运输费用"],
+              "answer": "交付物；应交付成果",
+              "explanation": "deliverables 指合同约定的应交付成果，可以是产品、软件、报告、设计稿等。注意 deliverable 作形容词时意为\u201c可交付的\u201d。"
+            },
+            {
+              "prompt": "<span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span>（合同语境）",
+              "options": ["终点线", "公里标", "里程碑；阶段节点", "截止日期"],
+              "answer": "里程碑；阶段节点",
+              "explanation": "milestone 在合同中指项目的关键阶段节点，通常与支付挂钩（milestone payments = 里程碑付款）。"
+            },
+            {
+              "prompt": "<span class=\"term\" data-def=\"履行/履约\">performance</span>（performance of obligations）",
+              "options": ["表演", "性能", "履行（义务）", "业绩"],
+              "answer": "履行（义务）",
+              "explanation": "performance 在法律语境中主要指\u201c履行\u201d合同义务，而非日常含义的\u201c表演\u201d或\u201c性能\u201d。performance of obligations = 义务的履行。"
+            },
+            {
+              "prompt": "<span class=\"term\" data-def=\"规格/技术要求\">specifications</span>",
+              "options": ["特殊条件", "规格；技术规范", "专有技术", "说明书"],
+              "answer": "规格；技术规范",
+              "explanation": "specifications 指合同中约定的产品或服务应满足的技术标准和具体要求。conform to specifications = 符合规格。"
+            },
+            {
+              "prompt": "<span class=\"term\" data-def=\"合规/遵守\">compliance</span>",
+              "options": ["竞争", "投诉", "合规；遵守", "完成"],
+              "answer": "合规；遵守",
+              "explanation": "compliance 指遵守法律法规或合同要求。compliance with applicable Laws = 遵守适用法律。注意不要与 complaint（投诉）混淆。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：选词填空",
+          "instruction": "根据语境选择最恰当的术语填入合同条款空白处。",
+          "questions": [
+            {
+              "prompt": "The Service Provider shall ______ the Services <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> this Agreement.",
+              "options": ["perform", "performing", "performed", "performance"],
+              "answer": "perform",
+              "explanation": "perform obligations/services 是法律英语中\u201c履行义务/服务\u201d的标准搭配。shall perform = 应当履行。"
+            },
+            {
+              "prompt": "The Contractor shall ______ all necessary documentation to the Client for review.",
+              "options": ["render", "furnish", "deliver", "comply"],
+              "answer": "furnish",
+              "explanation": "furnish 常用于提供信息、文件、证据等场景。furnish documentation = 提供文件。provide 也可以，但 furnish 更精确地表达\u201c供查阅\u201d之意。"
+            },
+            {
+              "prompt": "______ the <span class=\"term\" data-def=\"预付款；定金\">advance payment</span>, Supplier shall deliver the Goods within five (5) Business Days.",
+              "options": ["Upon receipt of", "Under payment of", "On receiving the", "At the time of"],
+              "answer": "Upon receipt of",
+              "explanation": "upon receipt of = 收到……后，是合同中表示触发条件的标准搭配。Upon receipt of payment = 收到款项后。"
+            },
+            {
+              "prompt": "Provider shall use its ______ to complete the project by the Target Date.",
+              "options": ["good efforts", "best efforts", "great efforts", "full efforts"],
+              "answer": "best efforts",
+              "explanation": "best efforts（最大努力）代表最高程度的努力义务，要求义务方用尽一切合理手段。对比 reasonable efforts（合理努力）义务程度较低。"
+            },
+            {
+              "prompt": "All Services shall be performed ______ the Specifications <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Exhibit A.",
+              "options": ["according to", "in accordance with", "following up", "based on"],
+              "answer": "in accordance with",
+              "explanation": "in accordance with = 按照/根据，是法律英语中表示\u201c遵循某标准/规定\u201d的标准搭配。注意区别于 in compliance with（更强调合规义务）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：理解与辨析",
+          "instruction": "选择正确答案。",
+          "questions": [
+            {
+              "prompt": "合同中使用 <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 而非 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 意味着什么？",
+              "options": [
+                "义务方无需做任何努力",
+                "义务方可以考虑自身成本和可行性，采取合理步骤即可",
+                "两者含义完全相同",
+                "义务方必须不惜一切代价完成"
+              ],
+              "answer": "义务方可以考虑自身成本和可行性，采取合理步骤即可",
+              "explanation": "reasonable efforts 要求义务方采取合理步骤，但允许考虑自身成本和可行性。而 best efforts 要求更高，义务方需用尽一切合理手段，即使需要牺牲自身利益。"
+            },
+            {
+              "prompt": "合同中写明 \u201c<span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span>\u201d 的法律效果是什么？",
+              "options": [
+                "仅为提醒，无法律约束力",
+                "允许合理范围内的迟延",
+                "一旦迟延履行即构成违约，对方有权主张权利",
+                "仅适用于付款义务"
+              ],
+              "answer": "一旦迟延履行即构成违约，对方有权主张权利",
+              "explanation": "Time is of the essence 是法律术语，表示时间期限是合同的核心条款。一旦约定此条款，任何迟延都将构成重大违约（material breach），对方有权解除合同并索赔。"
+            },
+            {
+              "prompt": "<span class=\"term\">provide</span>、<span class=\"term\">furnish</span>、<span class=\"term\">render</span> 三者的区别是什么？",
+              "options": [
+                "三者含义完全相同，可随意替换",
+                "provide 最通用；furnish 侧重提供文件/信息；render 侧重提供专业服务",
+                "provide 最正式；furnish 最口语化；render 已过时",
+                "provide 用于服务；furnish 用于货物；render 用于金钱"
+              ],
+              "answer": "provide 最通用；furnish 侧重提供文件/信息；render 侧重提供专业服务",
+              "explanation": "三者均可译为\u201c提供\u201d，但 provide 适用范围最广，furnish 常搭配 information/documents/evidence（信息/文件/证据），render 常搭配 services/assistance/judgment（服务/协助/裁决）。"
+            },
+            {
+              "prompt": "\u201c<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms <span class=\"term\" data-def=\"本协议的\">hereof</span>\u201d 的正确翻译是？（复习 here- 家族词）",
+              "options": ["受制于本文条款", "根据本协议条款", "服从其条款", "依附本合同条款"],
+              "answer": "根据本协议条款",
+              "explanation": "Subject to the terms hereof 中 subject to = 根据/依据（前置条件），hereof = of this Agreement。整体译为\u201c根据本协议条款\u201d。注意不要译为\u201c受制于\u201d。（复习 here- 家族词）"
+            },
+            {
+              "prompt": "今天学的\u201c合同标的\u201d和\u201c履行义务\u201d条款属于合同结构中的哪个部分？（复习第1天知识）",
+              "options": [
+                "通用条款（boilerplate）",
+                "鉴于条款（recitals）",
+                "实质性条款（operative provisions）",
+                "定义条款（definitions）"
+              ],
+              "answer": "实质性条款（operative provisions）",
+              "explanation": "operative provisions = 实质性条款/正文条款，是合同中规定当事人核心权利义务的条款。今天学的标的条款和履行义务条款都属于 operative provisions。注意不是\u201c执行条款\u201d。（复习第1天错题）"
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习D：英译中",
+          "instruction": "将以下合同条款翻译为中文，完成后点击\u201c提交批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "Subject to the terms and conditions of this Agreement, Provider shall deliver the Goods to the location designated by Client within thirty (30) days of the Effective Date.",
+              "reference": "根据本协议的条款和条件，提供方应在生效日期后三十（30）日内将货物交付至客户指定的地点。",
+              "rubric": [
+                { "en": "Subject to", "ideal": "根据/依据", "accept": ["按照", "遵照"], "wrong": ["受制于", "服从于"], "note": "Subject to 在合同中表示\u201c根据/在……条件下\u201d，不是\u201c受制于\u201d" },
+                { "en": "terms and conditions", "ideal": "条款和条件", "accept": ["条款", "合同条款"], "wrong": ["术语和条件"], "note": "terms = 条款，不是\u201c术语\u201d" },
+                { "en": "shall deliver", "ideal": "应交付/应当交付", "accept": ["须交付", "将交付"], "wrong": ["可以交付", "可能交付"], "note": "shall 表示法律义务" },
+                { "en": "the location designated by Client", "ideal": "客户指定的地点", "accept": ["由客户指定的地点", "客户所指定的地点"], "wrong": ["客户的地点"], "note": "designated = 指定的" },
+                { "en": "within thirty (30) days of the Effective Date", "ideal": "在生效日期后三十（30）日内", "accept": ["自生效日起30日内", "生效日后30天内"], "wrong": ["三十天以后"], "note": "within X days of = 在……后X天内" }
+              ]
+            },
+            {
+              "source": "Contractor shall perform the Services in a professional and workmanlike manner, consistent with industry standards, and shall use reasonable efforts to complete the Deliverables by the milestones set forth in Schedule B.",
+              "reference": "承包方应以专业且符合行业水准的方式履行服务，符合行业标准，并应尽合理努力在附表B中规定的里程碑期限前完成交付物。",
+              "rubric": [
+                { "en": "in a professional and workmanlike manner", "ideal": "以专业且符合行业水准的方式", "accept": ["以专业方式", "以符合行业标准的方式"], "wrong": ["以工人的方式"], "note": "workmanlike = 专业的/符合行业水准的（非\u201c工人般的\u201d）" },
+                { "en": "consistent with industry standards", "ideal": "符合行业标准", "accept": ["与行业标准一致"], "wrong": ["坚持行业标准"], "note": "consistent with = 符合/与……一致" },
+                { "en": "shall use reasonable efforts", "ideal": "应尽合理努力/应使用合理努力", "accept": ["应采取合理措施"], "wrong": ["应尽最大努力"], "note": "reasonable efforts 不等于 best efforts，义务程度不同" },
+                { "en": "milestones set forth in Schedule B", "ideal": "附表B中规定的里程碑", "accept": ["附件B中载明的里程碑"], "wrong": ["时间表B"], "note": "set forth = 规定/载明（第3天所学）; Schedule = 附表/附件（第1天所学）" }
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习E：中译英",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击\u201c提交批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "根据本协议的条款和条件，承包方应在工作范围内按照附件A中规定的技术规范提供所有服务。",
+              "reference": "Subject to the terms and conditions of this Agreement, Contractor shall provide all Services within the scope of work in accordance with the specifications set forth in Exhibit A.",
+              "rubric": [
+                { "en": "根据本协议条款", "ideal": "Subject to the terms and conditions of this Agreement", "accept": ["Pursuant to this Agreement", "Under the terms of this Agreement"], "wrong": ["According to this Agreement"], "note": "合同中\u201c根据\u201d首选 subject to 或 pursuant to" },
+                { "en": "承包方应", "ideal": "Contractor shall", "accept": ["the Contractor shall"], "wrong": ["Contractor will", "Contractor should"], "note": "shall 表示合同义务（第3天所学）" },
+                { "en": "在工作范围内", "ideal": "within the scope of work", "accept": ["under the scope of work"], "note": "scope of work = 工作范围" },
+                { "en": "按照……技术规范", "ideal": "in accordance with the specifications", "accept": ["pursuant to the specifications", "according to the specifications"], "note": "in accordance with = 按照（法律标准搭配）" },
+                { "en": "附件A中规定的", "ideal": "set forth in Exhibit A", "accept": ["as set out in Exhibit A", "specified in Exhibit A"], "wrong": ["written in Exhibit A"], "note": "set forth = 规定/载明（法律用语）" }
+              ]
+            },
+            {
+              "source": "收到预付款后，供应商应在五（5）个工作日内开始交付货物，时间至关重要。",
+              "reference": "Upon receipt of the advance payment, Supplier shall commence delivery of the Goods within five (5) Business Days. Time is of the essence with respect to such delivery.",
+              "rubric": [
+                { "en": "收到预付款后", "ideal": "Upon receipt of the advance payment", "accept": ["After receiving the advance payment"], "wrong": ["When receiving"], "note": "upon receipt of = 收到……后（法律固定搭配）" },
+                { "en": "应开始交付", "ideal": "shall commence delivery", "accept": ["shall begin delivery", "shall start delivery"], "note": "commence 比 begin/start 更正式" },
+                { "en": "五（5）个工作日内", "ideal": "within five (5) Business Days", "accept": ["within 5 Business Days"], "wrong": ["in five days", "within 5 days"], "note": "合同中数字通常同时用文字和数字表示；Business Days 需大写（定义术语）" },
+                { "en": "时间至关重要", "ideal": "Time is of the essence", "accept": ["time is of the essence"], "wrong": ["Time is important", "Time is critical"], "note": "Time is of the essence 是法律专用表达，不可替换为普通英语" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "6. 今日小结",
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"标的/主题\">subject matter</span></strong>——合同标的/标的物，指合同权利义务所指向的具体事物</li><li><strong><span class=\"term\" data-def=\"交付成果\">deliverables</span></strong>——交付物/应交付成果，合同约定需交付的产品或成果</li><li><strong><span class=\"term\" data-def=\"工作范围\">scope of work</span></strong>（SOW）——工作范围，明确界定合同项下服务的具体内容</li><li><strong><span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span></strong>——里程碑/阶段节点，常与 milestone payments（里程碑付款）挂钩</li><li><strong><span class=\"term\" data-def=\"履行/履约\">performance</span></strong>——法律语境中首要含义是\u201c履行\u201d（非\u201c表演\u201d或\u201c性能\u201d）</li><li><strong>provide / furnish / render 三者辨析</strong>——provide 最通用；furnish 用于提供信息/文件；render 用于提供专业服务</li><li><strong><span class=\"term\" data-def=\"尽最大努力\">best efforts</span> vs. <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span></strong>——努力义务程度不同，<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 最高，<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 允许考虑自身成本</li><li><strong><span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span></strong>——法律效力：迟延即构成重大违约</li><li><strong><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></strong>——根据/须经（两种含义），不要译为\u201c受制于\u201d</li><li><strong><span class=\"term\" data-def=\"根据/依照\">in accordance with</span></strong>——按照/根据，法律英语中的标准搭配</li><li><strong>upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of</strong>——收到……后，表示触发条件的固定搭配</li><li><strong><span class=\"term\" data-def=\"交钥匙工程\">turnkey</span></strong>——交钥匙/整包，承包方完成全部工作后交付即可使用</li></ol>"
+    }
+  ]
+}

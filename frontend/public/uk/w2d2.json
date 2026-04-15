@@ -1,0 +1,275 @@
+{
+  "title": "第2周 第2天 — 性别判断强化训练",
+  "objective": "<strong>学习目标：</strong>通过大量新词汇和密集练习，把第1周学过的名词性别判断规则内化为直觉。今天不引入新语法，专注于扩展词汇量和强化性别判断能力。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 快速回顾第1周规则",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "上周我们学了名词性别的7条核心规则，花2分钟快速回忆一下："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<table><thead><tr><th>词尾特征</th><th>性别</th><th>代词</th><th>例子</th></tr></thead><tbody><tr><td>辅音结尾</td><td>阳性</td><td><span class=\"uk-word\">він</span></td><td><span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"公园\">парк</span></td></tr><tr><td>-а / -я 结尾</td><td>阴性</td><td><span class=\"uk-word\">вона</span></td><td><span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"厨房\">кухня</span></td></tr><tr><td>-о / -е 结尾</td><td>中性</td><td><span class=\"uk-word\">воно</span></td><td><span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\" data-def=\"海\">море</span></td></tr><tr><td>-ння / -ття 结尾</td><td>中性</td><td><span class=\"uk-word\">воно</span></td><td><span class=\"uk-word\" data-def=\"作业\">завдання</span>, <span class=\"uk-word\" data-def=\"生命\">життя</span></td></tr><tr><td>-ь 结尾</td><td>需记忆</td><td>—</td><td><span class=\"uk-word\" data-def=\"天\">день</span>(阳), <span class=\"uk-word\" data-def=\"夜晚\">ніч</span>(阴)</td></tr><tr><td>-ість 结尾</td><td>阴性</td><td><span class=\"uk-word\">вона</span></td><td><span class=\"uk-word\" data-def=\"喜悦\">радість</span>, <span class=\"uk-word\" data-def=\"可能性\">можливість</span></td></tr><tr><td>指男性的人</td><td>阳性</td><td><span class=\"uk-word\">він</span></td><td><span class=\"uk-word\" data-def=\"爸爸\">тато</span>, <span class=\"uk-word\" data-def=\"父亲\">батько</span></td></tr><tr><td>不变化外来词</td><td>中性</td><td><span class=\"uk-word\">воно</span></td><td><span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>, <span class=\"uk-word\" data-def=\"地铁\">метро</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>快速判断口诀：</strong><br>辅音 → 阳，-а/-я → 阴，-о/-е → 中<br>-ння/-ття → 中，-ість → 阴，-ь → 要记忆<br>指男性 → 阳，外来词 → 中"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "2. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：判断新词的性别（8题）",
+          "instruction": "选择每个名词的正确性别。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"大学生\">студент</span>（学生）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "студент 以辅音 -т 结尾 → 阳性"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"手\">рука</span>（手）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "рука 以 -а 结尾 → 阴性"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\">літо</span>（夏天）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "літо 以 -о 结尾 → 中性"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"博物馆\">музей</span>（博物馆）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "музей 以 -й 结尾，й 是辅音 → 阳性"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"腿\">нога</span>（腿）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "нога 以 -а 结尾 → 阴性"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"雪\">сніг</span>（雪）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "сніг 以辅音 -г 结尾 → 阳性"
+            },
+            {
+              "prompt": "7. <span class=\"uk-word\" data-def=\"啤酒\">пиво</span>（啤酒）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "пиво 以 -о 结尾 → 中性"
+            },
+            {
+              "prompt": "8. <span class=\"uk-word\" data-def=\"酒店\">готель</span>（酒店）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "готель 以 -ь 结尾，是阳性（需记忆）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：选择正确的代词（6题）",
+          "instruction": "根据名词性别，选择 <span class=\"uk-word\">він</span> / <span class=\"uk-word\">вона</span> / <span class=\"uk-word\">воно</span>。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"头\">голова</span>（头） — ______ тут.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "вона",
+              "explanation": "голова 以 -а 结尾 → 阴性 → вона"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"剧院\">театр</span>（剧院） — ______ там.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "він",
+              "explanation": "театр 以辅音 -р 结尾 → 阳性 → він"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"镜子\">дзеркало</span>（镜子） — ______ тут.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "воно",
+              "explanation": "дзеркало 以 -о 结尾 → 中性 → воно"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"风\">вітер</span>（风） — ______ тут.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "він",
+              "explanation": "вітер 以辅音 -р 结尾 → 阳性 → він"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"冬天\">зима</span>（冬天） — ______ тут.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "вона",
+              "explanation": "зима 以 -а 结尾 → 阴性 → вона"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"博物馆\">музей</span>（博物馆） — ______ там.",
+              "options": ["<span class=\"uk-word\">він</span>", "<span class=\"uk-word\">вона</span>", "<span class=\"uk-word\">воно</span>"],
+              "answer": "він",
+              "explanation": "музей 以 -й 结尾（辅音）→ 阳性 → він"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：找出不同类的词（5题）",
+          "instruction": "每组有一个词的性别与其他三个不同，找出它。",
+          "questions": [
+            {
+              "prompt": "1. 哪个词性别不同？",
+              "options": [
+                "<span class=\"uk-word\" data-def=\"兄弟\">брат</span>",
+                "<span class=\"uk-word\" data-def=\"大学生\">студент</span>",
+                "<span class=\"uk-word\">літо</span>",
+                "<span class=\"uk-word\" data-def=\"信/叶子\">лист</span>"
+              ],
+              "answer": "літо",
+              "explanation": "брат（阳）、студент（阳）、лист（阳）都是阳性；літо（中性 -о 结尾）不同"
+            },
+            {
+              "prompt": "2. 哪个词性别不同？",
+              "options": [
+                "<span class=\"uk-word\" data-def=\"姐妹\">сестра</span>",
+                "<span class=\"uk-word\" data-def=\"风\">вітер</span>",
+                "<span class=\"uk-word\" data-def=\"手\">рука</span>",
+                "<span class=\"uk-word\" data-def=\"腿\">нога</span>"
+              ],
+              "answer": "вітер",
+              "explanation": "сестра（阴）、рука（阴）、нога（阴）都是阴性；вітер（阳性 辅音结尾）不同"
+            },
+            {
+              "prompt": "3. 哪个词性别不同？",
+              "options": [
+                "<span class=\"uk-word\" data-def=\"啤酒\">пиво</span>",
+                "<span class=\"uk-word\">літо</span>",
+                "<span class=\"uk-word\" data-def=\"云\">хмара</span>",
+                "<span class=\"uk-word\" data-def=\"镜子\">дзеркало</span>"
+              ],
+              "answer": "хмара",
+              "explanation": "пиво（中）、літо（中）、дзеркало（中）都是中性；хмара（阴性 -а 结尾）不同"
+            },
+            {
+              "prompt": "4. 哪个词性别不同？",
+              "options": [
+                "<span class=\"uk-word\" data-def=\"剧院\">театр</span>",
+                "<span class=\"uk-word\" data-def=\"博物馆\">музей</span>",
+                "<span class=\"uk-word\" data-def=\"花\">квітка</span>",
+                "<span class=\"uk-word\" data-def=\"年\">рік</span>"
+              ],
+              "answer": "квітка",
+              "explanation": "театр（阳）、музей（阳）、рік（阳）都是阳性；квітка（阴性 -а 结尾）不同"
+            },
+            {
+              "prompt": "5. 哪个词性别不同？（注意 -ь 结尾！）",
+              "options": [
+                "<span class=\"uk-word\" data-def=\"冬天\">зима</span>",
+                "<span class=\"uk-word\" data-def=\"春天\">весна</span>",
+                "<span class=\"uk-word\" data-def=\"秋天\">осінь</span>",
+                "<span class=\"uk-word\" data-def=\"酒店\">готель</span>"
+              ],
+              "answer": "готель",
+              "explanation": "зима（阴）、весна（阴）、осінь（阴）都是阴性；готель 虽以 -ь 结尾但是阳性"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：新旧词混合性别判断（6题）",
+          "instruction": "混合本周新词和第1周旧词，判断性别。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"油/黄油\">масло</span>（黄油/油）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "масло 以 -о 结尾 → 中性（第1周学过的旧词）"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"年\">рік</span>（年）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "рік 以辅音 -к 结尾 → 阳性（本周新词）"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"广场\">площа</span>（广场）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "площа 以 -а 结尾 → 阴性（第1周旧词）"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"春天\">весна</span>（春天）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "весна 以 -а 结尾 → 阴性（本周新词）"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"脸\">обличчя</span>（脸）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "обличчя 以 -чя 结尾（类似 -ття），中性（第1周旧词）"
+            },
+            {
+              "prompt": "6. <span class=\"uk-word\" data-def=\"信/叶子\">лист</span>（信/叶子）",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "лист 以辅音 -т 结尾 → 阳性（本周新词）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：易错词终极挑战（5题）",
+          "instruction": "这些词容易判断错误，集中精力！",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"uk-word\" data-def=\"作业\">завдання</span>（作业） — 以 -я 结尾，是阴性还是中性？",
+              "options": ["阴性", "中性"],
+              "answer": "中性",
+              "explanation": "завдання 以 -ння 结尾 → 中性，不是阴性！"
+            },
+            {
+              "prompt": "2. <span class=\"uk-word\" data-def=\"爸爸\">тато</span>（爸爸） — 以 -о 结尾，是中性还是阳性？",
+              "options": ["阳性", "中性"],
+              "answer": "阳性",
+              "explanation": "тато 指爸爸（男性），自然性别优先 → 阳性"
+            },
+            {
+              "prompt": "3. <span class=\"uk-word\" data-def=\"旅行\">подорож</span>（旅行） — 以辅音 -ж 结尾，是阳性还是阴性？",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "подорож 看似以辅音 -ж 结尾应是阳性，但它是阴性特殊词"
+            },
+            {
+              "prompt": "4. <span class=\"uk-word\" data-def=\"出租车\">таксі</span>（出租车） — 外来词，什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "таксі 是不变化的外来词 → 中性"
+            },
+            {
+              "prompt": "5. <span class=\"uk-word\" data-def=\"青春\">молодість</span>（青春） — 以 -ь 结尾，什么性别？",
+              "options": ["阳性", "阴性"],
+              "answer": "阴性",
+              "explanation": "молодість 以 -ість 结尾 → 总是阴性"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "3. 今日小结",
+      "html": "<h3>今天的收获</h3><ol><li>发现新词尾：<strong>-й 结尾也是阳性</strong>（如 <span class=\"uk-word\" data-def=\"博物馆\">музей</span>），因为 й 是辅音</li><li>记住了季节的性别：<span class=\"uk-word\" data-def=\"冬天\">зима</span>(阴)、<span class=\"uk-word\" data-def=\"春天\">весна</span>(阴)、<span class=\"uk-word\">літо</span>(中)、<span class=\"uk-word\" data-def=\"秋天\">осінь</span>(阴) — 三阴一中</li><li>复习了 <span class=\"uk-word\" data-def=\"酒店\">готель</span>（-ь 结尾阳性）、<span class=\"uk-word\" data-def=\"旅行\">подорож</span>（-ж 结尾阴性）等易错词</li><li>身体部位词 <span class=\"uk-word\" data-def=\"手\">рука</span>、<span class=\"uk-word\" data-def=\"腿\">нога</span>、<span class=\"uk-word\" data-def=\"头\">голова</span> 都是阴性</li></ol><p><strong>明天预告：</strong>明天开始学习<strong>名词复数</strong>！先从阳性名词的复数形式开始 — 学会说\"不只一个\"！</p>"
+    }
+  ]
+}

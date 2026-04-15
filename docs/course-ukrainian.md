@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-基于文件的乌克兰语学习系统。Claude Code 根据学习进度，为用户生成每日课程文档（HTML 格式）。
+基于文件的乌克兰语学习系统。Claude Code 根据学习进度，为用户生成每日课程 **JSON 数据文件**，由 Vue 前端 `LessonRenderer` 组件渲染。
 
 **本项目只负责语法课程**，单词学习通过 vocabulary_app（mieltsm.top）管理。两个项目联动：课程中的实词必须来自用户已添加到 vocabulary_app 的词汇。
 
@@ -17,7 +17,7 @@
 
 ## Vocabulary App 联动
 
-课程页面通过 `courses/shared/auth.js` 读取主站 Supabase 登录会话，使用认证用户的 ID 添加词汇。默认 source 为 `UKA`，用户可在页面下拉框中切换。
+课程页面复用主站的 Supabase 登录会话（由 Vue 的 `useAuth` composable 管理），通过 `VocabPreloadSection.vue` 把单词写入 `words` 表。默认 source 为 `UKA`，用户可在页面下拉框中切换。
 
 课程生成时，通过 Supabase REST API 获取用户已知词汇（需要 service key，见 `backend/.env` 中的 `SUPABASE_SERVICE_KEY`）。
 
@@ -29,12 +29,12 @@
 2. **获取已知词汇**：通过 Supabase REST API 获取用户已添加的乌克兰语单词（user_id 和 source 从课程上下文确定）
 3. **参考大纲**：对照 `courses/ukrainian/curriculum.md` 确定今天的教学内容
 4. **生成课程**：
-   - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载课（`courses/ukrainian/lessons/w*d1.html`）了解已教过哪些词汇，并通过 API 查询背单词 App 中的已知词汇（见上方"Vocabulary App 联动配置"）。确保新词汇不与已教内容重复。生成词汇页面，列出本周所有新单词（含中文释义），引用 `templates/vocab.js` 实现一键添加到背单词App。参考 `courses/ukrainian/vocabulary/weekly-vocab.md` 中的词汇列表
-   - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载课（`courses/ukrainian/lessons/wXd1.html`）确认本周允许使用的词汇范围。在 `courses/ukrainian/lessons/` 目录下创建以周次天数命名的 `.html` 文件（如 `w3d5.html`）。**例句和练习中只使用已知词汇列表中的词**（语法功能词不受约束，详见下方"词汇约束规则"）。生成后对照 `courses/ukrainian/curriculum.md` 检查每道练习题是否超纲
+   - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载 JSON（`frontend/public/uk/w*d1.json`）了解已教过哪些词汇，并通过 API 查询背单词 App 中的已知词汇。确保新词汇不与已教内容重复。列出本周所有新单词（含中文释义）到 `sections[0]` 的 `vocab-preload` 类型。参考 `courses/ukrainian/vocabulary/weekly-vocab.md`
+   - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载 JSON（`frontend/public/uk/wXd1.json`）确认本周允许使用的词汇范围。在 `frontend/public/uk/` 目录下创建以周次天数命名的 `.json` 文件（如 `w3d5.json`）。**例句和练习中只使用已知词汇列表中的词**（语法功能词不受约束，详见下方"词汇约束规则"）。生成后对照 `courses/ukrainian/curriculum.md` 检查每道练习题是否超纲
    - **复习日（第7天）**：巩固本周内容，不引入新语法
 5. **更新进度**：课程生成后更新 `courses/ukrainian/progress.md`（推进天数、记录完成的课程）
-6. **更新索引页**：在 `courses/ukrainian/lessons/index.html` 的 `lessons` 数组中，将对应条目的 `file` 从 `null` 改为实际文件名（如 `"w3d5.html"`）
-7. **部署**：课程生成后 git commit && git push 即可自动部署，访问 https://mieltsm.top/uk/
+6. **更新课时索引**：在 `frontend/src/features/courses/data/lessons.ts` 的 `ukrainianLessons` 数组中新增或更新对应条目
+7. **部署**：课程生成后 git commit && git push 即可自动部署（GitHub Actions 触发前端构建），访问 https://mieltsm.top/uk/
 
 ## 词汇约束规则
 
@@ -72,38 +72,13 @@
 
 ## 进度追踪
 
-课程完成进度通过 `courses/ukrainian/lessons/index.html` 中每课右侧的 **checkbox** 由用户手动标记，状态保存在浏览器 localStorage（key: `ukrainian_progress`）。不再使用日期自动判断完成状态。
+课程完成进度通过 Vue 的 `CourseIndexPage` 的 checkbox 由用户手动标记，状态保存在 Supabase `course_progress` 表（跨设备同步）。
 
 `courses/ukrainian/progress.md` 仍然用于记录当前周次/天数、薄弱点、待复习内容，供 Claude 生成课程时参考。
 
 ## 课程格式
 
-课程支持两种格式：**JSON 数据驱动**（推荐）和传统 HTML。新课程一律使用 JSON 格式。
-
-### JSON 格式（推荐）
-
-每个课时由两个文件组成：
-
-1. **`wXdY.json`** — 纯内容数据（Claude 生成此文件）
-2. **`wXdY.html`** — 薄壳 HTML（复制模板，改文件名即可）
-
-**薄壳 HTML 模板**（13 行，写一次永不变）：
-
-```html
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="templates/lesson.css">
-</head>
-<body>
-<script src="templates/auth.js"></script>
-<script src="templates/renderer.js"></script>
-<script>CourseRenderer.load('wXdY.json')</script>
-</body>
-</html>
-```
+每个课时是一个独立的 JSON 文件，存储在 `frontend/public/uk/wXdY.json`，由 `LessonRenderer.vue` 组件解析渲染。**不需要**配套的 HTML 文件、薄壳、或任何 script 标签。
 
 **JSON 结构**（以语法课为例）：
 
@@ -201,40 +176,7 @@ JSON 中的 html 字段同理：
 ```json
 { "type": "p", "html": "Це <span class=\"uk-word\" data-def=\"桌子\">стіл</span>" }
 ```
-vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动输出为 `data-def`，无需在 html 中重复标注。
-
-### 传统 HTML 格式（已有课程）
-
-已有课程仍为完整 HTML。结构骨架：
-
-```html
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第X周 第Y天 — 课程标题</title>
-  <link rel="stylesheet" href="templates/lesson.css">
-</head>
-<body>
-<!-- 课程内容 -->
-<script src="templates/auth.js"></script>
-<script src="templates/tts.js"></script>
-<script src="templates/wordInteraction.js"></script>
-<script src="templates/exercise.js"></script>
-<script src="templates/nav.js"></script>
-</body>
-</html>
-```
-
-### 例句标记（第3周起适用）
-
-```html
-<p class="example">
-  1. <span class="uk-text">Це стіл.</span>
-  <span class="translation">— 这是桌子。</span>
-</p>
-```
+vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSection.vue` 自动输出为 `data-def`，无需在 html 中重复标注。
 
 ### 乌克兰语可点击标记规范
 
@@ -250,37 +192,29 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 - **词汇预载课（w*d1）中定义的词组**，在所有课时中都保持词组整体标记（如 `<span class="uk-word">чоловічий рід</span>`）
 - **不在 d1 词汇表中的词**，一律按单个单词标记（如 `<span class="uk-word">чоловічий</span> <span class="uk-word">рід</span>`）
 
-**例句处理**：`.uk-text` 包裹的完整例句由 tts.js 自动拆词为可点击单词，其内部不再嵌套 `.uk-word`。拆出的每个单词同样支持气泡交互。
+**例句处理**：`.uk-text` 包裹的完整例句由 `useCourseTts` 自动拆词为可点击单词，其内部不再嵌套 `.uk-word`。拆出的每个单词同样支持气泡交互。
 
-**练习题加粗规范**：`.quiz-prompt` 默认 `font-weight: normal`，不会自动加粗。如果练习说明（instruction）中提到"加粗的名词/单词"，必须在对应 prompt 中用 `<strong>` 标签显式包裹目标词，例如：`"prompt": "Це <strong><span class=\"uk-word\" data-def=\"桌子\">стіл</span></strong>."`。否则学生无法区分哪个词是需要关注的目标词。
+**练习题加粗规范**：quiz prompt 默认不加粗。如果练习说明（instruction）中提到"加粗的名词/单词"，必须在对应 prompt 中用 `<strong>` 标签显式包裹目标词，例如：`"prompt": "Це <strong><span class=\"uk-word\" data-def=\"桌子\">стіл</span></strong>."`。否则学生无法区分哪个词是需要关注的目标词。
 
-### 交互练习标记
+### 交互练习（JSON）
 
-每道题用 `.quiz-item` 包裹，答案和解析存在 `data-answer` / `data-explanation` 属性中。每个 `.exercise` 末尾放判题按钮。`exercise.js` 自动处理判题逻辑。
+每道 quiz 题包含 `prompt`（题目）、`options`（选项数组）、`answer`（正确答案，必须与某个选项完全匹配）、可选的 `explanation`（解析）和 `hints`（渐进提示数组）。`QuizExercise.vue` 自动处理判题逻辑和状态保存。
 
-```html
-<div class="exercise">
-  <h3>练习A：题目标题</h3>
-  <p>说明文字</p>
-
-  <div class="quiz-item" data-answer="阳性" data-explanation="以辅音 -к 结尾">
-    <div class="quiz-prompt">1. парк</div>
-    <div class="quiz-options">
-      <label><input type="radio" name="a1" value="阳性"> 阳性</label>
-      <label><input type="radio" name="a1" value="阴性"> 阴性</label>
-      <label><input type="radio" name="a1" value="中性"> 中性</label>
-    </div>
-  </div>
-  <!-- 更多 .quiz-item ... -->
-
-  <button class="grade-btn" disabled>判题</button>
-</div>
+```json
+{
+  "style": "quiz",
+  "title": "练习A：判断名词性别",
+  "instruction": "选择每个名词的正确性别。",
+  "questions": [
+    {
+      "prompt": "<span class=\"uk-word\" data-def=\"公园\">парк</span>",
+      "options": ["阳性", "阴性", "中性"],
+      "answer": "阳性",
+      "explanation": "以辅音 -к 结尾 → 阳性"
+    }
+  ]
+}
 ```
-
-注意事项：
-- 每个 `.exercise` 内的 radio `name` 属性需唯一（如 a1, a2, b1, b2...）
-- `data-answer` 的值必须与某个 radio 的 `value` 完全匹配
-- 所有题型（判断性别、选代词、选不同类）统一用 radio 按钮
 
 ### 填空题格式（JSON）
 
@@ -372,4 +306,5 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 renderer.js 自动
 - 课程大纲：`courses/ukrainian/curriculum.md`
 - 学习进度：`courses/ukrainian/progress.md`
 - 每周推荐词汇：`courses/ukrainian/vocabulary/weekly-vocab.md`
-- 每日课程：`courses/ukrainian/lessons/wXdY.html`（如 `w1d2.html` = 第1周第2天）
+- **每日课程 JSON**：`frontend/public/uk/wXdY.json`（如 `w1d2.json` = 第1周第2天）
+- **课时索引数据**：`frontend/src/features/courses/data/lessons.ts`（`ukrainianLessons` 数组，新增课时须同步更新）

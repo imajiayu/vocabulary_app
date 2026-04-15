@@ -1,0 +1,469 @@
+{
+  "title": "第3周 第4天 — 利息与违约金（Interest & Liquidated Damages）",
+  "objective": "掌握商务合同中利息条款与违约金条款的核心词汇，理解 <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>（预定损害赔偿）与 <span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span>（罚款/违约金）的法律区别，能够准确翻译合同中典型的利息计算和违约金条款。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "引言",
+      "blocks": [
+        { "type": "p", "html": "<strong>上节回顾：</strong>上节课学习了支付条款的核心词汇\u2014\u2014<span class=\"term\" data-def=\"发票；账单\">invoice</span>（发票）、<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>（净30天）、<span class=\"term\" data-def=\"分期付款；期款\">installment</span>（分期款）、<span class=\"term\" data-def=\"质保金；尾款\">retention</span>（质保金）、<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>（电汇）、<span class=\"term\" data-def=\"到期应付\">due and payable</span>（到期应付）等。今天学习\u201c如果逾期不付款会怎样\u201d\u2014\u2014利息与违约金条款。" },
+        { "type": "error-warn", "html": "<strong>错题复习（mistakes.md 持续攻克项）：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（\u274c 错误：执行条款）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（\u26a0\ufe0f 必须完整翻译，不可简化为\u201c有效\u201d）</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为（\u274c 错误：\u201c被认为是\u201d）</li><li><span class=\"term\">unenforceable</span> = 不可执行的（\u274c 错误：\u201c没有强制执行力的\u201d\u2014\u2014译法冗长）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（\u26a0\ufe0f here- 家族词不可省略）</li></ul>" }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "1. 核心词汇",
+      "blocks": [
+        { "type": "p", "html": "利息与违约金条款是合同争议的高发地带。以下 16 个术语是翻译和理解这类条款的基础。" },
+        {
+          "type": "table",
+          "headers": ["英文", "音标", "中文", "常见搭配"],
+          "firstColWord": true,
+          "rows": [
+            ["interest", "/\u02c8\u026antr\u0259st/", "利息；利率", "bear interest; interest shall accrue; interest at the rate of"],
+            ["interest rate", "/\u02c8\u026antr\u0259st re\u026at/", "利率", "at an <span class=\"term\" data-def=\"利率\">interest rate</span> of X%; <span class=\"term\" data-def=\"利率\">interest rate</span> <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>"],
+            ["default interest", "/d\u026a\u02c8f\u0254\u02d0lt \u02c8\u026antr\u0259st/", "违约利息；逾期利息", "<span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span> at the rate of; <span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span> shall accrue"],
+            ["late payment interest", "/le\u026at \u02c8pe\u026am\u0259nt \u02c8\u026antr\u0259st/", "逾期付款利息；迟延支付利息", "<span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span> of X% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>; charged <span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span>"],
+            ["per annum", "/p\u025cr \u02c8\u00e6n\u0259m/", "每年；按年计算（缩写：p.a.）", "5% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>; <span class=\"term\" data-def=\"利率\">interest rate</span> of 8% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>; calculated <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>"],
+            ["accrue", "/\u0259\u02c8kru\u02d0/", "（利息/权利）产生；累积", "interest shall accrue from; accrued interest; accruing on a daily basis"],
+            ["compound interest", "/\u02c8k\u0252mpa\u028and \u02c8\u026antr\u0259st/", "复利（利息再生利息）", "compounded monthly/annually; <span class=\"term\" data-def=\"复利\">compound interest</span> at the rate of"],
+            ["simple interest", "/\u02c8s\u026amp\u0259l \u02c8\u026antr\u0259st/", "单利（仅对本金计息）", "<span class=\"term\" data-def=\"单利\">simple interest</span> calculated on the principal; <span class=\"term\" data-def=\"单利\">simple interest</span> basis"],
+            ["default", "/d\u026a\u02c8f\u0254\u02d0lt/", "违约；逾期（名词/动词）", "event of default; in default; upon default; default by the Client"],
+            ["grace period", "/\u0261re\u026as \u02c8p\u026a\u0259ri\u0259d/", "宽限期（允许逾期后若干天内补救）", "within the <span class=\"term\" data-def=\"宽限期\">grace period</span>; a <span class=\"term\" data-def=\"宽限期\">grace period</span> of 5 Business Days; cure within the <span class=\"term\" data-def=\"宽限期\">grace period</span>"],
+            ["penalty", "/\u02c8p\u025bn\u0259lti/", "罚款；惩罚性违约金", "<span class=\"term\" data-def=\"违约金条款；惩罚性条款\">penalty clause</span>; <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a penalty; impose a penalty"],
+            ["penalty clause", "/\u02c8p\u025bn\u0259lti kl\u0254\u02d0z/", "违约金条款；惩罚性条款（英美法下可能不可执行）", "a <span class=\"term\" data-def=\"违约金条款；惩罚性条款\">penalty clause</span> is void; enforce a <span class=\"term\" data-def=\"违约金条款；惩罚性条款\">penalty clause</span>"],
+            ["liquidated damages", "/\u02c8l\u026akw\u026ade\u026at\u026ad \u02c8d\u00e6m\u026ad\u0292\u026az/", "预定损害赔偿；约定损害赔偿金（缩写：LD）", "<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> clause; pay <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> of; LD at the rate of X per day"],
+            ["genuine pre-estimate", "/\u02c8d\u0292\u025bnju\u026an pri\u02d0\u02c8\u025bst\u026am\u026at/", "（损失的）真实预先估算（LD 合法的核心条件）", "constitute a <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss; <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of the loss suffered"],
+            ["in default of payment", "/\u026an d\u026a\u02c8f\u0254\u02d0lt \u0259v \u02c8pe\u026am\u0259nt/", "因未履行付款义务而违约", "<span class=\"term\" data-def=\"因未履行付款义务而违约\">in default of payment</span> of any sum due; if Client is <span class=\"term\" data-def=\"因未履行付款义务而违约\">in default of payment</span>"],
+            ["without prejudice to", "/w\u026a\u02c8\u00f0a\u028at \u02c8pr\u025bd\u0292\u028ad\u026as tu\u02d0/", "不影响\u2026\u2026的权利；不妨碍\u2026\u2026（保留其他救济权）", "<span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span> any other remedy; <span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span> Provider's right to"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>词源记忆：</strong><ul><li><span class=\"term\" data-def=\"利息；利率\">interest</span>：来自拉丁语 <em>inter esse</em>（在其中；关系到），引申为\u201c因资金被占用而产生的利益\u201d\u2014\u2014即利息。</li><li><span class=\"term\" data-def=\"每年；按年计算\">per annum</span>：纯拉丁语，<em>per</em>（每）+ <em>annum</em>（年），合同中的年利率固定用这个表达，缩写为 p.a.。</li><li><span class=\"term\" data-def=\"（利息/权利）产生；累积\">accrue</span>：来自拉丁语 <em>accrescere</em>（增长/增加），利息\u201caccrue\u201d就是指它随时间逐渐积累增长。</li><li><span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>：<em>liquidated</em> = 已明确量化的（非\u201c清偿\u201d）。LD 是合同签署时双方已预先\u201c量化/固定\u201d好的赔偿额，区别于诉讼时才确定的 unliquidated damages。</li><li><span class=\"term\" data-def=\"宽限期\">grace period</span>：<em>grace</em> 有\u201c恩典/宽恕\u201d之意，<span class=\"term\" data-def=\"宽限期\">grace period</span> 是给违约方一段\u201c被宽恕\u201d的缓冲时间，在此期间补救不算违约。</li></ul>" }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        { "type": "p", "html": "以下搭配在利息与违约金条款中高频出现，需整体记忆。" },
+        {
+          "type": "table",
+          "headers": ["固定搭配", "中文意思", "真实合同例句"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"利息；利率\">interest</span> shall <span class=\"term\" data-def=\"（利息/权利）产生；累积\">accrue</span> from the date of <span class=\"term\" data-def=\"违约；逾期\">default</span>", "利息自违约之日起产生", "<span class=\"en-text\">Interest shall accrue from the date of default until the date of actual payment.</span>"],
+            ["at the rate of [X]% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>", "按每年[X]%的利率", "<span class=\"en-text\">Overdue amounts shall bear interest at the rate of six percent (6%) per annum.</span>"],
+            ["<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> at the rate of [X] per day", "按每日[X]元的标准支付预定损害赔偿", "<span class=\"en-text\">Provider shall pay liquidated damages at the rate of USD 1,000 per day of delay.</span>"],
+            ["<span class=\"term\" data-def=\"构成\">constitute</span> a <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss", "构成对损失的真实预先估算", "<span class=\"en-text\">The parties agree that the foregoing liquidated damages constitute a genuine pre-estimate of the loss likely to be suffered.</span>"],
+            ["<span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span> any other <span class=\"term\" data-def=\"救济；补救\">remedy</span>", "不影响任何其他救济权利", "<span class=\"en-text\">Without prejudice to any other remedy available hereunder, Provider shall be entitled to charge default interest on overdue amounts.</span>"],
+            ["<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a maximum <span class=\"term\" data-def=\"累计的/总计的\">aggregate</span> of", "以\u2026\u2026总额为上限", "<span class=\"en-text\">Liquidated damages shall be subject to a maximum aggregate of ten percent (10%) of the Contract Price.</span>"],
+            ["in the <span class=\"term\" data-def=\"事件；情形\">event</span> of late payment", "如发生逾期付款", "<span class=\"en-text\">In the event of late payment, Client shall pay interest on the overdue amount.</span>"],
+            ["<span class=\"term\" data-def=\"（利息/权利）产生；累积\">accruing</span> on a daily basis", "按日累计", "<span class=\"en-text\">Default interest shall accrue on the outstanding balance, accruing on a daily basis from the due date.</span>"]
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. 词汇辨析",
+      "blocks": [
+        { "type": "h3", "text": "3.1 liquidated damages vs. penalty \u2014 最重要的法律区别" },
+        { "type": "p", "html": "这是本课最核心的辨析，也是合同实务中最容易混淆的概念。在英美法下，两者有根本区别：" },
+        {
+          "type": "table",
+          "headers": ["概念", "中文", "法律性质", "可执行性", "判断标准"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> (LD)", "预定损害赔偿", "对未来损失的合理预先量化", "\u2705 可执行（合法）", "是否构成 <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss"],
+            ["<span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span>", "惩罚性违约金", "以惩罚违约方为目的，金额与损失不成比例", "\u274c 在英美法下通常不可执行（void）", "是否远超实际可能损失"]
+          ]
+        },
+        { "type": "note", "html": "<strong>实操要点：</strong>中国法律中通常将两者统称为\u201c违约金\u201d（合同法第114条），中国法院可依据公平原则调整违约金金额。但在起草英文合同时，务必将 LD 条款写为\u201c<span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss\u201d，避免被英美法院认定为不可执行的 penalty。" },
+        { "type": "error-warn", "html": "<strong>常见翻译错误：</strong><span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> \u2260 \u201c清算损害赔偿\u201d 或 \u201c已结清的损失\u201d！<br><span class=\"term\">liquidated</span> 在此处意为\u201c已量化的/已确定的\u201d，不是\u201c清算\u201d的意思。正确译法：预定损害赔偿 / 约定损害赔偿金。" },
+        { "type": "h3", "text": "3.2 default interest vs. late payment interest vs. interest" },
+        {
+          "type": "table",
+          "headers": ["术语", "中文", "使用场景"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"利息；利率\">interest</span>", "利息（通用）", "最通用，任何类型利息均可用"],
+            ["<span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span>", "逾期付款利息", "强调付款逾期这一具体原因产生的利息"],
+            ["<span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span>", "违约利息", "更正式的合同用语，适用于任何类型的违约（不限于付款违约）产生的利息"]
+          ]
+        },
+        { "type": "h3", "text": "3.3 compound interest vs. simple interest" },
+        {
+          "type": "table",
+          "headers": ["术语", "中文", "计算逻辑", "合同中的地位"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"单利\">simple interest</span>", "单利", "仅对本金计息，利息不再生息", "商业合同中更常见，通常是默认方式"],
+            ["<span class=\"term\" data-def=\"复利\">compound interest</span>", "复利", "利息并入本金后再计息，成本更高", "须在合同中明确约定才能主张"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆提示：</strong>在英美合同法中，如果合同对利息类型没有特别约定，法院通常认定为单利（<span class=\"term\" data-def=\"单利\">simple interest</span>）。如需复利，必须在合同中明确写明 <span class=\"term\" data-def=\"复利计算的\">compounded</span> monthly/quarterly/annually。" }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "4. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1 \u2014 逾期付款利息条款",
+          "sentence": "Without prejudice to any other remedy available to Provider hereunder, in the event that Client fails to make any payment by the due date, all overdue amounts shall bear interest at the rate of eight percent (8%) per annum, accruing on a daily basis from the due date until the date of actual receipt of payment in full.",
+          "structure": [
+            "<em><span class=\"term\" data-def=\"不影响……的权利；不妨碍\">Without prejudice to</span> any other remedy available to Provider hereunder</em> \u2014 前置状语：不影响乙方在本协议项下可获得的任何其他救济（保留其他权利的标准表述）",
+            "<em><span class=\"term\" data-def=\"如果/在…情况下\">in the event that</span> Client fails to make any payment by the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span></em> \u2014 条件从句：如甲方未能在到期日前支付任何款项",
+            "<em>all overdue amounts shall bear interest</em> \u2014 主句：所有逾期款项应计利息（<span class=\"term\" data-def=\"计息\">bear interest</span> = 产生/计算利息，比 accrue interest 更正式）",
+            "<em>at the rate of eight percent (8%) <span class=\"term\" data-def=\"每年；按年计算\">per annum</span></em> \u2014 利率：按每年8%的利率",
+            "<em>accruing on a daily basis from the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span> until the date of actual receipt of <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span></em> \u2014 分词短语：自到期日起按日累计，至实际收到全额款项之日止"
+          ],
+          "translation": "在不影响乙方在本协议项下可获得的任何其他救济的情况下，如甲方未能在到期日前支付任何款项，所有逾期款项应按每年8%的利率计算利息，自到期日起按日累计，至实际全额收款之日止。"
+        },
+        {
+          "title": "例句 2 \u2014 预定损害赔偿条款（LD Clause）",
+          "sentence": "If Provider fails to deliver the Deliverables by the Delivery Date, Provider shall pay to Client liquidated damages at the rate of USD 1,000 per day for each day of delay, subject to a maximum aggregate amount of ten percent (10%) of the Contract Price, which the parties acknowledge and agree constitute a genuine pre-estimate of the loss likely to be suffered by Client as a result of such delay and shall not be construed as a penalty.",
+          "structure": [
+            "<em>If Provider fails to deliver the Deliverables by the Delivery Date</em> \u2014 条件：如乙方未能在交付日期前交付交付物",
+            "<em>Provider shall pay to Client <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> at the rate of USD 1,000 per day</em> \u2014 主句：乙方应向甲方支付以每日1,000美元为标准的预定损害赔偿",
+            "<em>for each day of delay</em> \u2014 计算方式：针对迟延的每一天",
+            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a maximum aggregate amount of ten percent (10%) of the Contract Price</em> \u2014 上限：以合同总价10%为最高累计金额上限",
+            "<em>which the parties acknowledge and agree constitute a <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of the loss</em> \u2014 定语从句：双方承认并同意该金额构成对损失的真实预先估算（这是LD条款的合法性声明，至关重要）",
+            "<em>shall not be construed as a penalty</em> \u2014 进一步声明：不应被解释为违约罚款（penalty）\u2014\u2014防止被法院认定为不可执行）"
+          ],
+          "translation": "如乙方未能在交付日期前交付交付物，乙方应向甲方支付预定损害赔偿，标准为每迟延一天1,000美元，最高累计金额不超过合同总价的10%；双方承认并同意上述金额构成对甲方因迟延可能遭受损失的真实预先估算，且不应被解释为违约罚款。"
+        },
+        {
+          "title": "例句 3 \u2014 宽限期与违约利息条款",
+          "sentence": "In the event of late payment, Client shall have a grace period of five (5) Business Days from the due date within which to make payment without incurring default interest; thereafter, default interest shall accrue on the outstanding amount at the rate of 1.5% per month, compounded monthly, until payment is received in full.",
+          "structure": [
+            "<em>In the event of late payment</em> \u2014 触发条件：如发生逾期付款",
+            "<em>Client shall have a <span class=\"term\" data-def=\"宽限期\">grace period</span> of five (5) Business Days from the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span></em> \u2014 主句：甲方享有自到期日起5个工作日的宽限期",
+            "<em>within which to make payment without incurring <span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span></em> \u2014 定语：在此期间付款无需承担违约利息（without <span class=\"term\" data-def=\"产生/招致\">incurring</span> = 无需产生/承担）",
+            "<em>thereafter</em> \u2014 此后（即宽限期届满后）",
+            "<em><span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span> shall accrue on the outstanding amount at the rate of 1.5% per month, compounded monthly</em> \u2014 违约利息：按每月1.5%的复利标准，就未结款项累计计算",
+            "<em>until payment is received in full</em> \u2014 截止时间：至全额付款被收到为止"
+          ],
+          "translation": "如发生逾期付款，甲方自到期日起享有五（5）个工作日的宽限期，在此期间付款不产生违约利息；此后，违约利息按每月1.5%的利率就未结款项计算，按月复利，直至全额收款为止。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "5. 单词记忆",
+      "blocks": [
+        { "type": "h3", "text": "5a. 闪卡自测" },
+        { "type": "p", "html": "看到英文术语，先想想中文意思，然后点击展开答案：" },
+        { "type": "grammar-box", "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span></summary><div class=\"answer-content\">预定损害赔偿；约定损害赔偿金（简称 LD）\u2014\u2014合同中预先量化的损失赔偿额</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span></summary><div class=\"answer-content\">（对损失的）真实预先估算\u2014\u2014LD 合法的核心条件，须在合同签署时合理预估</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"每年；按年计算\">per annum</span></summary><div class=\"answer-content\">每年；按年计（拉丁语，缩写 p.a.）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"（利息/权利）产生；累积\">accrue</span></summary><div class=\"answer-content\">（利息/权利）产生；累积\u2014\u2014interest accrues = 利息在产生/累积</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span></summary><div class=\"answer-content\">违约利息；逾期利息\u2014\u2014违约或逾期付款时产生的利息</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"宽限期\">grace period</span></summary><div class=\"answer-content\">宽限期\u2014\u2014逾期后允许补救而不产生违约后果的时间窗口</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"违约金条款；惩罚性条款\">penalty clause</span></summary><div class=\"answer-content\">违约金条款（英美法下惩罚性条款可能不可执行，需区别于 LD）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span></summary><div class=\"answer-content\">不影响\u2026\u2026的权利；不妨碍\u2026\u2026\u2014\u2014保留其他权利的法律套语</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"复利\">compound interest</span></summary><div class=\"answer-content\">复利\u2014\u2014利息并入本金后再计息</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"单利\">simple interest</span></summary><div class=\"answer-content\">单利\u2014\u2014仅对本金计息，利息不再生息</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"因未履行付款义务而违约\">in default of payment</span></summary><div class=\"answer-content\">因未履行付款义务而违约</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"计息\">bear interest</span></summary><div class=\"answer-content\">（款项）计利息；产生利息（= accrue interest，但 bear interest 更正式）</div></details></div></div>" }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "5b. 配对选择：看中文选英文",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "5b. 配对选择：看中文选英文",
+          "questions": [
+            {
+              "prompt": "1. 合同中预先约定的、量化的损失赔偿额",
+              "options": ["penalty", "<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>", "compensation"],
+              "answer": "<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>",
+              "explanation": "liquidated damages = 预定损害赔偿（合同签署时预先量化的赔偿额）。penalty 是不可执行的惩罚性条款，compensation 是通用赔偿词。"
+            },
+            {
+              "prompt": "2. 利息随时间持续产生/累积（动词）",
+              "options": ["calculate", "accrue", "impose"],
+              "answer": "accrue",
+              "explanation": "accrue = （利息）产生；累积。计算利息用 calculate，支付利息用 pay interest。"
+            },
+            {
+              "prompt": "3. 允许逾期后补救而不承担违约后果的时间窗口",
+              "options": ["notice period", "<span class=\"term\" data-def=\"宽限期\">grace period</span>", "payment period"],
+              "answer": "<span class=\"term\" data-def=\"宽限期\">grace period</span>",
+              "explanation": "grace period = 宽限期，是逾期后给予补救的时间窗口，在此期间不产生违约后果。notice period 是通知期，payment period 是付款期。"
+            },
+            {
+              "prompt": "4. 按年计算（拉丁语，合同利率的标准表述）",
+              "options": ["per diem", "per month", "<span class=\"term\" data-def=\"每年；按年计算\">per annum</span>"],
+              "answer": "<span class=\"term\" data-def=\"每年；按年计算\">per annum</span>",
+              "explanation": "per annum = 每年（拉丁语）= per year，合同中年利率的固定表达，缩写 p.a.。per diem 是每天，per month 是每月。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "6. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语理解选择",
+          "instruction": "根据场景选择最准确的术语。",
+          "questions": [
+            {
+              "prompt": "1. 合同约定\u201c乙方每迟延交付一天，赔偿甲方人民币5,000元\u201d，这属于 ____。",
+              "options": ["<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>（预定损害赔偿）", "penalty（罚款）", "interest（利息）"],
+              "answer": "<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>（预定损害赔偿）",
+              "explanation": "合同签署时预先约定因迟延交付而赔偿的金额，是对损失的预先量化\u2014\u2014这正是 liquidated damages 的定义。penalty 在英美法中可能无效，interest 是利息。"
+            },
+            {
+              "prompt": "2. 合同约定\u201c逾期款项按年利率6%计息\u201d，未注明是否复利，则应按 ____ 计算。",
+              "options": ["<span class=\"term\" data-def=\"复利\">compound interest</span>（复利）", "<span class=\"term\" data-def=\"单利\">simple interest</span>（单利）", "<span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span>（违约利息）"],
+              "answer": "<span class=\"term\" data-def=\"单利\">simple interest</span>（单利）",
+              "explanation": "simple interest = 单利，仅对本金计息。如果是复利，利息会并入本金后再计息。在未特别说明的情况下，合同中默认为单利。"
+            },
+            {
+              "prompt": "3. 合同约定\u201c到期日后5个工作日内付款不视为违约\u201d，这5个工作日称为 ____。",
+              "options": ["notice period（通知期）", "<span class=\"term\" data-def=\"宽限期\">grace period</span>（宽限期）", "term（合同期限）"],
+              "answer": "<span class=\"term\" data-def=\"宽限期\">grace period</span>（宽限期）",
+              "explanation": "grace period = 宽限期，给付款方在到期日后一段时间内补救的机会，在此期间补救不产生违约后果。这是对逾期方的保护机制。"
+            },
+            {
+              "prompt": "4. 乙方主张利息权利的同时，要保留其他所有救济权利，条款应写 \u201c____  any other remedy available hereunder\u201d。",
+              "options": ["<span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span>", "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>", "in addition to"],
+              "answer": "<span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span>",
+              "explanation": "without prejudice to any other remedy = 不影响（乙方的）任何其他救济权利。这是保留权利的标准套语，意思是\u201c除了这一权利之外，其他权利仍然保留\u201d。"
+            },
+            {
+              "prompt": "5. LD 条款之所以在英美法下合法有效，关键在于该金额须构成 ____。",
+              "options": ["惩罚性罚款", "<span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss（真实预先估算）", "最高责任上限"],
+              "answer": "<span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss（真实预先估算）",
+              "explanation": "liquidated damages 之所以在英美法下可执行，核心要件是须构成 genuine pre-estimate of loss（对损失的真实预先估算）。如果金额远超实际损失，则可能被认定为不可执行的 penalty。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：判断正误",
+          "instruction": "判断以下陈述是否正确（\u201c正确\u201d或\u201c错误\u201d）。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> 中的 liquidated 是\u201c清算\u201d的意思，所以应译为\u201c清算损害赔偿\u201d。",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "liquidated damages 中的 liquidated 不是\u201c清算\u201d的意思，而是\u201c已量化/已确定\u201d的意思。所以 liquidated damages 不译为\u201c清算损失\u201d，而是\u201c预定损害赔偿\u201d\u2014\u2014合同签署时预先量化确定的赔偿金额。"
+            },
+            {
+              "prompt": "2. \u201c8% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>\u201d中的 <span class=\"term\" data-def=\"每年；按年计算\">per annum</span> 是拉丁语，意为\u201c每年\u201d，即年利率8%。",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "正确。per annum 是拉丁语，per = 每，annum = 年，所以 per annum = every year = 每年。8% per annum = 年利率8%。"
+            },
+            {
+              "prompt": "3. 在英美法下，如果 <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> 金额远超实际损失，法院可能将其认定为不可执行的 penalty。",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "正确。在英美合同法下，如果 LD 金额远超违约方实际造成的损失，法院可能认定其为不可执行的 penalty（惩罚性违约金），拒绝执行。这是两者最关键的法律区别。"
+            },
+            {
+              "prompt": "4. 如果合同对利息类型未作说明，默认应按 <span class=\"term\" data-def=\"复利\">compound interest</span>（复利）计算。",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "compound interest（复利）需要在合同中明确约定才能适用。如果合同对利息类型没有特别说明，法院通常认定为 simple interest（单利）。复利不是默认方式。"
+            },
+            {
+              "prompt": "5. <span class=\"term\" data-def=\"宽限期\">grace period</span>（宽限期）内完成付款，不产生违约利息，也不视为违约。",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "正确。grace period（宽限期）是给违约方一段补救时间，在宽限期内完成付款或履行义务，不产生违约后果（不计利息、不视为违约）。宽限期届满后才开始计算违约利息。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：合同语境填空",
+          "instruction": "根据合同条款语境，选择最恰当的表达。",
+          "questions": [
+            {
+              "prompt": "1. \u201cInterest ____ from the date of default until <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span>.\u201d 空白处应填 ____。",
+              "options": ["shall accrue", "shall grow", "shall increase"],
+              "answer": "shall accrue",
+              "explanation": "accrue 是描述利息产生/累积的专用动词，配合 shall 表示法律义务。interest shall accrue from... = 利息自...起产生/累积。"
+            },
+            {
+              "prompt": "2. 合同中\u201c按年利率6%计息\u201d的正确表达是 ____。",
+              "options": ["at the rate of 6% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>", "in the rate of 6% per year", "by 6% annual rate"],
+              "answer": "at the rate of 6% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>",
+              "explanation": "at the rate of X% per annum 是合同中描述年利率的固定搭配，必须整体使用。in the rate / by the rate 均不正确。"
+            },
+            {
+              "prompt": "3. 在 LD 条款末尾，为防止被认定为不可执行的 penalty，通常加上：该金额 ____。",
+              "options": ["shall not be construed as a penalty", "is not a penalty at all", "may be waived"],
+              "answer": "shall not be construed as a penalty",
+              "explanation": "LD 条款的合法性声明必须包含\u201cshall not be construed as a penalty\u201d（不应被解释为违约罚款），否则在英美法下可能面临被认定为不可执行的 penalty 的风险。"
+            },
+            {
+              "prompt": "4. \u201c<span class=\"term\" data-def=\"违约利息；逾期利息\">Default interest</span> shall accrue on the outstanding amount, ____, from the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>.\u201d 表示利息每天累计，空白处填 ____。",
+              "options": ["accruing on a daily basis", "calculated every day", "in a daily manner"],
+              "answer": "accruing on a daily basis",
+              "explanation": "accruing on a daily basis = 按日累计（分词短语，修饰利息产生的方式）。这说明利息每天都在产生，而不是月末才统一计算。"
+            },
+            {
+              "prompt": "5. 合同约定 LD 不超过合同总价10%，这一上限表述为 \u201c____  10% of the Contract Price\u201d。",
+              "options": ["not more than", "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a maximum aggregate of", "limited to"],
+              "answer": "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a maximum aggregate of",
+              "explanation": "subject to a maximum aggregate of [X] = 以[X]为最高累计上限，是限制 LD 总额的标准表述。这个上限保护违约方不会因长期迟延而承担无限制的赔偿。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：错题回顾（来自 mistakes.md）",
+          "instruction": "以下是之前课程中的易错点，请选择正确翻译或解释。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 的正确中文翻译是 ____。",
+              "options": ["执行条款", "实质条款", "操作规程"],
+              "answer": "实质条款",
+              "explanation": "operative provisions = 实质条款/正文条款（operative = 实质性地起作用的）。合同的核心约定部分，区别于 recitals（陈述部分）。不要译为\u201c执行条款\u201d\u2014\u2014执行条款通常对应 enforcement provisions。"
+            },
+            {
+              "prompt": "2. <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 的完整准确译法是 ____。",
+              "options": ["有效", "生效", "完全有效"],
+              "answer": "完全有效",
+              "explanation": "in full force and effect = 完全有效（固定搭配，必须完整翻译）。不可简化为\u201c有效\u201d（that's just in effect）或\u201c生效\u201d。full force 强调\u201c全部效力\u201d，effect 强调\u201c有效\u201d，两者合在一起是法律固定搭配。"
+            },
+            {
+              "prompt": "3. <span class=\"term\">unenforceable</span> 最准确且简洁的专业译法是 ____。",
+              "options": ["没有强制执行力的", "不可执行的", "无约束力的"],
+              "answer": "不可执行的",
+              "explanation": "unenforceable = 不可执行的（简洁表达）。不要译为\u201c没有强制执行力的\u201d\u2014\u2014虽然意思对，但太冗长不专业。专业法律翻译以简洁为要。"
+            },
+            {
+              "prompt": "4. <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 不能简译为\u201c附件\u201d，正确译法是 ____。",
+              "options": ["附件", "附于本协议的", "随附的"],
+              "answer": "附于本协议的",
+              "explanation": "attached hereto = 附于本协议的（hereto = to this Agreement）。here- 家族词是合同精确性的保障：hereto 表明附件附于\u201c这份\u201d协议，而非其他文件。省略 hereto 会造成法律歧义。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：找出不同类",
+          "instruction": "每组词中，有一个与其他词不属于同一类别，请找出那个词。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span> / <span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span> / <span class=\"term\" data-def=\"宽限期\">grace period</span> / <span class=\"term\" data-def=\"单利\">simple interest</span> \u2014 哪个不是\u201c利息类型\u201d？",
+              "options": ["<span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span>", "<span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span>", "<span class=\"term\" data-def=\"宽限期\">grace period</span>", "<span class=\"term\" data-def=\"单利\">simple interest</span>"],
+              "answer": "<span class=\"term\" data-def=\"宽限期\">grace period</span>",
+              "explanation": "default interest、late payment interest、compound interest、simple interest 都是利息的种类。grace period（宽限期）是时间概念，不是利息类型，与其他词不同类。"
+            },
+            {
+              "prompt": "2. <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span> / <span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span> / <span class=\"term\" data-def=\"利率\">interest rate</span> / <span class=\"term\" data-def=\"违约；逾期\">default</span> \u2014 哪个不属于\u201c违约相关\u201d类术语？",
+              "options": ["<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>", "penalty", "<span class=\"term\" data-def=\"利率\">interest rate</span>", "default"],
+              "answer": "<span class=\"term\" data-def=\"利率\">interest rate</span>",
+              "explanation": "liquidated damages、penalty、breach of warranty、default 都与\u201c违约\u201d相关。interest rate（利率）是利息的计算参数，与违约无直接关系，不属于违约类概念，与其他词不同类。"
+            },
+            {
+              "prompt": "3. <span class=\"term\" data-def=\"（利息/权利）产生；累积\">accrue</span> / <span class=\"term\" data-def=\"计息\">bear interest</span> / <span class=\"term\" data-def=\"每年；按年计算\">per annum</span> / compounded \u2014 哪个不是描述\u201c利息产生/计算方式\u201d的动词性表达？",
+              "options": ["accrue", "bear interest", "<span class=\"term\" data-def=\"每年；按年计算\">per annum</span>", "compounded"],
+              "answer": "<span class=\"term\" data-def=\"每年；按年计算\">per annum</span>",
+              "explanation": "accrue、bear interest、compound（复利计息）都是描述利息\u201c如何产生/计算\u201d的动词性表达。per annum（每年）是时间单位，是利率的修饰语，不是描述利息产生行为的动词，与其他三个不同类。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习F：句意理解选择",
+          "instruction": "判断以下合同句子的正确中文含义。",
+          "questions": [
+            {
+              "prompt": "1. \u201cOverdue amounts shall bear interest at the rate of 8% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>, accruing on a daily basis from the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>.\u201d 的正确翻译是 ____。",
+              "options": ["逾期金额须每日支付8%的利息", "逾期金额按年利率8%计息，自到期日起按日累计", "所有款项须在到期日前按8%利率付清"],
+              "answer": "逾期金额按年利率8%计息，自到期日起按日累计",
+              "explanation": "overdue amounts = 逾期款项；bear interest at the rate of 8% per annum = 按年利率8%计息；accruing on a daily basis = 按日累计。注意 from the due date 是起点，until actual payment 是终点（本题简化了终点部分）。"
+            },
+            {
+              "prompt": "2. \u201c<span class=\"term\" data-def=\"不影响……的权利；不妨碍\">Without prejudice to</span> any other remedy available to Provider hereunder\u201d 的正确理解是 ____。",
+              "options": ["放弃乙方的其他所有权利", "不影响乙方在本协议项下可获得的任何其他救济", "乙方不得同时主张利息和其他救济"],
+              "answer": "不影响乙方在本协议项下可获得的任何其他救济",
+              "explanation": "without prejudice to = 不影响/不妨碍；any other remedy available to Provider hereunder = 乙方在本协议项下可获得的任何其他救济。这是保留权利的套语，表示收取利息不排除其他权利。"
+            },
+            {
+              "prompt": "3. \u201cthe parties agree the LD amount constitutes a <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span> of loss and shall not be construed as a penalty\u201d 的含义是 ____。",
+              "options": ["双方同意该赔偿额是惩罚性的", "双方同意该金额构成对迟延可能造成损失的真实预先估算，不应被解释为罚款", "双方同意放弃要求损失赔偿的权利"],
+              "answer": "双方同意该金额构成对迟延可能造成损失的真实预先估算，不应被解释为罚款",
+              "explanation": "the parties acknowledge and agree = 双方承认并同意；constitute a genuine pre-estimate of the loss = 构成对损失的真实预先估算；shall not be construed as a penalty = 不应被解释为罚款。这是 LD 条款合法性的核心声明。"
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习：英译中",
+          "instruction": "将以下合同条款翻译为中文，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "Without prejudice to any other remedy available hereunder, all amounts not paid by the due date shall bear default interest at the rate of eight percent (8%) per annum, accruing on a daily basis from the due date until the date of actual payment in full.",
+              "reference": "在不影响本协议项下任何其他救济的前提下，所有未在到期日前付清的款项应按年利率8%计算违约利息，自到期日起按日累计，至实际全额付款之日止。",
+              "rubric": [
+                { "en": "Without prejudice to any other remedy available hereunder", "ideal": "在不影响本协议项下任何其他救济的前提下", "accept": ["不影响本协议项下可获得的任何其他救济"], "wrong": ["放弃其他救济", "不考虑其他救济"], "note": "without prejudice to = 不影响/不妨碍，是保留权利的套语；hereunder = under this Agreement" },
+                { "en": "shall bear default interest", "ideal": "应计算违约利息", "accept": ["应计违约利息", "须承担违约利息"], "wrong": ["须支付罚款", "需缴纳利息"], "note": "bear interest = 计/产生利息；default interest = 违约利息" },
+                { "en": "at the rate of eight percent (8%) per annum", "ideal": "按年利率8%", "accept": ["以每年8%的利率"], "wrong": ["按8%的利率", "按每月8%"], "note": "per annum = 每年，必须体现年利率概念" },
+                { "en": "accruing on a daily basis", "ideal": "按日累计", "accept": ["每日累计", "每天计算"], "wrong": ["按月计算", "定期累计"], "note": "on a daily basis = 按日，accruing 强调持续积累" },
+                { "en": "until the date of actual payment in full", "ideal": "至实际全额付款之日止", "accept": ["直至全额支付之日", "至实际收款之日"], "wrong": ["直到付款", "到期后", "付款后"], "note": "in full = 全额；actual = 实际（强调不是计划而是实际收款）" }
+              ]
+            },
+            {
+              "source": "In the event that Provider fails to achieve any Milestone by the corresponding Milestone Date, Provider shall pay to Client liquidated damages at the rate of USD 500 per day for each day of delay beyond such Milestone Date, subject to a maximum aggregate amount of five percent (5%) of the Contract Price, which the parties agree constitutes a genuine pre-estimate of the loss likely to be suffered by Client and shall not be construed as a penalty.",
+              "reference": "如乙方未能在相应里程碑日期前达到任何里程碑节点，乙方应向甲方支付预定损害赔偿，标准为超过该里程碑日期后每迟延一天500美元，最高累计金额不超过合同总价的5%；双方同意上述金额构成对甲方可能遭受损失的真实预先估算，且不应被解释为违约罚款。",
+              "rubric": [
+                { "en": "In the event that Provider fails to achieve any Milestone by the corresponding Milestone Date", "ideal": "如乙方未能在相应里程碑日期前达到任何里程碑节点", "accept": ["如乙方未能在里程碑日期前完成里程碑"], "wrong": ["如果乙方不完成工作", "如乙方迟延"], "note": "milestone = 里程碑（项目节点）；corresponding = 相应的，对应的" },
+                { "en": "liquidated damages at the rate of USD 500 per day", "ideal": "预定损害赔偿，标准为每日500美元", "accept": ["违约金每天500美元", "约定损害赔偿每日500美元"], "wrong": ["罚款500美元/天", "清算损失500美元"], "note": "liquidated damages = 预定损害赔偿，不是\u201c清算损失\u201d或\u201c罚款\u201d" },
+                { "en": "for each day of delay beyond such Milestone Date", "ideal": "超过该里程碑日期后每迟延一天", "accept": ["自里程碑日期起每迟延一日"], "wrong": ["每天", "每个延误日"], "note": "beyond = 超过（日期）之后；each day of delay = 每迟延一天" },
+                { "en": "subject to a maximum aggregate amount of five percent (5%) of the Contract Price", "ideal": "最高累计金额不超过合同总价的5%", "accept": ["以合同总价5%为上限"], "wrong": ["总计不超过5%", "最多5%"], "note": "subject to a maximum aggregate = 以最高累计额为上限；Contract Price = 合同总价" },
+                { "en": "shall not be construed as a penalty", "ideal": "不应被解释为违约罚款", "accept": ["不构成罚款", "不视为惩罚性条款"], "wrong": ["不是罚款", "不算违约"], "note": "construed = 解释/理解；penalty = 惩罚性违约金，在英美法下可能不可执行" }
+              ]
+            },
+            {
+              "source": "In the event of late payment, Client shall have a grace period of three (3) Business Days from the due date within which to make payment; if Client fails to make payment within such grace period, default interest shall accrue on the overdue amount at the rate of 1.5% per month, compounded monthly, from the due date until the date of actual receipt of payment.",
+              "reference": "如发生逾期付款，甲方自到期日起享有三（3）个工作日的宽限期用于付款；如甲方在宽限期内未能付款，则违约利息就逾期款项按每月1.5%的复利自到期日起累计，至实际收款之日止。",
+              "rubric": [
+                { "en": "In the event of late payment", "ideal": "如发生逾期付款", "accept": ["若发生付款迟延", "一旦付款逾期"], "wrong": ["付款期间", "在付款时"], "note": "in the event of = 如发生/一旦；late payment = 逾期付款" },
+                { "en": "a grace period of three (3) Business Days from the due date", "ideal": "自到期日起三（3）个工作日的宽限期", "accept": ["从到期日算起3个工作日宽限期"], "wrong": ["3天的宽限期", "3个自然日"], "note": "Business Days = 工作日（不是自然日）；from the due date = 自到期日起" },
+                { "en": "within which to make payment", "ideal": "用于付款", "accept": ["在此期间付款", "在此时间内付款"], "wrong": ["以便付款", "之前须付款"], "note": "within which = 在该期限内" },
+                { "en": "default interest shall accrue on the overdue amount", "ideal": "违约利息就逾期款项累计", "accept": ["逾期款项产生违约利息"], "wrong": ["须支付利息", "逾期款项加计利息"], "note": "accrue on = 就...累计；overdue amount = 逾期款项" },
+                { "en": "compounded monthly", "ideal": "按月复利", "accept": ["每月复利计算", "月复利"], "wrong": ["按月计算", "每月付利息"], "note": "compounded = 复利计算的；monthly = 每月（说明复利的计算周期）" }
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习：中译英",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "所有逾期未付款项应按年利率12%计算违约利息，自到期日起按日累计，至实际全额付款之日止。",
+              "reference": "All overdue amounts shall bear default interest at the rate of twelve percent (12%) per annum, accruing on a daily basis from the due date until the date of actual payment in full.",
+              "rubric": [
+                { "en": "overdue amounts", "ideal": "逾期未付款项", "accept": ["逾期款项", "过期未付金额"], "wrong": ["欠款", "未付款"], "note": "overdue = 逾期的；amounts = 款项" },
+                { "en": "shall bear default interest", "ideal": "应计算违约利息", "accept": ["应计违约利息", "须承担违约利息"], "wrong": ["须支付罚款", "产生利息"], "note": "bear interest = 计/产生利息；default interest = 违约利息" },
+                { "en": "at the rate of twelve percent (12%) per annum", "ideal": "按年利率12%", "accept": ["以每年12%的利率"], "wrong": ["按12%的利率", "按每月12%"], "note": "per annum = 每年，必须体现年利率概念" },
+                { "en": "accruing on a daily basis", "ideal": "按日累计", "accept": ["每日累计", "逐日计算"], "wrong": ["按月计算", "定期累计"], "note": "on a daily basis = 按日；accruing = 累计" },
+                { "en": "until the date of actual payment in full", "ideal": "至实际全额付款之日止", "accept": ["直至全额支付之日", "到实际收款之日"], "wrong": ["直到付款", "到期后"], "note": "in full = 全额；actual = 实际（强调不是计划而是实际付款）" }
+              ]
+            },
+            {
+              "source": "如乙方未按时完工，应向甲方支付预定损害赔偿，标准为每迟延一天1000美元，累计上限不超过合同总价的10%。",
+              "reference": "In the event that Provider fails to complete the work on time, Provider shall pay to Client liquidated damages at the rate of USD 1,000 per day of delay, subject to a maximum aggregate amount of ten percent (10%) of the Contract Price.",
+              "rubric": [
+                { "en": "In the event that", "ideal": "如/若", "accept": ["一旦", "在...情况下"], "wrong": ["如果", "万一"], "note": "In the event that 是合同中表示条件的正式用语" },
+                { "en": "fails to complete the work on time", "ideal": "未按时完工", "accept": ["未能按时完成工作"], "wrong": ["没有完成", "不完工"], "note": "fail to = 未能；on time = 按时" },
+                { "en": "liquidated damages", "ideal": "预定损害赔偿", "accept": ["约定损害赔偿", "违约金"], "wrong": ["清算损失", "罚款"], "note": "liquidated damages = 预定损害赔偿，不是\u201c清算损失\u201d或\u201c罚款\u201d" },
+                { "en": "at the rate of USD 1,000 per day of delay", "ideal": "标准为每迟延一天1000美元", "accept": ["每迟延一日1000美元"], "wrong": ["每天1000美元", "1000美元/天"], "note": "per day of delay = 每迟延一天，强调是迟延期间的计费标准" },
+                { "en": "subject to a maximum aggregate amount of ten percent (10%) of the Contract Price", "ideal": "累计上限不超过合同总价的10%", "accept": ["以合同总价10%为上限"], "wrong": ["最多10%", "总计不超过10%"], "note": "subject to a maximum aggregate = 以最高累计额为上限；Contract Price = 合同总价" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "7. 今日小结",
+      "html": "<p><strong>第3周 第4天 \u2014 利息与违约金核心知识点</strong></p><ul><li><strong>利息术语</strong>：<span class=\"term\" data-def=\"利息；利率\">interest</span>（利息）\u2192 <span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span> / <span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span>（违约/逾期利息）；<span class=\"term\" data-def=\"每年；按年计算\">per annum</span>（每年）；<span class=\"term\" data-def=\"（利息/权利）产生；累积\">accrue</span>（累计产生）</li><li><strong>利率类型</strong>：<span class=\"term\" data-def=\"单利\">simple interest</span>（单利，默认）vs. <span class=\"term\" data-def=\"复利\">compound interest</span>（复利，须明确约定）</li><li><strong>LD vs. Penalty 核心区别</strong>：<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>（预定损害赔偿，可执行）= 对损失的 <span class=\"term\" data-def=\"（损失的）真实预先估算\">genuine pre-estimate</span>；<span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span>（惩罚性条款，英美法下可能无效）= 远超损失的惩罚性金额</li><li><strong>重要套语</strong>：<span class=\"term\" data-def=\"不影响……的权利；不妨碍\">without prejudice to</span> any other <span class=\"term\" data-def=\"救济；补救\">remedy</span>（不影响其他救济权利）/ shall not be <span class=\"term\" data-def=\"被解释为\">construed</span> as a <span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span>（不应被解释为罚款）</li><li><strong>宽限期</strong>：<span class=\"term\" data-def=\"宽限期\">grace period</span> \u2014 逾期后给付款方的补救时间窗口，期内补救不产生违约后果</li><li><strong>固定搭配</strong>：<span class=\"term\" data-def=\"利息；利率\">interest</span> shall <span class=\"term\" data-def=\"（利息/权利）产生；累积\">accrue</span> from... at the rate of X% <span class=\"term\" data-def=\"每年；按年计算\">per annum</span>，<span class=\"term\" data-def=\"（利息/权利）产生；累积\">accruing</span> on a daily basis，<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a maximum <span class=\"term\" data-def=\"累计的/总计的\">aggregate</span> of</li><li><strong>here- 家族词复习</strong>：<span class=\"term\" data-def=\"本协议项下\">hereunder</span>（本协议项下）/ <span class=\"term\" data-def=\"附于本协议的\">hereto</span>（附于本协议的）/ <span class=\"term\" data-def=\"本协议的\">hereof</span>（本协议的）\u2014 翻译时不可省略！</li></ul><p><strong>下节预告（第3周 第5天）：</strong>税费与扣款 \u2014 tax, withholding, gross-up, VAT, duty, set-off, deduction</p>"
+    }
+  ]
+}

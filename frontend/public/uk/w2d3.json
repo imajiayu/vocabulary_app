@@ -1,0 +1,305 @@
+{
+  "title": "第2周 第3天 — 阳性名词复数 (-и/-і)",
+  "objective": "<strong>学习目标：</strong>掌握阳性名词的复数变化规则，学会把单数名词变成复数形式。理解\u201c飘忽元音\u201d现象。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 快速回顾",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "昨天我们强化了性别判断。今天开始学<strong>复数</strong>（множина）！在乌克兰语中，名词从单数变复数时，<strong>词尾会改变</strong>。不同性别的名词有不同的复数规则。今天只学<strong>阳性名词</strong>的复数。"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>为什么先学阳性复数？</strong><br>因为阳性名词数量最多，而且复数规则相对统一：基本就是加 <strong>-и</strong> 或 <strong>-і</strong>。掌握了阳性，阴性和中性就更容易理解。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 语法讲解",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "什么是复数？"
+        },
+        {
+          "type": "p",
+          "html": "跟中文不同，乌克兰语的名词要区分<strong>单数</strong>（однина）和<strong>复数</strong>（множина）。一个东西用单数，两个及以上用复数。复数形式通过改变词尾来实现。"
+        },
+        {
+          "type": "h3",
+          "text": "规则一：硬辅音结尾 → 加 -и"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p>大多数以<strong>硬辅音</strong>（б, в, г, д, к, м, н, п, р, с, т, ф, х）结尾的阳性名词，复数加 <strong>-и</strong>：</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"公园\">парк</span></td><td><span class=\"uk-word\">парки</span></td><td>公园 → 公园们</td></tr><tr><td><span class=\"uk-word\" data-def=\"公交车\">автобус</span></td><td><span class=\"uk-word\">автобуси</span></td><td>公交车 → 公交车们</td></tr><tr><td><span class=\"uk-word\" data-def=\"电话\">телефон</span></td><td><span class=\"uk-word\">телефони</span></td><td>电话 → 电话们</td></tr><tr><td><span class=\"uk-word\" data-def=\"课\">урок</span></td><td><span class=\"uk-word\">уроки</span></td><td>课 → 课们</td></tr><tr><td><span class=\"uk-word\" data-def=\"大学生\">студент</span></td><td><span class=\"uk-word\">студенти</span></td><td>学生 → 学生们</td></tr><tr><td><span class=\"uk-word\" data-def=\"兄弟\">брат</span></td><td><span class=\"uk-word\">брати</span></td><td>兄弟 → 兄弟们</td></tr></tbody></table>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>记忆法：</strong>硬辅音 + 硬元音 -и，像给名词穿上\u201c硬壳\u201d变成复数。"
+        },
+        {
+          "type": "h3",
+          "text": "规则二：嘶擦音 ж, ч, ш, щ 结尾 → 加 -і"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p>以嘶擦音 <strong>ж, ч, ш, щ</strong> 结尾的阳性名词，复数加 <strong>-і</strong>：</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"刀\">ніж</span></td><td><span class=\"uk-word\">ножі</span></td><td>刀 → 刀们（注意 і→о！）</td></tr><tr><td><span class=\"uk-word\" data-def=\"球\">м'яч</span></td><td><span class=\"uk-word\">м'ячі</span></td><td>球 → 球们</td></tr><tr><td><span class=\"uk-word\" data-def=\"诗\">вірш</span></td><td><span class=\"uk-word\">вірші</span></td><td>诗 → 诗们</td></tr><tr><td><span class=\"uk-word\" data-def=\"钥匙\">ключ</span></td><td><span class=\"uk-word\">ключі</span></td><td>钥匙 → 钥匙们</td></tr></tbody></table>"
+        },
+        {
+          "type": "h3",
+          "text": "规则三：-ь 结尾 → 去掉 -ь，加 -і"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p>以 <strong>-ь</strong> 结尾的阳性名词，去掉 -ь，加 <strong>-і</strong>：</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"老师\">вчитель</span></td><td><span class=\"uk-word\">вчителі</span></td><td>老师 → 老师们</td></tr><tr><td><span class=\"uk-word\" data-def=\"客人\">гість</span></td><td><span class=\"uk-word\">гості</span></td><td>客人 → 客人们</td></tr><tr><td><span class=\"uk-word\" data-def=\"月份\">місяць</span></td><td><span class=\"uk-word\">місяці</span></td><td>月 → 月们</td></tr><tr><td><span class=\"uk-word\" data-def=\"学生\">учень</span></td><td><span class=\"uk-word\">учні</span></td><td>学生 → 学生们</td></tr></tbody></table>"
+        },
+        {
+          "type": "note",
+          "html": "<strong>注意 <span class=\"uk-word\" data-def=\"学生\">учень</span> → <span class=\"uk-word\">учні</span>：</strong>去掉 -ь 后，е 也脱落了！这就是下面要讲的\u201c飘忽元音\u201d。"
+        },
+        {
+          "type": "h3",
+          "text": "规则四：飘忽元音 — 变复数时元音消失或变化"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p>这是阳性复数最大的难点！有些名词变复数时，词干中的元音会<strong>消失</strong>或<strong>变化</strong>：</p><h4>类型A：і → о（最常见）</h4><table><thead><tr><th>单数</th><th>复数</th><th>中文</th><th>变化</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"桌子\">стіл</span></td><td><span class=\"uk-word\">столи</span></td><td>桌子</td><td>ст<strong>і</strong>л → ст<strong>о</strong>ли</td></tr><tr><td><span class=\"uk-word\" data-def=\"家\">дім</span></td><td><span class=\"uk-word\">доми</span></td><td>家</td><td>д<strong>і</strong>м → д<strong>о</strong>ми</td></tr><tr><td><span class=\"uk-word\" data-def=\"年\">рік</span></td><td><span class=\"uk-word\">роки</span></td><td>年</td><td>р<strong>і</strong>к → р<strong>о</strong>ки</td></tr><tr><td><span class=\"uk-word\" data-def=\"刀\">ніж</span></td><td><span class=\"uk-word\">ножі</span></td><td>刀</td><td>н<strong>і</strong>ж → н<strong>о</strong>жі</td></tr></tbody></table><h4>类型B：元音脱落</h4><table><thead><tr><th>单数</th><th>复数</th><th>中文</th><th>变化</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"天\">день</span></td><td><span class=\"uk-word\">дні</span></td><td>天</td><td>д<strong>е</strong>нь → дн<strong>і</strong>（е 脱落）</td></tr><tr><td><span class=\"uk-word\" data-def=\"学生\">учень</span></td><td><span class=\"uk-word\">учні</span></td><td>学生</td><td>уч<strong>е</strong>нь → учн<strong>і</strong>（е 脱落）</td></tr></tbody></table><h4>类型C：-ок/-ець 的飘忽元音</h4><table><thead><tr><th>单数</th><th>复数</th><th>中文</th><th>变化</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"建筑\">будинок</span></td><td><span class=\"uk-word\">будинки</span></td><td>楼房</td><td>будин<strong>о</strong>к → будинки（о 脱落）</td></tr><tr><td><span class=\"uk-word\" data-def=\"礼物\">подарунок</span></td><td><span class=\"uk-word\">подарунки</span></td><td>礼物</td><td>подарун<strong>о</strong>к → подарунки（о 脱落）</td></tr><tr><td><span class=\"uk-word\" data-def=\"角落\">куток</span></td><td><span class=\"uk-word\">кутки</span></td><td>角落</td><td>кут<strong>о</strong>к → кутки（о 脱落）</td></tr><tr><td><span class=\"uk-word\" data-def=\"铅笔\">олівець</span></td><td><span class=\"uk-word\">олівці</span></td><td>铅笔</td><td>олів<strong>е</strong>ць → олівці（е 脱落）</td></tr></tbody></table>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>中文母语者易错点：</strong><br>中文没有单复数变化，所以很容易忘记变形。记住：乌克兰语中说\u201c两张桌子\u201d不是\u201cдва стіл\u201d，而是\u201cдва <span class=\"uk-word\">столи</span>\u201d！名词必须变复数。"
+        },
+        {
+          "type": "h3",
+          "text": "规则五：辅音交替 г → з"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p>少数以 -г 结尾的名词，变复数时 г 变成 з：</p><table><thead><tr><th>单数</th><th>复数</th><th>中文</th><th>变化</th></tr></thead><tbody><tr><td><span class=\"uk-word\" data-def=\"朋友\">друг</span></td><td><span class=\"uk-word\">друзі</span></td><td>朋友</td><td>дру<strong>г</strong> → дру<strong>зі</strong>（г→з）</td></tr></tbody></table><p>注意：这是特殊情况，大多数 -г 结尾直接加 -и，如 <span class=\"uk-word\" data-def=\"雪\">сніг</span> → <span class=\"uk-word\">сніги</span>。<span class=\"uk-word\" data-def=\"朋友\">друг</span> → <span class=\"uk-word\">друзі</span> 需要单独记忆。</p>"
+        },
+        {
+          "type": "h3",
+          "text": "阳性复数规则总结"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<table><thead><tr><th>词尾</th><th>复数变化</th><th>例子</th></tr></thead><tbody><tr><td>硬辅音 (б,в,д,к,м,н,п,р,с,т...)</td><td>加 -и</td><td>парк → парки</td></tr><tr><td>嘶擦音 (ж,ч,ш,щ)</td><td>加 -і</td><td>ключ → ключі</td></tr><tr><td>-ь</td><td>去ь + -і</td><td>вчитель → вчителі</td></tr><tr><td>-ок</td><td>о脱落 + -ки</td><td>будинок → будинки</td></tr><tr><td>-ець</td><td>е脱落 + -ці</td><td>олівець → олівці</td></tr></tbody></table><p><strong>飘忽元音口诀：</strong>стіл→столи, дім→доми, рік→роки — \u201cі 变 о，别忘掉！\u201d</p>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "preface": "共 <strong>28 道题</strong>，分为 5 组。",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：选择正确的复数形式（8题）",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"电话\">телефон</span>（电话）",
+              "options": ["<span class=\"uk-word\">телефоні</span>", "<span class=\"uk-word\">телефони</span>", "<span class=\"uk-word\">телефона</span>"],
+              "answer": "телефони",
+              "explanation": "телефон + и = телефони（硬辅音 +и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"球\">м'яч</span>（球）",
+              "options": ["<span class=\"uk-word\">м'ячи</span>", "<span class=\"uk-word\">м'ячі</span>", "<span class=\"uk-word\">м'яча</span>"],
+              "answer": "м'ячі",
+              "explanation": "м'яч + і = м'ячі（嘶擦音 ч + і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"客人\">гість</span>（客人）",
+              "options": ["<span class=\"uk-word\">гісті</span>", "<span class=\"uk-word\">гості</span>", "<span class=\"uk-word\">гостьі</span>"],
+              "answer": "гості",
+              "explanation": "гість → гості（去ь + і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"笔记本\">зошит</span>（笔记本）",
+              "options": ["<span class=\"uk-word\">зошиті</span>", "<span class=\"uk-word\">зошити</span>", "<span class=\"uk-word\">зошита</span>"],
+              "answer": "зошити",
+              "explanation": "зошит + и = зошити（硬辅音 +и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"背包\">рюкзак</span>（背包）",
+              "options": ["<span class=\"uk-word\">рюкзакі</span>", "<span class=\"uk-word\">рюкзаки</span>", "<span class=\"uk-word\">рюкзака</span>"],
+              "answer": "рюкзаки",
+              "explanation": "рюкзак + и = рюкзаки（硬辅音 +и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"医生\">лікар</span>（医生）",
+              "options": ["<span class=\"uk-word\">лікари</span>", "<span class=\"uk-word\">лікарі</span>", "<span class=\"uk-word\">лікара</span>"],
+              "answer": "лікарі",
+              "explanation": "лікар + і = лікарі（р 后加 -і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"坚果\">горіх</span>（坚果）",
+              "options": ["<span class=\"uk-word\">горіхі</span>", "<span class=\"uk-word\">горіхи</span>", "<span class=\"uk-word\">горохи</span>"],
+              "answer": "горіхи",
+              "explanation": "горіх + и = горіхи（硬辅音 х + и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"诗\">вірш</span>（诗）",
+              "options": ["<span class=\"uk-word\">вірши</span>", "<span class=\"uk-word\">вірші</span>", "<span class=\"uk-word\">вірша</span>"],
+              "answer": "вірші",
+              "explanation": "вірш + і = вірші（嘶擦音 ш + і）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：判断是单数还是复数（5题）",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\">столи</span>",
+              "options": ["单数", "复数"],
+              "answer": "复数",
+              "explanation": "столи 是 стіл 的复数形式（і→о，+и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"钥匙\">ключ</span>",
+              "options": ["单数", "复数"],
+              "answer": "单数",
+              "explanation": "ключ 是单数形式，复数是 ключі"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">друзі</span>",
+              "options": ["单数", "复数"],
+              "answer": "复数",
+              "explanation": "друзі 是 друг 的复数形式（г→з+і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">дні</span>",
+              "options": ["单数", "复数"],
+              "answer": "复数",
+              "explanation": "дні 是 день 的复数形式（е脱落）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"建筑\">будинок</span>",
+              "options": ["单数", "复数"],
+              "answer": "单数",
+              "explanation": "будинок 是单数形式，复数是 будинки"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：看到复数，选出单数原形（5题）",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\">ножі</span> 的单数是？",
+              "options": ["<span class=\"uk-word\">нож</span>", "<span class=\"uk-word\" data-def=\"刀\">ніж</span>", "<span class=\"uk-word\">ножь</span>"],
+              "answer": "ніж",
+              "explanation": "ножі → ніж（飘忽元音 о→і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">доми</span> 的单数是？",
+              "options": ["<span class=\"uk-word\">дом</span>", "<span class=\"uk-word\" data-def=\"家\">дім</span>", "<span class=\"uk-word\">домь</span>"],
+              "answer": "дім",
+              "explanation": "доми → дім（飘忽元音 о→і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">олівці</span> 的单数是？",
+              "options": ["<span class=\"uk-word\">олівць</span>", "<span class=\"uk-word\" data-def=\"铅笔\">олівець</span>", "<span class=\"uk-word\">олівц</span>"],
+              "answer": "олівець",
+              "explanation": "олівці → олівець（飘忽元音 е 恢复）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">друзі</span> 的单数是？",
+              "options": ["<span class=\"uk-word\">друз</span>", "<span class=\"uk-word\">друзь</span>", "<span class=\"uk-word\" data-def=\"朋友\">друг</span>"],
+              "answer": "друг",
+              "explanation": "друзі → друг（辅音交替 з→г）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\">дні</span> 的单数是？",
+              "options": ["<span class=\"uk-word\">дін</span>", "<span class=\"uk-word\" data-def=\"天\">день</span>", "<span class=\"uk-word\">днь</span>"],
+              "answer": "день",
+              "explanation": "дні → день（飘忽元音 е 恢复 + ь）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：飘忽元音专项训练（5题）",
+          "instruction": "这些词变复数时都有元音变化，选出正确的复数！",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"年\">рік</span>（年）的复数？",
+              "options": ["<span class=\"uk-word\">рікі</span>", "<span class=\"uk-word\">ріки</span>", "<span class=\"uk-word\">роки</span>"],
+              "answer": "роки",
+              "explanation": "рік → роки（飘忽元音 і→о）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"角落\">куток</span>（角落）的复数？",
+              "options": ["<span class=\"uk-word\">кутоки</span>", "<span class=\"uk-word\">кутки</span>", "<span class=\"uk-word\">кутокі</span>"],
+              "answer": "кутки",
+              "explanation": "куток → кутки（飘忽元音 о脱落）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"礼物\">подарунок</span>（礼物）的复数？",
+              "options": ["<span class=\"uk-word\">подаруноки</span>", "<span class=\"uk-word\">подарунки</span>", "<span class=\"uk-word\">подарункі</span>"],
+              "answer": "подарунки",
+              "explanation": "подарунок → подарунки（飘忽元音 о脱落）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"学生\">учень</span>（学生）的复数？",
+              "options": ["<span class=\"uk-word\">учені</span>", "<span class=\"uk-word\">учні</span>", "<span class=\"uk-word\">ученьі</span>"],
+              "answer": "учні",
+              "explanation": "учень → учні（飘忽元音 е脱落，去ь+і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span>（桌子）的复数？",
+              "options": ["<span class=\"uk-word\">стілі</span>", "<span class=\"uk-word\">столи</span>", "<span class=\"uk-word\">стіли</span>"],
+              "answer": "столи",
+              "explanation": "стіл → столи（飘忽元音 і→о）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：综合挑战（5题）",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"邻居\">сусід</span>（邻居）的复数？",
+              "options": ["<span class=\"uk-word\">сусіди</span>", "<span class=\"uk-word\">сусіді</span>", "<span class=\"uk-word\">сусіда</span>"],
+              "answer": "сусіди",
+              "explanation": "сусід + и = сусіди（规则加 -и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"月份\">місяць</span>（月）的复数？",
+              "options": ["<span class=\"uk-word\">місяци</span>", "<span class=\"uk-word\">місяці</span>", "<span class=\"uk-word\">місяча</span>"],
+              "answer": "місяці",
+              "explanation": "місяць → місяці（去ь + і）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"男孩\">хлопчик</span>（小男孩）的复数？",
+              "options": ["<span class=\"uk-word\">хлопчикі</span>", "<span class=\"uk-word\">хлопчики</span>", "<span class=\"uk-word\">хлопчіки</span>"],
+              "answer": "хлопчики",
+              "explanation": "хлопчик + и = хлопчики（硬辅音 +и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"蘑菇\">гриб</span>（蘑菇）的复数？",
+              "options": ["<span class=\"uk-word\">грибі</span>", "<span class=\"uk-word\">гриби</span>", "<span class=\"uk-word\">гріби</span>"],
+              "answer": "гриби",
+              "explanation": "гриб + и = гриби（硬辅音 +и）"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师\">вчитель</span>（老师）的复数？",
+              "options": ["<span class=\"uk-word\">вчителі</span>", "<span class=\"uk-word\">вчители</span>", "<span class=\"uk-word\">вчительі</span>"],
+              "answer": "вчителі",
+              "explanation": "вчитель → вчителі（去ь + і）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<h3>今天的收获</h3><ol><li><strong>阳性复数基本规则：</strong>硬辅音 +и，嘶擦音(ж/ч/ш/щ) +і，-ь 去掉加 -і</li><li><strong>飘忽元音：</strong><span class=\"uk-word\" data-def=\"桌子\">стіл</span>→<span class=\"uk-word\">столи</span>、<span class=\"uk-word\" data-def=\"家\">дім</span>→<span class=\"uk-word\">доми</span>、<span class=\"uk-word\" data-def=\"年\">рік</span>→<span class=\"uk-word\">роки</span>（і→о）；<span class=\"uk-word\" data-def=\"天\">день</span>→<span class=\"uk-word\">дні</span>（е脱落）</li><li><strong>-ок/-ець 飘忽元音：</strong><span class=\"uk-word\" data-def=\"建筑\">будинок</span>→<span class=\"uk-word\">будинки</span>、<span class=\"uk-word\" data-def=\"铅笔\">олівець</span>→<span class=\"uk-word\">олівці</span>（元音脱落）</li><li><strong>辅音交替：</strong><span class=\"uk-word\" data-def=\"朋友\">друг</span>→<span class=\"uk-word\">друзі</span>（г→з，特殊记忆）</li><li>学了 <strong>18 个新阳性名词</strong>及其复数形式</li></ol><p><strong>明天预告：</strong>学习<strong>阴性名词的复数</strong>！阴性名词变复数也是改词尾，规则和阳性类似但有差异。</p>"
+    }
+  ]
+}

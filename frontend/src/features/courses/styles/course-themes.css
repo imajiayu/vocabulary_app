@@ -1,0 +1,72 @@
+/* === 课程主题变量 ===
+   每门课程在 Editorial Study 设计体系内有独立的强调色：
+   - ukrainian   → Indigo × Cream（乌克兰刺绣深靛 + 暖纸色）
+   - legal      → Brick × Ivory（古典法典朱红 + 象牙色）
+   通过 [data-course="xxx"] 属性注入。
+*/
+
+/* ══════════════════════════════════════════════════════════════
+   乌克兰语课程 — 深靛（Indigo）
+   ══════════════════════════════════════════════════════════════ */
+[data-course="ukrainian"] {
+  /* 强调色 */
+  --course-accent: #2A4380;
+  --course-accent-strong: #1F3366;
+  --course-accent-hover: #1F3366;
+  --course-accent-on: #FDFBF5;
+  --course-accent-glow: #6B8CD9;
+  --course-accent-shadow: rgba(42, 67, 128, 0.35);
+
+  /* 柔和面（用于悬停态、badge、选中背景） */
+  --course-accent-soft: rgba(42, 67, 128, 0.08);
+  --course-accent-soft-strong: rgba(42, 67, 128, 0.14);
+  --course-accent-ring: rgba(42, 67, 128, 0.14);
+
+  /* 辅助色：提示框、引用框背景 */
+  --course-highlight: #F3F5FC;
+  --course-table-hover: #EEF1F9;
+  --course-word-playing-bg: var(--course-accent);
+
+  /* TopBar 专属 */
+  --course-topbar-bg: rgba(253, 251, 245, 0.86);
+  --course-surface-chip: rgba(42, 67, 128, 0.04);
+  --course-surface-chip-hover: rgba(42, 67, 128, 0.08);
+  --course-chip-border: rgba(42, 67, 128, 0.14);
+
+  /* Hero 装饰渐变 */
+  --course-hero-gradient: radial-gradient(1200px 400px at 10% 0%, rgba(42, 67, 128, 0.08), transparent 60%),
+                          radial-gradient(800px 300px at 100% 0%, rgba(184, 134, 11, 0.06), transparent 60%);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   法律英语课程 — 朱红（Brick）
+   ══════════════════════════════════════════════════════════════ */
+[data-course="legal-english"] {
+  /* 强调色 */
+  --course-accent: #7A2E2E;
+  --course-accent-strong: #5C2222;
+  --course-accent-hover: #5C2222;
+  --course-accent-on: #FDFBF5;
+  --course-accent-glow: #B85858;
+  --course-accent-shadow: rgba(122, 46, 46, 0.35);
+
+  /* 柔和面 */
+  --course-accent-soft: rgba(122, 46, 46, 0.08);
+  --course-accent-soft-strong: rgba(122, 46, 46, 0.14);
+  --course-accent-ring: rgba(122, 46, 46, 0.14);
+
+  /* 辅助色 */
+  --course-highlight: #FBF3F3;
+  --course-table-hover: #F7EBEB;
+  --course-word-playing-bg: var(--course-accent);
+
+  /* TopBar */
+  --course-topbar-bg: rgba(253, 251, 245, 0.86);
+  --course-surface-chip: rgba(122, 46, 46, 0.04);
+  --course-surface-chip-hover: rgba(122, 46, 46, 0.08);
+  --course-chip-border: rgba(122, 46, 46, 0.14);
+
+  /* Hero 装饰 */
+  --course-hero-gradient: radial-gradient(1200px 400px at 10% 0%, rgba(122, 46, 46, 0.08), transparent 60%),
+                          radial-gradient(800px 300px at 100% 0%, rgba(184, 134, 11, 0.06), transparent 60%);
+}

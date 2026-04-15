@@ -1,0 +1,413 @@
+{
+  "title": "第2周 第5天 — 豁免与责任限制（Waiver & <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>）",
+  "objective": "掌握合同中豁免与责任限制条款（Waiver & <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>）的核心词汇和固定搭配，理解 waiver、<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>、cap、exclusion、disclaimer、indemnify 等术语在商务合同中的精确含义，能够准确阅读和翻译合同中最复杂的责任限制条款。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 核心词汇",
+      "blocks": [
+        { "type": "p", "html": "上节回顾：第3天学习了条件与前提（Conditions & Prerequisites），掌握了 <span class=\"term\" data-def=\"先决条件\">condition precedent</span>、<span class=\"term\" data-def=\"解除条件\">condition subsequent</span>、<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>、<span class=\"term\" data-def=\"但是/前提是\">provided that</span>、<span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span>、<span class=\"term\" data-def=\"先决条件/前提\">prerequisite</span>、<span class=\"term\" data-def=\"履行/满足\">fulfill</span>、<span class=\"term\" data-def=\"放弃（权利）\">waive</span> 等术语。重点辨析了 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 的多重含义和 <span class=\"term\" data-def=\"先决条件\">condition precedent</span> 与 <span class=\"term\" data-def=\"解除条件\">condition subsequent</span> 的区别。今天学习合同中如何限制和豁免责任——这是商务合同谈判的核心焦点之一。" },
+        { "type": "error-warn", "html": "<strong>错题回顾：</strong><ul><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（不可简化为\u201c有效\u201d）——今天的责任限制条款中会出现这个搭配</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为（非\u201c被认为\u201d）——如某条款被裁定为无效时，需要理解法律后果</li></ul>" },
+        { "type": "note", "html": "<strong>商业背景：为什么 <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span> 如此重要？</strong><p>在商务合同谈判中，责任限制条款（<span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>）往往是<strong>谈判时间最长、争议最多</strong>的条款之一。原因在于：</p><ul><li>它直接决定了一方违约时另一方能获得多少赔偿</li><li>它是双方<strong>风险分配</strong>的核心机制——谁承担更多风险？</li><li>如果没有责任限制条款，违约方可能面临无上限的赔偿责任</li><li>实务中，供应商/服务提供方通常强烈要求加入责任上限（<span class=\"term\" data-def=\"上限\">cap</span>），而客户方则倾向于尽量减少或取消限制</li></ul>" },
+        {
+          "type": "table",
+          "headers": ["英文", "音标", "中文", "常见搭配"],
+          "firstColWord": true,
+          "rows": [
+            ["waiver", "/ˈweɪvər/", "弃权；豁免；放弃（权利）", "waiver of rights; express waiver; implied waiver"],
+            ["waive", "/weɪv/", "放弃（权利）；豁免", "waive a right; waive a condition; waive a claim"],
+            ["limitation of liability", "/ˌlɪmɪˈteɪʃən əv ˌlaɪəˈbɪləti/", "责任限制", "<span class=\"term\" data-def=\"责任限制\">limitation of liability</span> clause; limitations on liability"],
+            ["cap", "/kæp/", "（名）上限；限额 （动）设定上限", "cap on liability; cap on damages; liability is capped at"],
+            ["exclusion", "/ɪkˈskluːʒən/", "排除；免除", "exclusion of liability; exclusion of <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>"],
+            ["disclaimer", "/dɪsˈkleɪmər/", "免责声明；否认声明", "disclaimer of warranties; disclaimer of liability"],
+            ["indemnify", "/ɪnˈdemnɪfaɪ/", "赔偿；补偿；使免受损害", "indemnify and <span class=\"term\" data-def=\"使免受损害\">hold harmless</span>; indemnify against losses"],
+            ["indemnification", "/ɪnˌdemnɪfɪˈkeɪʃən/", "赔偿；补偿", "indemnification obligations; indemnification clause"],
+            ["hold harmless", "/hoʊld ˈhɑːrmləs/", "使免受损害；免责", "indemnify and <span class=\"term\" data-def=\"使免受损害\">hold harmless</span>; <span class=\"term\" data-def=\"使免受损害\">hold harmless</span> from and against"],
+            ["liability", "/ˌlaɪəˈbɪləti/", "责任；法律责任", "aggregate liability; liability for damages; assume liability"],
+            ["negligence", "/ˈneɡlɪdʒəns/", "过失；疏忽", "ordinary negligence; contributory negligence"],
+            ["gross negligence", "/ɡroʊs ˈneɡlɪdʒəns/", "重大过失", "<span class=\"term\" data-def=\"重大过失\">gross negligence</span> or <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>"],
+            ["willful misconduct", "/ˈwɪlfəl ˌmɪsˈkɒndʌkt/", "故意不当行为", "<span class=\"term\" data-def=\"重大过失\">gross negligence</span> or <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>"],
+            ["consequential damages", "/ˌkɒnsɪˈkwenʃəl ˈdæmɪdʒɪz/", "间接损害；后果性损害", "exclusion of <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>; consequential, incidental, or special damages"],
+            ["direct damages", "/dɪˈrekt ˈdæmɪdʒɪz/", "直接损害", "liability for direct damages only; actual direct damages"],
+            ["in no event shall", "/ɪn noʊ ɪˈvent ʃæl/", "在任何情况下……均不得/均不应", "<span class=\"term\" data-def=\"在任何情况下不得\">in no event shall</span> either Party be liable for"],
+            ["aggregate", "/ˈæɡrɪɡət/", "（形/名）累计的；总计的；总额", "aggregate liability; in the aggregate; aggregate amount"]
+          ]
+        },
+        { "type": "note", "html": "<strong>词源记忆：indemnify</strong><ul><li>源自拉丁语 <em>indemnis</em>（无损害的）= <em>in-</em>（不）+ <em>damnum</em>（损害）</li><li>所以 <span class=\"term\" data-def=\"赔偿/补偿\">indemnify</span> 字面意思是\u201c使不受损害\u201d——即赔偿对方使其恢复到未受损害的状态</li><li>与 <span class=\"term\">damages</span>（损害赔偿）同源，注意区分：indemnify 是动词（赔偿），damages 是名词（损害赔偿金）</li></ul>" },
+        { "type": "note", "html": "<strong>词源记忆：waive vs. wave</strong><ul><li><span class=\"term\" data-def=\"放弃（权利）\">waive</span>（放弃权利）——源自古法语 <em>weyver</em>（放弃），法律专用词</li><li>wave（挥手）——完全不同的词源，日常英语</li><li>记忆技巧：waive 含 <em>ai</em>，联想\u201c哎(ai)，放弃了\u201d</li></ul>" }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["英文表达", "中文翻译", "例句"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>", "责任限制", "<span class=\"en-text\">The limitation of liability set forth in this Section shall apply to the fullest extent permitted by applicable law.</span>"],
+            ["<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> of <span class=\"term\" data-def=\"权利\">rights</span>", "权利放弃；弃权", "<span class=\"en-text\">No failure to exercise or delay in exercising any right shall constitute a waiver of such right.</span>"],
+            ["<span class=\"term\" data-def=\"上限\">cap</span> on <span class=\"term\" data-def=\"责任；赔偿义务\">liability</span> / <span class=\"term\" data-def=\"上限\">cap</span> on <span class=\"term\" data-def=\"损害赔偿\">damages</span>", "责任上限；损害赔偿上限", "<span class=\"en-text\">The total aggregate liability of Provider under this Agreement shall be subject to a cap on liability equal to the fees paid during the preceding twelve (12) months.</span>"],
+            ["<span class=\"term\" data-def=\"保证免责声明\">disclaimer of warranties</span>", "保证免责声明", "<span class=\"en-text\">PROVIDER MAKES NO WARRANTIES, EXPRESS OR IMPLIED, AND HEREBY DISCLAIMS ALL IMPLIED WARRANTIES, INCLUDING MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</span>"],
+            ["<span class=\"term\" data-def=\"在任何情况下不得\">in no event shall</span> ... be <span class=\"term\" data-def=\"负有责任的\">liable</span>", "在任何情况下……均不承担责任", "<span class=\"en-text\">In no event shall either Party be liable to the other Party for any consequential, incidental, or special damages.</span>"],
+            ["to the maximum extent <span class=\"term\" data-def=\"允许的/许可的\">permitted</span> by law", "在法律允许的最大范围内", "<span class=\"en-text\">To the maximum extent permitted by applicable law, Provider disclaims all liability for indirect damages.</span>"],
+            ["<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>", "赔偿并使免受损害", "<span class=\"en-text\">Provider shall indemnify and hold harmless Client from and against any and all claims, damages, and expenses arising out of Provider's breach of this Agreement.</span>"],
+            ["<span class=\"term\" data-def=\"累计的/总计的\">aggregate</span> <span class=\"term\" data-def=\"责任；赔偿义务\">liability</span> shall not <span class=\"term\" data-def=\"超过\">exceed</span>", "累计责任不得超过", "<span class=\"en-text\">The aggregate liability of either Party under this Agreement shall not exceed the total fees paid or payable hereunder during the twelve (12) month period preceding the event giving rise to such liability.</span>"]
+          ]
+        },
+        { "type": "error-warn", "html": "<strong>中文母语者易错点：<span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span> 的翻译</strong><br><ul><li><span class=\"term\" data-def=\"在任何情况下不得\">In no event shall</span> = 在任何情况下……均不得/均不应——这是<strong>绝对否定</strong>的强调句式</li><li>在合同原文中常以<strong>全大写</strong>书写（<span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span>），以引起注意</li><li>常见错误：\u201c在没有事件的情况下\u201d——event 在此不是\u201c事件\u201d，而是\u201c情况/情形\u201d</li><li>正确理解：in no event = under no circumstances = 在任何情况下都不</li></ul>" }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. 词汇辨析",
+      "blocks": [
+        { "type": "h3", "text": "3a. waiver vs. disclaimer" },
+        { "type": "p", "html": "这两个词都涉及\u201c免除\u201d，但对象和机制完全不同：" },
+        {
+          "type": "table",
+          "headers": ["术语", "含义", "对象", "使用场景"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>", "弃权；放弃（自己的权利）", "己方已有的权利", "放弃追究违约的权利、放弃某个合同条件。<br>例：A 方放弃追究 B 方迟延交付的违约责任"],
+            ["<span class=\"term\" data-def=\"免责声明\">disclaimer</span>", "免责声明；否认（自己的责任/保证）", "己方可能承担的责任或保证", "事先声明不承担某种责任或不作某种保证。<br>例：供应商声明不对产品适销性作出保证"]
+          ]
+        },
+        { "type": "p", "html": "1. <span class=\"en-text\">The failure of either Party to enforce any provision shall not constitute a waiver of that Party's right to enforce such provision.</span> <em>— 任何一方未执行任何条款不构成该方放弃执行该条款权利的弃权。</em>" },
+        { "type": "p", "html": "2. <span class=\"en-text\">The Provider hereby disclaims all warranties, express or implied, including without limitation any implied warranty of merchantability.</span> <em>— 提供方特此否认所有明示或默示保证，包括但不限于任何默示的适销性保证。</em>" },
+        { "type": "tip", "html": "<strong>简记：</strong><span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> = 放弃自己的权利（主动让步）；<span class=\"term\" data-def=\"免责声明\">disclaimer</span> = 否认自己的责任/保证（主动撇清）。" },
+        { "type": "h3", "text": "3b. liability vs. obligation vs. responsibility" },
+        {
+          "type": "table",
+          "headers": ["术语", "含义", "侧重点", "合同中的使用"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"责任；赔偿义务\">liability</span>", "法律责任；赔偿责任", "侧重<strong>违约/侵权后的赔偿后果</strong>", "liability for damages = 损害赔偿责任<br><span class=\"term\" data-def=\"责任限制\">limitation of liability</span> = 责任限制"],
+            ["<span class=\"term\" data-def=\"义务\">obligation</span>", "义务；合同义务", "侧重<strong>合同约定必须履行的事项</strong>", "perform obligations = 履行义务<br>contractual obligations = 合同义务"],
+            ["responsibility", "责任；职责", "侧重<strong>分工、职责范围</strong>，法律约束力较弱", "responsibilities of each Party = 各方职责<br>合同中较少用于赔偿语境"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>关系链：</strong><span class=\"term\" data-def=\"义务\">obligation</span>（合同义务）→ 违反义务 → 产生 <span class=\"term\" data-def=\"责任；赔偿义务\">liability</span>（赔偿责任）。先有义务，违约后才有责任。" },
+        { "type": "h3", "text": "3c. negligence vs. gross negligence vs. willful misconduct（三级递进）" },
+        { "type": "p", "html": "合同中的过错行为按严重程度分为三个层级：" },
+        {
+          "type": "table",
+          "headers": ["层级", "术语", "含义", "程度", "对责任限制的影响"],
+          "firstColWord": false,
+          "rows": [
+            ["第一级", "<span class=\"term\" data-def=\"过失/疏忽\">negligence</span>", "（一般）过失；疏忽", "未尽到合理注意义务", "通常<strong>可以</strong>被责任限制条款覆盖"],
+            ["第二级", "<span class=\"term\" data-def=\"重大过失\">gross negligence</span>", "重大过失", "严重违反注意义务，近乎漠视", "通常<strong>不受</strong>责任限制条款保护"],
+            ["第三级", "<span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>", "故意不当行为", "明知故犯；故意违约", "<strong>绝对不受</strong>责任限制条款保护"]
+          ]
+        },
+        { "type": "p", "html": "3. <span class=\"en-text\">The limitations of liability set forth in this Section shall not apply to damages arising from a Party's gross negligence or willful misconduct.</span> <em>— 本条规定的责任限制不适用于因一方重大过失或故意不当行为导致的损害。</em>" },
+        { "type": "error-warn", "html": "<strong>中文母语者易错点：gross 在法律英语中的含义</strong><br><ul><li>日常英语 gross = 总的（gross income）/ 恶心的</li><li>法律英语 <span class=\"term\" data-def=\"重大过失\">gross negligence</span> 中 gross = <strong>严重的、重大的</strong></li><li>千万不要译为\u201c总过失\u201d或\u201c全部过失\u201d——正确翻译：<strong>重大过失</strong></li></ul>" },
+        { "type": "h3", "text": "3d. direct damages vs. consequential damages vs. incidental damages" },
+        {
+          "type": "table",
+          "headers": ["术语", "含义", "说明", "举例"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"term\" data-def=\"直接损害\">direct damages</span>", "直接损害", "违约行为的<strong>直接、自然</strong>结果", "购买的设备有缺陷，维修费用即为直接损害"],
+            ["<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>", "间接损害；后果性损害", "违约导致的<strong>间接后果</strong>，包括利润损失、商誉损害等", "设备故障导致工厂停产，停产造成的利润损失即为间接损害"],
+            ["<span class=\"term\" data-def=\"附带损害\">incidental damages</span>", "附带损害", "为处理违约而产生的<strong>额外费用</strong>", "因供应商违约而紧急寻找替代供应商产生的额外运输费"]
+          ]
+        },
+        { "type": "p", "html": "4. <span class=\"en-text\">In no event shall either Party be liable to the other for any indirect, consequential, incidental, special, or punitive damages, including but not limited to loss of profits, loss of revenue, or loss of data.</span> <em>— 在任何情况下，任何一方均不对另一方承担任何间接、后果性、附带、特殊或惩罚性损害赔偿责任，包括但不限于利润损失、收入损失或数据损失。</em>" },
+        { "type": "tip", "html": "<strong>实务提示：</strong>在合同谈判中，<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>（间接损害）的排除几乎是标准做法。因为间接损害的金额往往远超合同价值（例如一个小软件故障可能导致客户数百万的利润损失），供应商通常坚持排除此类损害赔偿。" }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "4. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1",
+          "sentence": "IN NO EVENT SHALL EITHER PARTY BE LIABLE TO THE OTHER PARTY FOR ANY INDIRECT, CONSEQUENTIAL, INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO THIS AGREEMENT, WHETHER BASED ON WARRANTY, CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, OR ANY OTHER LEGAL THEORY, EVEN IF SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.",
+          "structure": [
+            "<em><span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span> EITHER PARTY BE LIABLE</em> — 倒装主句（否定副词 in no event 置于句首引发主谓倒装），\u201c在任何情况下，任何一方均不承担责任\u201d",
+            "<em>TO THE OTHER PARTY</em> — 责任的对象，\u201c对另一方\u201d",
+            "<em>FOR ANY INDIRECT, CONSEQUENTIAL, INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES</em> — 责任的范围，列举五类被排除的损害类型",
+            "<em>ARISING OUT OF OR RELATED TO THIS AGREEMENT</em> — 现在分词短语限定 damages，\u201c因本协议引起的或与之相关的\u201d",
+            "<em>WHETHER BASED ON WARRANTY, CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, OR ANY OTHER LEGAL THEORY</em> — 让步状语，\u201c无论是基于保证、合同、侵权（包括过失）、严格责任还是任何其他法律理论\u201d；这是合同的\u201c全覆盖\u201d表述",
+            "<em>EVEN IF SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES</em> — 进一步让步，\u201c即使该方已被告知此类损害的可能性\u201d；这切断了\u201c不知情\u201d的抗辩"
+          ],
+          "translation": "在任何情况下，任何一方均不对另一方承担因本协议引起的或与之相关的任何间接、后果性、附带、特殊或惩罚性损害赔偿责任，无论是基于保证、合同、侵权（包括过失）、严格责任还是任何其他法律理论，即使该方已被告知此类损害发生的可能性。"
+        },
+        {
+          "title": "例句 2",
+          "sentence": "Notwithstanding anything to the contrary contained herein, the aggregate liability of Provider under this Agreement for any and all claims shall not exceed the total fees actually paid by Client to Provider during the twelve (12) month period immediately preceding the event giving rise to such liability (the \u201cLiability Cap\u201d).",
+          "structure": [
+            "<em>Notwithstanding anything to the contrary contained herein</em> — 让步状语，\u201c尽管本协议中有任何相反规定\u201d（第1周已学固定表达）",
+            "<em>the aggregate liability of Provider under this Agreement</em> — 主语，\u201c提供方在本协议项下的累计责任\u201d",
+            "<em>for any and all claims</em> — 限定范围，\u201c就任何及所有索赔\u201d",
+            "<em>shall not exceed</em> — 谓语，\u201c不得超过\u201d",
+            "<em>the total fees actually paid by Client to Provider</em> — 上限金额，\u201c客户实际向提供方支付的全部费用\u201d",
+            "<em>during the twelve (12) month period immediately preceding</em> — 时间限定，\u201c在紧接……之前的十二（12）个月期间内\u201d",
+            "<em>the event giving rise to such liability</em> — \u201c引起该等责任的事件\u201d；give <span class=\"term\" data-def=\"引起/产生\">rise</span> to = 引起/导致",
+            "<em>(the \u201cLiability Cap\u201d)</em> — 括号定义，将该金额定义为\u201c责任上限\u201d"
+          ],
+          "translation": "尽管本协议中有任何相反规定，提供方在本协议项下就任何及所有索赔的累计责任不得超过在紧接引起该等责任的事件之前的十二（12）个月期间内客户实际向提供方支付的全部费用（\u201c责任上限\u201d）。"
+        },
+        {
+          "title": "例句 3",
+          "sentence": "Provider shall indemnify, defend, and hold harmless Client and its officers, directors, employees, agents, successors, and assigns (collectively, the \u201cIndemnified Parties\u201d) from and against any and all losses, damages, liabilities, costs, and expenses (including reasonable attorneys' fees) arising out of or resulting from any breach by Provider of its representations, warranties, or obligations under this Agreement.",
+          "structure": [
+            "<em>Provider shall indemnify, defend, and <span class=\"term\" data-def=\"使免受损害\">hold harmless</span></em> — 三个并列谓语，\u201c提供方应赔偿、辩护并使免受损害\u201d；这是赔偿条款的标准三联动词",
+            "<em>Client and its officers, directors, employees, agents, successors, and assigns</em> — 被保护的对象范围，从公司本身扩展到其高管、董事、员工、代理人、继承人和受让人",
+            "<em>(collectively, the \u201cIndemnified Parties\u201d)</em> — 括号定义，\u201c统称为\u2018被赔偿方\u2019\u201d",
+            "<em>from and against any and all losses, damages, liabilities, costs, and expenses</em> — 赔偿范围，\u201c免受任何及所有损失、损害、责任、费用和开支的侵害\u201d",
+            "<em>(including reasonable attorneys' fees)</em> — 括号补充，\u201c包括合理的律师费\u201d",
+            "<em>arising out of or resulting from</em> — 原因限定，\u201c因……引起或导致的\u201d",
+            "<em>any breach by Provider of its representations, warranties, or obligations</em> — \u201c提供方对其陈述、保证或义务的任何违反\u201d",
+            "<em>under this Agreement</em> — \u201c在本协议项下\u201d"
+          ],
+          "translation": "提供方应赔偿、辩护并使客户及其高管、董事、员工、代理人、继承人和受让人（统称\u201c被赔偿方\u201d）免受因提供方违反其在本协议项下的陈述、保证或义务而引起或导致的任何及所有损失、损害、责任、费用和开支（包括合理的律师费）的侵害。"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "5. 单词记忆",
+      "blocks": [
+        { "type": "h3", "text": "5a. 闪卡自测" },
+        { "type": "p", "text": "看到英文术语，想一想中文意思，然后点击展开答案：" },
+        {
+          "type": "grammar-box",
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span></summary><div class=\"answer-content\">弃权；豁免；放弃（权利）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"责任限制\">limitation of liability</span></summary><div class=\"answer-content\">责任限制</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"上限\">cap</span>（合同语境）</summary><div class=\"answer-content\">上限；限额（名词）/ 设定上限（动词）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">exclusion</span></summary><div class=\"answer-content\">排除；免除</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"免责声明\">disclaimer</span></summary><div class=\"answer-content\">免责声明；否认声明</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"赔偿/补偿\">indemnify</span></summary><div class=\"answer-content\">赔偿；补偿；使免受损害</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"使免受损害\">hold harmless</span></summary><div class=\"answer-content\">使免受损害；免责</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"责任；赔偿义务\">liability</span></summary><div class=\"answer-content\">责任；法律责任（侧重赔偿后果）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"过失/疏忽\">negligence</span></summary><div class=\"answer-content\">过失；疏忽（一般过失）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"重大过失\">gross negligence</span></summary><div class=\"answer-content\">重大过失（gross = 严重的，非\u201c总的\u201d）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span></summary><div class=\"answer-content\">故意不当行为</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span></summary><div class=\"answer-content\">间接损害；后果性损害（如利润损失）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"直接损害\">direct damages</span></summary><div class=\"answer-content\">直接损害</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"在任何情况下不得\">in no event shall</span></summary><div class=\"answer-content\">在任何情况下……均不得/均不应</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"累计的/总计的\">aggregate</span></summary><div class=\"answer-content\">累计的；总计的；总额</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">indemnification</span></summary><div class=\"answer-content\">赔偿；补偿</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"完全有效\">in full force and effect</span>（复习）</summary><div class=\"answer-content\">完全有效（固定搭配，不可简化）</div></details></div></div>"
+        }
+      ],
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "5b. 配对选择：看中文选英文",
+          "questions": [
+            {
+              "prompt": "1. 弃权；豁免；放弃（权利）",
+              "options": ["disclaimer", "waiver", "exclusion"],
+              "answer": "waiver",
+              "explanation": "waiver = 弃权/豁免/放弃权利。waive 是动词，waiver 是名词。注意与 disclaimer（免责声明）区分：waiver 是放弃自己的权利，disclaimer 是否认自己的责任。"
+            },
+            {
+              "prompt": "2. 赔偿；补偿；使免受损害",
+              "options": ["compensate", "indemnify", "reimburse"],
+              "answer": "indemnify",
+              "explanation": "indemnify = 赔偿/补偿/使免受损害。源自拉丁语 indemnis（无损害的）。常见搭配：indemnify and hold harmless。"
+            },
+            {
+              "prompt": "3. 重大过失",
+              "options": ["negligence", "willful misconduct", "gross negligence"],
+              "answer": "gross negligence",
+              "explanation": "gross negligence = 重大过失。gross 在法律英语中 = 严重的/重大的，不是\u2018总的\u2019。严重程度：negligence < gross negligence < willful misconduct。"
+            },
+            {
+              "prompt": "4. 间接损害；后果性损害",
+              "options": ["direct damages", "incidental damages", "consequential damages"],
+              "answer": "consequential damages",
+              "explanation": "consequential damages = 间接损害/后果性损害，指违约行为导致的间接后果，如利润损失、商誉损害等。通常在合同中被排除。"
+            },
+            {
+              "prompt": "5. 累计的；总计的；总额",
+              "options": ["total", "aggregate", "collective"],
+              "answer": "aggregate",
+              "explanation": "aggregate = 累计的/总计的/总额。aggregate liability = 累计责任。in the aggregate = 合计/总共。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "6. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语选择",
+          "instruction": "选择正确的中文释义。",
+          "questions": [
+            {
+              "prompt": "1. <span class=\"term\" data-def=\"上限\">cap</span>（cap on liability）",
+              "options": ["帽子", "能力", "上限；限额", "覆盖范围"],
+              "answer": "上限；限额",
+              "explanation": "cap 在合同中意为\u201c上限/限额\u201d（名词）或\u201c设定上限\u201d（动词）。cap on liability = 责任上限。liability is capped at $1 million = 责任上限为100万美元。"
+            },
+            {
+              "prompt": "2. <span class=\"term\" data-def=\"免责声明\">disclaimer</span>",
+              "options": ["弃权声明", "免责声明；否认声明", "权利声明", "通知声明"],
+              "answer": "免责声明；否认声明",
+              "explanation": "disclaimer = 免责声明/否认声明。disclaimer of warranties = 保证免责声明（声明不对某些保证承担责任）。注意与 waiver（弃权）区分。"
+            },
+            {
+              "prompt": "3. <span class=\"term\" data-def=\"在任何情况下不得\">in no event shall</span>",
+              "options": ["在没有事件的情况下应当", "在任何情况下……均不得", "如果不发生任何事件", "在特定事件发生前"],
+              "answer": "在任何情况下……均不得",
+              "explanation": "in no event shall = 在任何情况下……均不得/均不应。这是绝对否定的强调句式。event 在此不是\u201c事件\u201d，而是\u201c情况/情形\u201d。in no event = under no circumstances。"
+            },
+            {
+              "prompt": "4. <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>",
+              "options": ["意外失误", "重大过失", "故意不当行为", "有意的管理"],
+              "answer": "故意不当行为",
+              "explanation": "willful misconduct = 故意不当行为。willful = 故意的（= intentional）；misconduct = 不当行为。这是过错行为的最高级别，通常绝对不受责任限制条款保护。"
+            },
+            {
+              "prompt": "5. <span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>",
+              "options": ["赔偿并使免受损害", "补偿并保持无害", "确认并免除责任", "保证并承担责任"],
+              "answer": "赔偿并使免受损害",
+              "explanation": "indemnify and hold harmless 是赔偿条款中的标准搭配。indemnify = 赔偿/补偿；hold harmless = 使免受损害。两者常一起使用，含义有重叠但法律上各有侧重。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习B：选词填空",
+          "instruction": "根据语境选择最恰当的术语填入合同条款空白处。",
+          "questions": [
+            {
+              "prompt": "6. No failure to exercise or delay in exercising any right shall constitute a ______ of such right.",
+              "options": ["disclaimer", "waiver", "exclusion", "limitation"],
+              "answer": "waiver",
+              "explanation": "waiver = 弃权/放弃权利。\u201cNo failure to exercise any right shall constitute a waiver of such right\u201d 是合同中的标准条款：未行使权利不构成弃权。"
+            },
+            {
+              "prompt": "7. The ______ of Provider under this Agreement shall not exceed the total fees paid during the preceding twelve (12) months.",
+              "options": ["total obligation", "aggregate liability", "maximum responsibility", "complete duty"],
+              "answer": "aggregate liability",
+              "explanation": "aggregate liability = 累计责任。aggregate liability shall not exceed = 累计责任不得超过，用于设定责任总额上限。"
+            },
+            {
+              "prompt": "8. <span class=\"term\" data-def=\"在任何情况下不得\">In no event shall</span> either Party be liable for any indirect, ______, incidental, or special damages.",
+              "options": ["direct damages", "consequential damages", "actual damages", "general damages"],
+              "answer": "consequential damages",
+              "explanation": "consequential damages = 间接损害/后果性损害。In no event shall...be liable for consequential damages 是责任限制条款中排除间接损害的标准表述。"
+            },
+            {
+              "prompt": "9. Provider shall ______, defend, and <span class=\"term\" data-def=\"使免受损害\">hold harmless</span> Client from and against any claims arising from Provider's breach.",
+              "options": ["compensate", "indemnify", "reimburse", "repay"],
+              "answer": "indemnify",
+              "explanation": "indemnify = 赔偿/补偿/使免受损害。shall indemnify, defend, and hold harmless 是赔偿条款的标准三联动词。"
+            },
+            {
+              "prompt": "10. The limitations <span class=\"term\" data-def=\"规定/载明\">set forth</span> herein shall not apply to damages arising from a Party's ______ or <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>.",
+              "options": ["negligence", "gross negligence", "carelessness", "recklessness"],
+              "answer": "gross negligence",
+              "explanation": "gross negligence = 重大过失。责任限制条款通常不适用于 gross negligence or willful misconduct（重大过失或故意不当行为），这是常见的 carve-out（例外）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：理解与辨析",
+          "instruction": "选择正确答案。",
+          "questions": [
+            {
+              "prompt": "11. <span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> 和 <span class=\"term\" data-def=\"免责声明\">disclaimer</span> 的核心区别是什么？",
+              "options": [
+                "含义完全相同，可以互换",
+                "waiver 是放弃自己的权利，disclaimer 是否认自己的责任或保证",
+                "waiver 用于侵权，disclaimer 用于合同",
+                "waiver 是书面的，disclaimer 是口头的"
+              ],
+              "answer": "waiver 是放弃自己的权利，disclaimer 是否认自己的责任或保证",
+              "explanation": "waiver 和 disclaimer 都涉及\u2018免除\u2019，但方向不同。waiver：我有权利但我放弃行使（弃权）。disclaimer：我声明不承担某种责任或不作某种保证（免责）。"
+            },
+            {
+              "prompt": "12. 以下三个术语按过错严重程度从低到高的正确排列是？",
+              "options": [
+                "gross negligence < negligence < willful misconduct",
+                "willful misconduct < gross negligence < negligence",
+                "negligence（一般过失）< gross negligence（重大过失）< willful misconduct（故意不当行为）",
+                "三者严重程度相同"
+              ],
+              "answer": "negligence（一般过失）< gross negligence（重大过失）< willful misconduct（故意不当行为）",
+              "explanation": "三者按严重程度递进。negligence = 未尽合理注意义务（可被责任限制覆盖）；gross negligence = 严重违反注意义务（通常不受责任限制保护）；willful misconduct = 明知故犯（绝对不受保护）。"
+            },
+            {
+              "prompt": "13. 以下哪个属于 <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>（间接损害）？",
+              "options": [
+                "修复有缺陷设备的维修费用",
+                "设备故障导致工厂停产所造成的利润损失",
+                "购买替代设备的价格差额",
+                "合同约定的违约金"
+              ],
+              "answer": "设备故障导致工厂停产所造成的利润损失",
+              "explanation": "consequential damages（间接损害/后果性损害）是违约行为的间接后果，如利润损失、商誉损害等。设备维修费属于 direct damages（直接损害）；利润损失才是 consequential damages。"
+            },
+            {
+              "prompt": "14. <span class=\"term\" data-def=\"被裁定为\">held to be</span> 在法律语境中的正确翻译是？（复习错题）",
+              "options": ["被持有为", "被认为是", "被裁定为", "被保持为"],
+              "answer": "被裁定为",
+              "explanation": "held to be 中 hold = 裁定（法律用语），held to be = 被裁定为/被判定为。不要译为日常含义的\u2018被认为是\u2019。这是复习错题。"
+            },
+            {
+              "prompt": "15. <span class=\"term\" data-def=\"责任；赔偿义务\">liability</span> 和 <span class=\"term\" data-def=\"义务\">obligation</span> 的关系是什么？",
+              "options": [
+                "两者完全相同",
+                "赔偿后果——违反 obligation 后产生 liability",
+                "liability 产生 obligation",
+                "obligation 是 liability 的同义词"
+              ],
+              "answer": "赔偿后果——违反 obligation 后产生 liability",
+              "explanation": "liability 侧重违约/侵权后的赔偿后果，obligation 侧重合同约定必须履行的事项。关系链：obligation（合同义务）→ 违反义务 → 产生 liability（赔偿责任）。"
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习D：英译中",
+          "instruction": "将以下合同条款翻译为中文，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "IN NO EVENT SHALL EITHER PARTY BE LIABLE TO THE OTHER PARTY FOR ANY INDIRECT, CONSEQUENTIAL, INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS OR LOSS OF DATA, REGARDLESS OF THE FORM OF ACTION OR THE THEORY OF LIABILITY, EVEN IF SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.",
+              "reference": "在任何情况下，任何一方均不对另一方承担任何间接、后果性、附带、特殊或惩罚性损害赔偿责任，包括但不限于利润损失或数据损失，无论诉讼形式或责任理论如何，即使该方已被告知此类损害发生的可能性。",
+              "rubric": [
+                { "en": "In no event shall", "ideal": "在任何情况下……均不", "accept": ["无论任何情况下……均不"], "wrong": ["在没有事件的情况下", "如果没有事件"], "note": "in no event = under no circumstances = 在任何情况下都不。event 在此不是\u201c事件\u201d" },
+                { "en": "be liable to the other Party for", "ideal": "对另一方承担……责任", "accept": ["向另一方承担……赔偿责任"], "wrong": ["对另一方负有……义务"], "note": "be liable for = 承担……责任" },
+                { "en": "consequential, incidental, special, or punitive damages", "ideal": "后果性、附带、特殊或惩罚性损害赔偿", "accept": ["间接、附带、特殊或惩罚性损害"], "wrong": ["连续的损害"], "note": "consequential = 后果性的/间接的，不是\u201c连续的\u201d" },
+                { "en": "including but not limited to", "ideal": "包括但不限于", "accept": ["包括但不仅限于"], "wrong": ["包括"], "note": "including but not limited to 是法律固定搭配，必须翻译完整" },
+                { "en": "regardless of the form of action or the theory of liability", "ideal": "无论诉讼形式或责任理论如何", "accept": ["不论采取何种诉讼形式或责任理论"], "wrong": ["不管行动方式"], "note": "form of action = 诉讼形式；theory of liability = 责任理论" },
+                { "en": "even if such Party has been advised of the possibility", "ideal": "即使该方已被告知此类损害发生的可能性", "accept": ["即便该方已获知此等损害的可能性"], "wrong": ["即使该方已经建议"], "note": "advised = 被告知（非\u201c建议\u201d）；possibility = 可能性" }
+              ]
+            },
+            {
+              "source": "Notwithstanding anything to the contrary contained herein, the aggregate liability of Provider arising out of or related to this Agreement, whether in contract, tort, or otherwise, shall not exceed the total amount of fees actually paid by Client to Provider under this Agreement during the twelve (12) month period immediately preceding the event giving rise to such claim.",
+              "reference": "尽管本协议中有任何相反规定，提供方因本协议引起的或与之相关的累计责任，无论是基于合同、侵权还是其他原因，不得超过在紧接引起该等索赔的事件之前的十二（12）个月期间内客户根据本协议实际向提供方支付的费用总额。",
+              "rubric": [
+                { "en": "Notwithstanding anything to the contrary contained herein", "ideal": "尽管本协议中有任何相反规定", "accept": ["不论本协议中有任何相反约定"], "wrong": ["不承担本协议中的相反责任"], "note": "Notwithstanding anything to the contrary 是法律固定表达" },
+                { "en": "the aggregate liability of Provider", "ideal": "提供方的累计责任", "accept": ["提供方的总责任"], "wrong": ["提供方的全部义务"], "note": "aggregate liability = 累计责任，非\u201c义务\u201d" },
+                { "en": "arising out of or related to", "ideal": "因……引起的或与之相关的", "accept": ["由……产生的或相关的"], "wrong": ["出现的"], "note": "arising out of or related to 是法律中界定因果关系的标准搭配" },
+                { "en": "whether in contract, tort, or otherwise", "ideal": "无论是基于合同、侵权还是其他原因", "accept": ["不论是合同、侵权或其他"], "wrong": ["无论合同还是折磨"], "note": "tort = 侵权行为（法律术语），非\u201c折磨\u201d" },
+                { "en": "shall not exceed", "ideal": "不得超过", "accept": ["不应超过"], "wrong": ["不会超过"], "note": "shall not = 不得（法律义务），非\u201c不会\u201d" },
+                { "en": "the event giving rise to such claim", "ideal": "引起该等索赔的事件", "accept": ["导致该索赔的事件"], "wrong": ["引起该声明的事件"], "note": "give rise to = 引起/导致；claim = 索赔/请求（非\u201c声明\u201d）" }
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习E：中译英",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "questions": [
+            {
+              "source": "提供方应赔偿并使客户免受因提供方违反本协议项下的陈述、保证或义务而引起的任何及所有损失、损害和费用（包括合理的律师费）的侵害。上述赔偿义务不适用于因客户重大过失或故意不当行为导致的损害。",
+              "reference": "Provider shall indemnify and hold harmless Client from and against any and all losses, damages, and expenses (including reasonable attorneys' fees) arising out of Provider's breach of its representations, warranties, or obligations under this Agreement. The foregoing indemnification obligations shall not apply to damages resulting from Client's gross negligence or willful misconduct.",
+              "rubric": [
+                { "en": "赔偿并使……免受损害", "ideal": "indemnify and hold harmless", "accept": ["indemnify and hold Client harmless"], "wrong": ["compensate and protect", "pay and keep safe"], "note": "indemnify and hold harmless 是赔偿条款的标准搭配" },
+                { "en": "任何及所有损失、损害和费用", "ideal": "any and all losses, damages, and expenses", "accept": ["all losses, damages, and expenses"], "wrong": ["any losses and damages"], "note": "any and all 是法律强调用语，表示\u201c任何及所有\u201d" },
+                { "en": "合理的律师费", "ideal": "reasonable attorneys' fees", "accept": ["reasonable attorney fees", "reasonable legal fees"], "wrong": ["lawyer fees", "legal costs"], "note": "attorneys' fees 是法律标准用语" },
+                { "en": "因……引起的", "ideal": "arising out of", "accept": ["resulting from", "arising from"], "wrong": ["because of", "caused by"], "note": "arising out of 是法律英语中表示因果关系的标准用语" },
+                { "en": "陈述、保证或义务", "ideal": "representations, warranties, or obligations", "accept": ["representations, warranties, and obligations"], "wrong": ["promises or duties"], "note": "representations, warranties, obligations 是合同三大承诺类型" },
+                { "en": "重大过失或故意不当行为", "ideal": "gross negligence or willful misconduct", "accept": ["gross negligence or intentional misconduct"], "wrong": ["big negligence or intentional behavior"], "note": "gross negligence（重大过失）和 willful misconduct（故意不当行为）是法律固定术语" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "7. 今日小结",
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> / <span class=\"term\" data-def=\"放弃（权利）\">waive</span></strong>——弃权/放弃权利；waiver = 放弃自己已有的权利（区别于 disclaimer = 否认自己的责任）</li><li><strong><span class=\"term\" data-def=\"责任限制\">limitation of liability</span></strong>——责任限制，合同谈判的核心焦点，直接决定违约赔偿的上限</li><li><strong><span class=\"term\" data-def=\"上限\">cap</span></strong>——上限/限额；cap on liability = 责任上限；常与 aggregate 搭配使用</li><li><strong><span class=\"term\" data-def=\"免责声明\">disclaimer</span></strong>——免责声明；disclaimer of warranties = 保证免责声明（事先声明不承担某种责任）</li><li><strong><span class=\"term\" data-def=\"赔偿/补偿\">indemnify</span> / <span class=\"term\">indemnification</span> / <span class=\"term\" data-def=\"使免受损害\">hold harmless</span></strong>——赔偿/使免受损害；\u201cindemnify, defend, and <span class=\"term\" data-def=\"使免受损害\">hold harmless</span>\u201d 是赔偿条款的标准三联动词</li><li><strong>过错三级递进</strong>：<span class=\"term\" data-def=\"过失/疏忽\">negligence</span>（一般过失）&lt; <span class=\"term\" data-def=\"重大过失\">gross negligence</span>（重大过失）&lt; <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>（故意不当行为）——级别越高，责任限制越不适用</li><li><strong>损害赔偿分类</strong>：<span class=\"term\" data-def=\"直接损害\">direct damages</span>（直接损害）vs. <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>（间接损害）vs. <span class=\"term\" data-def=\"附带损害\">incidental damages</span>（附带损害）——间接损害通常在合同中被排除</li><li><strong><span class=\"term\" data-def=\"在任何情况下不得\">in no event shall</span></strong>——在任何情况下均不得（event ≠ \u201c事件\u201d，= \u201c情况\u201d）</li><li><strong><span class=\"term\" data-def=\"累计的/总计的\">aggregate</span></strong>——累计的/总计的；aggregate liability shall not exceed = 累计责任不得超过</li><li><strong>to the maximum extent <span class=\"term\" data-def=\"允许的/许可的\">permitted</span> by law</strong>——在法律允许的最大范围内</li></ol><p><strong>下节预告：</strong>明天（第2周第5天）将学习违约与救济（Breach & Remedies），了解合同违约后有哪些法律救济手段。今天所学的责任限制条款将与明天的违约救济条款紧密衔接——限制了责任之后，违约方实际需要承担的赔偿范围就有了上限。</p>"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "title": "第2周 第7天 — 复习日：性别 + 复数综合练习",
+  "objective": "<strong>学习目标：</strong>巩固第1-2周所学的全部内容：名词性别判断规则 + 名词复数变化规则（含不规则复数）。今天不引入新语法和新词汇，专注于综合复习和大量练习。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 总复习",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "1a. 性别判断规则总结"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>名词性别判断 — 7条核心规则</h3><table><thead><tr><th>规则</th><th>词尾特征</th><th>性别</th><th>代词</th><th>例子</th></tr></thead><tbody><tr><td>规则一</td><td>辅音结尾</td><td>阳性</td><td><span class=\"uk-word\">він</span></td><td><span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"公园\">парк</span>, <span class=\"uk-word\" data-def=\"面包\">хліб</span></td></tr><tr><td>规则二</td><td>-а / -я 结尾</td><td>阴性</td><td><span class=\"uk-word\">вона</span></td><td><span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"厨房\">кухня</span>, <span class=\"uk-word\" data-def=\"歌曲\">пісня</span></td></tr><tr><td>规则三</td><td>-о / -е 结尾</td><td>中性</td><td><span class=\"uk-word\">воно</span></td><td><span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\" data-def=\"海\">море</span>, <span class=\"uk-word\" data-def=\"心脏\">серце</span></td></tr><tr><td>规则四</td><td>-ння / -ття 结尾</td><td>中性</td><td><span class=\"uk-word\">воно</span></td><td><span class=\"uk-word\" data-def=\"作业\">завдання</span>, <span class=\"uk-word\" data-def=\"生命\">життя</span></td></tr><tr><td>规则五</td><td>-ь 结尾</td><td>需记忆</td><td>\u2014</td><td>阳性：<span class=\"uk-word\" data-def=\"天\">день</span>；阴性：<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>；-ість\u2192阴性</td></tr><tr><td>规则六</td><td>指男性的 -о/-а/-я</td><td>阳性</td><td><span class=\"uk-word\">він</span></td><td><span class=\"uk-word\" data-def=\"爸爸\">тато</span>, <span class=\"uk-word\" data-def=\"父亲\">батько</span>, <span class=\"uk-word\" data-def=\"法官\">суддя</span></td></tr><tr><td>规则七</td><td>不变化外来词</td><td>中性</td><td><span class=\"uk-word\">воно</span></td><td><span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>, <span class=\"uk-word\" data-def=\"地铁\">метро</span>, <span class=\"uk-word\" data-def=\"出租车\">таксі</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>性别判断口诀：</strong><br>辅音 \u2192 阳，-а/-я \u2192 阴，-о/-е \u2192 中<br>-ння/-ття \u2192 中，-ість \u2192 阴，-ь \u2192 要记忆<br>指男性 \u2192 阳，外来词 \u2192 中"
+        },
+        {
+          "type": "h3",
+          "text": "1b. 复数变化规则总结"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>阳性名词复数</h3><table><thead><tr><th>单数词尾</th><th>复数变化</th><th>例子</th></tr></thead><tbody><tr><td>辅音</td><td>+ и</td><td><span class=\"uk-word\" data-def=\"桌子\">стіл</span>\u2192<span class=\"uk-word\">столи</span>, <span class=\"uk-word\" data-def=\"男孩\">хлопчик</span>\u2192<span class=\"uk-word\">хлопчики</span></td></tr><tr><td>-ь</td><td>-ь\u2192і</td><td><span class=\"uk-word\" data-def=\"学生\">учень</span>\u2192<span class=\"uk-word\">учні</span>, <span class=\"uk-word\" data-def=\"老师\">вчитель</span>\u2192<span class=\"uk-word\">вчителі</span></td></tr><tr><td>-ж/-ч/-ш/-щ</td><td>+ і</td><td><span class=\"uk-word\" data-def=\"刀\">ніж</span>\u2192<span class=\"uk-word\">ножі</span>, <span class=\"uk-word\" data-def=\"钥匙\">ключ</span>\u2192<span class=\"uk-word\">ключі</span></td></tr><tr><td>飘忽元音</td><td>元音脱落 + и</td><td><span class=\"uk-word\" data-def=\"桌子\">стіл</span>\u2192<span class=\"uk-word\">столи</span>, <span class=\"uk-word\" data-def=\"家\">дім</span>\u2192<span class=\"uk-word\">доми</span></td></tr><tr><td>辅音交替</td><td>г\u2192з, к\u2192ц 等</td><td><span class=\"uk-word\" data-def=\"朋友\">друг</span>\u2192<span class=\"uk-word\">друзі</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>阴性名词复数</h3><table><thead><tr><th>单数词尾</th><th>复数变化</th><th>例子</th></tr></thead><tbody><tr><td>-а</td><td>-а\u2192и</td><td><span class=\"uk-word\" data-def=\"盘子\">тарілка</span>\u2192<span class=\"uk-word\">тарілки</span>, <span class=\"uk-word\" data-def=\"妈妈\">мама</span>\u2192<span class=\"uk-word\">мами</span></td></tr><tr><td>-я</td><td>-я\u2192і</td><td><span class=\"uk-word\" data-def=\"裙子\">сукня</span>\u2192<span class=\"uk-word\">сукні</span>, <span class=\"uk-word\" data-def=\"奶奶\">бабуся</span>\u2192<span class=\"uk-word\">бабусі</span></td></tr><tr><td>-ь</td><td>-ь\u2192і</td><td><span class=\"uk-word\" data-def=\"夜晚\">ніч</span>\u2192<span class=\"uk-word\">ночі</span>, <span class=\"uk-word\" data-def=\"盐\">сіль</span>\u2192<span class=\"uk-word\">солі</span></td></tr><tr><td>-ість</td><td>-ість\u2192ості</td><td><span class=\"uk-word\" data-def=\"喜悦\">радість</span>\u2192<span class=\"uk-word\">радості</span>, <span class=\"uk-word\" data-def=\"新闻\">новість</span>\u2192<span class=\"uk-word\">новості</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>中性名词复数</h3><table><thead><tr><th>单数词尾</th><th>复数变化</th><th>例子</th></tr></thead><tbody><tr><td>-о</td><td>-о\u2192а</td><td><span class=\"uk-word\" data-def=\"扶手椅\">крісло</span>\u2192<span class=\"uk-word\">крісла</span>, <span class=\"uk-word\" data-def=\"桶\">відро</span>\u2192<span class=\"uk-word\">відра</span></td></tr><tr><td>-е</td><td>-е\u2192я</td><td><span class=\"uk-word\" data-def=\"田野\">поле</span>\u2192<span class=\"uk-word\">поля</span>, <span class=\"uk-word\" data-def=\"海\">море</span>\u2192<span class=\"uk-word\">моря</span></td></tr><tr><td>-ння/-ття</td><td>不变</td><td><span class=\"uk-word\">запитання</span>\u2192<span class=\"uk-word\">запитання</span>, <span class=\"uk-word\" data-def=\"生命\">життя</span>\u2192<span class=\"uk-word\" data-def=\"生命\">життя</span></td></tr><tr><td>外来词</td><td>不变</td><td><span class=\"uk-word\" data-def=\"大衣\">пальто</span>\u2192<span class=\"uk-word\" data-def=\"大衣\">пальто</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<h3>不规则复数</h3><table><thead><tr><th>类型</th><th>变化模式</th><th>例子</th></tr></thead><tbody><tr><td>完全不规则</td><td>词干大变</td><td><span class=\"uk-word\" data-def=\"孩子\">дитина</span>\u2192<span class=\"uk-word\">діти</span>, <span class=\"uk-word\" data-def=\"人\">людина</span>\u2192<span class=\"uk-word\">люди</span>, <span class=\"uk-word\" data-def=\"眼睛\">око</span>\u2192<span class=\"uk-word\">очі</span></td></tr><tr><td>-м'я 类</td><td>-'я\u2192-ена</td><td><span class=\"uk-word\" data-def=\"名字\">ім'я</span>\u2192<span class=\"uk-word\">імена</span></td></tr><tr><td>幼崽名词</td><td>-а\u2192-ата / -я\u2192-ята</td><td><span class=\"uk-word\" data-def=\"小鸡\">курча</span>\u2192<span class=\"uk-word\">курчата</span>, <span class=\"uk-word\" data-def=\"小牛\">теля</span>\u2192<span class=\"uk-word\">телята</span></td></tr></tbody></table>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>复数记忆口诀：</strong><br>阳性加 и/і，飘忽元音要脱落<br>阴性 а\u2192и，я\u2192і，ість\u2192ості<br>中性 о\u2192а，е\u2192я，ння/ття 不变化<br>幼崽 -ата/-ята，дитина\u2192діти 要死记！"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "2. 综合练习题",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "下面共有 <strong>35 道题</strong>，分为 6 组不同题型，覆盖本周所有内容。这是第2周的最终挑战！"
+        }
+      ],
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：混合性别判断（8题）",
+          "instruction": "判断以下名词的性别，注意它们都是本周学过的新词。",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\" data-def=\"风\">вітер</span>（风）", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "вітер 以辅音 -р 结尾 \u2192 阳性" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"云\">хмара</span>（云）", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "хмара 以 -а 结尾 \u2192 阴性" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"镜子\">дзеркало</span>（镜子）", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "дзеркало 以 -о 结尾 \u2192 中性" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"酒店\">готель</span>（酒店）", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "готель 以 -ь 结尾，是阳性（需记忆）" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"花\">квітка</span>（花）", "options": ["阳性", "阴性", "中性"], "answer": "阴性", "explanation": "квітка 以 -а 结尾 \u2192 阴性" },
+            { "prompt": "<span class=\"uk-word\">літо</span>（夏天）", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "літо 以 -о 结尾 \u2192 中性" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"羽毛\">перо</span>（羽毛）", "options": ["阳性", "阴性", "中性"], "answer": "中性", "explanation": "перо 以 -о 结尾 \u2192 中性" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"博物馆\">музей</span>（博物馆）", "options": ["阳性", "阴性", "中性"], "answer": "阳性", "explanation": "музей 以辅音 -й 结尾 \u2192 阳性" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：混合复数形式（8题）",
+          "instruction": "选出以下名词的正确复数形式。三种性别都有，注意区分规则！",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\" data-def=\"钥匙\">ключ</span>（钥匙）", "options": ["<span class=\"uk-word\">ключи</span>", "<span class=\"uk-word\">ключі</span>", "<span class=\"uk-word\">ключа</span>"], "answer": "ключі", "explanation": "ключ 以 -ч 结尾 \u2192 加 і \u2192 ключі" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"杯子\">чашка</span>（杯子）", "options": ["<span class=\"uk-word\">чашкі</span>", "<span class=\"uk-word\">чашки</span>", "<span class=\"uk-word\" data-def=\"杯子\">чашка</span>"], "answer": "чашки", "explanation": "чашка 以 -а 结尾 \u2192 -а\u2192-и \u2192 чашки" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"桶\">відро</span>（桶）", "options": ["<span class=\"uk-word\">відри</span>", "<span class=\"uk-word\">відрі</span>", "<span class=\"uk-word\">відра</span>"], "answer": "відра", "explanation": "відро 以 -о 结尾 \u2192 -о\u2192-а \u2192 відра" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"医生\">лікар</span>（医生）", "options": ["<span class=\"uk-word\">лікари</span>", "<span class=\"uk-word\">лікарі</span>", "<span class=\"uk-word\">лікара</span>"], "answer": "лікарі", "explanation": "лікар 以辅音 -р 结尾 \u2192 加 і \u2192 лікарі" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"女儿\">донька</span>（女儿）", "options": ["<span class=\"uk-word\">доньки</span>", "<span class=\"uk-word\">донькі</span>", "<span class=\"uk-word\">доньк</span>"], "answer": "доньки", "explanation": "донька 以 -а 结尾 \u2192 -а\u2192-и \u2192 доньки" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"数字\">число</span>（数字）", "options": ["<span class=\"uk-word\">числи</span>", "<span class=\"uk-word\">числа</span>", "<span class=\"uk-word\" data-def=\"数字\">число</span>"], "answer": "числа", "explanation": "число 以 -о 结尾 \u2192 -о\u2192-а \u2192 числа" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"诗\">вірш</span>（诗）", "options": ["<span class=\"uk-word\">вірши</span>", "<span class=\"uk-word\">вірші</span>", "<span class=\"uk-word\">віршата</span>"], "answer": "вірші", "explanation": "вірш 以 -ш 结尾 \u2192 加 і \u2192 вірші" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"女学生\">учениця</span>（女学生）", "options": ["<span class=\"uk-word\">учениці</span>", "<span class=\"uk-word\">ученици</span>", "<span class=\"uk-word\">ученицята</span>"], "answer": "учениці", "explanation": "учениця 以 -я 结尾 \u2192 -я\u2192-і \u2192 учениці" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：找不同类（5题）",
+          "instruction": "每组中有一个词与其他三个在某方面不同（性别或单复数特征），找出它。",
+          "questions": [
+            { "prompt": "哪个词性别不同？", "options": ["<span class=\"uk-word\" data-def=\"兄弟\">брат</span>", "<span class=\"uk-word\" data-def=\"大学生\">студент</span>", "<span class=\"uk-word\" data-def=\"剧院\">театр</span>", "<span class=\"uk-word\">літо</span>"], "answer": "літо", "explanation": "брат（阳性）、студент（阳性）、театр（阳性）都是阳性辅音结尾；літо（中性 -о 结尾）不同" },
+            { "prompt": "哪个词性别不同？", "options": ["<span class=\"uk-word\" data-def=\"盘子\">тарілка</span>", "<span class=\"uk-word\" data-def=\"耳朵\">вухо</span>", "<span class=\"uk-word\" data-def=\"灯\">лампа</span>", "<span class=\"uk-word\" data-def=\"墙\">стіна</span>"], "answer": "вухо", "explanation": "тарілка（阴性 -а）、лампа（阴性 -а）、стіна（阴性 -а）都是阴性；вухо（中性 -о 结尾）不同" },
+            { "prompt": "哪个复数形式的变化规则与其他三个不同？", "options": ["<span class=\"uk-word\">хлопчики</span>", "<span class=\"uk-word\">тарілки</span>", "<span class=\"uk-word\">крісла</span>", "<span class=\"uk-word\">щенята</span>"], "answer": "щенята", "explanation": "хлопчики、тарілки、крісла 是规则复数；щенята 是幼崽不规则复数（-ята）" },
+            { "prompt": "哪个名词的复数与单数同形？", "options": ["<span class=\"uk-word\" data-def=\"扶手椅\">крісло</span>", "<span class=\"uk-word\" data-def=\"桶\">відро</span>", "<span class=\"uk-word\" data-def=\"数字\">число</span>", "<span class=\"uk-word\">запитання</span>"], "answer": "запитання", "explanation": "крісло\u2192крісла、відро\u2192відра、число\u2192числа 复数都变化（-о\u2192-а）；запитання 复数与单数同形（-ння 不变）" },
+            { "prompt": "哪个复数不是从阳性名词变来的？", "options": ["<span class=\"uk-word\">столи</span>", "<span class=\"uk-word\">ножі</span>", "<span class=\"uk-word\">діти</span>", "<span class=\"uk-word\">гриби</span>"], "answer": "діти", "explanation": "столи（стіл的规则复数）、ножі（ніж的复数）、гриби（гриб的复数）都是阳性名词复数；діти 是 дитина 的完全不规则复数（原词阴性）" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：单数和复数双向转换（5题）",
+          "instruction": "有些题给单数选复数，有些题给复数选单数。",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\" data-def=\"背包\">рюкзак</span>（背包）的复数是？", "options": ["<span class=\"uk-word\">рюкзакі</span>", "<span class=\"uk-word\">рюкзаки</span>", "<span class=\"uk-word\">рюкзака</span>"], "answer": "рюкзаки", "explanation": "рюкзак（背包）以辅音 -к 结尾 \u2192 加 и \u2192 рюкзаки" },
+            { "prompt": "<span class=\"uk-word\">ложки</span>（勺子们）的单数是？", "options": ["<span class=\"uk-word\" data-def=\"勺子\">ложка</span>", "<span class=\"uk-word\">ложк</span>", "<span class=\"uk-word\">ложкя</span>"], "answer": "ложка", "explanation": "ложки（勺子们）的单数是 ложка，阴性 -а 结尾" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"桨\">весло</span>（桨）的复数是？", "options": ["<span class=\"uk-word\">весли</span>", "<span class=\"uk-word\">весла</span>", "<span class=\"uk-word\">веслі</span>"], "answer": "весла", "explanation": "весло（桨）以 -о 结尾 \u2192 -о\u2192-а \u2192 весла" },
+            { "prompt": "<span class=\"uk-word\">каченята</span>（小鸭们）的单数是？", "options": ["<span class=\"uk-word\">качен</span>", "<span class=\"uk-word\" data-def=\"小鸭\">каченя</span>", "<span class=\"uk-word\" data-def=\"鸭子\">качка</span>"], "answer": "каченя", "explanation": "каченята（小鸭们）的单数是 каченя，幼崽名词" },
+            { "prompt": "<span class=\"uk-word\">іграшки</span>（玩具们）的单数是？", "options": ["<span class=\"uk-word\" data-def=\"玩具\">іграшка</span>", "<span class=\"uk-word\">іграшк</span>", "<span class=\"uk-word\">іграшкя</span>"], "answer": "іграшка", "explanation": "іграшки（玩具们）的单数是 іграшка，阴性 -а 结尾" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习E：不规则复数专项（5题）",
+          "instruction": "专门测试不规则复数形式。",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\" data-def=\"人\">людина</span>（人）的复数是？", "options": ["<span class=\"uk-word\">людини</span>", "<span class=\"uk-word\">люди</span>", "<span class=\"uk-word\">людята</span>"], "answer": "люди", "explanation": "людина（人）\u2192 люди，完全不规则" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"小牛\">теля</span>（小牛）的复数是？", "options": ["<span class=\"uk-word\">телі</span>", "<span class=\"uk-word\">теляна</span>", "<span class=\"uk-word\">телята</span>"], "answer": "телята", "explanation": "теля（小牛）\u2192 телята，幼崽 -я\u2192-ята" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"眼睛\">око</span>（眼睛）的复数是？", "options": ["<span class=\"uk-word\">ока</span>", "<span class=\"uk-word\">очі</span>", "<span class=\"uk-word\">окі</span>"], "answer": "очі", "explanation": "око（眼睛）\u2192 очі，к\u2192ч 不规则" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"名字\">ім'я</span>（名字）的复数是？", "options": ["<span class=\"uk-word\">ім'ї</span>", "<span class=\"uk-word\">імена</span>", "<span class=\"uk-word\">ім'ята</span>"], "answer": "імена", "explanation": "ім'я（名字）→ імена，-м'я 类加 -ена" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"小马\">лоша</span>（小马驹）的复数是？", "options": ["<span class=\"uk-word\">лоші</span>", "<span class=\"uk-word\">лошата</span>", "<span class=\"uk-word\">лошаті</span>"], "answer": "лошата", "explanation": "лоша（小马驹）\u2192 лошата，幼崽 -а\u2192-ата" }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习F：终极挑战（4题）",
+          "instruction": "每道题综合考查性别判断 + 复数规则 + 特殊情况。这是本周最后的挑战！",
+          "questions": [
+            { "prompt": "<span class=\"uk-word\" data-def=\"膝盖\">коліно</span>（膝盖）是什么性别？复数是 <span class=\"uk-word\">коліна</span>，用的是哪个规则？", "options": ["阳性（辅音结尾 + и）", "阴性（-а\u2192-и）", "中性（-о\u2192-а）"], "answer": "中性", "explanation": "коліно 以 -о 结尾 \u2192 中性。复数 коліна（-о\u2192-а）" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"小猫\">кошеня</span>（小猫）以 -я 结尾。它的复数应该用哪个规则？", "options": ["阴性规则：-я\u2192-і \u2192 кошені", "幼崽规则：-я\u2192-ята \u2192 кошенята", "中性不变：кошеня\u2192кошеня"], "answer": "不规则 -ята", "explanation": "кошеня 是幼崽名词（中性），复数用特殊的 -ята 规则 \u2192 кошенята，不是阴性 -я\u2192-і" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（大衣）的复数是什么？", "options": ["<span class=\"uk-word\">пальта</span>（按 -о\u2192-а）", "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（不变化外来词）", "<span class=\"uk-word\">пальті</span>"], "answer": "пальто", "explanation": "пальто 是不变化的外来词（中性），单复数同形 \u2192 пальто" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"名字\">ім'я</span>（名字）以 -я 结尾，是中性特殊词。它的复数是？", "options": ["<span class=\"uk-word\">ім'ї</span>（按 -я→-і）", "<span class=\"uk-word\">ім'ята</span>（按幼崽规则）", "<span class=\"uk-word\">імена</span>（-'я→-ена 特殊）"], "answer": "імена", "explanation": "ім'я 是 -м'я 类中性特殊词，复数去掉 -'я 加 -ена → імена" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "3. 本周小结",
+      "html": "<h3>第2周完成！</h3><p>恭喜你完成了第2周「名词性别巩固 + 名词复数」的全部学习！本周你掌握了以下核心技能：</p><h4>性别判断（第1周 + 本周强化）</h4><ol><li><strong>辅音结尾 → 阳性</strong>（<span class=\"uk-word\" data-def=\"桌子\">стіл</span>, <span class=\"uk-word\" data-def=\"兄弟\">брат</span>, <span class=\"uk-word\" data-def=\"风\">вітер</span>）</li><li><strong>-а/-я 结尾 → 阴性</strong>（<span class=\"uk-word\" data-def=\"学校\">школа</span>, <span class=\"uk-word\" data-def=\"姐妹\">сестра</span>, <span class=\"uk-word\" data-def=\"花\">квітка</span>）</li><li><strong>-о/-е 结尾 → 中性</strong>（<span class=\"uk-word\" data-def=\"窗户\">вікно</span>, <span class=\"uk-word\">літо</span>, <span class=\"uk-word\" data-def=\"海\">море</span>）</li><li><strong>-ння/-ття → 中性</strong>，<strong>-ість → 阴性</strong>，<strong>-ь → 记忆</strong></li><li><strong>指男性 → 阳性</strong>，<strong>外来词 → 中性</strong></li></ol><h4>复数变化（本周新学）</h4><ol><li><strong>阳性</strong>：辅音+и，-ь→і，ж/ч/ш/щ+і，飘忽元音脱落</li><li><strong>阴性</strong>：-а→и，-я→і，-ь→і，-ість→ості</li><li><strong>中性</strong>：-о→а，-е→я，-ння/-ття不变，外来词不变</li><li><strong>不规则</strong>：<span class=\"uk-word\" data-def=\"孩子\">дитина</span>→<span class=\"uk-word\">діти</span>，<span class=\"uk-word\" data-def=\"人\">людина</span>→<span class=\"uk-word\">люди</span>，<span class=\"uk-word\" data-def=\"眼睛\">око</span>→<span class=\"uk-word\">очі</span></li><li><strong>幼崽名词</strong>：-а→-ата / -я→-ята（<span class=\"uk-word\" data-def=\"小鸡\">курча</span>→<span class=\"uk-word\">курчата</span>，<span class=\"uk-word\" data-def=\"小牛\">теля</span>→<span class=\"uk-word\">телята</span>）</li><li><strong>-м'я 类</strong>：-'я→-ена（<span class=\"uk-word\" data-def=\"名字\">ім'я</span>→<span class=\"uk-word\">імена</span>）</li></ol><p><strong>本周新词汇总数</strong>：85+ 个！加上第1周的词汇，你已经积累了超过 200 个乌克兰语词汇。</p><p><strong>下周预告</strong>：第3周我们将进入<strong>主格与宾格</strong>（Називний і Знахідний відмінок）的学习。这是乌克兰语\u201c格\u201d系统的入门 — 名词在句子中的角色不同，形式也会变化。这会让我们能够造出更复杂的句子！</p><p>好好休息一天，第3周我们继续加油！</p>"
+    }
+  ]
+}

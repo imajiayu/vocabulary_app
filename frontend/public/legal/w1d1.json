@@ -1,0 +1,113 @@
+{
+  "title": "第1周 第1天 — 本周词汇预载",
+  "objective": "本周主题：合同基础与结构（Contract Fundamentals）。本页列出第1周课程中将要用到的所有法律英语术语。请点击下方按钮一键添加到背单词 App，然后再开始学习课程。",
+  "sections": [
+    {
+      "type": "vocab-preload",
+      "groups": [
+        {
+          "heading": "Day 2 — 合同总体结构",
+          "words": [
+            { "word": "title", "def": "合同标题" },
+            { "word": "preamble", "def": "前言/序言" },
+            { "word": "recitals", "def": "鉴于条款" },
+            { "word": "definitions", "def": "定义条款" },
+            { "word": "operative provisions", "def": "实质条款" },
+            { "word": "boilerplate", "def": "样板条款/通用条款" },
+            { "word": "schedules", "def": "附表/附件" },
+            { "word": "clause", "def": "条款" },
+            { "word": "provision", "def": "规定/条款" },
+            { "word": "article", "def": "条（合同中的大条）" },
+            { "word": "amendment", "def": "修正案/修改" },
+            { "word": "execution", "def": "签署/执行" }
+          ]
+        },
+        {
+          "heading": "Day 3 — 合同当事人",
+          "words": [
+            { "word": "party", "def": "当事人/缔约方" },
+            { "word": "hereinafter", "def": "以下称为" },
+            { "word": "whereas", "def": "鉴于" },
+            { "word": "witnesseth", "def": "兹证明" },
+            { "word": "now therefore", "def": "因此/有鉴于此" },
+            { "word": "enter into", "def": "签订/订立" },
+            { "word": "by and between", "def": "由…与…之间" },
+            { "word": "duly organized", "def": "依法设立" },
+            { "word": "principal place of business", "def": "主要营业地" },
+            { "word": "in consideration of", "def": "鉴于/考虑到" },
+            { "word": "mutual covenants", "def": "相互承诺" },
+            { "word": "the premises", "def": "上述事项" },
+            { "word": "referred to as", "def": "称为" },
+            { "word": "recital", "def": "鉴于条款（单数）" }
+          ]
+        },
+        {
+          "heading": "Day 4 — 定义条款",
+          "words": [
+            { "word": "shall mean", "def": "系指/应当指" },
+            { "word": "shall have the meaning", "def": "具有…的含义" },
+            { "word": "as used herein", "def": "如本协议所用" },
+            { "word": "unless the context otherwise requires", "def": "除非上下文另有要求" },
+            { "word": "affiliate", "def": "关联方/关联公司" },
+            { "word": "person", "def": "人（含自然人和法人）" },
+            { "word": "business day", "def": "工作日/营业日" },
+            { "word": "effective date", "def": "生效日期" },
+            { "word": "material", "def": "重大的/实质性的" },
+            { "word": "including without limitation", "def": "包括但不限于" },
+            { "word": "hereof", "def": "本协议的" },
+            { "word": "thereof", "def": "其中的/该…的" },
+            { "word": "ascribe", "def": "赋予（含义）" },
+            { "word": "set forth", "def": "规定/载明" }
+          ]
+        },
+        {
+          "heading": "Day 5 — 合同标的与履行义务",
+          "words": [
+            { "word": "subject matter", "def": "标的/主题" },
+            { "word": "deliverables", "def": "交付成果" },
+            { "word": "performance", "def": "履行/履约" },
+            { "word": "obligation", "def": "义务/责任" },
+            { "word": "due diligence", "def": "尽职调查" },
+            { "word": "scope of work", "def": "工作范围" },
+            { "word": "milestone", "def": "里程碑/阶段节点" },
+            { "word": "turnkey", "def": "交钥匙工程" },
+            { "word": "specifications", "def": "规格/技术要求" },
+            { "word": "compliance", "def": "合规/遵守" },
+            { "word": "time is of the essence", "def": "时间至关重要（法律效力）" },
+            { "word": "best efforts", "def": "尽最大努力" },
+            { "word": "reasonable efforts", "def": "合理努力" },
+            { "word": "in accordance with", "def": "根据/依照" },
+            { "word": "in full force and effect", "def": "完全有效" },
+            { "word": "held to be", "def": "被裁定为" },
+            { "word": "attached hereto", "def": "附于本协议的" }
+          ]
+        },
+        {
+          "heading": "Day 6 — 合同生效与期限",
+          "words": [
+            { "word": "term", "def": "期限" },
+            { "word": "commencement", "def": "开始/生效" },
+            { "word": "expiration", "def": "届满/到期" },
+            { "word": "renewal", "def": "续期/续签" },
+            { "word": "termination", "def": "终止/解除" },
+            { "word": "initial term", "def": "初始期限" },
+            { "word": "perpetual", "def": "永久的" },
+            { "word": "extension", "def": "延期/延长" },
+            { "word": "survival", "def": "存续条款" },
+            { "word": "notwithstanding", "def": "尽管/不受…影响" },
+            { "word": "as of", "def": "自…起/截至" },
+            { "word": "terminate for cause", "def": "因故终止" },
+            { "word": "terminate for convenience", "def": "无因终止/便利终止" },
+            { "word": "execution date", "def": "签署日期" },
+            { "word": "commencement date", "def": "起始日期" },
+            { "word": "automatic renewal", "def": "自动续期" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "html": "<p><strong>共计约 65 个术语和固定搭配。</strong>添加完毕后即可进入第2天的课程，开始学习合同总体结构。</p><p>点击任意术语可以听发音。本周课程中只会使用以上词汇作为核心教学内容。</p>"
+    }
+  ]
+}
