@@ -2,7 +2,7 @@
  * 共享 Source 选择状态（模块级单例）
  *
  * 原因：Source 选择已从课时页面内部提升到课程顶部导航栏。
- * TopBar / VocabPreloadSection / WordPopover 需要响应式共享同一份状态，
+ * TopBar / VocabPreloadSection / CourseLessonPage 需要响应式共享同一份状态，
  * 避免在不同组件中各自持有独立 ref 导致更新不同步。
  *
  * 按 courseId 分组缓存，切换课程时自动恢复该课程上次选择的 source。

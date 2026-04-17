@@ -13,7 +13,6 @@
           <td
             v-for="(cell, ci) in row"
             :key="ci"
-            :class="ci === 0 ? wordClass : ''"
             v-html="wrap(cell)"
           />
         </tr>
@@ -23,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
 import type { VocabTableSection } from '../../types/lesson'
 import { useCourseHtml } from '../../composables/useCourseHtml'
 
@@ -31,6 +29,5 @@ defineProps<{
   section: VocabTableSection
 }>()
 
-const wordClass = inject<string>('courseWordClass', 'uk-word')
 const { wrap } = useCourseHtml()
 </script>

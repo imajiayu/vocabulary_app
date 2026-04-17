@@ -3,162 +3,213 @@
     <CourseTopBar v-if="!embedded" :config="config" />
 
     <main class="course-index-main">
-      <!-- Hero：课程名 + 副标题 + 进度环 -->
-      <section class="course-hero">
-        <div class="course-hero-decor" aria-hidden="true" />
+      <!-- ══ 左侧 Rail: 章节索引 ══ -->
+      <aside class="course-rail" aria-label="按周索引">
+        <header class="rail-header">
+          <span class="rail-numeral">§</span>
+          <span class="rail-label">Chapitres</span>
+          <span class="rail-count stat-number">{{ ribbonTabs.length }}</span>
+        </header>
 
-        <div class="course-hero-inner">
-          <div class="course-hero-text">
-            <span class="course-hero-kicker">{{ heroKicker }}</span>
-            <h1 class="course-hero-title">{{ config.name }}</h1>
-            <p class="course-hero-subtitle">{{ heroSubtitle }}</p>
+        <ul ref="railEl" class="rail-list" role="tablist">
+          <li
+            v-for="tab in ribbonTabs"
+            :key="tab.week"
+            class="rail-row"
+            :class="{
+              active: activeWeek === tab.week,
+              future: tab.type === 'future',
+              done: tab.type === 'current' && weekDone(tab.week) === tab.total
+            }"
+          >
+            <button
+              type="button"
+              class="rail-btn"
+              role="tab"
+              :aria-selected="activeWeek === tab.week"
+              :tabindex="activeWeek === tab.week ? 0 : -1"
+              @click="selectWeek(tab.week)"
+              @keydown="onTabKeydown($event, tab.week)"
+            >
+              <span class="rail-roman">{{ toRoman(tab.week) }}</span>
+              <span class="rail-body">
+                <span class="rail-title">{{ tab.title }}</span>
+                <span class="rail-meta">
+                  <template v-if="tab.type === 'current'">
+                    <span class="rail-dots" aria-hidden="true">
+                      <span
+                        v-for="n in tab.total"
+                        :key="n"
+                        class="rail-dot"
+                        :class="{ filled: n <= weekDone(tab.week) }"
+                      />
+                    </span>
+                    <span class="rail-ratio stat-number">
+                      {{ weekDone(tab.week) }}/{{ tab.total }}
+                    </span>
+                  </template>
+                  <template v-else>
+                    <span class="rail-future-label">À venir</span>
+                  </template>
+                </span>
+              </span>
+              <span class="rail-bracket" aria-hidden="true" />
+            </button>
+          </li>
+        </ul>
 
-            <div class="course-hero-meta">
-              <span class="course-hero-meta-item">
-                <strong class="stat-number">{{ totalLessons }}</strong>
-                课时
-              </span>
-              <span class="course-hero-sep" aria-hidden="true">·</span>
-              <span class="course-hero-meta-item">
-                <strong class="stat-number">{{ weekCount }}</strong>
-                周期
-              </span>
-              <span class="course-hero-sep" aria-hidden="true">·</span>
-              <span class="course-hero-meta-item">
-                <strong class="stat-number">{{ completedCount }}/{{ totalLessons }}</strong>
-                已完成
-              </span>
-            </div>
+        <footer class="rail-footer">
+          <span class="rail-footer-text">{{ completedCount }}/{{ totalLessons }}</span>
+          <span class="rail-footer-label">已完成</span>
+        </footer>
+      </aside>
+
+      <!-- ══ 右侧 Content ══ -->
+      <section class="course-content">
+        <!-- Masthead: 课程标题 + 进度环 -->
+        <header class="masthead">
+          <div class="masthead-text">
+            <span class="masthead-kicker">
+              {{ heroKicker }}
+              <span class="masthead-kicker-dot">·</span>
+              <span class="masthead-kicker-year">MMXXVI</span>
+            </span>
+            <h1 class="masthead-title">{{ config.name }}</h1>
+            <p class="masthead-subtitle">{{ heroSubtitle }}</p>
           </div>
 
-          <div class="course-hero-ring">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="ring-track" cx="60" cy="60" r="52" />
-              <circle
-                class="ring-progress"
-                cx="60"
-                cy="60"
-                r="52"
-                :stroke-dasharray="ringCircumference"
-                :stroke-dashoffset="ringOffset"
-              />
-            </svg>
-            <div class="course-hero-ring-content">
-              <span class="course-hero-ring-pct stat-number">{{ completionPct }}</span>
-              <span class="course-hero-ring-label">完成度</span>
+          <div class="masthead-stats">
+            <div class="masthead-meta">
+              <span class="meta-item">
+                <strong class="stat-number">{{ totalLessons }}</strong>
+                <span class="meta-label">课时</span>
+              </span>
+              <span class="meta-divider" aria-hidden="true" />
+              <span class="meta-item">
+                <strong class="stat-number">{{ weekCount }}</strong>
+                <span class="meta-label">周期</span>
+              </span>
             </div>
+
+            <div class="masthead-ring" role="img" :aria-label="`已完成 ${completionPct}`">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring-track" cx="60" cy="60" r="52" />
+                <circle
+                  class="ring-progress"
+                  cx="60"
+                  cy="60"
+                  r="52"
+                  :stroke-dasharray="ringCircumference"
+                  :stroke-dashoffset="ringOffset"
+                />
+              </svg>
+              <div class="masthead-ring-content">
+                <span class="masthead-ring-pct stat-number">{{ completionPct }}</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- 激活周条带 -->
+        <div class="week-strip" role="tabpanel" :aria-label="`第 ${activeWeek} 周`">
+          <span class="week-strip-numeral">§</span>
+          <span class="week-strip-no stat-number">{{ toRoman(activeWeek) }}</span>
+          <div class="week-strip-title-col">
+            <span class="week-strip-label">Week {{ activeWeek }}</span>
+            <span class="week-strip-title">{{ activeTabTitle }}</span>
+          </div>
+          <div class="week-strip-progress" v-if="!activeIsFuture">
+            <span class="week-strip-ratio stat-number">
+              {{ weekDone(activeWeek) }} / {{ activeWeekLessons.length }}
+            </span>
+            <div class="week-strip-track" aria-hidden="true">
+              <div
+                class="week-strip-bar"
+                :style="{ width: activeWeekLessons.length ? (weekDone(activeWeek) / activeWeekLessons.length * 100) + '%' : '0%' }"
+              />
+            </div>
+          </div>
+          <div class="week-strip-progress future-pill" v-else>
+            <span class="future-pill-text">尚未开启</span>
+          </div>
+        </div>
+
+        <!-- 课时流 (或未来周预告) -->
+        <div class="lesson-stream" :class="{ 'is-future': activeIsFuture }">
+          <!-- 当前周 -->
+          <ol
+            v-if="!activeIsFuture && activeWeekLessons.length"
+            class="lesson-grid"
+            :key="`lessons-${activeWeek}`"
+          >
+            <li
+              v-for="(lesson, idx) in activeWeekLessons"
+              :key="lesson.id"
+              class="lesson-item"
+              :style="{ '--reveal-delay': `${idx * 28}ms` }"
+            >
+              <router-link
+                :to="`${config.basePath}/${lesson.id}`"
+                class="lesson-card"
+                :class="{
+                  completed: isCompleted(lesson.id),
+                  'is-vocab': lesson.vocab,
+                  'is-review': lesson.review
+                }"
+              >
+                <div class="lesson-head">
+                  <span class="lesson-day stat-number">D{{ lesson.day }}</span>
+                  <span class="lesson-kind">
+                    <template v-if="lesson.vocab">词汇预载</template>
+                    <template v-else-if="lesson.review">综合复习</template>
+                    <template v-else>讲授</template>
+                  </span>
+                  <button
+                    type="button"
+                    class="lesson-check"
+                    :class="{ checked: isCompleted(lesson.id) }"
+                    :aria-pressed="isCompleted(lesson.id)"
+                    :title="isCompleted(lesson.id) ? '标记为未完成' : '标记为已完成'"
+                    @click.prevent.stop="toggleLesson(lesson.id)"
+                  >
+                    <svg v-if="isCompleted(lesson.id)" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="m3.5 7.5 2.2 2.2L10.5 4.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                    </svg>
+                    <span v-else class="lesson-check-dot" />
+                  </button>
+                </div>
+
+                <h3 class="lesson-title">{{ lesson.title }}</h3>
+                <p class="lesson-topic">{{ lesson.topic }}</p>
+
+                <span class="lesson-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 16 16"><path d="M5 3.5 9.5 8 5 12.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </router-link>
+            </li>
+          </ol>
+
+          <!-- 未来周预告 -->
+          <div v-else-if="activeIsFuture && activeFutureWeek" class="future-panel">
+            <span class="future-ornament" aria-hidden="true">❦</span>
+            <span class="future-kicker">À venir · Week {{ activeFutureWeek.week }}</span>
+            <h2 class="future-title">{{ activeFutureWeek.title }}</h2>
+            <p class="future-topic">{{ activeFutureWeek.topic }}</p>
+            <p class="future-note">
+              此章节尚未编订 · 课程按周渐次展开
+            </p>
           </div>
         </div>
       </section>
-
-      <!-- 周分组 -->
-      <section
-        v-for="week in weeks"
-        :key="week.num"
-        class="course-week"
-      >
-        <header class="course-week-header">
-          <div class="course-week-meta">
-            <span class="course-week-index stat-number">W{{ String(week.num).padStart(2, '0') }}</span>
-            <h2 class="course-week-title">
-              <span v-if="weekTitles[week.num]">{{ weekTitles[week.num] }}</span>
-              <span v-else>第 {{ week.num }} 周</span>
-            </h2>
-          </div>
-          <div class="course-week-progress">
-            <span class="course-week-progress-text">
-              {{ weekDone(week.num) }} / {{ week.lessons.length }}
-            </span>
-            <div class="course-week-progress-track">
-              <div
-                class="course-week-progress-bar"
-                :style="{ width: (weekDone(week.num) / week.lessons.length * 100) + '%' }"
-              />
-            </div>
-          </div>
-        </header>
-
-        <ol class="course-lesson-grid">
-          <li
-            v-for="lesson in week.lessons"
-            :key="lesson.id"
-            class="course-lesson-item"
-          >
-            <router-link
-              :to="`${config.basePath}/${lesson.id}`"
-              class="course-lesson-card"
-              :class="{
-                completed: isCompleted(lesson.id),
-                'is-vocab': lesson.vocab,
-                'is-review': lesson.review
-              }"
-            >
-              <div class="course-lesson-card-head">
-                <span class="course-lesson-dayno stat-number">
-                  D{{ lesson.day }}
-                </span>
-                <span class="course-lesson-kind">
-                  <template v-if="lesson.vocab">词汇预载</template>
-                  <template v-else-if="lesson.review">综合复习</template>
-                  <template v-else>讲授</template>
-                </span>
-              </div>
-
-              <h3 class="course-lesson-title">{{ lesson.title }}</h3>
-              <p class="course-lesson-topic">{{ lesson.topic }}</p>
-
-              <div class="course-lesson-card-foot">
-                <span class="course-lesson-status" :class="{ done: isCompleted(lesson.id) }">
-                  <svg v-if="isCompleted(lesson.id)" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="m4 8.5 2.5 2.5L12 5.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                  </svg>
-                  <span v-else class="course-lesson-status-dot" />
-                </span>
-                <button
-                  type="button"
-                  class="course-lesson-toggle"
-                  :class="{ checked: isCompleted(lesson.id) }"
-                  :aria-pressed="isCompleted(lesson.id)"
-                  :title="isCompleted(lesson.id) ? '标记为未完成' : '标记为已完成'"
-                  @click.prevent.stop="toggleLesson(lesson.id)"
-                >
-                  {{ isCompleted(lesson.id) ? '已完成' : '标记完成' }}
-                </button>
-              </div>
-            </router-link>
-          </li>
-        </ol>
-      </section>
-
-      <!-- 未来周预告 -->
-      <section v-if="futureWeeks.length" class="course-future">
-        <header class="course-future-header">
-          <span class="course-future-kicker">À venir</span>
-          <h2>即将展开的章节</h2>
-        </header>
-        <ul class="course-future-list">
-          <li v-for="fw in futureWeeks" :key="fw.week" class="course-future-item">
-            <span class="course-future-week stat-number">W{{ String(fw.week).padStart(2, '0') }}</span>
-            <div class="course-future-meta">
-              <span class="course-future-title">{{ fw.title }}</span>
-              <span class="course-future-topic">{{ fw.topic }}</span>
-            </div>
-          </li>
-        </ul>
-      </section>
-
-      <footer class="course-footer">
-        <span>{{ config.name }} — Curated for IELTS Study</span>
-      </footer>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, provide } from 'vue'
+import { computed, nextTick, onMounted, provide, ref } from 'vue'
 import { useCourseConfig } from '@/features/courses/composables/useCourseConfig'
 import { useCourseProgress } from '@/features/courses/composables/useCourseProgress'
-import { getLessonsByCourse } from '@/features/courses/data/lessons'
+import { getLessonsByCourse, type LessonMeta, type FutureWeek } from '@/features/courses/data/lessons'
 import CourseTopBar from '@/features/courses/components/navigation/CourseTopBar.vue'
 
 import '@/features/courses/styles/course.css'
@@ -177,6 +228,7 @@ const { isCompleted, toggleLesson, fetchProgress } = useCourseProgress(props.cou
 
 provide('courseConfig', config.value)
 
+// ── 统计 ──
 const totalLessons = lessons.length
 
 const weekCount = computed(() => {
@@ -200,143 +252,620 @@ const ringOffset = computed(() => {
   return ringCircumference * (1 - p)
 })
 
-const weeks = computed(() => {
-  const map = new Map<number, typeof lessons>()
+// ── 按周组织数据 ──
+const currentWeeks = computed(() => {
+  const map = new Map<number, LessonMeta[]>()
   for (const l of lessons) {
     if (!map.has(l.week)) map.set(l.week, [])
     map.get(l.week)!.push(l)
   }
-  return Array.from(map.entries()).map(([num, lessons]) => ({ num, lessons }))
+  return Array.from(map.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([num, lessons]) => ({ num, lessons }))
+})
+
+type RibbonTab =
+  | { type: 'current'; week: number; title: string; total: number }
+  | { type: 'future'; week: number; title: string; topic: string }
+
+const ribbonTabs = computed<RibbonTab[]>(() => {
+  const current: RibbonTab[] = currentWeeks.value.map(w => ({
+    type: 'current',
+    week: w.num,
+    title: weekTitles[w.num] || `第 ${w.num} 周`,
+    total: w.lessons.length
+  }))
+  const future: RibbonTab[] = futureWeeks.map(fw => ({
+    type: 'future',
+    week: fw.week,
+    title: fw.title,
+    topic: fw.topic
+  }))
+  return [...current, ...future]
 })
 
 function weekDone(n: number) {
   return lessons.filter(l => l.week === n && isCompleted(l.id)).length
 }
 
+// ── 当前激活周 ──
+const activeWeek = ref<number>(1)
+
+const activeTab = computed(() =>
+  ribbonTabs.value.find(t => t.week === activeWeek.value)
+)
+
+const activeIsFuture = computed(() => activeTab.value?.type === 'future')
+
+const activeWeekLessons = computed(() => {
+  const w = currentWeeks.value.find(x => x.num === activeWeek.value)
+  return w?.lessons ?? []
+})
+
+const activeFutureWeek = computed<FutureWeek | undefined>(() =>
+  futureWeeks.find(fw => fw.week === activeWeek.value)
+)
+
+const activeTabTitle = computed(() => activeTab.value?.title ?? `第 ${activeWeek.value} 周`)
+
+function selectWeek(n: number) {
+  activeWeek.value = n
+}
+
+const railEl = ref<HTMLUListElement | null>(null)
+
+function onTabKeydown(e: KeyboardEvent, week: number) {
+  const tabs = ribbonTabs.value
+  const idx = tabs.findIndex(t => t.week === week)
+  if (idx < 0) return
+  let next = idx
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = Math.min(idx + 1, tabs.length - 1)
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = Math.max(idx - 1, 0)
+  else if (e.key === 'Home') next = 0
+  else if (e.key === 'End') next = tabs.length - 1
+  else return
+  e.preventDefault()
+  activeWeek.value = tabs[next].week
+  nextTick(() => {
+    const btn = document.querySelectorAll<HTMLButtonElement>('.rail-btn')[next]
+    btn?.focus()
+  })
+}
+
+// ── 默认激活周: 最新的未全部完成的周 ──
+function pickDefaultWeek(): number {
+  const weeks = currentWeeks.value
+  if (weeks.length === 0) return futureWeeks[0]?.week ?? 1
+  for (const w of weeks) {
+    const done = w.lessons.filter(l => isCompleted(l.id)).length
+    if (done < w.lessons.length) return w.num
+  }
+  return weeks[weeks.length - 1].num
+}
+
+// ── 罗马数字 (装饰用) ──
+const ROMAN_NUMERALS = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
+function toRoman(n: number): string {
+  return ROMAN_NUMERALS[n] ?? String(n)
+}
+
+// ── 文案 ──
 const heroKicker = computed(() =>
   config.value.id === 'ukrainian'
-    ? 'Ukrainian · A Study Journal'
-    : 'Legal English · A Study Journal'
+    ? 'Ukrainian · Study Journal'
+    : 'Legal English · Study Journal'
 )
 
 const heroSubtitle = computed(() =>
   config.value.id === 'ukrainian'
-    ? '从名词性别到七格变位，系统学习乌克兰语核心语法。每一课配套真实词汇与练习。'
-    : '从合同基础到违约救济，精研法律英语术语。每一课配套真实条款与翻译练习。'
+    ? '从名词性别到七格变位，系统学习乌克兰语核心语法'
+    : '从合同基础到违约救济，精研法律英语术语与起草'
 )
 
-onMounted(() => {
-  fetchProgress()
+onMounted(async () => {
+  await fetchProgress()
+  activeWeek.value = pickDefaultWeek()
+  await nextTick()
+  const el = railEl.value
+  if (el) {
+    const idx = ribbonTabs.value.findIndex(t => t.week === activeWeek.value)
+    const row = el.querySelectorAll<HTMLElement>('.rail-row')[idx]
+    row?.scrollIntoView({ block: 'nearest' })
+  }
 })
 </script>
 
 <style scoped>
+/* ══════════════════════════════════════════════════════════════════
+   整屏容器 — 与 WordIndex 一致：不滚动、内容居中
+   ══════════════════════════════════════════════════════════════════ */
 .course-index-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   min-height: 100vh;
   min-height: 100dvh;
   background: var(--color-surface-page);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+  overflow: hidden;
+  position: relative;
 }
 
 .course-index-page.embedded {
-  min-height: auto;
-  width: 100%;
+  min-height: 100%;
+  height: 100%;
+}
+
+/* 纸质背景纹理 + 主题色柔和光晕 */
+.course-index-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--primitive-gold-600) 0.6%, transparent) 2px,
+      color-mix(in srgb, var(--primitive-gold-600) 0.6%, transparent) 3px
+    ),
+    radial-gradient(900px 500px at 18% -10%, var(--course-accent-soft) 0%, transparent 60%),
+    radial-gradient(700px 400px at 100% 110%, color-mix(in srgb, var(--primitive-gold-500) 5%, transparent) 0%, transparent 55%);
 }
 
 .course-index-main {
-  max-width: 1080px;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 1220px;
   margin: 0 auto;
-  padding: 0 28px 96px;
+  padding: 22px 28px 24px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
-/* ══════════ HERO ══════════ */
-.course-hero {
-  position: relative;
-  margin: 32px 0 48px;
-  padding: 52px 48px;
+/* ══════════════════════════════════════════════════════════════════
+   左侧 Rail
+   ══════════════════════════════════════════════════════════════════ */
+.course-rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   background: var(--color-surface-card);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  isolation: isolate;
+  position: relative;
 }
 
-.course-hero-decor {
+/* 左侧装饰竖线 — 像书脊上的烫金带 */
+.course-rail::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  background: var(--course-hero-gradient);
-  z-index: -1;
-  pointer-events: none;
+  top: 12px;
+  bottom: 12px;
+  left: 4px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--course-accent-soft-strong) 20%,
+    var(--course-accent-soft-strong) 80%,
+    transparent
+  );
+  opacity: 0.6;
 }
 
-.course-hero-inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 48px;
-  align-items: center;
-}
-
-.course-hero-text { min-width: 0; }
-
-.course-hero-kicker {
-  display: inline-block;
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--course-accent);
-  font-weight: 600;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--course-accent-soft-strong);
-  margin-bottom: 20px;
-}
-
-.course-hero-title {
-  font-family: var(--font-serif);
-  font-size: clamp(32px, 4.2vw, 46px);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-  margin: 0 0 14px;
-}
-
-.course-hero-subtitle {
-  font-family: var(--font-serif);
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--color-text-secondary);
-  max-width: 520px;
-  margin: 0 0 24px;
-  font-style: italic;
-}
-
-.course-hero-meta {
+.rail-header {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  color: var(--color-text-secondary);
-  font-size: 13.5px;
-}
-
-.course-hero-meta-item strong {
-  color: var(--color-text-primary);
-  font-size: 17px;
-  margin-right: 4px;
-  font-weight: 600;
-}
-
-.course-hero-sep { opacity: 0.4; }
-
-/* 进度环 */
-.course-hero-ring {
-  position: relative;
-  width: 140px;
-  height: 140px;
+  gap: 8px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
-.course-hero-ring svg {
+.rail-numeral {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--course-accent-strong);
+  line-height: 1;
+}
+
+.rail-label {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  color: var(--course-accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  flex: 1;
+}
+
+.rail-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.04em;
+}
+
+.rail-list {
+  list-style: none;
+  padding: 6px 6px;
+  margin: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--course-accent-soft-strong) transparent;
+}
+
+.rail-list::-webkit-scrollbar {
+  width: 4px;
+}
+.rail-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.rail-list::-webkit-scrollbar-thumb {
+  background: var(--course-accent-soft-strong);
+  border-radius: 2px;
+}
+
+.rail-row {
+  position: relative;
+}
+
+.rail-btn {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px 7px 10px;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-default);
+  cursor: pointer;
+  text-align: left;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.18s ease;
+  position: relative;
+}
+
+.rail-btn:hover {
+  background: var(--course-accent-soft);
+}
+
+.rail-btn:focus-visible {
+  outline: 2px solid var(--course-accent);
+  outline-offset: -2px;
+}
+
+.rail-roman {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--course-accent);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  min-width: 22px;
+  text-align: center;
+}
+
+.rail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rail-title {
+  font-family: var(--font-serif);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.rail-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+.rail-dots {
+  display: flex;
+  gap: 2px;
+}
+
+.rail-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--course-accent-soft-strong);
+  transition: background 0.2s ease;
+}
+
+.rail-dot.filled {
+  background: var(--course-accent);
+  border-color: var(--course-accent);
+}
+
+.rail-ratio {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.02em;
+  margin-left: auto;
+}
+
+.rail-future-label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 10.5px;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.04em;
+}
+
+/* Active — 底色加重 + 左侧 accent bar */
+.rail-row.active .rail-btn {
+  background: var(--course-accent-soft);
+}
+
+.rail-row.active .rail-roman {
+  color: var(--course-accent-strong);
+  font-weight: 600;
+}
+
+.rail-row.active .rail-title {
+  color: var(--course-accent-strong);
+  font-weight: 600;
+}
+
+.rail-row.active .rail-bracket {
+  position: absolute;
+  left: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--course-accent);
+  border-radius: 1px;
+}
+
+/* Done — 完成标记 */
+.rail-row.done .rail-btn::after {
+  content: '✓';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  width: 12px;
+  height: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--color-state-success);
+  background: var(--color-state-success-light);
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.rail-row.done .rail-ratio {
+  opacity: 0;
+}
+
+/* Future — 斜纹底、斜体 */
+.rail-row.future .rail-btn {
+  opacity: 0.55;
+}
+
+.rail-row.future .rail-btn:hover {
+  opacity: 0.85;
+}
+
+.rail-row.future .rail-roman,
+.rail-row.future .rail-title {
+  font-style: italic;
+  color: var(--color-text-tertiary);
+}
+
+.rail-row.future.active .rail-btn {
+  opacity: 0.92;
+  background: var(--course-accent-soft);
+}
+
+.rail-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+  background: var(--course-accent-soft);
+}
+
+.rail-footer-text {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--course-accent-strong);
+  letter-spacing: 0.02em;
+}
+
+.rail-footer-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   右侧 Content
+   ══════════════════════════════════════════════════════════════════ */
+.course-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 14px;
+}
+
+/* ── Masthead ── */
+.masthead {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 18px 22px 16px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.masthead::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 26px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--course-accent-soft-strong) 20%,
+    var(--course-accent-soft-strong) 80%,
+    transparent
+  );
+  opacity: 0.4;
+}
+
+.masthead-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.masthead-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--course-accent);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.masthead-kicker-dot {
+  font-size: 14px;
+  opacity: 0.5;
+  letter-spacing: 0;
+}
+
+.masthead-kicker-year {
+  font-family: var(--font-serif);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+}
+
+.masthead-title {
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.masthead-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+
+.masthead-stats {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-shrink: 0;
+}
+
+.masthead-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.meta-item {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.meta-item strong {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.meta-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+.meta-divider {
+  width: 24px;
+  height: 1px;
+  background: var(--course-accent-soft-strong);
+  margin: 2px 0;
+}
+
+.masthead-ring {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.masthead-ring svg {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
@@ -345,123 +874,193 @@ onMounted(() => {
 .ring-track {
   fill: none;
   stroke: var(--course-accent-soft-strong);
-  stroke-width: 6;
+  stroke-width: 5;
 }
 
 .ring-progress {
   fill: none;
   stroke: var(--course-accent);
-  stroke-width: 6;
+  stroke-width: 5;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.course-hero-ring-content {
+.masthead-ring-content {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  align-content: center;
   text-align: center;
 }
 
-.course-hero-ring-pct {
+.masthead-ring-pct {
   font-family: var(--font-serif);
-  font-size: 28px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--course-accent-strong);
   line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.course-hero-ring-label {
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-text-tertiary);
-  margin-top: 6px;
-}
-
-/* ══════════ 周分组 ══════════ */
-.course-week {
-  margin-bottom: 48px;
-}
-
-.course-week-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 18px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--color-border-light);
-}
-
-.course-week-meta {
-  display: flex;
-  align-items: baseline;
+/* ── 周条带 ── */
+.week-strip {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
   gap: 14px;
+  padding: 10px 18px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-default);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.week-strip::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--course-accent);
+  border-radius: var(--radius-default) 0 0 var(--radius-default);
+}
+
+.week-strip-numeral {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--course-accent);
+  margin-left: 6px;
+}
+
+.week-strip-no {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--course-accent-strong);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.week-strip-title-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   min-width: 0;
 }
 
-.course-week-index {
-  font-family: var(--font-serif);
-  font-size: 14px;
+.week-strip-label {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
   font-weight: 600;
-  color: var(--course-accent);
-  letter-spacing: 0.04em;
 }
 
-.course-week-title {
+.week-strip-title {
   font-family: var(--font-serif);
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--color-text-primary);
-  margin: 0;
-  line-height: 1.3;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.course-week-progress {
+.week-strip-progress {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
-  color: var(--color-text-tertiary);
   font-family: var(--font-mono);
   flex-shrink: 0;
 }
 
-.course-week-progress-track {
-  width: 80px;
+.week-strip-ratio {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.week-strip-track {
+  width: 120px;
   height: 3px;
   background: var(--color-border-light);
   border-radius: 999px;
   overflow: hidden;
 }
 
-.course-week-progress-bar {
+.week-strip-bar {
   height: 100%;
   background: var(--course-accent);
   border-radius: 999px;
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── 课时卡片网格 ── */
-.course-lesson-grid {
+.future-pill {
+  padding: 3px 10px;
+  border: 1px dashed var(--course-accent-soft-strong);
+  border-radius: 999px;
+}
+
+.future-pill-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 11.5px;
+  color: var(--course-accent);
+  letter-spacing: 0.04em;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   课时流
+   ══════════════════════════════════════════════════════════════════ */
+.lesson-stream {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-grid {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
 }
 
-.course-lesson-item { min-width: 0; }
+.lesson-item {
+  min-width: 0;
+  min-height: 0;
+  animation: cardIn 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
 
-.course-lesson-card {
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lesson-card {
   display: flex;
   flex-direction: column;
+  gap: 6px;
   height: 100%;
-  padding: 18px 20px;
+  padding: 12px 14px 12px 16px;
   background: var(--color-surface-card);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-md);
@@ -472,7 +1071,7 @@ onMounted(() => {
   overflow: hidden;
 }
 
-.course-lesson-card::before {
+.lesson-card::before {
   content: '';
   position: absolute;
   left: 0;
@@ -482,77 +1081,123 @@ onMounted(() => {
   background: var(--course-accent);
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.course-lesson-card:hover {
+.lesson-card:hover {
   border-color: var(--course-accent);
-  box-shadow: 0 8px 28px -12px var(--course-accent-shadow);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px -10px var(--course-accent-shadow);
 }
 
-.course-lesson-card:hover::before { transform: scaleY(1); }
+.lesson-card:hover::before { transform: scaleY(1); }
 
-.course-lesson-card.completed::before {
+.lesson-card.completed { background: var(--course-accent-soft); }
+.lesson-card.completed::before {
   background: var(--color-state-success);
   transform: scaleY(1);
 }
 
-.course-lesson-card.completed { background: var(--color-surface-elevated); }
-
-.course-lesson-card-head {
+.lesson-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
 }
 
-.course-lesson-dayno {
+.lesson-day {
   font-family: var(--font-serif);
+  font-style: italic;
   font-size: 13px;
   font-weight: 600;
   color: var(--course-accent);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
 }
 
-.course-lesson-kind {
-  font-size: 10.5px;
+.lesson-kind {
+  flex: 1;
+  font-size: 9.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-text-tertiary);
-  padding: 3px 9px;
+  padding: 2px 7px;
   border-radius: 999px;
   border: 1px solid var(--color-border-medium);
   background: var(--color-surface-elevated);
+  text-align: center;
+  max-width: max-content;
+  font-weight: 600;
 }
 
-.course-lesson-card.is-vocab .course-lesson-kind {
+.lesson-card.is-vocab .lesson-kind {
   color: var(--course-accent-strong);
   background: var(--course-accent-soft);
   border-color: var(--course-accent-soft-strong);
 }
 
-.course-lesson-card.is-review .course-lesson-kind {
+.lesson-card.is-review .lesson-kind {
   color: var(--primitive-gold-700);
   background: rgba(184, 134, 11, 0.08);
   border-color: rgba(184, 134, 11, 0.2);
 }
 
-.course-lesson-title {
-  font-family: var(--font-serif);
-  font-size: 16.5px;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0 0 6px;
-  line-height: 1.35;
+.lesson-check {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--color-border-medium);
+  border-radius: 50%;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
 }
 
-.course-lesson-topic {
-  font-size: 13px;
+.lesson-check:hover {
+  border-color: var(--course-accent);
+  color: var(--course-accent-strong);
+}
+
+.lesson-check.checked {
+  color: var(--color-state-success);
+  background: var(--color-state-success-light);
+  border-color: var(--color-state-success);
+}
+
+.lesson-check svg {
+  width: 11px;
+  height: 11px;
+}
+
+.lesson-check-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.lesson-title {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lesson-topic {
+  font-size: 12px;
   color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin: 0 0 16px;
+  line-height: 1.5;
+  margin: 0;
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -560,187 +1205,223 @@ onMounted(() => {
   overflow: hidden;
 }
 
-.course-lesson-card-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px dashed var(--color-border-light);
-}
-
-.course-lesson-status {
+.lesson-arrow {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 14px;
+  height: 14px;
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
   color: var(--color-text-tertiary);
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: all 0.18s ease;
 }
 
-.course-lesson-status svg { width: 14px; height: 14px; }
-.course-lesson-status.done { color: var(--color-state-success); }
-
-.course-lesson-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  border: 1.5px solid currentColor;
+.lesson-arrow svg {
+  width: 11px;
+  height: 11px;
 }
 
-.course-lesson-toggle {
-  font-family: var(--font-sans);
-  font-size: 11.5px;
-  letter-spacing: 0.02em;
-  color: var(--color-text-tertiary);
-  background: transparent;
-  border: 1px solid var(--color-border-medium);
-  padding: 5px 12px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.15s ease;
+.lesson-card:hover .lesson-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--course-accent);
 }
 
-.course-lesson-toggle:hover {
-  border-color: var(--course-accent);
-  color: var(--course-accent-strong);
-  background: var(--course-accent-soft);
+/* ══════════════════════════════════════════════════════════════════
+   未来周预告
+   ══════════════════════════════════════════════════════════════════ */
+.lesson-stream.is-future {
+  display: flex;
 }
 
-.course-lesson-toggle.checked {
-  color: var(--color-state-success);
-  border-color: var(--color-state-success);
-  background: var(--color-state-success-light);
+.future-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-surface-elevated) 0 2px,
+    transparent 2px 24px
+  ), var(--color-surface-card);
+  border: 1px dashed var(--course-accent-soft-strong);
+  border-radius: var(--radius-md);
 }
 
-/* ══════════ 未来周 ══════════ */
-.course-future {
-  margin-top: 56px;
-  padding: 32px 36px;
-  background: transparent;
-  border-top: 1px solid var(--color-border-light);
+.future-ornament {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  color: var(--course-accent);
+  opacity: 0.65;
+  line-height: 1;
+  margin-bottom: 14px;
 }
 
-.course-future-header { margin-bottom: 20px; }
-
-.course-future-kicker {
+.future-kicker {
   display: inline-block;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--course-accent);
-  margin-bottom: 6px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
+  padding: 3px 12px;
+  border-top: 1px solid var(--course-accent-soft-strong);
+  border-bottom: 1px solid var(--course-accent-soft-strong);
+  margin-bottom: 16px;
+  line-height: 1.8;
 }
 
-.course-future-header h2 {
+.future-title {
   font-family: var(--font-serif);
-  font-size: 20px;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  margin: 0;
-}
-
-.course-future-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 10px;
-}
-
-.course-future-item {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding: 12px 16px;
-  background: var(--color-surface-card);
-  border: 1px dashed var(--color-border-medium);
-  border-radius: var(--radius-default);
-  opacity: 0.72;
-  transition: opacity 0.2s ease;
-}
-
-.course-future-item:hover { opacity: 1; }
-
-.course-future-week {
-  font-family: var(--font-serif);
-  font-size: 12.5px;
+  font-size: 22px;
   font-weight: 600;
-  color: var(--course-accent);
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
-  min-width: 34px;
-}
-
-.course-future-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.course-future-title {
-  font-size: 13.5px;
-  font-weight: 500;
   color: var(--color-text-primary);
-  line-height: 1.4;
+  margin: 0 0 8px;
+  line-height: 1.25;
 }
 
-.course-future-topic {
+.future-topic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  margin: 0 0 14px;
+  line-height: 1.6;
+  max-width: 360px;
+}
+
+.future-note {
+  font-family: var(--font-serif);
+  font-style: italic;
   font-size: 11.5px;
   color: var(--color-text-tertiary);
-  font-style: italic;
-  font-family: var(--font-serif);
-  line-height: 1.4;
+  margin: 0;
+  letter-spacing: 0.04em;
 }
 
-.course-footer {
-  text-align: center;
-  margin-top: 64px;
-  padding-top: 32px;
-  border-top: 1px solid var(--color-border-light);
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  letter-spacing: 0.02em;
-}
-
-/* ══════════ 响应式 ══════════ */
+/* ══════════════════════════════════════════════════════════════════
+   响应式 — 移动端保持单屏密集布局
+   ══════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .course-index-main { padding: 0 16px 72px; }
-
-  .course-hero {
-    padding: 32px 24px;
-    margin: 20px 0 36px;
-    border-radius: var(--radius-md);
+  .course-index-page.embedded {
+    min-height: calc(100dvh - var(--mobile-nav-height, 88px));
   }
 
-  .course-hero-inner {
+  .course-index-main {
     grid-template-columns: 1fr;
-    gap: 24px;
-    text-align: center;
+    gap: 10px;
+    padding: 10px 12px 8px;
   }
 
-  .course-hero-text { text-align: left; }
-  .course-hero-kicker { font-size: 10px; }
-  .course-hero-subtitle { font-size: 14.5px; }
-  .course-hero-meta { gap: 8px; font-size: 12.5px; flex-wrap: wrap; }
-  .course-hero-meta-item strong { font-size: 15px; }
-  .course-hero-ring { width: 110px; height: 110px; margin: 0 auto; }
+  .course-rail {
+    flex-direction: column;
+  }
 
-  .course-week { margin-bottom: 36px; }
-  .course-week-header { flex-direction: column; align-items: stretch; gap: 10px; }
-  .course-week-title { font-size: 17px; }
-  .course-week-progress { justify-content: flex-start; }
+  .rail-header {
+    padding: 8px 12px 6px;
+  }
 
-  .course-lesson-grid { grid-template-columns: 1fr; gap: 10px; }
-  .course-lesson-card { padding: 16px 18px; }
-  .course-lesson-title { font-size: 15px; }
+  .rail-label {
+    font-size: 10.5px;
+  }
 
-  .course-future { padding: 24px 4px; }
-  .course-future-list { grid-template-columns: 1fr; }
+  .rail-list {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px 8px;
+    gap: 6px;
+    scroll-snap-type: x proximity;
+  }
+
+  .rail-row {
+    flex-shrink: 0;
+    scroll-snap-align: center;
+  }
+
+  .rail-btn {
+    min-width: 190px;
+    grid-template-columns: auto 1fr;
+    padding: 7px 10px;
+  }
+
+  .rail-row.active .rail-bracket {
+    left: 3px;
+    top: 6px;
+    bottom: 6px;
+  }
+
+  .rail-row.done .rail-btn::after {
+    right: 6px;
+  }
+
+  .rail-footer {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .masthead {
+    padding: 14px 16px 12px;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+  }
+
+  .masthead::before {
+    left: 16px;
+    right: 16px;
+    top: 22px;
+  }
+
+  .masthead-kicker { font-size: 9.5px; }
+  .masthead-title { font-size: 20px; }
+  .masthead-subtitle { font-size: 12px; }
+
+  .masthead-stats { gap: 14px; }
+  .masthead-meta { display: none; }
+  .masthead-ring { width: 62px; height: 62px; }
+  .masthead-ring-pct { font-size: 14px; }
+
+  .week-strip {
+    padding: 8px 14px;
+    gap: 10px;
+  }
+  .week-strip-numeral { font-size: 14px; }
+  .week-strip-no { font-size: 18px; }
+  .week-strip-title { font-size: 13.5px; }
+  .week-strip-track { width: 70px; }
+
+  .lesson-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .lesson-card {
+    padding: 10px 12px;
+    gap: 4px;
+  }
+
+  .lesson-title { font-size: 13.5px; }
+  .lesson-topic { font-size: 11.5px; -webkit-line-clamp: 1; }
+  .lesson-arrow { display: none; }
+
+  .future-panel { padding: 18px; }
+  .future-title { font-size: 18px; }
+  .future-topic { font-size: 12.5px; }
+}
+
+/* 超宽屏留白 */
+@media (min-width: 1440px) {
+  .course-index-main {
+    max-width: 1320px;
+    grid-template-columns: 320px 1fr;
+    padding: 28px 32px 30px;
+  }
 }
 </style>

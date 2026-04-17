@@ -5,7 +5,7 @@
       <h1 class="word-display">{{ props.word?.word }}</h1>
 
       <!-- 音标 / 发音 -->
-      <div v-if="hasDefinition" class="phonetic-row">
+      <div v-if="hasDefinition || props.isGhost" class="phonetic-row">
         <!-- 单一 IPA 音标（非英语） -->
         <template v-if="props.word?.definition.phonetic?.ipa">
           <span
@@ -63,14 +63,16 @@
           <span class="def-text">{{ definition }}</span>
         </div>
       </div>
-      <div v-else class="loading-container">
+      <!-- Ghost 模式下若没有释义，不显示 loading（课时未提供 data-def） -->
+      <div v-else-if="!props.isGhost" class="loading-container">
         <div class="loading-spinner"></div>
         <p>加载中...</p>
       </div>
+      <p v-else class="ghost-empty">课时未提供该词的释义。</p>
     </div>
 
-    <!-- 例句区 -->
-    <div class="section">
+    <!-- 例句区（ghost 模式不渲染） -->
+    <div v-if="!props.isGhost" class="section">
       <label class="section-label">例句</label>
       <div v-if="hasDefinition" class="examples-list">
         <div
@@ -99,9 +101,10 @@ import AppIcon from '@/shared/components/controls/Icons.vue';
 
 interface Props {
   word?: Word;
+  isGhost?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { isGhost: false });
 const langConfig = useWordLangConfig(() => props.word?.source || '');
 const ttsLang = computed(() => langConfig.value.ttsLang);
 
@@ -308,6 +311,18 @@ const hasDefinition = computed(() => {
   border-top-color: var(--color-brand-primary);
   border-radius: var(--radius-full);
   animation: spin 0.8s linear infinite;
+}
+
+.ghost-empty {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-default);
+  border-left: 3px dashed var(--color-border-medium);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

@@ -231,7 +231,7 @@ courses/                # 仅保留学习资料，不再作为页面源
 | `exercise.js` | `QuizExercise` / `FillBlankExercise` / `TranslationExercise` + `useExerciseState.ts`（URL 无关 key + Supabase 同步）|
 | `vocab.js` | `VocabPreloadSection.vue` |
 | `renderer.js` | `LessonRenderer.vue`（JSON → Vue 组件树） |
-| `wordInteraction.js` | `WordPopover.vue` |
+| `wordInteraction.js` | 复用主站 `WordEditorModal`（store ghost 模式：未在当前 source 时显示"加入词本"按钮） |
 | `chat.js` | `CourseChat.vue`（复用 `shared/services/deepseek.ts` 的 `streamDeepSeek`） |
 
 ### 持久化架构

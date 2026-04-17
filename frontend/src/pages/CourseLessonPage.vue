@@ -53,21 +53,25 @@
     </footer>
 
     <!-- 交互组件 -->
-    <WordPopover v-if="lesson" />
+    <WordEditorModal v-if="lesson" />
     <CourseChat v-if="lesson" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, provide } from 'vue'
+import { computed, provide, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLessonData } from '@/features/courses/composables/useLessonData'
 import { useCourseConfig } from '@/features/courses/composables/useCourseConfig'
+import { useCourseSource } from '@/features/courses/composables/useCourseSource'
+import { checkCourseAccess } from '@/features/courses/composables/useCourseAccess'
+import { useToast } from '@/shared/composables/useToast'
 import { getLessonsByCourse } from '@/features/courses/data/lessons'
 import LessonRenderer from '@/features/courses/components/LessonRenderer.vue'
-import WordPopover from '@/features/courses/components/interactions/WordPopover.vue'
+import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
 import CourseChat from '@/features/courses/components/interactions/CourseChat.vue'
 import CourseTopBar from '@/features/courses/components/navigation/CourseTopBar.vue'
+import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
 import '@/features/courses/styles/course.css'
 import '@/features/courses/styles/course-themes.css'
@@ -81,6 +85,50 @@ const router = useRouter()
 const { config } = useCourseConfig(props.courseId)
 const { lesson, loading, error } = useLessonData(props.courseId, props.lessonId)
 const { lessons } = getLessonsByCourse(props.courseId)
+const { selectedSource, loadSources } = useCourseSource(config.value)
+const wordEditorStore = useWordEditorStore()
+const toast = useToast()
+
+// 全局点击单词/术语 → 用 WordEditorModal 替代旧 popover
+const PUNCT_RE = /[.,!?;:…—–\-"«»()"。，！？：；]/g
+function handleWordClick(e: MouseEvent) {
+  const target = e.target as HTMLElement | null
+  if (!target) return
+  const wordEl = target.closest(
+    `.${config.value.wordClass}, .tts-word`
+  ) as HTMLElement | null
+  if (!wordEl) return
+
+  e.stopPropagation()
+  // quiz 选项 <label> 内点词，阻止默认行为防止误选 radio
+  if (wordEl.closest('label')) e.preventDefault()
+
+  const text = (wordEl.textContent || '').replace(PUNCT_RE, '').trim()
+  if (!text) return
+  if (!selectedSource.value) return
+
+  const def = wordEl.getAttribute('data-def') || undefined
+  wordEditorStore.openForCourse(text, def, {
+    source: selectedSource.value,
+    lang: config.value.lang,
+  })
+}
+
+onMounted(async () => {
+  // URL 直接进入课时页：检查准入，无对应语言 source 则跳回主页
+  const access = await checkCourseAccess(config.value)
+  if (!access.allowed) {
+    toast.warning(access.reason || '无法进入该课程')
+    router.push('/')
+    return
+  }
+  loadSources()
+  document.addEventListener('click', handleWordClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleWordClick)
+})
 
 // 错误态的"返回目录"：写入 activeTab 后跳 `/`，HomePage 恢复为对应课程 tab
 function returnToCourseIndex() {
@@ -99,7 +147,7 @@ const nextLesson = computed(() =>
     : null
 )
 
-// Provide 给兄弟组件 WordPopover / CourseChat / CourseTopBar
+// Provide 给兄弟组件 WordEditorModal / CourseChat / CourseTopBar
 // 标题可能包含 HTML 标签（如 <span class="term">），面包屑/AI 提示词只需要纯文本
 provide('courseConfig', config.value)
 provide('lessonTitle', computed(() => {

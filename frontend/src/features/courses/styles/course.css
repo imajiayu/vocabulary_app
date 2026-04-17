@@ -731,7 +731,7 @@
   border-radius: 0 6px 6px 0;
 }
 
-/* 词汇预载与单词气泡样式已迁移至各自组件的 scoped style（VocabPreloadSection.vue / WordPopover.vue） */
+/* 词汇预载样式已迁移至 VocabPreloadSection.vue；单词点击交互已合并到主站 WordEditorModal */
 
 /* ── 行内代码 ── */
 .course-content code {

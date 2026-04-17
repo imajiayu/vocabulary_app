@@ -16,6 +16,39 @@ const log = logger.create('WordEditor')
 export type DuplicateCheckState = 'idle' | 'checking' | 'duplicate' | 'clear'
 export type DuplicateCheckerFn = (word: string, excludeId: number) => Promise<boolean>
 
+export type GhostAddStatus = 'idle' | 'adding' | 'failed'
+
+export interface CourseGhostContext {
+  source: string
+  lang: SourceLang
+}
+
+/** 构造 ghost Word 占位（id=-1，表示尚未在 DB 中存在） */
+function buildGhostWord(text: string, source: string, definition?: string): Word {
+  return {
+    id: -1,
+    word: text,
+    definition: definition ? { definitions: [definition] } : {},
+    ease_factor: 0,
+    stop_review: 0,
+    stop_spell: 0,
+    date_added: '',
+    repetition: 0,
+    interval: 0,
+    next_review: '',
+    lapse: 0,
+    spell_strength: null,
+    spell_next_review: null,
+    source,
+    related_words: [],
+    last_review: null,
+    last_spell: null,
+    remember_count: 0,
+    forget_count: 0,
+    avg_elapsed_time: 0,
+  }
+}
+
 export const useWordEditorStore = defineStore('wordEditor', () => {
   // ── State ──
   const currentWord = ref<Word | null>(null)
@@ -25,6 +58,11 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   const mode = ref<string>('') // 复习模式，如 'mode_lapse', 'mode_review', 'mode_spelling'
   const relatedWords = shallowRef<RelatedWord[]>([])
   const isLoadingRelated = ref(false)
+
+  // ── Ghost 模式（课程页点词时，单词尚未加入用户当前 source）──
+  const isGhost = ref(false)
+  const ghostContext = ref<CourseGhostContext | null>(null)
+  const ghostAddStatus = ref<GhostAddStatus>('idle')
 
   // ── 重复检测 ──
   const duplicateCheckState = ref<DuplicateCheckState>('idle')
@@ -69,6 +107,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     isEditing.value = editMode
     mode.value = reviewMode
     isOpen.value = true
+    isGhost.value = false
+    ghostContext.value = null
+    ghostAddStatus.value = 'idle'
 
     // 重置关联词状态
     relatedWords.value = []
@@ -84,6 +125,126 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     // 异步加载关联词（不阻塞 modal 打开，非英语源跳过）
     loadRelatedWords(word)
+  }
+
+  /**
+   * 课程页点词调用：先查 (user, source, word) 是否存在
+   *  - 命中：走 open() 进入正常模式
+   *  - 未命中：构造 ghost Word，进入 ghost 模式，sidebar 仅显示"加入词本"
+   *
+   * @param wordText 用户点击的词（已 trim/去标点的）
+   * @param definition 课时 JSON 中 data-def 的释义（可选）
+   * @param ctx 课程上下文：source / lang / sendDefinition
+   */
+  async function openForCourse(
+    wordText: string,
+    definition: string | undefined,
+    ctx: CourseGhostContext
+  ): Promise<void> {
+    const cleaned = wordText.trim()
+    if (!cleaned) return
+
+    let existing: Word | null = null
+    try {
+      existing = await api.words.getWordByTextAndSourceDirect(cleaned, ctx.source, ctx.lang)
+    } catch (error) {
+      log.error('查询课程单词失败:', error)
+    }
+
+    if (existing) {
+      open(existing)
+      return
+    }
+
+    currentWord.value = buildGhostWord(cleaned, ctx.source, definition)
+    originalWord.value = currentWord.value
+    isEditing.value = false
+    mode.value = ''
+    isOpen.value = true
+    isGhost.value = true
+    ghostContext.value = ctx
+    ghostAddStatus.value = 'idle'
+    relatedWords.value = []
+    isLoadingRelated.value = false
+  }
+
+  /**
+   * Ghost 模式下点击"加入词本"按钮
+   * 走标准创建流程（含负荷均衡、可选释义），成功后用真实 Word 替换占位并切回正常模式
+   */
+  async function addGhostWord(): Promise<boolean> {
+    if (!isGhost.value || !ghostContext.value || !currentWord.value) return false
+
+    const ctx = ghostContext.value
+    const wordText = currentWord.value.word
+    const ghostDef = currentWord.value.definition?.definitions?.[0]
+
+    ghostAddStatus.value = 'adding'
+
+    try {
+      const settings = await api.settings.getSettings()
+      const learning = settings.sourceSettings[ctx.source]?.learning
+      const dailyLimit = learning?.dailyReviewLimit ?? 50
+      const maxPrepDays = learning?.maxPrepDays ?? 90
+
+      const [todayDue, futureLoads] = await Promise.all([
+        api.words.getTodayDueCountDirect(ctx.source),
+        api.words.getDailyReviewLoadsDirect(ctx.source, maxPrepDays),
+      ])
+
+      // 课时 JSON 提供了 data-def → 直接写入；否则插入 '{}' 后异步爬取释义
+      // 与 VocabularyManagementPage.handleWordInserted 行为一致
+      const options = ghostDef
+        ? { definition: { definitions: [ghostDef] } }
+        : undefined
+
+      const created = await api.words.createWordDirect(
+        wordText,
+        ctx.source,
+        { dailyLimit, loadsWithToday: [todayDue, ...futureLoads] },
+        ctx.lang,
+        options
+      )
+
+      // 切到正常模式，替换为真实 Word
+      currentWord.value = { ...created }
+      originalWord.value = { ...created }
+      isGhost.value = false
+      ghostContext.value = null
+      ghostAddStatus.value = 'idle'
+      loadRelatedWords(created)
+
+      // 无释义则后台爬取（fire-and-forget；fetchDefinitionAsync 内部会更新 currentWord）
+      if (!ghostDef) {
+        fetchDefinitionAsync(created.id, ctx.lang)
+      }
+      return true
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
+      // 并发竞态：刚刚被别处加入了，重新拉一次切到正常模式
+      if (msg.includes('已存在')) {
+        try {
+          const found = await api.words.getWordByTextAndSourceDirect(wordText, ctx.source, ctx.lang)
+          if (found) {
+            currentWord.value = { ...found }
+            originalWord.value = { ...found }
+            isGhost.value = false
+            ghostContext.value = null
+            ghostAddStatus.value = 'idle'
+            loadRelatedWords(found)
+            return true
+          }
+        } catch {
+          // 忽略，回退到 failed
+        }
+      }
+      log.error('加入词本失败:', error)
+      ghostAddStatus.value = 'failed'
+      setTimeout(() => {
+        if (ghostAddStatus.value === 'failed') ghostAddStatus.value = 'idle'
+      }, 1500)
+      return false
+    }
   }
 
   /**
@@ -122,6 +283,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     relatedWords.value = []
     isLoadingRelated.value = false
     duplicateCheckState.value = 'idle'
+    isGhost.value = false
+    ghostContext.value = null
+    ghostAddStatus.value = 'idle'
 
     // 清空回调
     clearCallbacks()
@@ -242,10 +406,11 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
   /**
    * 异步获取释义并更新状态
+   * @param lang 可选语言：传入可避免后端查 user_config 解析 source → lang
    */
-  async function fetchDefinitionAsync(wordId: number) {
+  async function fetchDefinitionAsync(wordId: number, lang?: SourceLang) {
     try {
-      const wordWithDefinition = await api.words.fetchDefinition(wordId)
+      const wordWithDefinition = await api.words.fetchDefinition(wordId, lang)
 
       // 只有当 modal 还在显示同一个单词时才更新
       if (currentWord.value?.id === wordId) {
@@ -573,6 +738,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     mode,
     relatedWords,
     isLoadingRelated,
+    isGhost,
+    ghostContext,
+    ghostAddStatus,
 
     // Getters
     hasChanges,
@@ -581,6 +749,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     // Actions
     open,
+    openForCourse,
+    addGhostWord,
     close,
     startEdit,
     cancelEdit,

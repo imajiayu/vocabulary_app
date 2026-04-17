@@ -1,11 +1,11 @@
 <template>
   <div class="word-info">
-    <WordDetailsDisplay v-if="!isEditing" :word="props.editData" />
+    <WordDetailsDisplay v-if="!isEditing || isGhost" :word="props.editData" :is-ghost="isGhost" />
     <WordDetailsEdit v-else :edit-data="props.editData" @update:edit-data="onUpdateEditData" />
 
-    <!-- 关联词面板（仅在非编辑模式且有关联词时显示） -->
+    <!-- 关联词面板（仅在非编辑、非 ghost 且有关联词时显示） -->
     <RelatedWordsPanel
-      v-if="!isEditing && relatedWords.length > 0"
+      v-if="!isEditing && !isGhost && relatedWords.length > 0"
       :related-words="relatedWords"
       class="related-words-section"
     />
@@ -29,7 +29,7 @@ const props = defineProps<Props>();
 
 // 获取 store 中的关联词
 const store = useWordEditorStore();
-const { relatedWords } = storeToRefs(store);
+const { relatedWords, isGhost } = storeToRefs(store);
 
 // 声明一个 emit 事件，用于将数据传递给 WordInfoSection.vue 的父组件
 const emit = defineEmits(['update:editData']);

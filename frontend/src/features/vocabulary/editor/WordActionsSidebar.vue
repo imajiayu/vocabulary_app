@@ -1,79 +1,107 @@
 <template>
   <div class="actions-sidebar">
-    <!-- Status Card -->
-    <div class="status-card">
-      <div class="status-header">
-        <span class="status-card-label">学习数据</span>
-        <span :class="['status-badge', isRemembered ? 'badge-mastered' : 'badge-learning']">
-          {{ isRemembered ? '已掌握' : '学习中' }}
-        </span>
+    <!-- Ghost 模式：单词尚未加入当前 source -->
+    <template v-if="isGhost">
+      <div class="status-card ghost-card">
+        <div class="ghost-pill">
+          <svg viewBox="0 0 14 14" aria-hidden="true">
+            <path d="M3 12A1.5 1.5 0 0 1 4.5 10.5H12M4.5 1H12v12H4.5A1.5 1.5 0 0 1 3 11.5v-9A1.5 1.5 0 0 1 4.5 1Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          </svg>
+          <span>尚未加入</span>
+        </div>
+        <div class="ghost-source">
+          <span class="ghost-source-label">目标词本</span>
+          <span class="ghost-source-value">{{ ghostContext?.source }}</span>
+        </div>
+        <p class="ghost-hint">加入后即可在复习与拼写中练习。</p>
       </div>
 
-      <div class="status-grid">
-        <div class="stat-item">
-          <span class="stat-label">难度</span>
-          <span class="stat-value stat-number">{{ currentWord?.ease_factor.toFixed(2) }}</span>
+      <div class="actions-group">
+        <button
+          @click="handleAddGhost"
+          :disabled="ghostAddStatus === 'adding'"
+          class="action-btn btn-primary"
+        >
+          {{ addBtnText }}
+        </button>
+      </div>
+    </template>
+
+    <!-- 正常模式 -->
+    <template v-else>
+      <div class="status-card">
+        <div class="status-header">
+          <span class="status-card-label">学习数据</span>
+          <span :class="['status-badge', isRemembered ? 'badge-mastered' : 'badge-learning']">
+            {{ isRemembered ? '已掌握' : '学习中' }}
+          </span>
         </div>
-        <div class="stat-item">
-          <span class="stat-label">连续正确</span>
-          <span class="stat-value stat-number">{{ currentWord?.repetition }}</span>
+
+        <div class="status-grid">
+          <div class="stat-item">
+            <span class="stat-label">难度</span>
+            <span class="stat-value stat-number">{{ currentWord?.ease_factor.toFixed(2) }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">连续正确</span>
+            <span class="stat-value stat-number">{{ currentWord?.repetition }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">复习间隔</span>
+            <span class="stat-value stat-number">{{ currentWord?.interval }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">拼写强度</span>
+            <span class="stat-value stat-number">{{ currentWord?.spell_strength !== null && currentWord?.spell_strength !== undefined ? currentWord.spell_strength.toFixed(2) : '-' }}</span>
+          </div>
         </div>
-        <div class="stat-item">
-          <span class="stat-label">复习间隔</span>
-          <span class="stat-value stat-number">{{ currentWord?.interval }}</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">拼写强度</span>
-          <span class="stat-value stat-number">{{ currentWord?.spell_strength !== null && currentWord?.spell_strength !== undefined ? currentWord.spell_strength.toFixed(2) : '-' }}</span>
+
+        <div class="status-dates">
+          <div class="date-row">
+            <span class="date-label">添加</span>
+            <span class="date-value">{{ currentWord?.date_added }}</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">下次复习</span>
+            <span class="date-value">{{ currentWord?.next_review }}</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">下次拼写</span>
+            <span class="date-value">{{ currentWord?.spell_next_review }}</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">来源</span>
+            <span class="date-value">{{ currentWord?.source }}</span>
+          </div>
         </div>
       </div>
 
-      <div class="status-dates">
-        <div class="date-row">
-          <span class="date-label">添加</span>
-          <span class="date-value">{{ currentWord?.date_added }}</span>
-        </div>
-        <div class="date-row">
-          <span class="date-label">下次复习</span>
-          <span class="date-value">{{ currentWord?.next_review }}</span>
-        </div>
-        <div class="date-row">
-          <span class="date-label">下次拼写</span>
-          <span class="date-value">{{ currentWord?.spell_next_review }}</span>
-        </div>
-        <div class="date-row">
-          <span class="date-label">来源</span>
-          <span class="date-value">{{ currentWord?.source }}</span>
-        </div>
+      <div class="actions-group">
+        <template v-if="isEditing">
+          <button @click="handleSave" :disabled="saveButtonDisabled" class="action-btn btn-primary">
+            {{ saveButtonText }}
+          </button>
+          <button @click="store.cancelEdit()" class="action-btn btn-ghost">取消</button>
+        </template>
+
+        <template v-else>
+          <button v-if="store.mode !== 'mode_lapse'" @click="toggleReview" :class="['action-btn', isRemembered ? 'btn-secondary' : 'btn-success']">
+            {{ isRemembered ? '恢复复习' : '标记掌握' }}
+          </button>
+          <button v-if="store.mode !== 'mode_lapse'" @click="toggleSpell" :class="['action-btn', isSpellStopped ? 'btn-secondary' : 'btn-success']">
+            {{ isSpellStopped ? '恢复拼写' : '停止拼写' }}
+          </button>
+          <button @click="handleMarkForgot" :disabled="isForgetButtonUsed" class="action-btn btn-warning">
+            {{ isForgetButtonUsed ? '已设为忘记' : '设为忘记' }}
+          </button>
+          <button @click="handleResetSpelling" :disabled="isSpellResetDisabled" class="action-btn btn-warning">
+            {{ isSpellResetDisabled ? '已重置拼写' : '重置拼写' }}
+          </button>
+          <button @click="store.startEdit()" class="action-btn btn-outline">编辑单词</button>
+          <button @click="handleDelete" class="action-btn btn-danger-ghost">删除单词</button>
+        </template>
       </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="actions-group">
-      <template v-if="isEditing">
-        <button @click="handleSave" :disabled="saveButtonDisabled" class="action-btn btn-primary">
-          {{ saveButtonText }}
-        </button>
-        <button @click="store.cancelEdit()" class="action-btn btn-ghost">取消</button>
-      </template>
-
-      <template v-else>
-        <button v-if="store.mode !== 'mode_lapse'" @click="toggleReview" :class="['action-btn', isRemembered ? 'btn-secondary' : 'btn-success']">
-          {{ isRemembered ? '恢复复习' : '标记掌握' }}
-        </button>
-        <button v-if="store.mode !== 'mode_lapse'" @click="toggleSpell" :class="['action-btn', isSpellStopped ? 'btn-secondary' : 'btn-success']">
-          {{ isSpellStopped ? '恢复拼写' : '停止拼写' }}
-        </button>
-        <button @click="handleMarkForgot" :disabled="isForgetButtonUsed" class="action-btn btn-warning">
-          {{ isForgetButtonUsed ? '已设为忘记' : '设为忘记' }}
-        </button>
-        <button @click="handleResetSpelling" :disabled="isSpellResetDisabled" class="action-btn btn-warning">
-          {{ isSpellResetDisabled ? '已重置拼写' : '重置拼写' }}
-        </button>
-        <button @click="store.startEdit()" class="action-btn btn-outline">编辑单词</button>
-        <button @click="handleDelete" class="action-btn btn-danger-ghost">删除单词</button>
-      </template>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -84,7 +112,19 @@ import { useWordEditorStore } from '../stores/wordEditor';
 
 // 使用 Pinia Store
 const store = useWordEditorStore();
-const { currentWord, isEditing, duplicateCheckState } = storeToRefs(store);
+const { currentWord, isEditing, duplicateCheckState, isGhost, ghostContext, ghostAddStatus } = storeToRefs(store);
+
+const addBtnText = computed(() => {
+  switch (ghostAddStatus.value) {
+    case 'adding': return '添加中…';
+    case 'failed': return '失败，请重试';
+    default: return `加入到 ${ghostContext.value?.source ?? '词本'}`;
+  }
+});
+
+const handleAddGhost = () => {
+  store.addGhostWord();
+};
 
 // Computed property to check if word has been marked as forgotten (lapse > 0)
 const isForgetButtonUsed = computed(() => {
@@ -177,6 +217,68 @@ const handleSave = () => {
   border-radius: var(--radius-default);
   border: 1px solid var(--color-border-light);
   overflow: hidden;
+}
+
+/* ── Ghost Card ── */
+.ghost-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-style: dashed;
+  border-color: var(--color-border-medium);
+  background: var(--color-bg-secondary);
+}
+
+.ghost-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-state-warning-light);
+  color: var(--primitive-gold-700);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+}
+
+.ghost-pill svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ghost-source {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ghost-source-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ghost-source-value {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.ghost-hint {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
 }
 
 .status-header {

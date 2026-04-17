@@ -10,7 +10,6 @@
         <td
           v-for="(cell, ci) in row"
           :key="ci"
-          :class="ci === 0 && block.firstColWord ? wordClass : ''"
           v-html="wrap(cell)"
         />
       </tr>
@@ -19,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
 import type { TableBlock } from '../../types/lesson'
 import { useCourseHtml } from '../../composables/useCourseHtml'
 
@@ -27,6 +25,5 @@ defineProps<{
   block: TableBlock
 }>()
 
-const wordClass = inject<string>('courseWordClass', 'uk-word')
 const { wrap } = useCourseHtml()
 </script>

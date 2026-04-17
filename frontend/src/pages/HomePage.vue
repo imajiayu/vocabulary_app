@@ -159,6 +159,13 @@ import type { WritingPrompt } from '@/shared/types/writing'
 import { createWritingContext } from '@/features/writing/composables'
 import { api } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
+import { useToast } from '@/shared/composables/useToast'
+import { checkCourseAccess } from '@/features/courses/composables/useCourseAccess'
+import { useCourseConfig } from '@/features/courses/composables/useCourseConfig'
+
+const toast = useToast()
+const { config: ukConfig } = useCourseConfig('ukrainian')
+const { config: legalConfig } = useCourseConfig('legal-english')
 
 // 所有主 tab 共享 URL `/`，通过 localStorage 持久化当前 tab。
 // 课时页有独立 URL（/uk/:lessonId、/legal/:lessonId），返回 `/` 时由 CourseTopBar
@@ -238,10 +245,20 @@ const isDelayingSwitchToWords = ref(false)
 // 添加一个标志来跟踪侧边栏是否正在消失
 const sidebarDisappearing = ref(false)
 
-const handleTabChange = (tabId: string) => {
+const handleTabChange = async (tabId: string) => {
   // 如果正在延迟切换到单词模式，忽略其他切换请求
   if (isDelayingSwitchToWords.value) {
     return
+  }
+
+  // 课程入口准入：用户必须有匹配语言的 source 才能进入
+  if (tabId === 'course-uk' || tabId === 'course-legal') {
+    const cfg = tabId === 'course-uk' ? ukConfig.value : legalConfig.value
+    const access = await checkCourseAccess(cfg)
+    if (!access.allowed) {
+      toast.warning(access.reason || '无法进入该课程')
+      return
+    }
   }
 
   // 延迟切换的情况会在 activeTab watcher 中处理
@@ -348,12 +365,23 @@ watch(activeTab, (newTab, oldTab) => {
 })
 
 // 组件挂载时恢复状态
-onMounted(() => {
+onMounted(async () => {
   // 如果当前是speaking模式，尝试恢复选中的问题
   if (activeTab.value === 'speaking') {
     nextTick(() => {
       restoreSelectedQuestion()
     })
+  }
+
+  // 如果初始 tab 是课程，但用户没有匹配语言的 source，回退到单词
+  if (activeTab.value === 'course-uk' || activeTab.value === 'course-legal') {
+    const cfg = activeTab.value === 'course-uk' ? ukConfig.value : legalConfig.value
+    const access = await checkCourseAccess(cfg)
+    if (!access.allowed) {
+      toast.warning(access.reason || '无法进入该课程')
+      activeTab.value = 'words'
+      localStorage.setItem('activeTab', 'words')
+    }
   }
 })
 </script>
@@ -670,15 +698,17 @@ onMounted(() => {
   overflow: visible;
 }
 
-/* 课程 index 页面：内容由上至下排列，允许自然流式滚动 */
+/* 课程 index 页面：与 WordIndex 一样全屏不滚动，主内容需拉伸全宽 */
 .app-container.is-course .main-container {
-  overflow: visible;
-  justify-content: flex-start;
   align-items: stretch;
 }
 
 .course-index-embedded {
   width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 移动端主内容区域 - 统一 padding 为 0，由各页面组件自己处理内边距 */

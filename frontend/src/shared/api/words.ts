@@ -243,6 +243,37 @@ export class WordsApi {
   }
 
   /**
+   * 按 (user, source, word) 查询单条单词记录，未命中返回 null
+   * 唯一约束 unique_word_per_user(word, user_id, source) 保证最多 1 条
+   */
+  static async getWordByTextAndSourceDirect(
+    wordText: string,
+    source: string,
+    lang?: SourceLang
+  ): Promise<Word | null> {
+    const userId = getCurrentUserId()
+    const normalized = lang
+      ? normalizeWordText(wordText, lang)
+      : wordText.normalize('NFC').trim().toLowerCase()
+    if (!normalized) return null
+
+    const { data, error } = await supabase
+      .from('words')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('source', source)
+      .eq('word', normalized)
+      .maybeSingle()
+
+    throwIfError(error, '查询单词失败')
+    if (!data) return null
+
+    const word = this.transformWord(data)
+    word.related_words = await this.getRelatedWordsDirect(word.id).catch(() => [])
+    return word
+  }
+
+  /**
    * 检查同一 user_id 下是否已存在相同单词（排除指定 ID）
    * 唯一约束不限定 source，同一用户的单词全局唯一
    */
