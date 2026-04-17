@@ -144,7 +144,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useBreakpoint } from '@/shared/composables/useBreakpoint'
-import { useRoute, useRouter } from 'vue-router'
 import WordIndex from '@/features/vocabulary/index/WordIndex.vue'
 import SpeakingIndex from '@/pages/SpeakingPage.vue'
 import WritingIndex from '@/pages/WritingPage.vue'
@@ -161,23 +160,12 @@ import { createWritingContext } from '@/features/writing/composables'
 import { api } from '@/shared/api'
 import { logger } from '@/shared/utils/logger'
 
-const route = useRoute()
-const router = useRouter()
-
-// Tab ↔ URL path 映射（课程 tab 对应独立路径，其他 tab 共享 /）
-const TAB_TO_PATH: Record<string, string> = {
-  'course-uk': '/uk/',
-  'course-legal': '/legal/'
-}
-
-// URL 是课程 tab 的唯一权威来源：访问 / 时，即便 localStorage 残留课程 tab 也不读取，
-// 否则会把用户对根路径的明确意图覆盖成自动跳转到 /uk/ 或 /legal/。
-const COURSE_TABS = new Set(['course-uk', 'course-legal'])
+// 所有主 tab 共享 URL `/`，通过 localStorage 持久化当前 tab。
+// 课时页有独立 URL（/uk/:lessonId、/legal/:lessonId），返回 `/` 时由 CourseTopBar
+// 在跳转前写入 activeTab，HomePage 挂载时读取即可恢复到正确的课程 tab。
 function resolveInitialTab(): string {
-  const fromRoute = route.meta.defaultTab as string | undefined
-  if (fromRoute) return fromRoute
   const stored = localStorage.getItem('activeTab')
-  if (stored && !COURSE_TABS.has(stored)) return stored
+  if (stored) return stored
   return 'words'
 }
 const activeTab = ref(resolveInitialTab())
@@ -198,33 +186,6 @@ const primaryTabs: Array<{ value: string, label: string, icon: 'book' | 'mic' | 
   { value: 'speaking', label: '口语', icon: 'mic' },
   { value: 'writing', label: '写作', icon: 'writing' }
 ]
-
-// 切换 tab 时同步更新 URL（课程 tab 路径为 /uk/ 或 /legal/，其他为 /）
-const syncUrlForTab = (tabId: string) => {
-  const targetPath = TAB_TO_PATH[tabId] || '/'
-  if (route.path !== targetPath) {
-    router.replace({ path: targetPath, query: route.query, hash: route.hash }).catch(() => {})
-  }
-}
-
-// 监听路由变化：用户直接访问 /uk/ /legal/ 或通过浏览器前进后退切换时同步 activeTab
-const PATH_TO_TAB: Record<string, string> = {
-  '/uk/': 'course-uk',
-  '/legal/': 'course-legal'
-}
-watch(() => route.path, (newPath) => {
-  const mappedTab = PATH_TO_TAB[newPath]
-  if (mappedTab) {
-    if (activeTab.value !== mappedTab) {
-      activeTab.value = mappedTab
-      localStorage.setItem('activeTab', mappedTab)
-    }
-  } else if (newPath === '/' && (activeTab.value === 'course-uk' || activeTab.value === 'course-legal')) {
-    // URL 回到 / 但 activeTab 仍是课程 tab，回退到单词
-    activeTab.value = 'words'
-    localStorage.setItem('activeTab', 'words')
-  }
-})
 
 // localStorage键名
 const SELECTED_QUESTION_KEY = 'selectedQuestion'
@@ -287,7 +248,6 @@ const handleTabChange = (tabId: string) => {
   // 这里只处理立即切换的情况
   activeTab.value = tabId
   localStorage.setItem('activeTab', tabId)
-  syncUrlForTab(tabId)
 
   if (tabId === 'speaking') {
     // 进入口语练习时，重置侧边栏状态，但保持selectedQuestion用于恢复
@@ -374,7 +334,6 @@ watch(activeTab, (newTab, oldTab) => {
     setTimeout(() => {
       activeTab.value = 'words'
       localStorage.setItem('activeTab', 'words')
-      syncUrlForTab('words')
       isDelayingSwitchToWords.value = false // 清除延迟标志
       sidebarDisappearing.value = false // 清除消失标志
     }, animationDelay)

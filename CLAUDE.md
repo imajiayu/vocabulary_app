@@ -214,9 +214,10 @@ courses/                # 仅保留学习资料，不再作为页面源
 
 ### 课程访问
 
-- 乌克兰语：`https://mieltsm.top/uk/`
-- 法律英语：`https://mieltsm.top/legal/`
-- 路由定义：`frontend/src/app/router/index.ts`（`/uk/:lessonId?` 和 `/legal/:lessonId?`）
+- 所有主 tab（含课程 index）共享 URL `/`，通过 `activeTab` + localStorage 持久化；进入"课程" tab 不会改变 URL，只改 `localStorage.activeTab`
+- 仅课时页有独立 URL：`https://mieltsm.top/uk/w3d1` 和 `https://mieltsm.top/legal/w3d1`
+- 兼容性 redirect：访问 `/uk/` 或 `/legal/` 时 vue-router 会写入对应 `activeTab` 后跳回 `/`（见 `router/index.ts`）
+- 课时页返回目录（CourseTopBar `←` / brand / 面包屑）统一走 `returnToCourseIndex()`：写入 localStorage → `router.push('/')`
 
 ### Vue 组件架构
 

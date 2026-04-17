@@ -87,16 +87,21 @@ const routes = [
     meta: { title: '设置', depth: 1 }
   },
   // ── 课程路由 ──
-  // 课程 index 页面作为 HomePage 的 tab 渲染（通过 meta.defaultTab 标识）
+  // 所有主 tab（含课程 index）共享 URL `/`，通过 activeTab + localStorage 区分；
+  // 仅课时页有独立 URL。/uk/ 与 /legal/ 作为兼容性 redirect，顺带记录目标 tab。
   {
     path: '/uk',
-    redirect: '/uk/'
+    redirect: () => {
+      localStorage.setItem('activeTab', 'course-uk')
+      return '/'
+    }
   },
   {
     path: '/uk/',
-    name: 'course-uk-index',
-    component: HomePage,
-    meta: { title: '乌克兰语课程', depth: 0, defaultTab: 'course-uk' }
+    redirect: () => {
+      localStorage.setItem('activeTab', 'course-uk')
+      return '/'
+    }
   },
   {
     path: '/uk/:lessonId',
@@ -110,13 +115,17 @@ const routes = [
   },
   {
     path: '/legal',
-    redirect: '/legal/'
+    redirect: () => {
+      localStorage.setItem('activeTab', 'course-legal')
+      return '/'
+    }
   },
   {
     path: '/legal/',
-    name: 'course-legal-index',
-    component: HomePage,
-    meta: { title: '法律英语课程', depth: 0, defaultTab: 'course-legal' }
+    redirect: () => {
+      localStorage.setItem('activeTab', 'course-legal')
+      return '/'
+    }
   },
   {
     path: '/legal/:lessonId',

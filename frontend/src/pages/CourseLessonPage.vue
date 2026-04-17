@@ -12,7 +12,7 @@
     <div v-else-if="error" class="course-state course-state-error">
       <h2>课时加载失败</h2>
       <p>{{ error }}</p>
-      <router-link :to="config.basePath + '/'" class="course-state-link">← 返回目录</router-link>
+      <a href="/" class="course-state-link" @click.prevent="returnToCourseIndex">← 返回目录</a>
     </div>
 
     <!-- 课时内容 -->
@@ -60,6 +60,7 @@
 
 <script setup lang="ts">
 import { computed, provide } from 'vue'
+import { useRouter } from 'vue-router'
 import { useLessonData } from '@/features/courses/composables/useLessonData'
 import { useCourseConfig } from '@/features/courses/composables/useCourseConfig'
 import { getLessonsByCourse } from '@/features/courses/data/lessons'
@@ -76,9 +77,17 @@ const props = defineProps<{
   lessonId: string
 }>()
 
+const router = useRouter()
 const { config } = useCourseConfig(props.courseId)
 const { lesson, loading, error } = useLessonData(props.courseId, props.lessonId)
 const { lessons } = getLessonsByCourse(props.courseId)
+
+// 错误态的"返回目录"：写入 activeTab 后跳 `/`，HomePage 恢复为对应课程 tab
+function returnToCourseIndex() {
+  const tabId = props.courseId === 'legal-english' ? 'course-legal' : 'course-uk'
+  localStorage.setItem('activeTab', tabId)
+  router.push('/')
+}
 
 const currentIndex = computed(() => lessons.findIndex(l => l.id === props.lessonId))
 const prevLesson = computed(() =>

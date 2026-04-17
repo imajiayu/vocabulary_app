@@ -4,28 +4,28 @@
     <div v-if="lessonId" class="course-topbar-progress" :style="{ transform: `scaleX(${progress})` }" />
 
     <div class="course-topbar-inner">
-      <!-- 左：返回主站 + 课程标识 -->
+      <!-- 左：返回课程目录 + 课程标识 -->
       <div class="course-topbar-left">
-        <router-link to="/" class="course-topbar-home" title="返回 IELTS Study">
+        <a href="/" class="course-topbar-home" title="返回课程目录" @click.prevent="returnToCourseIndex">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M10.5 3.5 6 8l4.5 4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-        </router-link>
+        </a>
 
         <div class="course-topbar-brand" :class="`theme-${config.theme}`">
           <span class="course-topbar-badge" aria-hidden="true">
             <component :is="badgeIcon" />
           </span>
-          <router-link :to="config.basePath + '/'" class="course-topbar-brand-text">
+          <a href="/" class="course-topbar-brand-text" @click.prevent="returnToCourseIndex">
             <span class="course-topbar-brand-name">{{ brandTitle }}</span>
             <span class="course-topbar-brand-sub">{{ brandSubtitle }}</span>
-          </router-link>
+          </a>
         </div>
       </div>
 
       <!-- 中：面包屑（课时页才显示） -->
       <nav v-if="lessonId" class="course-topbar-crumbs" aria-label="面包屑">
-        <router-link :to="config.basePath + '/'" class="course-crumb-link">目录</router-link>
+        <a href="/" class="course-crumb-link" @click.prevent="returnToCourseIndex">目录</a>
         <span class="course-crumb-sep" aria-hidden="true">·</span>
         <span class="course-crumb-current">
           <span v-if="lessonMeta" class="course-crumb-week">W{{ lessonMeta.week }} · D{{ lessonMeta.day }}</span>
@@ -70,6 +70,7 @@
 import { ref, computed, h, onMounted, onBeforeUnmount } from 'vue'
 import type { Component, ComputedRef } from 'vue'
 import { inject } from 'vue'
+import { useRouter } from 'vue-router'
 import CourseSourceSelector from './CourseSourceSelector.vue'
 import type { CourseConfig } from '../../types/course'
 import { getLessonsByCourse } from '../../data/lessons'
@@ -79,8 +80,17 @@ const props = defineProps<{
   lessonId?: string
 }>()
 
+const router = useRouter()
+
 const lessonTitleRef = inject<ComputedRef<string>>('lessonTitle')
 const lessonTitle = computed(() => lessonTitleRef?.value || '')
+
+// 返回"课程目录"tab：写入 localStorage，HomePage 挂载时会读取并显示对应课程 index
+function returnToCourseIndex() {
+  const tabId = props.config.id === 'legal-english' ? 'course-legal' : 'course-uk'
+  localStorage.setItem('activeTab', tabId)
+  router.push('/')
+}
 
 const { lessons } = getLessonsByCourse(props.config.id)
 
