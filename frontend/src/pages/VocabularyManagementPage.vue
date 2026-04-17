@@ -11,10 +11,26 @@
             <span class="title">单词管理</span>
         </template>
         <template #topbar-right>
-            <button class="button" @click="handleOpenLoadAdjustment" :disabled="isLoading || hasMoreWords || isLoadingMore">
+            <div class="view-toggle-bar">
+                <button
+                    class="view-toggle-btn"
+                    :class="{ active: viewMode === 'grid' }"
+                    @click="switchView('grid')">
+                    <LayoutGrid class="view-icon" />
+                    <span>卡片</span>
+                </button>
+                <button
+                    class="view-toggle-btn"
+                    :class="{ active: viewMode === 'table' }"
+                    @click="switchView('table')">
+                    <TableIcon class="view-icon" />
+                    <span>表格</span>
+                </button>
+            </div>
+            <button v-if="viewMode === 'grid'" class="button" @click="handleOpenLoadAdjustment" :disabled="isLoading || hasMoreWords || isLoadingMore">
                 负荷调整
             </button>
-            <button class="button" @click="handleFixDefinitions" :disabled="isLoading || hasMoreWords || isLoadingMore || defProgress.isActive.value">
+            <button v-if="viewMode === 'grid'" class="button" @click="handleFixDefinitions" :disabled="isLoading || hasMoreWords || isLoadingMore || defProgress.isActive.value">
                 修复释义
             </button>
         </template>
@@ -24,13 +40,55 @@
 
         <!-- Main Content -->
         <template v-else>
+            <!-- 进度指示器（两种模式共享） -->
+            <div v-if="hasMoreWords || isLoadingMore" class="loading-progress">
+                <div class="progress-info">
+                    <span class="progress-text">
+                        已加载 {{ loadedWords }}/{{ totalWords }} 个单词
+                    </span>
+                    <div class="loading-spinner-small"></div>
+                </div>
+                <div class="progress-bar">
+                    <div
+                        class="progress-fill"
+                        :style="{ width: totalWords > 0 ? `${(loadedWords / totalWords) * 100}%` : '0%' }"
+                    ></div>
+                </div>
+            </div>
+
+            <div v-if="defProgress.isActive.value" class="loading-progress">
+                <div class="progress-info">
+                    <span class="progress-text">
+                        {{ defProgress.label.value }} {{ defProgress.current.value }}/{{ defProgress.total.value }}
+                        <template v-if="defProgress.failedCount.value > 0">
+                            （失败 {{ defProgress.failedCount.value }}）
+                        </template>
+                    </span>
+                    <div class="loading-spinner-small"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" :style="{ width: `${defProgress.progress.value}%` }"></div>
+                </div>
+            </div>
+
+            <div v-if="defProgress.showFailureSummary.value" class="failure-summary">
+                <div class="failure-header">
+                    <span class="failure-text">
+                        {{ defProgress.failedWords.value.length }} 个单词释义获取失败
+                    </span>
+                    <button class="failure-dismiss" @click="defProgress.dismiss()">✕</button>
+                </div>
+                <div class="failure-words">
+                    {{ defProgress.failedWords.value.join('、') }}
+                </div>
+            </div>
+
+            <!-- ===== 卡片模式 ===== -->
+            <template v-if="viewMode === 'grid'">
                 <div class="top-controls">
-                    <!-- 添加单词表单 -->
                     <div class="control-item">
                         <WordInsertForm @word-inserted="handleWordInserted" @batch-word-inserted="handleBatchWordInserted" />
                     </div>
-
-                    <!-- 搜索和筛选 -->
                     <div class="control-item">
                         <SearchFilter
                             :source="filters.source.value"
@@ -50,7 +108,6 @@
                     </div>
                 </div>
 
-                <!-- 高级筛选面板（独立渲染，不影响上方两栏等高） -->
                 <AdvancedFilterPanel
                     :expanded="advancedExpanded"
                     :lapse-only="filters.lapseOnly.value"
@@ -70,86 +127,41 @@
                     @update:last-review-preset="filters.lastReviewPreset.value = $event"
                     @reset-advanced="filters.resetAdvancedFilters()"
                     @close="advancedExpanded = false" />
-                <!-- 单词网格 / 表格 -->
+
                 <div class="words-section">
-                    <!-- 视图切换 -->
-                    <div class="view-toggle-bar">
-                        <button
-                            class="view-toggle-btn"
-                            :class="{ active: viewMode === 'grid' }"
-                            @click="switchView('grid')">
-                            <LayoutGrid class="view-icon" />
-                            <span>卡片</span>
-                        </button>
-                        <button
-                            class="view-toggle-btn"
-                            :class="{ active: viewMode === 'table' }"
-                            @click="switchView('table')">
-                            <TableIcon class="view-icon" />
-                            <span>表格</span>
-                        </button>
-                    </div>
-                    <!-- 批量加载进度指示器 -->
-                    <div v-if="hasMoreWords || isLoadingMore" class="loading-progress">
-                        <div class="progress-info">
-                            <span class="progress-text">
-                                已加载 {{ loadedWords }}/{{ totalWords }} 个单词
-                            </span>
-                            <div class="loading-spinner-small"></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div
-                                class="progress-fill"
-                                :style="{ width: totalWords > 0 ? `${(loadedWords / totalWords) * 100}%` : '0%' }"
-                            ></div>
-                        </div>
-                    </div>
-
-                    <!-- 释义获取进度指示器 -->
-                    <div v-if="defProgress.isActive.value" class="loading-progress">
-                        <div class="progress-info">
-                            <span class="progress-text">
-                                {{ defProgress.label.value }} {{ defProgress.current.value }}/{{ defProgress.total.value }}
-                                <template v-if="defProgress.failedCount.value > 0">
-                                    （失败 {{ defProgress.failedCount.value }}）
-                                </template>
-                            </span>
-                            <div class="loading-spinner-small"></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" :style="{ width: `${defProgress.progress.value}%` }"></div>
-                        </div>
-                    </div>
-
-                    <!-- 释义获取失败摘要 -->
-                    <div v-if="defProgress.showFailureSummary.value" class="failure-summary">
-                        <div class="failure-header">
-                            <span class="failure-text">
-                                {{ defProgress.failedWords.value.length }} 个单词释义获取失败
-                            </span>
-                            <button class="failure-dismiss" @click="defProgress.dismiss()">✕</button>
-                        </div>
-                        <div class="failure-words">
-                            {{ defProgress.failedWords.value.join('、') }}
-                        </div>
-                    </div>
-
                     <WordGrid
-                        v-if="viewMode === 'grid'"
                         ref="wordGridRef"
                         :words="words"
                         :filtered-words="filters.filteredWords.value"
                         :search-query="filters.search.value"
                         @show-detail="handleShowDetail"
                         @batch-delete="handleBatchDelete" />
-                    <WordTable
-                        v-else
-                        ref="wordTableRef"
-                        :filtered-words="filters.filteredWords.value"
-                        :search-query="filters.search.value"
-                        @saved="handleTableRowSaved"
-                        @dirty-change="tableDirtyCount = $event" />
                 </div>
+            </template>
+
+            <!-- ===== 表格模式 ===== -->
+            <template v-else>
+                <ConditionFilterBar
+                    :conditions="tableFilters.conditions.value"
+                    v-model:logic-mode="tableFilters.logicMode.value"
+                    :filtered-count="tableFilters.filteredWords.value.length"
+                    :total-count="words.length"
+                    @add-condition="tableFilters.addCondition()"
+                    @remove-condition="tableFilters.removeCondition($event)"
+                    @update-condition="tableFilters.updateCondition($event.id, $event.partial)"
+                    @clear-all="tableFilters.clearAll()" />
+
+                <WordTable
+                    ref="wordTableRef"
+                    :filtered-words="tableFilters.filteredWords.value"
+                    :all-words="words"
+                    :all-words-loaded="!hasMoreWords"
+                    :available-sources="availableSources"
+                    @saved="handleTableRowSaved"
+                    @word-added="handleTableWordAdded"
+                    @batch-delete="handleBatchDelete"
+                    @dirty-change="tableDirtyCount = $event" />
+            </template>
 
             <!-- 详情弹窗 - 使用 store 管理状态 -->
             <WordEditorModal />
@@ -161,11 +173,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useBreakpoint } from '@/shared/composables/useBreakpoint';
 import WordInsertForm from '@/features/vocabulary/editor/WordInsertForm.vue';
 import SearchFilter from '@/features/vocabulary/grid/SearchFilter.vue';
 import AdvancedFilterPanel from '@/features/vocabulary/grid/AdvancedFilterPanel.vue';
+import ConditionFilterBar from '@/features/vocabulary/grid/ConditionFilterBar.vue';
 import WordGrid from '@/features/vocabulary/grid/WordGrid.vue';
 import WordTable from '@/features/vocabulary/grid/WordTable.vue';
 import { LayoutGrid, Table as TableIcon } from 'lucide-vue-next';
@@ -177,6 +190,7 @@ import type { Word, SourceLang } from '@/shared/types';
 import { normalizeWordText } from '@/shared/config/sourceLanguage';
 import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection';
 import { useWordFilters } from '@/features/vocabulary/grid/useWordFilters';
+import { useConditionFilters } from '@/features/vocabulary/grid/useConditionFilters';
 import { api } from '@/shared/api';
 import { useSettings } from '@/shared/composables/useSettings';
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor';
@@ -187,13 +201,13 @@ import { useDefinitionProgress } from '@/features/vocabulary/editor/composables'
 const words = ref<Word[]>([]);
 const defProgress = useDefinitionProgress();
 const filters = useWordFilters(words);
+const tableFilters = useConditionFilters(words);
 const advancedExpanded = ref(false);
 
 // O(1) word lookup by id — rebuilt lazily when words array changes
 let _wordIndexMap: Map<number, number> | null = null
 let _wordIndexVersion = 0
 function getWordIndex(wordId: number): number {
-  // Rebuild map when words array has been mutated
   const currentVersion = words.value.length
   if (!_wordIndexMap || _wordIndexVersion !== currentVersion) {
     _wordIndexMap = new Map()
@@ -207,9 +221,9 @@ function invalidateWordIndex() { _wordIndexMap = null }
 // Word Editor Store
 const wordEditorStore = useWordEditorStore();
 const isLoading = ref(true);
-const wordGridRef = ref<InstanceType<typeof WordGrid>>(); // WordGrid 组件引用
-const wordTableRef = ref<InstanceType<typeof WordTable>>(); // WordTable 组件引用
-const loadAdjustmentRef = ref<InstanceType<typeof LoadAdjustmentModal>>(); // 负荷调整组件引用
+const wordGridRef = ref<InstanceType<typeof WordGrid>>();
+const wordTableRef = ref<InstanceType<typeof WordTable>>();
+const loadAdjustmentRef = ref<InstanceType<typeof LoadAdjustmentModal>>();
 
 // 视图模式：卡片网格 vs Excel 表格编辑
 const viewMode = ref<'grid' | 'table'>('grid');
@@ -225,7 +239,7 @@ const switchView = (mode: 'grid' | 'table') => {
     viewMode.value = mode;
 };
 
-// 表格视图保存某一行后，同步回 words 数组（让卡片视图、modal 拿到最新数据）
+// 表格视图保存某一行后，同步回 words 数组
 const handleTableRowSaved = (updatedWord: Word) => {
     const index = getWordIndex(updatedWord.id);
     if (index !== -1) {
@@ -233,33 +247,60 @@ const handleTableRowSaved = (updatedWord: Word) => {
     }
 };
 
+// 表格视图新增单词
+const handleTableWordAdded = async (word: Word) => {
+    words.value.unshift(word);
+    invalidateWordIndex();
+
+    defProgress.start(1, '获取释义');
+    try {
+        const updatedWord = await api.words.fetchDefinition(word.id);
+        defProgress.increment();
+        const index = getWordIndex(word.id);
+        if (index !== -1) {
+            words.value[index] = updatedWord;
+        }
+        wordTableRef.value?.syncWord(updatedWord);
+    } catch (error) {
+        defProgress.incrementFailed(word.word);
+        logger.error('Failed to fetch definition for new word:', error);
+    } finally {
+        defProgress.finish();
+    }
+};
+
 // 使用全局设置管理
 const { settings, loadSettings } = useSettings();
 
 // 分批加载相关状态
-const batchSize = ref(200); // 每批加载单词数量，从settings读取
+const batchSize = ref(200);
 const totalWords = ref(0);
 const loadedWords = ref(0);
 const isLoadingMore = ref(false);
 const hasMoreWords = ref(true);
-const shouldStopLoading = ref(false); // 控制是否停止后台加载
+const shouldStopLoading = ref(false);
 
 // Use read-only composable to get WordIndex selection
-const { currentSource, initializeFromData } = useSourceSelectionReadOnly();
+const { currentSource, availableSources: sourcesFromSelection, initializeFromData } = useSourceSelectionReadOnly();
+
+const availableSources = computed(() => {
+    const fromSelection = sourcesFromSelection.value ?? []
+    if (fromSelection.length > 0) return fromSelection
+    const sources = new Set(words.value.map(w => w.source).filter(Boolean))
+    return [...sources]
+})
 
 // 分批加载单词的函数
 const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
     try {
-        isLoadingMore.value = offset > 0; // 只有加载后续批次时才显示加载更多状态
+        isLoadingMore.value = offset > 0;
 
         const response = await api.words.getWordsPaginatedDirect(batchSize.value, offset);
 
         if (offset === 0) {
-            // 首次加载，替换所有数据
             words.value = response.words;
             totalWords.value = response.total;
         } else {
-            // 后续批次，追加数据
             words.value.push(...response.words);
         }
 
@@ -275,7 +316,7 @@ const loadWordsBatch = async (offset: number = 0): Promise<boolean> => {
     }
 };
 
-// 并行加载所有剩余批次（并发限制 + 重试 + 有序排水队列渐进更新）
+// 并行加载所有剩余批次
 const loadRemainingBatches = async () => {
     if (!hasMoreWords.value || shouldStopLoading.value) return;
     isLoadingMore.value = true;
@@ -291,14 +332,13 @@ const loadRemainingBatches = async () => {
             return;
         }
 
-        // 有序排水队列：每批完成后存入对应槽位，按顺序 drain 进 words
         const slots: (Word[] | null)[] = new Array(offsets.length).fill(null);
         let drainIndex = 0;
 
         const drainReady = () => {
             while (drainIndex < slots.length && slots[drainIndex] !== null) {
                 words.value.push(...slots[drainIndex]!);
-                slots[drainIndex] = null; // 释放内存
+                slots[drainIndex] = null;
                 drainIndex++;
                 loadedWords.value = words.value.length;
             }
@@ -317,7 +357,6 @@ const loadRemainingBatches = async () => {
             { retries: 2, retryDelay: 500 },
         );
 
-        // 兜底 drain
         drainReady();
         hasMoreWords.value = false;
     } catch (error) {
@@ -333,15 +372,12 @@ const { isDesktop } = useBreakpoint()
 onMounted(async () => {
     if (isDesktop.value) document.documentElement.classList.add('hide-scrollbar')
     try {
-        // Initialize source filter to sync with WordIndex selection (read-only)
         await initializeFromData();
 
-        // Set initial source filter based on WordIndex selection
         if (currentSource.value) {
             filters.source.value = currentSource.value;
         }
 
-        // 从settings加载批次大小（使用缓存）
         try {
             const settings = await loadSettings();
             batchSize.value = settings.management.wordsLoadBatchSize;
@@ -349,12 +385,9 @@ onMounted(async () => {
             logger.error('Failed to load wordsLoadBatchSize from settings, using default 200:', error);
         }
 
-        // 加载第一批单词
         await loadWordsBatch(0);
 
-        // 在背景中异步加载剩余的单词
         if (hasMoreWords.value) {
-            // 不等待这个函数完成，让它在后台运行
             loadRemainingBatches();
         }
     } catch (error) {
@@ -373,7 +406,6 @@ const handleOpenLoadAdjustment = () => {
 const handleShowDetail = (word: Word) => {
     wordEditorStore.open(word);
 
-    // 注册重复检测器：本地已全部加载时走内存查找，否则走 Supabase 查询
     const customSources = settings.value?.sources?.customSources as Record<string, SourceLang> | undefined
     const lang: SourceLang = customSources?.[word.source || ''] ?? 'en'
     wordEditorStore.setDuplicateChecker(async (wordText, excludeId) => {
@@ -386,7 +418,6 @@ const handleShowDetail = (word: Word) => {
         return api.words.checkWordExistsDirect(wordText, excludeId, lang)
     });
 
-    // 注册回调：模态框关闭时更新列表
     wordEditorStore.onClose((finalWord: Word | undefined) => {
         if (finalWord) {
             const index = getWordIndex(finalWord.id);
@@ -396,7 +427,6 @@ const handleShowDetail = (word: Word) => {
         }
     });
 
-    // 注册回调：单词删除时更新列表
     wordEditorStore.onWordDeleted((wordId: number) => {
         const index = getWordIndex(wordId);
         if (index !== -1) {
@@ -405,34 +435,28 @@ const handleShowDetail = (word: Word) => {
         }
     });
 
-    // 注册回调：单词更新时更新列表
     wordEditorStore.onWordUpdated((updatedWord: Word) => {
         const index = getWordIndex(updatedWord.id);
         if (index !== -1) {
             words.value[index] = updatedWord;
         }
-        // 若表格视图正显示此单词，同步 draft，避免与服务端不一致
         wordTableRef.value?.syncWord(updatedWord);
     });
 };
 
 const handleWordInserted = async (word: Word) => {
     words.value.unshift(word);
-    // 标记为新增单词，使其显示在最前面
     wordGridRef.value?.addNewWordId(word.id);
 
-    // 新增单词后，异步获取释义
     invalidateWordIndex();
     defProgress.start(1, '获取释义');
     try {
         const updatedWord = await api.words.fetchDefinition(word.id);
         defProgress.increment();
-        // 更新列表中的单词
         const index = getWordIndex(word.id);
         if (index !== -1) {
             words.value[index] = updatedWord;
         }
-        // 如果 modal 正在显示同一个单词，同步释义到 modal
         if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
             wordEditorStore.updateCurrentWord(updatedWord);
         }
@@ -444,9 +468,7 @@ const handleWordInserted = async (word: Word) => {
     }
 };
 
-// 批量插入单词后并发获取释义（受 definitionFetchThreads 设置限制）
 const handleBatchWordInserted = async (insertedWords: Word[]) => {
-    // 先将所有单词添加到列表（无释义状态）
     insertedWords.forEach(word => {
         words.value.unshift(word);
         wordGridRef.value?.addNewWordId(word.id);
@@ -455,7 +477,6 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
     invalidateWordIndex();
     if (insertedWords.length === 0) return;
 
-    // 读取并发数设置（settings 已在 onMounted 中加载并缓存）
     let threads = 3;
     try {
         const settings = await loadSettings();
@@ -464,7 +485,6 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
         // 使用默认值
     }
 
-    // 池模式并发获取释义
     defProgress.start(insertedWords.length, '获取释义');
     await concurrentMap(insertedWords, async (word) => {
         try {
@@ -485,7 +505,6 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
     defProgress.finish();
 };
 
-// 修复释义：找出 definition 为空的单词并批量获取
 const handleFixDefinitions = async () => {
     const isEmptyDefinition = (def: Word['definition']) =>
         !def || (typeof def === 'object' && (!def.definitions || def.definitions.length === 0));
@@ -526,21 +545,17 @@ const handleFixDefinitions = async () => {
 };
 
 const handleBatchDelete = (wordIds: number[]) => {
-    // 从本地words数组中批量移除这些单词
     words.value = words.value.filter(w => !wordIds.includes(w.id));
     invalidateWordIndex();
 };
 
 onUnmounted(() => {
     document.documentElement.classList.remove('hide-scrollbar')
-    // 停止后台加载
     shouldStopLoading.value = true;
 })
 </script>
 
 <style scoped>
-/* PageLayout 已提供基础布局，这里只需要页面特有样式 */
-
 .top-controls {
     display: flex;
     align-items: stretch;
@@ -565,11 +580,11 @@ onUnmounted(() => {
     padding: var(--space-6);
 }
 
+/* 视图切换（现在在 topbar 内） */
 .view-toggle-bar {
     display: inline-flex;
     align-items: center;
     gap: 0;
-    margin-bottom: var(--space-4);
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border-medium);
     border-radius: var(--radius-sm);
@@ -645,8 +660,6 @@ onUnmounted(() => {
     border-radius: var(--radius-full);
     transition: width 0.3s ease;
 }
-
-/* spin animation defined in animations.css */
 
 /* 释义获取失败摘要 */
 .failure-summary {
