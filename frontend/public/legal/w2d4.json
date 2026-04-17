@@ -27,97 +27,97 @@
             [
               "<span class=\"term\">condition</span>",
               "/kənˈdɪʃən/",
-              "条件",
+              "n. 条件",
               "conditions of the Agreement; upon the condition that"
             ],
             [
               "<span class=\"term\" data-def=\"先决条件\">condition precedent</span>",
               "/kənˈdɪʃən ˈpresɪdənt/",
-              "先决条件；停止条件",
+              "n. 先决条件；停止条件",
               "as a <span class=\"term\" data-def=\"先决条件\">condition precedent</span> to; the following conditions precedent"
             ],
             [
               "<span class=\"term\" data-def=\"解除条件\">condition subsequent</span>",
               "/kənˈdɪʃən ˈsʌbsɪkwənt/",
-              "解除条件；后续条件",
+              "n. 解除条件；后续条件",
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a <span class=\"term\" data-def=\"解除条件\">condition subsequent</span>; <span class=\"term\" data-def=\"在…发生时\">upon the occurrence of</span> a <span class=\"term\" data-def=\"解除条件\">condition subsequent</span>"
             ],
             [
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>",
               "/ˈsʌbdʒekt tuː/",
-              "以…为条件；受…约束；根据",
+              "prep. 以…为条件；受…约束；根据",
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> the terms hereof; <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> approval; <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> applicable law"
             ],
             [
               "<span class=\"term\" data-def=\"但是/前提是\">provided that</span>",
               "/prəˈvaɪdɪd ðæt/",
-              "但须；前提是；但书",
+              "conj. 但须；前提是；但书",
               "<span class=\"term\" data-def=\"但是/前提是\">provided that</span> the Buyer has paid; provided, however, that"
             ],
             [
               "<span class=\"term\" data-def=\"但是/但书\">provided however that</span>",
               "/prəˈvaɪdɪd haʊˈevər ðæt/",
-              "但是，前提是（加强但书）",
+              "conj. 但是，前提是（加强但书）",
               "provided, however, that such obligation shall not exceed..."
             ],
             [
               "<span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span>",
               "/kənˈtɪndʒənt əˈpɑːn/",
-              "取决于；以…为条件",
+              "prep. 取决于；以…为条件",
               "<span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span> the receipt of; <span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span> regulatory approval"
             ],
             [
               "<span class=\"term\" data-def=\"先决条件/前提\">prerequisite</span>",
               "/priːˈrekwəzɪt/",
-              "先决条件；前提",
+              "n. 先决条件；前提",
               "a prerequisite to closing; prerequisite conditions"
             ],
             [
               "<span class=\"term\">precondition</span>",
               "/priːkənˈdɪʃən/",
-              "前提条件",
+              "n. 前提条件",
               "as a precondition to performance; preconditions to the obligation"
             ],
             [
               "<span class=\"term\">satisfaction</span>",
               "/ˌsætɪsˈfækʃən/",
-              "满足（条件）；清偿",
+              "n. 满足（条件）；清偿",
               "satisfaction of conditions; to the satisfaction of the Lender"
             ],
             [
               "<span class=\"term\" data-def=\"履行/满足\">fulfill</span>",
               "/fʊlˈfɪl/",
-              "履行；满足",
+              "v. 履行；满足",
               "fulfill the conditions; fulfill an obligation"
             ],
             [
               "<span class=\"term\" data-def=\"放弃（权利）\">waive</span>",
               "/weɪv/",
-              "放弃（权利/条件）",
+              "v. 放弃（权利/条件）",
               "waive a condition; waive the right to; waiver of conditions"
             ],
             [
               "<span class=\"term\">conditional</span>",
               "/kənˈdɪʃənəl/",
-              "有条件的；附条件的",
+              "adj. 有条件的；附条件的",
               "conditional approval; conditional upon; conditional obligation"
             ],
             [
               "<span class=\"term\">unconditional</span>",
               "/ˌʌnkənˈdɪʃənəl/",
-              "无条件的",
+              "adj. 无条件的",
               "unconditional obligation; unconditional guarantee"
             ],
             [
               "<span class=\"term\" data-def=\"如果/在…情况下\">in the event that</span>",
               "/ɪn ðə ɪˈvent ðæt/",
-              "如果；万一；在…情况下",
+              "conj. 如果；万一；在…情况下",
               "<span class=\"term\" data-def=\"如果/在…情况下\">in the event that</span> the Seller fails to deliver; in the event of default"
             ],
             [
               "<span class=\"term\" data-def=\"在…发生时\">upon the occurrence of</span>",
               "/əˈpɑːn ðə əˈkʌrəns ʌv/",
-              "在…发生时",
+              "prep. 在…发生时",
               "<span class=\"term\" data-def=\"在…发生时\">upon the occurrence of</span> an Event of Default; <span class=\"term\" data-def=\"在…发生时\">upon the occurrence of</span> a Force Majeure Event"
             ]
           ]

@@ -1,5 +1,8 @@
 /**
- * JSON 课时数据结构的 TypeScript 类型定义
+ * JSON 课时数据结构的 TypeScript 类型定义 —— 单一规范 schema。
+ *
+ * 所有 public/{legal,uk}/*.json 课时必须符合此 schema；不允许多版本并存。
+ * 生成/手改课时时请对照本文件。
  */
 
 // ── 顶层课时结构 ──
@@ -44,6 +47,8 @@ export interface VocabTableSection {
   intro?: string
   columns: string[]
   rows: string[][]
+  /** 第一列是否为单词样式 */
+  firstColWord?: boolean
 }
 
 export interface GrammarSection {
@@ -72,6 +77,8 @@ export interface ExampleItem {
 export interface ExercisesSection {
   type: 'exercises'
   heading?: string
+  /** 可选引言段落（位于 heading 之后、groups 之前） */
+  blocks?: Block[]
   groups: ExerciseGroup[]
 }
 
@@ -117,6 +124,7 @@ export interface TranslationGroup {
 export interface TranslationQuestion {
   source: string
   reference?: string
+  placeholder?: string
   rubric?: RubricItem[]
 }
 
@@ -131,9 +139,11 @@ export interface RubricItem {
 export interface SummarySection {
   type: 'summary'
   heading?: string
-  /** 直接 HTML 内容 */
+  /** 正文小标题 */
+  title?: string
+  /** 直接 HTML 内容（与 points 二选一） */
   html?: string
-  /** 要点列表（与 html 二选一） */
+  /** 要点列表 */
   points?: string[]
   /** 下节预告 */
   next?: string
@@ -152,7 +162,7 @@ export interface SentenceAnalysisItem {
   translation?: string
 }
 
-// ── Block 联合类型（GrammarSection 内部） ──
+// ── Block 联合类型（GrammarSection / ExercisesSection.blocks 内部） ──
 
 export type Block =
   | ParagraphBlock

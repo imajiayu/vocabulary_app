@@ -26,6 +26,7 @@
       <ExercisesSection
         v-else-if="section.type === 'exercises'"
         :section="section"
+        :section-index="i"
       />
       <SummarySection
         v-else-if="section.type === 'summary'"

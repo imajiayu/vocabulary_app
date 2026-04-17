@@ -1,6 +1,6 @@
 {
   "title": "第2周 第2天 — 情态动词的法律含义（Shall, May & Must in Contracts）",
-  "objective": "<strong>学习目标：</strong>掌握合同中 shall / may / must / will / should 等情态动词的法律含义区分，理解\u201c义务\u201d\u201c权利\u201d\u201c强制要求\u201d在合同语言中的精确表达，学会在真实合同条款中正确识别各方的权利与义务。",
+  "objective": "<strong>学习目标：</strong>掌握合同中 shall / may / must / will / should 等情态动词的法律含义区分，理解“义务”“权利”“强制要求”在合同语言中的精确表达，学会在真实合同条款中正确识别各方的权利与义务。",
   "intro": "<strong>上节回顾：</strong>上周（第1周）我们完成了合同基础与结构的学习。第5天学习了合同生效与期限相关术语：<span class=\"term\" data-def=\"生效日期\">effective date</span>、<span class=\"term\" data-def=\"期限\">term</span>、<span class=\"term\" data-def=\"开始/生效\">commencement</span>、<span class=\"term\" data-def=\"届满/到期\">expiration</span>、<span class=\"term\" data-def=\"续期/续签\">renewal</span>、<span class=\"term\" data-def=\"终止/解除\">termination</span>、<span class=\"term\" data-def=\"存续条款\">survival</span>、<span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span>。第6天进行了综合复习，重点攻克了错题。今天我们进入第2周——<strong>权利与义务条款</strong>，从合同中最核心的情态动词开始。",
   "sections": [
     {
@@ -9,45 +9,122 @@
       "blocks": [
         {
           "type": "error-warn",
-          "html": "<strong>上周待复习错题提醒：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = <strong>实质条款</strong>（非\u201c执行条款\u201d）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = <strong>完全有效</strong>（不可简化）</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = <strong>被裁定为</strong>（非\u201c被认为\u201d）——法律中 hold = 裁定</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = <strong>附于本协议的</strong>（here- 家族词不可省略）</li><li><span class=\"term\" data-def=\"上述事项\">the premises</span> = <strong>上述事项</strong>（合同中非\u201c房屋\u201d）</li></ul><p>今天的练习题中将包含上述错题的复习，请特别留意。</p>"
+          "html": "<strong>上周待复习错题提醒：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = <strong>实质条款</strong>（非“执行条款”）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = <strong>完全有效</strong>（不可简化）</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = <strong>被裁定为</strong>（非“被认为”）——法律中 hold = 裁定</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = <strong>附于本协议的</strong>（here- 家族词不可省略）</li><li><span class=\"term\" data-def=\"上述事项\">the premises</span> = <strong>上述事项</strong>（合同中非“房屋”）</li></ul><p>今天的练习题中将包含上述错题的复习，请特别留意。</p>"
         }
       ]
     },
     {
       "type": "vocab-table",
       "heading": "1. 核心词汇",
-      "blocks": [
-        {
-          "type": "p",
-          "html": "合同的核心在于约定双方的权利与义务。情态动词在其中承担着极其关键的角色——<strong>一个词的差异，可能意味着\u201c必须做\u201d还是\u201c可以做\u201d</strong>。以下是本课的核心术语："
-        },
-        {
-          "type": "table",
-          "headers": ["英文", "音标", "中文", "常见搭配"],
-          "rows": [
-            ["<span class=\"term\">shall</span>", "/ʃæl/", "应；应当（表法律义务）", "The Provider shall deliver..."],
-            ["<span class=\"term\">may</span>", "/meɪ/", "可以；有权（表权利/许可）", "The Client may terminate..."],
-            ["<span class=\"term\">must</span>", "/mʌst/", "必须（表强制要求/条件）", "All notices must be in writing."],
-            ["<span class=\"term\">will</span>", "/wɪl/", "将（表未来事实/陈述）", "The contract will expire on..."],
-            ["<span class=\"term\">should</span>", "/ʃʊd/", "应该（表建议，非强制）", "Parties should endeavor to..."],
-            ["<span class=\"term\" data-def=\"义务\">obligation</span>", "/ˌɒblɪˈɡeɪʃn/", "义务", "contractual obligation 合同义务"],
-            ["<span class=\"term\" data-def=\"关税；税\">duty</span>", "/ˈdjuːti/", "责任；职责", "duty of care 注意义务"],
-            ["<span class=\"term\" data-def=\"权利\">right</span>", "/raɪt/", "权利", "contractual right 合同权利"],
-            ["<span class=\"term\" data-def=\"权利/应享权益\">entitlement</span>", "/ɪnˈtaɪtlmənt/", "权利；资格", "entitlement to compensation 获得补偿的权利"],
-            ["<span class=\"term\" data-def=\"自由裁量权\">discretion</span>", "/dɪˈskreʃn/", "自由裁量权", "at its sole discretion 由其自行决定"],
-            ["<span class=\"term\" data-def=\"强制性的\">mandatory</span>", "/ˈmændətɔːri/", "强制性的", "mandatory requirement 强制要求"],
-            ["<span class=\"term\" data-def=\"强制的/必须的\">compulsory</span>", "/kəmˈpʌlsəri/", "强制的；义务的", "compulsory arbitration 强制仲裁"],
-            ["<span class=\"term\" data-def=\"有约束力的\">binding</span>", "/ˈbaɪndɪŋ/", "有约束力的", "legally binding 具有法律约束力的"],
-            ["<span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>", "/ɪnˈfɔːrsəbl/", "可执行的；可强制执行的", "legally enforceable 具有法律执行力的"],
-            ["<span class=\"term\" data-def=\"同意/许可\">consent</span>", "/kənˈsent/", "同意；许可", "prior written consent 事先书面同意"],
-            ["<span class=\"term\" data-def=\"由…全权决定\">at one's sole discretion</span>", "/æt wʌnz soʊl dɪˈskreʃn/", "由某方自行决定", "at the Buyer's sole discretion"],
-            ["<span class=\"term\" data-def=\"有权…\">is entitled to</span>", "/ɪz ɪnˈtaɪtld tuː/", "有权……", "<span class=\"term\" data-def=\"有权…\">is entitled to</span> receive payment"]
-          ]
-        },
-        {
-          "type": "note",
-          "html": "<strong>记忆技巧：</strong><ul><li><span class=\"term\">shall</span>：在日常英语中几乎不用，但在法律英语中是出现频率最高的情态动词。记住：<strong>合同中 shall = 必须/应当</strong>，表法律义务。</li><li><span class=\"term\" data-def=\"自由裁量权\">discretion</span>：词根 discret-（分辨），\u201c能够自行分辨和决定\u201d → 自由裁量权。</li><li><span class=\"term\" data-def=\"强制性的\">mandatory</span> vs <span class=\"term\" data-def=\"强制的/必须的\">compulsory</span>：两者意思相近，但 mandatory 更常见于合同，compulsory 更常见于法规。</li><li><span class=\"term\" data-def=\"有约束力的\">binding</span>：bind（绑定）→ binding（有约束力的）——合同像绳子一样\u201c绑住\u201d双方。</li><li><span class=\"term\" data-def=\"权利/应享权益\">entitlement</span>：en-（使）+ title（头衔/权利）+ -ment → 被赋予的权利/资格。</li></ul>"
-        }
+      "columns": [
+        "英文",
+        "音标",
+        "中文",
+        "常见搭配"
+      ],
+      "rows": [
+        [
+          "<span class=\"term\">shall</span>",
+          "/ʃæl/",
+          "aux. 应；应当（表法律义务）",
+          "The Provider shall deliver..."
+        ],
+        [
+          "<span class=\"term\">may</span>",
+          "/meɪ/",
+          "aux. 可以；有权（表权利/许可）",
+          "The Client may terminate..."
+        ],
+        [
+          "<span class=\"term\">must</span>",
+          "/mʌst/",
+          "aux. 必须（表强制要求/条件）",
+          "All notices must be in writing."
+        ],
+        [
+          "<span class=\"term\">will</span>",
+          "/wɪl/",
+          "aux. 将（表未来事实/陈述）",
+          "The contract will expire on..."
+        ],
+        [
+          "<span class=\"term\">should</span>",
+          "/ʃʊd/",
+          "aux. 应该（表建议，非强制）",
+          "Parties should endeavor to..."
+        ],
+        [
+          "<span class=\"term\" data-def=\"义务\">obligation</span>",
+          "/ˌɒblɪˈɡeɪʃn/",
+          "n. 义务",
+          "contractual obligation 合同义务"
+        ],
+        [
+          "<span class=\"term\" data-def=\"关税；税\">duty</span>",
+          "/ˈdjuːti/",
+          "n. 责任；职责",
+          "duty of care 注意义务"
+        ],
+        [
+          "<span class=\"term\" data-def=\"权利\">right</span>",
+          "/raɪt/",
+          "n. 权利",
+          "contractual right 合同权利"
+        ],
+        [
+          "<span class=\"term\" data-def=\"权利/应享权益\">entitlement</span>",
+          "/ɪnˈtaɪtlmənt/",
+          "n. 权利；资格",
+          "entitlement to compensation 获得补偿的权利"
+        ],
+        [
+          "<span class=\"term\" data-def=\"自由裁量权\">discretion</span>",
+          "/dɪˈskreʃn/",
+          "n. 自由裁量权",
+          "at its sole discretion 由其自行决定"
+        ],
+        [
+          "<span class=\"term\" data-def=\"强制性的\">mandatory</span>",
+          "/ˈmændətɔːri/",
+          "adj. 强制性的",
+          "mandatory requirement 强制要求"
+        ],
+        [
+          "<span class=\"term\" data-def=\"强制的/必须的\">compulsory</span>",
+          "/kəmˈpʌlsəri/",
+          "adj. 强制的；义务的",
+          "compulsory arbitration 强制仲裁"
+        ],
+        [
+          "<span class=\"term\" data-def=\"有约束力的\">binding</span>",
+          "/ˈbaɪndɪŋ/",
+          "adj. 有约束力的",
+          "legally binding 具有法律约束力的"
+        ],
+        [
+          "<span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>",
+          "/ɪnˈfɔːrsəbl/",
+          "adj. 可执行的；可强制执行的",
+          "legally enforceable 具有法律执行力的"
+        ],
+        [
+          "<span class=\"term\" data-def=\"同意/许可\">consent</span>",
+          "/kənˈsent/",
+          "n./v. 同意；许可",
+          "prior written consent 事先书面同意"
+        ],
+        [
+          "<span class=\"term\" data-def=\"由…全权决定\">at one's sole discretion</span>",
+          "/æt wʌnz soʊl dɪˈskreʃn/",
+          "prep. 由某方自行决定",
+          "at the Buyer's sole discretion"
+        ],
+        [
+          "<span class=\"term\" data-def=\"有权…\">is entitled to</span>",
+          "/ɪz ɪnˈtaɪtld tuː/",
+          "phr. 有权……",
+          "<span class=\"term\" data-def=\"有权…\">is entitled to</span> receive payment"
+        ]
       ]
     },
     {
@@ -56,16 +133,52 @@
       "blocks": [
         {
           "type": "table",
-          "headers": ["搭配", "中文", "用法说明"],
+          "headers": [
+            "搭配",
+            "中文",
+            "用法说明"
+          ],
           "rows": [
-            ["<span class=\"term\">shall</span> be <span class=\"term\" data-def=\"有义务的\">obligated</span> to", "有义务；应当", "比 shall 更强调义务的强制性"],
-            ["<span class=\"term\">shall</span> have the <span class=\"term\" data-def=\"权利\">right</span> to", "有权……", "用 shall 搭配 right，赋予一方权利"],
-            ["<span class=\"term\" data-def=\"可以/有权\">may</span> at its <span class=\"term\" data-def=\"选择权\">option</span>", "可自行选择……", "强调选择权在该方手中"],
-            ["<span class=\"term\">must</span> <span class=\"term\" data-def=\"遵守\">comply</span> with", "必须遵守", "通常用于法律法规层面的强制要求"],
-            ["is <span class=\"term\" data-def=\"被要求的\">required</span> to", "被要求……；须……", "与 shall 类似，表义务"],
-            ["at the <span class=\"term\" data-def=\"唯一的；全权的\">sole</span> <span class=\"term\" data-def=\"自由裁量权\">discretion</span> of", "由……自行决定", "sole 强调排他性，仅由该方决定"],
-            ["with the prior written <span class=\"term\" data-def=\"同意/许可\">consent</span> of", "经……事先书面同意", "限制条件：需要提前、以书面形式获得同意"],
-            ["<span class=\"term\">shall</span> not <span class=\"term\" data-def=\"不合理地\">unreasonably</span> <span class=\"term\" data-def=\"拒绝给予；扣留\">withhold</span>", "不得无理拒绝", "常用于要求一方合理行使同意权"]
+            [
+              "<span class=\"term\">shall</span> be <span class=\"term\" data-def=\"有义务的\">obligated</span> to",
+              "有义务；应当",
+              "比 shall 更强调义务的强制性"
+            ],
+            [
+              "<span class=\"term\">shall</span> have the <span class=\"term\" data-def=\"权利\">right</span> to",
+              "有权……",
+              "用 shall 搭配 right，赋予一方权利"
+            ],
+            [
+              "<span class=\"term\" data-def=\"可以/有权\">may</span> at its <span class=\"term\" data-def=\"选择权\">option</span>",
+              "可自行选择……",
+              "强调选择权在该方手中"
+            ],
+            [
+              "<span class=\"term\">must</span> <span class=\"term\" data-def=\"遵守\">comply</span> with",
+              "必须遵守",
+              "通常用于法律法规层面的强制要求"
+            ],
+            [
+              "is <span class=\"term\" data-def=\"被要求的\">required</span> to",
+              "被要求……；须……",
+              "与 shall 类似，表义务"
+            ],
+            [
+              "at the <span class=\"term\" data-def=\"唯一的；全权的\">sole</span> <span class=\"term\" data-def=\"自由裁量权\">discretion</span> of",
+              "由……自行决定",
+              "sole 强调排他性，仅由该方决定"
+            ],
+            [
+              "with the prior written <span class=\"term\" data-def=\"同意/许可\">consent</span> of",
+              "经……事先书面同意",
+              "限制条件：需要提前、以书面形式获得同意"
+            ],
+            [
+              "<span class=\"term\">shall</span> not <span class=\"term\" data-def=\"不合理地\">unreasonably</span> <span class=\"term\" data-def=\"拒绝给予；扣留\">withhold</span>",
+              "不得无理拒绝",
+              "常用于要求一方合理行使同意权"
+            ]
           ]
         },
         {
@@ -109,11 +222,31 @@
         },
         {
           "type": "table",
-          "headers": ["词汇", "法律含义", "语义强度", "典型语境"],
+          "headers": [
+            "词汇",
+            "法律含义",
+            "语义强度",
+            "典型语境"
+          ],
           "rows": [
-            ["<span class=\"term\">shall</span>", "义务（obligation）——\u201c应当做\u201d", "★★★★ 法律义务", "约定当事人必须履行的行为"],
-            ["<span class=\"term\">will</span>", "陈述未来事实——\u201c将会\u201d", "★★ 事实描述", "描述将要发生的客观事实"],
-            ["<span class=\"term\">must</span>", "强制条件——\u201c必须\u201d", "★★★★★ 先决条件", "法规要求或不可缺少的条件"]
+            [
+              "<span class=\"term\">shall</span>",
+              "义务（obligation）——“应当做”",
+              "★★★★ 法律义务",
+              "约定当事人必须履行的行为"
+            ],
+            [
+              "<span class=\"term\">will</span>",
+              "陈述未来事实——“将会”",
+              "★★ 事实描述",
+              "描述将要发生的客观事实"
+            ],
+            [
+              "<span class=\"term\">must</span>",
+              "强制条件——“必须”",
+              "★★★★★ 先决条件",
+              "法规要求或不可缺少的条件"
+            ]
           ]
         },
         {
@@ -137,7 +270,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>中文母语者常见错误：</strong>把 shall 翻译为\u201c将\u201d或\u201c会\u201d。在合同中，shall 绝不是简单的将来时标志，而是表示法律义务。正确翻译为\u201c应\u201d\u201c应当\u201d\u201c须\u201d。"
+          "html": "<strong>中文母语者常见错误：</strong>把 shall 翻译为“将”或“会”。在合同中，shall 绝不是简单的将来时标志，而是表示法律义务。正确翻译为“应”“应当”“须”。"
         },
         {
           "type": "h3",
@@ -145,10 +278,22 @@
         },
         {
           "type": "table",
-          "headers": ["词汇", "法律含义", "说明"],
+          "headers": [
+            "词汇",
+            "法律含义",
+            "说明"
+          ],
           "rows": [
-            ["<span class=\"term\">may</span>", "有权；可以（许可/权利）", "合同中标准用词，表示授予权利或许可"],
-            ["can", "能够（能力）", "合同中几乎不用 can，因为它表示客观能力而非法律许可"]
+            [
+              "<span class=\"term\">may</span>",
+              "有权；可以（许可/权利）",
+              "合同中标准用词，表示授予权利或许可"
+            ],
+            [
+              "can",
+              "能够（能力）",
+              "合同中几乎不用 can，因为它表示客观能力而非法律许可"
+            ]
           ]
         },
         {
@@ -158,7 +303,7 @@
         },
         {
           "type": "note",
-          "html": "<strong>注意：</strong>\u201c<span class=\"term\" data-def=\"可以/有权\">may</span> not\u201d 在合同中 = \u201c不得\u201d（禁止），而非\u201c可能不\u201d。例如：The Licensee <em>may not</em> sublicense... = 被许可方<strong>不得</strong>再许可……"
+          "html": "<strong>注意：</strong>“<span class=\"term\" data-def=\"可以/有权\">may</span> not” 在合同中 = “不得”（禁止），而非“可能不”。例如：The Licensee <em>may not</em> sublicense... = 被许可方<strong>不得</strong>再许可……"
         },
         {
           "type": "h3",
@@ -166,15 +311,27 @@
         },
         {
           "type": "table",
-          "headers": ["词汇", "含义", "区别"],
+          "headers": [
+            "词汇",
+            "含义",
+            "区别"
+          ],
           "rows": [
-            ["<span class=\"term\" data-def=\"义务\">obligation</span>", "义务（合同约定的）", "更常用于合同语境，指因合同而产生的义务"],
-            ["<span class=\"term\" data-def=\"关税；税\">duty</span>", "责任；职责（法律规定的）", "更常用于法律原则，如 <span class=\"term\" data-def=\"注意义务\">duty of care</span>（注意义务）、<span class=\"term\" data-def=\"信义义务/受托义务\">fiduciary duty</span>（信义义务）"]
+            [
+              "<span class=\"term\" data-def=\"义务\">obligation</span>",
+              "义务（合同约定的）",
+              "更常用于合同语境，指因合同而产生的义务"
+            ],
+            [
+              "<span class=\"term\" data-def=\"关税；税\">duty</span>",
+              "责任；职责（法律规定的）",
+              "更常用于法律原则，如 <span class=\"term\" data-def=\"注意义务\">duty of care</span>（注意义务）、<span class=\"term\" data-def=\"信义义务/受托义务\">fiduciary duty</span>（信义义务）"
+            ]
           ]
         },
         {
           "type": "p",
-          "html": "简言之：obligation 偏\u201c约定义务\u201d，duty 偏\u201c法定义务\u201d。实务中两者常互换使用。"
+          "html": "简言之：obligation 偏“约定义务”，duty 偏“法定义务”。实务中两者常互换使用。"
         },
         {
           "type": "h3",
@@ -182,10 +339,22 @@
         },
         {
           "type": "table",
-          "headers": ["词汇", "含义", "区别"],
+          "headers": [
+            "词汇",
+            "含义",
+            "区别"
+          ],
           "rows": [
-            ["<span class=\"term\" data-def=\"有约束力的\">binding</span>", "有约束力的", "强调合同对当事人有约束力，双方须遵守"],
-            ["<span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>", "可执行的；可强制执行的", "强调在法律程序中可被法院强制执行"]
+            [
+              "<span class=\"term\" data-def=\"有约束力的\">binding</span>",
+              "有约束力的",
+              "强调合同对当事人有约束力，双方须遵守"
+            ],
+            [
+              "<span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>",
+              "可执行的；可强制执行的",
+              "强调在法律程序中可被法院强制执行"
+            ]
           ]
         },
         {
@@ -204,7 +373,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题复习：</strong>上例中注意 \u201c<span class=\"term\" data-def=\"被裁定为\">held to be</span>\u201d = <strong>被裁定为</strong>（非\u201c被认为\u201d），以及 \u201c<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>\u201d = <strong>完全有效</strong>（不可简化为\u201c有效\u201d）。这两个知识点在第1周练习中出错，请牢记。"
+          "html": "<strong>错题复习：</strong>上例中注意 “<span class=\"term\" data-def=\"被裁定为\">held to be</span>” = <strong>被裁定为</strong>（非“被认为”），以及 “<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>” = <strong>完全有效</strong>（不可简化为“有效”）。这两个知识点在第1周练习中出错，请牢记。"
         }
       ]
     },
@@ -219,11 +388,11 @@
             "<em>The Provider shall ... perform the Services</em> — 主句：提供方应履行服务（shall = 义务）",
             "<em>at its sole cost and expense</em> — 插入语，表示费用由提供方自行承担",
             "<em><span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the specifications</em> — 方式状语，根据规格标准",
-            "<em><span class=\"term\" data-def=\"规定/载明\">set forth</span> in Exhibit A attached hereto</em> — 过去分词短语修饰 specifications，\u201c载于附于本协议的附件A中\u201d",
+            "<em><span class=\"term\" data-def=\"规定/载明\">set forth</span> in Exhibit A attached hereto</em> — 过去分词短语修饰 specifications，“载于附于本协议的附件A中”",
             "<em>and shall comply with all applicable laws, rules, and regulations</em> — 并列的第二个 shall 义务"
           ],
           "translation": "提供方应自费按照附于本协议的附件A中所列规格履行服务，并应遵守所有适用的法律、规则和法规。",
-          "note": "<strong>错题复习：</strong>注意 \u201c<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>\u201d = <strong>附于本协议的</strong>，不可省略为\u201c附件\u201d或\u201c附上的\u201d。"
+          "note": "<strong>错题复习：</strong>注意 “<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>” = <strong>附于本协议的</strong>，不可省略为“附件”或“附上的”。"
         },
         {
           "title": "例句 2",
@@ -240,7 +409,7 @@
           "title": "例句 3",
           "sentence": "Notwithstanding anything to the contrary contained herein, either Party shall have the right to terminate this Agreement immediately upon written notice if the other Party is in material breach of any of its obligations hereunder and fails to cure such breach within thirty (30) days after receipt of written notice thereof.",
           "structure": [
-            "<em>Notwithstanding anything to the contrary contained herein</em> — 让步状语：\u201c尽管本协议中有任何相反规定\u201d",
+            "<em>Notwithstanding anything to the contrary contained herein</em> — 让步状语：“尽管本协议中有任何相反规定”",
             "<em>either Party shall have the right to terminate</em> — 主句：任一方有权终止（shall have the right = 权利）",
             "<em>immediately upon written notice</em> — 时间条件：在书面通知后立即",
             "<em>if the other Party is in material breach</em> — 条件从句1：如果另一方存在重大违约",
@@ -277,34 +446,54 @@
       "groups": [
         {
           "style": "quiz",
-          "items": [
+          "questions": [
             {
               "prompt": "1. 义务（合同约定的）",
-              "options": ["duty", "obligation", "right"],
+              "options": [
+                "duty",
+                "obligation",
+                "right"
+              ],
               "answer": "obligation",
               "explanation": "obligation = 义务（合同约定的义务）"
             },
             {
               "prompt": "2. 自由裁量权",
-              "options": ["consent", "entitlement", "discretion"],
+              "options": [
+                "consent",
+                "entitlement",
+                "discretion"
+              ],
               "answer": "discretion",
               "explanation": "discretion = 自由裁量权，常见搭配：at one's sole discretion"
             },
             {
               "prompt": "3. 可强制执行的",
-              "options": ["binding", "enforceable", "mandatory"],
+              "options": [
+                "binding",
+                "enforceable",
+                "mandatory"
+              ],
               "answer": "enforceable",
               "explanation": "enforceable = 可执行的/可强制执行的，强调法院可以强制执行"
             },
             {
               "prompt": "4. 同意；许可",
-              "options": ["discretion", "consent", "entitlement"],
+              "options": [
+                "discretion",
+                "consent",
+                "entitlement"
+              ],
               "answer": "consent",
               "explanation": "consent = 同意/许可，常见搭配：prior written consent 事先书面同意"
             },
             {
               "prompt": "5. 强制的；义务的",
-              "options": ["mandatory", "compulsory", "binding"],
+              "options": [
+                "mandatory",
+                "compulsory",
+                "binding"
+              ],
               "answer": "compulsory",
               "explanation": "compulsory = 强制的/义务的，常见搭配：compulsory arbitration 强制仲裁"
             }
@@ -318,35 +507,55 @@
       "groups": [
         {
           "style": "quiz",
-          "heading": "练习A：术语选择",
-          "items": [
+          "title": "练习A：术语选择",
+          "questions": [
             {
               "prompt": "1. The Seller ____ deliver the goods within ten (10) business days after receipt of the purchase order.",
-              "options": ["shall", "may", "will"],
+              "options": [
+                "shall",
+                "may",
+                "will"
+              ],
               "answer": "shall",
               "explanation": "shall 在合同中表示法律义务，The Seller shall deliver = 卖方应交付。"
             },
             {
               "prompt": "2. The Client ____ terminate this Agreement upon sixty (60) days' prior written notice.",
-              "options": ["shall", "may", "must"],
+              "options": [
+                "shall",
+                "may",
+                "must"
+              ],
               "answer": "may",
               "explanation": "may 表示权利/许可。The Client may terminate = 客户有权终止。"
             },
             {
               "prompt": "3. All modifications to this Agreement ____ be in writing and signed by both Parties.",
-              "options": ["will", "should", "must"],
+              "options": [
+                "will",
+                "should",
+                "must"
+              ],
               "answer": "must",
               "explanation": "must 表示强制条件。All modifications must be in writing = 所有修改必须以书面形式作出。"
             },
             {
               "prompt": "4. This Agreement ____ expire on December 31, 2027, unless renewed <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> Section 5.",
-              "options": ["shall", "will", "may"],
+              "options": [
+                "shall",
+                "will",
+                "may"
+              ],
               "answer": "will",
               "explanation": "will 在合同中表示未来事实的陈述，不创设义务。This Agreement will expire = 本协议将到期。"
             },
             {
               "prompt": "5. The Licensee ____ sublicense, assign, or transfer any rights granted hereunder without the Licensor's prior written consent.",
-              "options": ["shall not", "may not", "will not"],
+              "options": [
+                "shall not",
+                "may not",
+                "will not"
+              ],
               "answer": "may not",
               "explanation": "may not 在合同中 = 不得（禁止）。The Licensee may not sublicense = 被许可方不得再许可。"
             }
@@ -354,35 +563,55 @@
         },
         {
           "style": "quiz",
-          "heading": "练习B：选词填空（合同语境）",
-          "items": [
+          "title": "练习B：选词填空（合同语境）",
+          "questions": [
             {
               "prompt": "1. This Agreement shall constitute a legally ____ contract between the Parties.",
-              "options": ["binding", "enforceable", "mandatory"],
+              "options": [
+                "binding",
+                "enforceable",
+                "mandatory"
+              ],
               "answer": "binding",
               "explanation": "legally binding = 具有法律约束力的，是法律英语固定搭配。"
             },
             {
               "prompt": "2. No Party shall assign this Agreement without the prior written ____ of the other Party.",
-              "options": ["discretion", "consent", "entitlement"],
+              "options": [
+                "discretion",
+                "consent",
+                "entitlement"
+              ],
               "answer": "consent",
               "explanation": "prior written consent = 事先书面同意，合同中限制转让或披露的标准用语。"
             },
             {
               "prompt": "3. Upon completion of the Services, the Provider shall be ____ to receive <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span>.",
-              "options": ["obligated", "entitled", "required"],
+              "options": [
+                "obligated",
+                "entitled",
+                "required"
+              ],
               "answer": "entitled",
               "explanation": "is entitled to = 有权。The Seller is entitled to receive payment = 卖方有权收取款项。"
             },
             {
               "prompt": "4. The Company may, ____, extend the deadline by an additional thirty (30) days.",
-              "options": ["at its sole discretion", "with prior consent", "as required by law"],
+              "options": [
+                "at its sole discretion",
+                "with prior consent",
+                "as required by law"
+              ],
               "answer": "at its sole discretion",
               "explanation": "at its sole discretion = 由其自行决定，sole 强调排他性。"
             },
             {
               "prompt": "5. Each Party shall perform its ____ under the <span class=\"term\" data-def=\"实质条款\">operative provisions</span> of this Agreement in good faith.（提示：<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款）",
-              "options": ["obligations", "duties", "rights"],
+              "options": [
+                "obligations",
+                "duties",
+                "rights"
+              ],
               "answer": "obligations",
               "explanation": "perform one's obligations = 履行义务，obligation 更常用于合同约定的义务。错题复习：operative provisions = 实质条款。"
             }
@@ -390,37 +619,57 @@
         },
         {
           "style": "quiz",
-          "heading": "练习C：理解与辨析",
-          "items": [
+          "title": "练习C：理解与辨析",
+          "questions": [
             {
               "prompt": "1. 在合同中，<span class=\"term\">shall</span> 的核心法律功能是什么？",
-              "options": ["描述将来事实", "创设合同义务", "表达建议"],
+              "options": [
+                "描述将来事实",
+                "创设合同义务",
+                "表达建议"
+              ],
               "answer": "创设合同义务",
               "explanation": "shall 在合同中的核心功能是创设法律义务，违反 shall 条款可构成违约。"
             },
             {
-              "prompt": "2. \u201cThe Contractor <span class=\"term\" data-def=\"可以/有权\">may</span> not subcontract any portion of the work.\u201d 中 <span class=\"term\" data-def=\"可以/有权\">may</span> not 的意思是：",
-              "options": ["可能不会", "不得（禁止）", "不应该"],
+              "prompt": "2. “The Contractor <span class=\"term\" data-def=\"可以/有权\">may</span> not subcontract any portion of the work.” 中 <span class=\"term\" data-def=\"可以/有权\">may</span> not 的意思是：",
+              "options": [
+                "可能不会",
+                "不得（禁止）",
+                "不应该"
+              ],
               "answer": "不得（禁止）",
-              "explanation": "may not 在合同中 = 不得/禁止，而非日常英语中的\u2018可能不\u2019。"
+              "explanation": "may not 在合同中 = 不得/禁止，而非日常英语中的‘可能不’。"
             },
             {
-              "prompt": "3.【错题复习】\u201cIf any provision of this Agreement is <span class=\"term\" data-def=\"被裁定为\">held to be</span> invalid...\u201d 中 <span class=\"term\" data-def=\"被裁定为\">held to be</span> 应译为：",
-              "options": ["被认为是", "被裁定为", "被发现是"],
+              "prompt": "3.【错题复习】“If any provision of this Agreement is <span class=\"term\" data-def=\"被裁定为\">held to be</span> invalid...” 中 <span class=\"term\" data-def=\"被裁定为\">held to be</span> 应译为：",
+              "options": [
+                "被认为是",
+                "被裁定为",
+                "被发现是"
+              ],
               "answer": "被裁定为",
-              "explanation": "held to be = 被裁定为/被判定为（法律语境中 hold = 裁定），不能翻译为\u2018被认为\u2019。这是第1周的错题。"
+              "explanation": "held to be = 被裁定为/被判定为（法律语境中 hold = 裁定），不能翻译为‘被认为’。这是第1周的错题。"
             },
             {
               "prompt": "4. 以下关于 <span class=\"term\" data-def=\"有约束力的\">binding</span> 与 <span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span> 的说法，正确的是：",
-              "options": ["两者完全同义，可随意互换", "合同可以是 binding 但不一定 enforceable", "enforceable 的语义弱于 binding"],
+              "options": [
+                "两者完全同义，可随意互换",
+                "合同可以是 binding 但不一定 enforceable",
+                "enforceable 的语义弱于 binding"
+              ],
               "answer": "合同可以是 binding 但不一定 enforceable",
               "explanation": "binding 强调约束力，enforceable 强调法院可强制执行。合同可以有约束力但因某些原因（如违反公共政策）不可执行。"
             },
             {
-              "prompt": "5.【错题复习】合同前言中 \u201c<span class=\"term\" data-def=\"因此/有鉴于此\">NOW THEREFORE</span>, <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span> and the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> herein...\u201d 中 <span class=\"term\" data-def=\"上述事项\">the premises</span> 的意思是：",
-              "options": ["房屋；场所", "上述事项", "前提条件"],
+              "prompt": "5.【错题复习】合同前言中 “<span class=\"term\" data-def=\"因此/有鉴于此\">NOW THEREFORE</span>, <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span> and the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> herein...” 中 <span class=\"term\" data-def=\"上述事项\">the premises</span> 的意思是：",
+              "options": [
+                "房屋；场所",
+                "上述事项",
+                "前提条件"
+              ],
               "answer": "上述事项",
-              "explanation": "the premises 在合同前言中 = 上述事项（即前面提到的各项背景），不是\u2018房屋\u2019。这是第1周的错题。"
+              "explanation": "the premises 在合同前言中 = 上述事项（即前面提到的各项背景），不是‘房屋’。这是第1周的错题。"
             }
           ]
         }
@@ -432,51 +681,230 @@
       "groups": [
         {
           "style": "translation",
-          "heading": "翻译练习A：英译中",
-          "items": [
+          "title": "翻译练习A：英译中",
+          "questions": [
             {
               "source": "1. <span class=\"en-text\">The Supplier shall perform its obligations hereunder in a professional and workmanlike manner and shall comply with all mandatory requirements set forth in the operative provisions of this Agreement.</span>",
-              "dataSource": "The Supplier shall perform its obligations hereunder in a professional and workmanlike manner and shall comply with all mandatory requirements set forth in the operative provisions of this Agreement.",
               "reference": "供应商应以专业、精良的方式履行其在本协议项下的义务，并应遵守本协议实质条款中规定的所有强制性要求。",
               "rubric": [
-                {"en": "shall perform", "ideal": "应履行", "accept": ["应当履行", "须履行"], "wrong": ["将履行", "会履行"], "note": "shall = 法律义务，译为\"应/应当\"，不是\"将\""},
-                {"en": "obligations", "ideal": "义务", "accept": ["责任"], "wrong": ["工作", "任务"], "note": "obligations = 义务（合同术语）"},
-                {"en": "hereunder", "ideal": "在本协议项下的", "accept": ["依据本协议的", "根据本协议"], "wrong": [], "note": "hereunder = under this Agreement，here- 家族词不可省略"},
-                {"en": "in a professional and workmanlike manner", "ideal": "以专业、精良的方式", "accept": ["以专业且精良的方式", "以专业工艺般的方式"], "wrong": ["专业地"], "note": "workmanlike = 精良的/工匠般的，不可漏译"},
-                {"en": "mandatory requirements", "ideal": "强制性要求", "accept": ["强制要求"], "wrong": ["必要要求", "基本要求"], "note": "mandatory = 强制性的"},
-                {"en": "operative provisions", "ideal": "实质条款", "accept": ["正文条款"], "wrong": ["执行条款", "操作条款", "运营条款"], "note": "错题复习：operative provisions = 实质条款，不是\"执行条款\""}
+                {
+                  "en": "shall perform",
+                  "ideal": "应履行",
+                  "accept": [
+                    "应当履行",
+                    "须履行"
+                  ],
+                  "wrong": [
+                    "将履行",
+                    "会履行"
+                  ],
+                  "note": "shall = 法律义务，译为\"应/应当\"，不是\"将\""
+                },
+                {
+                  "en": "obligations",
+                  "ideal": "义务",
+                  "accept": [
+                    "责任"
+                  ],
+                  "wrong": [
+                    "工作",
+                    "任务"
+                  ],
+                  "note": "obligations = 义务（合同术语）"
+                },
+                {
+                  "en": "hereunder",
+                  "ideal": "在本协议项下的",
+                  "accept": [
+                    "依据本协议的",
+                    "根据本协议"
+                  ],
+                  "wrong": [],
+                  "note": "hereunder = under this Agreement，here- 家族词不可省略"
+                },
+                {
+                  "en": "in a professional and workmanlike manner",
+                  "ideal": "以专业、精良的方式",
+                  "accept": [
+                    "以专业且精良的方式",
+                    "以专业工艺般的方式"
+                  ],
+                  "wrong": [
+                    "专业地"
+                  ],
+                  "note": "workmanlike = 精良的/工匠般的，不可漏译"
+                },
+                {
+                  "en": "mandatory requirements",
+                  "ideal": "强制性要求",
+                  "accept": [
+                    "强制要求"
+                  ],
+                  "wrong": [
+                    "必要要求",
+                    "基本要求"
+                  ],
+                  "note": "mandatory = 强制性的"
+                },
+                {
+                  "en": "operative provisions",
+                  "ideal": "实质条款",
+                  "accept": [
+                    "正文条款"
+                  ],
+                  "wrong": [
+                    "执行条款",
+                    "操作条款",
+                    "运营条款"
+                  ],
+                  "note": "错题复习：operative provisions = 实质条款，不是\"执行条款\""
+                }
               ]
             },
             {
               "source": "2. <span class=\"en-text\">Either Party may terminate this Agreement at its sole discretion upon ninety (90) days' prior written notice, provided that all binding obligations that have accrued prior to the effective date of termination shall survive such termination and remain in full force and effect.</span>",
-              "dataSource": "Either Party may terminate this Agreement at its sole discretion upon ninety (90) days' prior written notice, provided that all binding obligations that have accrued prior to the effective date of termination shall survive such termination and remain in full force and effect.",
               "reference": "任一方有权在提前九十（90）天书面通知后自行决定终止本协议，但在终止生效日之前已产生的所有有约束力的义务在终止后继续存续，并保持完全有效。",
               "rubric": [
-                {"en": "may terminate", "ideal": "有权终止/可以终止", "accept": ["可终止"], "wrong": ["将终止", "应终止"], "note": "may = 权利/许可，不是义务"},
-                {"en": "at its sole discretion", "ideal": "自行决定/由其自行决定", "accept": ["酌情"], "wrong": ["独自"], "note": "sole discretion = 自行决定（排他性裁量权）"},
-                {"en": "prior written notice", "ideal": "事先书面通知/提前书面通知", "accept": ["书面通知"], "wrong": ["提前通知"], "note": "prior + written 两个修饰语都应体现"},
-                {"en": "binding obligations", "ideal": "有约束力的义务", "accept": ["具有约束力的义务"], "wrong": ["绑定义务"], "note": "binding = 有约束力的"},
-                {"en": "survive such termination", "ideal": "在终止后继续存续", "accept": ["于该等终止后仍然有效"], "wrong": ["在终止后存活"], "note": "survive 法律含义 = 继续存续/继续有效"},
-                {"en": "in full force and effect", "ideal": "完全有效", "accept": ["继续完全有效"], "wrong": ["有效", "生效"], "note": "错题复习：in full force and effect 不可简化为\"有效\""}
+                {
+                  "en": "may terminate",
+                  "ideal": "有权终止/可以终止",
+                  "accept": [
+                    "可终止"
+                  ],
+                  "wrong": [
+                    "将终止",
+                    "应终止"
+                  ],
+                  "note": "may = 权利/许可，不是义务"
+                },
+                {
+                  "en": "at its sole discretion",
+                  "ideal": "自行决定/由其自行决定",
+                  "accept": [
+                    "酌情"
+                  ],
+                  "wrong": [
+                    "独自"
+                  ],
+                  "note": "sole discretion = 自行决定（排他性裁量权）"
+                },
+                {
+                  "en": "prior written notice",
+                  "ideal": "事先书面通知/提前书面通知",
+                  "accept": [
+                    "书面通知"
+                  ],
+                  "wrong": [
+                    "提前通知"
+                  ],
+                  "note": "prior + written 两个修饰语都应体现"
+                },
+                {
+                  "en": "binding obligations",
+                  "ideal": "有约束力的义务",
+                  "accept": [
+                    "具有约束力的义务"
+                  ],
+                  "wrong": [
+                    "绑定义务"
+                  ],
+                  "note": "binding = 有约束力的"
+                },
+                {
+                  "en": "survive such termination",
+                  "ideal": "在终止后继续存续",
+                  "accept": [
+                    "于该等终止后仍然有效"
+                  ],
+                  "wrong": [
+                    "在终止后存活"
+                  ],
+                  "note": "survive 法律含义 = 继续存续/继续有效"
+                },
+                {
+                  "en": "in full force and effect",
+                  "ideal": "完全有效",
+                  "accept": [
+                    "继续完全有效"
+                  ],
+                  "wrong": [
+                    "有效",
+                    "生效"
+                  ],
+                  "note": "错题复习：in full force and effect 不可简化为\"有效\""
+                }
               ]
             }
           ]
         },
         {
           "style": "translation",
-          "heading": "翻译练习B：中译英",
-          "items": [
+          "title": "翻译练习B：中译英",
+          "questions": [
             {
               "source": "1. 未经甲方事先书面同意（该同意不得被无理拒绝），乙方不得将其在本协议项下的任何权利或义务转让给第三方。",
-              "dataSource": "未经甲方事先书面同意（该同意不得被无理拒绝），乙方不得将其在本协议项下的任何权利或义务转让给第三方。",
               "reference": "Party B may not assign any of its rights or obligations hereunder to any third party without the prior written consent of Party A, which consent shall not be unreasonably withheld.",
               "placeholder": "Please enter your English translation...",
               "rubric": [
-                {"en": "may not assign", "ideal": "may not assign", "accept": ["shall not assign"], "wrong": ["can not assign", "will not assign"], "note": "不得 = may not 或 shall not（合同标准表达）"},
-                {"en": "rights or obligations", "ideal": "rights or obligations", "accept": ["rights and obligations"], "wrong": ["duty", "responsibility"], "note": "权利或义务 = rights or obligations"},
-                {"en": "hereunder", "ideal": "hereunder", "accept": ["under this Agreement"], "wrong": ["herein", "hereof"], "note": "在本协议项下 = hereunder / under this Agreement"},
-                {"en": "prior written consent", "ideal": "prior written consent", "accept": ["written consent in advance"], "wrong": ["consent", "approval"], "note": "事先书面同意 = prior written consent（三个词缺一不可）"},
-                {"en": "shall not be unreasonably withheld", "ideal": "shall not be unreasonably withheld", "accept": ["which consent shall not be unreasonably withheld"], "wrong": ["cannot be refused"], "note": "不得被无理拒绝 = shall not be unreasonably withheld（固定搭配）"}
+                {
+                  "en": "may not assign",
+                  "ideal": "may not assign",
+                  "accept": [
+                    "shall not assign"
+                  ],
+                  "wrong": [
+                    "can not assign",
+                    "will not assign"
+                  ],
+                  "note": "不得 = may not 或 shall not（合同标准表达）"
+                },
+                {
+                  "en": "rights or obligations",
+                  "ideal": "rights or obligations",
+                  "accept": [
+                    "rights and obligations"
+                  ],
+                  "wrong": [
+                    "duty",
+                    "responsibility"
+                  ],
+                  "note": "权利或义务 = rights or obligations"
+                },
+                {
+                  "en": "hereunder",
+                  "ideal": "hereunder",
+                  "accept": [
+                    "under this Agreement"
+                  ],
+                  "wrong": [
+                    "herein",
+                    "hereof"
+                  ],
+                  "note": "在本协议项下 = hereunder / under this Agreement"
+                },
+                {
+                  "en": "prior written consent",
+                  "ideal": "prior written consent",
+                  "accept": [
+                    "written consent in advance"
+                  ],
+                  "wrong": [
+                    "consent",
+                    "approval"
+                  ],
+                  "note": "事先书面同意 = prior written consent（三个词缺一不可）"
+                },
+                {
+                  "en": "shall not be unreasonably withheld",
+                  "ideal": "shall not be unreasonably withheld",
+                  "accept": [
+                    "which consent shall not be unreasonably withheld"
+                  ],
+                  "wrong": [
+                    "cannot be refused"
+                  ],
+                  "note": "不得被无理拒绝 = shall not be unreasonably withheld（固定搭配）"
+                }
               ]
             }
           ]
@@ -488,7 +916,7 @@
       "heading": "7. 今日小结",
       "title": "本课要点",
       "points": [
-        "<strong>情态动词的法律含义：</strong><ul><li><span class=\"term\">shall</span> = 法律义务（\u201c应/应当\u201d），违反可构成违约</li><li><span class=\"term\" data-def=\"可以/有权\">may</span> = 权利/许可（\u201c可以/有权\u201d）；<span class=\"term\" data-def=\"可以/有权\">may</span> not = 禁止（\u201c不得\u201d）</li><li><span class=\"term\">must</span> = 强制条件/先决要求（\u201c必须\u201d）</li><li><span class=\"term\">will</span> = 未来事实陈述（\u201c将\u201d），不创设义务</li><li><span class=\"term\">should</span> = 建议性（\u201c应该\u201d），非强制</li></ul>",
+        "<strong>情态动词的法律含义：</strong><ul><li><span class=\"term\">shall</span> = 法律义务（“应/应当”），违反可构成违约</li><li><span class=\"term\" data-def=\"可以/有权\">may</span> = 权利/许可（“可以/有权”）；<span class=\"term\" data-def=\"可以/有权\">may</span> not = 禁止（“不得”）</li><li><span class=\"term\">must</span> = 强制条件/先决要求（“必须”）</li><li><span class=\"term\">will</span> = 未来事实陈述（“将”），不创设义务</li><li><span class=\"term\">should</span> = 建议性（“应该”），非强制</li></ul>",
         "<strong>核心搭配：</strong><ul><li><span class=\"term\">shall</span> be <span class=\"term\" data-def=\"有义务的\">obligated</span> to（有义务）/ <span class=\"term\">shall</span> have the <span class=\"term\" data-def=\"权利\">right</span> to（有权）</li><li><span class=\"term\" data-def=\"由…全权决定\">at one's sole discretion</span>（自行决定）/ with the prior written <span class=\"term\" data-def=\"同意/许可\">consent</span> of（经事先书面同意）</li><li><span class=\"term\">shall</span> not <span class=\"term\" data-def=\"不合理地\">unreasonably</span> <span class=\"term\" data-def=\"拒绝给予；扣留\">withhold</span>（不得无理拒绝）</li></ul>",
         "<strong>关键辨析：</strong><ul><li><span class=\"term\" data-def=\"义务\">obligation</span>（合同义务）vs. <span class=\"term\" data-def=\"关税；税\">duty</span>（法定职责）</li><li><span class=\"term\" data-def=\"有约束力的\">binding</span>（有约束力）vs. <span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>（可强制执行）</li><li><span class=\"term\" data-def=\"强制性的\">mandatory</span>（强制性的，合同用）vs. <span class=\"term\" data-def=\"强制的/必须的\">compulsory</span>（强制的，法规用）</li></ul>",
         "<strong>错题巩固：</strong>复习了 <span class=\"term\" data-def=\"实质条款\">operative provisions</span>、<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>、<span class=\"term\" data-def=\"被裁定为\">held to be</span>、<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>、<span class=\"term\" data-def=\"上述事项\">the premises</span> 等易错点。"

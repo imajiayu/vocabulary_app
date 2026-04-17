@@ -32,9 +32,10 @@
    - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载 JSON（`frontend/public/uk/w*d1.json`）了解已教过哪些词汇，并通过 API 查询背单词 App 中的已知词汇。确保新词汇不与已教内容重复。列出本周所有新单词（含中文释义）到 `sections[0]` 的 `vocab-preload` 类型。参考 `courses/ukrainian/vocabulary/weekly-vocab.md`
    - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载 JSON（`frontend/public/uk/wXd1.json`）确认本周允许使用的词汇范围。在 `frontend/public/uk/` 目录下创建以周次天数命名的 `.json` 文件（如 `w3d5.json`）。**例句和练习中只使用已知词汇列表中的词**（语法功能词不受约束，详见下方"词汇约束规则"）。生成后对照 `courses/ukrainian/curriculum.md` 检查每道练习题是否超纲
    - **复习日（第7天）**：巩固本周内容，不引入新语法
-5. **更新进度**：课程生成后更新 `courses/ukrainian/progress.md`（推进天数、记录完成的课程）
-6. **更新课时索引**：在 `frontend/src/features/courses/data/lessons.ts` 的 `ukrainianLessons` 数组中新增或更新对应条目
-7. **部署**：课程生成后 git commit && git push 即可自动部署（GitHub Actions 触发前端构建），访问 https://mieltsm.top/uk/
+5. **Schema 校验（强制）**：写完 JSON 立即执行 `python3 scripts/validate_course_schema.py`，退出码必须为 0。有违规项按"规范 JSON Schema"一节修复；若是历史格式批量违规，用 `python3 scripts/migrate_course_schema.py --write` 自动归一化后再校验。校验不过禁止提交
+6. **更新进度**：课程生成后更新 `courses/ukrainian/progress.md`（推进天数、记录完成的课程）
+7. **更新课时索引**：在 `frontend/src/features/courses/data/lessons.ts` 的 `ukrainianLessons` 数组中新增或更新对应条目
+8. **部署**：课程生成后 git commit && git push 即可自动部署（GitHub Actions 触发前端构建），访问 https://mieltsm.top/uk/
 
 ## 词汇约束规则
 
@@ -80,7 +81,89 @@
 
 每个课时是一个独立的 JSON 文件，存储在 `frontend/public/uk/wXdY.json`，由 `LessonRenderer.vue` 组件解析渲染。**不需要**配套的 HTML 文件、薄壳、或任何 script 标签。
 
-**JSON 结构**（以语法课为例）：
+## 规范 JSON Schema（强制）
+
+> 权威来源：`frontend/src/features/courses/types/lesson.ts`。本节与该文件冲突时以 `.ts` 为准。
+> 自动校验：`python3 scripts/validate_course_schema.py`（退出码 0/1，可纳入 CI）。
+> 自动迁移（历史格式→规范）：`python3 scripts/migrate_course_schema.py --write`。
+
+### 顶层
+
+```json
+{
+  "title": "第X周 第Y天 — 课程标题",
+  "objective": "本课学习目标（可选）",
+  "sections": [ /* Section[] */ ]
+}
+```
+
+### 7 种 Section（封闭集合，不得自创其它 `type`）
+
+| `type` | 必填字段 | 可选字段 | 禁用字段 |
+|---|---|---|---|
+| `vocab-preload` | `groups[{heading?, words:[{word, def}]}]` | — | — |
+| `vocab-table` | `columns[], rows[][]` | `heading`, `intro`, `firstColWord` | `blocks` |
+| `grammar` | `blocks[]` | `heading` | — |
+| `examples` | `groups[{heading?, items:[{text, translation}]}]` | `heading`, `intro` | `blocks`（纯内容应改用 `grammar`） |
+| `exercises` | `groups[]` | `heading`, `blocks[]`（仅作引言段落） | 扁平的 `style`/`questions`/`items` |
+| `summary` | `html` 或 `points[]`（二选一） | `heading`, `title`, `next` | `blocks` |
+| `sentence-analysis` | `items[{title?, sentence, structure?, translation?}]` | `heading` | `blocks` |
+
+### ExerciseGroup（`exercises.groups[]` 的元素）
+
+```json
+{
+  "style": "quiz | fill-blank | translation",   // 必填，仅限此 3 值
+  "title": "练习A：判断名词性别",                  // 可选
+  "instruction": "选择每个名词的正确性别。",         // 可选
+  "questions": [ /* 下面详述 */ ]                // 必填（不得写作 items）
+}
+```
+
+**禁止的别名**：组里不能用 `heading`（应写 `title`）、`intro`（应写 `instruction`）、`items`（应写 `questions`）。
+
+### 三种 Question
+
+```json
+// style: "quiz"
+{ "prompt": "...", "options": ["阳性", "阴性", "中性"], "answer": "阳性",
+  "explanation": "...", "hints": ["提示1", "提示2"] }
+
+// style: "fill-blank"  —— prompt 内用 4 个下划线 "____" 作占位
+{ "prompt": "Це ____. (桌子)", "answer": "стіл",
+  "accept": ["стіл"], "explanation": "...", "hints": [] }
+
+// style: "translation"
+{ "source": "...", "reference": "...", "placeholder": "...",
+  "rubric": [ { "en": "...", "ideal": "...", "accept": [...], "wrong": [...], "note": "..." } ] }
+```
+
+翻译题**禁止**再带 `dataSource`、`prompt`、`displayHtml` 等历史字段；`source` 即用于 AI 批改的唯一原文来源。
+
+### Block 类型（`grammar.blocks`、`exercises.blocks` 共用）
+
+允许的 `type` 值：`p | h3 | h4 | tip | note | error-warn | grammar-box | ul | ol | table | details`。
+
+**禁止使用 `h2`**——`h2` 永远是 section 的 `heading` 字段，不得作为块出现。如需在一段内切出 `h2` 级标题，请拆成两个独立 section。
+
+| Block `type` | 主字段 |
+|---|---|
+| `p` / `h3` / `h4` | `html` 或 `text` |
+| `tip` / `note` / `error-warn` / `grammar-box` | `html` 或 `text` |
+| `ul` / `ol` | `items: string[]` |
+| `table` | `headers?: string[]`, `rows: string[][]`, `firstColWord?: boolean` |
+| `details` | `summary?`, `html` |
+
+### 常见违规与修复
+
+- ❌ `exercises` 扁平 `{type, style, questions}` → ✅ 包到 `groups: [{style, questions}]`
+- ❌ `exercises.groups[].items/heading/intro` → ✅ `questions/title/instruction`
+- ❌ `vocab-table` 里 `blocks:[{type:"table"}]` → ✅ 直接 `columns` + `rows` 提到 section 顶层
+- ❌ `summary.blocks:[...]` → ✅ 序列化为 `html` 字符串，或用 `points[] + next`
+- ❌ `grammar.blocks` 里夹 `h2` → ✅ 按 `h2` 文本拆成新的 `grammar` section（`heading`）
+- ❌ `examples.blocks`（无 `groups`）→ ✅ 把 section `type` 改成 `grammar`
+
+**JSON 结构示例**（以语法课为例）：
 
 ```json
 {

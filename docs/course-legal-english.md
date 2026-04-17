@@ -20,9 +20,10 @@
    - **词汇预载日（第1天）**：生成前，先读取所有往期词汇预载 JSON（`frontend/public/legal/w*d1.json`）了解已教过哪些词汇，并通过 Supabase REST API 查询背单词 App 中的已知词汇。确保新词汇不与已教内容重复。列出本周所有新术语（含中文释义）到 `sections[0]` 的 `vocab-preload` 类型
    - **语法课程日（第2-6天）**：生成前，先读取本周的词汇预载 JSON（`frontend/public/legal/wXd1.json`）确认本周允许使用的词汇范围。在 `frontend/public/legal/` 目录下创建以周次天数命名的 `.json` 文件（如 `w3d5.json`）。生成后对照 `courses/legal-english/curriculum.md` 检查每道练习题是否超纲
    - **复习日（第7天）**：巩固本周内容，不引入新知识点
-5. **更新进度**：课程生成后更新 `courses/legal-english/progress.md`（推进天数、记录完成的课程）
-6. **更新词汇**：将课程中的新词汇追加到 `courses/legal-english/vocabulary/known_words.md`
-7. **更新课时索引**：在 `frontend/src/features/courses/data/lessons.ts` 的 `legalEnglishLessons` 数组中新增或更新对应条目
+5. **Schema 校验（强制）**：写完 JSON 立即执行 `python3 scripts/validate_course_schema.py`，退出码必须为 0。有违规项按"规范 JSON Schema"一节修复；若是历史格式批量违规，用 `python3 scripts/migrate_course_schema.py --write` 自动归一化后再校验。校验不过禁止提交
+6. **更新进度**：课程生成后更新 `courses/legal-english/progress.md`（推进天数、记录完成的课程）
+7. **更新词汇**：将课程中的新词汇追加到 `courses/legal-english/vocabulary/known_words.md`
+8. **更新课时索引**：在 `frontend/src/features/courses/data/lessons.ts` 的 `legalEnglishLessons` 数组中新增或更新对应条目
 
 ## 部署方式
 
@@ -38,7 +39,89 @@
 
 每个课时是一个独立的 JSON 文件，存储在 `frontend/public/legal/wXdY.json`，由 `LessonRenderer.vue` 组件解析渲染。**不需要**配套的 HTML 文件、薄壳、或任何 script 标签。
 
-**JSON 结构**（以法律英语课时为例）：
+## 规范 JSON Schema（强制）
+
+> 权威来源：`frontend/src/features/courses/types/lesson.ts`。本节与该文件冲突时以 `.ts` 为准。
+> 自动校验：`python3 scripts/validate_course_schema.py`（CI 友好，退出码 0/1）。
+> 自动迁移（历史格式→规范）：`python3 scripts/migrate_course_schema.py --write`。
+
+### 顶层
+
+```json
+{
+  "title": "第X周 第Y天 — 课程标题",
+  "objective": "本课学习目标（可选）",
+  "sections": [ /* Section[] */ ]
+}
+```
+
+### 7 种 Section（封闭集合，不得自创其它 `type`）
+
+| `type` | 必填字段 | 可选字段 | 禁用字段 |
+|---|---|---|---|
+| `vocab-preload` | `groups[{heading?, words:[{word, def}]}]` | — | — |
+| `vocab-table` | `columns[], rows[][]` | `heading`, `intro`, `firstColWord` | `blocks` |
+| `grammar` | `blocks[]` | `heading` | — |
+| `examples` | `groups[{heading?, items:[{text, translation}]}]` | `heading`, `intro` | `blocks`（纯内容应改用 `grammar`） |
+| `exercises` | `groups[]` | `heading`, `blocks[]`（仅作引言段落） | 扁平的 `style`/`questions`/`items` |
+| `summary` | `html` 或 `points[]`（二选一） | `heading`, `title`, `next` | `blocks` |
+| `sentence-analysis` | `items[{title?, sentence, structure?, translation?}]` | `heading` | `blocks` |
+
+### ExerciseGroup（`exercises.groups[]` 的元素）
+
+```json
+{
+  "style": "quiz | fill-blank | translation",   // 必填，仅限此 3 值
+  "title": "练习A：术语选择",                    // 可选
+  "instruction": "请从三个选项中选择...",          // 可选
+  "questions": [ /* 下面详述 */ ]                // 必填（不得写作 items）
+}
+```
+
+**禁止的别名**：组里不能用 `heading`（应写 `title`）、`intro`（应写 `instruction`）、`items`（应写 `questions`）。
+
+### 三种 Question
+
+```json
+// style: "quiz"
+{ "prompt": "...", "options": ["A", "B", "C"], "answer": "B",
+  "explanation": "...", "hints": ["提示1", "提示2"] }
+
+// style: "fill-blank"  —— prompt 内用 4 个下划线 "____" 作占位
+{ "prompt": "The Provider ____ deliver.", "answer": "shall",
+  "accept": ["shall"], "explanation": "...", "hints": [] }
+
+// style: "translation" —— 参见下方“翻译练习”章节
+{ "source": "...", "reference": "...", "placeholder": "...",
+  "rubric": [ { "en": "...", "ideal": "...", "accept": [...], "wrong": [...], "note": "..." } ] }
+```
+
+翻译题**禁止**再带 `dataSource`、`prompt`、`displayHtml` 等历史字段；`source` 即用于 AI 批改的唯一原文来源。
+
+### Block 类型（`grammar.blocks`、`exercises.blocks` 共用）
+
+允许的 `type` 值：`p | h3 | h4 | tip | note | error-warn | grammar-box | ul | ol | table | details`。
+
+**禁止使用 `h2`**——`h2` 永远是 section 的 `heading` 字段，不得作为块出现。如果需要在一段内切出 `h2` 级标题，请拆成两个独立 section。
+
+| Block `type` | 主字段 |
+|---|---|
+| `p` / `h3` / `h4` | `html` 或 `text` |
+| `tip` / `note` / `error-warn` / `grammar-box` | `html` 或 `text` |
+| `ul` / `ol` | `items: string[]` |
+| `table` | `headers?: string[]`, `rows: string[][]`, `firstColWord?: boolean` |
+| `details` | `summary?`, `html` |
+
+### 常见违规与修复
+
+- ❌ `exercises` 扁平 `{type, style, questions}` → ✅ 包到 `groups: [{style, questions}]`
+- ❌ `exercises.groups[].items/heading/intro` → ✅ `questions/title/instruction`
+- ❌ `vocab-table` 里 `blocks:[{type:"table"}]` → ✅ 直接 `columns` + `rows` 提到 section 顶层
+- ❌ `summary.blocks:[...]` → ✅ 序列化为 `html` 字符串，或用 `points[] + next`
+- ❌ `grammar.blocks` 里夹 `h2` → ✅ 按 `h2` 文本拆成新的 `grammar` section（`heading`）
+- ❌ `examples.blocks`（无 `groups`）→ ✅ 把 section `type` 改成 `grammar`
+
+**JSON 结构示例**：
 
 ```json
 {
@@ -356,6 +439,7 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSecti
 
 课程生成完成后，必须逐题检查以下内容：
 
+0. **Schema 校验**：`python3 scripts/validate_course_schema.py` 必须通过（退出码 0）。这是结构层的硬门槛，不通过说明 JSON 字段命名/嵌套不符合规范，后续内容校验无意义
 1. **选项与答案匹配**（选择题）：`data-answer` / `answer` 的值必须与某个选项**完全一致**（区分大小写、单复数、时态）。常见错误：
    - 大小写不一致（如 `answer: "as used herein"` vs 选项 `"As used herein"`）
    - 单复数不一致（如 `answer: "operative provisions"` vs 选项 `"operative provision"`）
@@ -378,6 +462,26 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSecti
   - 每课至少 **5 道填空题**（主动回忆比选择题记忆效果翻倍）
   - 每课 **2-3 道翻译题**（英译中/中译英各半，答案全部预生成）
   - 较难题目须提供 `hints` 数组（1-2 条渐进提示）
+- **词性标注（强制）**：以下两处的**中文释义**前必须带词性前缀（如 `n.`、`v.`、`adj.`、`adv.`、`prep.`、`conj.`、`aux.`、`phr.`、`abbr.`），与释义之间用空格分隔：
+  - **每周第1天词汇预载**（`w*d1.json`）中 `vocab-preload` 的每一个 `words[].def`
+  - **每日课程第一张核心词汇表**（`vocab-table` 或 `grammar` 内 `headers: ["英文", "音标", "中文", "常见搭配"]` 的表格）的第3列「中文」单元格
+  - 词性约定：
+    - 单词：按标准词典词性（名词 `n.`、动词 `v.`、形容词 `adj.`、副词 `adv.`、介词 `prep.`、连词 `conj.`）
+    - 情态动词：`aux.`（shall/may/must/will 等）
+    - 名词短语：`n.`（subject matter, business day）
+    - 动词短语：`v.`（enter into, set forth, hold harmless）
+    - 介词短语：`prep.`（subject to, in accordance with, in consideration of）
+    - 副词短语：`adv.`（hereinafter, thereof, hereof）
+    - 连词/引导短语：`conj.`（provided that, whereas, notwithstanding）
+    - 其它完整子句/惯用语：`phr.`（time is of the essence, in no event shall）
+    - 缩写：`abbr.`（VAT, FX）
+    - 同时兼多种词性：用 `/` 连写，如 `n./v.` `v./n.`
+  - 示例：
+    - `{"word": "preamble", "def": "n. 前言；序言"}`
+    - `{"word": "enter into", "def": "v. 签订；订立"}`
+    - `{"word": "subject to", "def": "prep. 以…为条件；受…约束"}`
+    - `{"word": "shall", "def": "aux. 应当（法律义务）"}`
+  - 其它辅助性表格（辨析表、搭配表、例句表等）不强制标注词性，除非语义需要
 - **循序渐进**：严格按 `courses/legal-english/curriculum.md` 的周次主题推进，不跳跃
 - **严格范围控制**：每周第2-7天课程中出现的词汇，必须限定在**本周第1天词汇预载课 + 往期已教过的词汇**范围内。练习题只能涉及当天及之前已教过的内容
 - **复习优先**：每节新课开头简要回顾上节课的重点
