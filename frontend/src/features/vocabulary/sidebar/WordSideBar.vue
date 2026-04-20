@@ -48,8 +48,8 @@
       </div>
     </div>
 
-    <!-- 移动端：浮动气泡列表 -->
-    <div v-else class="mobile-sidebar" ref="mobileSidebarRef">
+    <!-- 移动端：浮动气泡列表（空态不渲染，避免无意义的 "0" 气泡） -->
+    <div v-else-if="displayedWords.length > 0" class="mobile-sidebar" ref="mobileSidebarRef">
       <!-- 展开/收起按钮 -->
       <button
         class="mobile-toggle"

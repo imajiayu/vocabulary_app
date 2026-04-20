@@ -1,5 +1,5 @@
 <template>
-  <div class="review-page" :class="{ 'is-completed': isCompleted, 'no-sidebar': isCompleted && sidebarWords.length === 0 }">
+  <div class="review-page" :class="{ 'is-completed': isCompleted }">
     <!-- 右侧面板（通知 + AI 助手）- 桌面端固定 / 移动端浮动 -->
     <ReviewRightPanel
       :notification-data="notification.data"
@@ -8,7 +8,7 @@
 
     <!-- 侧边栏 -->
     <WordSideBar
-      v-if="(!isCompleted && displayIndex <= displayTotal) || (isCompleted && sidebarWords.length > 0)"
+      v-if="!isInitializing"
       :words="sidebarWords"
       :remember-history="wordResults"
       :mode="mode"
@@ -571,13 +571,6 @@ onUnmounted(() => {
     --sidebar-right: 260px;
     padding-left: var(--sidebar-left);
     padding-right: var(--sidebar-right);
-  }
-}
-
-/* Lapse 完成后 sidebar 不显示，取消左侧 padding */
-@media (min-width: 769px) {
-  .review-page.no-sidebar {
-    padding-left: 0;
   }
 }
 
