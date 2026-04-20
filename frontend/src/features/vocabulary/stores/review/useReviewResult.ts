@@ -63,6 +63,9 @@ export function useReviewResult() {
   const reviewLoadsCache = ref<number[] | null>(null)
   const spellLoadsCache = ref<number[] | null>(null)
 
+  // 拼写模式：强度变化 <= 0 且非"满分锁顶"的单词（用于侧边栏红色标记）
+  const spellWeakWords = ref<Set<number>>(new Set())
+
   const closeNotification = () => {
     notification.value = { show: false, data: null }
   }
@@ -120,6 +123,16 @@ export function useReviewResult() {
 
     incrementLoadsCache(spellLoadsCache.value, calcResult.interval - 1)
     notification.value = { show: true, data: calcResult.notification }
+
+    // 强度变化 <= 0 且非"满分锁顶"→ 侧边栏标记为弱表现（红色）
+    const prevStrength = ctx.wordForCalc.spell_strength ?? 0
+    const gain = calcResult.notification.param_change
+    const isLockedAtMax = prevStrength >= 5.0 && gain === 0
+    if (gain <= 0 && !isLockedAtMax) {
+      spellWeakWords.value.add(ctx.wordId)
+    } else {
+      spellWeakWords.value.delete(ctx.wordId)
+    }
 
     updateWordInQueue(ctx.wordQueue, ctx.wordId, {
       spell_strength: calcResult.persistData.new_strength,
@@ -355,6 +368,7 @@ export function useReviewResult() {
     persistError.value = null
     reviewLoadsCache.value = null
     spellLoadsCache.value = null
+    spellWeakWords.value.clear()
   }
 
   return {
@@ -363,6 +377,7 @@ export function useReviewResult() {
     persistError,
     reviewLoadsCache,
     spellLoadsCache,
+    spellWeakWords,
     closeNotification,
     processNonLapseResult,
     stopReviewWordNonLapse,

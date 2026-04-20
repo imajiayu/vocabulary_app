@@ -13,6 +13,7 @@
       :remember-history="wordResults"
       :mode="mode"
       :word-gap-levels="wordGapLevels"
+      :spell-weak-words="spellWeakWords"
       @sidebar-word-change="sidebarWordChange"
       @word-deleted="handleSidebarWordDeleted"
       @word-forgot="handleWordForgot"
@@ -300,6 +301,7 @@ const {
   graduatedCount,
   initialWordCount,
   wordGapLevels,
+  spellWeakWords,
 } = storeToRefs(reviewStore)
 
 provideReviewContext({

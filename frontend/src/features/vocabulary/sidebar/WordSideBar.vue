@@ -126,6 +126,7 @@ interface Props {
   rememberHistory: Map<number, boolean>
   mode?: string
   wordGapLevels?: Map<number, number>
+  spellWeakWords?: Set<number>
 }
 
 const props = defineProps<Props>()
@@ -194,6 +195,10 @@ const getWordStatus = (wordId: number): string => {
     return 'current'
   }
   const remembered = props.rememberHistory.get(wordId)
+  // 拼写模式：记住但强度变化 <= 0 且非满分锁顶 → 显示红色
+  if (remembered === true && props.spellWeakWords?.has(wordId)) {
+    return 'forgot'
+  }
   return remembered === true ? 'remembered' : remembered === false ? 'forgot' : ''
 }
 

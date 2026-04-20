@@ -214,6 +214,7 @@ export const useReviewStore = defineStore('review', () => {
     persistError: result.persistError,
     reviewLoadsCache: result.reviewLoadsCache,
     spellLoadsCache: result.spellLoadsCache,
+    spellWeakWords: result.spellWeakWords,
     graduatedWords: lapse.graduatedWords,
     initialWordCount: lapse.initialWordCount,
     wordGapLevels: lapse.wordGapLevels,
