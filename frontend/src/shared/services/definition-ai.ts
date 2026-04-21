@@ -1,8 +1,8 @@
 /**
- * AI 释义回退：Wiktionary 查不到时用 DeepSeek 生成结构化释义
+ * AI 释义回退：Wiktionary 查不到时通过 ai-proxy 调用 LLM 生成结构化释义
  */
 
-import { callDeepSeek } from './deepseek'
+import { callAI } from './ai'
 import { parseJsonResponse } from '@/shared/utils/json'
 import type { DefinitionObject, SourceLang } from '@/shared/types'
 
@@ -23,7 +23,7 @@ Rules:
 - Provide 1-2 examples
 - Return ONLY valid JSON, no markdown or extra text`
 
-  const response = await callDeepSeek(systemPrompt, word, [], {
+  const response = await callAI(systemPrompt, word, [], {
     temperature: 0.3,
     maxTokens: 500,
   })

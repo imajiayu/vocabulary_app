@@ -162,42 +162,66 @@
             [
               "payment shall be <span class=\"term\" data-def=\"到期应付\">due and payable</span>",
               "付款到期应予支付",
-              "<span class=\"en-text\">All amounts shall be due and payable within thirty (30) days of invoice.</span>"
+              {
+                "en": "<span class=\"en-text\">All amounts shall be due and payable within thirty (30) days of invoice.</span>",
+                "zh": "所有款项应于开具发票后三十（30）日内到期应付。"
+              }
             ],
             [
               "upon <span class=\"term\">receipt</span> of <span class=\"term\" data-def=\"发票；账单\">invoice</span>",
               "收到发票后（即付）",
-              "<span class=\"en-text\">Client shall remit payment upon receipt of a valid invoice from Provider.</span>"
+              {
+                "en": "<span class=\"en-text\">Client shall remit payment upon receipt of a valid invoice from Provider.</span>",
+                "zh": "客户方应在收到提供方开具的有效发票后汇付款项。"
+              }
             ],
             [
               "<span class=\"term\">net</span> [number] days from the date of <span class=\"term\" data-def=\"发票；账单\">invoice</span>",
               "自发票日起净[天数]天",
-              "<span class=\"en-text\">Payment is due net 30 days from the date of invoice.</span>"
+              {
+                "en": "<span class=\"en-text\">Payment is due net 30 days from the date of invoice.</span>",
+                "zh": "付款期限为发票日后净 30 日到期。"
+              }
             ],
             [
               "in equal monthly <span class=\"term\" data-def=\"分期付款；期款\">installments</span>",
               "按相等的月度分期付款",
-              "<span class=\"en-text\">The License Fee shall be payable in twelve (12) equal monthly installments.</span>"
+              {
+                "en": "<span class=\"en-text\">The License Fee shall be payable in twelve (12) equal monthly installments.</span>",
+                "zh": "许可费应分十二（12）期等额月付。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a <span class=\"term\" data-def=\"质保金；尾款\">retention</span> of [X]%",
               "扣留[X]%质保金",
-              "<span class=\"en-text\">Each progress payment is subject to a retention of ten percent (10%) until final acceptance.</span>"
+              {
+                "en": "<span class=\"en-text\">Each progress payment is subject to a retention of ten percent (10%) until final acceptance.</span>",
+                "zh": "每笔进度款须保留百分之十（10%），直至最终验收。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final <span class=\"term\">settlement</span>",
               "全额最终结算付款",
-              "<span class=\"en-text\">The foregoing amounts constitute payment in full and final settlement of all claims.</span>"
+              {
+                "en": "<span class=\"en-text\">The foregoing amounts constitute payment in full and final settlement of all claims.</span>",
+                "zh": "上述款项构成对所有索赔的全额且最终的清偿。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> to the <span class=\"term\">designated</span> bank account",
               "电汇至指定银行账户",
-              "<span class=\"en-text\">All payments shall be made by wire transfer to the designated bank account set forth in Schedule A.</span>"
+              {
+                "en": "<span class=\"en-text\">All payments shall be made by wire transfer to the designated bank account set forth in Schedule A.</span>",
+                "zh": "所有付款应通过电汇方式汇入附表 A 所指定的银行账户。"
+              }
             ],
             [
               "as per the <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span> <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>",
               "按照附于本协议的付款计划表",
-              "<span class=\"en-text\">Client shall make payments as per the payment schedule attached hereto as Exhibit B.</span>"
+              {
+                "en": "<span class=\"en-text\">Client shall make payments as per the payment schedule attached hereto as Exhibit B.</span>",
+                "zh": "客户方应按照本协议附件 B 的付款时间表付款。"
+              }
             ]
           ]
         }

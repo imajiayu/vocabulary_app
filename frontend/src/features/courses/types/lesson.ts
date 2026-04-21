@@ -224,10 +224,22 @@ export interface ListBlock {
   items: string[]
 }
 
+/**
+ * 表格单元格：
+ *  - string：单行 HTML 内容
+ *  - { en, zh }：双语单元格（英文例句 + 中文翻译，常见于"固定搭配"例句列）
+ */
+export type TableCell = string | BilingualCell
+
+export interface BilingualCell {
+  en: string
+  zh: string
+}
+
 export interface TableBlock {
   type: 'table'
   headers?: string[]
-  rows: string[][]
+  rows: TableCell[][]
   /** 第一列是否为单词样式 */
   firstColWord?: boolean
 }

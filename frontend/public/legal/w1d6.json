@@ -152,42 +152,66 @@
             [
               "<span class=\"term\" data-def=\"进入\">come</span> into <span class=\"term\" data-def=\"效力；生效\">effect</span> / <span class=\"term\" data-def=\"取得\">take</span> <span class=\"term\" data-def=\"效力；生效\">effect</span>",
               "生效",
-              "<span class=\"en-text\">This Agreement shall come into effect on the date of execution by both Parties.</span>"
+              {
+                "en": "<span class=\"en-text\">This Agreement shall come into effect on the date of execution by both Parties.</span>",
+                "zh": "本协议自双方签署之日起生效。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"保持；继续\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
               "保持完全有效",
-              "<span class=\"en-text\">This Agreement shall remain in full force and effect until terminated in accordance with the provisions hereof.</span>"
+              {
+                "en": "<span class=\"en-text\">This Agreement shall remain in full force and effect until terminated in accordance with the provisions hereof.</span>",
+                "zh": "本协议应保持完全效力，直至依据本协议的规定终止为止。"
+              }
             ],
             [
               "unless earlier <span class=\"term\" data-def=\"终止/解除\">terminated</span>",
               "除非提前终止",
-              "<span class=\"en-text\">The initial term shall be two (2) years from the Effective Date, unless earlier terminated pursuant to Section 12.</span>"
+              {
+                "en": "<span class=\"en-text\">The initial term shall be two (2) years from the Effective Date, unless earlier terminated pursuant to Section 12.</span>",
+                "zh": "初始期限自生效日起为两（2）年，除非依据第 12 条提前终止。"
+              }
             ],
             [
               "upon the <span class=\"term\" data-def=\"届满/到期\">expiration</span> of",
               "在……届满时",
-              "<span class=\"en-text\">Upon the expiration of the initial term, this Agreement shall automatically renew for successive one (1) year periods.</span>"
+              {
+                "en": "<span class=\"en-text\">Upon the expiration of the initial term, this Agreement shall automatically renew for successive one (1) year periods.</span>",
+                "zh": "初始期限届满后，本协议应按连续一（1）年的期限自动续期。"
+              }
             ],
             [
               "for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of",
               "初始期限为",
-              "<span class=\"en-text\">This Agreement shall be for an initial term of three (3) years commencing on the Effective Date.</span>"
+              {
+                "en": "<span class=\"en-text\">This Agreement shall be for an initial term of three (3) years commencing on the Effective Date.</span>",
+                "zh": "本协议初始期限为三（3）年，自生效日起算。"
+              }
             ],
             [
               "<span class=\"term\">terminate for cause</span>",
               "因故终止；因违约终止",
-              "<span class=\"en-text\">Either Party may terminate this Agreement for cause upon thirty (30) days' prior written notice.</span>"
+              {
+                "en": "<span class=\"en-text\">Either Party may terminate this Agreement for cause upon thirty (30) days' prior written notice.</span>",
+                "zh": "任何一方均可凭正当理由，在提前三十（30）日以书面通知后终止本协议。"
+              }
             ],
             [
               "<span class=\"term\">terminate for convenience</span>",
               "任意终止；无因终止",
-              "<span class=\"en-text\">Client may terminate this Agreement for convenience upon ninety (90) days' prior written notice to Provider.</span>"
+              {
+                "en": "<span class=\"en-text\">Client may terminate this Agreement for convenience upon ninety (90) days' prior written notice to Provider.</span>",
+                "zh": "客户方可在提前九十（90）日向提供方发出书面通知后，出于便利而终止本协议。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"在…之后继续有效\">survive</span> the <span class=\"term\" data-def=\"终止/解除\">termination</span> of",
               "在……终止后继续有效",
-              "<span class=\"en-text\">Sections 8, 9, and 12 shall survive the termination or expiration of this Agreement.</span>"
+              {
+                "en": "<span class=\"en-text\">Sections 8, 9, and 12 shall survive the termination or expiration of this Agreement.</span>",
+                "zh": "第 8 条、第 9 条和第 12 条在本协议终止或届满后仍继续有效。"
+              }
             ]
           ]
         },

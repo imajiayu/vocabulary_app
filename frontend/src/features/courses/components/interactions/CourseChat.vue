@@ -69,26 +69,40 @@
       </div>
     </div>
 
-    <!-- 选中文本浮动按钮 -->
-    <button
+    <!-- 选中文本浮动按钮组 -->
+    <div
       v-show="selBtnVisible"
-      class="chat-sel-btn"
+      class="sel-popover"
       :style="{ left: selBtnPos.x + 'px', top: selBtnPos.y + 'px' }"
-      @click.prevent.stop="askAboutSelection"
-    >问 AI</button>
+      @mousedown.prevent.stop
+    >
+      <button class="sel-btn" @click.prevent.stop="askAboutSelection">问 AI</button>
+      <button class="sel-btn" @click.prevent.stop="addSelection" :disabled="!courseSource">添加</button>
+      <button class="sel-btn sel-btn-icon" @click.prevent.stop="pronounceSelection" title="发音">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 6v4h2.5L8.5 12.5V3.5L5.5 6H3Z" fill="currentColor"/>
+          <path d="M10.5 5.5c.8.7 1.3 1.6 1.3 2.5s-.5 1.8-1.3 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        </svg>
+      </button>
+    </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
 import { ref, inject, onMounted, onBeforeUnmount, nextTick, computed } from 'vue'
-import type { ComputedRef } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 import type { CourseConfig } from '../../types/course'
-import type { ChatMessage } from '@/shared/services/deepseek'
-import { streamDeepSeek } from '@/shared/services/deepseek'
+import type { ChatMessage } from '@/shared/services/ai'
+import { streamAI } from '@/shared/services/ai'
 import { formatMarkdown } from '@/shared/utils/markdown'
+import { useCourseTts } from '../../composables/useCourseTts'
+import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
 const config = inject<CourseConfig>('courseConfig')!
 const lessonTitleRef = inject<ComputedRef<string>>('lessonTitle')
+const courseSource = inject<Ref<string>>('courseSource', ref(''))
+const wordEditorStore = useWordEditorStore()
+const { speak } = useCourseTts(config)
 
 const isOpen = ref(false)
 const messages = ref<ChatMessage[]>([])
@@ -176,7 +190,7 @@ async function send() {
   let fullContent = ''
 
   try {
-    for await (const chunk of streamDeepSeek(apiMessages, {
+    for await (const chunk of streamAI(apiMessages, {
       temperature: 0.7,
       signal: abortController.signal
     })) {
@@ -203,6 +217,8 @@ async function send() {
 // 文本选中交互
 function onDocMouseup(e: MouseEvent) {
   if (chatWindowRef.value?.contains(e.target as Node)) return
+  const target = e.target as HTMLElement | null
+  if (target?.closest('.sel-popover')) return
 
   setTimeout(() => {
     const sel = window.getSelection()
@@ -210,9 +226,11 @@ function onDocMouseup(e: MouseEvent) {
     if (text.length > 2 && text.length < 500) {
       selectedText = text
       selBtnVisible.value = true
+      // 锚点：选区正上方 36px，避免超出视口右/上边
+      const POPOVER_W = 180
       selBtnPos.value = {
-        x: Math.min(e.pageX + 10, window.innerWidth - 80),
-        y: e.pageY - 36
+        x: Math.max(8, Math.min(e.pageX - POPOVER_W / 2, window.innerWidth - POPOVER_W - 8)),
+        y: Math.max(8, e.pageY - 44)
       }
     } else {
       selBtnVisible.value = false
@@ -222,22 +240,54 @@ function onDocMouseup(e: MouseEvent) {
 }
 
 function onDocMousedown(e: MouseEvent) {
-  const target = e.target as HTMLElement
-  if (!target.classList.contains('chat-sel-btn')) {
+  const target = e.target as HTMLElement | null
+
+  // 选中弹层外部点击 → 隐藏
+  if (!target?.closest('.sel-popover')) {
     selBtnVisible.value = false
+  }
+
+  // 聊天窗口外部点击 → 关闭窗口（排除 FAB / popover / 自身）
+  if (
+    isOpen.value &&
+    target &&
+    !chatWindowRef.value?.contains(target) &&
+    !target.closest('.chat-fab') &&
+    !target.closest('.sel-popover')
+  ) {
+    isOpen.value = false
   }
 }
 
 function askAboutSelection() {
+  const text = selectedText
   selBtnVisible.value = false
   if (!isOpen.value) toggleChat()
-  inputText.value = `关于以下内容：\n"${selectedText}"\n\n请解释一下。`
+  inputText.value = `关于以下内容：\n"${text}"\n\n请解释一下。`
   nextTick(() => {
     textareaRef.value?.focus()
     autoHeight()
   })
   selectedText = ''
   window.getSelection()?.removeAllRanges()
+}
+
+function addSelection() {
+  if (!courseSource.value) return
+  const text = selectedText
+  selBtnVisible.value = false
+  wordEditorStore.openForCreate(
+    { source: courseSource.value, lang: config.lang },
+    text
+  )
+  selectedText = ''
+  window.getSelection()?.removeAllRanges()
+}
+
+function pronounceSelection() {
+  const text = selectedText
+  if (!text) return
+  speak(text)
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -305,8 +355,8 @@ onBeforeUnmount(() => {
   max-width: 95vw;
   max-height: 90vh;
   border-radius: 16px;
-  background: var(--color-surface-elevated, #fff);
-  border: 1px solid var(--color-border-light, rgba(0,0,0,0.08));
+  background: var(--color-surface-card, var(--primitive-paper-100));
+  border: 1px solid var(--color-border-medium, var(--primitive-paper-400));
   box-shadow:
     0 24px 60px -16px rgba(15, 23, 42, 0.22),
     0 10px 24px -10px rgba(15, 23, 42, 0.1);
@@ -410,14 +460,14 @@ onBeforeUnmount(() => {
   align-items: flex-end;
   gap: 8px;
   padding: 10px 14px;
-  border-top: 1px solid var(--color-border-medium, #e5e2dd);
+  border-top: 1px solid var(--color-border-medium, var(--primitive-paper-400));
   flex-shrink: 0;
-  background: var(--color-surface-card, #fff);
+  background: var(--color-surface-page, var(--primitive-paper-200));
 }
 
 .chat-input-area textarea {
   flex: 1;
-  border: 1px solid var(--color-border-medium, #e5e2dd);
+  border: 1px solid var(--color-border-medium, var(--primitive-paper-400));
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 14px;
@@ -427,7 +477,7 @@ onBeforeUnmount(() => {
   min-height: 36px;
   outline: none;
   font-family: inherit;
-  background: var(--color-surface-card, #fff);
+  background: var(--color-surface-card, var(--primitive-paper-100));
   color: var(--color-text-primary, #2d2d2d);
   transition: border-color 0.15s;
 }
@@ -466,21 +516,55 @@ onBeforeUnmount(() => {
   margin-top: 4px;
 }
 
-.chat-sel-btn {
+.sel-popover {
   position: absolute;
   z-index: 10002;
-  background: var(--course-accent);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  display: inline-flex;
+  align-items: stretch;
+  background: var(--color-surface-card, var(--primitive-paper-100));
+  border: 1px solid var(--color-border-medium, var(--primitive-paper-400));
+  border-radius: 8px;
+  box-shadow: 0 6px 18px -4px rgba(15, 23, 42, 0.24);
+  overflow: hidden;
+  font-family: var(--font-sans);
 }
 
-.chat-sel-btn:hover { opacity: 0.9; }
+.sel-btn {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: none;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s ease, color 0.12s ease;
+  border-right: 1px solid var(--color-border-light, var(--primitive-paper-300));
+}
+
+.sel-btn:last-child { border-right: none; }
+
+.sel-btn:hover:not(:disabled) {
+  background: var(--course-accent);
+  color: var(--course-accent-on, #fff);
+}
+
+.sel-btn:disabled {
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.sel-btn-icon {
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sel-btn-icon svg {
+  width: 14px;
+  height: 14px;
+}
 
 @media (max-width: 600px) {
   .chat-window {

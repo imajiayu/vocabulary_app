@@ -47,7 +47,7 @@
               "<span class=\"term\" data-def=\"兹证明\">witnesseth</span>",
               "/ˈwɪtnəsɪθ/",
               "v. 兹证明；特此证明",
-              "NOW, THEREFORE, THIS AGREEMENT WITNESSETH"
+              "Now, therefore, this Agreement witnesseth"
             ],
             [
               "<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>",
@@ -136,42 +136,66 @@
             [
               "made and <span class=\"term\" data-def=\"签订/订立\">entered</span> into",
               "签订并订立（合同开头固定搭配）",
-              "<span class=\"en-text\">This Agreement is made and entered into as of January 1, 2026.</span>"
+              {
+                "en": "<span class=\"en-text\">This Agreement is made and entered into as of January 1, 2026.</span>",
+                "zh": "本协议由各方于 2026 年 1 月 1 日签订生效。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and <span class=\"term\" data-def=\"存续的\">existing</span> under the laws of",
               "依……法律合法设立并存续",
-              "<span class=\"en-text\">ABC Inc., a corporation duly organized and existing under the laws of the State of Delaware.</span>"
+              {
+                "en": "<span class=\"en-text\">ABC Inc., a corporation duly organized and existing under the laws of the State of Delaware.</span>",
+                "zh": "ABC 公司，一家根据特拉华州法律正式组建并存续的公司。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span>",
               "以下简称为",
-              "<span class=\"en-text\">XYZ Ltd. (hereinafter referred to as \"the Buyer\") agrees to the terms hereof.</span>"
+              {
+                "en": "<span class=\"en-text\">XYZ Ltd. (hereinafter referred to as \"the Buyer\") agrees to the terms hereof.</span>",
+                "zh": "XYZ 有限公司（以下简称「买方」）同意本协议的条款。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
               "基于相互约定的对价",
-              "<span class=\"en-text\">In consideration of the mutual covenants and agreements herein contained, the parties agree as follows.</span>"
+              {
+                "en": "<span class=\"en-text\">In consideration of the mutual covenants and agreements herein contained, the parties agree as follows.</span>",
+                "zh": "基于本协议所载的相互承诺与约定，各方约定如下。"
+              }
             ],
             [
               "the <span class=\"term\" data-def=\"当事方/缔约方\">parties</span> <span class=\"term\" data-def=\"本协议的各方\">hereto</span>",
               "本协议各方",
-              "<span class=\"en-text\">The parties hereto have caused this Agreement to be executed by their authorized representatives.</span>"
+              {
+                "en": "<span class=\"en-text\">The parties hereto have caused this Agreement to be executed by their authorized representatives.</span>",
+                "zh": "本协议各方已促使其授权代表签署本协议。"
+              }
             ],
             [
               "for other good and <span class=\"term\" data-def=\"有价值的\">valuable</span> <span class=\"term\" data-def=\"对价；约因\">consideration</span>",
               "以及其他充分有效的对价",
-              "<span class=\"en-text\">For good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged.</span>"
+              {
+                "en": "<span class=\"en-text\">For good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged.</span>",
+                "zh": "基于已足额收到且特此确认的有效对价。"
+              }
             ],
             [
               "with its <span class=\"term\" data-def=\"主要营业地\">principal place of business</span> at",
               "主要营业地位于",
-              "<span class=\"en-text\">A company with its principal place of business at 200 Park Avenue, New York.</span>"
+              {
+                "en": "<span class=\"en-text\">A company with its principal place of business at 200 Park Avenue, New York.</span>",
+                "zh": "一家主要营业地位于纽约公园大道 200 号的公司。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"统称\">collectively</span> <span class=\"term\" data-def=\"称为\">referred to as</span>",
               "合称为",
-              "<span class=\"en-text\">The Seller and the Buyer shall be collectively referred to as \"the Parties\".</span>"
+              {
+                "en": "<span class=\"en-text\">The Seller and the Buyer shall be collectively referred to as \"the Parties\".</span>",
+                "zh": "卖方与买方合称为「各方」。"
+              }
             ]
           ]
         }

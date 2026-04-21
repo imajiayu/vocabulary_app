@@ -44,7 +44,8 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 关系清空 | Frontend → Supabase | 按类型批量删除 |
 | 统计数据 | Frontend → Supabase Views | 直接查询视图 |
 | 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
-| 写作模块 | Frontend → Supabase | 纯 CRUD + Storage + AI |
+| 写作模块 | Frontend → Supabase + ai-proxy | CRUD/Storage 直连；AI 反馈走 Edge Function |
+| LLM 调用（口语/写作/词汇助手/课程聊天/翻译批改/释义回退） | Frontend → Edge Function `ai-proxy` | API key 收敛到服务端 secret，OpenAI 兼容协议 |
 | 设置读写 | Frontend → Supabase | 简单读写 |
 | 设置复杂操作 | Frontend → Edge Functions | 级联删除、批量调整 |
 | 进度追踪 | Frontend → Supabase | 简单 CRUD |
@@ -105,7 +106,7 @@ features/           # 功能模块 (vocabulary, speaking, statistics, writing)
 shared/
   api/              # Supabase 直连 + 后端 API（仅 relations）
   core/             # SM-2 算法、拼写强度算法、负荷均衡（TypeScript）
-  services/         # 业务编排（wordResultService）+ AI 服务（DeepSeek, Google STT）
+  services/         # 业务编排（wordResultService）+ AI 服务（ai.ts → ai-proxy Edge Function, Google STT）
   types/            # TypeScript 类型
   composables/      # 可组合函数（15 个）
   components/       # 通用组件（base, charts, controls, feedback, layout）
@@ -126,7 +127,7 @@ shared/
 - 6 个函数：update_updated_at(), get_daily_spell_loads(), handle_new_user(), delete_words_cascade(), batch_reschedule_review(), batch_reschedule_spell()
 - 3 个触发器：trg_user_config_updated_at, on_auth_user_created, trg_course_progress_updated_at
 - 2 个 Storage Bucket：speaking-audios, writing-images
-- 4 个 Edge Functions：adjust-max-prep-days, delete-source, fetch-definition, quick-add-word
+- 5 个 Edge Functions：adjust-max-prep-days, delete-source, fetch-definition, quick-add-word, ai-proxy
 
 ## 状态管理
 
@@ -157,9 +158,15 @@ FLASK_DEBUG=0            # 仅开发环境设为 1
 ```
 VITE_SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co
 VITE_SUPABASE_ANON_KEY=...
-VITE_DEEPSEEK_API_KEY=...
 VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
 VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
+```
+
+**Edge Function secrets**（LLM 代理，通过 `supabase secrets set ...` 配置）
+```
+AI_BASE_URL=https://api.deepseek.com   # 上游 LLM API base（兼容 OpenAI chat/completions）
+AI_API_KEY=sk-xxx                      # 上游 LLM API key
+AI_MODEL=deepseek-chat                 # 模型名（前端无法覆盖）
 ```
 
 ## 开发规范
@@ -232,7 +239,7 @@ courses/                # 仅保留学习资料，不再作为页面源
 | `vocab.js` | `VocabPreloadSection.vue` |
 | `renderer.js` | `LessonRenderer.vue`（JSON → Vue 组件树） |
 | `wordInteraction.js` | 复用主站 `WordEditorModal`（store ghost 模式：未在当前 source 时显示"加入词本"按钮） |
-| `chat.js` | `CourseChat.vue`（复用 `shared/services/deepseek.ts` 的 `streamDeepSeek`） |
+| `chat.js` | `CourseChat.vue`（复用 `shared/services/ai.ts` 的 `streamAI`，经由 `ai-proxy` Edge Function） |
 
 ### 持久化架构
 

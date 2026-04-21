@@ -24,7 +24,7 @@
           <div class="modal-header">
             <div class="modal-header-left">
               <span class="modal-header-accent"></span>
-              <h2 class="modal-title">单词详情</h2>
+              <h2 class="modal-title">{{ isCreating ? '新建单词' : '单词详情' }}</h2>
             </div>
             <button v-if="!isEditing" @click="store.close()" class="close-button" aria-label="关闭">
               <XIcon class="close-icon" />
@@ -54,7 +54,7 @@ import { useWordEditorStore } from '../stores/wordEditor';
 
 // 使用 Pinia Store
 const store = useWordEditorStore();
-const { currentWord, isOpen, isEditing } = storeToRefs(store);
+const { currentWord, isOpen, isEditing, isCreating } = storeToRefs(store);
 
 const abortController = ref<AbortController | null>(null);
 

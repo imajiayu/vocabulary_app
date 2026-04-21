@@ -1,6 +1,6 @@
 /**
  * AI Prompt Cache — 共享缓存层
- * 缓存固定 AI 提示按钮的 DeepSeek 响应，所有用户共享
+ * 缓存固定 AI 提示按钮的响应，所有用户共享
  */
 
 import { supabase } from '@/shared/config/supabase'

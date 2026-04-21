@@ -16,15 +16,13 @@ const log = logger.create('WordEditor')
 export type DuplicateCheckState = 'idle' | 'checking' | 'duplicate' | 'clear'
 export type DuplicateCheckerFn = (word: string, excludeId: number) => Promise<boolean>
 
-export type GhostAddStatus = 'idle' | 'adding' | 'failed'
-
-export interface CourseGhostContext {
+export interface WordCreateContext {
   source: string
   lang: SourceLang
 }
 
-/** 构造 ghost Word 占位（id=-1，表示尚未在 DB 中存在） */
-function buildGhostWord(text: string, source: string, definition?: string): Word {
+/** 构造空白 Word 占位（id=-1，尚未写入 DB）— 供新建 / 课程点词未命中时使用 */
+function buildBlankWord(source: string, text = '', definition?: string): Word {
   return {
     id: -1,
     word: text,
@@ -59,10 +57,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   const relatedWords = shallowRef<RelatedWord[]>([])
   const isLoadingRelated = ref(false)
 
-  // ── Ghost 模式（课程页点词时，单词尚未加入用户当前 source）──
-  const isGhost = ref(false)
-  const ghostContext = ref<CourseGhostContext | null>(null)
-  const ghostAddStatus = ref<GhostAddStatus>('idle')
+  // ── 创建模式（课程页未命中 / 用户主动添加 → 进入编辑态空白页） ──
+  const isCreating = ref(false)
+  const createContext = ref<WordCreateContext | null>(null)
 
   // ── 重复检测 ──
   const duplicateCheckState = ref<DuplicateCheckState>('idle')
@@ -90,7 +87,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   })
 
   const canSave = computed(() => {
-    return isEditing.value && hasChanges.value
+    if (!currentWord.value || !isEditing.value) return false
+    if (isCreating.value) return !!currentWord.value.word.trim()
+    return hasChanges.value
   })
 
   // ── Actions ──
@@ -107,9 +106,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     isEditing.value = editMode
     mode.value = reviewMode
     isOpen.value = true
-    isGhost.value = false
-    ghostContext.value = null
-    ghostAddStatus.value = 'idle'
+    isCreating.value = false
+    createContext.value = null
 
     // 重置关联词状态
     relatedWords.value = []
@@ -130,16 +128,12 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   /**
    * 课程页点词调用：先查 (user, source, word) 是否存在
    *  - 命中：走 open() 进入正常模式
-   *  - 未命中：构造 ghost Word，进入 ghost 模式，sidebar 仅显示"加入词本"
-   *
-   * @param wordText 用户点击的词（已 trim/去标点的）
-   * @param definition 课时 JSON 中 data-def 的释义（可选）
-   * @param ctx 课程上下文：source / lang / sendDefinition
+   *  - 未命中：进入创建态（openForCreate），预填单词和释义
    */
   async function openForCourse(
     wordText: string,
     definition: string | undefined,
-    ctx: CourseGhostContext
+    ctx: WordCreateContext
   ): Promise<void> {
     const cleaned = wordText.trim()
     if (!cleaned) return
@@ -156,30 +150,65 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       return
     }
 
-    currentWord.value = buildGhostWord(cleaned, ctx.source, definition)
-    originalWord.value = currentWord.value
-    isEditing.value = false
-    mode.value = ''
-    isOpen.value = true
-    isGhost.value = true
-    ghostContext.value = ctx
-    ghostAddStatus.value = 'idle'
-    relatedWords.value = []
-    isLoadingRelated.value = false
+    openForCreate(ctx, cleaned, definition)
   }
 
   /**
-   * Ghost 模式下点击"加入词本"按钮
-   * 走标准创建流程（含负荷均衡、可选释义），成功后用真实 Word 替换占位并切回正常模式
+   * 打开空白编辑器（新建单词）
+   *  - 用户从课程导航栏/选中文本点"添加"时调用
+   *  - 课程点词未命中时由 openForCourse 转发进来
    */
-  async function addGhostWord(): Promise<boolean> {
-    if (!isGhost.value || !ghostContext.value || !currentWord.value) return false
+  function openForCreate(
+    ctx: WordCreateContext,
+    initialWord = '',
+    initialDef?: string
+  ) {
+    currentWord.value = buildBlankWord(ctx.source, initialWord, initialDef)
+    originalWord.value = { ...currentWord.value }
+    isOpen.value = true
+    isEditing.value = true
+    isCreating.value = true
+    createContext.value = { ...ctx }
+    mode.value = ''
+    relatedWords.value = []
+    isLoadingRelated.value = false
+    duplicateCheckState.value = 'idle'
+  }
 
-    const ctx = ghostContext.value
-    const wordText = currentWord.value.word
-    const ghostDef = currentWord.value.definition?.definitions?.[0]
+  /**
+   * 保存新建：负荷均衡 → createWordDirect → 切到正常模式
+   * 成功后触发 onWordUpdated（列表视图可监听以刷新）
+   */
+  async function saveCreate(): Promise<boolean> {
+    if (!createContext.value || !currentWord.value) return false
 
-    ghostAddStatus.value = 'adding'
+    const ctx = createContext.value
+    const wordText = currentWord.value.word.trim()
+    if (!wordText) return false
+
+    // 重复检测：第一次点击查询 → 第二次点击确认保存（与 update 路径同步 UX）
+    if (duplicateCheckState.value === 'idle') {
+      duplicateCheckState.value = 'checking'
+      try {
+        const exists = await api.words.checkWordExistsDirect(wordText, -1, ctx.lang)
+        if (currentWord.value?.word.trim() !== wordText) {
+          duplicateCheckState.value = 'idle'
+          return false
+        }
+        duplicateCheckState.value = exists ? 'duplicate' : 'clear'
+      } catch (error) {
+        log.error('重复检测失败:', error)
+        duplicateCheckState.value = 'clear'
+      }
+      return false
+    }
+
+    if (duplicateCheckState.value === 'duplicate') return false
+
+    // 释义加粗（与 update 路径一致）
+    const strippedDef = stripBoldFromDefinition(currentWord.value.definition)
+    const boldedDef = applyBoldToDefinition(strippedDef, wordText)
+    const hasDef = !!(boldedDef?.definitions && boldedDef.definitions.length)
 
     try {
       const settings = await api.settings.getSettings()
@@ -192,57 +221,51 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
         api.words.getDailyReviewLoadsDirect(ctx.source, maxPrepDays),
       ])
 
-      // 课时 JSON 提供了 data-def → 直接写入；否则插入 '{}' 后异步爬取释义
-      // 与 VocabularyManagementPage.handleWordInserted 行为一致
-      const options = ghostDef
-        ? { definition: { definitions: [ghostDef] } }
-        : undefined
-
       const created = await api.words.createWordDirect(
         wordText,
         ctx.source,
         { dailyLimit, loadsWithToday: [todayDue, ...futureLoads] },
         ctx.lang,
-        options
+        hasDef ? { definition: boldedDef } : undefined
       )
 
-      // 切到正常模式，替换为真实 Word
+      // 切到正常模式
       currentWord.value = { ...created }
       originalWord.value = { ...created }
-      isGhost.value = false
-      ghostContext.value = null
-      ghostAddStatus.value = 'idle'
+      isEditing.value = false
+      isCreating.value = false
+      createContext.value = null
+      duplicateCheckState.value = 'idle'
+
+      onWordUpdatedCallbacks.value.forEach(cb => cb({ ...created }))
       loadRelatedWords(created)
 
-      // 无释义则后台爬取（fire-and-forget；fetchDefinitionAsync 内部会更新 currentWord）
-      if (!ghostDef) {
-        fetchDefinitionAsync(created.id, ctx.lang)
-      }
+      // 无预填释义 → 后台爬取
+      if (!hasDef) fetchDefinitionAsync(created.id, ctx.lang)
+
       return true
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
-      // 并发竞态：刚刚被别处加入了，重新拉一次切到正常模式
+      log.error('创建单词失败:', error)
+      // 并发竞态：刚好被其他入口创建 → 查询后切到正常模式
       if (msg.includes('已存在')) {
         try {
           const found = await api.words.getWordByTextAndSourceDirect(wordText, ctx.source, ctx.lang)
           if (found) {
             currentWord.value = { ...found }
             originalWord.value = { ...found }
-            isGhost.value = false
-            ghostContext.value = null
-            ghostAddStatus.value = 'idle'
+            isEditing.value = false
+            isCreating.value = false
+            createContext.value = null
+            duplicateCheckState.value = 'idle'
             loadRelatedWords(found)
             return true
           }
         } catch {
-          // 忽略，回退到 failed
+          // 忽略，回退到 duplicate
         }
+        duplicateCheckState.value = 'duplicate'
       }
-      log.error('加入词本失败:', error)
-      ghostAddStatus.value = 'failed'
-      setTimeout(() => {
-        if (ghostAddStatus.value === 'failed') ghostAddStatus.value = 'idle'
-      }, 1500)
       return false
     }
   }
@@ -283,9 +306,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     relatedWords.value = []
     isLoadingRelated.value = false
     duplicateCheckState.value = 'idle'
-    isGhost.value = false
-    ghostContext.value = null
-    ghostAddStatus.value = 'idle'
+    isCreating.value = false
+    createContext.value = null
 
     // 清空回调
     clearCallbacks()
@@ -306,9 +328,13 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   }
 
   /**
-   * 取消编辑，恢复原始数据
+   * 取消编辑，恢复原始数据；创建态下直接关闭
    */
   function cancelEdit() {
+    if (isCreating.value) {
+      close()
+      return
+    }
     if (originalWord.value) {
       currentWord.value = { ...originalWord.value }
     }
@@ -325,6 +351,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
    */
   async function save(): Promise<boolean> {
     if (!currentWord.value || !canSave.value) return false
+
+    // 创建态走独立路径
+    if (isCreating.value) return saveCreate()
 
     const wordId = currentWord.value.id
     const wordFieldChanged = !!originalWord.value && currentWord.value.word !== originalWord.value.word
@@ -738,9 +767,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     mode,
     relatedWords,
     isLoadingRelated,
-    isGhost,
-    ghostContext,
-    ghostAddStatus,
+    isCreating,
+    createContext,
 
     // Getters
     hasChanges,
@@ -750,7 +778,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     // Actions
     open,
     openForCourse,
-    addGhostWord,
+    openForCreate,
     close,
     startEdit,
     cancelEdit,

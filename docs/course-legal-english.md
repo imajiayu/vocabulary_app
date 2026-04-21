@@ -109,7 +109,7 @@
 | `p` / `h3` / `h4` | `html` 或 `text` |
 | `tip` / `note` / `error-warn` / `grammar-box` | `html` 或 `text` |
 | `ul` / `ol` | `items: string[]` |
-| `table` | `headers?: string[]`, `rows: string[][]`, `firstColWord?: boolean` |
+| `table` | `headers?: string[]`, `rows: (string \| {en, zh})[][]`, `firstColWord?: boolean` |
 | `details` | `summary?`, `html` |
 
 ### 常见违规与修复
@@ -142,7 +142,21 @@
       "heading": "2. 固定搭配",
       "blocks": [
         { "type": "p", "html": "段落，可含 <span class=\"term\">术语</span>" },
-        { "type": "table", "headers": [...], "rows": [...] },
+        {
+          "type": "table",
+          "headers": ["英文表达", "中文翻译", "例句"],
+          "firstColWord": false,
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>",
+              "责任限制",
+              {
+                "en": "The <span class=\"en-text\">limitation of liability</span> set forth in this Section shall apply to the fullest extent permitted by applicable law.",
+                "zh": "本条款规定的责任限制应在适用法律允许的最大范围内生效。"
+              }
+            ]
+          ]
+        },
         { "type": "tip", "html": "..." }
       ]
     },
@@ -453,10 +467,11 @@ vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSecti
 ## 教学原则
 
 - **语言**：用中文讲解所有语法和说明
+- **例句大小写**：所有英文例句（`<span class="en-text">...</span>`、`sentence-analysis.sentence`、`translation.source` 等）一律使用正常 Sentence case，**不得模仿合同原文的全大写排版**（如 `IN NO EVENT SHALL...`、`PROVIDER MAKES NO WARRANTIES...` 等）。合同定义的专有方仍保留首字母大写（Provider, Client, Party, Agreement 等）
 - **时长**：每课内容量对应 **45-60 分钟**学习时间
 - **内容量要求**：
   - 每课 **12-18 个核心术语**
-  - 每课 **6-8 个固定搭配**
+  - 每课 **6-8 个固定搭配**（"固定搭配"表格第 3 列「例句」**必须是双语**，格式 `{"en": "英文例句", "zh": "中文翻译"}`；英文部分用 `<span class="en-text">...</span>` 包裹便于发音/样式定位，中文是完整翻译——不得只写英文）
   - 每课 **2-3 个长难句解析**
   - 每课 **15-20 道练习题**，**至少 3 种练习类型**（选择题 + 填空题 + 翻译题）
   - 每课至少 **5 道填空题**（主动回忆比选择题记忆效果翻倍）

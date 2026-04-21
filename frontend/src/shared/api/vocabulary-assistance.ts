@@ -1,10 +1,10 @@
 /**
  * 词汇学习助手相关的API接口
- * 直接调用 DeepSeek API，不经过后端
+ * 通过 Edge Function ai-proxy 调用上游 LLM
  */
 
 import type { SourceLang } from '@/shared/types'
-import { callDeepSeek } from '@/shared/services/deepseek'
+import { callAI } from '@/shared/services/ai'
 import { AiCacheApi } from './ai-cache'
 
 // 词汇助手消息参数接口
@@ -98,7 +98,7 @@ export class VocabularyAssistanceApi {
       .replace('{word}', payload.word || '暂无')
       .replace('{definition}', payload.definition || '暂无')
 
-    const response = await callDeepSeek(systemPrompt, payload.message)
+    const response = await callAI(systemPrompt, payload.message)
 
     // Fire-and-forget 写入缓存
     if (promptType && payload.word) {

@@ -45,7 +45,7 @@ import type { TranslationGroup } from '../../types/lesson'
 import type { ExerciseState } from '../../composables/useExerciseState'
 import type { GradeResult } from '../../utils/grading'
 import { gradeWithRubric } from '../../utils/grading'
-import { callDeepSeek } from '@/shared/services/deepseek'
+import { callAI } from '@/shared/services/ai'
 import TranslationFeedback from './TranslationFeedback.vue'
 import RubricFeedback from './RubricFeedback.vue'
 import { useCourseHtml } from '../../composables/useCourseHtml'
@@ -96,12 +96,12 @@ function onInput(qi: number, val: string) {
   exerciseState.textarea[`t${qi}`] = val
 }
 
-async function callDeepSeekGrading(source: string, userText: string, reference?: string): Promise<AIFeedback> {
+async function callAIGrading(source: string, userText: string, reference?: string): Promise<AIFeedback> {
   const direction = /[\u4e00-\u9fff]/.test(source) && source.length > 2 ? '中译英' : '英译中'
   let prompt = `## 翻译练习批改\n\n**翻译方向**：${direction}\n\n**原文**：\n${source}\n\n**学生翻译**：\n${userText}\n\n`
   if (reference) prompt += `**参考译文**：\n${reference}\n\n`
 
-  const json = await callDeepSeek(GRADING_SYSTEM_PROMPT, prompt, [], {
+  const json = await callAI(GRADING_SYSTEM_PROMPT, prompt, [], {
     temperature: 0.3,
     jsonMode: true
   })
@@ -119,7 +119,7 @@ async function gradeAll() {
     if (!userText) continue
 
     try {
-      const result = await callDeepSeekGrading(q.source, userText, q.reference)
+      const result = await callAIGrading(q.source, userText, q.reference)
       feedbacks.value[qi] = result
       exerciseState.aiResults[`${qi}`] = result
     } catch {

@@ -1,9 +1,9 @@
 /**
  * 写作 AI 反馈服务
- * 直接调用 DeepSeek API，不经过后端
+ * 通过 Edge Function ai-proxy 调用上游 LLM
  */
 
-import { callDeepSeek } from './deepseek'
+import { callAI } from './ai'
 import type { ParagraphFeedback, WritingScores } from '@/shared/types/writing'
 import { logger } from '@/shared/utils/logger'
 import { parseJsonResponse } from '@/shared/utils/json'
@@ -249,7 +249,7 @@ export async function getParagraphFeedback(
     .replace('{prompt}', promptText)
     .replace('{essay}', essay)
 
-  const response = await callDeepSeek(systemPrompt, '请逐段分析并返回 JSON 格式的改进建议。')
+  const response = await callAI(systemPrompt, '请逐段分析并返回 JSON 格式的改进建议。')
 
   try {
     const parsed = parseJsonResponse<ParagraphFeedback[]>(response)
@@ -273,7 +273,7 @@ export async function optimizeOutline(
     .replace('{outline}', outline)
     .replace('{instruction}', instruction)
 
-  const response = await callDeepSeek(systemPrompt, instruction)
+  const response = await callAI(systemPrompt, instruction)
   return response.trim()
 }
 
@@ -292,7 +292,7 @@ export async function reoptimizeParagraph(
     .replace('{currentImproved}', currentImproved)
     .replace('{instruction}', instruction)
 
-  const response = await callDeepSeek(systemPrompt, instruction)
+  const response = await callAI(systemPrompt, instruction)
 
   try {
     return parseJsonResponse<ParagraphFeedback>(response)
@@ -315,7 +315,7 @@ export async function getFinalScores(
     .replace('{prompt}', promptText)
     .replace('{finalEssay}', finalEssay)
 
-  const response = await callDeepSeek(systemPrompt, '请评分并返回 JSON 格式的结果。')
+  const response = await callAI(systemPrompt, '请评分并返回 JSON 格式的结果。')
 
   try {
     const parsed = parseJsonResponse<{
@@ -352,7 +352,7 @@ export async function askWritingQuestion(
     .replace('{selectedText}', selectedText || '（无选中文本）')
     .replace('{question}', question)
 
-  const response = await callDeepSeek(systemPrompt, question)
+  const response = await callAI(systemPrompt, question)
   return response.trim()
 }
 
@@ -369,7 +369,7 @@ export async function editWritingText(
     .replace('{selectedText}', selectedText)
     .replace('{instruction}', instruction)
 
-  const response = await callDeepSeek(systemPrompt, instruction)
+  const response = await callAI(systemPrompt, instruction)
   return response.trim()
 }
 
@@ -388,7 +388,7 @@ export async function askOutlineQuestion(
     .replace('{selectedText}', selectedText || '（无选中文本）')
     .replace('{question}', question)
 
-  const response = await callDeepSeek(systemPrompt, question)
+  const response = await callAI(systemPrompt, question)
   return response.trim()
 }
 
@@ -407,7 +407,7 @@ export async function editOutlineText(
     .replace('{selectedText}', selectedText)
     .replace('{instruction}', instruction)
 
-  const response = await callDeepSeek(systemPrompt, instruction)
+  const response = await callAI(systemPrompt, instruction)
 
   try {
     return parseJsonResponse<{ reply: string; modified: string }>(response)

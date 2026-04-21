@@ -33,7 +33,7 @@
         </span>
       </nav>
 
-      <!-- 右：课时翻页（课时页）+ Source 选择器 -->
+      <!-- 右：课时翻页（课时页）+ 添加单词 + Source 选择器 -->
       <div class="course-topbar-right">
         <div v-if="lessonId && (prevLesson || nextLesson)" class="course-topbar-paging">
           <router-link
@@ -60,6 +60,19 @@
           </span>
         </div>
 
+        <button
+          v-if="lessonId"
+          class="course-add-btn"
+          :disabled="!selectedSource"
+          :title="selectedSource ? `添加单词到 ${selectedSource}` : '请先选择词本'"
+          @click="handleAddWord"
+        >
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+          </svg>
+          <span class="course-add-btn-label">添加</span>
+        </button>
+
         <CourseSourceSelector />
       </div>
     </div>
@@ -74,6 +87,8 @@ import { useRouter } from 'vue-router'
 import CourseSourceSelector from './CourseSourceSelector.vue'
 import type { CourseConfig } from '../../types/course'
 import { getLessonsByCourse } from '../../data/lessons'
+import { useCourseSource } from '../../composables/useCourseSource'
+import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
 const props = defineProps<{
   config: CourseConfig
@@ -81,6 +96,17 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+
+const { selectedSource } = useCourseSource(props.config)
+const wordEditorStore = useWordEditorStore()
+
+function handleAddWord() {
+  if (!selectedSource.value) return
+  wordEditorStore.openForCreate({
+    source: selectedSource.value,
+    lang: props.config.lang,
+  })
+}
 
 const lessonTitleRef = inject<ComputedRef<string>>('lessonTitle')
 const lessonTitle = computed(() => lessonTitleRef?.value || '')
@@ -391,6 +417,39 @@ onBeforeUnmount(() => {
   cursor: not-allowed;
 }
 
+.course-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--course-chip-border);
+  background: var(--course-surface-chip);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.course-add-btn:hover:not(:disabled) {
+  background: var(--course-accent);
+  color: var(--course-accent-on);
+  border-color: var(--course-accent);
+}
+
+.course-add-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.course-add-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
 /* ── 响应式 ── */
 @media (max-width: 960px) {
   .course-topbar-inner {
@@ -433,5 +492,8 @@ onBeforeUnmount(() => {
   .course-topbar-right { gap: 8px; }
 
   .course-topbar-paging { display: none; }
+
+  .course-add-btn { padding: 0 8px; }
+  .course-add-btn-label { display: none; }
 }
 </style>

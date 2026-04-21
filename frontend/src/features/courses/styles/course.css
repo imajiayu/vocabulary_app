@@ -60,14 +60,13 @@
 }
 
 .course-content h4 {
-  font-size: 0.92em;
+  font-size: 1em;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-text-tertiary, var(--primitive-ink-400));
+  letter-spacing: 0.01em;
+  color: var(--color-text-secondary, var(--primitive-ink-500));
   margin-top: 24px;
   margin-bottom: 8px;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif, "Lora", Georgia, serif);
 }
 
 /* ── 学习目标 ── */
@@ -98,8 +97,6 @@
 .course-objective strong {
   color: var(--course-accent-strong);
   font-weight: 600;
-  font-family: var(--font-sans);
-  letter-spacing: 0.02em;
 }
 
 /* ── 段落与列表 ── */
@@ -129,9 +126,8 @@
   padding: 12px 16px;
   text-align: left;
   font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.02em;
   border-bottom: 1px solid var(--color-border-medium);
 }
 

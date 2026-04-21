@@ -4,7 +4,7 @@
  * 全部使用 Supabase 直连，不经过后端
  * - 数据读写：Supabase Database
  * - 文件存储：Supabase Storage (writing-images bucket)
- * - AI 反馈：前端直调 DeepSeek API
+ * - AI 反馈：Edge Function ai-proxy
  */
 
 import { supabase } from '@/shared/config/supabase'

@@ -152,42 +152,66 @@
             [
               "for good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>",
               "为了充分和有价的对价",
-              "<span class=\"en-text\">The parties acknowledge receipt of good and valuable consideration.</span>"
+              {
+                "en": "<span class=\"en-text\">The parties acknowledge receipt of good and valuable consideration.</span>",
+                "zh": "各方确认已收到有效对价。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>",
               "基于...对价；作为...的交换",
-              "<span class=\"en-text\">In consideration of the Services to be provided by Provider, Client shall pay the Fees.</span>"
+              {
+                "en": "<span class=\"en-text\">In consideration of the Services to be provided by Provider, Client shall pay the Fees.</span>",
+                "zh": "作为提供方所提供服务的对价，客户方应支付相关费用。"
+              }
             ],
             [
               "the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and <span class=\"term\" data-def=\"充分性；足够性\">sufficiency</span> of which is hereby <span class=\"term\" data-def=\"确认/承认\">acknowledged</span>",
               "现已确认收到且对价充分",
-              "<span class=\"en-text\">The parties acknowledge the receipt and sufficiency of the consideration hereof.</span>"
+              {
+                "en": "<span class=\"en-text\">The parties acknowledge the receipt and sufficiency of the consideration hereof.</span>",
+                "zh": "各方确认已足额收到本协议项下的对价。"
+              }
             ],
             [
               "for and <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>",
               "作为和基于...的对价",
-              "<span class=\"en-text\">For and in consideration of the covenants herein, each party agrees to...</span>"
+              {
+                "en": "<span class=\"en-text\">For and in consideration of the covenants herein, each party agrees to...</span>",
+                "zh": "基于本协议所载的各项承诺作为对价，各方同意……"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"对价不履行；对价失败\">failure of consideration</span>",
               "对价不履行；对价条款违反",
-              "<span class=\"en-text\">Upon failure of consideration, the other party may seek damages.</span>"
+              {
+                "en": "<span class=\"en-text\">Upon failure of consideration, the other party may seek damages.</span>",
+                "zh": "若对价未能实现，另一方可请求损害赔偿。"
+              }
             ],
             [
               "without further <span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>",
               "无须进一步的对价",
-              "<span class=\"en-text\">Provider shall perform the obligations without further consideration.</span>"
+              {
+                "en": "<span class=\"en-text\">Provider shall perform the obligations without further consideration.</span>",
+                "zh": "提供方应在不收取额外对价的情况下履行相关义务。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"充分对价；足够对价\">adequate consideration</span>",
               "充分对价",
-              "<span class=\"en-text\">Both parties warrant that they have received adequate consideration.</span>"
+              {
+                "en": "<span class=\"en-text\">Both parties warrant that they have received adequate consideration.</span>",
+                "zh": "双方均保证已收到足够的对价。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span>",
               "达成的对等交换",
-              "<span class=\"en-text\">The promises constitute a bargained-for exchange of value.</span>"
+              {
+                "en": "<span class=\"en-text\">The promises constitute a bargained-for exchange of value.</span>",
+                "zh": "该等承诺构成双方就价值进行的协商交换（对价的要件）。"
+              }
             ]
           ]
         }

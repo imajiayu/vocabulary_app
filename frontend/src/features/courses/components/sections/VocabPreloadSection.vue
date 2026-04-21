@@ -318,7 +318,6 @@ watch(selectedSource, () => {
 .course-vocab-hint strong {
   color: var(--course-accent-strong);
   font-weight: 600;
-  font-family: var(--font-sans);
   font-style: normal;
   padding: 1px 6px;
   background: var(--course-accent-soft);

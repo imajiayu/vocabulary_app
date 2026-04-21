@@ -1,6 +1,6 @@
 /**
  * 口语 AI 反馈服务
- * 直接调用 DeepSeek API，不经过后端
+ * 通过 Edge Function ai-proxy 调用上游 LLM
  *
  * 根据雅思口语考试三个 Part 的不同要求，使用差异化的评估 prompt：
  * - Part 1: 日常话题简短问答
@@ -8,7 +8,7 @@
  * - Part 3: 深入抽象讨论
  */
 
-import { callDeepSeek } from './deepseek'
+import { callAI } from './ai'
 
 // ============================================================================
 // 评分维度和锚点（三个 Part 共用）
@@ -236,7 +236,7 @@ export async function getSpeakingFeedback(
     userMessage = `【问题】${questionText}\n【回答】${userAnswer}`
   }
 
-  const response = await callDeepSeek(systemPrompt, userMessage)
+  const response = await callAI(systemPrompt, userMessage)
 
   // 解析响应：第一行为分数，【点评】和【优化】标记分隔两部分
   const scoreMatch = response.match(/^([\d.]+)/)

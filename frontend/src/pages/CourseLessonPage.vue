@@ -150,6 +150,7 @@ const nextLesson = computed(() =>
 // Provide 给兄弟组件 WordEditorModal / CourseChat / CourseTopBar
 // 标题可能包含 HTML 标签（如 <span class="term">），面包屑/AI 提示词只需要纯文本
 provide('courseConfig', config.value)
+provide('courseSource', selectedSource)
 provide('lessonTitle', computed(() => {
   const raw = lesson.value?.title || ''
   if (!raw) return ''

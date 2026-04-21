@@ -154,42 +154,66 @@
             [
               "<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>",
               "陈述与保证",
-              "<p class=\"example\"><span class=\"en-text\">The representations and warranties of each Party shall survive the Closing for a period of two (2) years.</span><span class=\"translation\">— 各方的陈述与保证在交割后存续两（2）年。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The representations and warranties of each Party shall survive the Closing for a period of two (2) years.</span>",
+                "zh": "各方的陈述与保证在交割后存续两（2）年。"
+              }
             ],
             [
               "make a <span class=\"term\" data-def=\"陈述/声明\">representation</span>",
               "作出陈述",
-              "<p class=\"example\"><span class=\"en-text\">No Party has made any representation not expressly set forth herein.</span><span class=\"translation\">— 任何一方均未作出本协议未明确载明的陈述。</span></p>"
+              {
+                "en": "<span class=\"en-text\">No Party has made any representation not expressly set forth herein.</span>",
+                "zh": "任何一方均未作出本协议未明确载明的陈述。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"违反保证\">breach of warranty</span>",
               "违反保证",
-              "<p class=\"example\"><span class=\"en-text\">In the event of a breach of warranty, the non-breaching Party shall be entitled to seek damages.</span><span class=\"translation\">— 如发生违反保证的情形，非违约方有权寻求损害赔偿。</span></p>"
+              {
+                "en": "<span class=\"en-text\">In the event of a breach of warranty, the non-breaching Party shall be entitled to seek damages.</span>",
+                "zh": "如发生违反保证的情形，非违约方有权寻求损害赔偿。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"契约/承诺\">covenants</span> and <span class=\"term\" data-def=\"同意\">agrees</span>",
               "承诺并同意",
-              "<p class=\"example\"><span class=\"en-text\">The Seller covenants and agrees to maintain all required licenses during the term of this Agreement.</span><span class=\"translation\">— 卖方承诺并同意在本协议期限内维持所有所需许可证。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The Seller covenants and agrees to maintain all required licenses during the term of this Agreement.</span>",
+                "zh": "卖方承诺并同意在本协议期限内维持所有所需许可证。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"据…所知\">to the best of its knowledge</span>",
               "据其所知",
-              "<p class=\"example\"><span class=\"en-text\">To the best of its knowledge, the Company is in compliance with all applicable laws.</span><span class=\"translation\">— 据公司所知，公司遵守所有适用法律。</span></p>"
+              {
+                "en": "<span class=\"en-text\">To the best of its knowledge, the Company is in compliance with all applicable laws.</span>",
+                "zh": "据公司所知，公司遵守所有适用法律。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"在所有重大方面真实且正确\">true and correct in all material respects</span>",
               "在所有重大方面真实且正确",
-              "<p class=\"example\"><span class=\"en-text\">The representations and warranties shall be true and correct in all material respects as of the Closing Date.</span><span class=\"translation\">— 陈述与保证在交割日在所有重大方面应真实且正确。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The representations and warranties shall be true and correct in all material respects as of the Closing Date.</span>",
+                "zh": "陈述与保证在交割日在所有重大方面应真实且正确。"
+              }
             ],
             [
               "each Party <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that",
               "各方陈述并保证",
-              "<p class=\"example\"><span class=\"en-text\">Each Party represents and warrants that it has the full power and authority to enter into this Agreement.</span><span class=\"translation\">— 各方陈述并保证其拥有签订本协议的全部权力和授权。</span></p>"
+              {
+                "en": "<span class=\"en-text\">Each Party represents and warrants that it has the full power and authority to enter into this Agreement.</span>",
+                "zh": "各方陈述并保证其拥有签订本协议的全部权力和授权。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span>",
               "截至本协议签署之日",
-              "<p class=\"example\"><span class=\"en-text\">As of the date hereof, there is no pending litigation against the Company.</span><span class=\"translation\">— 截至本协议签署之日，不存在针对公司的未决诉讼。</span></p>"
+              {
+                "en": "<span class=\"en-text\">As of the date hereof, there is no pending litigation against the Company.</span>",
+                "zh": "截至本协议签署之日，不存在针对公司的未决诉讼。"
+              }
             ]
           ]
         }

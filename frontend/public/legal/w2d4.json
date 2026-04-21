@@ -12,7 +12,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题回顾：</strong><ul><li><span class=\"term\" data-def=\"完全有效/充分有效\">in full force and effect</span> = 完全有效（不可简化为\u201c有效\u201d）——今天学的条件条款中会出现此搭配，如\u201c条件满足后合同完全有效\u201d</li><li><span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span> = 被裁定为（非\u201c被认为\u201d）——注意\u201c条件被裁定为已满足\u201d的表达</li></ul>"
+          "html": "<strong>错题回顾：</strong><ul><li><span class=\"term\" data-def=\"完全有效/充分有效\">in full force and effect</span> = 完全有效（不可简化为“有效”）——今天学的条件条款中会出现此搭配，如“条件满足后合同完全有效”</li><li><span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span> = 被裁定为（非“被认为”）——注意“条件被裁定为已满足”的表达</li></ul>"
         }
       ]
     },
@@ -22,7 +22,12 @@
       "blocks": [
         {
           "type": "table",
-          "headers": ["英文", "音标", "中文", "常见搭配"],
+          "headers": [
+            "英文",
+            "音标",
+            "中文",
+            "常见搭配"
+          ],
           "rows": [
             [
               "<span class=\"term\">condition</span>",
@@ -124,7 +129,7 @@
         },
         {
           "type": "note",
-          "html": "<strong>词源记忆：precedent 与 subsequent</strong><ul><li><span class=\"term\">precedent</span>——源自拉丁语 <em>prae-</em>（在…之前）+ <em>cedere</em>（走），字面意思是\u201c走在前面的\u201d，因此 <span class=\"term\" data-def=\"先决条件\">condition precedent</span> = 必须先满足的条件</li><li><span class=\"term\">subsequent</span>——源自拉丁语 <em>sub-</em>（在…之后）+ <em>sequi</em>（跟随），字面意思是\u201c跟在后面的\u201d，因此 <span class=\"term\" data-def=\"解除条件\">condition subsequent</span> = 之后发生的事件导致解除</li></ul><p>记忆技巧：<strong>pre-</strong>cedent = <strong>前</strong>置条件，<strong>sub</strong>sequent = 后<strong>续</strong>解除。</p>"
+          "html": "<strong>词源记忆：precedent 与 subsequent</strong><ul><li><span class=\"term\">precedent</span>——源自拉丁语 <em>prae-</em>（在…之前）+ <em>cedere</em>（走），字面意思是“走在前面的”，因此 <span class=\"term\" data-def=\"先决条件\">condition precedent</span> = 必须先满足的条件</li><li><span class=\"term\">subsequent</span>——源自拉丁语 <em>sub-</em>（在…之后）+ <em>sequi</em>（跟随），字面意思是“跟在后面的”，因此 <span class=\"term\" data-def=\"解除条件\">condition subsequent</span> = 之后发生的事件导致解除</li></ul><p>记忆技巧：<strong>pre-</strong>cedent = <strong>前</strong>置条件，<strong>sub</strong>sequent = 后<strong>续</strong>解除。</p>"
         },
         {
           "type": "note",
@@ -138,47 +143,75 @@
       "blocks": [
         {
           "type": "table",
-          "headers": ["英文搭配", "中文", "例句"],
+          "headers": [
+            "英文搭配",
+            "中文",
+            "例句"
+          ],
           "rows": [
             [
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> the <span class=\"term\" data-def=\"满足（条件）/清偿\">satisfaction</span> of",
               "以满足…为前提",
-              "<p class=\"example\"><span class=\"en-text\">The Closing shall be subject to the satisfaction of the conditions set forth in Article 5.</span><span class=\"translation\">— 交割须以满足第5条所列条件为前提。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The Closing shall be subject to the satisfaction of the conditions set forth in Article 5.</span>",
+                "zh": "交割须以满足第5条所列条件为前提。"
+              }
             ],
             [
               "on the <span class=\"term\" data-def=\"条件\">condition</span> that",
               "在…条件下；以…为条件",
-              "<p class=\"example\"><span class=\"en-text\">The license is granted on the condition that the Licensee complies with all applicable laws.</span><span class=\"translation\">— 许可的授予以被许可方遵守所有适用法律为条件。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The license is granted on the condition that the Licensee complies with all applicable laws.</span>",
+                "zh": "许可的授予以被许可方遵守所有适用法律为条件。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"但是/但书\">provided, however, that</span>",
               "但是，前提是（加强但书）",
-              "<p class=\"example\"><span class=\"en-text\">The Seller shall deliver the Goods within thirty (30) days; provided, however, that the Buyer has opened the letter of credit.</span><span class=\"translation\">— 卖方应在三十（30）日内交付货物；但前提是买方已开立信用证。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The Seller shall deliver the Goods within thirty (30) days; provided, however, that the Buyer has opened the letter of credit.</span>",
+                "zh": "卖方应在三十（30）日内交付货物；但前提是买方已开立信用证。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span> the <span class=\"term\" data-def=\"发生/出现\">occurrence</span> of",
               "取决于…的发生",
-              "<p class=\"example\"><span class=\"en-text\">Payment of the bonus is contingent upon the occurrence of the Milestone Event.</span><span class=\"translation\">— 奖金的支付取决于里程碑事件的发生。</span></p>"
+              {
+                "en": "<span class=\"en-text\">Payment of the bonus is contingent upon the occurrence of the Milestone Event.</span>",
+                "zh": "奖金的支付取决于里程碑事件的发生。"
+              }
             ],
             [
               "upon <span class=\"term\" data-def=\"履行/满足\">fulfillment</span> of",
               "在满足…之后",
-              "<p class=\"example\"><span class=\"en-text\">The escrow funds shall be released upon fulfillment of all conditions precedent.</span><span class=\"translation\">— 托管资金应在所有先决条件满足后释放。</span></p>"
+              {
+                "en": "<span class=\"en-text\">The escrow funds shall be released upon fulfillment of all conditions precedent.</span>",
+                "zh": "托管资金应在所有先决条件满足后释放。"
+              }
             ],
             [
               "the <span class=\"term\" data-def=\"条件\">conditions</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> in",
               "…所列条件/…中规定的条件",
-              "<p class=\"example\"><span class=\"en-text\">Each Party shall use reasonable efforts to satisfy the conditions set forth in Section 7.1.</span><span class=\"translation\">— 各方应尽合理努力满足第7.1条中规定的条件。</span></p>"
+              {
+                "en": "<span class=\"en-text\">Each Party shall use reasonable efforts to satisfy the conditions set forth in Section 7.1.</span>",
+                "zh": "各方应尽合理努力满足第7.1条中规定的条件。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> of <span class=\"term\" data-def=\"条件\">conditions</span>",
               "放弃条件/条件豁免",
-              "<p class=\"example\"><span class=\"en-text\">Any waiver of conditions must be in writing and signed by the waiving Party.</span><span class=\"translation\">— 任何条件的放弃必须以书面形式作出，并由放弃方签署。</span></p>"
+              {
+                "en": "<span class=\"en-text\">Any waiver of conditions must be in writing and signed by the waiving Party.</span>",
+                "zh": "任何条件的放弃必须以书面形式作出，并由放弃方签署。"
+              }
             ],
             [
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> the terms and conditions",
               "根据条款和条件",
-              "<p class=\"example\"><span class=\"en-text\">Subject to the terms and conditions of this Agreement, the Company hereby grants to the Contractor a limited license.</span><span class=\"translation\">— 根据本协议的条款和条件，公司特此授予承包商一项有限许可。</span></p>"
+              {
+                "en": "<span class=\"en-text\">Subject to the terms and conditions of this Agreement, the Company hereby grants to the Contractor a limited license.</span>",
+                "zh": "根据本协议的条款和条件，公司特此授予承包商一项有限许可。"
+              }
             ]
           ]
         }
@@ -194,7 +227,7 @@
         },
         {
           "type": "grammar-box",
-          "html": "<p>这是本课最重要的辨析。中国法学教育中使用\u201c停止条件\u201d和\u201c解除条件\u201d来对应，但翻译时容易混淆。</p><table><thead><tr><th>比较项</th><th><span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件/停止条件）</th><th><span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件/后续条件）</th></tr></thead><tbody><tr><td>含义</td><td>必须先满足，权利/义务才<strong>生效</strong></td><td>事件发生后，已有的权利/义务<strong>终止</strong></td></tr><tr><td>逻辑</td><td>\u201c先满足A，才能得到B\u201d</td><td>\u201c已经有B，但如果A发生，B消灭\u201d</td></tr><tr><td>中国法对应</td><td>附停止条件（《民法典》第158条）——条件成就时法律行为生效</td><td>附解除条件（《民法典》第158条）——条件成就时法律行为失效</td></tr><tr><td>合同场景</td><td>交割前提条件（如：获得政府审批后才交割）</td><td>许可终止条件（如：若违反合规义务，许可自动撤销）</td></tr></tbody></table><p><strong>例句对比：</strong></p><p class=\"example\">1. <span class=\"en-text\">As a condition precedent to Closing, the Buyer shall have obtained all necessary regulatory approvals.</span><span class=\"translation\">— 作为交割的先决条件，买方应已取得所有必要的监管批准。</span></p><p class=\"example\">2. <span class=\"en-text\">This license shall terminate upon the occurrence of a condition subsequent, namely the Licensee's material breach of its compliance obligations.</span><span class=\"translation\">— 本许可应在解除条件发生时终止，即被许可方实质违反其合规义务。</span></p><p><strong>翻译要点：</strong><span class=\"term\" data-def=\"先决条件\">condition precedent</span> 通常译为\u201c先决条件\u201d（商务合同中最常用）或\u201c停止条件\u201d（更贴近大陆法体系），不可译为\u201c前例条件\u201d。<span class=\"term\" data-def=\"解除条件\">condition subsequent</span> 译为\u201c解除条件\u201d或\u201c后续条件\u201d。</p>"
+          "html": "<p>这是本课最重要的辨析。中国法学教育中使用“停止条件”和“解除条件”来对应，但翻译时容易混淆。</p><table><thead><tr><th>比较项</th><th><span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件/停止条件）</th><th><span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件/后续条件）</th></tr></thead><tbody><tr><td>含义</td><td>必须先满足，权利/义务才<strong>生效</strong></td><td>事件发生后，已有的权利/义务<strong>终止</strong></td></tr><tr><td>逻辑</td><td>“先满足A，才能得到B”</td><td>“已经有B，但如果A发生，B消灭”</td></tr><tr><td>中国法对应</td><td>附停止条件（《民法典》第158条）——条件成就时法律行为生效</td><td>附解除条件（《民法典》第158条）——条件成就时法律行为失效</td></tr><tr><td>合同场景</td><td>交割前提条件（如：获得政府审批后才交割）</td><td>许可终止条件（如：若违反合规义务，许可自动撤销）</td></tr></tbody></table><p><strong>例句对比：</strong></p><p class=\"example\">1. <span class=\"en-text\">As a condition precedent to Closing, the Buyer shall have obtained all necessary regulatory approvals.</span><span class=\"translation\">— 作为交割的先决条件，买方应已取得所有必要的监管批准。</span></p><p class=\"example\">2. <span class=\"en-text\">This license shall terminate upon the occurrence of a condition subsequent, namely the Licensee's material breach of its compliance obligations.</span><span class=\"translation\">— 本许可应在解除条件发生时终止，即被许可方实质违反其合规义务。</span></p><p><strong>翻译要点：</strong><span class=\"term\" data-def=\"先决条件\">condition precedent</span> 通常译为“先决条件”（商务合同中最常用）或“停止条件”（更贴近大陆法体系），不可译为“前例条件”。<span class=\"term\" data-def=\"解除条件\">condition subsequent</span> 译为“解除条件”或“后续条件”。</p>"
         },
         {
           "type": "h3",
@@ -202,7 +235,7 @@
         },
         {
           "type": "grammar-box",
-          "html": "<p><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 是合同中出现频率最高的短语之一，至少有三种核心含义，必须根据上下文判断：</p><table><thead><tr><th>含义</th><th>中文译法</th><th>识别线索</th><th>例句</th></tr></thead><tbody><tr><td><strong>\u2460</strong> 以…为条件</td><td>须经；以…为前提</td><td>后接审批、同意等动作</td><td><p class=\"example\"><span class=\"en-text\">The assignment is subject to the prior written consent of the other Party.</span><span class=\"translation\">— 转让须经另一方事先书面同意。</span></p></td></tr><tr><td><strong>\u2461</strong> 受…约束/限制</td><td>受…约束；受…限制</td><td>后接法律、法规、条款</td><td><p class=\"example\"><span class=\"en-text\">This Agreement is subject to applicable laws and regulations.</span><span class=\"translation\">— 本协议受适用法律法规的约束。</span></p></td></tr><tr><td><strong>\u2462</strong> 根据；依照</td><td>根据；按照</td><td>后接本协议的条款</td><td><p class=\"example\"><span class=\"en-text\">Subject to the terms hereof, the Seller shall deliver the Goods.</span><span class=\"translation\">— 根据本协议条款，卖方应交付货物。</span></p></td></tr></tbody></table><div class=\"error-warn\"><strong>常见翻译错误：</strong>将所有 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 一律译为\u201c受制于\u201d。这在法律翻译中不够精确。应根据语境选择\u201c须经\u201d\u201c受…约束\u201d或\u201c根据\u201d。</div>"
+          "html": "<p><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 是合同中出现频率最高的短语之一，至少有三种核心含义，必须根据上下文判断：</p><table><thead><tr><th>含义</th><th>中文译法</th><th>识别线索</th><th>例句</th></tr></thead><tbody><tr><td><strong>①</strong> 以…为条件</td><td>须经；以…为前提</td><td>后接审批、同意等动作</td><td><p class=\"example\"><span class=\"en-text\">The assignment is subject to the prior written consent of the other Party.</span><span class=\"translation\">— 转让须经另一方事先书面同意。</span></p></td></tr><tr><td><strong>②</strong> 受…约束/限制</td><td>受…约束；受…限制</td><td>后接法律、法规、条款</td><td><p class=\"example\"><span class=\"en-text\">This Agreement is subject to applicable laws and regulations.</span><span class=\"translation\">— 本协议受适用法律法规的约束。</span></p></td></tr><tr><td><strong>③</strong> 根据；依照</td><td>根据；按照</td><td>后接本协议的条款</td><td><p class=\"example\"><span class=\"en-text\">Subject to the terms hereof, the Seller shall deliver the Goods.</span><span class=\"translation\">— 根据本协议条款，卖方应交付货物。</span></p></td></tr></tbody></table><div class=\"error-warn\"><strong>常见翻译错误：</strong>将所有 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 一律译为“受制于”。这在法律翻译中不够精确。应根据语境选择“须经”“受…约束”或“根据”。</div>"
         },
         {
           "type": "h3",
@@ -210,7 +243,7 @@
         },
         {
           "type": "grammar-box",
-          "html": "<table><thead><tr><th>表达</th><th>含义</th><th>功能</th><th>语气</th></tr></thead><tbody><tr><td><span class=\"term\" data-def=\"但是/前提是\">provided that</span></td><td>但须；前提是</td><td>添加<strong>但书条件</strong>（对前文的限定或补充条件）</td><td>中性</td></tr><tr><td><span class=\"term\" data-def=\"但是/但书\">provided, however, that</span></td><td>但是，前提是</td><td>添加<strong>加强但书</strong>（强调转折或例外）</td><td>更强调转折</td></tr><tr><td>on <span class=\"term\" data-def=\"条件\">condition</span> that</td><td>在…条件下；以…为条件</td><td>添加<strong>前提条件</strong>（侧重条件本身）</td><td>较正式</td></tr></tbody></table><p><strong>用法比较：</strong></p><p class=\"example\">1. <span class=\"en-text\">The Contractor may subcontract the Work, provided that the Contractor remains fully responsible for the performance thereof.</span><span class=\"translation\">— 承包商可以将工程分包，但须由承包商对其履行承担全部责任。</span></p><p class=\"example\">2. <span class=\"en-text\">The Seller shall deliver the Goods within 60 days; provided, however, that such delivery period may be extended by mutual written agreement.</span><span class=\"translation\">— 卖方应在60日内交付货物；但是，前提是该交付期限可经双方书面协议延长。</span></p><p class=\"example\">3. <span class=\"en-text\">The license is granted on condition that the Licensee pays all royalties when due.</span><span class=\"translation\">— 许可的授予以被许可方按时支付全部许可费为条件。</span></p><p><strong>要点：</strong><span class=\"term\" data-def=\"但是/前提是\">provided that</span> 和 <span class=\"term\" data-def=\"但是/但书\">provided, however, that</span> 后面通常是对主句的<strong>限制或例外</strong>，而 on <span class=\"term\" data-def=\"条件\">condition</span> that 更侧重于列出一个<strong>前提条件</strong>。在翻译中，<span class=\"term\" data-def=\"但是/前提是\">provided that</span> 常译为\u201c但须\u201d或\u201c但前提是\u201d，<span class=\"term\" data-def=\"但是/但书\">provided, however, that</span> 通常加\u201c但是\u201d强调转折。</p>"
+          "html": "<table><thead><tr><th>表达</th><th>含义</th><th>功能</th><th>语气</th></tr></thead><tbody><tr><td><span class=\"term\" data-def=\"但是/前提是\">provided that</span></td><td>但须；前提是</td><td>添加<strong>但书条件</strong>（对前文的限定或补充条件）</td><td>中性</td></tr><tr><td><span class=\"term\" data-def=\"但是/但书\">provided, however, that</span></td><td>但是，前提是</td><td>添加<strong>加强但书</strong>（强调转折或例外）</td><td>更强调转折</td></tr><tr><td>on <span class=\"term\" data-def=\"条件\">condition</span> that</td><td>在…条件下；以…为条件</td><td>添加<strong>前提条件</strong>（侧重条件本身）</td><td>较正式</td></tr></tbody></table><p><strong>用法比较：</strong></p><p class=\"example\">1. <span class=\"en-text\">The Contractor may subcontract the Work, provided that the Contractor remains fully responsible for the performance thereof.</span><span class=\"translation\">— 承包商可以将工程分包，但须由承包商对其履行承担全部责任。</span></p><p class=\"example\">2. <span class=\"en-text\">The Seller shall deliver the Goods within 60 days; provided, however, that such delivery period may be extended by mutual written agreement.</span><span class=\"translation\">— 卖方应在60日内交付货物；但是，前提是该交付期限可经双方书面协议延长。</span></p><p class=\"example\">3. <span class=\"en-text\">The license is granted on condition that the Licensee pays all royalties when due.</span><span class=\"translation\">— 许可的授予以被许可方按时支付全部许可费为条件。</span></p><p><strong>要点：</strong><span class=\"term\" data-def=\"但是/前提是\">provided that</span> 和 <span class=\"term\" data-def=\"但是/但书\">provided, however, that</span> 后面通常是对主句的<strong>限制或例外</strong>，而 on <span class=\"term\" data-def=\"条件\">condition</span> that 更侧重于列出一个<strong>前提条件</strong>。在翻译中，<span class=\"term\" data-def=\"但是/前提是\">provided that</span> 常译为“但须”或“但前提是”，<span class=\"term\" data-def=\"但是/但书\">provided, however, that</span> 通常加“但是”强调转折。</p>"
         },
         {
           "type": "h3",
@@ -230,11 +263,11 @@
           "title": "例句 1",
           "sentence": "Subject to the satisfaction or waiver of each of the conditions precedent set forth in Sections 6.1 and 6.2, the Closing of the transactions contemplated hereby shall take place at the offices of Seller's counsel on the third Business Day following the date on which all such conditions have been satisfied or waived.",
           "structure": [
-            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the satisfaction or waiver of each of the conditions precedent <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Sections 6.1 and 6.2</em> — 介词短语作状语，\u201c以第6.1和6.2条所列各项先决条件的满足或放弃为前提\u201d",
-            "<em>the Closing of the transactions contemplated hereby</em> — 主语，\u201c本协议项下交易的交割\u201d；contemplated hereby = 本协议所预期/约定的",
-            "<em>shall take place</em> — 谓语，\u201c应当进行/举行\u201d",
-            "<em>at the offices of Seller's counsel</em> — 地点状语，\u201c在卖方律师事务所\u201d",
-            "<em>on the third <span class=\"term\" data-def=\"工作日/营业日\">Business Day</span> following the date on which all such conditions have been satisfied or waived</em> — 时间状语（嵌套定语从句），\u201c在所有该等条件被满足或放弃之日后第三个工作日\u201d"
+            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the satisfaction or waiver of each of the conditions precedent <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Sections 6.1 and 6.2</em> — 介词短语作状语，“以第6.1和6.2条所列各项先决条件的满足或放弃为前提”",
+            "<em>the Closing of the transactions contemplated hereby</em> — 主语，“本协议项下交易的交割”；contemplated hereby = 本协议所预期/约定的",
+            "<em>shall take place</em> — 谓语，“应当进行/举行”",
+            "<em>at the offices of Seller's counsel</em> — 地点状语，“在卖方律师事务所”",
+            "<em>on the third <span class=\"term\" data-def=\"工作日/营业日\">Business Day</span> following the date on which all such conditions have been satisfied or waived</em> — 时间状语（嵌套定语从句），“在所有该等条件被满足或放弃之日后第三个工作日”"
           ],
           "translation": "以第6.1和6.2条所列各项先决条件的满足或放弃为前提，本协议项下交易的交割应在所有该等条件被满足或放弃之日后第三个工作日，在卖方律师事务所进行。"
         },
@@ -242,13 +275,13 @@
           "title": "例句 2",
           "sentence": "Notwithstanding anything to the contrary contained herein, the obligation of the Purchaser to consummate the Acquisition shall be contingent upon the Purchaser having received, in form and substance satisfactory to the Purchaser, all governmental approvals and third-party consents required under applicable law; provided, however, that the Purchaser shall use commercially reasonable efforts to obtain such approvals and consents.",
           "structure": [
-            "<em>Notwithstanding anything to the contrary contained herein</em> — 让步状语，\u201c尽管本协议中有任何相反规定\u201d（固定搭配）",
-            "<em>the obligation of the Purchaser to consummate the Acquisition</em> — 主语，\u201c买方完成收购的义务\u201d",
-            "<em>shall be <span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span></em> — 谓语，\u201c应取决于/以…为条件\u201d",
-            "<em>the Purchaser having received ... all governmental approvals and third-party consents</em> — 宾语（动名词复合结构），\u201c买方已收到…所有政府批准和第三方同意\u201d",
-            "<em>in form and substance satisfactory to the Purchaser</em> — 插入语修饰 received 的内容，\u201c形式和实质上令买方满意的\u201d",
-            "<em>required under applicable law</em> — 后置定语修饰 approvals and consents，\u201c适用法律要求的\u201d",
-            "<em>provided, however, that the Purchaser shall use commercially <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> to obtain such approvals and consents</em> — 但书条款，\u201c但买方应以商业合理努力获取该等批准和同意\u201d"
+            "<em>Notwithstanding anything to the contrary contained herein</em> — 让步状语，“尽管本协议中有任何相反规定”（固定搭配）",
+            "<em>the obligation of the Purchaser to consummate the Acquisition</em> — 主语，“买方完成收购的义务”",
+            "<em>shall be <span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span></em> — 谓语，“应取决于/以…为条件”",
+            "<em>the Purchaser having received ... all governmental approvals and third-party consents</em> — 宾语（动名词复合结构），“买方已收到…所有政府批准和第三方同意”",
+            "<em>in form and substance satisfactory to the Purchaser</em> — 插入语修饰 received 的内容，“形式和实质上令买方满意的”",
+            "<em>required under applicable law</em> — 后置定语修饰 approvals and consents，“适用法律要求的”",
+            "<em>provided, however, that the Purchaser shall use commercially <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> to obtain such approvals and consents</em> — 但书条款，“但买方应以商业合理努力获取该等批准和同意”"
           ],
           "translation": "尽管本协议中有任何相反规定，买方完成收购的义务应以买方已收到适用法律要求的所有政府批准和第三方同意为条件，且该等批准和同意的形式和实质应令买方满意；但买方应以商业合理努力获取该等批准和同意。"
         },
@@ -256,12 +289,12 @@
           "title": "例句 3",
           "sentence": "In the event that any condition precedent to the obligations of either Party hereunder shall not have been fulfilled or waived on or prior to the Outside Date, then either Party may, upon written notice to the other Party, terminate this Agreement without liability, provided that the terminating Party is not then in material breach of any of its representations, warranties, or covenants contained herein.",
           "structure": [
-            "<em><span class=\"term\" data-def=\"如果/在…情况下\">In the event that</span> any <span class=\"term\" data-def=\"先决条件\">condition precedent</span> ... shall not have been fulfilled or waived</em> — 条件状语，\u201c如果任何先决条件未被满足或放弃\u201d（shall not have been = 完成时态，表示截止到某时点）",
-            "<em>to the obligations of either Party hereunder</em> — 后置定语修饰 <span class=\"term\" data-def=\"先决条件\">condition precedent</span>，\u201c本协议项下任一方义务的\u201d",
-            "<em>on or prior to the Outside Date</em> — 时间限定，\u201c在最后期限当日或之前\u201d",
-            "<em>then either Party may ... terminate this Agreement without liability</em> — 主句，\u201c则任一方可…终止本协议且不承担责任\u201d",
-            "<em>upon written notice to the other Party</em> — 方式状语，\u201c在向另一方发出书面通知后\u201d",
-            "<em><span class=\"term\" data-def=\"但是/前提是\">provided that</span> the terminating Party is not then in material breach ...</em> — 但书，\u201c但终止方当时未实质违反…\u201d"
+            "<em><span class=\"term\" data-def=\"如果/在…情况下\">In the event that</span> any <span class=\"term\" data-def=\"先决条件\">condition precedent</span> ... shall not have been fulfilled or waived</em> — 条件状语，“如果任何先决条件未被满足或放弃”（shall not have been = 完成时态，表示截止到某时点）",
+            "<em>to the obligations of either Party hereunder</em> — 后置定语修饰 <span class=\"term\" data-def=\"先决条件\">condition precedent</span>，“本协议项下任一方义务的”",
+            "<em>on or prior to the Outside Date</em> — 时间限定，“在最后期限当日或之前”",
+            "<em>then either Party may ... terminate this Agreement without liability</em> — 主句，“则任一方可…终止本协议且不承担责任”",
+            "<em>upon written notice to the other Party</em> — 方式状语，“在向另一方发出书面通知后”",
+            "<em><span class=\"term\" data-def=\"但是/前提是\">provided that</span> the terminating Party is not then in material breach ...</em> — 但书，“但终止方当时未实质违反…”"
           ],
           "translation": "如果本协议项下任一方义务的任何先决条件在最后期限当日或之前未被满足或放弃，则任一方可在向另一方发出书面通知后终止本协议且不承担责任，但终止方当时不得存在对本协议所载其任何陈述、保证或承诺的实质违反。"
         }
@@ -271,11 +304,17 @@
       "type": "grammar",
       "heading": "5. 单词记忆",
       "blocks": [
-        { "type": "h3", "html": "5a. 闪卡自测" },
-        { "type": "p", "html": "看到英文术语，想一想中文意思，然后点击展开答案：" },
+        {
+          "type": "h3",
+          "html": "5a. 闪卡自测"
+        },
+        {
+          "type": "p",
+          "html": "看到英文术语，想一想中文意思，然后点击展开答案："
+        },
         {
           "type": "grammar-box",
-          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"先决条件\">condition precedent</span></summary><div class=\"answer-content\">先决条件；停止条件——必须先满足，权利/义务才生效</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"解除条件\">condition subsequent</span></summary><div class=\"answer-content\">解除条件；后续条件——事件发生后，已有的权利/义务终止</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></summary><div class=\"answer-content\">以…为条件；受…约束；根据（多义词，需看语境）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"但是/前提是\">provided that</span></summary><div class=\"answer-content\">但须；前提是——用于添加但书条件</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span></summary><div class=\"answer-content\">取决于；以…为条件</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"先决条件/前提\">prerequisite</span></summary><div class=\"answer-content\">先决条件；前提</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">precondition</span></summary><div class=\"answer-content\">前提条件</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">satisfaction</span></summary><div class=\"answer-content\">满足（条件）；清偿</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"履行/满足\">fulfill</span></summary><div class=\"answer-content\">履行；满足——侧重主动完成</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"放弃（权利）\">waive</span></summary><div class=\"answer-content\">放弃（权利/条件）——名词形式 waiver</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">conditional</span></summary><div class=\"answer-content\">有条件的；附条件的</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">unconditional</span></summary><div class=\"answer-content\">无条件的</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"如果/在…情况下\">in the event that</span></summary><div class=\"answer-content\">如果；万一；在…情况下</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"在…发生时\">upon the occurrence of</span></summary><div class=\"answer-content\">在…发生时</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"完全有效/充分有效\">in full force and effect</span></summary><div class=\"answer-content\">完全有效（错题复习！不可简化为\u201c有效\u201d）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></summary><div class=\"answer-content\">被裁定为（错题复习！非\u201c被认为\u201d）</div></details></div></div>"
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"先决条件\">condition precedent</span></summary><div class=\"answer-content\">先决条件；停止条件——必须先满足，权利/义务才生效</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"解除条件\">condition subsequent</span></summary><div class=\"answer-content\">解除条件；后续条件——事件发生后，已有的权利/义务终止</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></summary><div class=\"answer-content\">以…为条件；受…约束；根据（多义词，需看语境）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"但是/前提是\">provided that</span></summary><div class=\"answer-content\">但须；前提是——用于添加但书条件</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span></summary><div class=\"answer-content\">取决于；以…为条件</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"先决条件/前提\">prerequisite</span></summary><div class=\"answer-content\">先决条件；前提</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">precondition</span></summary><div class=\"answer-content\">前提条件</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">satisfaction</span></summary><div class=\"answer-content\">满足（条件）；清偿</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"履行/满足\">fulfill</span></summary><div class=\"answer-content\">履行；满足——侧重主动完成</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"放弃（权利）\">waive</span></summary><div class=\"answer-content\">放弃（权利/条件）——名词形式 waiver</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">conditional</span></summary><div class=\"answer-content\">有条件的；附条件的</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">unconditional</span></summary><div class=\"answer-content\">无条件的</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"如果/在…情况下\">in the event that</span></summary><div class=\"answer-content\">如果；万一；在…情况下</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"在…发生时\">upon the occurrence of</span></summary><div class=\"answer-content\">在…发生时</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"完全有效/充分有效\">in full force and effect</span></summary><div class=\"answer-content\">完全有效（错题复习！不可简化为“有效”）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></summary><div class=\"answer-content\">被裁定为（错题复习！非“被认为”）</div></details></div></div>"
         }
       ]
     },
@@ -298,7 +337,11 @@
             },
             {
               "prompt": "2. 放弃（权利或条件）",
-              "options": ["fulfill", "waive", "satisfy"],
+              "options": [
+                "fulfill",
+                "waive",
+                "satisfy"
+              ],
               "answer": "waive",
               "explanation": "waive = 放弃（权利或条件），名词形式为 waiver"
             },
@@ -376,7 +419,11 @@
             },
             {
               "prompt": "4. The Seller may, in its sole discretion, ____ any or all of the conditions <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Section 5.2.",
-              "options": ["fulfill", "satisfy", "waive"],
+              "options": [
+                "fulfill",
+                "satisfy",
+                "waive"
+              ],
               "answer": "waive",
               "explanation": "waive a condition = 放弃条件，指一方主动不要求对方满足某项条件"
             },
@@ -388,7 +435,7 @@
                 "<span class=\"term\" data-def=\"但是/前提是\">Provided that</span>"
               ],
               "answer": "In the event that",
-              "explanation": "In the event that = 如果/万一，引导条件从句，是法律文书中表达假设条件的正式用语。Subject to 表示\u201c以…为条件/受…约束\u201d，后接名词而非完整从句；Provided that 表示\u201c但是/前提是\u201d，用于附加限制条件，语义偏向\u201c只要…就…\u201d而非单纯假设。"
+              "explanation": "In the event that = 如果/万一，引导条件从句，是法律文书中表达假设条件的正式用语。Subject to 表示“以…为条件/受…约束”，后接名词而非完整从句；Provided that 表示“但是/前提是”，用于附加限制条件，语义偏向“只要…就…”而非单纯假设。"
             }
           ]
         },
@@ -408,13 +455,21 @@
             },
             {
               "prompt": "2. The Closing shall occur upon ____ of all conditions precedent.（所有先决条件的满足）",
-              "options": ["satisfaction", "fulfillment", "completion"],
+              "options": [
+                "satisfaction",
+                "fulfillment",
+                "completion"
+              ],
               "answer": "satisfaction",
               "explanation": "satisfaction of conditions = 条件的满足/成就，名词形式"
             },
             {
               "prompt": "3. The Guarantor hereby provides an ____ guarantee of the Borrower's obligations.（无条件担保）",
-              "options": ["conditional", "unconditional", "contingent"],
+              "options": [
+                "conditional",
+                "unconditional",
+                "contingent"
+              ],
               "answer": "unconditional",
               "explanation": "unconditional guarantee = 无条件担保，不附带任何前提"
             },
@@ -455,7 +510,7 @@
               "explanation": "condition precedent = 先决条件，必须先满足条件，义务/权利才能生效"
             },
             {
-              "prompt": "2. \u201cThe assignment is <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> the prior written consent of the other Party.\u201d 中 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 应译为？",
+              "prompt": "2. “The assignment is <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> the prior written consent of the other Party.” 中 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 应译为？",
               "options": [
                 "须经另一方事先书面同意",
                 "受制于另一方事先书面同意",
@@ -465,10 +520,14 @@
               "explanation": "subject to + consent = 须经…同意，表示以获得同意为条件"
             },
             {
-              "prompt": "3. \u201cIf any provision of this Agreement is <span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span> invalid...\u201d 中 <span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span> 应译为？",
-              "options": ["被认为是", "被裁定为", "被持有为"],
+              "prompt": "3. “If any provision of this Agreement is <span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span> invalid...” 中 <span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span> 应译为？",
+              "options": [
+                "被认为是",
+                "被裁定为",
+                "被持有为"
+              ],
               "answer": "被裁定为",
-              "explanation": "held to be = 被裁定为/被判定为（法律语境 hold = 裁定，非日常的\u201c认为\u201d）（错题复习）"
+              "explanation": "held to be = 被裁定为/被判定为（法律语境 hold = 裁定，非日常的“认为”）（错题复习）"
             },
             {
               "prompt": "4. 在合同中，<span class=\"term\" data-def=\"但是/前提是\">provided that</span> 的主要功能是什么？",
@@ -501,30 +560,155 @@
         {
           "style": "translation",
           "title": "翻译练习A：英译中",
-          "instruction": "将以下合同条款翻译为中文，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "instruction": "将以下合同条款翻译为中文，完成后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
               "source": "Subject to the satisfaction of all conditions precedent set forth in Article 6, the Seller shall transfer and deliver to the Buyer all of the Shares, free and clear of any liens or encumbrances.",
               "reference": "以第6条所列全部先决条件的满足为前提，卖方应向买方转让并交付全部股份，且该等股份不附带任何留置权或产权负担。",
               "rubric": [
-                {"en": "Subject to", "ideal": "以…为前提/须经", "accept": ["在…条件下", "根据"], "wrong": ["受制于"], "note": "此处 subject to 表示\u201c以…为条件/前提\u201d"},
-                {"en": "satisfaction of all conditions precedent", "ideal": "全部先决条件的满足", "accept": ["所有先决条件的成就", "所有前提条件得到满足"], "wrong": ["满意"], "note": "satisfaction 在法律语境指条件的\u201c满足/成就\u201d，非\u201c满意\u201d"},
-                {"en": "set forth in", "ideal": "所列/中规定的", "accept": ["载明的", "列明的"], "wrong": ["提出的"], "note": "set forth in = 在…中规定/列明"},
-                {"en": "transfer and deliver", "ideal": "转让并交付", "accept": ["转让和交付"], "wrong": ["转移"], "note": "transfer = 转让（法律术语），deliver = 交付"},
-                {"en": "free and clear of any liens or encumbrances", "ideal": "不附带任何留置权或产权负担", "accept": ["无任何留置权或担保负担", "不存在任何留置权或负担"], "wrong": ["自由和清除"], "note": "free and clear of = 不附带/不存在（法律固定搭配），liens = 留置权，encumbrances = 产权负担"}
+                {
+                  "en": "Subject to",
+                  "ideal": "以…为前提/须经",
+                  "accept": [
+                    "在…条件下",
+                    "根据"
+                  ],
+                  "wrong": [
+                    "受制于"
+                  ],
+                  "note": "此处 subject to 表示“以…为条件/前提”"
+                },
+                {
+                  "en": "satisfaction of all conditions precedent",
+                  "ideal": "全部先决条件的满足",
+                  "accept": [
+                    "所有先决条件的成就",
+                    "所有前提条件得到满足"
+                  ],
+                  "wrong": [
+                    "满意"
+                  ],
+                  "note": "satisfaction 在法律语境指条件的“满足/成就”，非“满意”"
+                },
+                {
+                  "en": "set forth in",
+                  "ideal": "所列/中规定的",
+                  "accept": [
+                    "载明的",
+                    "列明的"
+                  ],
+                  "wrong": [
+                    "提出的"
+                  ],
+                  "note": "set forth in = 在…中规定/列明"
+                },
+                {
+                  "en": "transfer and deliver",
+                  "ideal": "转让并交付",
+                  "accept": [
+                    "转让和交付"
+                  ],
+                  "wrong": [
+                    "转移"
+                  ],
+                  "note": "transfer = 转让（法律术语），deliver = 交付"
+                },
+                {
+                  "en": "free and clear of any liens or encumbrances",
+                  "ideal": "不附带任何留置权或产权负担",
+                  "accept": [
+                    "无任何留置权或担保负担",
+                    "不存在任何留置权或负担"
+                  ],
+                  "wrong": [
+                    "自由和清除"
+                  ],
+                  "note": "free and clear of = 不附带/不存在（法律固定搭配），liens = 留置权，encumbrances = 产权负担"
+                }
               ]
             },
             {
               "source": "The obligation of each Party to consummate the transactions contemplated hereby is contingent upon the other Party having duly performed all of its obligations hereunder required to be performed on or prior to the Closing Date; provided, however, that this condition may be waived in writing by the Party for whose benefit it was established.",
               "reference": "各方完成本协议项下交易的义务取决于另一方在交割日当日或之前已适当履行其在本协议项下应履行的全部义务；但该条件可由为其利益而设定的一方以书面形式放弃。",
               "rubric": [
-                {"en": "consummate the transactions contemplated hereby", "ideal": "完成本协议项下（预期的）交易", "accept": ["完成本协议所约定的交易"], "wrong": ["完善交易", "消费交易"], "note": "consummate = 完成/达成（正式用语），contemplated hereby = 本协议所预期/约定的"},
-                {"en": "is contingent upon", "ideal": "取决于/以…为条件", "accept": ["以…为前提"], "wrong": ["偶然的"], "note": "contingent upon = 取决于，表示条件依赖关系"},
-                {"en": "having duly performed", "ideal": "已适当履行", "accept": ["已正当地履行", "已按规定履行"], "wrong": ["已经表演"], "note": "duly = 适当地/正当地，performed = 履行（非\u201c表演\u201d）"},
-                {"en": "on or prior to the Closing Date", "ideal": "在交割日当日或之前", "accept": ["不晚于交割日"], "wrong": ["在关闭日期"], "note": "Closing Date = 交割日（非\u201c关闭日期\u201d）"},
-                {"en": "provided, however, that", "ideal": "但", "accept": ["但是，前提是", "然而"], "wrong": ["提供"], "note": "provided, however, that = 加强但书，表示转折/例外"},
-                {"en": "waived in writing", "ideal": "以书面形式放弃", "accept": ["书面放弃"], "wrong": ["书面挥手"], "note": "waive = 放弃（权利/条件），in writing = 以书面形式"},
-                {"en": "for whose benefit it was established", "ideal": "为其利益而设定的", "accept": ["为其利益而设立的"], "wrong": [], "note": "定语从句修饰 the Party，指条件是为哪一方的利益设定的"}
+                {
+                  "en": "consummate the transactions contemplated hereby",
+                  "ideal": "完成本协议项下（预期的）交易",
+                  "accept": [
+                    "完成本协议所约定的交易"
+                  ],
+                  "wrong": [
+                    "完善交易",
+                    "消费交易"
+                  ],
+                  "note": "consummate = 完成/达成（正式用语），contemplated hereby = 本协议所预期/约定的"
+                },
+                {
+                  "en": "is contingent upon",
+                  "ideal": "取决于/以…为条件",
+                  "accept": [
+                    "以…为前提"
+                  ],
+                  "wrong": [
+                    "偶然的"
+                  ],
+                  "note": "contingent upon = 取决于，表示条件依赖关系"
+                },
+                {
+                  "en": "having duly performed",
+                  "ideal": "已适当履行",
+                  "accept": [
+                    "已正当地履行",
+                    "已按规定履行"
+                  ],
+                  "wrong": [
+                    "已经表演"
+                  ],
+                  "note": "duly = 适当地/正当地，performed = 履行（非“表演”）"
+                },
+                {
+                  "en": "on or prior to the Closing Date",
+                  "ideal": "在交割日当日或之前",
+                  "accept": [
+                    "不晚于交割日"
+                  ],
+                  "wrong": [
+                    "在关闭日期"
+                  ],
+                  "note": "Closing Date = 交割日（非“关闭日期”）"
+                },
+                {
+                  "en": "provided, however, that",
+                  "ideal": "但",
+                  "accept": [
+                    "但是，前提是",
+                    "然而"
+                  ],
+                  "wrong": [
+                    "提供"
+                  ],
+                  "note": "provided, however, that = 加强但书，表示转折/例外"
+                },
+                {
+                  "en": "waived in writing",
+                  "ideal": "以书面形式放弃",
+                  "accept": [
+                    "书面放弃"
+                  ],
+                  "wrong": [
+                    "书面挥手"
+                  ],
+                  "note": "waive = 放弃（权利/条件），in writing = 以书面形式"
+                },
+                {
+                  "en": "for whose benefit it was established",
+                  "ideal": "为其利益而设定的",
+                  "accept": [
+                    "为其利益而设立的"
+                  ],
+                  "wrong": [],
+                  "note": "定语从句修饰 the Party，指条件是为哪一方的利益设定的"
+                }
               ]
             }
           ]
@@ -532,18 +716,79 @@
         {
           "style": "translation",
           "title": "翻译练习B：中译英",
-          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
               "source": "以获得所有必要的政府批准和第三方同意为前提，本协议项下的交割应在全部先决条件满足或放弃后五（5）个工作日内完成。",
               "reference": "Subject to the receipt of all necessary governmental approvals and third-party consents, the Closing hereunder shall be completed within five (5) Business Days following the satisfaction or waiver of all conditions precedent.",
               "rubric": [
-                {"en": "Subject to", "ideal": "Subject to", "accept": ["Contingent upon", "On the condition that"], "wrong": ["According to"], "note": "\u201c以…为前提\u201d应译为 Subject to 或 Contingent upon"},
-                {"en": "governmental approvals and third-party consents", "ideal": "governmental approvals and third-party consents", "accept": ["government approvals and third party consents"], "wrong": ["government agreements"], "note": "政府批准 = governmental approvals，第三方同意 = third-party consents"},
-                {"en": "the Closing hereunder", "ideal": "the Closing hereunder", "accept": ["the Closing under this Agreement"], "wrong": ["the closing"], "note": "交割 = Closing（大写），hereunder = 本协议项下"},
-                {"en": "within five (5) Business Days", "ideal": "within five (5) Business Days", "accept": ["within 5 Business Days"], "wrong": ["in five days"], "note": "工作日 = Business Days（大写），数字用文字+括号数字"},
-                {"en": "satisfaction or waiver", "ideal": "satisfaction or waiver", "accept": ["fulfillment or waiver"], "wrong": ["completion"], "note": "满足 = satisfaction/fulfillment，放弃 = waiver"},
-                {"en": "conditions precedent", "ideal": "conditions precedent", "accept": ["preconditions"], "wrong": ["previous conditions"], "note": "先决条件 = conditions precedent（注意复数形式词序）"}
+                {
+                  "en": "Subject to",
+                  "ideal": "Subject to",
+                  "accept": [
+                    "Contingent upon",
+                    "On the condition that"
+                  ],
+                  "wrong": [
+                    "According to"
+                  ],
+                  "note": "“以…为前提”应译为 Subject to 或 Contingent upon"
+                },
+                {
+                  "en": "governmental approvals and third-party consents",
+                  "ideal": "governmental approvals and third-party consents",
+                  "accept": [
+                    "government approvals and third party consents"
+                  ],
+                  "wrong": [
+                    "government agreements"
+                  ],
+                  "note": "政府批准 = governmental approvals，第三方同意 = third-party consents"
+                },
+                {
+                  "en": "the Closing hereunder",
+                  "ideal": "the Closing hereunder",
+                  "accept": [
+                    "the Closing under this Agreement"
+                  ],
+                  "wrong": [
+                    "the closing"
+                  ],
+                  "note": "交割 = Closing（大写），hereunder = 本协议项下"
+                },
+                {
+                  "en": "within five (5) Business Days",
+                  "ideal": "within five (5) Business Days",
+                  "accept": [
+                    "within 5 Business Days"
+                  ],
+                  "wrong": [
+                    "in five days"
+                  ],
+                  "note": "工作日 = Business Days（大写），数字用文字+括号数字"
+                },
+                {
+                  "en": "satisfaction or waiver",
+                  "ideal": "satisfaction or waiver",
+                  "accept": [
+                    "fulfillment or waiver"
+                  ],
+                  "wrong": [
+                    "completion"
+                  ],
+                  "note": "满足 = satisfaction/fulfillment，放弃 = waiver"
+                },
+                {
+                  "en": "conditions precedent",
+                  "ideal": "conditions precedent",
+                  "accept": [
+                    "preconditions"
+                  ],
+                  "wrong": [
+                    "previous conditions"
+                  ],
+                  "note": "先决条件 = conditions precedent（注意复数形式词序）"
+                }
               ]
             }
           ]
@@ -553,7 +798,7 @@
     {
       "type": "summary",
       "heading": "7. 今日小结",
-      "html": "<p><strong>核心收获：</strong></p><ol><li><strong><span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）vs. <span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件）</strong>：前者是\u201c先满足条件，权利/义务才生效\u201d；后者是\u201c事件发生后，已有的权利/义务终止\u201d。对应中国法的停止条件与解除条件。</li><li><strong><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 的三重含义</strong>：\u2460以…为条件（须经）\u2461受…约束/限制 \u2462根据/依照。翻译时切忌一律译为\u201c受制于\u201d。</li><li><strong><span class=\"term\" data-def=\"但是/前提是\">provided that</span> vs. <span class=\"term\" data-def=\"但是/但书\">provided, however, that</span></strong>：都是但书条款，后者转折语气更强。功能是对主句添加限制或例外条件。</li><li><strong><span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span></strong> = 取决于/以…为条件，常用于表达义务对某条件的依赖关系。</li><li><strong><span class=\"term\">satisfy</span> vs. <span class=\"term\" data-def=\"履行/满足\">fulfill</span></strong>：satisfy 侧重条件被达到（结果），fulfill 侧重主动履行（过程）。条件条款中 satisfy conditions 更常见。</li><li><strong><span class=\"term\" data-def=\"放弃（权利）\">waive</span>（放弃条件）</strong>：一方可主动放弃对自己有利的条件，通常需书面形式。名词 <span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>。</li></ol><p><strong>错题回顾：</strong><span class=\"term\" data-def=\"完全有效/充分有效\">in full force and effect</span>（完全有效）和 <span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span>（被裁定为）已在练习中安排复习。</p><p><strong>预告：</strong>下节课将学习豁免与限制（Waiver, <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>），深入理解 waiver 条款的完整机制和责任限制条款的起草方式。</p>"
+      "html": "<p><strong>核心收获：</strong></p><ol><li><strong><span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）vs. <span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件）</strong>：前者是“先满足条件，权利/义务才生效”；后者是“事件发生后，已有的权利/义务终止”。对应中国法的停止条件与解除条件。</li><li><strong><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 的三重含义</strong>：①以…为条件（须经）②受…约束/限制 ③根据/依照。翻译时切忌一律译为“受制于”。</li><li><strong><span class=\"term\" data-def=\"但是/前提是\">provided that</span> vs. <span class=\"term\" data-def=\"但是/但书\">provided, however, that</span></strong>：都是但书条款，后者转折语气更强。功能是对主句添加限制或例外条件。</li><li><strong><span class=\"term\" data-def=\"取决于/以…为条件\">contingent upon</span></strong> = 取决于/以…为条件，常用于表达义务对某条件的依赖关系。</li><li><strong><span class=\"term\">satisfy</span> vs. <span class=\"term\" data-def=\"履行/满足\">fulfill</span></strong>：satisfy 侧重条件被达到（结果），fulfill 侧重主动履行（过程）。条件条款中 satisfy conditions 更常见。</li><li><strong><span class=\"term\" data-def=\"放弃（权利）\">waive</span>（放弃条件）</strong>：一方可主动放弃对自己有利的条件，通常需书面形式。名词 <span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>。</li></ol><p><strong>错题回顾：</strong><span class=\"term\" data-def=\"完全有效/充分有效\">in full force and effect</span>（完全有效）和 <span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span>（被裁定为）已在练习中安排复习。</p><p><strong>预告：</strong>下节课将学习豁免与限制（Waiver, <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>），深入理解 waiver 条款的完整机制和责任限制条款的起草方式。</p>"
     }
   ]
 }
