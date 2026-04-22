@@ -224,6 +224,12 @@ export interface UserSettings {
   management: ManagementSettings;
   hotkeys: HotkeySettings;
   sources: SourcesSettings;
+  /** 按 caller 的 AI 模型覆盖（键为 AiCaller，值为 model 字符串；缺省走 AI_CALLERS[caller].defaultModel） */
+  aiModels?: Record<string, string>;
+  /** STT 模型（全局单一，空值继承 AI_STT_DEFAULT） */
+  aiSttModel?: string;
+  /** TTS 模型（全局单一，空值继承 AI_TTS_DEFAULT） */
+  aiTtsModel?: string;
 }
 
 // ========== 学习进度相关类型 ==========

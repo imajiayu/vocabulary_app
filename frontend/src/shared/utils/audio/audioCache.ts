@@ -7,7 +7,7 @@ export const MAX_TTS_CACHE_SIZE = 30
 // 预加载缓存：存储已预加载的 Audio 对象
 export const preloadCache = new Map<string, HTMLAudioElement>()
 
-// Google TTS URL 缓存（避免重复 API 调用 / HEAD 请求）
+// AI TTS URL 缓存（避免重复 API 调用 / HEAD 请求）
 export const ttsCache = new Map<string, string>()
 
 /**

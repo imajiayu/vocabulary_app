@@ -28,12 +28,14 @@ def create_app():
     """应用工厂函数"""
     app = Flask(__name__)
 
-    # 请求体大小限制（1MB）
-    app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+    # 请求体大小限制（10MB，AI 代理需要接收音频 base64 / 长文本 prompt）
+    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 
     # 注册蓝图
+    from backend.api.ai import ai_bp
     from backend.api.generation import generation_bp
     from backend.api.tts_cache import tts_cache_bp
+    app.register_blueprint(ai_bp)
     app.register_blueprint(generation_bp)
     app.register_blueprint(tts_cache_bp)
 

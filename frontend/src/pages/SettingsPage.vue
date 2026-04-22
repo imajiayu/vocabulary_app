@@ -48,9 +48,16 @@
       <div class="settings-content">
 
       <!-- ═══════════════════════════════════════════════════════════════
+           AI 模型 Tab 内容（按 caller 指定 model）
+           ═══════════════════════════════════════════════════════════════ -->
+      <template v-if="activeTab === '__ai_models__'">
+        <SettingsAiModelsTab />
+      </template>
+
+      <!-- ═══════════════════════════════════════════════════════════════
            Source Tab 内容（按源独立的设置）
            ═══════════════════════════════════════════════════════════════ -->
-      <template v-if="activeTab !== '__global__'">
+      <template v-else-if="activeTab !== '__global__'">
 
         <!-- 学习设置 -->
         <section
@@ -677,6 +684,8 @@ import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import WheelSelector from '@/shared/components/controls/WheelSelector.vue'
 import IOSSwitch from '@/shared/components/controls/IOSSwitch.vue'
 import KeySelector from '@/shared/components/controls/KeySelector.vue'
+import SettingsAiModelsTab from './settings/SettingsAiModelsTab.vue'
+import { AI_CALLER_GROUPS, callersByGroup } from '@/shared/constants/ai-callers'
 import { useSettings } from '@/shared/composables/useSettings'
 import { api } from '@/shared/api'
 import type { GenerationTaskStatus } from '@/shared/api/relations'
@@ -762,7 +771,25 @@ const sectionKeywords: Record<string, string[]> = {
 }
 
 // 导航数据 - 根据当前 Tab 动态切换
+const AI_MODELS_SECTION_ICON: Record<string, IconName> = {
+  vocabulary: 'book-open',
+  course: 'graduation-cap',
+  speaking: 'mic',
+  writing: 'pen',
+}
 const sections = computed<{ id: string; title: string; icon: IconName; itemCount: number }[]>(() => {
+  // AI 模型 tab：词汇 / 课程 / 口语 / 写作 / 语音
+  if (activeTab.value === '__ai_models__') {
+    const groups: { id: string; title: string; icon: IconName; itemCount: number }[] =
+      AI_CALLER_GROUPS.map(g => ({
+        id: g.key,
+        title: g.label,
+        icon: AI_MODELS_SECTION_ICON[g.key] ?? 'sliders',
+        itemCount: callersByGroup(g.key).length,
+      }))
+    groups.push({ id: 'voice', title: '语音', icon: 'volume', itemCount: 2 })
+    return groups
+  }
   if (activeTab.value === '__global__') {
     const result: { id: string; title: string; icon: IconName; itemCount: number }[] = [
       { id: 'audio', title: '自动播放', icon: 'music-note', itemCount: 2 },
@@ -870,7 +897,11 @@ const tabs = computed(() => {
     label: name,
     langTag: localSources.value[name] === 'uk' ? 'УКР' : 'EN',
   }))
-  return [...sourceTabs, { key: '__global__', label: '通用', langTag: '' }]
+  return [
+    ...sourceTabs,
+    { key: '__ai_models__', label: 'AI 模型', langTag: '' },
+    { key: '__global__', label: '通用', langTag: '' },
+  ]
 })
 
 // 当前 Tab 是否支持口音切换

@@ -46,6 +46,7 @@ import type { ExerciseState } from '../../composables/useExerciseState'
 import type { GradeResult } from '../../utils/grading'
 import { gradeWithRubric } from '../../utils/grading'
 import { callAI } from '@/shared/services/ai'
+import { TRANSLATION_GRADING_PROMPT } from '@/shared/prompts/translation'
 import TranslationFeedback from './TranslationFeedback.vue'
 import RubricFeedback from './RubricFeedback.vue'
 import { useCourseHtml } from '../../composables/useCourseHtml'
@@ -85,12 +86,6 @@ export interface AIFeedbackItem {
   note?: string
 }
 
-const GRADING_SYSTEM_PROMPT = [
-  '你是一位资深法律翻译审校专家，专门批改商务合同英语翻译练习。',
-  '严格按以下 JSON 格式输出：',
-  '{"score":75,"summary":"一句话总评","items":[{"term":"术语","status":"perfect|acceptable|error|missing","userTranslation":"","idealTranslation":"","note":""}],"overallComments":"总评"}'
-].join('\n')
-
 function onInput(qi: number, val: string) {
   inputs.value[qi] = val
   exerciseState.textarea[`t${qi}`] = val
@@ -101,9 +96,10 @@ async function callAIGrading(source: string, userText: string, reference?: strin
   let prompt = `## 翻译练习批改\n\n**翻译方向**：${direction}\n\n**原文**：\n${source}\n\n**学生翻译**：\n${userText}\n\n`
   if (reference) prompt += `**参考译文**：\n${reference}\n\n`
 
-  const json = await callAI(GRADING_SYSTEM_PROMPT, prompt, [], {
+  const json = await callAI(TRANSLATION_GRADING_PROMPT, prompt, [], {
     temperature: 0.3,
-    jsonMode: true
+    jsonMode: true,
+    caller: 'translation_grading',
   })
   return JSON.parse(json)
 }

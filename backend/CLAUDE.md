@@ -1,6 +1,6 @@
 # backend
 
-Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 管理）。
+Flask 后端 — 关系生成 + TTS 缓存 + 外部 AI 代理（LLM/STT/TTS），部署于阿里云（systemd 管理）。
 
 ## 认证
 
@@ -15,7 +15,8 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 
 **后端负责：**
 - 关系生成（5种生成器，线程化执行 + SSE 进度推送，多用户隔离）
-- TTS 音频缓存（保存/删除 Google TTS 音频到文件系统，nginx 静态服务）
+- TTS 音频缓存（保存/删除 AI TTS 音频到文件系统，nginx 静态服务）
+- 外部 AI 代理（LLM chat/completions、Speech-to-Text、Text-to-Speech 统一入口，API key 只留在后端）
 
 **后端不处理（已迁移到前端）：**
 - 单词 CRUD（前端直连 Supabase）
@@ -34,7 +35,8 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 
 | 文件/目录 | 职责 |
 |------|------|
-| `app.py` | Flask 入口（CORS 来源限制、请求体大小限制、健康检查含活跃任务数） |
+| `app.py` | Flask 入口（CORS 来源限制、请求体大小限制 10MB、健康检查含活跃任务数） |
+| `api/ai.py` | 外部 AI 代理（LLM chat 同步+流式 / STT / TTS），上游 API key 只在本端 |
 | `api/generation.py` | 关系生成/停止/进度 API（SSE 空闲 5min 超时断开） |
 | `api/tts_cache.py` | TTS 音频缓存保存/删除（base64 → 文件系统，路径遍历防护） |
 | `generators/` | 5种关系生成器（synonym, antonym, root, confused, topic） |
@@ -59,6 +61,9 @@ Flask 后端 — 关系专用服务 + TTS 缓存，部署于阿里云（systemd 
 | `/api/health` | GET | 健康检查 |
 | `/api/tts/cache` | POST | 保存 TTS 音频缓存 |
 | `/api/tts/cache` | DELETE | 删除 TTS 音频缓存 |
+| `/api/ai/chat` | POST | LLM chat 代理（网关 /chat/completions，支持流式）；用户可按 caller 在前端覆盖 model |
+| `/api/ai/transcribe` | POST | STT 代理（网关 /audio/transcriptions，multipart file 上传） |
+| `/api/ai/synthesize` | POST | TTS 代理（网关 /audio/speech，JSON 输入→二进制音频 base64 返回） |
 
 ## 环境变量
 
@@ -69,6 +74,14 @@ SUPABASE_JWT_SECRET=...          # HS256 回退验证密钥
 TTS_CACHE_DIR=/opt/vocabulary_app/tts-cache  # TTS 音频缓存目录
 CORS_ORIGINS=*                   # 允许的来源（逗号分隔，默认 *）
 FLASK_DEBUG=0                    # 调试模式（仅开发环境设为 1）
+
+# --- 外部 AI 代理（OpenAI 兼容网关，一把 key 覆盖 LLM + STT + TTS）---
+AI_BASE_URL=https://llm-proxy.tapsvc.com/v1
+AI_API_KEY=sk-...
+AI_DEFAULT_MODEL=gemini-3-flash-preview        # LLM 兜底；用户可在 Settings → AI 模型 按 caller 覆盖
+AI_DEFAULT_STT_MODEL=gpt-4o-mini-transcribe
+AI_DEFAULT_TTS_MODEL=elevenlabs/eleven_multilingual_v2
+AI_DEFAULT_TTS_VOICE=alloy
 ```
 
 `DATABASE_URL` 形如 `postgresql://postgres.{project_ref}:{password}@aws-0-us-west-2.pooler.supabase.com:6543/postgres`，从 Supabase Dashboard → Project Settings → Database → Connection string (Transaction pooler) 复制，密码即数据库密码。

@@ -1,5 +1,8 @@
-// 音频源：URL 构建 + Google TTS API + 服务器缓存探测
+// 音频源：URL 构建 + AI TTS（经 Flask /api/ai/synthesize）+ 服务器缓存探测
 
+import { API_BASE_URL } from '@/shared/config/env'
+import { supabase } from '@/shared/config/supabase'
+import { resolveTtsModel } from '@/shared/services/aiModelPrefs'
 import { uploadTtsCache } from './ttsCacheApi'
 
 // 服务器缓存已知存在集合（避免重复 HEAD 请求）
@@ -32,12 +35,12 @@ async function buildTtsCacheUrl(word: string, source: string): Promise<string> {
 }
 
 /**
- * 调用 Google Cloud TTS API，返回音频 URL
- * 有 source 时先尝试服务器缓存，未命中再调 API 并上传
+ * 调用 AI TTS（Flask 代理），返回音频 URL
+ * 有 source 时先尝试服务器缓存，未命中再调后端并异步写回缓存
  *
  * 性能优化：serverCacheKnown 记录已知存在的缓存条目，跳过 HEAD 请求
  */
-export async function fetchGoogleTtsUrl(word: string, lang: string, source?: string): Promise<string> {
+export async function fetchAiTtsUrl(word: string, lang: string, source?: string): Promise<string> {
   // 1. 有 source 时，先尝试从服务器缓存获取
   if (source) {
     const cacheUrl = await buildTtsCacheUrl(word, source)
@@ -53,27 +56,31 @@ export async function fetchGoogleTtsUrl(word: string, lang: string, source?: str
         serverCacheKnown.add(knownKey)
         return cacheUrl
       }
-    } catch { /* 缓存不可用，继续调 API */ }
+    } catch { /* 缓存不可用，继续调后端 */ }
   }
 
-  // 2. 调用 Google TTS API
-  const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY
-  if (!apiKey) throw new Error('VITE_GOOGLE_TTS_API_KEY not configured')
-  const resp = await fetch(
-    `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        input: { text: word },
-        voice: { languageCode: lang },
-        audioConfig: { audioEncoding: 'MP3' },
-      }),
-    }
-  )
-  if (!resp.ok) throw new Error(`Google TTS API error: ${resp.status}`)
-  const data = await resp.json()
-  const audioContent: string = data.audioContent
+  // 2. 调用 Flask /api/ai/synthesize
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.access_token) throw new Error('未登录，无法合成语音')
+
+  const resp = await fetch(`${API_BASE_URL}/api/ai/synthesize`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({
+      text: word,
+      lang,
+      model: await resolveTtsModel(),
+    }),
+  })
+  if (!resp.ok) throw new Error(`AI TTS 失败: HTTP ${resp.status}`)
+  const payload = await resp.json()
+  if (!payload?.success || !payload?.data?.audio_base64) {
+    throw new Error(payload?.error || 'AI TTS 响应缺少 audio_base64')
+  }
+  const audioContent: string = payload.data.audio_base64
 
   // 3. 有 source 时，上传到服务器缓存（fire-and-forget）+ 记录已知
   if (source) {

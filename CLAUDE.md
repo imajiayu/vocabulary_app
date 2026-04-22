@@ -40,12 +40,14 @@ IELTS学习应用 - Vue3前端 + 最小化Flask后端，实现间隔重复记忆
 | 复习/拼写单词列表 | Frontend → Supabase | 前端获取 ID + 分页加载 |
 | 关系生成 | Backend（线程 + SSE） | CPU 密集 + NLTK 依赖 |
 | TTS 音频缓存 | Frontend → Backend → 文件系统 | nginx 静态服务 + 避免重复 API 调用 |
+| AI TTS 合成 | Frontend → Backend `/api/ai/synthesize` → 上游 TTS | API key 服务端保管，MP3 base64 返回后前端写入 TTS 缓存 |
+| AI STT 转录 | Frontend → Backend `/api/ai/transcribe` → 上游 Speech | API key 服务端保管，同步/异步轮询由后端处理 |
 | 课程词汇添加 | Course Page → Supabase | 课程页面直连 Supabase（复用主站登录会话） |
 | 关系清空 | Frontend → Supabase | 按类型批量删除 |
 | 统计数据 | Frontend → Supabase Views | 直接查询视图 |
 | 口语模块 | Frontend → Supabase | 纯 CRUD + Storage |
-| 写作模块 | Frontend → Supabase + ai-proxy | CRUD/Storage 直连；AI 反馈走 Edge Function |
-| LLM 调用（口语/写作/词汇助手/课程聊天/翻译批改/释义回退） | Frontend → Edge Function `ai-proxy` | API key 收敛到服务端 secret，OpenAI 兼容协议 |
+| 写作模块 | Frontend → Supabase + Flask `/api/ai/chat` | CRUD/Storage 直连；AI 反馈走后端代理 |
+| LLM 调用（口语/写作/词汇助手/课程聊天/翻译批改/释义回退） | Frontend → Flask `/api/ai/chat` | API key 收敛到 backend/.env，OpenAI 兼容协议，用户可按 caller 选 model |
 | 设置读写 | Frontend → Supabase | 简单读写 |
 | 设置复杂操作 | Frontend → Edge Functions | 级联删除、批量调整 |
 | 进度追踪 | Frontend → Supabase | 简单 CRUD |
@@ -106,7 +108,7 @@ features/           # 功能模块 (vocabulary, speaking, statistics, writing)
 shared/
   api/              # Supabase 直连 + 后端 API（仅 relations）
   core/             # SM-2 算法、拼写强度算法、负荷均衡（TypeScript）
-  services/         # 业务编排（wordResultService）+ AI 服务（ai.ts → ai-proxy Edge Function, Google STT）
+  services/         # 业务编排（wordResultService）+ AI 服务（ai.ts / aiTranscription.ts 经 Flask /api/ai/*）
   types/            # TypeScript 类型
   composables/      # 可组合函数（15 个）
   components/       # 通用组件（base, charts, controls, feedback, layout）
@@ -127,7 +129,7 @@ shared/
 - 6 个函数：update_updated_at(), get_daily_spell_loads(), handle_new_user(), delete_words_cascade(), batch_reschedule_review(), batch_reschedule_spell()
 - 3 个触发器：trg_user_config_updated_at, on_auth_user_created, trg_course_progress_updated_at
 - 2 个 Storage Bucket：speaking-audios, writing-images
-- 5 个 Edge Functions：adjust-max-prep-days, delete-source, fetch-definition, quick-add-word, ai-proxy
+- 4 个 Edge Functions：adjust-max-prep-days, delete-source, fetch-definition, quick-add-word（LLM/STT/TTS 代理已迁到 Flask `/api/ai/*`）
 
 ## 状态管理
 
@@ -158,16 +160,27 @@ FLASK_DEBUG=0            # 仅开发环境设为 1
 ```
 VITE_SUPABASE_URL=https://oilcmmlkkmikmftqjlih.supabase.co
 VITE_SUPABASE_ANON_KEY=...
-VITE_GOOGLE_STT_API_KEY=...  # 可选，用于语音转录
-VITE_GOOGLE_TTS_API_KEY=...  # 可选，用于非英语单词发音
+VITE_API_BASE_URL=                     # 本地开发留空走 Vite 代理；生产填后端域名
 ```
 
-**Edge Function secrets**（LLM 代理，通过 `supabase secrets set ...` 配置）
+**后端外部 AI 代理 env（backend/.env，见 backend/.env.example）**
+
+上游采用 OpenAI 兼容网关（一把 key 覆盖 LLM + STT + TTS，通过 `model` 字段路由到具体供应商）：
 ```
-AI_BASE_URL=https://api.deepseek.com   # 上游 LLM API base（兼容 OpenAI chat/completions）
-AI_API_KEY=sk-xxx                      # 上游 LLM API key
-AI_MODEL=deepseek-chat                 # 模型名（前端无法覆盖）
+AI_BASE_URL=https://llm-proxy.tapsvc.com/v1  # 网关 base
+AI_API_KEY=sk-xxx                             # 唯一 key
+AI_DEFAULT_MODEL=gemini-3-flash-preview       # LLM 兜底
+AI_DEFAULT_STT_MODEL=gpt-4o-mini-transcribe   # STT 兜底
+AI_DEFAULT_TTS_MODEL=elevenlabs/eleven_multilingual_v2  # TTS 兜底
+AI_DEFAULT_TTS_VOICE=alloy                    # TTS 声音（OpenAI: alloy 系列；ElevenLabs: voice_id）
 ```
+
+三条路径（全部 OpenAI 兼容）：
+- `/api/ai/chat` → `{AI_BASE_URL}/chat/completions`（同步 + 流式）
+- `/api/ai/transcribe` → `{AI_BASE_URL}/audio/transcriptions`（multipart file 上传）
+- `/api/ai/synthesize` → `{AI_BASE_URL}/audio/speech`（JSON 输入，二进制音频输出）
+
+用户级 model 覆盖存在 `user_config.config.aiModels[caller]` / `aiSttModel` / `aiTtsModel`，Settings 页 "AI 模型" tab 可视化管理；可选模型与价格元数据写死在 `frontend/src/shared/constants/ai-callers.ts`。
 
 ## 开发规范
 
@@ -239,7 +252,7 @@ courses/                # 仅保留学习资料，不再作为页面源
 | `vocab.js` | `VocabPreloadSection.vue` |
 | `renderer.js` | `LessonRenderer.vue`（JSON → Vue 组件树） |
 | `wordInteraction.js` | 复用主站 `WordEditorModal`（store ghost 模式：未在当前 source 时显示"加入词本"按钮） |
-| `chat.js` | `CourseChat.vue`（复用 `shared/services/ai.ts` 的 `streamAI`，经由 `ai-proxy` Edge Function） |
+| `chat.js` | `CourseChat.vue`（复用 `shared/services/ai.ts` 的 `streamAI`，经由 Flask `/api/ai/chat`） |
 
 ### 持久化架构
 
@@ -268,11 +281,11 @@ courses/                # 仅保留学习资料，不再作为页面源
 
 ## 注意事项
 
-- 后端定位为关系服务（图查询 + 关系生成）+ TTS 音频缓存服务
+- 后端定位为关系服务（图查询 + 关系生成）+ TTS 音频缓存服务 + 外部 AI 代理（LLM/STT/TTS）
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
-- TTS 音频缓存：非英语单词首次播放从 Google TTS 获取后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v1.8.6`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- TTS 音频缓存：非英语单词首次播放经 Flask `/api/ai/synthesize` 合成后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
+- 当前版本号 `v1.9.16`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 课程页面复用主站的 Supabase 登录会话，用户需先在主站登录；未登录仍可浏览但练习无法同步到云端
 - 课时 JSON 的所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义（单词点击气泡需要）
 - 新增课时同步更新 `frontend/src/features/courses/data/lessons.ts` 的索引数据

@@ -15,7 +15,8 @@ export default defineConfig({
     host: '0.0.0.0',
     open: true,
     proxy: {
-      '/api/relations': {
+      // 所有后端路由统一走 5001：/api/relations/* · /api/tts/* · /api/ai/* · /api/health
+      '/api': {
         target: 'http://127.0.0.1:5001',
         changeOrigin: true,
       },

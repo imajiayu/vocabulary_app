@@ -1,13 +1,17 @@
 /**
- * AI 服务（通过 Supabase Edge Function `ai-proxy` 转发到上游 LLM）
+ * AI 服务 — 经 Flask 后端 `/api/ai/chat` 转发到上游 LLM (OpenAI 兼容)
  *
- * - callAI: 非流式，走 supabase.functions.invoke（自动带 Bearer + apikey + JSON 解析）
- * - streamAI: 流式，手写 fetch（invoke 不支持流式），同时需要手动带 apikey header
+ * - callAI: 非流式
+ * - streamAI: 流式（Server-Sent Events）
  *
- * 协议：OpenAI 兼容 chat/completions。model 由 Edge Function 注入，前端不传。
+ * 前端按 `caller` 从 user_config.config.aiModels[caller] 解析 model 后随请求提交。
+ * 后端对 model 字段做兜底（未传时用 AI_DEFAULT_MODEL）。API key 全部收敛在 backend/.env。
  */
 
+import { API_BASE_URL } from '@/shared/config/env'
 import { supabase } from '@/shared/config/supabase'
+import type { AiCaller } from '@/shared/constants/ai-callers'
+import { resolveModelForCaller } from './aiModelPrefs'
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
@@ -19,9 +23,35 @@ export interface AIOptions {
   maxTokens?: number
   /** 强制返回 JSON 对象（非流式专用） */
   jsonMode?: boolean
+  /** 调用方标识，用于按 caller 解析用户配置的 model */
+  caller?: AiCaller
 }
 
-const AI_PROXY_FN = 'ai-proxy'
+const CHAT_URL = `${API_BASE_URL}/api/ai/chat`
+
+async function getAccessToken(): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.access_token) throw new Error('未登录，无法调用 AI')
+  return session.access_token
+}
+
+async function buildBody(
+  messages: ChatMessage[],
+  options: AIOptions,
+  stream: boolean
+): Promise<Record<string, unknown>> {
+  const body: Record<string, unknown> = {
+    messages,
+    temperature: options.temperature ?? (stream ? 0.7 : 1.0),
+    stream,
+  }
+  if (options.maxTokens) body.max_tokens = options.maxTokens
+  if (options.jsonMode && !stream) body.response_format = { type: 'json_object' }
+  if (options.caller) {
+    body.model = await resolveModelForCaller(options.caller)
+  }
+  return body
+}
 
 /**
  * 流式调用 AI chat API
@@ -31,34 +61,21 @@ export async function* streamAI(
   messages: ChatMessage[],
   options: AIOptions & { signal?: AbortSignal } = {}
 ): AsyncGenerator<string> {
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) throw new Error('未登录，无法调用 AI')
+  const token = await getAccessToken()
+  const body = await buildBody(messages, options, true)
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-  if (!supabaseUrl || !anonKey) throw new Error('Supabase 环境变量未配置')
-
-  const url = `${supabaseUrl}/functions/v1/${AI_PROXY_FN}`
-
-  const response = await fetch(url, {
+  const response = await fetch(CHAT_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // Supabase 网关要求：apikey 不能少，否则预检/网关会先拦
-      'apikey': anonKey,
-      'Authorization': `Bearer ${session.access_token}`,
+      'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      messages,
-      temperature: options.temperature ?? 0.7,
-      stream: true,
-      ...(options.maxTokens ? { max_tokens: options.maxTokens } : {}),
-    }),
+    body: JSON.stringify(body),
     signal: options.signal,
   })
 
   if (!response.ok) {
-    throw new Error(`ai-proxy 调用失败: ${response.status}`)
+    throw new Error(`AI 调用失败: ${response.status}`)
   }
 
   const reader = response.body!.getReader()
@@ -84,7 +101,7 @@ export async function* streamAI(
       } catch {
         continue
       }
-      // Edge Function 上游失败时会塞单帧 {error} 进来
+      // 后端上游失败时会塞单帧 {error} 进来
       if (typeof json.error === 'string') throw new Error(json.error)
       const choices = json.choices as Array<{ delta?: { content?: string } }> | undefined
       const content = choices?.[0]?.delta?.content
@@ -108,20 +125,30 @@ export async function callAI(
     { role: 'user', content: userMessage },
   ]
 
-  const { data, error } = await supabase.functions.invoke(AI_PROXY_FN, {
-    body: {
-      messages,
-      temperature: options.temperature ?? 1.0,
-      stream: false,
-      ...(options.maxTokens ? { max_tokens: options.maxTokens } : {}),
-      ...(options.jsonMode ? { response_format: { type: 'json_object' } } : {}),
+  const token = await getAccessToken()
+  const body = await buildBody(messages, options, false)
+
+  const response = await fetch(CHAT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
+    body: JSON.stringify(body),
   })
 
-  if (error) throw new Error(`ai-proxy 调用失败: ${error.message}`)
-  if (!data?.success) throw new Error(data?.error || 'AI 调用失败')
+  let json: { success?: boolean; data?: { choices?: Array<{ message?: { content?: string } }> }; error?: string }
+  try {
+    json = await response.json()
+  } catch {
+    throw new Error(`AI 调用失败: HTTP ${response.status}`)
+  }
 
-  const content = data.data?.choices?.[0]?.message?.content
+  if (!response.ok || !json.success) {
+    throw new Error(json.error || `AI 调用失败: HTTP ${response.status}`)
+  }
+
+  const content = json.data?.choices?.[0]?.message?.content
   if (typeof content !== 'string') throw new Error('AI 响应缺少 content 字段')
   return content
 }

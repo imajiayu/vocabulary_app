@@ -144,7 +144,6 @@ import type { CreateRecordPayload } from '@/shared/api/speaking'
 import { useAudioRecording } from '../composables/useAudioRecording'
 import { transcribeAudio } from '@/shared/services/transcription'
 import { useWebSpeechRecognition } from '@/shared/services/webSpeechRecognition'
-import { isGoogleSTTConfigured } from '@/shared/services/googleCloudSTT'
 import SwitchTab from '@/shared/components/controls/SwitchTab.vue'
 
 const props = defineProps<{ question: Question | null }>()
@@ -224,7 +223,7 @@ const webSpeech = useWebSpeechRecognition({ lang: 'en-US' })
 // 转录方式 — 本地状态，不持久化
 const providerTabs = [
   { value: 'web-speech', label: '实时识别' },
-  { value: 'google-cloud-stt', label: 'Google 转录' },
+  { value: 'ai-transcription', label: 'AI 转录' },
 ]
 const selectedProvider = ref('web-speech')
 const useWebSpeech = computed(() => selectedProvider.value === 'web-speech')
@@ -233,13 +232,6 @@ const providerDescription = computed(() => {
     return '边说边看文字，实时显示识别结果'
   }
   return '录音结束后统一转录，识别更准确'
-})
-
-// Google STT 未配置时自动回退
-watch(selectedProvider, (val) => {
-  if (val === 'google-cloud-stt' && !isGoogleSTTConfigured()) {
-    selectedProvider.value = 'web-speech'
-  }
 })
 
 // 状态机操作
@@ -388,7 +380,7 @@ const handleRecordingStart = async (): Promise<void> => {
           transition('STOP_RECORDING')
         }
       },
-      !useWebSpeech.value // Google STT 需要 webm 格式
+      !useWebSpeech.value // AI 转录需要 webm 格式
     )
   } catch (error) {
     speakingLogger.error('无法访问麦克风', error)

@@ -4,6 +4,7 @@
     <button
       class="chat-fab"
       :class="{ open: isOpen }"
+      :data-course="config.theme"
       :title="isOpen ? '关闭助手' : `问 ${config.chatName}`"
       @click="toggleChat"
     >
@@ -20,7 +21,7 @@
     </button>
 
     <!-- 聊天窗口 -->
-    <div v-show="isOpen" class="chat-window" ref="chatWindowRef" :style="windowStyle">
+    <div v-show="isOpen" class="chat-window" ref="chatWindowRef" :data-course="config.theme" :style="windowStyle">
       <!-- 标题栏 -->
       <div class="chat-header" :style="{ background: 'var(--course-accent)' }">
         <span class="chat-header-title">{{ config.chatName }}</span>
@@ -73,6 +74,7 @@
     <div
       v-show="selBtnVisible"
       class="sel-popover"
+      :data-course="config.theme"
       :style="{ left: selBtnPos.x + 'px', top: selBtnPos.y + 'px' }"
       @mousedown.prevent.stop
     >
@@ -145,12 +147,15 @@ function clearChat() {
   streamContent.value = ''
 }
 
+const TEXTAREA_MAX_HEIGHT = 80
+
 function autoHeight() {
   const ta = textareaRef.value
-  if (ta) {
-    ta.style.height = 'auto'
-    ta.style.height = Math.min(ta.scrollHeight, 80) + 'px'
-  }
+  if (!ta) return
+  ta.style.height = 'auto'
+  const next = Math.min(ta.scrollHeight, TEXTAREA_MAX_HEIGHT)
+  ta.style.height = next + 'px'
+  ta.style.overflowY = ta.scrollHeight > TEXTAREA_MAX_HEIGHT ? 'auto' : 'hidden'
 }
 
 function scrollToBottom() {
@@ -192,6 +197,7 @@ async function send() {
   try {
     for await (const chunk of streamAI(apiMessages, {
       temperature: 0.7,
+      caller: 'course_chat',
       signal: abortController.signal
     })) {
       fullContent += chunk
@@ -413,7 +419,39 @@ onBeforeUnmount(() => {
   padding: 8px 12px;
   border-radius: 10px;
   word-break: break-word;
+}
+
+.chat-msg.user .chat-bubble {
   white-space: pre-wrap;
+}
+
+.chat-bubble :deep(p),
+.chat-bubble :deep(ul),
+.chat-bubble :deep(ol),
+.chat-bubble :deep(pre),
+.chat-bubble :deep(blockquote) {
+  margin: 0;
+}
+
+.chat-bubble :deep(p + p),
+.chat-bubble :deep(p + ul),
+.chat-bubble :deep(p + ol),
+.chat-bubble :deep(ul + p),
+.chat-bubble :deep(ol + p) {
+  margin-top: 6px;
+}
+
+.chat-bubble :deep(ul),
+.chat-bubble :deep(ol) {
+  padding-left: 1.2em;
+}
+
+.chat-bubble :deep(h1),
+.chat-bubble :deep(h2),
+.chat-bubble :deep(h3),
+.chat-bubble :deep(h4) {
+  margin: 4px 0;
+  font-size: 1em;
 }
 
 .chat-msg.user .chat-bubble {
@@ -475,11 +513,27 @@ onBeforeUnmount(() => {
   resize: none;
   max-height: 80px;
   min-height: 36px;
+  overflow-y: hidden;
   outline: none;
   font-family: inherit;
   background: var(--color-surface-card, var(--primitive-paper-100));
   color: var(--color-text-primary, #2d2d2d);
   transition: border-color 0.15s;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong, var(--primitive-paper-500)) transparent;
+}
+
+.chat-input-area textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-input-area textarea::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong, var(--primitive-paper-500));
+  border-radius: 3px;
+}
+
+.chat-input-area textarea::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .chat-input-area textarea:focus {

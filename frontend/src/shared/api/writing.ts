@@ -1,10 +1,10 @@
 /**
  * 写作练习相关的 API 接口
  *
- * 全部使用 Supabase 直连，不经过后端
+ * 数据/存储走 Supabase 直连，AI 反馈走 Flask /api/ai/chat
  * - 数据读写：Supabase Database
  * - 文件存储：Supabase Storage (writing-images bucket)
- * - AI 反馈：Edge Function ai-proxy
+ * - AI 反馈：Flask /api/ai/chat（见 services/writing-ai.ts）
  */
 
 import { supabase } from '@/shared/config/supabase'

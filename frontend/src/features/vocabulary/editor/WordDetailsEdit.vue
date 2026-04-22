@@ -140,7 +140,7 @@ const addDefinition = () => {
 };
 
 const removeDefinition = (index: number) => {
-  if (props.editData?.definition?.definitions && props.editData.definition.definitions.length > 1) {
+  if (props.editData?.definition?.definitions?.length) {
     const newDefinitions = [...props.editData.definition.definitions];
     newDefinitions.splice(index, 1);
     emit('update:editData', {
@@ -167,7 +167,7 @@ const addExample = () => {
 };
 
 const removeExample = (index: number) => {
-  if (props.editData?.definition?.examples && props.editData.definition.examples.length > 1) {
+  if (props.editData?.definition?.examples?.length) {
     const newExamples = [...props.editData.definition.examples];
     newExamples.splice(index, 1);
     emit('update:editData', {

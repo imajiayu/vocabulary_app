@@ -3,10 +3,10 @@
  *
  * 支持两种转录提供者，用户可在 VoicePractice 组件中切换：
  * - Web Speech API：浏览器原生实时识别（默认）
- * - Google Cloud STT：批量识别，精度更高，每月 60 分钟免费
+ * - AI 转录：经 Flask /api/ai/transcribe 批量识别，精度更高
  */
 
-import { transcribeWithGoogleSTT } from './googleCloudSTT'
+import { transcribeWithAi } from './aiTranscription'
 
 export interface TranscriptionResult {
   text: string
@@ -15,9 +15,9 @@ export interface TranscriptionResult {
 }
 
 /**
- * 使用 Google Cloud STT 转录音频文件
+ * 使用 AI 转录音频文件
  *
- * 仅当 provider 为 'google-cloud-stt' 时在 ANALYZING 阶段调用
+ * 仅当 provider 为 'ai-transcription' 时在 ANALYZING 阶段调用
  * Web Speech API 的转录由 VoicePractice 直接管理（实时识别）
  */
 export async function transcribeAudio(
@@ -25,7 +25,7 @@ export async function transcribeAudio(
   durationSeconds: number
 ): Promise<TranscriptionResult> {
   try {
-    const result = await transcribeWithGoogleSTT(audioFile, durationSeconds)
+    const result = await transcribeWithAi(audioFile, durationSeconds)
     return {
       text: result.text,
       success: !!result.text.trim()

@@ -11,7 +11,7 @@ export interface CourseConfig {
   name: string
   /** 课程语言代码 */
   lang: SourceLang
-  /** Google TTS 语言代码（如 'uk-UA', 'en-US'） */
+  /** AI TTS 语言代码（BCP-47，如 'uk-UA', 'en-US'） */
   ttsLang: string
   /** 课程 URL 前缀（如 '/uk', '/legal'） */
   basePath: string
