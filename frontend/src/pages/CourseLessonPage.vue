@@ -65,6 +65,7 @@ import { useLessonData } from '@/features/courses/composables/useLessonData'
 import { useCourseConfig } from '@/features/courses/composables/useCourseConfig'
 import { useCourseSource } from '@/features/courses/composables/useCourseSource'
 import { checkCourseAccess } from '@/features/courses/composables/useCourseAccess'
+import { summarizeLessonForAI } from '@/features/courses/utils/lessonSummary'
 import { useToast } from '@/shared/composables/useToast'
 import { getLessonsByCourse } from '@/features/courses/data/lessons'
 import LessonRenderer from '@/features/courses/components/LessonRenderer.vue'
@@ -158,6 +159,8 @@ provide('lessonTitle', computed(() => {
   tmp.innerHTML = raw
   return tmp.textContent || ''
 }))
+// 给 CourseChat 等组件注入的课时摘要，避免每轮对话都重新计算
+provide('lessonSummary', computed(() => summarizeLessonForAI(lesson.value)))
 </script>
 
 <style scoped>

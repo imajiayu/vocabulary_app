@@ -102,6 +102,7 @@ import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
 const config = inject<CourseConfig>('courseConfig')!
 const lessonTitleRef = inject<ComputedRef<string>>('lessonTitle')
+const lessonSummaryRef = inject<ComputedRef<string>>('lessonSummary')
 const courseSource = inject<Ref<string>>('courseSource', ref(''))
 const wordEditorStore = useWordEditorStore()
 const { speak } = useCourseTts(config)
@@ -169,7 +170,11 @@ function scrollToBottom() {
 function buildSystemPrompt(): string {
   let prompt = config.chatSystemPrompt
   const title = lessonTitleRef?.value
-  if (title) prompt += `\n\n当前课时：${title}`
+  if (title) prompt += `\n\n【当前课时】${title}`
+  const summary = lessonSummaryRef?.value
+  if (summary) {
+    prompt += `\n\n【课时内容摘要】\n${summary}`
+  }
   return prompt
 }
 

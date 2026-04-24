@@ -2,10 +2,15 @@
  * 口语 AI 反馈服务 — 经 Flask /api/ai/chat
  *
  * Prompt 维护在 shared/prompts/speaking.ts
+ * 输出为严格 JSON：{ score, capScore, capReasons, review, optimized }
  */
 
 import { callAI } from './ai'
+import { parseJsonResponse } from '@/shared/utils/json'
+import { logger } from '@/shared/utils/logger'
 import { PART1_PROMPT, PART2_PROMPT, PART3_PROMPT } from '@/shared/prompts/speaking'
+
+const log = logger.create('speaking-ai')
 
 type QuestionType = 'part1' | 'part2' | 'part3'
 
@@ -44,6 +49,26 @@ export interface SpeakingFeedbackResult {
   score: number
   chineseFeedback: string
   improvedEnglish: string
+  /** 命中分数上限规则后推导出的封顶分数；无触发时与 score 相同 */
+  capScore: number
+  /** 命中的上限规则描述，用于 UI 提示用户为什么被压分 */
+  capReasons: string[]
+}
+
+interface RawSpeakingResponse {
+  score?: unknown
+  capScore?: unknown
+  capReasons?: unknown
+  review?: unknown
+  optimized?: unknown
+}
+
+/** 把 LLM 返回的分数 clamp 到合法范围并归到最近的 0.5 */
+function normalizeScore(raw: unknown): number {
+  const n = typeof raw === 'number' ? raw : parseFloat(String(raw ?? ''))
+  if (!Number.isFinite(n)) return 0
+  const clamped = Math.max(0, Math.min(9, n))
+  return Math.round(clamped * 2) / 2
 }
 
 /**
@@ -69,18 +94,34 @@ export async function getSpeakingFeedback(
     userMessage = `【问题】${questionText}\n【回答】${userAnswer}`
   }
 
-  const response = await callAI(systemPrompt, userMessage, [], { caller: 'speaking_feedback' })
+  const response = await callAI(systemPrompt, userMessage, [], {
+    caller: 'speaking_feedback',
+    temperature: 0.3,
+    jsonMode: true,
+  })
 
-  const scoreMatch = response.match(/^([\d.]+)/)
-  const score = scoreMatch ? parseFloat(scoreMatch[1]) : 0
+  let raw: RawSpeakingResponse
+  try {
+    raw = parseJsonResponse<RawSpeakingResponse>(response)
+  } catch (err) {
+    log.error('解析口语 AI 反馈 JSON 失败:', response)
+    throw new Error('AI 反馈格式错误，请重试')
+  }
 
-  const chineseMatch = response.match(/【点评】\s*([\s\S]*?)(?=【优化】)/)
-  const englishMatch = response.match(/【优化】\s*([\s\S]*)/)
+  const baseScore = normalizeScore(raw.score)
+  const capScore = normalizeScore(raw.capScore ?? raw.score)
+  // 服务端保险：即使模型忘了在 score 上 apply capScore，前端再 clamp 一次
+  const finalScore = capScore > 0 ? Math.min(baseScore, capScore) : baseScore
 
-  const chineseFeedback = chineseMatch ? chineseMatch[1].trim() : ''
-  const improvedEnglish = englishMatch
-    ? englishMatch[1].trim()
-    : response.split('\n').slice(1).join('\n').trim()
+  const capReasons = Array.isArray(raw.capReasons)
+    ? raw.capReasons.filter((r): r is string => typeof r === 'string' && r.trim().length > 0)
+    : []
 
-  return { score, chineseFeedback, improvedEnglish }
+  return {
+    score: finalScore,
+    capScore: capScore || finalScore,
+    capReasons,
+    chineseFeedback: typeof raw.review === 'string' ? raw.review.trim() : '',
+    improvedEnglish: typeof raw.optimized === 'string' ? raw.optimized.trim() : '',
+  }
 }

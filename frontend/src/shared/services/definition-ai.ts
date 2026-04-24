@@ -6,15 +6,20 @@
 
 import { callAI } from './ai'
 import { parseJsonResponse } from '@/shared/utils/json'
-import { buildDefinitionPrompt } from '@/shared/prompts/definition'
+import { buildDefinitionPrompt, buildDefinitionUserMessage } from '@/shared/prompts/definition'
 import type { DefinitionObject, SourceLang } from '@/shared/types'
 
 export async function fetchDefinitionFromAI(word: string, lang: SourceLang): Promise<DefinitionObject> {
-  const response = await callAI(buildDefinitionPrompt(lang), word, [], {
-    temperature: 0.3,
-    maxTokens: 500,
-    jsonMode: true,
-    caller: 'definition_fallback',
-  })
+  const response = await callAI(
+    buildDefinitionPrompt(lang),
+    buildDefinitionUserMessage(word, lang),
+    [],
+    {
+      temperature: 0.3,
+      maxTokens: 500,
+      jsonMode: true,
+      caller: 'definition_fallback',
+    },
+  )
   return parseJsonResponse<DefinitionObject>(response)
 }

@@ -46,7 +46,7 @@ import type { ExerciseState } from '../../composables/useExerciseState'
 import type { GradeResult } from '../../utils/grading'
 import { gradeWithRubric } from '../../utils/grading'
 import { callAI } from '@/shared/services/ai'
-import { TRANSLATION_GRADING_PROMPT } from '@/shared/prompts/translation'
+import { TRANSLATION_GRADING_PROMPT, buildTranslationUserMessage } from '@/shared/prompts/translation'
 import TranslationFeedback from './TranslationFeedback.vue'
 import RubricFeedback from './RubricFeedback.vue'
 import { useCourseHtml } from '../../composables/useCourseHtml'
@@ -92,11 +92,9 @@ function onInput(qi: number, val: string) {
 }
 
 async function callAIGrading(source: string, userText: string, reference?: string): Promise<AIFeedback> {
-  const direction = /[\u4e00-\u9fff]/.test(source) && source.length > 2 ? '中译英' : '英译中'
-  let prompt = `## 翻译练习批改\n\n**翻译方向**：${direction}\n\n**原文**：\n${source}\n\n**学生翻译**：\n${userText}\n\n`
-  if (reference) prompt += `**参考译文**：\n${reference}\n\n`
+  const userMessage = buildTranslationUserMessage(source, userText, reference)
 
-  const json = await callAI(TRANSLATION_GRADING_PROMPT, prompt, [], {
+  const json = await callAI(TRANSLATION_GRADING_PROMPT, userMessage, [], {
     temperature: 0.3,
     jsonMode: true,
     caller: 'translation_grading',

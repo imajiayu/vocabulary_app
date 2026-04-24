@@ -45,7 +45,10 @@ export class VocabularyAssistanceApi {
       .replace('{word}', payload.word || '暂无')
       .replace('{definition}', payload.definition || '暂无')
 
-    const response = await callAI(systemPrompt, payload.message, [], { caller: 'vocab_assist' })
+    const response = await callAI(systemPrompt, payload.message, [], {
+      caller: 'vocab_assist',
+      temperature: 0.6,
+    })
 
     // Fire-and-forget 写入缓存
     if (promptType && payload.word) {

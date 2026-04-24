@@ -63,17 +63,24 @@ export type WritingSessionStatus = 'outline' | 'writing' | 'feedback' | 'revisio
 export interface ParagraphFeedback {
   improved: string  // 改进后的段落文本
   notes: string     // 改进说明
+  /**
+   * AI 是否实际做了改动。
+   * 新数据由 LLM 提供；老数据可能缺失，UI 读取时兜底：字段缺失则按字符串相等比较原文推断。
+   */
+  changed?: boolean
 }
 
 /**
  * IELTS 评分
+ * overall 由前端按 IELTS 官方规则从四项计算（见 shared/services/writing-ai.ts 的 ieltsRoundOverall）。
+ * LLM 不再返回 overall 字段。
  */
 export interface WritingScores {
   taskAchievement: number    // Task 1: Task Achievement / Task 2: Task Response
   coherenceCohesion: number  // 连贯与衔接
   lexicalResource: number    // 词汇资源
   grammaticalRange: number   // 语法范围与准确性
-  overall: number            // 总分（四项平均，四舍五入到 0.5）
+  overall: number            // 总分（前端计算）
 }
 
 /**
