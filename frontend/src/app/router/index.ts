@@ -29,6 +29,7 @@ const ReviewPage = lazyPage(() => import('@/pages/ReviewPage.vue'))
 const SpeakingPage = lazyPage(() => import('@/pages/SpeakingPage.vue'))
 const WritingPage = lazyPage(() => import('@/pages/WritingPage.vue'))
 const SettingsPage = lazyPage(() => import('@/pages/SettingsPage.vue'))
+const AiReviewPage = lazyPage(() => import('@/pages/AiReviewPage.vue'))
 const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage.vue'))
 const CourseLessonPage = lazyPage(() => import('@/pages/CourseLessonPage.vue'))
 
@@ -85,6 +86,12 @@ const routes = [
     name: 'settings',
     component: SettingsPage,
     meta: { title: '设置', depth: 1 }
+  },
+  {
+    path: '/ai-review',
+    name: 'ai-review',
+    component: AiReviewPage,
+    meta: { title: 'AI 复习', depth: 1 }
   },
   // ── 课程路由 ──
   // 所有主 tab（含课程 index）共享 URL `/`，通过 activeTab + localStorage 区分；

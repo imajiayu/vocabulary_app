@@ -8,6 +8,7 @@
  * - vocabulary-assistance.ts — 词汇学习助手（英/乌）
  * - translation.ts        — 法律英语翻译批改
  * - course-chat.ts        — 课程聊天助手（乌语/法律英语）
+ * - ai-review.ts          — AI 复习（中译英出题）
  *
  * 调用规范：
  * - 纯静态 prompt 直接导出 const
@@ -21,3 +22,4 @@ export * from './definition'
 export * from './vocabulary-assistance'
 export * from './translation'
 export * from './course-chat'
+export * from './ai-review'

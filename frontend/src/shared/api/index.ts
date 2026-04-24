@@ -15,6 +15,7 @@ import { SettingsSupabaseApi } from './settings-supabase'
 import { RelationsApi } from './relations'
 import { VocabularyAssistanceApi } from './vocabulary-assistance'
 import { AiCacheApi } from './ai-cache'
+import { AiReviewApi } from './aiReview'
 import type { Progress, SaveProgressPayload, RestoreData } from '@/shared/types'
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
@@ -62,6 +63,9 @@ export type {
 
 export { AiCacheApi } from './ai-cache'
 export type { PromptType } from './ai-cache'
+
+export { AiReviewApi } from './aiReview'
+export type { AiReviewQuestion, AiReviewSession, DailyReviewWordRow } from './aiReview'
 
 // 进度恢复API（直连 Supabase）
 export class ProgressApi {
@@ -287,7 +291,8 @@ export const api = {
   relations: RelationsApi,
   progress: ProgressApi,
   vocabularyAssistance: VocabularyAssistanceApi,
-  aiCache: AiCacheApi
+  aiCache: AiCacheApi,
+  aiReview: AiReviewApi
 } as const
 
 export default api

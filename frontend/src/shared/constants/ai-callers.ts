@@ -81,6 +81,12 @@ const _AI_CALLERS_LITERAL = {
     defaultModel: 'gemini-3-flash-preview',
     description: '词汇页面的 AI 对话按钮',
   },
+  ai_review: {
+    label: 'AI 复习',
+    group: 'vocabulary',
+    defaultModel: 'gemini-3-flash-preview',
+    description: '按日期汇总当天单词生成中英互译练习',
+  },
   translation_grading: {
     label: '翻译批改',
     group: 'course',

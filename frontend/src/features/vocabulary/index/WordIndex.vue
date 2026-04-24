@@ -187,6 +187,10 @@
             <AppIcon name="chart" class="link-icon-svg" />
             <span class="link-text">统计</span>
           </button>
+          <button class="quick-link" @click="goAiReview">
+            <AppIcon name="sparkle" class="link-icon-svg" />
+            <span class="link-text">AI复习</span>
+          </button>
           <button class="quick-link" @click="goMasteredReview">
             <AppIcon name="check-circle" class="link-icon-svg" />
             <span class="link-text">复习已掌握</span>
@@ -340,6 +344,10 @@
         <button class="quick-btn" @click="goStats">
           <AppIcon name="chart" class="quick-icon-svg" />
           <span class="quick-text">统计</span>
+        </button>
+        <button class="quick-btn" @click="goAiReview">
+          <AppIcon name="sparkle" class="quick-icon-svg" />
+          <span class="quick-text">AI复习</span>
         </button>
         <button class="quick-btn" @click="goMasteredReview">
           <AppIcon name="check-circle" class="quick-icon-svg" />
@@ -674,6 +682,10 @@ const goStats = () => {
 
 const goManagement = () => {
   router.push('/management')
+}
+
+const goAiReview = () => {
+  router.push('/ai-review')
 }
 
 const goMasteredReview = () => {
