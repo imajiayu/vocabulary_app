@@ -65,7 +65,7 @@
       </aside>
 
       <!-- ══ 右侧 Content ══ -->
-      <section class="course-content">
+      <section class="course-index-content">
         <!-- Masthead: 课程标题 + 进度环 -->
         <header class="masthead">
           <div class="masthead-text">
@@ -645,14 +645,21 @@ onMounted(async () => {
   font-weight: 600;
 }
 
-.rail-row.active .rail-bracket {
+/* bracket 始终 absolute，脱离 grid 流；否则它作为第 3 个 grid item 会被
+   auto-flow 到第 2 行，切换 active 时 grid 行数从 2 变 1，触发内部文字垂直跳动。 */
+.rail-bracket {
   position: absolute;
   left: 3px;
   top: 6px;
   bottom: 6px;
   width: 2px;
-  background: var(--course-accent);
+  background: transparent;
   border-radius: 1px;
+  pointer-events: none;
+}
+
+.rail-row.active .rail-bracket {
+  background: var(--course-accent);
 }
 
 /* Done — 完成标记 */
@@ -726,7 +733,7 @@ onMounted(async () => {
 /* ══════════════════════════════════════════════════════════════════
    右侧 Content
    ══════════════════════════════════════════════════════════════════ */
-.course-content {
+.course-index-content {
   display: flex;
   flex-direction: column;
   min-height: 0;

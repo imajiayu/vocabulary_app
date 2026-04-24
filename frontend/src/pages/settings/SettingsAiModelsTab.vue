@@ -44,21 +44,29 @@
                 <span class="chip__dot" aria-hidden="true"></span>
                 <span class="chip__id">{{ resolvedModel(caller) }}</span>
               </span>
-              <div class="select-wrap">
-                <select
-                  class="ai-select"
-                  :value="localTextModels[caller] ?? ''"
-                  @change="onTextChange(caller, ($event.target as HTMLSelectElement).value)"
-                >
-                  <option value="">— 默认 · {{ formatTextOption(AI_CALLERS[caller].defaultModel) }} —</option>
-                  <option
-                    v-for="m in AI_TEXT_MODELS"
-                    :key="m.id"
-                    :value="m.id"
-                  >{{ providerLabel(inferProvider(m.id)) }} · {{ m.id }} · ctx {{ m.context }} · ↓{{ m.inputPrice }} ↑{{ m.outputPrice }}</option>
-                </select>
-                <span class="select-wrap__arrow" aria-hidden="true">▾</span>
-              </div>
+              <CustomSelect
+                :model-value="localTextModels[caller] ?? ''"
+                :options="getTextOptions(caller)"
+                class="ai-select"
+                @update:model-value="(value) => onTextChange(caller, String(value))"
+              >
+                <template #trigger="{ selected }">
+                  <div class="ai-select-trigger">
+                    <div class="ai-select-trigger__main">
+                      <span class="ai-select-trigger__label">{{ selected?.label ?? '请选择模型' }}</span>
+                      <span v-if="selected?.meta" class="ai-select-trigger__meta">{{ selected.meta }}</span>
+                    </div>
+                  </div>
+                </template>
+                <template #option="{ option }">
+                  <div class="ai-option">
+                    <div class="ai-option__main">
+                      <span class="ai-option__label">{{ option.label }}</span>
+                      <span v-if="option.meta" class="ai-option__meta">{{ option.meta }}</span>
+                    </div>
+                  </div>
+                </template>
+              </CustomSelect>
             </div>
           </div>
         </div>
@@ -103,21 +111,29 @@
                 <span class="chip__dot" aria-hidden="true"></span>
                 <span class="chip__id">{{ resolvedSttId }}</span>
               </span>
-              <div class="select-wrap">
-                <select
-                  class="ai-select"
-                  :value="localSttModel"
-                  @change="onSttChange(($event.target as HTMLSelectElement).value)"
-                >
-                  <option value="">— 默认 · {{ providerLabel(inferProvider(AI_STT_DEFAULT)) }} · {{ AI_STT_DEFAULT }} —</option>
-                  <option
-                    v-for="m in AI_STT_MODELS"
-                    :key="m.id"
-                    :value="m.id"
-                  >{{ providerLabel(inferProvider(m.id)) }} · {{ m.id }} · {{ m.price }}</option>
-                </select>
-                <span class="select-wrap__arrow" aria-hidden="true">▾</span>
-              </div>
+              <CustomSelect
+                :model-value="localSttModel"
+                :options="sttOptions"
+                class="ai-select"
+                @update:model-value="(value) => onSttChange(String(value))"
+              >
+                <template #trigger="{ selected }">
+                  <div class="ai-select-trigger">
+                    <div class="ai-select-trigger__main">
+                      <span class="ai-select-trigger__label">{{ selected?.label ?? '请选择模型' }}</span>
+                      <span v-if="selected?.meta" class="ai-select-trigger__meta">{{ selected.meta }}</span>
+                    </div>
+                  </div>
+                </template>
+                <template #option="{ option }">
+                  <div class="ai-option">
+                    <div class="ai-option__main">
+                      <span class="ai-option__label">{{ option.label }}</span>
+                      <span v-if="option.meta" class="ai-option__meta">{{ option.meta }}</span>
+                    </div>
+                  </div>
+                </template>
+              </CustomSelect>
             </div>
           </div>
 
@@ -132,21 +148,29 @@
                 <span class="chip__dot" aria-hidden="true"></span>
                 <span class="chip__id">{{ resolvedTtsId }}</span>
               </span>
-              <div class="select-wrap">
-                <select
-                  class="ai-select"
-                  :value="localTtsModel"
-                  @change="onTtsChange(($event.target as HTMLSelectElement).value)"
-                >
-                  <option value="">— 默认 · {{ providerLabel(inferProvider(AI_TTS_DEFAULT)) }} · {{ AI_TTS_DEFAULT }} —</option>
-                  <option
-                    v-for="m in AI_TTS_MODELS"
-                    :key="m.id"
-                    :value="m.id"
-                  >{{ providerLabel(inferProvider(m.id)) }} · {{ m.id }} · {{ m.price }}</option>
-                </select>
-                <span class="select-wrap__arrow" aria-hidden="true">▾</span>
-              </div>
+              <CustomSelect
+                :model-value="localTtsModel"
+                :options="ttsOptions"
+                class="ai-select"
+                @update:model-value="(value) => onTtsChange(String(value))"
+              >
+                <template #trigger="{ selected }">
+                  <div class="ai-select-trigger">
+                    <div class="ai-select-trigger__main">
+                      <span class="ai-select-trigger__label">{{ selected?.label ?? '请选择模型' }}</span>
+                      <span v-if="selected?.meta" class="ai-select-trigger__meta">{{ selected.meta }}</span>
+                    </div>
+                  </div>
+                </template>
+                <template #option="{ option }">
+                  <div class="ai-option">
+                    <div class="ai-option__main">
+                      <span class="ai-option__label">{{ option.label }}</span>
+                      <span v-if="option.meta" class="ai-option__meta">{{ option.meta }}</span>
+                    </div>
+                  </div>
+                </template>
+              </CustomSelect>
             </div>
           </div>
         </div>
@@ -174,6 +198,7 @@ import {
   type AiCaller,
   type AiCallerGroup,
 } from '@/shared/constants/ai-callers'
+import CustomSelect from '@/shared/components/CustomSelect.vue'
 import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
 import { useSettings } from '@/shared/composables/useSettings'
 import { invalidateAiModelPrefs } from '@/shared/services/aiModelPrefs'
@@ -219,6 +244,57 @@ function resolvedModel(caller: AiCaller): string {
 }
 const resolvedSttId = computed(() => localSttModel.value.trim() || AI_STT_DEFAULT)
 const resolvedTtsId = computed(() => localTtsModel.value.trim() || AI_TTS_DEFAULT)
+
+interface AiSelectOption {
+  value: string
+  label: string
+  meta: string
+}
+
+function formatDefaultLabel(modelId: string): string {
+  return `默认 · ${providerLabel(inferProvider(modelId))}`
+}
+
+function getTextOptions(caller: AiCaller): AiSelectOption[] {
+  return [
+    {
+      value: '',
+      label: formatDefaultLabel(AI_CALLERS[caller].defaultModel),
+      meta: formatTextOption(AI_CALLERS[caller].defaultModel),
+    },
+    ...AI_TEXT_MODELS.map(model => ({
+      value: model.id,
+      label: `${providerLabel(inferProvider(model.id))} · ${model.id}`,
+      meta: `ctx ${model.context} · ↓${model.inputPrice} ↑${model.outputPrice}`,
+    })),
+  ]
+}
+
+const sttOptions = computed<AiSelectOption[]>(() => [
+  {
+    value: '',
+    label: formatDefaultLabel(AI_STT_DEFAULT),
+    meta: `${AI_STT_DEFAULT} · ${AI_STT_MODELS.find(model => model.id === AI_STT_DEFAULT)?.price ?? ''}`,
+  },
+  ...AI_STT_MODELS.map(model => ({
+    value: model.id,
+    label: `${providerLabel(inferProvider(model.id))} · ${model.id}`,
+    meta: model.price,
+  })),
+])
+
+const ttsOptions = computed<AiSelectOption[]>(() => [
+  {
+    value: '',
+    label: formatDefaultLabel(AI_TTS_DEFAULT),
+    meta: `${AI_TTS_DEFAULT} · ${AI_TTS_MODELS.find(model => model.id === AI_TTS_DEFAULT)?.price ?? ''}`,
+  },
+  ...AI_TTS_MODELS.map(model => ({
+    value: model.id,
+    label: `${providerLabel(inferProvider(model.id))} · ${model.id}`,
+    meta: model.price,
+  })),
+])
 
 // ── 分组统计 ──
 function groupCustomCount(group: AiCallerGroup): number {
@@ -373,7 +449,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-3);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .card-header {
@@ -564,45 +640,82 @@ onBeforeUnmount(() => {
   text-overflow: ellipsis;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   Select（包装原生 select）
-   ═══════════════════════════════════════════════════════════════════════════ */
-.select-wrap {
-  position: relative;
+.ai-select {
   width: 100%;
   min-width: 260px;
 }
-.ai-select {
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  padding: 6px 26px 6px 10px;
+.ai-select :deep(.custom-select-trigger) {
+  padding: 8px 10px;
+  align-items: flex-start;
   background: var(--color-surface-card);
   border: 1px solid var(--color-border-medium);
   border-radius: var(--radius-sm);
-  color: var(--color-text-primary);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
 }
-.ai-select:hover {
+.ai-select :deep(.custom-select-trigger:hover) {
   border-color: var(--primitive-copper-300);
 }
-.ai-select:focus {
-  outline: none;
-  border-color: var(--primitive-copper-500);
-  box-shadow: 0 0 0 3px var(--color-brand-primary-light);
+.ai-select :deep(.custom-select-dropdown) {
+  z-index: 20;
 }
-.select-wrap__arrow {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+.ai-select :deep(.select-option) {
+  padding: 0;
+}
+
+.ai-select-trigger,
+.ai-option {
+  width: 100%;
+  min-width: 0;
+}
+
+.ai-select-trigger__main,
+.ai-option__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ai-select-trigger__label,
+.ai-option__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-primary);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-select-trigger__meta,
+.ai-option__meta {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--primitive-copper-500);
-  pointer-events: none;
+  color: var(--color-text-tertiary);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-option {
+  padding: 10px 14px;
+}
+
+.ai-select :deep(.select-option.selected) .ai-option__label {
+  font-weight: 600;
+}
+
+.ai-select :deep(.dropdown-arrow) {
+  margin-top: 2px;
+}
+
+.ai-select :deep(.custom-select-trigger),
+.ai-select-trigger__label,
+.ai-select-trigger__meta,
+.ai-option__label,
+.ai-option__meta {
+  appearance: none;
+  font-family: var(--font-mono);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -621,7 +734,7 @@ onBeforeUnmount(() => {
     max-width: none;
     align-self: flex-start;
   }
-  .select-wrap {
+  .ai-select {
     min-width: 0;
   }
 }
