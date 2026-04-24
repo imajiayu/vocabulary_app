@@ -24,6 +24,27 @@ export interface ReviewNotificationState {
   data: ReviewNotificationData | null
 }
 
+/** 本次会话的正确/错误与参数变化累计，用于完成界面的统计展示。 */
+export interface SessionStats {
+  reviewCorrect: number
+  reviewWrong: number
+  reviewCount: number
+  reviewEfDeltaSum: number
+  spellCorrect: number
+  spellWrong: number
+  spellCount: number
+  spellStrengthDeltaSum: number
+}
+
+/**
+ * 判定本次拼写是否算"弱表现"（即 strength 没有增加且非满分锁顶）。
+ * 与 WordSidebar 红色标记使用同一套规则。
+ */
+export function isSpellWeak(prevStrength: number, gain: number): boolean {
+  const isLockedAtMax = prevStrength >= 5.0 && gain === 0
+  return gain <= 0 && !isLockedAtMax
+}
+
 // 处理上下文：各模式处理函数共用的参数
 interface ProcessContext {
   wordForCalc: Word
@@ -66,6 +87,18 @@ export function useReviewResult() {
   // 拼写模式：强度变化 <= 0 且非"满分锁顶"的单词（用于侧边栏红色标记）
   const spellWeakWords = ref<Set<number>>(new Set())
 
+  // 本次会话统计（仅 mode_review / mode_spelling 计入，完成界面展示）
+  const sessionStats = ref<SessionStats>({
+    reviewCorrect: 0,
+    reviewWrong: 0,
+    reviewCount: 0,
+    reviewEfDeltaSum: 0,
+    spellCorrect: 0,
+    spellWrong: 0,
+    spellCount: 0,
+    spellStrengthDeltaSum: 0,
+  })
+
   const closeNotification = () => {
     notification.value = { show: false, data: null }
   }
@@ -84,6 +117,18 @@ export function useReviewResult() {
 
     incrementLoadsCache(reviewLoadsCache.value, calcResult.scheduledDay - 1)
     notification.value = { show: true, data: calcResult.notification }
+
+    // 会话统计：正确/错误 + EF 变化（满分锁顶时 delta=0 自然计入平均）
+    const efDelta = Math.round(
+      (calcResult.persistData.ease_factor - ctx.wordForCalc.ease_factor) * 100
+    ) / 100
+    sessionStats.value.reviewCount++
+    sessionStats.value.reviewEfDeltaSum += efDelta
+    if (ctx.result.remembered) {
+      sessionStats.value.reviewCorrect++
+    } else {
+      sessionStats.value.reviewWrong++
+    }
 
     const pd = calcResult.persistData
     updateWordInQueue(ctx.wordQueue, ctx.wordId, {
@@ -127,11 +172,21 @@ export function useReviewResult() {
     // 强度变化 <= 0 且非"满分锁顶"→ 侧边栏标记为弱表现（红色）
     const prevStrength = ctx.wordForCalc.spell_strength ?? 0
     const gain = calcResult.notification.param_change
-    const isLockedAtMax = prevStrength >= 5.0 && gain === 0
-    if (gain <= 0 && !isLockedAtMax) {
+    const weak = isSpellWeak(prevStrength, gain)
+    if (weak) {
       spellWeakWords.value.add(ctx.wordId)
     } else {
       spellWeakWords.value.delete(ctx.wordId)
+    }
+
+    // 会话统计：与 WordSidebar 绿/红判定一致 — 绿色（正确）= remembered && !weak。
+    // 满分锁顶（prevStrength>=5.0 且 gain=0）由 isSpellWeak 排除在 weak 之外，自然算正确。
+    sessionStats.value.spellCount++
+    sessionStats.value.spellStrengthDeltaSum += gain
+    if (ctx.result.remembered && !weak) {
+      sessionStats.value.spellCorrect++
+    } else {
+      sessionStats.value.spellWrong++
     }
 
     updateWordInQueue(ctx.wordQueue, ctx.wordId, {
@@ -369,6 +424,16 @@ export function useReviewResult() {
     reviewLoadsCache.value = null
     spellLoadsCache.value = null
     spellWeakWords.value.clear()
+    sessionStats.value = {
+      reviewCorrect: 0,
+      reviewWrong: 0,
+      reviewCount: 0,
+      reviewEfDeltaSum: 0,
+      spellCorrect: 0,
+      spellWrong: 0,
+      spellCount: 0,
+      spellStrengthDeltaSum: 0,
+    }
   }
 
   return {
@@ -378,6 +443,7 @@ export function useReviewResult() {
     reviewLoadsCache,
     spellLoadsCache,
     spellWeakWords,
+    sessionStats,
     closeNotification,
     processNonLapseResult,
     stopReviewWordNonLapse,

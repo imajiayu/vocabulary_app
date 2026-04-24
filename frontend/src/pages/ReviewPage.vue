@@ -97,6 +97,20 @@
               <span class="time-point">{{ formatTime(sessionEndTime) }}</span>
             </div>
           </div>
+          <div v-if="sessionSummary" class="session-stats-info">
+            <div class="stats-row">
+              <span class="stats-item correct">{{ sessionSummary.correct }}</span>
+              <span class="stats-divider">/</span>
+              <span class="stats-item wrong">{{ sessionSummary.wrong }}</span>
+              <span class="stats-accuracy">{{ sessionSummary.accuracyLabel }}</span>
+            </div>
+            <div class="stats-delta">
+              <span class="delta-label">{{ sessionSummary.deltaLabel }}</span>
+              <span class="delta-value" :class="sessionSummary.deltaClass">
+                {{ sessionSummary.deltaText }}
+              </span>
+            </div>
+          </div>
           <button @click="goHome" class="home-btn">
             <span class="btn-icon">←</span>
             <span class="btn-text">回到首页</span>
@@ -302,6 +316,7 @@ const {
   initialWordCount,
   wordGapLevels,
   spellWeakWords,
+  sessionStats,
 } = storeToRefs(reviewStore)
 
 provideReviewContext({
@@ -344,6 +359,53 @@ const sessionDuration = computed(() => {
   if (minutes > 0) return `${minutes}分${seconds}秒`
   return `${seconds}秒`
 })
+
+// 完成界面：本次会话的正确/错误/正确率 + 平均 EF / 强度变化
+// 仅在 mode_review / mode_spelling 下显示（其他模式未累计，返回 null）
+const sessionSummary = computed(() => {
+  const s = sessionStats.value
+  if (!s) return null
+
+  if (mode.value === 'mode_review' && s.reviewCount > 0) {
+    const total = s.reviewCount
+    const correct = s.reviewCorrect
+    const wrong = s.reviewWrong
+    const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0
+    const avg = total > 0 ? s.reviewEfDeltaSum / total : 0
+    return buildSummary(correct, wrong, accuracy, avg, '平均 EF 变化')
+  }
+
+  if (mode.value === 'mode_spelling' && s.spellCount > 0) {
+    const total = s.spellCount
+    const correct = s.spellCorrect
+    const wrong = s.spellWrong
+    const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0
+    const avg = total > 0 ? s.spellStrengthDeltaSum / total : 0
+    return buildSummary(correct, wrong, accuracy, avg, '平均强度变化')
+  }
+
+  return null
+})
+
+function buildSummary(
+  correct: number,
+  wrong: number,
+  accuracy: number,
+  avgDelta: number,
+  deltaLabel: string
+) {
+  const rounded = Math.round(avgDelta * 100) / 100
+  const sign = rounded > 0 ? '+' : ''
+  const deltaClass = rounded > 0 ? 'positive' : rounded < 0 ? 'negative' : 'neutral'
+  return {
+    correct,
+    wrong,
+    accuracyLabel: `${accuracy}%`,
+    deltaLabel,
+    deltaText: `${sign}${rounded.toFixed(2)}`,
+    deltaClass,
+  }
+}
 
 useTimerPause()
 
@@ -815,6 +877,85 @@ onUnmounted(() => {
   color: var(--primitive-paper-500);
 }
 
+/* ── 会话统计（正确/错误 + 平均变化） ── */
+.session-stats-info {
+  margin-bottom: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.stats-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-item {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stats-item.correct {
+  color: var(--primitive-olive-600);
+}
+
+.stats-item.wrong {
+  color: var(--primitive-brick-500);
+}
+
+.stats-divider {
+  font-size: 0.9rem;
+  color: var(--primitive-paper-500);
+}
+
+.stats-accuracy {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 0.15rem 0.5rem;
+  background: var(--primitive-paper-200);
+  border-radius: var(--radius-full);
+}
+
+.stats-delta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+}
+
+.delta-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.delta-value {
+  font-family: var(--font-data);
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.delta-value.positive {
+  color: var(--primitive-olive-600);
+}
+
+.delta-value.negative {
+  color: var(--primitive-brick-500);
+}
+
+.delta-value.neutral {
+  color: var(--color-text-secondary);
+}
+
 .home-btn {
   display: inline-flex;
   align-items: center;
@@ -932,6 +1073,23 @@ onUnmounted(() => {
     margin-bottom: 1.25rem;
   }
 
+  .session-stats-info {
+    margin-bottom: 1.25rem;
+    gap: 0.375rem;
+  }
+
+  .stats-item {
+    font-size: 1.1rem;
+  }
+
+  .stats-accuracy {
+    font-size: 0.75rem;
+  }
+
+  .delta-value {
+    font-size: 0.85rem;
+  }
+
   .duration-value {
     font-size: 1.25rem;
   }
@@ -978,6 +1136,19 @@ onUnmounted(() => {
 
   .session-time-info {
     margin-bottom: 0.5rem;
+  }
+
+  .session-stats-info {
+    margin-bottom: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .stats-item {
+    font-size: 0.95rem;
+  }
+
+  .delta-value {
+    font-size: 0.8rem;
   }
 
   .time-duration {
