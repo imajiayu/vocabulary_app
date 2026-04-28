@@ -84,6 +84,53 @@ export interface WordScheduleData {
 }
 
 /**
+ * 清洗 Edge Function 返回的原始释义对象，仅服务于新建态「获取释义」按钮：
+ * - definitions: 把 ["n.", "1. xxx", "2. yyy"] 这种被有道新版页面拆开的结果
+ *   合并成一条 "n. xxx；yyy"（数字前缀剥掉，多条用 "；" 拼）
+ * - examples: 用 \s+ 归一化掉 li 残留的 \n\t 缩进
+ * 不动 phonetic（前端无能为力，缺就缺）
+ *
+ * 故意不放在 utils/definition.ts 里 — 避免影响已存在词的旧 fetchDefinition 路径
+ */
+function sanitizeFetchedDefinition(def: DefinitionObject): DefinitionObject {
+  const out: DefinitionObject = { ...def }
+
+  // definitions：合并孤立词性条目
+  if (Array.isArray(def.definitions) && def.definitions.length > 0) {
+    const cleaned = def.definitions
+      .map(s => (s ?? '').replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+
+    const isPosOnly = (s: string) => /^[a-zA-Z]+[.．]?\s*$/.test(s)
+    const posPrefixes: string[] = []
+    const realDefs: string[] = []
+    for (const s of cleaned) {
+      if (isPosOnly(s)) posPrefixes.push(s.replace(/[.．]?\s*$/, '.'))
+      else realDefs.push(s)
+    }
+
+    if (posPrefixes.length === 0) {
+      out.definitions = cleaned
+    } else if (realDefs.length === 0) {
+      out.definitions = posPrefixes
+    } else {
+      const stripped = realDefs.map(s => s.replace(/^\d+[.．]\s*/, ''))
+      out.definitions = [`${posPrefixes[0]} ${stripped.join('；')}`]
+    }
+  }
+
+  // examples：清洗多余空白
+  if (Array.isArray(def.examples)) {
+    out.examples = def.examples.map(ex => ({
+      en: (ex.en ?? '').replace(/\s+/g, ' ').trim(),
+      zh: (ex.zh ?? '').replace(/\s+/g, ' ').trim(),
+    }))
+  }
+
+  return out
+}
+
+/**
  * 单词API类
  */
 export class WordsApi {
@@ -245,7 +292,9 @@ export class WordsApi {
   /**
    * 仅根据单词文本 + 语言获取释义（不依赖 wordId / 不写 DB / 不查 user_config）
    * 创建态用：先拉释义预填表单，由 saveCreate 真正写库
-   * 复用 fetchDefinition 的 Edge Function + AI fallback + bold 处理逻辑
+   *
+   * 与 fetchDefinition 共用 Edge Function + AI fallback，但只在这个新路径上做
+   * 表单友好的后处理（合并孤立词性条目、清洗例句空白）— 老路径行为保持不变
    */
   static async fetchDefinitionByTextDirect(
     wordText: string,
@@ -273,7 +322,7 @@ export class WordsApi {
       rawDefinition = data.definition as DefinitionObject
     }
 
-    return applyBoldToDefinition(rawDefinition, cleaned)
+    return applyBoldToDefinition(sanitizeFetchedDefinition(rawDefinition), cleaned)
   }
 
   /**
