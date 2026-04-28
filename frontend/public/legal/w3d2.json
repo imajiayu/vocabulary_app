@@ -1,7 +1,7 @@
 {
-  "title": "第3周 第2天 — 对价基础（Consideration Fundamentals）",
-  "objective": "<strong>学习目标：</strong>掌握法律英语中“对价”（consideration）的核心概念、多种类型及其在合同法中的关键角色。理解 consideration 作为法律术语与日常英语“考虑”的本质区别，学会在合同条款中识别和使用对价相关表述。",
-  "intro": "<strong>上节回顾：</strong>第2周重点学习了权利与义务条款，掌握了 shall/may/must 等法律助动词、陈述与保证（representations & warranties）、条件条款（conditions）、责任限制（<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>）和保密条款（confidentiality）等关键概念。本周进入支付与对价条款，对价是所有有效合同的法律基础。",
+  "title": "第3周 第2天 — 对价基础（<span class=\"term\" data-def=\"对价\">Consideration</span> Fundamentals）",
+  "objective": "<strong>学习目标：</strong>掌握法律英语中“对价”（<span class=\"term\" data-def=\"对价\">consideration</span>）的核心概念、多种类型及其在合同法中的关键角色。理解 <span class=\"term\" data-def=\"对价\">consideration</span> 作为法律术语与日常英语“考虑”的本质区别，学会在合同条款中识别和使用对价相关表述。",
+  "intro": "<strong>上节回顾：</strong>第2周重点学习了权利与义务条款，掌握了 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>/<span class=\"term\" data-def=\"可以（任择/许可）\">may</span>/<span class=\"term\" data-def=\"必须（绝对强制）\">must</span> 等法律助动词、陈述与保证（representations & warranties）、条件条款（<span class=\"term\" data-def=\"条件（复数）\">conditions</span>）、责任限制（<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>）和保密条款（confidentiality）等关键概念。本周进入支付与对价条款，对价是所有有效合同的法律基础。",
   "sections": [
     {
       "type": "grammar",
@@ -9,7 +9,7 @@
       "blocks": [
         {
           "type": "error-warn",
-          "html": "<strong>上周错题待复习：</strong>以下5个概念在上周练习中出现错误，本课将在练习C中安排复习。请重点关注：<ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（错误：非“执行条款”）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（必须整体使用，非简化形式）</li><li><span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span> = 被裁定为（错误：非“被认为”）</li><li><span class=\"term\">unenforceable</span> = 不可执行的（常见遗漏）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（here- 家族词难点）</li></ul>"
+          "html": "<strong>上周错题待复习：</strong>以下5个概念在上周练习中出现错误，本课将在练习C中安排复习。请重点关注：<ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（错误：非“执行条款”）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（必须整体使用，非简化形式）</li><li><span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span> = 被裁定为（错误：非“被认为”）</li><li><span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span> = 不可执行的（常见遗漏）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（here- 家族词难点）</li></ul>"
         }
       ]
     },
@@ -27,7 +27,7 @@
           "<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>",
           "/ˌkənsɪˈdəreɪʃən/",
           "n. 对价；约因；代价",
-          "for consideration; <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>; without consideration"
+          "for <span class=\"term\" data-def=\"对价\">consideration</span>; <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>; without <span class=\"term\" data-def=\"对价\">consideration</span>"
         ],
         [
           "<span class=\"term\" data-def=\"相互对价；互惠对价\">mutual consideration</span>",
@@ -45,7 +45,7 @@
           "<span class=\"term\" data-def=\"充分对价；足够对价\">adequate consideration</span>",
           "/ˈædɪkwət ˌkənsɪˈdəreɪʃən/",
           "n. 充分对价；足够对价",
-          "whether the consideration is adequate"
+          "whether the <span class=\"term\" data-def=\"对价\">consideration</span> is adequate"
         ],
         [
           "<span class=\"term\" data-def=\"名义对价；象征性对价\">nominal consideration</span>",
@@ -57,7 +57,7 @@
           "<span class=\"term\" data-def=\"道义对价；情感对价\">good consideration</span>",
           "/ɡʊd ˌkənsɪˈdəreɪʃən/",
           "n. 道义对价；情感对价",
-          "past acts may constitute <span class=\"term\" data-def=\"道义对价；情感对价\">good consideration</span>"
+          "past acts <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> constitute <span class=\"term\" data-def=\"道义对价；情感对价\">good consideration</span>"
         ],
         [
           "<span class=\"term\" data-def=\"过往对价；既往对价\">past consideration</span>",
@@ -69,7 +69,7 @@
           "<span class=\"term\" data-def=\"对价不履行；对价失败\">failure of consideration</span>",
           "/ˈfeɪljər əv ˌkənsɪˈdəreɪʃən/",
           "n. 对价不履行；对价失败",
-          "in the event of <span class=\"term\" data-def=\"对价不履行；对价失败\">failure of consideration</span>, Party B may terminate"
+          "in the event of <span class=\"term\" data-def=\"对价不履行；对价失败\">failure of consideration</span>, <span class=\"term\" data-def=\"当事人\">Party</span> B <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span>"
         ],
         [
           "<span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>",
@@ -87,43 +87,43 @@
           "<span class=\"term\" data-def=\"交易；约定；讨价还价\">bargain</span>",
           "/ˈbɑːɡən/",
           "n./v. 交易；约定；讨价还价",
-          "a hard bargain; to strike a bargain"
+          "a hard <span class=\"term\" data-def=\"交易\">bargain</span>; to strike a <span class=\"term\" data-def=\"交易\">bargain</span>"
         ],
         [
           "<span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span>",
           "/ˈbɑːɡənd fɔːr ɪksˈtʃeɪndʒ/",
           "phr. 已达成一致的交换；已讨价还价的交换",
-          "consideration requires a <span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span>"
+          "<span class=\"term\" data-def=\"对价\">consideration</span> requires a <span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span>"
         ],
         [
           "<span class=\"term\" data-def=\"承诺人；作出承诺的人\">promisor</span>",
           "/ˈprɒmɪsər/",
           "n. 承诺人；作出承诺的人",
-          "the promisor's obligations"
+          "the <span class=\"term\" data-def=\"承诺人\">promisor</span>'s <span class=\"term\" data-def=\"义务（复数）\">obligations</span>"
         ],
         [
           "<span class=\"term\" data-def=\"被承诺人；受诺人\">promisee</span>",
           "/ˌprɒmɪˈsiː/",
           "n. 被承诺人；受诺人",
-          "the promisee's right to enforce"
+          "the <span class=\"term\" data-def=\"被承诺人\">promisee</span>'s <span class=\"term\" data-def=\"权利\">right</span> to enforce"
         ],
         [
           "<span class=\"term\" data-def=\"无偿的；无对价的\">gratuitous</span>",
           "/ɡrəˈtjuːɪtəs/",
           "adj. 无偿的；无对价的；无端的",
-          "a gratuitous promise is not enforceable"
+          "a <span class=\"term\" data-def=\"无偿的\">gratuitous</span> promise is not <span class=\"term\" data-def=\"可执行的\">enforceable</span>"
         ],
         [
           "<span class=\"term\" data-def=\"等价交换；一物换一物\">quid pro quo</span>",
           "/ˌkwɪd proʊ ˈkwoʊ/",
           "phr. 等价交换；一物换一物",
-          "consideration is the <span class=\"term\" data-def=\"等价交换；一物换一物\">quid pro quo</span> of a contract"
+          "<span class=\"term\" data-def=\"对价\">consideration</span> is the <span class=\"term\" data-def=\"等价交换；一物换一物\">quid pro quo</span> of a contract"
         ],
         [
           "<span class=\"term\" data-def=\"将来对价；未来履行的对价\">executory consideration</span>",
           "/ɪɡˈzɛkjətɔːri ˌkənsɪˈdəreɪʃən/",
           "n. 将来对价；未来履行的对价",
-          "a promise of future performance is <span class=\"term\" data-def=\"将来对价；未来履行的对价\">executory consideration</span>"
+          "a promise of future <span class=\"term\" data-def=\"履行\">performance</span> is <span class=\"term\" data-def=\"将来对价；未来履行的对价\">executory consideration</span>"
         ],
         [
           "<span class=\"term\" data-def=\"已履行对价；已完成的对价\">executed consideration</span>",
@@ -166,7 +166,7 @@
               }
             ],
             [
-              "the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and <span class=\"term\" data-def=\"充分性；足够性\">sufficiency</span> of which is hereby <span class=\"term\" data-def=\"确认/承认\">acknowledged</span>",
+              "the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and <span class=\"term\" data-def=\"充分性；足够性\">sufficiency</span> of which is <span class=\"term\" data-def=\"兹；特此\">hereby</span> <span class=\"term\" data-def=\"确认/承认\">acknowledged</span>",
               "现已确认收到且对价充分",
               {
                 "en": "<span class=\"en-text\">The parties acknowledge the receipt and sufficiency of the consideration hereof.</span>",
@@ -223,7 +223,7 @@
       "blocks": [
         {
           "type": "h3",
-          "text": "3.1 Consideration 的两重身份：日常 vs 法律"
+          "text": "3.1 <span class=\"term\" data-def=\"对价\">Consideration</span> 的两重身份：日常 vs 法律"
         },
         {
           "type": "p",
@@ -238,11 +238,11 @@
         },
         {
           "type": "p",
-          "html": "<strong>核心要点：</strong>在合同中，consideration 永远不是“考虑”，而是指<strong>交换、代价、约因</strong>。这是判断合同是否有效的最关键要素之一。"
+          "html": "<strong>核心要点：</strong>在合同中，<span class=\"term\" data-def=\"对价\">consideration</span> 永远不是“考虑”，而是指<strong>交换、代价、约因</strong>。这是判断合同是否有效的最关键要素之一。"
         },
         {
           "type": "h3",
-          "text": "3.2 Gratuitous vs Valuable"
+          "text": "3.2 <span class=\"term\" data-def=\"无偿的\">Gratuitous</span> vs Valuable"
         },
         {
           "type": "table",
@@ -257,7 +257,7 @@
               "<span class=\"term\" data-def=\"无偿的；无对价的\">gratuitous</span> promise",
               "无偿承诺",
               "一方不期待任何回报而作出的承诺",
-              "通常<strong>不可强制执行</strong>（缺乏 consideration）"
+              "通常<strong>不可强制执行</strong>（缺乏 <span class=\"term\" data-def=\"对价\">consideration</span>）"
             ],
             [
               "<span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>",
@@ -288,7 +288,7 @@
         },
         {
           "type": "h3",
-          "text": "3.4 Promisor vs Promisee"
+          "text": "3.4 <span class=\"term\" data-def=\"承诺人\">Promisor</span> vs <span class=\"term\" data-def=\"被承诺人\">Promisee</span>"
         },
         {
           "type": "table",
@@ -303,13 +303,13 @@
               "<span class=\"term\" data-def=\"承诺人；作出承诺的人\">Promisor</span>",
               "作出承诺的人",
               "债务人（负有义务的一方）",
-              "The <span class=\"term\" data-def=\"承诺人；作出承诺的人\">promisor</span> shall deliver the Goods."
+              "The <span class=\"term\" data-def=\"承诺人；作出承诺的人\">promisor</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver the Goods."
             ],
             [
               "<span class=\"term\" data-def=\"被承诺人；受诺人\">Promisee</span>",
               "接受承诺的人",
               "债权人（有权利的一方）",
-              "The <span class=\"term\" data-def=\"被承诺人；受诺人\">promisee</span> has the right to demand delivery."
+              "The <span class=\"term\" data-def=\"被承诺人；受诺人\">promisee</span> has the <span class=\"term\" data-def=\"权利\">right</span> to demand delivery."
             ]
           ]
         }
@@ -321,36 +321,36 @@
       "items": [
         {
           "title": "例句 1：对价确认与充分性",
-          "sentence": "In consideration of the mutual covenants and agreements herein contained and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged by each party, the parties agree as follows.",
+          "sentence": "<span class=\"term\" data-def=\"鉴于\">In consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements <span class=\"term\" data-def=\"本协议中\">herein</span> contained and for other good and <span class=\"term\" data-def=\"有价对价\">valuable consideration</span>, the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged by each <span class=\"term\" data-def=\"当事人\">party</span>, the parties agree as follows.",
           "structure": [
             "<em><span class=\"term\" data-def=\"鉴于/考虑到\">In consideration of</span>...</em> — 介词短语作状语，表示“基于...对价”",
             "<em>the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements</em> — 宾语，表示“相互的承诺和协议”",
             "<em>for other good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span></em> — 补充说明对价的质量（“充分且有价值”）",
-            "<em>the receipt and sufficiency of which are hereby acknowledged</em> — 关系从句，修饰 consideration，“对价的收据和充分性由此确认”。注意 which 指代前面的 consideration",
-            "<em>by each party</em> — 表示由“各方”确认"
+            "<em>the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged</em> — 关系从句，修饰 <span class=\"term\" data-def=\"对价\">consideration</span>，“对价的收据和充分性由此确认”。注意 which 指代前面的 <span class=\"term\" data-def=\"对价\">consideration</span>",
+            "<em>by each <span class=\"term\" data-def=\"当事人\">party</span></em> — 表示由“各方”确认"
           ],
           "translation": "鉴于本协议所含的相互承诺与协议，以及其他充分且有价值的对价（各方对该对价的收据和充分性由此确认），各方同意如下。"
         },
         {
           "title": "例句 2：对价不足的后果",
-          "sentence": "Should there be a total failure of consideration, the receiving party shall be entitled to recover the full amount paid hereunder, provided that such recovery shall not exceed the actual damages incurred.",
+          "sentence": "<span class=\"term\" data-def=\"应（建议性，非强制）\">Should</span> there be a <span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>, the <span class=\"term\" data-def=\"接收方\">receiving party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be entitled to recover the full amount paid <span class=\"term\" data-def=\"依本协议\">hereunder</span>, <span class=\"term\" data-def=\"但是\">provided that</span> such recovery <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not exceed the actual <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span> incurred.",
           "structure": [
-            "<em>Should there be a <span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span></em> — 虚拟条件句，表示“万一对价完全不履行”",
+            "<em><span class=\"term\" data-def=\"应（建议性，非强制）\">Should</span> there be a <span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span></em> — 虚拟条件句，表示“万一对价完全不履行”",
             "<em>the <span class=\"term\" data-def=\"接收方\">receiving party</span></em> — 主语，指“接收方”（通常是支付方或给付方）",
-            "<em>shall be entitled to recover</em> — 有权收回，法律义务强调",
-            "<em>hereunder</em> — here- 家族词，表示“根据本协议”",
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be entitled to recover</em> — 有权收回，法律义务强调",
+            "<em><span class=\"term\" data-def=\"依本协议\">hereunder</span></em> — here- 家族词，表示“根据本协议”",
             "<em><span class=\"term\" data-def=\"但是/前提是\">provided that</span></em> — 条件从句，“条件是”“但须”"
           ],
           "translation": "若对价完全不履行，接收方有权收回已支付的全部金额，但该收回额不得超过实际产生的损害赔偿。"
         },
         {
           "title": "例句 3：无对价承诺的不可执行性",
-          "sentence": "Any promise made without consideration shall be deemed gratuitous and shall not be enforceable against the promisor unless such promise is executed in a deed or other formal instrument as required by applicable law.",
+          "sentence": "Any promise made without <span class=\"term\" data-def=\"对价\">consideration</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be deemed <span class=\"term\" data-def=\"无偿的\">gratuitous</span> and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not be <span class=\"term\" data-def=\"可执行的\">enforceable</span> against the <span class=\"term\" data-def=\"承诺人\">promisor</span> unless such promise is executed in a <span class=\"term\" data-def=\"契据；正式文书\">deed</span> or other formal instrument as required by applicable law.",
           "structure": [
-            "<em>Any promise made without consideration</em> — 分词短语，修饰 promise，表示“任何未获对价的承诺”",
-            "<em>shall be deemed gratuitous</em> — 被视为无偿的",
-            "<em>shall not be enforceable against the promisor</em> — 不能对承诺人强制执行",
-            "<em>unless such promise is executed in a deed</em> — 除非...以法律文书形式执行。注意：在英美法中，即使缺乏 consideration，“deed”（契约）也可强制执行"
+            "<em>Any promise made without <span class=\"term\" data-def=\"对价\">consideration</span></em> — 分词短语，修饰 promise，表示“任何未获对价的承诺”",
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be deemed <span class=\"term\" data-def=\"无偿的\">gratuitous</span></em> — 被视为无偿的",
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not be <span class=\"term\" data-def=\"可执行的\">enforceable</span> against the <span class=\"term\" data-def=\"承诺人\">promisor</span></em> — 不能对承诺人强制执行",
+            "<em>unless such promise is executed in a <span class=\"term\" data-def=\"契据；正式文书\">deed</span></em> — 除非...以法律文书形式执行。注意：在英美法中，即使缺乏 <span class=\"term\" data-def=\"对价\">consideration</span>，“<span class=\"term\" data-def=\"契据；正式文书\">deed</span>”（契约）也可强制执行"
           ],
           "translation": "任何不获对价的承诺应被视为无偿承诺，除非该承诺以契约或其他法律规定的正式文书形式执行，否则对承诺人不可强制执行。"
         }
@@ -390,62 +390,62 @@
             {
               "prompt": "1. 合同法中，一方为了获得另一方承诺而给予或承诺的价值。",
               "options": [
-                "consideration",
+                "<span class=\"term\" data-def=\"对价\">consideration</span>",
                 "attention",
                 "thought"
               ],
-              "answer": "consideration",
-              "explanation": "consideration = 对价/约因，法律术语，非日常“考虑”"
+              "answer": "<span class=\"term\" data-def=\"对价\">consideration</span>",
+              "explanation": "<span class=\"term\" data-def=\"对价\">consideration</span> = 对价/约因，法律术语，非日常“考虑”"
             },
             {
               "prompt": "2. 有现实或法律价值的对价，如金钱、服务或承诺。",
               "options": [
-                "valuable consideration",
-                "nominal consideration",
-                "good consideration"
+                "<span class=\"term\" data-def=\"有价对价\">valuable consideration</span>",
+                "<span class=\"term\" data-def=\"名义对价\">nominal consideration</span>",
+                "<span class=\"term\" data-def=\"道义对价\">good consideration</span>"
               ],
-              "answer": "valuable consideration",
-              "explanation": "valuable consideration = 有价对价，包含实际或法律价值的东西"
+              "answer": "<span class=\"term\" data-def=\"有价对价\">valuable consideration</span>",
+              "explanation": "<span class=\"term\" data-def=\"有价对价\">valuable consideration</span> = 有价对价，包含实际或法律价值的东西"
             },
             {
               "prompt": "3. 形式上很小但符合法律要求的对价，如1美元。",
               "options": [
-                "adequate consideration",
-                "nominal consideration",
-                "executed consideration"
+                "<span class=\"term\" data-def=\"充分对价\">adequate consideration</span>",
+                "<span class=\"term\" data-def=\"名义对价\">nominal consideration</span>",
+                "<span class=\"term\" data-def=\"已履行对价\">executed consideration</span>"
               ],
-              "answer": "nominal consideration",
-              "explanation": "nominal consideration = 名义对价，象征性的、极小的对价（如1美元）"
+              "answer": "<span class=\"term\" data-def=\"名义对价\">nominal consideration</span>",
+              "explanation": "<span class=\"term\" data-def=\"名义对价\">nominal consideration</span> = 名义对价，象征性的、极小的对价（如1美元）"
             },
             {
               "prompt": "4. 一方未能履行其承诺或未能提供商品/服务。",
               "options": [
-                "breach of warranty",
-                "failure of consideration",
+                "<span class=\"term\" data-def=\"违反保证\">breach of warranty</span>",
+                "<span class=\"term\" data-def=\"对价不履行\">failure of consideration</span>",
                 "force majeure"
               ],
-              "answer": "failure of consideration",
-              "explanation": "failure of consideration = 对价不履行，指一方未能履行其在对价中的承诺"
+              "answer": "<span class=\"term\" data-def=\"对价不履行\">failure of consideration</span>",
+              "explanation": "<span class=\"term\" data-def=\"对价不履行\">failure of consideration</span> = 对价不履行，指一方未能履行其在对价中的承诺"
             },
             {
               "prompt": "5. 一方单方作出、不期待任何回报的承诺。",
               "options": [
                 "mutual",
-                "gratuitous",
-                "conditional"
+                "<span class=\"term\" data-def=\"无偿的\">gratuitous</span>",
+                "<span class=\"term\" data-def=\"有条件的\">conditional</span>"
               ],
-              "answer": "gratuitous",
-              "explanation": "gratuitous = 无偿的、无对价的，这样的承诺通常不可强制执行"
+              "answer": "<span class=\"term\" data-def=\"无偿的\">gratuitous</span>",
+              "explanation": "<span class=\"term\" data-def=\"无偿的\">gratuitous</span> = 无偿的、无对价的，这样的承诺通常不可强制执行"
             },
             {
               "prompt": "6. 拉丁法律短语，表示“一物换一物”的等价交换原则。",
               "options": [
                 "pro bono",
-                "quid pro quo",
+                "<span class=\"term\" data-def=\"等价交换\">quid pro quo</span>",
                 "pro rata"
               ],
-              "answer": "quid pro quo",
-              "explanation": "quid pro quo = 等价交换，强调对价是“一物换一物”，这是 consideration 的本质"
+              "answer": "<span class=\"term\" data-def=\"等价交换\">quid pro quo</span>",
+              "explanation": "<span class=\"term\" data-def=\"等价交换\">quid pro quo</span> = 等价交换，强调对价是“一物换一物”，这是 <span class=\"term\" data-def=\"对价\">consideration</span> 的本质"
             }
           ]
         }
@@ -461,54 +461,54 @@
           "instruction": "选择合适的术语填空。注意关键词汇的语境区别。",
           "questions": [
             {
-              "prompt": "1. For a contract to be enforceable, there must be mutual ____ between the parties.",
+              "prompt": "1. For a contract to be <span class=\"term\" data-def=\"可执行的\">enforceable</span>, there <span class=\"term\" data-def=\"必须（绝对强制）\">must</span> be mutual ____ between the parties.",
               "options": [
-                "consideration",
+                "<span class=\"term\" data-def=\"对价\">consideration</span>",
                 "discussion",
                 "approval"
               ],
-              "answer": "consideration",
+              "answer": "<span class=\"term\" data-def=\"对价\">consideration</span>",
               "explanation": "此句需要“对价”这个法律术语，表示合同交换的核心要素"
             },
             {
               "prompt": "2. _______ the Services to be provided, Client agrees to pay USD 10,000 within 30 days.",
               "options": [
-                "in consideration of",
+                "<span class=\"term\" data-def=\"鉴于\">in consideration of</span>",
                 "in view of",
                 "with respect to"
               ],
-              "answer": "in consideration of",
-              "explanation": "'in consideration of' 是固定搭配，表示'基于...的对价'"
+              "answer": "<span class=\"term\" data-def=\"鉴于\">in consideration of</span>",
+              "explanation": "'<span class=\"term\" data-def=\"鉴于\">in consideration of</span>' 是固定搭配，表示'基于...的对价'"
             },
             {
-              "prompt": "3. The payment of Fees constitutes _______ for the Goods.",
+              "prompt": "3. The <span class=\"term\" data-def=\"付款\">payment</span> of Fees constitutes _______ for the Goods.",
               "options": [
-                "nominal consideration",
-                "valuable consideration",
-                "past consideration"
+                "<span class=\"term\" data-def=\"名义对价\">nominal consideration</span>",
+                "<span class=\"term\" data-def=\"有价对价\">valuable consideration</span>",
+                "<span class=\"term\" data-def=\"过往对价\">past consideration</span>"
               ],
-              "answer": "valuable consideration",
-              "explanation": "valuable consideration = 有价对价，本句强调对价的有价值性"
+              "answer": "<span class=\"term\" data-def=\"有价对价\">valuable consideration</span>",
+              "explanation": "<span class=\"term\" data-def=\"有价对价\">valuable consideration</span> = 有价对价，本句强调对价的有价值性"
             },
             {
-              "prompt": "4. A _______ promise is generally not enforceable unless it is made in a formal deed.",
+              "prompt": "4. A _______ promise is generally not <span class=\"term\" data-def=\"可执行的\">enforceable</span> unless it is made in a formal <span class=\"term\" data-def=\"契据；正式文书\">deed</span>.",
               "options": [
                 "bilateral",
-                "gratuitous",
+                "<span class=\"term\" data-def=\"无偿的\">gratuitous</span>",
                 "unilateral"
               ],
-              "answer": "gratuitous",
-              "explanation": "gratuitous promise = 无偿承诺，这样的承诺通常不受合同法保护"
+              "answer": "<span class=\"term\" data-def=\"无偿的\">gratuitous</span>",
+              "explanation": "<span class=\"term\" data-def=\"无偿的\">gratuitous</span> promise = 无偿承诺，这样的承诺通常不受合同法保护"
             },
             {
-              "prompt": "5. Consideration requires a _______ between the promisor and promisee.",
+              "prompt": "5. <span class=\"term\" data-def=\"对价\">Consideration</span> requires a _______ between the <span class=\"term\" data-def=\"承诺人\">promisor</span> and <span class=\"term\" data-def=\"被承诺人\">promisee</span>.",
               "options": [
                 "mutual agreement",
-                "bargained-for exchange",
-                "written consent"
+                "<span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span>",
+                "written <span class=\"term\" data-def=\"同意\">consent</span>"
               ],
-              "answer": "bargained-for exchange",
-              "explanation": "bargained-for exchange = 讨价还价后达成的交换，这是 consideration 的核心特征"
+              "answer": "<span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span>",
+              "explanation": "<span class=\"term\" data-def=\"已达成一致的交换\">bargained-for exchange</span> = 讨价还价后达成的交换，这是 <span class=\"term\" data-def=\"对价\">consideration</span> 的核心特征"
             }
           ]
         },
@@ -518,7 +518,7 @@
           "instruction": "根据对价的法律定义判断以下陈述的正误。",
           "questions": [
             {
-              "prompt": "1. Consideration must be mutual and exchanged by both parties. 对价必须是相互的且由双方交换。",
+              "prompt": "1. <span class=\"term\" data-def=\"对价\">Consideration</span> <span class=\"term\" data-def=\"必须（绝对强制）\">must</span> be mutual and exchanged by both parties. 对价必须是相互的且由双方交换。",
               "options": [
                 "正确",
                 "错误"
@@ -527,7 +527,7 @@
               "explanation": "正确。对价必须是相互的、双向的，每一方都给予或承诺某物作为交换。"
             },
             {
-              "prompt": "2. The courts always examine whether the consideration is adequate and equal in value. 法院总是审查对价是否充分且价值相等。",
+              "prompt": "2. The courts always examine whether the <span class=\"term\" data-def=\"对价\">consideration</span> is adequate and equal in value. 法院总是审查对价是否充分且价值相等。",
               "options": [
                 "正确",
                 "错误"
@@ -536,13 +536,13 @@
               "explanation": "错误。法律通常不审查对价的充分性（adequacy），只要双方达成一致交换，哪怕不对等也有效。除非涉及欺诈或胁迫。"
             },
             {
-              "prompt": "3. A promise made for one dollar as consideration is invalid due to insufficient value. 为1美元承诺的对价因价值不足而无效。",
+              "prompt": "3. A promise made for one dollar as <span class=\"term\" data-def=\"对价\">consideration</span> is invalid due to insufficient value. 为1美元承诺的对价因价值不足而无效。",
               "options": [
                 "正确",
                 "错误"
               ],
               "answer": "错误",
-              "explanation": "错误。即使是很小的对价（如1美元），只要是双方明确同意的交换，在法律上也是充分的（sufficient）。这叫 nominal consideration。"
+              "explanation": "错误。即使是很小的对价（如1美元），只要是双方明确同意的交换，在法律上也是充分的（sufficient）。这叫 <span class=\"term\" data-def=\"名义对价\">nominal consideration</span>。"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"过往对价；既往对价\">Past consideration</span>, such as a prior favor or previous service, can support a new contract. 过往对价，如之前的帮忙或之前的服务，可以支撑新合同。",
@@ -551,16 +551,16 @@
                 "错误"
               ],
               "answer": "错误",
-              "explanation": "错误。即使对价已经在过去履行，如果当初没有约定作为对价，就不构成有效的 consideration。这称为 'past consideration'，通常不足以形成有效合同。"
+              "explanation": "错误。即使对价已经在过去履行，如果当初没有约定作为对价，就不构成有效的 <span class=\"term\" data-def=\"对价\">consideration</span>。这称为 '<span class=\"term\" data-def=\"过往对价\">past consideration</span>'，通常不足以形成有效合同。"
             },
             {
-              "prompt": "5. When there is a <span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>, the other party may seek to rescind the contract or recover damages. 若对价完全不履行，对方可寻求撤销合同或要求赔偿。",
+              "prompt": "5. When there is a <span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>, the other <span class=\"term\" data-def=\"当事人\">party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> seek to rescind the contract or recover <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>. 若对价完全不履行，对方可寻求撤销合同或要求赔偿。",
               "options": [
                 "正确",
                 "错误"
               ],
               "answer": "正确",
-              "explanation": "正确。当一方完全不履行其在对价中的承诺时，对方可以撤销合同或要求赔偿。这被称为 'total failure of consideration'。"
+              "explanation": "正确。当一方完全不履行其在对价中的承诺时，对方可以撤销合同或要求赔偿。这被称为 '<span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>'。"
             }
           ]
         },
@@ -570,54 +570,54 @@
           "instruction": "本练习复习上周出现错误的5个关键概念。这些是今后合同阅读中的常见难点。",
           "questions": [
             {
-              "prompt": "1. The section on <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span> is an _______ that governs the financial obligations of both parties.",
+              "prompt": "1. The section on <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span> is an _______ that governs the financial <span class=\"term\" data-def=\"义务（复数）\">obligations</span> of both parties.",
               "options": [
-                "operative provision",
-                "executive provision",
-                "provisional clause"
+                "<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> <span class=\"term\" data-def=\"规定\">provision</span>",
+                "executive <span class=\"term\" data-def=\"规定\">provision</span>",
+                "provisional <span class=\"term\" data-def=\"条款\">clause</span>"
               ],
-              "answer": "operative provision",
-              "explanation": "operative provision = 实质条款，指合同中具有实质法律效力的条款（如付款义务、交付条款）。executive provision 不是法律术语，executive 指'执行的/行政的'，容易与 operative 混淆；provisional clause 意为'临时条款'，provisional 指'暂时的'，与 operative（实质的）含义完全不同。"
+              "answer": "<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> <span class=\"term\" data-def=\"规定\">provision</span>",
+              "explanation": "<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> <span class=\"term\" data-def=\"规定\">provision</span> = 实质条款，指合同中具有实质法律效力的条款（如付款义务、交付条款）。executive <span class=\"term\" data-def=\"规定\">provision</span> 不是法律术语，executive 指'执行的/行政的'，容易与 <span class=\"term\" data-def=\"实质的；起作用的\">operative</span> 混淆；provisional <span class=\"term\" data-def=\"条款\">clause</span> 意为'临时条款'，provisional 指'暂时的'，与 <span class=\"term\" data-def=\"实质的；起作用的\">operative</span>（实质的）含义完全不同。"
             },
             {
-              "prompt": "2. This Agreement shall remain _______ until terminated by either party in writing.",
+              "prompt": "2. This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> _______ until terminated by either <span class=\"term\" data-def=\"当事人\">party</span> in writing.",
               "options": [
                 "in effect",
                 "in force",
-                "in full force and effect"
+                "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>"
               ],
-              "answer": "in full force and effect",
-              "explanation": "'in full force and effect' 是合同用语，表示条款'完全有效'。必须整体使用，不可简化。常见错误：只说 'in effect' 或 'in force'"
+              "answer": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
+              "explanation": "'<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>' 是合同用语，表示条款'完全有效'。必须整体使用，不可简化。常见错误：只说 'in effect' 或 'in force'"
             },
             {
-              "prompt": "3. The contract was _______ void by the court due to lack of consideration.",
+              "prompt": "3. The contract was _______ void by the court due to lack of <span class=\"term\" data-def=\"对价\">consideration</span>.",
               "options": [
-                "held to be",
+                "<span class=\"term\" data-def=\"被裁定为\">held to be</span>",
                 "regarded as",
                 "considered to be"
               ],
-              "answer": "held to be",
-              "explanation": "'held to be' = 被裁定为，通常用于法律判决。常见错误：用 'held as' 或混淆为'被认为是'（regarded as）。在法律上，'held to be' 强调司法裁定的权威性"
+              "answer": "<span class=\"term\" data-def=\"被裁定为\">held to be</span>",
+              "explanation": "'<span class=\"term\" data-def=\"被裁定为\">held to be</span>' = 被裁定为，通常用于法律判决。常见错误：用 'held as' 或混淆为'被认为是'（regarded as）。在法律上，'<span class=\"term\" data-def=\"被裁定为\">held to be</span>' 强调司法裁定的权威性"
             },
             {
-              "prompt": "4. Penalty clauses that are grossly disproportionate may be deemed _______ by courts.",
+              "prompt": "4. <span class=\"term\" data-def=\"罚款\">Penalty</span> clauses that are grossly disproportionate <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> be deemed _______ by courts.",
               "options": [
                 "unilateral",
-                "unenforceable",
+                "<span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span>",
                 "unreasonable"
               ],
-              "answer": "unenforceable",
-              "explanation": "unenforceable = 不可执行的，指法律上不能强制履行（如格式条款因不合理或过度免责）。注意：与 'void'（无效）略有区别，但都表示无法强制执行"
+              "answer": "<span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span>",
+              "explanation": "<span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span> = 不可执行的，指法律上不能强制履行（如格式条款因不合理或过度免责）。注意：与 'void'（无效）略有区别，但都表示无法强制执行"
             },
             {
-              "prompt": "5. All specifications are <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Schedule B _______ and are incorporated herein by reference.",
+              "prompt": "5. All <span class=\"term\" data-def=\"规格\">specifications</span> are <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Schedule B _______ and are incorporated <span class=\"term\" data-def=\"本协议中\">herein</span> by reference.",
               "options": [
                 "attached here",
-                "attached hereto",
-                "attached hereunder"
+                "<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>",
+                "attached <span class=\"term\" data-def=\"依本协议\">hereunder</span>"
               ],
-              "answer": "attached hereto",
-              "explanation": "'attached hereto' = 附于本协议的，here- 家族词。注意：'hereto' 不是 'to here'，而是 'of this'（本协议）。正确用法：'Exhibit A attached hereto'（附于本协议的附件A）"
+              "answer": "<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>",
+              "explanation": "'<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>' = 附于本协议的，here- 家族词。注意：'<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>' 不是 'to here'，而是 'of this'（本协议）。正确用法：'Exhibit A <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>'（附于本协议的附件A）"
             }
           ]
         }
@@ -643,7 +643,7 @@
               "placeholder": "请输入中文翻译...",
               "rubric": [
                 {
-                  "en": "In consideration of",
+                  "en": "<span class=\"term\" data-def=\"鉴于\">In consideration of</span>",
                   "ideal": "基于...的对价/鉴于",
                   "accept": [
                     "因为",
@@ -652,10 +652,10 @@
                   "wrong": [
                     "考虑"
                   ],
-                  "note": "In consideration of 在合同中是固定搭配，表示'基于对价'，不是日常'考虑'"
+                  "note": "<span class=\"term\" data-def=\"鉴于\">In consideration of</span> 在合同中是固定搭配，表示'基于对价'，不是日常'考虑'"
                 },
                 {
-                  "en": "mutual covenants",
+                  "en": "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
                   "ideal": "相互承诺/相互约定",
                   "accept": [
                     "双方承诺",
@@ -665,10 +665,10 @@
                     "相互同意",
                     "互相理解"
                   ],
-                  "note": "covenant 特指'约定义务'，通常用于严肃的法律承诺"
+                  "note": "<span class=\"term\" data-def=\"契约\">covenant</span> 特指'约定义务'，通常用于严肃的法律承诺"
                 },
                 {
-                  "en": "receipt and sufficiency",
+                  "en": "<span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency",
                   "ideal": "收据和充分性/收据和足够性",
                   "accept": [
                     "收取和确认",
@@ -678,10 +678,10 @@
                     "收获",
                     "接收"
                   ],
-                  "note": "receipt 在合同中指'确认收到'，sufficiency 指'在法律上足够'"
+                  "note": "<span class=\"term\" data-def=\"收到；收据\">receipt</span> 在合同中指'确认收到'，sufficiency 指'在法律上足够'"
                 },
                 {
-                  "en": "hereby acknowledged",
+                  "en": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged",
                   "ideal": "由此确认/据此确认",
                   "accept": [
                     "据此承认",
@@ -691,10 +691,10 @@
                     "被认为",
                     "被理解"
                   ],
-                  "note": "hereby 是法律用语，表示'通过本声明/本协议'"
+                  "note": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> 是法律用语，表示'通过本声明/本协议'"
                 },
                 {
-                  "en": "respective obligations",
+                  "en": "respective <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
                   "ideal": "各自的义务/各自的责任",
                   "accept": [
                     "各方义务",
@@ -737,7 +737,7 @@
                   "note": "在合同中，Goods 特指买卖的标的物，大写首字母"
                 },
                 {
-                  "en": "total failure of consideration",
+                  "en": "<span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>",
                   "ideal": "对价完全不履行/完全对价失败",
                   "accept": [
                     "完全不履行对价",
@@ -762,7 +762,7 @@
                   "note": "entitled to = 有权...，recover = 收回/追偿"
                 },
                 {
-                  "en": "claim damages for breach",
+                  "en": "claim <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span> for breach",
                   "ideal": "就违约要求赔偿/就违反要求损害赔偿金",
                   "accept": [
                     "要求违约赔偿",
@@ -771,7 +771,7 @@
                   "wrong": [
                     "提出违约索赔"
                   ],
-                  "note": "claim damages = 要求赔偿金，breach = 违约"
+                  "note": "claim <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span> = 要求赔偿金，breach = 违约"
                 }
               ]
             }
@@ -783,11 +783,11 @@
           "questions": [
             {
               "source": "1. 双方确认已收到充分的和有价值的对价，据此同意履行本协议项下的各自义务。",
-              "reference": "Both parties acknowledge receipt of adequate and valuable consideration, and hereby agree to perform their respective obligations under this Agreement.",
+              "reference": "Both parties <span class=\"term\" data-def=\"确认\">acknowledge</span> <span class=\"term\" data-def=\"收到；收据\">receipt</span> of adequate and <span class=\"term\" data-def=\"有价对价\">valuable consideration</span>, and <span class=\"term\" data-def=\"兹；特此\">hereby</span> agree to perform their respective <span class=\"term\" data-def=\"义务（复数）\">obligations</span> under this Agreement.",
               "placeholder": "Please enter your English translation...",
               "rubric": [
                 {
-                  "en": "acknowledge receipt of",
+                  "en": "<span class=\"term\" data-def=\"确认\">acknowledge</span> <span class=\"term\" data-def=\"收到；收据\">receipt</span> of",
                   "ideal": "确认收到",
                   "accept": [
                     "承认收到",
@@ -797,10 +797,10 @@
                     "承认",
                     "得到"
                   ],
-                  "note": "acknowledge receipt of 是固定搭配，强调'正式确认收到'"
+                  "note": "<span class=\"term\" data-def=\"确认\">acknowledge</span> <span class=\"term\" data-def=\"收到；收据\">receipt</span> of 是固定搭配，强调'正式确认收到'"
                 },
                 {
-                  "en": "adequate and valuable consideration",
+                  "en": "adequate and <span class=\"term\" data-def=\"有价对价\">valuable consideration</span>",
                   "ideal": "充分的和有价值的对价",
                   "accept": [
                     "适当的和有价值的对价"
@@ -811,7 +811,7 @@
                   "note": "adequate = 充分，valuable = 有价值。二者联用强调对价既充分又有价值"
                 },
                 {
-                  "en": "hereby agree to",
+                  "en": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> agree to",
                   "ideal": "据此同意/由此同意",
                   "accept": [
                     "特此同意"
@@ -819,7 +819,7 @@
                   "wrong": [
                     "同意"
                   ],
-                  "note": "hereby = 通过本协议，强调通过本协议的明确同意"
+                  "note": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> = 通过本协议，强调通过本协议的明确同意"
                 },
                 {
                   "en": "perform",
@@ -831,10 +831,10 @@
                   "wrong": [
                     "表现"
                   ],
-                  "note": "perform obligations = 履行义务，是合同法中的常用动词"
+                  "note": "perform <span class=\"term\" data-def=\"义务（复数）\">obligations</span> = 履行义务，是合同法中的常用动词"
                 },
                 {
-                  "en": "respective obligations",
+                  "en": "respective <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
                   "ideal": "各自的义务",
                   "accept": [
                     "各方义务"
@@ -855,16 +855,16 @@
       "heading": "7. 今日小结",
       "title": "核心要点回顾",
       "points": [
-        "<strong>对价的本质：</strong><span class=\"term\" data-def=\"对价；约因；代价\">Consideration</span> 是法律术语，指交换、代价、约因，与日常英语“考虑”完全不同。在合同法中，<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span> 是有效合同的三大要素之一（offer、acceptance、consideration）。",
+        "<strong>对价的本质：</strong><span class=\"term\" data-def=\"对价；约因；代价\">Consideration</span> 是法律术语，指交换、代价、约因，与日常英语“考虑”完全不同。在合同法中，<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span> 是有效合同的三大要素之一（offer、acceptance、<span class=\"term\" data-def=\"对价\">consideration</span>）。",
         "<strong>相互性：</strong><span class=\"term\" data-def=\"相互对价；互惠对价\">Mutual consideration</span> 强调双方的对等交换。每一方都必须给予或承诺某物，否则合同缺乏对价，可能无效。",
         "<strong>充分性 vs 足够性：</strong>法律关心的是对价是否“足够”（sufficient），即在法律上满足最低要求，而不一定关心是否“充分”（adequate），即价值是否对等。即使1美元的<span class=\"term\" data-def=\"名义对价；象征性对价\">nominal consideration</span>也可以在法律上有效。",
-        "<strong>不可执行的承诺：</strong><span class=\"term\" data-def=\"无偿的；无对价的\">Gratuitous</span>（无偿）承诺通常不可强制执行，除非以正式的<span class=\"term\">deed</span>（契约）形式。",
+        "<strong>不可执行的承诺：</strong><span class=\"term\" data-def=\"无偿的；无对价的\">Gratuitous</span>（无偿）承诺通常不可强制执行，除非以正式的<span class=\"term\" data-def=\"契据；正式文书\">deed</span>（契约）形式。",
         "<strong>对价失败的后果：</strong><span class=\"term\" data-def=\"对价不履行；对价失败\">Failure of consideration</span>（对价不履行）允许另一方撤销合同或要求赔偿。特别是<span class=\"term\" data-def=\"对价完全不履行\">total failure of consideration</span>（完全对价失败）时，接收方有权全额收回支付。",
-        "<strong>固定搭配必背：</strong><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>、for good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>、the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and <span class=\"term\" data-def=\"充分性；足够性\">sufficiency</span> of which are hereby <span class=\"term\" data-def=\"确认/承认\">acknowledged</span> 是合同中最常见的对价相关表述。",
-        "<strong>here- 家族词：</strong><span class=\"term\">herein</span>（本协议中）、<span class=\"term\" data-def=\"本协议的\">hereof</span>（本协议的）、<span class=\"term\">hereto</span>（附于本协议）、<span class=\"term\">hereunder</span>（根据本协议）在合同中频繁出现，要逐个掌握。",
-        "<strong>Promisor vs Promisee：</strong>前者是“承诺人”（债务人），后者是“被承诺人”（债权人）。理解两者的角色有助于快速识别合同中的权利和义务。"
+        "<strong>固定搭配必背：</strong><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>、for good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>、the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and <span class=\"term\" data-def=\"充分性；足够性\">sufficiency</span> of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> <span class=\"term\" data-def=\"确认/承认\">acknowledged</span> 是合同中最常见的对价相关表述。",
+        "<strong>here- 家族词：</strong><span class=\"term\" data-def=\"本协议中\">herein</span>（本协议中）、<span class=\"term\" data-def=\"本协议的\">hereof</span>（本协议的）、<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>（附于本协议）、<span class=\"term\" data-def=\"依本协议\">hereunder</span>（根据本协议）在合同中频繁出现，要逐个掌握。",
+        "<strong><span class=\"term\" data-def=\"承诺人\">Promisor</span> vs <span class=\"term\" data-def=\"被承诺人\">Promisee</span>：</strong>前者是“承诺人”（债务人），后者是“被承诺人”（债权人）。理解两者的角色有助于快速识别合同中的权利和义务。"
       ],
-      "next": "<strong>下节预告：</strong>第3周第2天（预计 2026-03-18）将学习<strong>付款条款与方式</strong>（<span class=\"term\" data-def=\"付款条件；付款条款\">Payment Terms</span> & Methods），包括 payment <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>、payment method、currency、<span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span> 等核心术语。对价决定了“交换什么”，而付款条款决定了“如何和何时交换”。"
+      "next": "<strong>下节预告：</strong>第3周第2天（预计 2026-03-18）将学习<strong>付款条款与方式</strong>（<span class=\"term\" data-def=\"付款条件；付款条款\">Payment Terms</span> & Methods），包括 <span class=\"term\" data-def=\"付款\">payment</span> <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>、<span class=\"term\" data-def=\"付款\">payment</span> method、<span class=\"term\" data-def=\"货币\">currency</span>、<span class=\"term\" data-def=\"逾期付款利息\">late payment interest</span> 等核心术语。对价决定了“交换什么”，而付款条款决定了“如何和何时交换”。"
     }
   ]
 }

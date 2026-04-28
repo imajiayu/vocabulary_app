@@ -1,6 +1,6 @@
 {
-  "title": "第2周 第6天 — 保密条款（Confidentiality & Non-Disclosure）",
-  "objective": "掌握商务合同保密条款中的核心术语和固定搭配，理解保密条款的典型结构（定义→义务→例外→期限→救济），能够准确阅读和翻译 NDA 及合同保密条款。",
+  "title": "第2周 第6天 — 保密条款（Confidentiality & <span class=\"term\" data-def=\"保密\">Non-Disclosure</span>）",
+  "objective": "掌握商务合同保密条款中的核心术语和固定搭配，理解保密条款的典型结构（定义→义务→例外→期限→救济），能够准确阅读和翻译 <span class=\"term\" data-def=\"保密协议\">NDA</span> 及合同保密条款。",
   "sections": [
     {
       "type": "grammar",
@@ -8,7 +8,7 @@
       "blocks": [
         {
           "type": "p",
-          "html": "上节回顾：第2周第4天学习了豁免与责任限制（Waiver & <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>），掌握了 <span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>、<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>、<span class=\"term\" data-def=\"上限\">cap</span>、<span class=\"term\">exclusion</span>、<span class=\"term\" data-def=\"免责声明\">disclaimer</span>、<span class=\"term\" data-def=\"赔偿/补偿\">indemnify</span>、<span class=\"term\" data-def=\"使免受损害\">hold harmless</span>、<span class=\"term\" data-def=\"过失/疏忽\">negligence</span>、<span class=\"term\" data-def=\"重大过失\">gross negligence</span>、<span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>、<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> 等术语。重点辨析了 <span class=\"term\" data-def=\"过失/疏忽\">negligence</span> 的三级递进关系和 <span class=\"term\" data-def=\"直接损害\">direct damages</span> 与 <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> 的区别。今天进入商务合同中几乎必备的保密条款——无论是独立的 NDA（保密协议）还是嵌入合同的保密条款，都是法律实务中最高频的内容之一。"
+          "html": "上节回顾：第2周第4天学习了豁免与责任限制（<span class=\"term\" data-def=\"弃权\">Waiver</span> & <span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>），掌握了 <span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>、<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>、<span class=\"term\" data-def=\"上限\">cap</span>、<span class=\"term\" data-def=\"排除；除外\">exclusion</span>、<span class=\"term\" data-def=\"免责声明\">disclaimer</span>、<span class=\"term\" data-def=\"赔偿/补偿\">indemnify</span>、<span class=\"term\" data-def=\"使免受损害\">hold harmless</span>、<span class=\"term\" data-def=\"过失/疏忽\">negligence</span>、<span class=\"term\" data-def=\"重大过失\">gross negligence</span>、<span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>、<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> 等术语。重点辨析了 <span class=\"term\" data-def=\"过失/疏忽\">negligence</span> 的三级递进关系和 <span class=\"term\" data-def=\"直接损害\">direct damages</span> 与 <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> 的区别。今天进入商务合同中几乎必备的保密条款——无论是独立的 <span class=\"term\" data-def=\"保密协议\">NDA</span>（保密协议）还是嵌入合同的保密条款，都是法律实务中最高频的内容之一。"
         },
         {
           "type": "error-warn",
@@ -16,7 +16,7 @@
         },
         {
           "type": "note",
-          "html": "<strong>实务背景：保密条款的典型结构</strong><p>NDA（<span class=\"term\" data-def=\"保密/不披露\">Non-Disclosure</span> <span class=\"term\" data-def=\"协议\">Agreement</span>，保密协议）是法律实务中最常见的合同类型之一，几乎所有商务谈判的第一步都是签署 NDA。保密条款无论是独立成文还是嵌入合同，通常遵循五段式结构：</p><ol><li><strong>定义</strong>——界定什么是 <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>（保密信息）</li><li><strong>义务</strong>——<span class=\"term\" data-def=\"接收方\">Receiving Party</span>（接收方）的保密义务</li><li><strong>例外</strong>——<span class=\"term\" data-def=\"允许的披露\">Permitted Disclosure</span>（允许披露的情形）</li><li><strong>期限</strong>——保密义务的存续期间</li><li><strong>救济</strong>——违反保密义务的法律后果（<span class=\"term\" data-def=\"禁令救济\">Injunctive Relief</span>、损害赔偿等）</li></ol>"
+          "html": "<strong>实务背景：保密条款的典型结构</strong><p><span class=\"term\" data-def=\"保密协议\">NDA</span>（<span class=\"term\" data-def=\"保密/不披露\">Non-Disclosure</span> <span class=\"term\" data-def=\"协议\">Agreement</span>，保密协议）是法律实务中最常见的合同类型之一，几乎所有商务谈判的第一步都是签署 <span class=\"term\" data-def=\"保密协议\">NDA</span>。保密条款无论是独立成文还是嵌入合同，通常遵循五段式结构：</p><ol><li><strong>定义</strong>——界定什么是 <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>（保密信息）</li><li><strong>义务</strong>——<span class=\"term\" data-def=\"接收方\">Receiving Party</span>（接收方）的保密义务</li><li><strong>例外</strong>——<span class=\"term\" data-def=\"允许的披露\">Permitted Disclosure</span>（允许披露的情形）</li><li><strong>期限</strong>——保密义务的存续期间</li><li><strong>救济</strong>——违反保密义务的法律后果（<span class=\"term\" data-def=\"禁令救济\">Injunctive Relief</span>、损害赔偿等）</li></ol>"
         }
       ]
     },
@@ -35,13 +35,13 @@
           "firstColWord": true,
           "rows": [
             [
-              "confidential",
+              "<span class=\"term\" data-def=\"保密的\">confidential</span>",
               "/ˌkɒnfɪˈdenʃəl/",
               "adj. 保密的；机密的",
-              "<span class=\"term\" data-def=\"保密信息\">confidential information</span>; strictly confidential; mark as confidential"
+              "<span class=\"term\" data-def=\"保密信息\">confidential information</span>; strictly <span class=\"term\" data-def=\"保密的\">confidential</span>; mark as <span class=\"term\" data-def=\"保密的\">confidential</span>"
             ],
             [
-              "confidential information",
+              "<span class=\"term\" data-def=\"保密信息\">confidential information</span>",
               "/ˌkɒnfɪˈdenʃəl ˌɪnfərˈmeɪʃən/",
               "n. 保密信息；机密信息",
               "all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>; use of <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>"
@@ -50,97 +50,97 @@
               "confidentiality",
               "/ˌkɒnfɪˌdenʃiˈælɪti/",
               "n. 保密性；保密义务",
-              "confidentiality obligations; <span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>; maintain confidentiality"
+              "confidentiality <span class=\"term\" data-def=\"义务（复数）\">obligations</span>; <span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>; maintain confidentiality"
             ],
             [
-              "non-disclosure",
+              "<span class=\"term\" data-def=\"保密\">non-disclosure</span>",
               "/ˌnɒn dɪsˈkloʊʒər/",
               "n. 不披露；保密",
-              "non-disclosure agreement; non-disclosure obligation"
+              "<span class=\"term\" data-def=\"保密\">non-disclosure</span> agreement; <span class=\"term\" data-def=\"保密\">non-disclosure</span> <span class=\"term\" data-def=\"义务\">obligation</span>"
             ],
             [
-              "NDA",
+              "<span class=\"term\" data-def=\"保密协议\">NDA</span>",
               "/ˌen diː ˈeɪ/",
-              "abbr. 保密协议（Non-Disclosure Agreement 的缩写）",
-              "sign an NDA; mutual NDA; unilateral NDA"
+              "abbr. 保密协议（<span class=\"term\" data-def=\"保密\">Non-Disclosure</span> Agreement 的缩写）",
+              "<span class=\"term\" data-def=\"签字；签署\">sign</span> an <span class=\"term\" data-def=\"保密协议\">NDA</span>; mutual <span class=\"term\" data-def=\"保密协议\">NDA</span>; unilateral <span class=\"term\" data-def=\"保密协议\">NDA</span>"
             ],
             [
-              "proprietary",
+              "<span class=\"term\" data-def=\"专有的\">proprietary</span>",
               "/prəˈpraɪətəri/",
               "adj. 专有的；所有权的",
-              "proprietary information; proprietary technology; proprietary and confidential"
+              "<span class=\"term\" data-def=\"专有信息\">proprietary information</span>; <span class=\"term\" data-def=\"专有的\">proprietary</span> technology; <span class=\"term\" data-def=\"专有的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span>"
             ],
             [
-              "proprietary information",
+              "<span class=\"term\" data-def=\"专有信息\">proprietary information</span>",
               "/prəˈpraɪətəri ˌɪnfərˈmeɪʃən/",
               "n. 专有信息",
-              "proprietary information of the Company; protect proprietary information"
+              "<span class=\"term\" data-def=\"专有信息\">proprietary information</span> of the Company; protect <span class=\"term\" data-def=\"专有信息\">proprietary information</span>"
             ],
             [
-              "trade secret",
+              "<span class=\"term\" data-def=\"商业秘密\">trade secret</span>",
               "/treɪd ˈsiːkrɪt/",
               "n. 商业秘密",
               "<span class=\"term\" data-def=\"商业秘密\">trade secret</span> protection; misappropriation of trade secrets; constitute a <span class=\"term\" data-def=\"商业秘密\">trade secret</span>"
             ],
             [
-              "permitted disclosure",
+              "<span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span>",
               "/pərˈmɪtɪd dɪsˈkloʊʒər/",
               "n. 允许的披露；许可披露",
               "<span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span> under this Agreement; exceptions to <span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span>"
             ],
             [
-              "receiving party",
+              "<span class=\"term\" data-def=\"接收方\">receiving party</span>",
               "/rɪˈsiːvɪŋ ˈpɑːrti/",
               "n. 接收方",
-              "the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> shall; obligations of the <span class=\"term\" data-def=\"接收方\">Receiving Party</span>"
+              "the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>; <span class=\"term\" data-def=\"义务（复数）\">obligations</span> of the <span class=\"term\" data-def=\"接收方\">Receiving Party</span>"
             ],
             [
-              "disclosing party",
+              "<span class=\"term\" data-def=\"披露方\">disclosing party</span>",
               "/dɪsˈkloʊzɪŋ ˈpɑːrti/",
               "n. 披露方",
               "the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>; at the request of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>"
             ],
             [
-              "unauthorized disclosure",
+              "<span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span>",
               "/ˌʌnˈɔːθəraɪzd dɪsˈkloʊʒər/",
               "n. 未经授权的披露",
-              "prevent unauthorized disclosure; unauthorized disclosure of <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>"
+              "prevent <span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span>; <span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span> of <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>"
             ],
             [
-              "breach of confidentiality",
+              "<span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>",
               "/briːtʃ əv ˌkɒnfɪˌdenʃiˈælɪti/",
               "n. 违反保密义务",
               "constitute a <span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>; in the event of a <span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>"
             ],
             [
-              "remedies",
+              "<span class=\"term\" data-def=\"救济（手段）\">remedies</span>",
               "/ˈremədiːz/",
               "n. 救济（措施）",
-              "available remedies; seek remedies; remedies at law or in equity"
+              "available <span class=\"term\" data-def=\"救济（手段）\">remedies</span>; seek <span class=\"term\" data-def=\"救济（手段）\">remedies</span>; <span class=\"term\" data-def=\"救济（手段）\">remedies</span> at law or in equity"
             ],
             [
-              "injunctive relief",
+              "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
               "/ɪnˈdʒʌŋktɪv rɪˈliːf/",
               "n. 禁令救济",
               "seek <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>; entitled to <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>; preliminary <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>"
             ],
             [
-              "return of materials",
+              "<span class=\"term\" data-def=\"退还资料\">return of materials</span>",
               "/rɪˈtɜːrn əv məˈtɪriəlz/",
               "n. 返还资料",
-              "<span class=\"term\" data-def=\"退还资料\">return of materials</span> upon termination; return or destruction of materials"
+              "<span class=\"term\" data-def=\"退还资料\">return of materials</span> upon <span class=\"term\" data-def=\"终止\">termination</span>; return or <span class=\"term\" data-def=\"销毁\">destruction</span> of materials"
             ],
             [
-              "destruction",
+              "<span class=\"term\" data-def=\"销毁\">destruction</span>",
               "/dɪˈstrʌkʃən/",
               "n. 销毁",
-              "return or destruction; certify the destruction of; destruction of <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>"
+              "return or <span class=\"term\" data-def=\"销毁\">destruction</span>; <span class=\"term\" data-def=\"证明\">certify</span> the <span class=\"term\" data-def=\"销毁\">destruction</span> of; <span class=\"term\" data-def=\"销毁\">destruction</span> of <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>"
             ]
           ]
         },
         {
           "type": "note",
-          "html": "<strong>词源记忆</strong><ul><li><span class=\"term\" data-def=\"保密的\">confidential</span>——源自拉丁语 <em>confidere</em>（信任），字面义是“被信任而知晓的”→ 保密的</li><li><span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span>——源自拉丁语 <em>proprietarius</em>（所有者的），<em>proprius</em> = 自己的 → 专有的、所有权的</li><li><span class=\"term\">injunction</span>——源自拉丁语 <em>injungere</em>（命令），<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 法院发出的命令性救济（禁令）</li><li><span class=\"term\">disclosure</span>——<em>dis-</em>（去除）+ <em>closure</em>（封闭）= 揭开/披露；<span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span> = 不揭开 = 保密</li></ul>"
+          "html": "<strong>词源记忆</strong><ul><li><span class=\"term\" data-def=\"保密的\">confidential</span>——源自拉丁语 <em>confidere</em>（信任），字面义是“被信任而知晓的”→ 保密的</li><li><span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span>——源自拉丁语 <em>proprietarius</em>（所有者的），<em>proprius</em> = 自己的 → 专有的、所有权的</li><li><span class=\"term\" data-def=\"禁令\">injunction</span>——源自拉丁语 <em>injungere</em>（命令），<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 法院发出的命令性救济（禁令）</li><li><span class=\"term\" data-def=\"披露\">disclosure</span>——<em>dis-</em>（去除）+ <em>closure</em>（封闭）= 揭开/披露；<span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span> = 不揭开 = 保密</li></ul>"
         }
       ]
     },
@@ -225,7 +225,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>中文母语者易错点：non-disclosure vs. confidentiality</strong><br><ul><li>中文翻译中，两者都可以译为“保密”，容易混淆。</li><li><span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span> 侧重<strong>不披露的行为</strong>——“不向外说”</li><li><span class=\"term\" data-def=\"保密性\">confidentiality</span> 侧重<strong>保密的状态/性质</strong>——“保持秘密”</li><li>因此：<span class=\"term\" data-def=\"保密/不披露\">Non-Disclosure</span> <span class=\"term\" data-def=\"协议\">Agreement</span>（保密协议）强调“不披露”这一核心义务；<span class=\"term\" data-def=\"保密性\">confidentiality</span> <span class=\"term\" data-def=\"条款\">clause</span>（保密条款）强调“保密性”这一整体要求。</li><li>实务中两者经常互换使用，但严格来说，NDA 更聚焦于“不向第三方披露”，而 confidentiality 的范围更广，还包括安全保管等义务。</li></ul>"
+          "html": "<strong>中文母语者易错点：<span class=\"term\" data-def=\"保密\">non-disclosure</span> vs. confidentiality</strong><br><ul><li>中文翻译中，两者都可以译为“保密”，容易混淆。</li><li><span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span> 侧重<strong>不披露的行为</strong>——“不向外说”</li><li><span class=\"term\" data-def=\"保密性\">confidentiality</span> 侧重<strong>保密的状态/性质</strong>——“保持秘密”</li><li>因此：<span class=\"term\" data-def=\"保密/不披露\">Non-Disclosure</span> <span class=\"term\" data-def=\"协议\">Agreement</span>（保密协议）强调“不披露”这一核心义务；<span class=\"term\" data-def=\"保密性\">confidentiality</span> <span class=\"term\" data-def=\"条款\">clause</span>（保密条款）强调“保密性”这一整体要求。</li><li>实务中两者经常互换使用，但严格来说，<span class=\"term\" data-def=\"保密协议\">NDA</span> 更聚焦于“不向第三方披露”，而 confidentiality 的范围更广，还包括安全保管等义务。</li></ul>"
         }
       ]
     },
@@ -235,7 +235,7 @@
       "blocks": [
         {
           "type": "h3",
-          "text": "3a. confidential vs. proprietary vs. privileged"
+          "text": "3a. <span class=\"term\" data-def=\"保密的\">confidential</span> vs. <span class=\"term\" data-def=\"专有的\">proprietary</span> vs. <span class=\"term\" data-def=\"享有特权的\">privileged</span>"
         },
         {
           "type": "table",
@@ -257,7 +257,7 @@
               "强调信息的<strong>所有权归属</strong>——这是“我们公司拥有的”。常见于技术文档、商业方法等。<span class=\"term\" data-def=\"专有信息\">proprietary information</span> 比 <span class=\"term\" data-def=\"保密信息\">confidential information</span> 更强调归属权。"
             ],
             [
-              "<span class=\"term\">privileged</span>",
+              "<span class=\"term\" data-def=\"享有特权的\">privileged</span>",
               "受特权保护的",
               "特指受法律特权保护的通信，如<strong>律师-客户特权</strong>（attorney-client privilege）。不能随意用于普通商业信息，有严格的法律适用条件。"
             ]
@@ -273,7 +273,7 @@
         },
         {
           "type": "h3",
-          "text": "3b. non-disclosure vs. confidentiality（名称区别）"
+          "text": "3b. <span class=\"term\" data-def=\"保密\">non-disclosure</span> vs. confidentiality（名称区别）"
         },
         {
           "type": "table",
@@ -287,7 +287,7 @@
             [
               "<span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span>",
               "不披露的<strong>行为义务</strong>",
-              "Non-Disclosure Agreement (NDA)——强调“不得向外披露”"
+              "<span class=\"term\" data-def=\"保密\">Non-Disclosure</span> Agreement (<span class=\"term\" data-def=\"保密协议\">NDA</span>)——强调“不得向外披露”"
             ],
             [
               "<span class=\"term\" data-def=\"保密性\">confidentiality</span>",
@@ -298,11 +298,11 @@
         },
         {
           "type": "p",
-          "html": "实务中 NDA 和 CA 指的是同一类协议，可以互换使用。部分公司偏好一个名称，但法律效力相同。合同中嵌入的保密条款通常称为 <span class=\"term\" data-def=\"保密性\">confidentiality</span> <span class=\"term\" data-def=\"条款\">clause</span> 或 <span class=\"term\" data-def=\"保密性\">confidentiality</span> <span class=\"term\" data-def=\"规定/条款\">provisions</span>。"
+          "html": "实务中 <span class=\"term\" data-def=\"保密协议\">NDA</span> 和 CA 指的是同一类协议，可以互换使用。部分公司偏好一个名称，但法律效力相同。合同中嵌入的保密条款通常称为 <span class=\"term\" data-def=\"保密性\">confidentiality</span> <span class=\"term\" data-def=\"条款\">clause</span> 或 <span class=\"term\" data-def=\"保密性\">confidentiality</span> <span class=\"term\" data-def=\"规定/条款\">provisions</span>。"
         },
         {
           "type": "h3",
-          "text": "3c. trade secret vs. confidential information（范围不同）"
+          "text": "3c. <span class=\"term\" data-def=\"商业秘密\">trade secret</span> vs. <span class=\"term\" data-def=\"保密信息\">confidential information</span>（范围不同）"
         },
         {
           "type": "table",
@@ -331,7 +331,7 @@
         },
         {
           "type": "h3",
-          "text": "3d. injunctive relief vs. damages（为什么保密条款偏好前者）"
+          "text": "3d. <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> vs. <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>（为什么保密条款偏好前者）"
         },
         {
           "type": "table",
@@ -348,7 +348,7 @@
               "<strong>即时性</strong>：可在诉讼前获得临时禁令；<strong>预防性</strong>：阻止损害继续扩大"
             ],
             [
-              "<span class=\"term\">damages</span>",
+              "<span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>",
               "损害赔偿——以金钱弥补已造成的损失",
               "<strong>事后性</strong>：只能在损害发生后获得；<strong>补偿性</strong>：用金钱弥补损失"
             ]
@@ -378,40 +378,40 @@
       "items": [
         {
           "title": "例句 1",
-          "sentence": "“Confidential Information” means any and all non-public, confidential or proprietary information disclosed by the Disclosing Party to the Receiving Party, whether orally, in writing, or by inspection of tangible objects, including without limitation trade secrets, business plans, financial data, customer lists, and technical specifications.",
+          "sentence": "“<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” means any and all non-public, <span class=\"term\" data-def=\"保密的\">confidential</span> or <span class=\"term\" data-def=\"专有信息\">proprietary information</span> disclosed by the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> to the <span class=\"term\" data-def=\"接收方\">Receiving Party</span>, whether orally, in writing, or by inspection of tangible objects, <span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> trade secrets, business plans, financial data, customer lists, and technical <span class=\"term\" data-def=\"规格\">specifications</span>.",
           "structure": [
             "<em>“<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” means</em> — 主句，定义条款的标准句式（回顾第3天 <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>）",
-            "<em>any and all non-public, confidential or proprietary information</em> — 宾语主体，“所有非公开的、保密的或专有的信息”；<strong>any and all</strong> 是法律强调用语，意为“任何及所有”",
+            "<em>any and all non-public, <span class=\"term\" data-def=\"保密的\">confidential</span> or <span class=\"term\" data-def=\"专有信息\">proprietary information</span></em> — 宾语主体，“所有非公开的、保密的或专有的信息”；<strong>any and all</strong> 是法律强调用语，意为“任何及所有”",
             "<em>disclosed by the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> to the <span class=\"term\" data-def=\"接收方\">Receiving Party</span></em> — 过去分词短语作定语，“由披露方向接收方披露的”",
             "<em>whether orally, in writing, or by inspection of tangible objects</em> — 让步状语，“无论以口头、书面还是通过检查有形物品的方式”；覆盖所有披露形式",
             "<em><span class=\"term\" data-def=\"包括但不限于\">including without limitation</span></em> — “包括但不限于”（第3天所学）",
-            "<em>trade secrets, business plans, financial data, customer lists, and technical specifications</em> — 列举保密信息的具体类型"
+            "<em>trade secrets, business plans, financial data, customer lists, and technical <span class=\"term\" data-def=\"规格\">specifications</span></em> — 列举保密信息的具体类型"
           ],
           "translation": "“保密信息”是指由披露方向接收方披露的任何及所有非公开的、保密的或专有的信息，无论以口头、书面还是通过检查有形物品的方式披露，包括但不限于商业秘密、商业计划、财务数据、客户名单和技术规格。"
         },
         {
           "title": "例句 2",
-          "sentence": "The Receiving Party shall hold the Disclosing Party's Confidential Information in strict confidence and shall not, without the prior written consent of the Disclosing Party, disclose, publish, or otherwise disseminate such Confidential Information to any third party, except as expressly permitted under Section 5.3 of this Agreement.",
+          "sentence": "The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"认定；持有\">hold</span> the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> in strict confidence and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not, without the prior written <span class=\"term\" data-def=\"同意\">consent</span> of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>, disclose, publish, or otherwise disseminate such <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> to any third <span class=\"term\" data-def=\"当事人\">party</span>, except as expressly permitted under Section 5.3 of this Agreement.",
           "structure": [
-            "<em>The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> shall hold ... in strict confidence</em> — 主句第一层义务，“接收方应严格保密”；<strong>hold in confidence</strong> = 保密（法律固定搭配）",
-            "<em>and shall not ... disclose, publish, or otherwise disseminate</em> — 并列义务，“不得披露、发布或以其他方式传播”；<strong>otherwise</strong> = 以其他方式（兜底表达）",
-            "<em>without the prior written consent of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span></em> — 条件状语，“未经披露方事先书面同意”；<strong>prior written consent</strong> 是合同高频搭配",
+            "<em>The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"认定；持有\">hold</span> ... in strict confidence</em> — 主句第一层义务，“接收方应严格保密”；<strong><span class=\"term\" data-def=\"认定；持有\">hold</span> in confidence</strong> = 保密（法律固定搭配）",
+            "<em>and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not ... disclose, publish, or otherwise disseminate</em> — 并列义务，“不得披露、发布或以其他方式传播”；<strong>otherwise</strong> = 以其他方式（兜底表达）",
+            "<em>without the prior written <span class=\"term\" data-def=\"同意\">consent</span> of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span></em> — 条件状语，“未经披露方事先书面同意”；<strong>prior written <span class=\"term\" data-def=\"同意\">consent</span></strong> 是合同高频搭配",
             "<em>such <span class=\"term\" data-def=\"保密信息\">Confidential Information</span></em> — <strong>such</strong> = 前述的/该等（法律指代词，回顾第3天）",
-            "<em>to any third party</em> — “向任何第三方”",
+            "<em>to any third <span class=\"term\" data-def=\"当事人\">party</span></em> — “向任何第三方”",
             "<em>except as expressly permitted under Section 5.3</em> — 例外条款，“除非第5.3条明确允许”"
           ],
           "translation": "接收方应对披露方的保密信息严格保密，未经披露方事先书面同意，不得向任何第三方披露、发布或以其他方式传播该等保密信息，但本协议第5.3条明确允许的除外。"
         },
         {
           "title": "例句 3",
-          "sentence": "Upon termination or expiration of this Agreement, the Receiving Party shall, at the Disclosing Party's option, promptly return or destroy all Confidential Information and any copies, extracts, or derivatives thereof, and shall certify in writing to the Disclosing Party that it has complied with this obligation.",
+          "sentence": "Upon <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement, the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>, at the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s option, promptly return or destroy all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> and any copies, extracts, or derivatives <span class=\"term\" data-def=\"其中的\">thereof</span>, and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"证明\">certify</span> in writing to the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> that it has complied with this <span class=\"term\" data-def=\"义务\">obligation</span>.",
           "structure": [
-            "<em>Upon termination or expiration of this Agreement</em> — 时间状语，“在本协议终止或届满后”（回顾第1周第5天 <span class=\"term\" data-def=\"终止/解除\">termination</span> 与 <span class=\"term\" data-def=\"届满/到期\">expiration</span> 的区别）",
-            "<em>the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> shall, at the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s option</em> — “接收方应按披露方的选择”；<strong>at one's option</strong> = 由……选择/按……的意愿",
+            "<em>Upon <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement</em> — 时间状语，“在本协议终止或届满后”（回顾第1周第5天 <span class=\"term\" data-def=\"终止/解除\">termination</span> 与 <span class=\"term\" data-def=\"届满/到期\">expiration</span> 的区别）",
+            "<em>the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>, at the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s option</em> — “接收方应按披露方的选择”；<strong>at one's option</strong> = 由……选择/按……的意愿",
             "<em>promptly return or destroy</em> — “立即返还或销毁”",
-            "<em>all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> and any copies, extracts, or derivatives thereof</em> — “所有保密信息及其任何副本、摘录或衍生物”；<strong>thereof</strong> = of it（第3天所学 here-/there- 家族词）",
-            "<em>and shall certify in writing</em> — “并应以书面方式确认”",
-            "<em>to the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> that it has complied with this obligation</em> — “向披露方确认其已履行该等义务”"
+            "<em>all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> and any copies, extracts, or derivatives <span class=\"term\" data-def=\"其中的\">thereof</span></em> — “所有保密信息及其任何副本、摘录或衍生物”；<strong><span class=\"term\" data-def=\"其中的\">thereof</span></strong> = of it（第3天所学 here-/there- 家族词）",
+            "<em>and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"证明\">certify</span> in writing</em> — “并应以书面方式确认”",
+            "<em>to the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> that it has complied with this <span class=\"term\" data-def=\"义务\">obligation</span></em> — “向披露方确认其已履行该等义务”"
           ],
           "translation": "本协议终止或届满后，接收方应按披露方的选择，立即返还或销毁所有保密信息及其任何副本、摘录或衍生物，并应以书面方式向披露方确认其已履行该等义务。"
         }
@@ -431,7 +431,7 @@
         },
         {
           "type": "grammar-box",
-          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密信息\">confidential information</span></summary><div class=\"answer-content\">保密信息；机密信息</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span></summary><div class=\"answer-content\">不披露；保密（侧重“不向外说”的行为义务）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">NDA</span></summary><div class=\"answer-content\">保密协议（Non-Disclosure Agreement）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span></summary><div class=\"answer-content\">专有的；所有权的（强调归属）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"商业秘密\">trade secret</span></summary><div class=\"answer-content\">商业秘密（受法律直接保护，需满足三个法定条件）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span></summary><div class=\"answer-content\">允许的披露；许可披露</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"接收方\">receiving party</span></summary><div class=\"answer-content\">接收方</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"披露方\">disclosing party</span></summary><div class=\"answer-content\">披露方</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span></summary><div class=\"answer-content\">未经授权的披露</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span></summary><div class=\"answer-content\">违反保密义务</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"禁令救济\">injunctive relief</span></summary><div class=\"answer-content\">禁令救济（法院命令停止或执行某行为）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"退还资料\">return of materials</span></summary><div class=\"answer-content\">返还资料</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">destruction</span></summary><div class=\"answer-content\">销毁</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密性\">confidentiality</span></summary><div class=\"answer-content\">保密性；保密义务（侧重“保持秘密”的整体状态）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">remedies</span></summary><div class=\"answer-content\">救济（措施）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"实质条款\">operative provisions</span>（复习）</summary><div class=\"answer-content\">实质条款/正文条款（不是“执行条款”）</div></details></div></div>"
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密信息\">confidential information</span></summary><div class=\"answer-content\">保密信息；机密信息</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span></summary><div class=\"answer-content\">不披露；保密（侧重“不向外说”的行为义务）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密协议\">NDA</span></summary><div class=\"answer-content\">保密协议（<span class=\"term\" data-def=\"保密\">Non-Disclosure</span> Agreement）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span></summary><div class=\"answer-content\">专有的；所有权的（强调归属）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"商业秘密\">trade secret</span></summary><div class=\"answer-content\">商业秘密（受法律直接保护，需满足三个法定条件）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span></summary><div class=\"answer-content\">允许的披露；许可披露</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"接收方\">receiving party</span></summary><div class=\"answer-content\">接收方</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"披露方\">disclosing party</span></summary><div class=\"answer-content\">披露方</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span></summary><div class=\"answer-content\">未经授权的披露</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span></summary><div class=\"answer-content\">违反保密义务</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"禁令救济\">injunctive relief</span></summary><div class=\"answer-content\">禁令救济（法院命令停止或执行某行为）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"退还资料\">return of materials</span></summary><div class=\"answer-content\">返还资料</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"销毁\">destruction</span></summary><div class=\"answer-content\">销毁</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"保密性\">confidentiality</span></summary><div class=\"answer-content\">保密性；保密义务（侧重“保持秘密”的整体状态）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"救济（手段）\">remedies</span></summary><div class=\"answer-content\">救济（措施）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"实质条款\">operative provisions</span>（复习）</summary><div class=\"answer-content\">实质条款/正文条款（不是“执行条款”）</div></details></div></div>"
         }
       ]
     },
@@ -448,50 +448,50 @@
               "options": [
                 "<span class=\"term\" data-def=\"商业秘密\">trade secret</span>",
                 "<span class=\"term\" data-def=\"保密信息\">confidential information</span>",
-                "proprietary information"
+                "<span class=\"term\" data-def=\"专有信息\">proprietary information</span>"
               ],
               "answer": "<span class=\"term\" data-def=\"商业秘密\">trade secret</span>",
-              "explanation": "trade secret = 商业秘密。trade secret 受法律直接保护，范围比 confidential information 更窄，需满足三个法定条件：有经济价值、不为公众知晓、采取合理保护措施。"
+              "explanation": "<span class=\"term\" data-def=\"商业秘密\">trade secret</span> = 商业秘密。<span class=\"term\" data-def=\"商业秘密\">trade secret</span> 受法律直接保护，范围比 <span class=\"term\" data-def=\"保密信息\">confidential information</span> 更窄，需满足三个法定条件：有经济价值、不为公众知晓、采取合理保护措施。"
             },
             {
               "prompt": "2. 禁令救济",
               "options": [
-                "damages",
+                "<span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>",
                 "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
-                "indemnification"
+                "<span class=\"term\" data-def=\"赔偿；补偿\">indemnification</span>"
               ],
               "answer": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
-              "explanation": "injunctive relief = 禁令救济。在保密条款中，因信息泄露后不可恢复，故常约定违约方同意对方有权寻求禁令救济，而不仅限于金钱赔偿。"
+              "explanation": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 禁令救济。在保密条款中，因信息泄露后不可恢复，故常约定违约方同意对方有权寻求禁令救济，而不仅限于金钱赔偿。"
             },
             {
               "prompt": "3. 接收方",
               "options": [
                 "<span class=\"term\" data-def=\"披露方\">disclosing party</span>",
                 "<span class=\"term\" data-def=\"接收方\">receiving party</span>",
-                "third party"
+                "third <span class=\"term\" data-def=\"当事人\">party</span>"
               ],
               "answer": "<span class=\"term\" data-def=\"接收方\">receiving party</span>",
-              "explanation": "receiving party = 接收方，在 NDA 中指接收保密信息的一方，承担保密义务。对应的另一方是 disclosing party（披露方）。"
+              "explanation": "<span class=\"term\" data-def=\"接收方\">receiving party</span> = 接收方，在 <span class=\"term\" data-def=\"保密协议\">NDA</span> 中指接收保密信息的一方，承担保密义务。对应的另一方是 <span class=\"term\" data-def=\"披露方\">disclosing party</span>（披露方）。"
             },
             {
               "prompt": "4. 未经授权的披露",
               "options": [
                 "<span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span>",
-                "unauthorized disclosure",
+                "<span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span>",
                 "<span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>"
               ],
-              "answer": "unauthorized disclosure",
-              "explanation": "unauthorized disclosure = 未经授权的披露。unauthorized = 未经授权的、未获批准的。是保密条款中需要防止的核心行为。"
+              "answer": "<span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span>",
+              "explanation": "<span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span> = 未经授权的披露。unauthorized = 未经授权的、未获批准的。是保密条款中需要防止的核心行为。"
             },
             {
               "prompt": "5. 专有的；所有权的",
               "options": [
-                "confidential",
-                "privileged",
-                "proprietary"
+                "<span class=\"term\" data-def=\"保密的\">confidential</span>",
+                "<span class=\"term\" data-def=\"享有特权的\">privileged</span>",
+                "<span class=\"term\" data-def=\"专有的\">proprietary</span>"
               ],
-              "answer": "proprietary",
-              "explanation": "proprietary = 专有的/所有权的。源自拉丁语 proprius（自己的）。proprietary information 强调信息的所有权归属，与 confidential（保密的）侧重点不同。"
+              "answer": "<span class=\"term\" data-def=\"专有的\">proprietary</span>",
+              "explanation": "<span class=\"term\" data-def=\"专有的\">proprietary</span> = 专有的/所有权的。源自拉丁语 proprius（自己的）。<span class=\"term\" data-def=\"专有信息\">proprietary information</span> 强调信息的所有权归属，与 <span class=\"term\" data-def=\"保密的\">confidential</span>（保密的）侧重点不同。"
             }
           ]
         }
@@ -515,10 +515,10 @@
                 "个人信息"
               ],
               "answer": "保密信息；机密信息",
-              "explanation": "confidential information = 保密信息/机密信息，指合同中约定需保密的任何信息。范围比 trade secret（商业秘密）更广。"
+              "explanation": "<span class=\"term\" data-def=\"保密信息\">confidential information</span> = 保密信息/机密信息，指合同中约定需保密的任何信息。范围比 <span class=\"term\" data-def=\"商业秘密\">trade secret</span>（商业秘密）更广。"
             },
             {
-              "prompt": "2. <span class=\"term\">NDA</span>",
+              "prompt": "2. <span class=\"term\" data-def=\"保密协议\">NDA</span>",
               "options": [
                 "不竞争协议",
                 "保密协议",
@@ -526,10 +526,10 @@
                 "知情同意书"
               ],
               "answer": "保密协议",
-              "explanation": "NDA = Non-Disclosure Agreement = 保密协议。是法律实务中最常见的合同类型之一，用于保护商务谈判中交换的机密信息。"
+              "explanation": "<span class=\"term\" data-def=\"保密协议\">NDA</span> = <span class=\"term\" data-def=\"保密\">Non-Disclosure</span> Agreement = 保密协议。是法律实务中最常见的合同类型之一，用于保护商务谈判中交换的机密信息。"
             },
             {
-              "prompt": "3. <span class=\"term\">destruction</span>（合同保密条款语境）",
+              "prompt": "3. <span class=\"term\" data-def=\"销毁\">destruction</span>（合同保密条款语境）",
               "options": [
                 "破坏",
                 "毁灭",
@@ -537,7 +537,7 @@
                 "拆除"
               ],
               "answer": "销毁",
-              "explanation": "destruction = 销毁。在保密条款中，合同终止后接收方通常需要 return or destroy（返还或销毁）所有保密信息。"
+              "explanation": "<span class=\"term\" data-def=\"销毁\">destruction</span> = 销毁。在保密条款中，合同终止后接收方通常需要 return or destroy（返还或销毁）所有保密信息。"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
@@ -548,7 +548,7 @@
                 "临时制裁"
               ],
               "answer": "禁令救济",
-              "explanation": "injunctive relief = 禁令救济，指法院命令对方停止或执行某种行为。保密条款偏好禁令救济，因为保密信息一旦泄露便不可恢复，金钱赔偿不足以补救。"
+              "explanation": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 禁令救济，指法院命令对方停止或执行某种行为。保密条款偏好禁令救济，因为保密信息一旦泄露便不可恢复，金钱赔偿不足以补救。"
             },
             {
               "prompt": "5. <span class=\"term\" data-def=\"实质条款\">operative provisions</span>（复习错题）",
@@ -559,7 +559,7 @@
                 "运营条款"
               ],
               "answer": "实质条款",
-              "explanation": "operative provisions = 实质条款/正文条款。operative = 实质性的，不是“执行”或“操作”。这是第1天的错题复习。"
+              "explanation": "<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款/正文条款。<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> = 实质性的，不是“执行”或“操作”。这是第1天的错题复习。"
             }
           ]
         },
@@ -569,18 +569,18 @@
           "instruction": "根据语境选择最恰当的术语填入合同条款空白处。",
           "questions": [
             {
-              "prompt": "6. “______” means any non-public information disclosed by either Party to the other Party in connection with this Agreement.",
+              "prompt": "6. “______” means any non-public information disclosed by either <span class=\"term\" data-def=\"当事人\">Party</span> to the other <span class=\"term\" data-def=\"当事人\">Party</span> in connection with this Agreement.",
               "options": [
                 "<span class=\"term\" data-def=\"商业秘密\">Trade Secret</span>",
                 "<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>",
-                "Proprietary Data",
-                "Privileged Information"
+                "<span class=\"term\" data-def=\"专有的\">Proprietary</span> Data",
+                "<span class=\"term\" data-def=\"享有特权的\">Privileged</span> Information"
               ],
               "answer": "<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>",
-              "explanation": "Confidential Information 是 NDA 中最核心的定义术语，指合同约定需保密的信息范围。此处是典型的定义条款句式。"
+              "explanation": "<span class=\"term\" data-def=\"保密信息\">Confidential Information</span> 是 <span class=\"term\" data-def=\"保密协议\">NDA</span> 中最核心的定义术语，指合同约定需保密的信息范围。此处是典型的定义条款句式。"
             },
             {
-              "prompt": "7. Upon termination of this Agreement, the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> shall promptly ______ all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>.",
+              "prompt": "7. Upon <span class=\"term\" data-def=\"终止\">termination</span> of this Agreement, the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> promptly ______ all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span>.",
               "options": [
                 "return or destroy",
                 "keep or store",
@@ -588,40 +588,40 @@
                 "transfer or sell"
               ],
               "answer": "return or destroy",
-              "explanation": "return or destroy = 返还或销毁。这是保密条款中合同终止后对保密信息处理的标准表达，通常由披露方选择（at the Disclosing Party's option）。"
+              "explanation": "return or destroy = 返还或销毁。这是保密条款中合同终止后对保密信息处理的标准表达，通常由披露方选择（at the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s option）。"
             },
             {
-              "prompt": "8. The Parties agree that a breach of this Section would cause irreparable harm and that the non-breaching Party shall be entitled to seek ______.",
+              "prompt": "8. The Parties agree that a breach of this Section would cause <span class=\"term\" data-def=\"不可弥补的损害\">irreparable harm</span> and that the non-breaching <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be entitled to seek ______.",
               "options": [
-                "compensatory damages",
+                "compensatory <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>",
                 "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
                 "<span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>",
-                "specific performance"
+                "specific <span class=\"term\" data-def=\"履行\">performance</span>"
               ],
               "answer": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
-              "explanation": "injunctive relief = 禁令救济。保密条款中约定违约方同意对方有权寻求禁令救济，因为保密信息泄露造成的损害是 irreparable（不可弥补的），金钱赔偿不足。"
+              "explanation": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 禁令救济。保密条款中约定违约方同意对方有权寻求禁令救济，因为保密信息泄露造成的损害是 irreparable（不可弥补的），金钱赔偿不足。"
             },
             {
-              "prompt": "9. The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> shall not disclose any <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> without the ______ of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>.",
+              "prompt": "9. The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not disclose any <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> without the ______ of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>.",
               "options": [
                 "oral agreement",
-                "prior written consent",
+                "prior written <span class=\"term\" data-def=\"同意\">consent</span>",
                 "general approval",
                 "informal permission"
               ],
-              "answer": "prior written consent",
-              "explanation": "prior written consent = 事先书面同意。是合同中限制某些行为（如披露保密信息）时最常用的条件，确保对方在行为前获得书面许可。"
+              "answer": "prior written <span class=\"term\" data-def=\"同意\">consent</span>",
+              "explanation": "prior written <span class=\"term\" data-def=\"同意\">consent</span> = 事先书面同意。是合同中限制某些行为（如披露保密信息）时最常用的条件，确保对方在行为前获得书面许可。"
             },
             {
-              "prompt": "10. All technical documentation provided hereunder shall be deemed ______ and shall not be disclosed to any third party.",
+              "prompt": "10. All technical documentation provided <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be deemed ______ and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not be disclosed to any third <span class=\"term\" data-def=\"当事人\">party</span>.",
               "options": [
                 "public and available",
-                "proprietary and confidential",
+                "<span class=\"term\" data-def=\"专有的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span>",
                 "private and personal",
                 "restricted and limited"
               ],
-              "answer": "proprietary and confidential",
-              "explanation": "proprietary and confidential = 专有且保密的。合同中经常将两个词并列使用，以同时覆盖所有权保护和保密保护，翻译时不要合并。"
+              "answer": "<span class=\"term\" data-def=\"专有的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span>",
+              "explanation": "<span class=\"term\" data-def=\"专有的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span> = 专有且保密的。合同中经常将两个词并列使用，以同时覆盖所有权保护和保密保护，翻译时不要合并。"
             }
           ]
         },
@@ -639,10 +639,10 @@
                 "<span class=\"term\" data-def=\"商业秘密\">trade secret</span> 不受法律保护，只受合同保护"
               ],
               "answer": "<span class=\"term\" data-def=\"商业秘密\">trade secret</span> 范围更窄，需满足法定条件；<span class=\"term\" data-def=\"保密信息\">confidential information</span> 由合同定义，范围更广",
-              "explanation": "trade secret（商业秘密）是法定概念，需满足三个条件：有经济价值、不为公众知晓、采取合理保护措施。confidential information（保密信息）由合同自行定义，范围更广。所有 trade secret 都是 confidential information，但反之不然。"
+              "explanation": "<span class=\"term\" data-def=\"商业秘密\">trade secret</span>（商业秘密）是法定概念，需满足三个条件：有经济价值、不为公众知晓、采取合理保护措施。<span class=\"term\" data-def=\"保密信息\">confidential information</span>（保密信息）由合同自行定义，范围更广。所有 <span class=\"term\" data-def=\"商业秘密\">trade secret</span> 都是 <span class=\"term\" data-def=\"保密信息\">confidential information</span>，但反之不然。"
             },
             {
-              "prompt": "12. 保密条款为什么偏好 <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>（禁令救济）而非 <span class=\"term\">damages</span>（损害赔偿）？",
+              "prompt": "12. 保密条款为什么偏好 <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>（禁令救济）而非 <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>（损害赔偿）？",
               "options": [
                 "禁令救济费用更低",
                 "保密信息一旦泄露不可恢复，金钱赔偿不足以补救",
@@ -650,18 +650,18 @@
                 "禁令救济可以由当事人自行执行"
               ],
               "answer": "保密信息一旦泄露不可恢复，金钱赔偿不足以补救",
-              "explanation": "保密信息泄露后覆水难收，无法恢复其保密状态，且损失难以量化。因此保密条款偏好 injunctive relief（禁令救济），可以即时阻止信息继续泄露，而不仅仅依赖事后的金钱赔偿。"
+              "explanation": "保密信息泄露后覆水难收，无法恢复其保密状态，且损失难以量化。因此保密条款偏好 <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>（禁令救济），可以即时阻止信息继续泄露，而不仅仅依赖事后的金钱赔偿。"
             },
             {
               "prompt": "13. <span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> 和 <span class=\"term\" data-def=\"保密的\">confidential</span> 的核心区别是什么？",
               "options": [
                 "两者含义完全相同",
-                "proprietary 强调所有权归属，confidential 强调不可公开",
-                "proprietary 仅用于技术信息",
-                "confidential 的保护程度更高"
+                "<span class=\"term\" data-def=\"专有的\">proprietary</span> 强调所有权归属，<span class=\"term\" data-def=\"保密的\">confidential</span> 强调不可公开",
+                "<span class=\"term\" data-def=\"专有的\">proprietary</span> 仅用于技术信息",
+                "<span class=\"term\" data-def=\"保密的\">confidential</span> 的保护程度更高"
               ],
-              "answer": "proprietary 强调所有权归属，confidential 强调不可公开",
-              "explanation": "proprietary 源自拉丁语 proprius（自己的），强调信息“属于我们公司”的所有权归属。confidential 源自 confidere（信任），强调信息“不可对外公开”的保密状态。合同中常并列使用：proprietary and confidential。"
+              "answer": "<span class=\"term\" data-def=\"专有的\">proprietary</span> 强调所有权归属，<span class=\"term\" data-def=\"保密的\">confidential</span> 强调不可公开",
+              "explanation": "<span class=\"term\" data-def=\"专有的\">proprietary</span> 源自拉丁语 proprius（自己的），强调信息“属于我们公司”的所有权归属。<span class=\"term\" data-def=\"保密的\">confidential</span> 源自 confidere（信任），强调信息“不可对外公开”的保密状态。合同中常并列使用：<span class=\"term\" data-def=\"专有的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span>。"
             },
             {
               "prompt": "14. 保密条款中 <span class=\"term\" data-def=\"返还\">return</span> or <span class=\"term\" data-def=\"销毁\">destroy</span> 条款的作用是什么？",
@@ -675,7 +675,7 @@
               "explanation": "return or destroy（返还或销毁）条款规定合同终止后，接收方必须将保密信息及其副本、摘录、衍生物全部返还给披露方或予以销毁，并通常需要书面确认已履行此义务。"
             },
             {
-              "prompt": "15. NDA 中的 <span class=\"term\" data-def=\"接收方\">Receiving Party</span> 是指什么？",
+              "prompt": "15. <span class=\"term\" data-def=\"保密协议\">NDA</span> 中的 <span class=\"term\" data-def=\"接收方\">Receiving Party</span> 是指什么？",
               "options": [
                 "提供保密信息的一方",
                 "接收保密信息并承担保密义务的一方",
@@ -683,7 +683,7 @@
                 "合同见证人"
               ],
               "answer": "接收保密信息并承担保密义务的一方",
-              "explanation": "Receiving Party = 接收方，在 NDA 中指接收保密信息的一方，承担不得披露、不得滥用等保密义务。对应的另一方是 Disclosing Party（披露方），即提供保密信息的一方。在 mutual NDA（双向保密协议）中，双方互为 Receiving Party 和 Disclosing Party。"
+              "explanation": "<span class=\"term\" data-def=\"接收方\">Receiving Party</span> = 接收方，在 <span class=\"term\" data-def=\"保密协议\">NDA</span> 中指接收保密信息的一方，承担不得披露、不得滥用等保密义务。对应的另一方是 <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>（披露方），即提供保密信息的一方。在 mutual <span class=\"term\" data-def=\"保密协议\">NDA</span>（双向保密协议）中，双方互为 <span class=\"term\" data-def=\"接收方\">Receiving Party</span> 和 <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>。"
             }
           ]
         },
@@ -693,11 +693,11 @@
           "instruction": "将以下保密条款翻译为中文，完成后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
-              "source": "The Receiving Party shall hold the Disclosing Party's Confidential Information in strict confidence and shall not, without the prior written consent of the Disclosing Party, disclose such information to any third party, except as expressly permitted under this Agreement.",
+              "source": "The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"认定；持有\">hold</span> the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> in strict confidence and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not, without the prior written <span class=\"term\" data-def=\"同意\">consent</span> of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>, disclose such information to any third <span class=\"term\" data-def=\"当事人\">party</span>, except as expressly permitted under this Agreement.",
               "reference": "接收方应对披露方的保密信息严格保密，未经披露方事先书面同意，不得向任何第三方披露该等信息，但本协议明确允许的除外。",
               "rubric": [
                 {
-                  "en": "hold ... in strict confidence",
+                  "en": "<span class=\"term\" data-def=\"认定；持有\">hold</span> ... in strict confidence",
                   "ideal": "严格保密",
                   "accept": [
                     "严格地保密",
@@ -707,10 +707,10 @@
                     "保持自信",
                     "持有信心"
                   ],
-                  "note": "hold in confidence = 保密（法律固定搭配）；strict = 严格的"
+                  "note": "<span class=\"term\" data-def=\"认定；持有\">hold</span> in confidence = 保密（法律固定搭配）；strict = 严格的"
                 },
                 {
-                  "en": "prior written consent",
+                  "en": "prior written <span class=\"term\" data-def=\"同意\">consent</span>",
                   "ideal": "事先书面同意",
                   "accept": [
                     "事前书面同意",
@@ -736,7 +736,7 @@
                   "note": "disclose = 披露（法律正式用语）；such = 该等/前述的"
                 },
                 {
-                  "en": "to any third party",
+                  "en": "to any third <span class=\"term\" data-def=\"当事人\">party</span>",
                   "ideal": "向任何第三方",
                   "accept": [
                     "给任何第三方",
@@ -745,7 +745,7 @@
                   "wrong": [
                     "向其他人"
                   ],
-                  "note": "third party = 第三方（法律术语），不要简化为“其他人”"
+                  "note": "third <span class=\"term\" data-def=\"当事人\">party</span> = 第三方（法律术语），不要简化为“其他人”"
                 },
                 {
                   "en": "except as expressly permitted",
@@ -762,11 +762,11 @@
               ]
             },
             {
-              "source": "The Parties acknowledge that any breach of this Section would cause irreparable harm for which monetary damages would be an inadequate remedy, and the non-breaching Party shall be entitled to seek injunctive relief in addition to any other remedies available at law or in equity.",
+              "source": "The Parties <span class=\"term\" data-def=\"确认\">acknowledge</span> that any breach of this Section would cause <span class=\"term\" data-def=\"不可弥补的损害\">irreparable harm</span> for which monetary <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span> would be an inadequate remedy, and the non-breaching <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be entitled to seek <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> in addition to any other <span class=\"term\" data-def=\"救济（手段）\">remedies</span> available at law or in equity.",
               "reference": "双方承认，违反本条将造成不可弥补的损害，金钱赔偿不足以作为充分救济，守约方有权在法律或衡平法允许的任何其他救济之外，寻求禁令救济。",
               "rubric": [
                 {
-                  "en": "irreparable harm",
+                  "en": "<span class=\"term\" data-def=\"不可弥补的损害\">irreparable harm</span>",
                   "ideal": "不可弥补的损害",
                   "accept": [
                     "无法弥补的损害",
@@ -779,7 +779,7 @@
                   "note": "irreparable = 不可弥补的（法律高频词）；harm = 损害"
                 },
                 {
-                  "en": "monetary damages",
+                  "en": "monetary <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>",
                   "ideal": "金钱赔偿",
                   "accept": [
                     "金钱损害赔偿",
@@ -789,7 +789,7 @@
                     "金钱损失",
                     "经济损害"
                   ],
-                  "note": "monetary damages = 金钱赔偿，是法律术语"
+                  "note": "monetary <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span> = 金钱赔偿，是法律术语"
                 },
                 {
                   "en": "inadequate remedy",
@@ -804,7 +804,7 @@
                   "note": "inadequate = 不充分的；remedy = 救济（法律术语）"
                 },
                 {
-                  "en": "entitled to seek injunctive relief",
+                  "en": "entitled to seek <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
                   "ideal": "有权寻求禁令救济",
                   "accept": [
                     "有权请求禁令救济",
@@ -814,7 +814,7 @@
                     "有权获得注射",
                     "被赋予禁令权"
                   ],
-                  "note": "entitled to = 有权；seek = 寻求；injunctive relief = 禁令救济"
+                  "note": "entitled to = 有权；seek = 寻求；<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 禁令救济"
                 },
                 {
                   "en": "at law or in equity",
@@ -838,29 +838,29 @@
           "questions": [
             {
               "source": "本协议终止或届满后，接收方应按披露方的选择，在十（10）个工作日内返还或销毁所有保密信息及其副本，并以书面方式确认其已履行该等义务。",
-              "reference": "Upon termination or expiration of this Agreement, the Receiving Party shall, at the Disclosing Party's option, return or destroy all Confidential Information and any copies thereof within ten (10) business days, and shall certify in writing that it has complied with such obligation.",
+              "reference": "Upon <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement, the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>, at the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s option, return or destroy all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> and any copies <span class=\"term\" data-def=\"其中的\">thereof</span> within ten (10) business days, and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"证明\">certify</span> in writing that it has complied with such <span class=\"term\" data-def=\"义务\">obligation</span>.",
               "rubric": [
                 {
                   "en": "终止或届满",
-                  "ideal": "termination or expiration",
+                  "ideal": "<span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span>",
                   "accept": [
-                    "expiration or termination"
+                    "<span class=\"term\" data-def=\"届满\">expiration</span> or <span class=\"term\" data-def=\"终止\">termination</span>"
                   ],
                   "wrong": [
                     "end",
-                    "termination"
+                    "<span class=\"term\" data-def=\"终止\">termination</span>"
                   ],
-                  "note": "termination（主动终止）和 expiration（自然届满）应并列使用，覆盖两种情形（第1周第5天所学）"
+                  "note": "<span class=\"term\" data-def=\"终止\">termination</span>（主动终止）和 <span class=\"term\" data-def=\"届满\">expiration</span>（自然届满）应并列使用，覆盖两种情形（第1周第5天所学）"
                 },
                 {
                   "en": "按披露方的选择",
-                  "ideal": "at the Disclosing Party's option",
+                  "ideal": "at the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s option",
                   "accept": [
-                    "at the option of the Disclosing Party"
+                    "at the option of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>"
                   ],
                   "wrong": [
-                    "by the Disclosing Party's choice",
-                    "the Disclosing Party chooses"
+                    "by the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>'s choice",
+                    "the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> chooses"
                   ],
                   "note": "at one's option = 按某方的选择（法律固定搭配）"
                 },
@@ -878,7 +878,7 @@
                 },
                 {
                   "en": "副本",
-                  "ideal": "copies thereof",
+                  "ideal": "copies <span class=\"term\" data-def=\"其中的\">thereof</span>",
                   "accept": [
                     "copies of such information",
                     "any copies"
@@ -886,20 +886,20 @@
                   "wrong": [
                     "copy"
                   ],
-                  "note": "thereof = of it（法律用语）；copies 用复数"
+                  "note": "<span class=\"term\" data-def=\"其中的\">thereof</span> = of it（法律用语）；copies 用复数"
                 },
                 {
                   "en": "以书面方式确认",
-                  "ideal": "certify in writing",
+                  "ideal": "<span class=\"term\" data-def=\"证明\">certify</span> in writing",
                   "accept": [
                     "confirm in writing",
-                    "provide written certification"
+                    "<span class=\"term\" data-def=\"提供\">provide</span> written certification"
                   ],
                   "wrong": [
                     "write to confirm",
                     "tell in writing"
                   ],
-                  "note": "certify = 正式确认/证明（比 confirm 更正式）"
+                  "note": "<span class=\"term\" data-def=\"证明\">certify</span> = 正式确认/证明（比 confirm 更正式）"
                 }
               ]
             }
@@ -910,7 +910,7 @@
     {
       "type": "summary",
       "heading": "7. 今日小结",
-      "html": "<ol><li><strong><span class=\"term\" data-def=\"保密信息\">confidential information</span></strong>——保密信息，由合同自行定义范围，比 <span class=\"term\" data-def=\"商业秘密\">trade secret</span> 更广</li><li><strong><span class=\"term\">NDA</span></strong>——Non-Disclosure Agreement（保密协议），法律实务中最常见的合同类型之一</li><li><strong><span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> vs. <span class=\"term\" data-def=\"保密的\">confidential</span></strong>——proprietary 强调所有权归属，confidential 强调不可公开；合同中常并列使用 “<span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span>”</li><li><strong><span class=\"term\" data-def=\"商业秘密\">trade secret</span></strong>——商业秘密，范围比 <span class=\"term\" data-def=\"保密信息\">confidential information</span> 更窄，受法律直接保护（无需合同约定）</li><li><strong><span class=\"term\" data-def=\"披露方\">disclosing party</span> / <span class=\"term\" data-def=\"接收方\">receiving party</span></strong>——披露方/接收方，NDA 中的两个核心角色</li><li><strong><span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span></strong>——允许的披露（例外情形），常见于保密条款的第三段</li><li><strong><span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span></strong>——未经授权的披露；<strong><span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span></strong>——违反保密义务</li><li><strong><span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> vs. <span class=\"term\">damages</span></strong>——保密条款偏好禁令救济，因信息泄露不可恢复（<span class=\"term\" data-def=\"不可弥补的损害\">irreparable harm</span>）</li><li><strong><span class=\"term\" data-def=\"返还\">return</span> or <span class=\"term\" data-def=\"销毁\">destroy</span></strong>——返还或销毁，合同终止后对保密信息的标准处理方式</li><li><strong>保密条款五段式结构</strong>：定义 → 义务 → 例外 → 期限 → 救济</li><li><strong>错题巩固</strong>：<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（不是“执行条款”）</li></ol><p><strong>本周回顾：</strong>第2周学习了权利与义务条款，从 <span class=\"term\">shall</span>/<span class=\"term\">may</span>/<span class=\"term\">must</span> 的法律含义（第1天）→ 保证与陈述（第2天）→ 条件与前提（第3天）→ 豁免与责任限制（第4天）→ 保密条款（今天）。明天是<strong>复习日</strong>，将综合巩固第2周所有内容，不引入新知识点。</p>"
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"保密信息\">confidential information</span></strong>——保密信息，由合同自行定义范围，比 <span class=\"term\" data-def=\"商业秘密\">trade secret</span> 更广</li><li><strong><span class=\"term\" data-def=\"保密协议\">NDA</span></strong>——<span class=\"term\" data-def=\"保密\">Non-Disclosure</span> Agreement（保密协议），法律实务中最常见的合同类型之一</li><li><strong><span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> vs. <span class=\"term\" data-def=\"保密的\">confidential</span></strong>——<span class=\"term\" data-def=\"专有的\">proprietary</span> 强调所有权归属，<span class=\"term\" data-def=\"保密的\">confidential</span> 强调不可公开；合同中常并列使用 “<span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> and <span class=\"term\" data-def=\"保密的\">confidential</span>”</li><li><strong><span class=\"term\" data-def=\"商业秘密\">trade secret</span></strong>——商业秘密，范围比 <span class=\"term\" data-def=\"保密信息\">confidential information</span> 更窄，受法律直接保护（无需合同约定）</li><li><strong><span class=\"term\" data-def=\"披露方\">disclosing party</span> / <span class=\"term\" data-def=\"接收方\">receiving party</span></strong>——披露方/接收方，<span class=\"term\" data-def=\"保密协议\">NDA</span> 中的两个核心角色</li><li><strong><span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span></strong>——允许的披露（例外情形），常见于保密条款的第三段</li><li><strong><span class=\"term\" data-def=\"未经授权的披露\">unauthorized disclosure</span></strong>——未经授权的披露；<strong><span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span></strong>——违反保密义务</li><li><strong><span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> vs. <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span></strong>——保密条款偏好禁令救济，因信息泄露不可恢复（<span class=\"term\" data-def=\"不可弥补的损害\">irreparable harm</span>）</li><li><strong><span class=\"term\" data-def=\"返还\">return</span> or <span class=\"term\" data-def=\"销毁\">destroy</span></strong>——返还或销毁，合同终止后对保密信息的标准处理方式</li><li><strong>保密条款五段式结构</strong>：定义 → 义务 → 例外 → 期限 → 救济</li><li><strong>错题巩固</strong>：<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（不是“执行条款”）</li></ol><p><strong>本周回顾：</strong>第2周学习了权利与义务条款，从 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>/<span class=\"term\" data-def=\"可以（任择/许可）\">may</span>/<span class=\"term\" data-def=\"必须（绝对强制）\">must</span> 的法律含义（第1天）→ 保证与陈述（第2天）→ 条件与前提（第3天）→ 豁免与责任限制（第4天）→ 保密条款（今天）。明天是<strong>复习日</strong>，将综合巩固第2周所有内容，不引入新知识点。</p>"
     }
   ]
 }

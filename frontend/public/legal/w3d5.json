@@ -1,6 +1,6 @@
 {
-  "title": "第3周 第5天 — 税费与扣款（Tax, Withholding & Set-off）",
-  "objective": "掌握商务合同中税费条款与扣款条款的核心词汇，重点理解 withholding tax（预扣税）和 gross-up（总额化补偿）的法律机制，以及 set-off（抵销）与 deduction（扣款）在合同中的精确含义，能够准确翻译税费和扣款相关条款。",
+  "title": "第3周 第5天 — 税费与扣款（<span class=\"term\" data-def=\"税\">Tax</span>, <span class=\"term\" data-def=\"预扣\">Withholding</span> & <span class=\"term\" data-def=\"抵销\">Set-off</span>）",
+  "objective": "掌握商务合同中税费条款与扣款条款的核心词汇，重点理解 <span class=\"term\" data-def=\"预扣税\">withholding tax</span>（预扣税）和 <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>（总额化补偿）的法律机制，以及 <span class=\"term\" data-def=\"抵销\">set-off</span>（抵销）与 <span class=\"term\" data-def=\"扣款\">deduction</span>（扣款）在合同中的精确含义，能够准确翻译税费和扣款相关条款。",
   "sections": [
     {
       "type": "grammar",
@@ -12,7 +12,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题持续攻克（来自 mistakes.md）：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（❌ 错误：“执行条款”）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（⚠️ 固定搭配，必须完整翻译，不能简化为“有效”）</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为（❌ 错误：“被认为是”——legal hold = 裁定）</li><li><span class=\"term\">unenforceable</span> = 不可执行的（❌ 错误：“没有强制执行力的”——表达冗长）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（⚠️ here- 家族词不可省略不可简化）</li></ul>"
+          "html": "<strong>错题持续攻克（来自 mistakes.md）：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（❌ 错误：“执行条款”）</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（⚠️ 固定搭配，必须完整翻译，不能简化为“有效”）</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为（❌ 错误：“被认为是”——legal <span class=\"term\" data-def=\"认定；持有\">hold</span> = 裁定）</li><li><span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span> = 不可执行的（❌ 错误：“没有强制执行力的”——表达冗长）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（⚠️ here- 家族词不可省略不可简化）</li></ul>"
         }
       ]
     },
@@ -35,106 +35,106 @@
           "firstColWord": true,
           "rows": [
             [
-              "tax",
+              "<span class=\"term\" data-def=\"税\">tax</span>",
               "/tæks/",
               "n. 税；税款；税费",
-              "all applicable taxes; tax imposed by; taxes and duties"
+              "all applicable taxes; <span class=\"term\" data-def=\"税\">tax</span> imposed by; taxes and duties"
             ],
             [
-              "withholding tax",
+              "<span class=\"term\" data-def=\"预扣税\">withholding tax</span>",
               "/wɪðˈhoʊldɪŋ tæks/",
               "n. 预扣税；扣缴税款",
               "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>; <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span> at the rate of; deduct <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>"
             ],
             [
-              "gross-up",
+              "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>",
               "/ˈɡroʊs ʌp/",
               "n./v. 总额化（补偿）；税后净额补足义务",
-              "gross-up obligation; gross up the payment; gross-up clause"
+              "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> <span class=\"term\" data-def=\"义务\">obligation</span>; gross up the <span class=\"term\" data-def=\"付款\">payment</span>; <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> <span class=\"term\" data-def=\"条款\">clause</span>"
             ],
             [
-              "VAT",
+              "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>",
               "/viː eɪ tiː/",
-              "abbr. 增值税（Value Added Tax）",
-              "exclusive of VAT; plus VAT; VAT invoice; VAT-registered"
+              "abbr. 增值税（Value Added <span class=\"term\" data-def=\"税\">Tax</span>）",
+              "exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>; plus <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>; <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> <span class=\"term\" data-def=\"发票\">invoice</span>; <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>-registered"
             ],
             [
-              "duty",
+              "<span class=\"term\" data-def=\"关税\">duty</span>",
               "/ˈdjuːti/",
               "n. 关税；税（特指进出口关税）",
-              "customs duty; import duty; export duty; duties and taxes"
+              "customs <span class=\"term\" data-def=\"关税\">duty</span>; import <span class=\"term\" data-def=\"关税\">duty</span>; export <span class=\"term\" data-def=\"关税\">duty</span>; duties and taxes"
             ],
             [
-              "deduction",
+              "<span class=\"term\" data-def=\"扣款\">deduction</span>",
               "/dɪˈdʌkʃən/",
               "n. 扣款；扣除；扣减",
-              "without deduction; deduction from the payment; any deduction required by law"
+              "without <span class=\"term\" data-def=\"扣款\">deduction</span>; <span class=\"term\" data-def=\"扣款\">deduction</span> from the <span class=\"term\" data-def=\"付款\">payment</span>; any <span class=\"term\" data-def=\"扣款\">deduction</span> required by law"
             ],
             [
-              "set-off",
+              "<span class=\"term\" data-def=\"抵销\">set-off</span>",
               "/ˈset ɒf/",
               "n. 抵销；（以债权）相互抵销",
-              "right of set-off; set-off against; waive the right of set-off; no set-off or counterclaim"
+              "<span class=\"term\" data-def=\"抵消权\">right of set-off</span>; <span class=\"term\" data-def=\"抵销\">set-off</span> against; <span class=\"term\" data-def=\"放弃（权利）\">waive</span> the <span class=\"term\" data-def=\"抵消权\">right of set-off</span>; no <span class=\"term\" data-def=\"抵销\">set-off</span> or <span class=\"term\" data-def=\"反诉\">counterclaim</span>"
             ],
             [
-              "net of tax",
-              "/net əv tæks/",
+              "<span class=\"term\" data-def=\"税后净额\">net of tax</span>",
+              "/<span class=\"term\" data-def=\"净额；扣除后\">net</span> əv tæks/",
               "phr. 税后净额；扣除税款后的金额",
-              "paid <span class=\"term\" data-def=\"税后净额\">net of tax</span>; amount net of <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>; net of all deductions"
+              "paid <span class=\"term\" data-def=\"税后净额\">net of tax</span>; amount <span class=\"term\" data-def=\"净额；扣除后\">net</span> of <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>; <span class=\"term\" data-def=\"净额；扣除后\">net</span> of all deductions"
             ],
             [
-              "tax authority",
+              "<span class=\"term\" data-def=\"税务机关\">tax authority</span>",
               "/tæks ɔːˈθɒrɪti/",
               "n. 税务机关；税务局",
-              "relevant <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>; remit to the <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>; as required by the <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>"
+              "relevant <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>; <span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> to the <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>; as required by the <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>"
             ],
             [
-              "applicable tax",
+              "<span class=\"term\" data-def=\"适用税款\">applicable tax</span>",
               "/ˈæplɪkəbl tæks/",
               "n. 适用税款；应缴税款",
               "all applicable taxes; pay all applicable taxes; applicable taxes and levies"
             ],
             [
-              "remit",
+              "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span>",
               "/rɪˈmɪt/",
               "v. （向税务局）缴纳；汇款",
-              "remit to the <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>; remit the tax withheld; remit payment"
+              "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> to the <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>; <span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> the <span class=\"term\" data-def=\"税\">tax</span> withheld; <span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> <span class=\"term\" data-def=\"付款\">payment</span>"
             ],
             [
-              "levy",
+              "<span class=\"term\" data-def=\"征收（税款）\">levy</span>",
               "/ˈlevi/",
               "v./n. 征收（税款）；税捐；课税",
-              "levy a tax; taxes and levies; levy imposed by government; any levy or surcharge"
+              "<span class=\"term\" data-def=\"征收（税款）\">levy</span> a <span class=\"term\" data-def=\"税\">tax</span>; taxes and levies; <span class=\"term\" data-def=\"征收（税款）\">levy</span> imposed by government; any <span class=\"term\" data-def=\"征收（税款）\">levy</span> or surcharge"
             ],
             [
-              "counterclaim",
+              "<span class=\"term\" data-def=\"反诉\">counterclaim</span>",
               "/ˈkaʊntəkleɪm/",
               "n. 反诉；反索赔",
-              "without set-off or counterclaim; assert a counterclaim; counterclaim against"
+              "without <span class=\"term\" data-def=\"抵销\">set-off</span> or <span class=\"term\" data-def=\"反诉\">counterclaim</span>; assert a <span class=\"term\" data-def=\"反诉\">counterclaim</span>; <span class=\"term\" data-def=\"反诉\">counterclaim</span> against"
             ],
             [
-              "gross amount",
+              "<span class=\"term\" data-def=\"总金额\">gross amount</span>",
               "/ɡroʊs əˈmaʊnt/",
               "n. 总金额；税前金额；未扣款前金额",
-              "<span class=\"term\" data-def=\"总金额；税前金额\">gross amount</span> of the invoice; on a gross basis; <span class=\"term\" data-def=\"总金额；税前金额\">gross amount</span> before deduction"
+              "<span class=\"term\" data-def=\"总金额；税前金额\">gross amount</span> of the <span class=\"term\" data-def=\"发票\">invoice</span>; on a gross basis; <span class=\"term\" data-def=\"总金额；税前金额\">gross amount</span> before <span class=\"term\" data-def=\"扣款\">deduction</span>"
             ],
             [
-              "net amount",
-              "/net əˈmaʊnt/",
+              "<span class=\"term\" data-def=\"净金额\">net amount</span>",
+              "/<span class=\"term\" data-def=\"净额；扣除后\">net</span> əˈmaʊnt/",
               "n. 净金额；税后实得金额；扣款后金额",
-              "<span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> received; <span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> payable; on a net basis"
+              "<span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> received; <span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> payable; on a <span class=\"term\" data-def=\"净额；扣除后\">net</span> basis"
             ],
             [
-              "tax-exempt",
+              "<span class=\"term\" data-def=\"免税的\">tax-exempt</span>",
               "/tæks ɪɡˈzempt/",
               "adj. 免税的；豁免税款的",
-              "tax-exempt entity; tax-exempt status; income is tax-exempt"
+              "<span class=\"term\" data-def=\"免税的\">tax-exempt</span> entity; <span class=\"term\" data-def=\"免税的\">tax-exempt</span> status; income is <span class=\"term\" data-def=\"免税的\">tax-exempt</span>"
             ]
           ]
         },
         {
           "type": "tip",
-          "html": "<strong>词源记忆：</strong><span class=\"term\" data-def=\"总额的；税前的\">gross</span> 来自拉丁语 grossus（大、厚重），法律语境中指“税前总额”；<span class=\"term\">net</span> 则来自法语 net（干净、纯粹），指扣除所有款项后的“净额”。“gross-up”字面意思就是“使其变大”——把收到的税后净额反推回税前总额，让对方实际到手不减少。"
+          "html": "<strong>词源记忆：</strong><span class=\"term\" data-def=\"总额的；税前的\">gross</span> 来自拉丁语 grossus（大、厚重），法律语境中指“税前总额”；<span class=\"term\" data-def=\"净额；扣除后\">net</span> 则来自法语 <span class=\"term\" data-def=\"净额；扣除后\">net</span>（干净、纯粹），指扣除所有款项后的“净额”。“<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>”字面意思就是“使其变大”——把收到的税后净额反推回税前总额，让对方实际到手不减少。"
         }
       ]
     },
@@ -168,7 +168,7 @@
               }
             ],
             [
-              "<span class=\"term\" data-def=\"总额的；税前的\">gross</span> up the payment",
+              "<span class=\"term\" data-def=\"总额的；税前的\">gross</span> up the <span class=\"term\" data-def=\"付款\">payment</span>",
               "将付款总额化（补足税款缺口）",
               {
                 "en": "<span class=\"en-text\">The Payor shall gross up the payment so that the Recipient receives the full amount.</span>",
@@ -225,7 +225,7 @@
       "blocks": [
         {
           "type": "h3",
-          "text": "3a. withholding tax vs. VAT vs. duty"
+          "text": "3a. <span class=\"term\" data-def=\"预扣税\">withholding tax</span> vs. <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> vs. <span class=\"term\" data-def=\"关税\">duty</span>"
         },
         {
           "type": "table",
@@ -263,19 +263,19 @@
         },
         {
           "type": "h3",
-          "text": "3b. deduction vs. set-off vs. counterclaim"
+          "text": "3b. <span class=\"term\" data-def=\"扣款\">deduction</span> vs. <span class=\"term\" data-def=\"抵销\">set-off</span> vs. <span class=\"term\" data-def=\"反诉\">counterclaim</span>"
         },
         {
           "type": "grammar-box",
-          "html": "<ul><li><span class=\"term\" data-def=\"扣款；扣除；扣减\">deduction</span>（扣款）：单方面从应付款中扣除某金额，通常有合同授权或法律要求（如扣缴税款）。范围广，可以是税款、质保金、损失赔偿等。</li><li><span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span>（抵销）：用己方对对方享有的债权，抵消己方对对方的债务。双方均有独立债权，互相折抵。需主动行使，属于权利，可被合同明文排除。</li><li><span class=\"term\" data-def=\"反诉；反索赔\">counterclaim</span>（反诉/反索赔）：在诉讼或仲裁程序中提出的对对方的索赔请求，与原诉请求并行审理。</li></ul><p>合同常见表述：“<em>All payments shall be made in full without any right of set-off, deduction, or counterclaim.</em>”——意思是：付款方不得以任何理由少付（不得抵销、不得扣款、不得反诉减额）。</p>"
+          "html": "<ul><li><span class=\"term\" data-def=\"扣款；扣除；扣减\">deduction</span>（扣款）：单方面从应付款中扣除某金额，通常有合同授权或法律要求（如扣缴税款）。范围广，可以是税款、质保金、损失赔偿等。</li><li><span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span>（抵销）：用己方对对方享有的债权，抵消己方对对方的债务。双方均有独立债权，互相折抵。需主动行使，属于权利，可被合同明文排除。</li><li><span class=\"term\" data-def=\"反诉；反索赔\">counterclaim</span>（反诉/反索赔）：在诉讼或仲裁程序中提出的对对方的索赔请求，与原诉请求并行审理。</li></ul><p>合同常见表述：“<em>All payments <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made in full without any <span class=\"term\" data-def=\"抵消权\">right of set-off</span>, <span class=\"term\" data-def=\"扣款\">deduction</span>, or <span class=\"term\" data-def=\"反诉\">counterclaim</span>.</em>”——意思是：付款方不得以任何理由少付（不得抵销、不得扣款、不得反诉减额）。</p>"
         },
         {
           "type": "h3",
-          "text": "3c. gross-up 机制详解"
+          "text": "3c. <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> 机制详解"
         },
         {
           "type": "grammar-box",
-          "html": "<p><strong>问题场景：</strong>A公司（甲国）向B公司（乙国）支付100万元服务费。乙国法律规定，跨境服务费须预扣10%的预扣税。</p><p><strong>没有 gross-up 条款时：</strong>A扣除10万元税款，B实际收到90万元，合同价值缩水。</p><p><strong>有 gross-up 条款时：</strong>A须向B支付“足额”——即B税后净得不低于100万元。因此A需支付约111.11万元（100÷0.9），扣除约11.11万元税款后，B实收100万元。</p><p><strong>合同语言：</strong>“<em>If any <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span> is required by law, the Payor shall gross up the payment such that the <span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> received by the Payee, after deduction of such <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>, equals the full amount that would have been received in the absence of such withholding.</em>”</p>"
+          "html": "<p><strong>问题场景：</strong>A公司（甲国）向B公司（乙国）支付100万元服务费。乙国法律规定，跨境服务费须预扣10%的预扣税。</p><p><strong>没有 <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> 条款时：</strong>A扣除10万元税款，B实际收到90万元，合同价值缩水。</p><p><strong>有 <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> 条款时：</strong>A须向B支付“足额”——即B税后净得不低于100万元。因此A需支付约111.11万元（100÷0.9），扣除约11.11万元税款后，B实收100万元。</p><p><strong>合同语言：</strong>“<em>If any <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span> is required by law, the Payor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> gross up the <span class=\"term\" data-def=\"付款\">payment</span> such that the <span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> received by the Payee, after <span class=\"term\" data-def=\"扣款\">deduction</span> of such <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>, equals the full amount that would have been received in the absence of such <span class=\"term\" data-def=\"预扣\">withholding</span>.</em>”</p>"
         }
       ]
     },
@@ -285,32 +285,32 @@
       "items": [
         {
           "title": "例句 1",
-          "sentence": "All sums payable by the Payor to the Payee under this Agreement shall be paid free and clear of, and without any deduction or withholding on account of, any Tax, unless the Payor is required by applicable law to make such deduction or withholding.",
+          "sentence": "All sums payable by the Payor to the Payee under this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be paid free and clear of, and without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> on account of, any <span class=\"term\" data-def=\"税\">Tax</span>, unless the Payor is required by applicable law to make such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span>.",
           "structure": [
             "<em>All sums payable by the Payor to the Payee</em> — 主语：付款方应付给收款方的所有款项",
-            "<em>shall be paid free and clear of, and without any deduction or withholding on account of, any Tax</em> — 谓语：应不含任何税款地足额支付（free and clear of = 不含；on account of = 因……原因）",
-            "<em>unless the Payor is required by applicable law to make such deduction or withholding</em> — 例外条件：除非适用法律要求付款方进行扣除或扣缴"
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be paid free and clear of, and without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> on account of, any <span class=\"term\" data-def=\"税\">Tax</span></em> — 谓语：应不含任何税款地足额支付（free and clear of = 不含；on account of = 因……原因）",
+            "<em>unless the Payor is required by applicable law to make such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span></em> — 例外条件：除非适用法律要求付款方进行扣除或扣缴"
           ],
           "translation": "付款方依据本协议向收款方应付的所有款项，均应不含任何税款、不作任何扣除或扣缴地足额支付，但适用法律要求付款方进行上述扣除或扣缴的除外。"
         },
         {
           "title": "例句 2",
-          "sentence": "If the Payor is so required to make any such deduction or withholding, the Payor shall simultaneously pay to the Payee such additional amounts as are necessary to ensure that the net amount received by the Payee after such deduction or withholding equals the full amount that the Payee would have received had no such deduction or withholding been required.",
+          "sentence": "If the Payor is so required to make any such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span>, the Payor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> simultaneously pay to the Payee such additional amounts as are necessary to ensure that the <span class=\"term\" data-def=\"净金额\">net amount</span> received by the Payee after such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> equals the full amount that the Payee would have received had no such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> been required.",
           "structure": [
-            "<em>If the Payor is so required to make any such deduction or withholding</em> — 条件从句：如果付款方被要求进行此类扣除或扣缴",
-            "<em>the Payor shall simultaneously pay to the Payee such additional amounts as are necessary</em> — 主句：付款方应同时向收款方支付必要的额外金额（gross-up义务）",
-            "<em>to ensure that the <span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> received ... equals the full amount that the Payee would have received had no such deduction or withholding been required</em> — 目的状语：以确保扣缴后净收额等于无需扣缴时的全额（had...been = 虚拟语气，省略if的倒装）"
+            "<em>If the Payor is so required to make any such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span></em> — 条件从句：如果付款方被要求进行此类扣除或扣缴",
+            "<em>the Payor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> simultaneously pay to the Payee such additional amounts as are necessary</em> — 主句：付款方应同时向收款方支付必要的额外金额（<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>义务）",
+            "<em>to ensure that the <span class=\"term\" data-def=\"净金额；税后实得金额\">net amount</span> received ... equals the full amount that the Payee would have received had no such <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> been required</em> — 目的状语：以确保扣缴后净收额等于无需扣缴时的全额（had...been = 虚拟语气，省略if的倒装）"
           ],
           "translation": "若付款方被要求进行上述扣除或扣缴，付款方应同时向收款方支付必要的额外金额，以确保收款方在扣除或扣缴后实际收到的净额，等于在无需进行该等扣除或扣缴情况下收款方本应收到的全部金额。"
         },
         {
           "title": "例句 3",
-          "sentence": "Each Party shall be responsible for all taxes imposed on or measured by its income or profits, and each Party hereby waives, and shall not be entitled to exercise, any right of set-off or counterclaim in respect of any payment due and payable under this Agreement.",
+          "sentence": "Each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be responsible for all taxes imposed on or measured by its income or profits, and each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"兹；特此\">hereby</span> waives, and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not be entitled to exercise, any <span class=\"term\" data-def=\"抵消权\">right of set-off</span> or <span class=\"term\" data-def=\"反诉\">counterclaim</span> in respect of any <span class=\"term\" data-def=\"付款\">payment</span> <span class=\"term\" data-def=\"到期应付\">due and payable</span> under this Agreement.",
           "structure": [
-            "<em>Each Party shall be responsible for all taxes imposed on or measured by its income or profits</em> — 各方就其收入或利润所得之税款自行承担（imposed on = 对…征收；measured by = 按…计算）",
-            "<em>each Party hereby waives</em> — hereby = 在此（此处 = 本合同中），正式法律用语",
-            "<em>shall not be entitled to exercise, any right of set-off or counterclaim</em> — 不得行使抵销权或反索赔权（be entitled to = 有权……）",
-            "<em>in respect of any payment due and payable under this Agreement</em> — 就本协议项下任何到期应付款项（in respect of = 关于；due and payable = 到期应付）"
+            "<em>Each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be responsible for all taxes imposed on or measured by its income or profits</em> — 各方就其收入或利润所得之税款自行承担（imposed on = 对…征收；measured by = 按…计算）",
+            "<em>each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"兹；特此\">hereby</span> waives</em> — <span class=\"term\" data-def=\"兹；特此\">hereby</span> = 在此（此处 = 本合同中），正式法律用语",
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not be entitled to exercise, any <span class=\"term\" data-def=\"抵消权\">right of set-off</span> or <span class=\"term\" data-def=\"反诉\">counterclaim</span></em> — 不得行使抵销权或反索赔权（be entitled to = 有权……）",
+            "<em>in respect of any <span class=\"term\" data-def=\"付款\">payment</span> <span class=\"term\" data-def=\"到期应付\">due and payable</span> under this Agreement</em> — 就本协议项下任何到期应付款项（in respect of = 关于；<span class=\"term\" data-def=\"到期应付\">due and payable</span> = 到期应付）"
           ],
           "translation": "各方应自行承担对其收入或利润征收或按其计算的所有税款，且各方特此放弃并不得行使就本协议项下任何到期应付款项的抵销权或反索赔权。"
         }
@@ -330,7 +330,7 @@
         },
         {
           "type": "grammar-box",
-          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span></summary><div class=\"answer-content\">预扣税；扣缴税款<br><em>由付款方代扣、代缴税务局的税款</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"总额化（补偿）；税后净额补足义务\">gross-up</span></summary><div class=\"answer-content\">总额化；税后净额补足<br><em>确保收款方税后实收不低于合同金额</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span></summary><div class=\"answer-content\">增值税（Value Added Tax）<br><em>exclusive of VAT = 不含增值税</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span></summary><div class=\"answer-content\">抵销（权）<br><em>用己方债权抵消对对方的债务</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"关税；税\">duty</span></summary><div class=\"answer-content\">关税；税（进出口）<br><em>customs duty / import duty / export duty</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"（向税务局）缴纳；汇款\">remit</span></summary><div class=\"answer-content\">（向税务局）缴纳；汇款<br><em>remit to the relevant <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span></em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"征收（税款）；税捐\">levy</span></summary><div class=\"answer-content\">征收（税款）；税捐<br><em>taxes and levies imposed by the government</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"免税的；豁免税款的\">tax-exempt</span></summary><div class=\"answer-content\">免税的<br><em>tax-exempt status / tax-exempt entity</em></div></details></div></div>"
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span></summary><div class=\"answer-content\">预扣税；扣缴税款<br><em>由付款方代扣、代缴税务局的税款</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"总额化（补偿）；税后净额补足义务\">gross-up</span></summary><div class=\"answer-content\">总额化；税后净额补足<br><em>确保收款方税后实收不低于合同金额</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span></summary><div class=\"answer-content\">增值税（Value Added <span class=\"term\" data-def=\"税\">Tax</span>）<br><em>exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> = 不含增值税</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span></summary><div class=\"answer-content\">抵销（权）<br><em>用己方债权抵消对对方的债务</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"关税；税\">duty</span></summary><div class=\"answer-content\">关税；税（进出口）<br><em>customs <span class=\"term\" data-def=\"关税\">duty</span> / import <span class=\"term\" data-def=\"关税\">duty</span> / export <span class=\"term\" data-def=\"关税\">duty</span></em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"（向税务局）缴纳；汇款\">remit</span></summary><div class=\"answer-content\">（向税务局）缴纳；汇款<br><em><span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> to the relevant <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span></em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"征收（税款）；税捐\">levy</span></summary><div class=\"answer-content\">征收（税款）；税捐<br><em>taxes and levies imposed by the government</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"免税的；豁免税款的\">tax-exempt</span></summary><div class=\"answer-content\">免税的<br><em><span class=\"term\" data-def=\"免税的\">tax-exempt</span> status / <span class=\"term\" data-def=\"免税的\">tax-exempt</span> entity</em></div></details></div></div>"
         }
       ]
     },
@@ -346,51 +346,51 @@
               "prompt": "1. 预扣税（付款方代扣代缴）",
               "options": [
                 "<span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>",
-                "VAT",
-                "levy"
+                "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>",
+                "<span class=\"term\" data-def=\"征收（税款）\">levy</span>"
               ],
               "answer": "<span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>",
-              "explanation": "withholding tax = 预扣税，由付款方代扣后汇缴税务机关"
+              "explanation": "<span class=\"term\" data-def=\"预扣税\">withholding tax</span> = 预扣税，由付款方代扣后汇缴税务机关"
             },
             {
               "prompt": "2. 总额化（确保收款方税后实收不减少）",
               "options": [
-                "deduction",
-                "gross-up",
-                "set-off"
+                "<span class=\"term\" data-def=\"扣款\">deduction</span>",
+                "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>",
+                "<span class=\"term\" data-def=\"抵销\">set-off</span>"
               ],
-              "answer": "gross-up",
-              "explanation": "gross-up = 总额化补偿，确保收款方税后净收等于合同约定金额"
+              "answer": "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>",
+              "explanation": "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> = 总额化补偿，确保收款方税后净收等于合同约定金额"
             },
             {
               "prompt": "3. 抵销（用己方债权折抵对方应付款）",
               "options": [
-                "counterclaim",
-                "deduction",
-                "set-off"
+                "<span class=\"term\" data-def=\"反诉\">counterclaim</span>",
+                "<span class=\"term\" data-def=\"扣款\">deduction</span>",
+                "<span class=\"term\" data-def=\"抵销\">set-off</span>"
               ],
-              "answer": "set-off",
-              "explanation": "set-off = 抵销，用己方对对方的债权抵消对对方的付款义务"
+              "answer": "<span class=\"term\" data-def=\"抵销\">set-off</span>",
+              "explanation": "<span class=\"term\" data-def=\"抵销\">set-off</span> = 抵销，用己方对对方的债权抵消对对方的付款义务"
             },
             {
               "prompt": "4. 关税（进出口税）",
               "options": [
-                "VAT",
-                "duty",
-                "levy"
+                "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>",
+                "<span class=\"term\" data-def=\"关税\">duty</span>",
+                "<span class=\"term\" data-def=\"征收（税款）\">levy</span>"
               ],
-              "answer": "duty",
-              "explanation": "duty = 关税，通常指进出口关税，如 customs duty / import duty"
+              "answer": "<span class=\"term\" data-def=\"关税\">duty</span>",
+              "explanation": "<span class=\"term\" data-def=\"关税\">duty</span> = 关税，通常指进出口关税，如 customs <span class=\"term\" data-def=\"关税\">duty</span> / import <span class=\"term\" data-def=\"关税\">duty</span>"
             },
             {
               "prompt": "5. 向税务机关缴纳（汇缴税款）",
               "options": [
-                "accrue",
-                "levy",
-                "remit"
+                "<span class=\"term\" data-def=\"（利息/权利）产生\">accrue</span>",
+                "<span class=\"term\" data-def=\"征收（税款）\">levy</span>",
+                "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span>"
               ],
-              "answer": "remit",
-              "explanation": "remit = 向税务机关缴纳、汇款；remit to the relevant tax authority 是固定搭配"
+              "answer": "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span>",
+              "explanation": "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> = 向税务机关缴纳、汇款；<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> to the relevant <span class=\"term\" data-def=\"税务机关\">tax authority</span> 是固定搭配"
             }
           ]
         }
@@ -408,62 +408,62 @@
             {
               "prompt": "1. 合同写道“The fee is USD 10,000 ____”，意思是价格不含增值税，买方须另付增值税。",
               "options": [
-                "inclusive of VAT（含增值税）",
-                "exclusive of VAT（不含增值税）",
+                "inclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>（含增值税）",
+                "exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>（不含增值税）",
                 "<span class=\"term\" data-def=\"税后净额\">net of tax</span>（税后净额）"
               ],
-              "answer": "exclusive of VAT（不含增值税）",
-              "explanation": "exclusive of VAT = 不含增值税，价格为税前价，买方需另付VAT"
+              "answer": "exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>（不含增值税）",
+              "explanation": "exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> = 不含增值税，价格为税前价，买方需另付<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>"
             },
             {
               "prompt": "2. 中国公司向美国公司支付技术服务费，中国税法要求中国公司从中扣留10%上缴税务局，这10%叫做：",
               "options": [
-                "VAT",
+                "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>",
                 "<span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>",
-                "import duty"
+                "import <span class=\"term\" data-def=\"关税\">duty</span>"
               ],
               "answer": "<span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>",
-              "explanation": "withholding tax = 预扣税，境外服务费常见，付款方扣留一部分税款代缴税务局"
+              "explanation": "<span class=\"term\" data-def=\"预扣税\">withholding tax</span> = 预扣税，境外服务费常见，付款方扣留一部分税款代缴税务局"
             },
             {
               "prompt": "3. 合同约定服务费100万，但须扣缴10%预扣税，为使乙方税后实得仍为100万，甲方须：",
               "options": [
-                "行使 set-off（抵销）",
-                "进行 gross-up（总额化补偿）",
-                "行使 waive（放弃权利）"
+                "行使 <span class=\"term\" data-def=\"抵销\">set-off</span>（抵销）",
+                "进行 <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>（总额化补偿）",
+                "行使 <span class=\"term\" data-def=\"放弃（权利）\">waive</span>（放弃权利）"
               ],
-              "answer": "进行 gross-up（总额化补偿）",
-              "explanation": "gross-up = 总额化，即付款方须多支付，使收款方税后净收仍等于合同约定金额"
+              "answer": "进行 <span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span>（总额化补偿）",
+              "explanation": "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> = 总额化，即付款方须多支付，使收款方税后净收仍等于合同约定金额"
             },
             {
-              "prompt": "4. 合同写道“payments shall be made in full without any right of ____”，意思是付款方不得以任何理由少付或折抵。",
+              "prompt": "4. 合同写道“payments <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made in full without any <span class=\"term\" data-def=\"权利\">right</span> of ____”，意思是付款方不得以任何理由少付或折抵。",
               "options": [
-                "deduction only",
-                "set-off",
-                "remittance"
+                "<span class=\"term\" data-def=\"扣款\">deduction</span> only",
+                "<span class=\"term\" data-def=\"抵销\">set-off</span>",
+                "<span class=\"term\" data-def=\"汇款\">remittance</span>"
               ],
-              "answer": "set-off",
-              "explanation": "set-off = 抵销权，允许一方用对对方的债权抵消对对方的债务；no set-off = 禁止行使抵销权"
+              "answer": "<span class=\"term\" data-def=\"抵销\">set-off</span>",
+              "explanation": "<span class=\"term\" data-def=\"抵销\">set-off</span> = 抵销权，允许一方用对对方的债权抵消对对方的债务；no <span class=\"term\" data-def=\"抵销\">set-off</span> = 禁止行使抵销权"
             },
             {
               "prompt": "5. 付款方扣留的预扣税，须在规定期限内 ____ to the relevant <span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>。",
               "options": [
                 "deduct",
-                "levy",
-                "remit"
+                "<span class=\"term\" data-def=\"征收（税款）\">levy</span>",
+                "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span>"
               ],
-              "answer": "remit",
-              "explanation": "remit = 缴纳、汇缴；remit to the tax authority = 向税务机关缴纳"
+              "answer": "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span>",
+              "explanation": "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> = 缴纳、汇缴；<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> to the <span class=\"term\" data-def=\"税务机关\">tax authority</span> = 向税务机关缴纳"
             },
             {
               "prompt": "6. 政府对商品交易征收税款，这个动词用：",
               "options": [
-                "remit（缴纳）",
-                "levy（征收）",
-                "accrue（累积）"
+                "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span>（缴纳）",
+                "<span class=\"term\" data-def=\"征收（税款）\">levy</span>（征收）",
+                "<span class=\"term\" data-def=\"（利息/权利）产生\">accrue</span>（累积）"
               ],
-              "answer": "levy（征收）",
-              "explanation": "levy = 征收（tax）；由政府对纳税人征收；与 impose 近义"
+              "answer": "<span class=\"term\" data-def=\"征收（税款）\">levy</span>（征收）",
+              "explanation": "<span class=\"term\" data-def=\"征收（税款）\">levy</span> = 征收（<span class=\"term\" data-def=\"税\">tax</span>）；由政府对纳税人征收；与 impose 近义"
             }
           ]
         },
@@ -473,7 +473,7 @@
           "instruction": "选择最合适的词填入空白处。",
           "questions": [
             {
-              "prompt": "1. All payments hereunder shall be made ____ all taxes, duties and levies.",
+              "prompt": "1. All payments <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made ____ all taxes, duties and levies.",
               "options": [
                 "exclusive of",
                 "free and clear of",
@@ -483,44 +483,44 @@
               "explanation": "free and clear of = 不含……，常与 taxes 搭配，表示付款不含任何税费"
             },
             {
-              "prompt": "2. The Licensee shall pay all royalties ____ on account of any tax.",
+              "prompt": "2. The Licensee <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> pay all royalties ____ on account of any <span class=\"term\" data-def=\"税\">tax</span>.",
               "options": [
                 "<span class=\"term\" data-def=\"税后净额\">net of tax</span>",
-                "without any deduction or withholding",
+                "without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span>",
                 "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>"
               ],
-              "answer": "without any deduction or withholding",
-              "explanation": "without any deduction or withholding = 不作任何扣除或扣缴，是合同中要求足额付款的标准表述"
+              "answer": "without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span>",
+              "explanation": "without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> = 不作任何扣除或扣缴，是合同中要求足额付款的标准表述"
             },
             {
-              "prompt": "3. The ____ requires the Payor to top up the payment to compensate for any <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span> deducted.",
+              "prompt": "3. The ____ requires the Payor to top up the <span class=\"term\" data-def=\"付款\">payment</span> to compensate for any <span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span> deducted.",
               "options": [
-                "set-off obligation",
-                "tax-exempt status",
-                "gross-up obligation"
+                "<span class=\"term\" data-def=\"抵销\">set-off</span> <span class=\"term\" data-def=\"义务\">obligation</span>",
+                "<span class=\"term\" data-def=\"免税的\">tax-exempt</span> status",
+                "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> <span class=\"term\" data-def=\"义务\">obligation</span>"
               ],
-              "answer": "gross-up obligation",
-              "explanation": "gross-up obligation = 总额化义务，指合同中规定的若扣缴预扣税则须补足金额的义务"
+              "answer": "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> <span class=\"term\" data-def=\"义务\">obligation</span>",
+              "explanation": "<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> <span class=\"term\" data-def=\"义务\">obligation</span> = 总额化义务，指合同中规定的若扣缴预扣税则须补足金额的义务"
             },
             {
-              "prompt": "4. The Buyer shall bear all ____ arising from the import of the Goods into the country of delivery.",
+              "prompt": "4. The Buyer <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> bear all ____ arising from the import of the Goods into the country of delivery.",
               "options": [
                 "interests and penalties",
                 "taxes and duties",
                 "levies and counterclaims"
               ],
               "answer": "taxes and duties",
-              "explanation": "taxes and duties = 税款与关税，是合同中常见的并列搭配，duty特指关税"
+              "explanation": "taxes and duties = 税款与关税，是合同中常见的并列搭配，<span class=\"term\" data-def=\"关税\">duty</span>特指关税"
             },
             {
-              "prompt": "5. Each Party hereby ____ or counterclaim against the other Party in respect of any sums due hereunder.",
+              "prompt": "5. Each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"兹；特此\">hereby</span> ____ or <span class=\"term\" data-def=\"反诉\">counterclaim</span> against the other <span class=\"term\" data-def=\"当事人\">Party</span> in respect of any sums due <span class=\"term\" data-def=\"依本协议\">hereunder</span>.",
               "options": [
-                "exercises any right of set-off",
-                "waives any right of set-off",
-                "levies any right of set-off"
+                "exercises any <span class=\"term\" data-def=\"抵消权\">right of set-off</span>",
+                "waives any <span class=\"term\" data-def=\"抵消权\">right of set-off</span>",
+                "levies any <span class=\"term\" data-def=\"抵消权\">right of set-off</span>"
               ],
-              "answer": "waives any right of set-off",
-              "explanation": "waives any right of set-off = 放弃任何抵销权；waive = 放弃（权利）"
+              "answer": "waives any <span class=\"term\" data-def=\"抵消权\">right of set-off</span>",
+              "explanation": "waives any <span class=\"term\" data-def=\"抵消权\">right of set-off</span> = 放弃任何抵销权；<span class=\"term\" data-def=\"放弃（权利）\">waive</span> = 放弃（权利）"
             }
           ]
         },
@@ -532,32 +532,32 @@
             {
               "prompt": "1. “the Exhibits <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>” 的正确翻译是：",
               "options": [
-                "附件（省略了hereto）",
+                "附件（省略了<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>）",
                 "附于本协议的（展附文件）",
                 "附属文件"
               ],
               "answer": "附于本协议的（展附文件）",
-              "explanation": "attached hereto = 附于本协议的；hereto = to this Agreement，here- 家族词必须保留，不得省略"
+              "explanation": "<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的；<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = to this Agreement，here- 家族词必须保留，不得省略"
             },
             {
-              "prompt": "2. “remain <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>” 的正确翻译是：",
+              "prompt": "2. “<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>” 的正确翻译是：",
               "options": [
                 "有效（不完整）",
                 "完全有效（保持完全有效）",
                 "全面生效"
               ],
               "answer": "完全有效（保持完全有效）",
-              "explanation": "in full force and effect = 完全有效，是法律固定搭配，不能简化为“有效”，三个词缺一不可"
+              "explanation": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效，是法律固定搭配，不能简化为“有效”，三个词缺一不可"
             },
             {
-              "prompt": "3. “if any provision is <span class=\"term\" data-def=\"被裁定为\">held to be</span> unenforceable” 中 “held to be” 的正确翻译：",
+              "prompt": "3. “if any <span class=\"term\" data-def=\"规定\">provision</span> is <span class=\"term\" data-def=\"被裁定为\">held to be</span> <span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span>” 中 “<span class=\"term\" data-def=\"被裁定为\">held to be</span>” 的正确翻译：",
               "options": [
                 "被认为是（日常用语，不够准确）",
                 "被裁定为（法律裁定，正确）",
                 "被视为（deemed 的翻译）"
               ],
               "answer": "被裁定为（法律裁定，正确）",
-              "explanation": "held to be = 被裁定为/被判定为，法律语境中 hold 是法院“裁定”的意思，不同于日常的“认为”"
+              "explanation": "<span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为/被判定为，法律语境中 <span class=\"term\" data-def=\"认定；持有\">hold</span> 是法院“裁定”的意思，不同于日常的“认为”"
             },
             {
               "prompt": "4. “<span class=\"term\" data-def=\"实质条款\">operative provisions</span>” 的正确翻译：",
@@ -567,17 +567,17 @@
                 "操作条款"
               ],
               "answer": "实质条款（✓ 正确）",
-              "explanation": "operative provisions = 实质条款/正文条款，operative = 实质性的、起作用的，不是“执行”的意思"
+              "explanation": "<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款/正文条款，<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> = 实质性的、起作用的，不是“执行”的意思"
             },
             {
-              "prompt": "5. “<span class=\"term\">unenforceable</span>” 最规范的中文翻译是：",
+              "prompt": "5. “<span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span>” 最规范的中文翻译是：",
               "options": [
                 "没有强制执行力的（冗长）",
                 "不可执行的（✓ 简洁规范）",
                 "无效的（void 的翻译，混淆）"
               ],
               "answer": "不可执行的（✓ 简洁规范）",
-              "explanation": "unenforceable = 不可执行的，简洁表达即可，不必说“没有强制执行力的”"
+              "explanation": "<span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span> = 不可执行的，简洁表达即可，不必说“没有强制执行力的”"
             }
           ]
         },
@@ -589,35 +589,35 @@
             {
               "prompt": "1. 找出不属于“税种”的一项：",
               "options": [
-                "VAT（增值税）",
+                "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>（增值税）",
                 "<span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>（预扣税）",
-                "set-off（抵销权）",
-                "import duty（进口关税）"
+                "<span class=\"term\" data-def=\"抵销\">set-off</span>（抵销权）",
+                "import <span class=\"term\" data-def=\"关税\">duty</span>（进口关税）"
               ],
-              "answer": "set-off（抵销权）",
-              "explanation": "VAT、withholding tax、import duty 都是税种；set-off 是法律权利（抵销权），不是税种"
+              "answer": "<span class=\"term\" data-def=\"抵销\">set-off</span>（抵销权）",
+              "explanation": "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>、<span class=\"term\" data-def=\"预扣税\">withholding tax</span>、import <span class=\"term\" data-def=\"关税\">duty</span> 都是税种；<span class=\"term\" data-def=\"抵销\">set-off</span> 是法律权利（抵销权），不是税种"
             },
             {
               "prompt": "2. 找出不属于“扣减行为”的一项：",
               "options": [
-                "deduction（扣款）",
+                "<span class=\"term\" data-def=\"扣款\">deduction</span>（扣款）",
                 "<span class=\"term\" data-def=\"总金额；税前金额\">gross amount</span>（总金额）",
-                "withholding（扣缴）",
-                "set-off（抵销）"
+                "<span class=\"term\" data-def=\"预扣\">withholding</span>（扣缴）",
+                "<span class=\"term\" data-def=\"抵销\">set-off</span>（抵销）"
               ],
               "answer": "<span class=\"term\" data-def=\"总金额；税前金额\">gross amount</span>（总金额）",
-              "explanation": "deduction、withholding、set-off 都涉及“减少/扣除”金额的概念；gross amount = 总金额（税前），是金额概念，不是扣减行为"
+              "explanation": "<span class=\"term\" data-def=\"扣款\">deduction</span>、<span class=\"term\" data-def=\"预扣\">withholding</span>、<span class=\"term\" data-def=\"抵销\">set-off</span> 都涉及“减少/扣除”金额的概念；<span class=\"term\" data-def=\"总金额\">gross amount</span> = 总金额（税前），是金额概念，不是扣减行为"
             },
             {
               "prompt": "3. 找出不属于“合同主体/机构”的一项：",
               "options": [
                 "<span class=\"term\" data-def=\"税务机关；税务局\">tax authority</span>（税务机关）",
                 "Payor（付款方）",
-                "levy（征收/税捐）",
+                "<span class=\"term\" data-def=\"征收（税款）\">levy</span>（征收/税捐）",
                 "Payee（收款方）"
               ],
-              "answer": "levy（征收/税捐）",
-              "explanation": "tax authority、Payor、Payee 都是合同中的主体（人/机构）；levy 是动词/名词（征收/税捐），不是合同主体"
+              "answer": "<span class=\"term\" data-def=\"征收（税款）\">levy</span>（征收/税捐）",
+              "explanation": "<span class=\"term\" data-def=\"税务机关\">tax authority</span>、Payor、Payee 都是合同中的主体（人/机构）；<span class=\"term\" data-def=\"征收（税款）\">levy</span> 是动词/名词（征收/税捐），不是合同主体"
             }
           ]
         },
@@ -627,11 +627,11 @@
           "instruction": "将以下条款翻译为中文，完成后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
-              "source": "All payments made by the Payor to the Payee under this Agreement shall be made without any deduction or withholding on account of any Taxes, unless the Payor is required by applicable law to deduct or withhold such Taxes.",
+              "source": "All payments made by the Payor to the Payee under this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> on account of any Taxes, unless the Payor is required by applicable law to deduct or withhold such Taxes.",
               "reference": "付款方依据本协议向收款方支付的所有款项，均应不作任何税款扣除或扣缴，但适用法律要求付款方扣除或扣缴该等税款的除外。",
               "rubric": [
                 {
-                  "en": "without any deduction or withholding",
+                  "en": "without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span>",
                   "ideal": "不作任何扣除或扣缴",
                   "accept": [
                     "不作任何扣款或代扣"
@@ -639,7 +639,7 @@
                   "wrong": [
                     "不扣除"
                   ],
-                  "note": "deduction 和 withholding 须分别翻译，不可合并为“不扣款”"
+                  "note": "<span class=\"term\" data-def=\"扣款\">deduction</span> 和 <span class=\"term\" data-def=\"预扣\">withholding</span> 须分别翻译，不可合并为“不扣款”"
                 },
                 {
                   "en": "on account of any Taxes",
@@ -687,7 +687,7 @@
               ]
             },
             {
-              "source": "If the Payor is required to withhold any Taxes, the Payor shall gross up the payment so that the Payee receives an amount equal to the sum it would have received had no such withholding been made.",
+              "source": "If the Payor is required to withhold any Taxes, the Payor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> gross up the <span class=\"term\" data-def=\"付款\">payment</span> so that the Payee receives an amount equal to the sum it would have received had no such <span class=\"term\" data-def=\"预扣\">withholding</span> been made.",
               "reference": "若付款方须扣缴任何税款，付款方应对付款进行总额化处理，使收款方收到的金额等于未经任何扣缴时本应收到的金额。",
               "rubric": [
                 {
@@ -703,7 +703,7 @@
                   "note": "withhold = 代扣（预扣税），不是“扣留”"
                 },
                 {
-                  "en": "gross up the payment",
+                  "en": "gross up the <span class=\"term\" data-def=\"付款\">payment</span>",
                   "ideal": "对付款进行总额化处理",
                   "accept": [
                     "将付款总额化",
@@ -727,7 +727,7 @@
                   "note": "the sum it would have received 是虚拟语气从句，须翻译出“本应收到”"
                 },
                 {
-                  "en": "had no such withholding been made",
+                  "en": "had no such <span class=\"term\" data-def=\"预扣\">withholding</span> been made",
                   "ideal": "未经任何扣缴时本应收到的",
                   "accept": [
                     "假如没有进行该等扣缴"
@@ -748,7 +748,7 @@
           "questions": [
             {
               "source": "买方应承担因进口货物产生的所有关税及适用税款，卖方报价不含增值税及任何政府税捐。",
-              "reference": "The Buyer shall bear all customs duties and applicable taxes arising from the importation of the Goods, and the Seller's quoted price is exclusive of VAT and any governmental levies.",
+              "reference": "The Buyer <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> bear all customs duties and applicable taxes arising from the importation of the Goods, and the Seller's quoted price is exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> and any governmental levies.",
               "rubric": [
                 {
                   "en": "bear all customs duties and applicable taxes",
@@ -773,11 +773,11 @@
                   "note": "arising from = 因……产生，法律合同常用表达"
                 },
                 {
-                  "en": "exclusive of VAT",
+                  "en": "exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>",
                   "ideal": "不含增值税",
                   "accept": [
                     "税前价",
-                    "VAT不包括在内"
+                    "<span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>不包括在内"
                   ],
                   "wrong": [
                     "包含增值税"
@@ -794,7 +794,7 @@
                   "wrong": [
                     "政府费用"
                   ],
-                  "note": "levy = 税捐/征收款，governmental levies 指政府依法征收的各类费用"
+                  "note": "<span class=\"term\" data-def=\"征收（税款）\">levy</span> = 税捐/征收款，governmental levies 指政府依法征收的各类费用"
                 }
               ]
             }
@@ -808,14 +808,14 @@
       "blocks": [
         {
           "type": "error-warn",
-          "html": "<strong>常见错误预防：</strong><ul><li><strong>gross-up ≠ 增加付款</strong>：gross-up 是“总额化”机制，目的是补偿被扣缴的税款，使收款方税后实得不低于合同金额，不是随意增加付款。</li><li><strong>set-off ≠ 抵扣</strong>：“抵扣”在税法中有特定含义（如进项税额抵扣），合同中的 set-off 应译为“抵销”，指债务互相折抵。</li><li><strong>exclusive of VAT ≠ 不含税价</strong>：exclusive of VAT 特指不含增值税，若要说不含任何税应写 exclusive of all taxes and duties。</li><li><strong>duty 在不同语境含义不同</strong>：作为“关税”时是名词（customs duty）；作为“义务/职责”时也是 duty（如 fiduciary duty 受信义务）。注意区分语境。</li></ul>"
+          "html": "<strong>常见错误预防：</strong><ul><li><strong><span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> ≠ 增加付款</strong>：<span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> 是“总额化”机制，目的是补偿被扣缴的税款，使收款方税后实得不低于合同金额，不是随意增加付款。</li><li><strong><span class=\"term\" data-def=\"抵销\">set-off</span> ≠ 抵扣</strong>：“抵扣”在税法中有特定含义（如进项税额抵扣），合同中的 <span class=\"term\" data-def=\"抵销\">set-off</span> 应译为“抵销”，指债务互相折抵。</li><li><strong>exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> ≠ 不含税价</strong>：exclusive of <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span> 特指不含增值税，若要说不含任何税应写 exclusive of all taxes and duties。</li><li><strong><span class=\"term\" data-def=\"关税\">duty</span> 在不同语境含义不同</strong>：作为“关税”时是名词（customs <span class=\"term\" data-def=\"关税\">duty</span>）；作为“义务/职责”时也是 <span class=\"term\" data-def=\"关税\">duty</span>（如 <span class=\"term\" data-def=\"信义义务\">fiduciary duty</span> 受信义务）。注意区分语境。</li></ul>"
         }
       ]
     },
     {
       "type": "summary",
       "heading": "8. 今日小结",
-      "html": "<h3>第3周 第5天 — 税费与扣款核心要点</h3><table><thead><tr><th>知识点</th><th>核心内容</th></tr></thead><tbody><tr><td>税种区分</td><td><span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>（预扣税，代扣代缴）vs. <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>（增值税，销售方申报）vs. <span class=\"term\" data-def=\"关税；税\">duty</span>（关税，进出口）</td></tr><tr><td>gross-up 机制</td><td>若须扣缴预扣税，付款方须“总额化”支付，确保收款方税后净收等于合同约定金额</td></tr><tr><td>set-off 与 deduction</td><td><span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span> = 债权相互抵销（需有独立债权）；<span class=\"term\" data-def=\"扣款；扣除；扣减\">deduction</span> = 从应付款中单方扣减（有合同依据或法律要求）</td></tr><tr><td>足额付款条款</td><td>free and clear of all taxes / without any deduction or withholding = 不含税、足额付款的标准表述</td></tr><tr><td>remit vs. levy</td><td><span class=\"term\" data-def=\"（向税务局）缴纳；汇款\">remit</span> = 缴纳/汇缴（纳税人向税务局）；<span class=\"term\" data-def=\"征收（税款）；税捐\">levy</span> = 征收（政府对纳税人）</td></tr><tr><td>错题巩固</td><td><span class=\"term\" data-def=\"实质条款\">operative provisions</span>（实质条款）/ in full force and effect（完全有效）/ attached hereto（附于本协议的）/ held to be（被裁定为）</td></tr></tbody></table><p><strong>明日预告（第3周 第6天）：</strong>货币与汇率条款——<span class=\"term\" data-def=\"货币；通货\">currency</span>（货币）、<span class=\"term\" data-def=\"汇率；兑换率\">exchange rate</span>（汇率）、<span class=\"term\" data-def=\"面额；计价货币\">denomination</span>（计价货币）、<span class=\"term\" data-def=\"汇率风险\">foreign exchange risk</span>（汇率风险）、<span class=\"term\" data-def=\"兑换；换算\">conversion</span>（货币换算）等核心术语。</p>"
+      "html": "<h3>第3周 第5天 — 税费与扣款核心要点</h3><table><thead><tr><th>知识点</th><th>核心内容</th></tr></thead><tbody><tr><td>税种区分</td><td><span class=\"term\" data-def=\"预扣税；扣缴税款\">withholding tax</span>（预扣税，代扣代缴）vs. <span class=\"term\" data-def=\"增值税（Value Added Tax）\">VAT</span>（增值税，销售方申报）vs. <span class=\"term\" data-def=\"关税；税\">duty</span>（关税，进出口）</td></tr><tr><td><span class=\"term\" data-def=\"总额化（补偿）\">gross-up</span> 机制</td><td>若须扣缴预扣税，付款方须“总额化”支付，确保收款方税后净收等于合同约定金额</td></tr><tr><td><span class=\"term\" data-def=\"抵销\">set-off</span> 与 <span class=\"term\" data-def=\"扣款\">deduction</span></td><td><span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span> = 债权相互抵销（需有独立债权）；<span class=\"term\" data-def=\"扣款；扣除；扣减\">deduction</span> = 从应付款中单方扣减（有合同依据或法律要求）</td></tr><tr><td>足额付款条款</td><td>free and clear of all taxes / without any <span class=\"term\" data-def=\"扣款\">deduction</span> or <span class=\"term\" data-def=\"预扣\">withholding</span> = 不含税、足额付款的标准表述</td></tr><tr><td><span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> vs. <span class=\"term\" data-def=\"征收（税款）\">levy</span></td><td><span class=\"term\" data-def=\"（向税务局）缴纳；汇款\">remit</span> = 缴纳/汇缴（纳税人向税务局）；<span class=\"term\" data-def=\"征收（税款）；税捐\">levy</span> = 征收（政府对纳税人）</td></tr><tr><td>错题巩固</td><td><span class=\"term\" data-def=\"实质条款\">operative provisions</span>（实质条款）/ <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>（完全有效）/ <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>（附于本协议的）/ <span class=\"term\" data-def=\"被裁定为\">held to be</span>（被裁定为）</td></tr></tbody></table><p><strong>明日预告（第3周 第6天）：</strong>货币与汇率条款——<span class=\"term\" data-def=\"货币；通货\">currency</span>（货币）、<span class=\"term\" data-def=\"汇率；兑换率\">exchange rate</span>（汇率）、<span class=\"term\" data-def=\"面额；计价货币\">denomination</span>（计价货币）、<span class=\"term\" data-def=\"汇率风险\">foreign exchange risk</span>（汇率风险）、<span class=\"term\" data-def=\"兑换；换算\">conversion</span>（货币换算）等核心术语。</p>"
     }
   ]
 }

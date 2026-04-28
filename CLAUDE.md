@@ -285,7 +285,7 @@ courses/                # 仅保留学习资料，不再作为页面源
 - 关系生成通过后端 API 触发，前端设置页面提供 UI 控件
 - 释义爬取通过 Edge Function (`fetch-definition`) 代理，前端加粗
 - TTS 音频缓存：非英语单词首次播放经 Flask `/api/ai/synthesize` 合成后缓存到阿里云服务器（`/tts-cache/{source}/{sha256}.mp3`），后续直接从 nginx 静态文件获取
-- 当前版本号 `v2.0.0`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
+- 当前版本号 `v2.1.4`，定义在 `frontend/src/shared/constants/version.ts`，每次 commit 须更新
 - 课程页面复用主站的 Supabase 登录会话，用户需先在主站登录；未登录仍可浏览但练习无法同步到云端
 - 课时 JSON 的所有 `.uk-word` / `.term` 元素必须带 `data-def` 属性提供释义（单词点击气泡需要）
 - 新增课时同步更新 `frontend/src/features/courses/data/lessons.ts` 的索引数据

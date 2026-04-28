@@ -98,6 +98,7 @@ import type { ChatMessage } from '@/shared/services/ai'
 import { streamAI } from '@/shared/services/ai'
 import { formatMarkdown } from '@/shared/utils/markdown'
 import { useCourseTts } from '../../composables/useCourseTts'
+import { lookupCourseDefinition } from '../../composables/useCourseDefinitionLookup'
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
 const config = inject<CourseConfig>('courseConfig')!
@@ -283,16 +284,33 @@ function askAboutSelection() {
   window.getSelection()?.removeAllRanges()
 }
 
-function addSelection() {
+async function addSelection() {
   if (!courseSource.value) return
   const text = selectedText
   selBtnVisible.value = false
-  wordEditorStore.openForCreate(
-    { source: courseSource.value, lang: config.lang },
-    text
-  )
   selectedText = ''
+
+  // 优先：从选区 DOM 节点向上找带 data-def 的祖先（点中整个 .term/.uk-word 时命中）
+  let def: string | undefined
+  const sel = window.getSelection()
+  if (sel && sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0)
+    let node: Node | null = range.commonAncestorContainer
+    if (node && node.nodeType === Node.TEXT_NODE) node = node.parentElement
+    const el = (node as HTMLElement | null)?.closest?.('[data-def]')
+    if (el) def = el.getAttribute('data-def') || undefined
+  }
   window.getSelection()?.removeAllRanges()
+
+  // 兜底：跨课程释义索引（覆盖漏标 data-def 的情况）
+  if (!def) {
+    def = await lookupCourseDefinition(text, config.lang)
+  }
+
+  await wordEditorStore.openForCourse(text, def, {
+    source: courseSource.value,
+    lang: config.lang,
+  })
 }
 
 function pronounceSelection() {

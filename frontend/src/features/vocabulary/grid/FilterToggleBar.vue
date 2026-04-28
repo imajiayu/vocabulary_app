@@ -59,14 +59,10 @@ defineEmits<{
 
 const mode = ref<'review' | 'spell'>('review')
 
-const modeTabs = computed(() => {
-  const reviewLabel = props.reviewStatus !== 'all' ? '复习 ●' : '复习'
-  const spellLabel = props.spellStatus !== 'all' ? '拼写 ●' : '拼写'
-  return [
-    { value: 'review', label: mode.value === 'review' ? '复习' : reviewLabel },
-    { value: 'spell', label: mode.value === 'spell' ? '拼写' : spellLabel },
-  ]
-})
+const modeTabs = [
+  { value: 'review', label: '复习' },
+  { value: 'spell', label: '拼写' },
+]
 
 const reviewTabs = computed(() => [
   { value: 'all', label: `全部 ${props.reviewCounts.total}` },

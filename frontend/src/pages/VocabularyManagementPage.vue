@@ -197,6 +197,8 @@ import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor';
 import { logger } from '@/shared/utils/logger';
 import { concurrentMap } from '@/shared/utils/concurrent';
 import { useDefinitionProgress } from '@/features/vocabulary/editor/composables';
+import { getCurrentUserId } from '@/shared/composables/useAuth';
+import * as wordsCache from '@/features/vocabulary/cache/wordsCache';
 
 const words = ref<Word[]>([]);
 const defProgress = useDefinitionProgress();
@@ -245,12 +247,14 @@ const handleTableRowSaved = (updatedWord: Word) => {
     if (index !== -1) {
         words.value[index] = updatedWord;
     }
+    syncCacheUpsert(updatedWord);
 };
 
 // 表格视图新增单词
 const handleTableWordAdded = async (word: Word) => {
     words.value.unshift(word);
     invalidateWordIndex();
+    syncCacheUpsert(word);
 
     defProgress.start(1, '获取释义');
     try {
@@ -261,6 +265,7 @@ const handleTableWordAdded = async (word: Word) => {
             words.value[index] = updatedWord;
         }
         wordTableRef.value?.syncWord(updatedWord);
+        syncCacheUpsert(updatedWord);
     } catch (error) {
         defProgress.incrementFailed(word.word);
         logger.error('Failed to fetch definition for new word:', error);
@@ -369,6 +374,148 @@ const loadRemainingBatches = async () => {
 // 桌面端隐藏页面滚动条
 const { isDesktop } = useBreakpoint()
 
+// 缓存同步辅助：getCurrentUserId 在未登录时抛错，统一兜底
+const safeUserId = (): string | null => {
+    try { return getCurrentUserId() } catch { return null }
+}
+
+// reconcile 期间收集用户的本地变更，fullReload 落地前回放，避免远端快照覆盖 in-flight mutation
+type DirtyOp = { kind: 'upsert', word: Word } | { kind: 'delete' }
+let pendingDirty: Map<number, DirtyOp> | null = null
+
+const syncCacheUpsert = (...updated: Word[]) => {
+    const uid = safeUserId(); if (uid) wordsCache.upsertWords(uid, updated)
+    if (pendingDirty) {
+        for (const w of updated) pendingDirty.set(w.id, { kind: 'upsert', word: w })
+    }
+}
+const syncCacheDelete = (...ids: number[]) => {
+    const uid = safeUserId(); if (uid) wordsCache.deleteWords(uid, ids)
+    if (pendingDirty) {
+        for (const id of ids) pendingDirty.set(id, { kind: 'delete' })
+    }
+}
+
+// 把 reconcile 期间累积的本地变更应用到一份远端快照上
+const applyPendingDirty = (snapshot: Word[]): Word[] => {
+    if (!pendingDirty || pendingDirty.size === 0) return snapshot
+    const result: Word[] = [];
+    const seen = new Set<number>();
+    for (const w of snapshot) {
+        const op = pendingDirty.get(w.id);
+        if (op?.kind === 'delete') continue;       // 用户已删除
+        if (op?.kind === 'upsert') {
+            result.push(op.word);                  // 用户最新版本
+        } else {
+            result.push(w);
+        }
+        seen.add(w.id);
+    }
+    // 用户在 reconcile 期间新增、但远端快照里还没有的词
+    for (const [id, op] of pendingDirty) {
+        if (op.kind !== 'upsert' || seen.has(id)) continue;
+        result.push(op.word);
+    }
+    return result;
+};
+
+// 后台校验本地缓存指纹，按差异选择"什么都不做 / 增量 / 全量重拉"
+const reconcileWithRemote = async (userId: string, localFp: wordsCache.WordsFingerprint) => {
+    pendingDirty = new Map();
+    try {
+        const remote = await api.words.getWordsFingerprintDirect();
+        if (wordsCache.fingerprintEqual(localFp, remote)) return;
+
+        // 全量重拉：先在本地数组里收集完，再 swap，避免 UI 闪烁
+        const fullReload = async () => {
+            const firstResp = await api.words.getWordsPaginatedDirect(batchSize.value, 0);
+            const collected: Word[] = [...firstResp.words];
+
+            if (firstResp.has_more) {
+                const offsets: number[] = [];
+                for (let offset = batchSize.value; offset < firstResp.total; offset += batchSize.value) {
+                    offsets.push(offset);
+                }
+                const slots: (Word[] | null)[] = new Array(offsets.length).fill(null);
+                await concurrentMap(
+                    offsets,
+                    async (offset) => {
+                        const r = await api.words.getWordsPaginatedDirect(batchSize.value, offset);
+                        slots[(offset - batchSize.value) / batchSize.value] = r.words;
+                    },
+                    4,
+                    { retries: 2, retryDelay: 500 },
+                );
+                for (const s of slots) if (s) collected.push(...s);
+            }
+
+            // 应用 reconcile 启动至此用户已发生的本地变更，避免远端快照吞掉 in-flight mutation
+            const merged = applyPendingDirty(collected);
+
+            words.value = merged;
+            totalWords.value = merged.length;
+            loadedWords.value = merged.length;
+            hasMoreWords.value = false;
+            invalidateWordIndex();
+            wordsCache.save(userId, words.value);
+        };
+
+        // count 一致 + remote 有新增/更新 → 尝试增量同步
+        // 注意：count 净相等不等价于"只有更新无删除"（远端可能同时发生 N 个删除 + N 个新增），
+        // 因此增量同步后再算一次本地 fingerprint 与 remote 比对，不一致就降级到全量重拉
+        if (
+            localFp.count === remote.count &&
+            remote.maxUpdatedAt &&
+            (!localFp.maxUpdatedAt || remote.maxUpdatedAt > localFp.maxUpdatedAt)
+        ) {
+            const since = localFp.maxUpdatedAt ?? '1970-01-01T00:00:00Z';
+            const sinceWords = await api.words.getWordsSinceDirect(since);
+            if (sinceWords.length === 0) {
+                // count 相同但 maxUpdatedAt 不一致却拉不到 since 之后的更新 → 异常，全量兜底
+                return fullReload();
+            }
+
+            const indexMap = new Map<number, number>();
+            words.value.forEach((w, i) => indexMap.set(w.id, i));
+            let inserted = false;
+            for (const w of sinceWords) {
+                // 用户已经在本地把这条删/改了，远端旧版本不能覆盖
+                const dirty = pendingDirty?.get(w.id);
+                if (dirty?.kind === 'delete') continue;
+                if (dirty?.kind === 'upsert') continue;
+
+                const idx = indexMap.get(w.id);
+                if (idx !== undefined) {
+                    words.value[idx] = w;
+                } else {
+                    words.value.push(w);
+                    inserted = true;
+                }
+            }
+            // 与服务端 ORDER BY word 对齐（用 < 与 PG C/default collation 在 ASCII 上一致；中文等字符差异可忽略）
+            if (inserted) {
+                words.value.sort((a, b) => a.word < b.word ? -1 : a.word > b.word ? 1 : 0);
+                totalWords.value = words.value.length;
+                loadedWords.value = words.value.length;
+            }
+            invalidateWordIndex();
+
+            // 校验：增量后的本地 fingerprint 必须与 remote 一致；否则说明发生了 "删+加" 之类的扭曲
+            // 期间产生的 pendingDirty 也会让 fingerprint 不一致 → 降级 fullReload，由 fullReload 内的 applyPendingDirty 兜回
+            const postFp = wordsCache.computeFingerprint(words.value);
+            if (!wordsCache.fingerprintEqual(postFp, remote)) {
+                return fullReload();
+            }
+            wordsCache.save(userId, words.value);
+            return;
+        }
+
+        return fullReload();
+    } finally {
+        pendingDirty = null;
+    }
+};
+
 onMounted(async () => {
     if (isDesktop.value) document.documentElement.classList.add('hide-scrollbar')
     try {
@@ -385,10 +532,38 @@ onMounted(async () => {
             logger.error('Failed to load wordsLoadBatchSize from settings, using default 200:', error);
         }
 
+        const userId = safeUserId();
+        const cached = userId ? wordsCache.load(userId) : null;
+
+        if (userId && cached && cached.words.length > 0) {
+            // 缓存命中：立即渲染，后台校验
+            words.value = cached.words;
+            totalWords.value = cached.fingerprint.count;
+            loadedWords.value = cached.fingerprint.count;
+            hasMoreWords.value = false;
+            invalidateWordIndex();
+            isLoading.value = false;
+
+            reconcileWithRemote(userId, cached.fingerprint).catch(error => {
+                logger.error('Failed to reconcile words cache:', error);
+            });
+            return;
+        }
+
+        // 缓存未命中：渐进式全量加载（第一批后即可交互，剩余在后台拉完写缓存）
         await loadWordsBatch(0);
 
         if (hasMoreWords.value) {
-            loadRemainingBatches();
+            loadRemainingBatches()
+                .then(() => {
+                    // 仅在真正跑完时落盘，避免 onUnmounted 触发的中途停止把残缺快照写入缓存
+                    if (userId && !shouldStopLoading.value && !hasMoreWords.value) {
+                        wordsCache.save(userId, words.value);
+                    }
+                })
+                .catch(error => logger.error('Failed to save words cache after background load:', error));
+        } else if (userId) {
+            wordsCache.save(userId, words.value);
         }
     } catch (error) {
         logger.error('Failed to load initial words batch:', error);
@@ -424,6 +599,7 @@ const handleShowDetail = (word: Word) => {
             if (index !== -1) {
                 words.value[index] = finalWord;
             }
+            syncCacheUpsert(finalWord);
         }
     });
 
@@ -433,6 +609,7 @@ const handleShowDetail = (word: Word) => {
             words.value.splice(index, 1);
             invalidateWordIndex();
         }
+        syncCacheDelete(wordId);
     });
 
     wordEditorStore.onWordUpdated((updatedWord: Word) => {
@@ -441,6 +618,7 @@ const handleShowDetail = (word: Word) => {
             words.value[index] = updatedWord;
         }
         wordTableRef.value?.syncWord(updatedWord);
+        syncCacheUpsert(updatedWord);
     });
 };
 
@@ -449,6 +627,8 @@ const handleWordInserted = async (word: Word) => {
     wordGridRef.value?.addNewWordId(word.id);
 
     invalidateWordIndex();
+    syncCacheUpsert(word);
+
     defProgress.start(1, '获取释义');
     try {
         const updatedWord = await api.words.fetchDefinition(word.id);
@@ -460,6 +640,7 @@ const handleWordInserted = async (word: Word) => {
         if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
             wordEditorStore.updateCurrentWord(updatedWord);
         }
+        syncCacheUpsert(updatedWord);
     } catch (error) {
         defProgress.incrementFailed(word.word);
         logger.error('Failed to fetch definition for new word:', error);
@@ -476,6 +657,7 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
 
     invalidateWordIndex();
     if (insertedWords.length === 0) return;
+    syncCacheUpsert(...insertedWords);
 
     let threads = 3;
     try {
@@ -485,6 +667,7 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
         // 使用默认值
     }
 
+    const fetched: Word[] = [];
     defProgress.start(insertedWords.length, '获取释义');
     await concurrentMap(insertedWords, async (word) => {
         try {
@@ -497,11 +680,13 @@ const handleBatchWordInserted = async (insertedWords: Word[]) => {
             if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
                 wordEditorStore.updateCurrentWord(updatedWord);
             }
+            fetched.push(updatedWord);
             return updatedWord;
         } catch {
             defProgress.incrementFailed(word.word);
         }
     }, threads);
+    if (fetched.length > 0) syncCacheUpsert(...fetched);
     defProgress.finish();
 };
 
@@ -524,6 +709,7 @@ const handleFixDefinitions = async () => {
         // 使用默认值
     }
 
+    const fetched: Word[] = [];
     defProgress.start(emptyWords.length, '修复释义');
     await concurrentMap(emptyWords, async (word) => {
         try {
@@ -536,17 +722,20 @@ const handleFixDefinitions = async () => {
             if (wordEditorStore.isOpen && wordEditorStore.currentWord?.id === word.id) {
                 wordEditorStore.updateCurrentWord(updatedWord);
             }
+            fetched.push(updatedWord);
             return updatedWord;
         } catch {
             defProgress.incrementFailed(word.word);
         }
     }, threads);
+    if (fetched.length > 0) syncCacheUpsert(...fetched);
     defProgress.finish();
 };
 
 const handleBatchDelete = (wordIds: number[]) => {
     words.value = words.value.filter(w => !wordIds.includes(w.id));
     invalidateWordIndex();
+    syncCacheDelete(...wordIds);
 };
 
 onUnmounted(() => {

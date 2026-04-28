@@ -8,13 +8,37 @@
       "blocks": [
         {
           "type": "table",
-          "headers": ["天", "主题", "核心术语（精选）"],
+          "headers": [
+            "天",
+            "主题",
+            "核心术语（精选）"
+          ],
           "rows": [
-            ["第1天", "合同总体结构", "<span class=\"term\" data-def=\"前言/序言\">preamble</span>, <span class=\"term\" data-def=\"鉴于条款\">recitals</span>, <span class=\"term\" data-def=\"实质条款\">operative provisions</span>, <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span>, <span class=\"term\" data-def=\"附表/附件\">schedules</span>"],
-            ["第2天", "合同当事人", "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>, <span class=\"term\" data-def=\"鉴于\">whereas</span>, <span class=\"term\" data-def=\"兹证明\">witnesseth</span>, <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>, <span class=\"term\" data-def=\"签订/订立\">enter into</span>"],
-            ["第3天", "定义条款", "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>, <span class=\"term\" data-def=\"关联方/关联公司\">affiliate</span>, <span class=\"term\" data-def=\"重大的/实质性的\">material</span>, <span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>, <span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>"],
-            ["第4天", "标的与履行义务", "<span class=\"term\" data-def=\"标的/主题\">subject matter</span>, <span class=\"term\" data-def=\"交付成果\">deliverables</span>, <span class=\"term\" data-def=\"工作范围\">scope of work</span>, <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>, <span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span>"],
-            ["第5天", "生效与期限", "<span class=\"term\" data-def=\"生效日期\">effective date</span>, <span class=\"term\" data-def=\"期限\">term</span>, <span class=\"term\" data-def=\"届满/到期\">expiration</span>, <span class=\"term\" data-def=\"终止/解除\">termination</span>, <span class=\"term\" data-def=\"续期/续签\">renewal</span>, <span class=\"term\" data-def=\"存续条款\">survival</span>"]
+            [
+              "第1天",
+              "合同总体结构",
+              "<span class=\"term\" data-def=\"前言/序言\">preamble</span>, <span class=\"term\" data-def=\"鉴于条款\">recitals</span>, <span class=\"term\" data-def=\"实质条款\">operative provisions</span>, <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span>, <span class=\"term\" data-def=\"附表/附件\">schedules</span>"
+            ],
+            [
+              "第2天",
+              "合同当事人",
+              "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>, <span class=\"term\" data-def=\"鉴于\">whereas</span>, <span class=\"term\" data-def=\"兹证明\">witnesseth</span>, <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>, <span class=\"term\" data-def=\"签订/订立\">enter into</span>"
+            ],
+            [
+              "第3天",
+              "定义条款",
+              "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>, <span class=\"term\" data-def=\"关联方/关联公司\">affiliate</span>, <span class=\"term\" data-def=\"重大的/实质性的\">material</span>, <span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>, <span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>"
+            ],
+            [
+              "第4天",
+              "标的与履行义务",
+              "<span class=\"term\" data-def=\"标的/主题\">subject matter</span>, <span class=\"term\" data-def=\"交付成果\">deliverables</span>, <span class=\"term\" data-def=\"工作范围\">scope of work</span>, <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>, <span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span>"
+            ],
+            [
+              "第5天",
+              "生效与期限",
+              "<span class=\"term\" data-def=\"生效日期\">effective date</span>, <span class=\"term\" data-def=\"期限\">term</span>, <span class=\"term\" data-def=\"届满/到期\">expiration</span>, <span class=\"term\" data-def=\"终止/解除\">termination</span>, <span class=\"term\" data-def=\"续期/续签\">renewal</span>, <span class=\"term\" data-def=\"存续条款\">survival</span>"
+            ]
           ]
         }
       ]
@@ -23,26 +47,29 @@
       "type": "grammar",
       "heading": "2. 错题专项攻克",
       "blocks": [
-        { "type": "p", "html": "以下是本周练习中出现的错误，请仔细复习每个知识点：" },
         {
-          "type": "error-warn",
-          "html": "<strong>错题 1：<span class=\"term\" data-def=\"实质条款\">operative provisions</span></strong><br><ul><li>\u274c 错误翻译：\u201c执行条款\u201d</li><li>\u2705 正确翻译：<strong>实质条款 / 正文条款</strong></li><li>记忆要点：operative 在法律英语中 = 实质性的、有效的（非\u201c操作的/执行的\u201d）。合同中 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 指规定双方核心权利义务的实质条款，对应合同结构中的正文部分（区别于 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 鉴于条款和 <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span> 通用条款）。</li></ul>"
+          "type": "p",
+          "html": "以下是本周练习中出现的错误，请仔细复习每个知识点："
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题 2：<span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong><br><ul><li>\u274c 错误翻译：漏译或简化为\u201c有效\u201d</li><li>\u2705 正确翻译：<strong>完全有效</strong>（法律固定搭配，必须完整翻译）</li><li>记忆要点：force = 法律效力，effect = 法律效果。\u201cfull force AND effect\u201d 双重强调，翻译时不可省略 \u201cfull\u201d。常见搭配：<span class=\"term\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 保持完全有效。</li></ul>"
+          "html": "<strong>错题 1：<span class=\"term\" data-def=\"实质条款\">operative provisions</span></strong><br><ul><li>❌ 错误翻译：“执行条款”</li><li>✅ 正确翻译：<strong>实质条款 / 正文条款</strong></li><li>记忆要点：<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> 在法律英语中 = 实质性的、有效的（非“操作的/执行的”）。合同中 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 指规定双方核心权利义务的实质条款，对应合同结构中的正文部分（区别于 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 鉴于条款和 <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span> 通用条款）。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题 3：<span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></strong><br><ul><li>\u274c 错误翻译：\u201c被认为是\u201d</li><li>\u2705 正确翻译：<strong>被裁定为 / 被判定为</strong></li><li>记忆要点：hold 在法律英语中有特殊含义 = 裁定、判定。The court held that... = 法院裁定\u2026\u2026。日常英语的\u201c认为\u201d应用 consider / deem，不用 hold。</li></ul>"
+          "html": "<strong>错题 2：<span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong><br><ul><li>❌ 错误翻译：漏译或简化为“有效”</li><li>✅ 正确翻译：<strong>完全有效</strong>（法律固定搭配，必须完整翻译）</li><li>记忆要点：force = 法律效力，effect = 法律效果。“full force AND effect” 双重强调，翻译时不可省略 “full”。常见搭配：<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 保持完全有效。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题 4：<span class=\"term\">unenforceable</span></strong><br><ul><li>\u274c 错误翻译：\u201c没有强制执行力的\u201d</li><li>\u2705 正确翻译：<strong>不可执行的 / 无法强制执行的</strong>（更简洁）</li><li>记忆要点：enforce = 强制执行，un- 前缀表否定，-able 表能力。整词 = 无法被强制执行的。法律翻译追求简洁精确，避免冗长表述。</li></ul>"
+          "html": "<strong>错题 3：<span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></strong><br><ul><li>❌ 错误翻译：“被认为是”</li><li>✅ 正确翻译：<strong>被裁定为 / 被判定为</strong></li><li>记忆要点：<span class=\"term\" data-def=\"认定；持有\">hold</span> 在法律英语中有特殊含义 = 裁定、判定。The court held that... = 法院裁定……。日常英语的“认为”应用 consider / deem，不用 <span class=\"term\" data-def=\"认定；持有\">hold</span>。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题 5：<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span></strong><br><ul><li>\u274c 错误翻译：只译为\u201c附件\u201d</li><li>\u2705 正确翻译：<strong>附于本协议的</strong>（here- 家族词不可省略）</li><li>记忆要点：hereto = to this Agreement（到/于本协议）。attached hereto 完整含义是\u201c附于本协议的\u201d，不能省略为\u201c附件\u201d（附件 = exhibit / schedule / annex）。</li></ul>"
+          "html": "<strong>错题 4：<span class=\"term\" data-def=\"不可强制执行的\">unenforceable</span></strong><br><ul><li>❌ 错误翻译：“没有强制执行力的”</li><li>✅ 正确翻译：<strong>不可执行的 / 无法强制执行的</strong>（更简洁）</li><li>记忆要点：enforce = 强制执行，un- 前缀表否定，-able 表能力。整词 = 无法被强制执行的。法律翻译追求简洁精确，避免冗长表述。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>错题 5：<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span></strong><br><ul><li>❌ 错误翻译：只译为“附件”</li><li>✅ 正确翻译：<strong>附于本协议的</strong>（here- 家族词不可省略）</li><li>记忆要点：<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = to this Agreement（到/于本协议）。<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 完整含义是“附于本协议的”，不能省略为“附件”（附件 = exhibit / schedule / annex）。</li></ul>"
         }
       ]
     },
@@ -50,22 +77,60 @@
       "type": "grammar",
       "heading": "3. 薄弱点强化：here- 家族词总复习",
       "blocks": [
-        { "type": "p", "html": "here- 家族词是法律英语的标志性表达，每个词都是 \u201chere\u201d + 介词 的合成词，其中 here 指代 \u201cthis Agreement\u201d（本协议）：" },
+        {
+          "type": "p",
+          "html": "here- 家族词是法律英语的标志性表达，每个词都是 “here” + 介词 的合成词，其中 here 指代 “this Agreement”（本协议）："
+        },
         {
           "type": "table",
-          "headers": ["here- 词", "等价于", "中文", "例句片段"],
+          "headers": [
+            "here- 词",
+            "等价于",
+            "中文",
+            "例句片段"
+          ],
           "rows": [
-            ["<span class=\"term\">herein</span>", "in this Agreement", "在本协议中", "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span> = 如本协议中所用"],
-            ["<span class=\"term\" data-def=\"本协议的\">hereof</span>", "of this Agreement", "本协议的", "the terms hereof = 本协议的条款"],
-            ["<span class=\"term\">hereto</span>", "to this Agreement", "于本协议；本协议的", "the Parties hereto = 本协议各方；attached hereto = 附于本协议的"],
-            ["<span class=\"term\">hereunder</span>", "under this Agreement", "在本协议项下", "obligations hereunder = 本协议项下的义务"],
-            ["<span class=\"term\">hereby</span>", "by this Agreement / by this means", "特此；以此", "The Parties hereby agree = 双方特此同意"],
-            ["<span class=\"term\" data-def=\"以下称为\">hereinafter</span>", "after this point in this Agreement", "以下称；下称", "hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span> = 以下简称"]
+            [
+              "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+              "in this Agreement",
+              "在本协议中",
+              "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span> = 如本协议中所用"
+            ],
+            [
+              "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+              "of this Agreement",
+              "本协议的",
+              "the terms <span class=\"term\" data-def=\"本协议的\">hereof</span> = 本协议的条款"
+            ],
+            [
+              "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>",
+              "to this Agreement",
+              "于本协议；本协议的",
+              "the Parties <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = 本协议各方；<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的"
+            ],
+            [
+              "<span class=\"term\" data-def=\"依本协议\">hereunder</span>",
+              "under this Agreement",
+              "在本协议项下",
+              "<span class=\"term\" data-def=\"义务（复数）\">obligations</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span> = 本协议项下的义务"
+            ],
+            [
+              "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
+              "by this Agreement / by this means",
+              "特此；以此",
+              "The Parties <span class=\"term\" data-def=\"兹；特此\">hereby</span> agree = 双方特此同意"
+            ],
+            [
+              "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
+              "after this point in this Agreement",
+              "以下称；下称",
+              "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> = 以下简称"
+            ]
           ]
         },
         {
           "type": "tip",
-          "html": "<strong>类推记忆：</strong>there- 家族词结构相同，只是 there 指代\u201cthat Agreement / that document\u201d（该协议/该文件）：<span class=\"term\">therein</span>（在其中）、<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>（其中的）、<span class=\"term\">thereto</span>（对其）、<span class=\"term\">thereunder</span>（在其项下）。"
+          "html": "<strong>类推记忆：</strong>there- 家族词结构相同，只是 there 指代“that Agreement / that document”（该协议/该文件）：<span class=\"term\" data-def=\"其中\">therein</span>（在其中）、<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>（其中的）、<span class=\"term\" data-def=\"随附于此\">thereto</span>（对其）、<span class=\"term\" data-def=\"依其\">thereunder</span>（在其项下）。"
         }
       ]
     },
@@ -73,19 +138,58 @@
       "type": "grammar",
       "heading": "4. 薄弱点强化：法律多义词辨析",
       "blocks": [
-        { "type": "p", "html": "以下词汇在日常英语和法律英语中含义差异巨大，是中文母语者最容易犯错的地方：" },
+        {
+          "type": "p",
+          "html": "以下词汇在日常英语和法律英语中含义差异巨大，是中文母语者最容易犯错的地方："
+        },
         {
           "type": "table",
-          "headers": ["英文", "日常含义", "法律含义"],
+          "headers": [
+            "英文",
+            "日常含义",
+            "法律含义"
+          ],
           "rows": [
-            ["<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>", "考虑；体贴", "<strong>约因；对价</strong>（合同成立的必要条件之一）"],
-            ["<span class=\"term\" data-def=\"上述事项\">the premises</span>", "房屋；经营场所", "<strong>上述事项；鉴于事项</strong>（指 recitals 中陈述的内容）"],
-            ["<span class=\"term\">hold</span>", "握住；持有", "<strong>裁定；判定</strong>（The court held that... = 法院裁定\u2026\u2026）"],
-            ["<span class=\"term\">operative</span>", "操作的；手术的", "<strong>实质性的；有效的</strong>（<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款）"],
-            ["<span class=\"term\" data-def=\"履行/履约\">performance</span>", "表演；性能", "<strong>履行</strong>（performance of obligations = 义务的履行）"],
-            ["<span class=\"term\" data-def=\"期限\">term</span>", "术语；学期", "<strong>条款</strong>（terms and conditions）或<strong>期限</strong>（the term of this Agreement）"],
-            ["<span class=\"term\" data-def=\"签署/执行\">execution</span>", "执行；处决", "<strong>签署</strong>（execution of this Agreement = 本协议的签署）"],
-            ["<span class=\"term\">convenience</span>", "方便；便利", "<strong>无因</strong>（terminate for convenience = 无因终止，非\u201c为了方便\u201d）"]
+            [
+              "<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>",
+              "考虑；体贴",
+              "<strong>约因；对价</strong>（合同成立的必要条件之一）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"上述事项\">the premises</span>",
+              "房屋；经营场所",
+              "<strong>上述事项；鉴于事项</strong>（指 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 中陈述的内容）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"认定；持有\">hold</span>",
+              "握住；持有",
+              "<strong>裁定；判定</strong>（The court held that... = 法院裁定……）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"实质的；起作用的\">operative</span>",
+              "操作的；手术的",
+              "<strong>实质性的；有效的</strong>（<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"履行/履约\">performance</span>",
+              "表演；性能",
+              "<strong>履行</strong>（<span class=\"term\" data-def=\"履行\">performance</span> of <span class=\"term\" data-def=\"义务（复数）\">obligations</span> = 义务的履行）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"期限\">term</span>",
+              "术语；学期",
+              "<strong>条款</strong>（terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span>）或<strong>期限</strong>（the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"签署/执行\">execution</span>",
+              "执行；处决",
+              "<strong>签署</strong>（<span class=\"term\" data-def=\"签署\">execution</span> of this Agreement = 本协议的签署）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"便利\">convenience</span>",
+              "方便；便利",
+              "<strong>无因</strong>（<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span> = 无因终止，非“为了方便”）"
+            ]
           ]
         }
       ]
@@ -94,10 +198,13 @@
       "type": "grammar",
       "heading": "5. 综合闪卡自测",
       "blocks": [
-        { "type": "p", "html": "以下从本周73个词汇中精选30个核心术语，打乱顺序。看到英文后想中文，再点击展开验证：" },
+        {
+          "type": "p",
+          "html": "以下从本周73个词汇中精选30个核心术语，打乱顺序。看到英文后想中文，再点击展开验证："
+        },
         {
           "type": "grammar-box",
-          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"鉴于条款\">recitals</span></summary><div class=\"answer-content\">鉴于条款（合同开头的背景陈述，第1天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"无因终止/任意终止\">terminate for convenience</span></summary><div class=\"answer-content\">任意终止；无因终止（非\u201c为了方便终止\u201d，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"鉴于\">whereas</span></summary><div class=\"answer-content\">鉴于（合同鉴于条款的引导词，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"完全有效\">in full force and effect</span></summary><div class=\"answer-content\">完全有效（固定搭配，不可简化为\u201c有效\u201d，第1天错题）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"关联方/关联公司\">affiliate</span></summary><div class=\"answer-content\">关联方；关联公司（第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"工作范围\">scope of work</span></summary><div class=\"answer-content\">工作范围（常缩写 SOW，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"存续条款\">survival</span></summary><div class=\"answer-content\">存续；继续有效（合同终止后某些条款继续有效，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"实质条款\">operative provisions</span></summary><div class=\"answer-content\">实质条款；正文条款（非\u201c执行条款\u201d，第1天错题）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"本协议的\">hereof</span></summary><div class=\"answer-content\">本协议的（= of this Agreement，第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"交付成果\">deliverables</span></summary><div class=\"answer-content\">交付物；应交付成果（第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span></summary><div class=\"answer-content\">尽管；不论（第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span></summary><div class=\"answer-content\">通用条款；标准条款（第1天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"上述事项\">the premises</span></summary><div class=\"answer-content\">上述事项（合同语境，非\u201c房屋\u201d，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"包括但不限于\">including without limitation</span></summary><div class=\"answer-content\">包括但不限于（第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">furnish</span></summary><div class=\"answer-content\">提供（信息/文件/证据，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"届满/到期\">expiration</span></summary><div class=\"answer-content\">届满；到期（自然到期，区别于 termination，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"兹证明\">witnesseth</span></summary><div class=\"answer-content\">兹证明（古英语，合同正文引导词，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"重大的/实质性的\">material</span></summary><div class=\"answer-content\">重大的；实质性的（法律含义，非\u201c材料\u201d，第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"尽最大努力\">best efforts</span></summary><div class=\"answer-content\">最大努力（义务程度最高，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"永久的\">perpetual</span></summary><div class=\"answer-content\">永久的；永续的（第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"签订/订立\">enter into</span></summary><div class=\"answer-content\">签订；订立（合同，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"规定/载明\">set forth</span></summary><div class=\"answer-content\">规定；载明（第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span></summary><div class=\"answer-content\">时间至关重要（迟延即构成违约，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">commence</span></summary><div class=\"answer-content\">开始；着手（法律正式用词，代替 begin/start，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"前言/序言\">preamble</span></summary><div class=\"answer-content\">序言；前言（合同开头部分，第1天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span></summary><div class=\"answer-content\">鉴于\u2026\u2026的约因/对价（第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></summary><div class=\"answer-content\">根据\u2026\u2026/ 须经\u2026\u2026（两种含义，非\u201c受制于\u201d，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></summary><div class=\"answer-content\">被裁定为；被判定为（非\u201c被认为是\u201d，错题）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"根据/依照\">in accordance with</span></summary><div class=\"answer-content\">按照；根据（法律标准搭配，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\">then-current</span></summary><div class=\"answer-content\">当时有效的；届时的（第5天）</div></details></div></div>"
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"鉴于条款\">recitals</span></summary><div class=\"answer-content\">鉴于条款（合同开头的背景陈述，第1天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"无因终止/任意终止\">terminate for convenience</span></summary><div class=\"answer-content\">任意终止；无因终止（非“为了方便终止”，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"鉴于\">whereas</span></summary><div class=\"answer-content\">鉴于（合同鉴于条款的引导词，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"完全有效\">in full force and effect</span></summary><div class=\"answer-content\">完全有效（固定搭配，不可简化为“有效”，第1天错题）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"关联方/关联公司\">affiliate</span></summary><div class=\"answer-content\">关联方；关联公司（第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"工作范围\">scope of work</span></summary><div class=\"answer-content\">工作范围（常缩写 SOW，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"存续条款\">survival</span></summary><div class=\"answer-content\">存续；继续有效（合同终止后某些条款继续有效，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"实质条款\">operative provisions</span></summary><div class=\"answer-content\">实质条款；正文条款（非“执行条款”，第1天错题）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"本协议的\">hereof</span></summary><div class=\"answer-content\">本协议的（= of this Agreement，第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"交付成果\">deliverables</span></summary><div class=\"answer-content\">交付物；应交付成果（第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span></summary><div class=\"answer-content\">尽管；不论（第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span></summary><div class=\"answer-content\">通用条款；标准条款（第1天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"上述事项\">the premises</span></summary><div class=\"answer-content\">上述事项（合同语境，非“房屋”，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"包括但不限于\">including without limitation</span></summary><div class=\"answer-content\">包括但不限于（第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"提供；交付\">furnish</span></summary><div class=\"answer-content\">提供（信息/文件/证据，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"届满/到期\">expiration</span></summary><div class=\"answer-content\">届满；到期（自然到期，区别于 <span class=\"term\" data-def=\"终止\">termination</span>，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"兹证明\">witnesseth</span></summary><div class=\"answer-content\">兹证明（古英语，合同正文引导词，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"重大的/实质性的\">material</span></summary><div class=\"answer-content\">重大的；实质性的（法律含义，非“材料”，第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"尽最大努力\">best efforts</span></summary><div class=\"answer-content\">最大努力（义务程度最高，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"永久的\">perpetual</span></summary><div class=\"answer-content\">永久的；永续的（第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"签订/订立\">enter into</span></summary><div class=\"answer-content\">签订；订立（合同，第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"规定/载明\">set forth</span></summary><div class=\"answer-content\">规定；载明（第3天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span></summary><div class=\"answer-content\">时间至关重要（迟延即构成违约，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"开始；起始\">commence</span></summary><div class=\"answer-content\">开始；着手（法律正式用词，代替 begin/start，第5天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"前言/序言\">preamble</span></summary><div class=\"answer-content\">序言；前言（合同开头部分，第1天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span></summary><div class=\"answer-content\">鉴于……的约因/对价（第2天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></summary><div class=\"answer-content\">根据……/ 须经……（两种含义，非“受制于”，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></summary><div class=\"answer-content\">被裁定为；被判定为（非“被认为是”，错题）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"根据/依照\">in accordance with</span></summary><div class=\"answer-content\">按照；根据（法律标准搭配，第4天）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"彼时现行的\">then-current</span></summary><div class=\"answer-content\">当时有效的；届时的（第5天）</div></details></div></div>"
         }
       ]
     },
@@ -111,33 +218,58 @@
           "questions": [
             {
               "prompt": "<span class=\"term\" data-def=\"实质条款\">operative provisions</span>（错题复习）",
-              "options": ["操作规定", "执行条款", "实质条款；正文条款", "运营条款"],
+              "options": [
+                "操作规定",
+                "执行条款",
+                "实质条款；正文条款",
+                "运营条款"
+              ],
               "answer": "实质条款；正文条款",
-              "explanation": "operative provisions = 实质条款/正文条款。operative 在法律语境中 = 实质性的，不是\u201c执行的\u201d。合同中 operative provisions 指规定核心权利义务的正文部分。（第1天+错题）"
+              "explanation": "<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款/正文条款。<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> 在法律语境中 = 实质性的，不是“执行的”。合同中 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 指规定核心权利义务的正文部分。（第1天+错题）"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"上述事项\">the premises</span>（合同法律语境）",
-              "options": ["房屋；经营场所", "前提条件", "上述事项；鉴于事项", "合同标的"],
+              "options": [
+                "房屋；经营场所",
+                "前提条件",
+                "上述事项；鉴于事项",
+                "合同标的"
+              ],
               "answer": "上述事项；鉴于事项",
-              "explanation": "the premises 在合同法律语境中 = 上述事项/鉴于事项，指 recitals 中陈述的背景事实。不是日常英语的\u201c房屋/经营场所\u201d。（第2天）"
+              "explanation": "<span class=\"term\" data-def=\"上述事项\">the premises</span> 在合同法律语境中 = 上述事项/鉴于事项，指 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 中陈述的背景事实。不是日常英语的“房屋/经营场所”。（第2天）"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span>（错题复习）",
-              "options": ["被认为是", "被持有为", "被裁定为；被判定为", "被保留为"],
+              "options": [
+                "被认为是",
+                "被持有为",
+                "被裁定为；被判定为",
+                "被保留为"
+              ],
               "answer": "被裁定为；被判定为",
-              "explanation": "held to be 中 hold = 裁定（法律用语）。held to be = 被裁定为/被判定为，不是日常英语的\u201c被认为是\u201d。（错题复习）"
+              "explanation": "<span class=\"term\" data-def=\"被裁定为\">held to be</span> 中 <span class=\"term\" data-def=\"认定；持有\">hold</span> = 裁定（法律用语）。<span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为/被判定为，不是日常英语的“被认为是”。（错题复习）"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
-              "options": ["不受限制地包括", "包括但不限于", "无限制包含", "有限度地包括"],
+              "options": [
+                "不受限制地包括",
+                "包括但不限于",
+                "无限制包含",
+                "有限度地包括"
+              ],
               "answer": "包括但不限于",
-              "explanation": "including without limitation = 包括但不限于，法律英语中确保列举为非穷尽式的固定表达。等同于 including but not limited to。（第3天）"
+              "explanation": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> = 包括但不限于，法律英语中确保列举为非穷尽式的固定表达。等同于 including but not limited to。（第3天）"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"无因终止/任意终止\">terminate for convenience</span>",
-              "options": ["方便时终止", "因违约终止", "任意终止；无因终止", "协商终止"],
+              "options": [
+                "方便时终止",
+                "因违约终止",
+                "任意终止；无因终止",
+                "协商终止"
+              ],
               "answer": "任意终止；无因终止",
-              "explanation": "terminate for convenience = 任意终止/无因终止。for convenience 在法律语境中 = 无需理由，不是日常英语的\u201c为了方便\u201d。（第5天）"
+              "explanation": "<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span> = 任意终止/无因终止。for <span class=\"term\" data-def=\"便利\">convenience</span> 在法律语境中 = 无需理由，不是日常英语的“为了方便”。（第5天）"
             }
           ]
         },
@@ -146,34 +278,59 @@
           "title": "练习B：here- 家族词专项（选词填空）",
           "questions": [
             {
-              "prompt": "<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms and conditions ______, Provider shall provide the Services.",
-              "options": ["herein", "hereof", "hereby", "hereto"],
-              "answer": "hereof",
-              "explanation": "hereof = of this Agreement（本协议的）。the terms and conditions hereof = 本协议的条款和条件。"
+              "prompt": "<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> ______, Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"提供\">provide</span> the Services.",
+              "options": [
+                "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
+                "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+              "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）。the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"本协议的\">hereof</span> = 本协议的条款和条件。"
             },
             {
-              "prompt": "The Statement of Work attached ______ as Exhibit A shall form part of this Agreement.（错题复习）",
-              "options": ["herein", "hereof", "hereto", "hereunder"],
-              "answer": "hereto",
-              "explanation": "hereto = to this Agreement（于本协议）。attached hereto as Exhibit A = 作为附件A附于本协议。（复习错题：attached hereto 不可省略）"
+              "prompt": "The Statement of Work attached ______ as Exhibit A <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> form part of this Agreement.（错题复习）",
+              "options": [
+                "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>",
+                "<span class=\"term\" data-def=\"依本协议\">hereunder</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>",
+              "explanation": "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = to this Agreement（于本协议）。<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> as Exhibit A = 作为附件A附于本协议。（复习错题：<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 不可省略）"
             },
             {
-              "prompt": "Neither Party may assign its rights or obligations ______ without the prior written consent of the other Party.",
-              "options": ["herein", "hereto", "hereunder", "hereof"],
-              "answer": "hereunder",
-              "explanation": "hereunder = under this Agreement（在本协议项下）。rights and obligations hereunder = 本协议项下的权利和义务。"
+              "prompt": "Neither <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> assign its rights or <span class=\"term\" data-def=\"义务（复数）\">obligations</span> ______ without the prior written <span class=\"term\" data-def=\"同意\">consent</span> of the other <span class=\"term\" data-def=\"当事人\">Party</span>.",
+              "options": [
+                "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+                "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>",
+                "<span class=\"term\" data-def=\"依本协议\">hereunder</span>",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"依本协议\">hereunder</span>",
+              "explanation": "<span class=\"term\" data-def=\"依本协议\">hereunder</span> = under this Agreement（在本协议项下）。rights and <span class=\"term\" data-def=\"义务（复数）\">obligations</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span> = 本协议项下的权利和义务。"
             },
             {
-              "prompt": "The Parties ______ agree to be bound by the terms and conditions of this Agreement.",
-              "options": ["herein", "hereby", "hereof", "hereto"],
-              "answer": "hereby",
-              "explanation": "hereby = by this Agreement / by this means（特此/以此）。The Parties hereby agree = 双方特此同意。hereby 强调通过签署本协议这一行为来实现某事。"
+              "prompt": "The Parties ______ agree to be bound by the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> of this Agreement.",
+              "options": [
+                "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+                "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
+              "explanation": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> = by this Agreement / by this means（特此/以此）。The Parties <span class=\"term\" data-def=\"兹；特此\">hereby</span> agree = 双方特此同意。<span class=\"term\" data-def=\"兹；特此\">hereby</span> 强调通过签署本协议这一行为来实现某事。"
             },
             {
-              "prompt": "As used ______, the term \u201cAffiliate\u201d <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any entity that controls, is controlled by, or is under common control with a Party.",
-              "options": ["herein", "hereof", "hereby", "hereunder"],
-              "answer": "herein",
-              "explanation": "herein = in this Agreement（在本协议中）。as used herein = 如本协议中所用。As used herein 是定义条款的标准引导语。"
+              "prompt": "As used ______, the <span class=\"term\" data-def=\"期限\">term</span> “<span class=\"term\" data-def=\"关联方\">Affiliate</span>” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any entity that controls, is controlled by, or is under common control with a <span class=\"term\" data-def=\"当事人\">Party</span>.",
+              "options": [
+                "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
+                "<span class=\"term\" data-def=\"依本协议\">hereunder</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+              "explanation": "<span class=\"term\" data-def=\"本协议中\">herein</span> = in this Agreement（在本协议中）。<span class=\"term\" data-def=\"如本协议所用\">as used herein</span> = 如本协议中所用。<span class=\"term\" data-def=\"如本协议所用\">As used herein</span> 是定义条款的标准引导语。"
             }
           ]
         },
@@ -182,34 +339,59 @@
           "title": "练习C：跨天综合选词填空",
           "questions": [
             {
-              "prompt": "This Agreement shall remain ______ for a period of three (3) years from the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>.（错题复习）",
-              "options": ["effective and valid", "in full force and effect", "fully effective", "binding and enforceable"],
-              "answer": "in full force and effect",
-              "explanation": "remain in full force and effect = 保持完全有效。法律固定搭配，不可简化为 remain effective 或 remain valid。（错题复习）"
+              "prompt": "This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> ______ for a period of three (3) years from the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>.（错题复习）",
+              "options": [
+                "effective and valid",
+                "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
+                "fully effective",
+                "<span class=\"term\" data-def=\"有约束力的\">binding</span> and <span class=\"term\" data-def=\"可执行的\">enforceable</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
+              "explanation": "<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 保持完全有效。法律固定搭配，不可简化为 <span class=\"term\" data-def=\"保持；仍然\">remain</span> effective 或 <span class=\"term\" data-def=\"保持；仍然\">remain</span> valid。（错题复习）"
             },
             {
               "prompt": "This Agreement is ______ <span class=\"term\" data-def=\"由…与…之间\">by and between</span> ABC Corp. and XYZ Ltd. <span class=\"term\" data-def=\"自…起/截至\">as of</span> January 1, 2026.",
-              "options": ["signed by", "entered into", "made between", "agreed upon"],
+              "options": [
+                "signed by",
+                "entered into",
+                "made between",
+                "agreed upon"
+              ],
               "answer": "entered into",
-              "explanation": "entered into 是法律英语中\u201c签订/订立协议\u201d的标准搭配（enter into an agreement）。signed by 虽有\u201c签署\u201d之意，但法律文书开头用 entered into 而非 signed by；made between 通常用于信托契约（deed），不是标准合同用语；agreed upon 表示\u201c商定的\u201d，是形容词用法，不适合此处的动词位置。"
+              "explanation": "entered into 是法律英语中“签订/订立协议”的标准搭配（<span class=\"term\" data-def=\"签订\">enter into</span> an agreement）。signed by 虽有“签署”之意，但法律文书开头用 entered into 而非 signed by；made between 通常用于信托契约（<span class=\"term\" data-def=\"契据；正式文书\">deed</span>），不是标准合同用语；agreed upon 表示“商定的”，是形容词用法，不适合此处的动词位置。"
             },
             {
-              "prompt": "\u201c<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>\u201d ______ any non-public information disclosed by either Party.",
-              "options": ["<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>", "is defined", "refers to", "includes"],
-              "answer": "shall mean",
-              "explanation": "shall mean 是定义条款的标准动词搭配。\u201cAffiliate\u201d shall mean... = \u201c关联方\u201d指\u2026\u2026（第3天）"
+              "prompt": "“<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” ______ any non-public information disclosed by either <span class=\"term\" data-def=\"当事人\">Party</span>.",
+              "options": [
+                "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>",
+                "is <span class=\"term\" data-def=\"已定义的\">defined</span>",
+                "refers to",
+                "includes"
+              ],
+              "answer": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
+              "explanation": "<span class=\"term\" data-def=\"系指\">shall mean</span> 是定义条款的标准动词搭配。“<span class=\"term\" data-def=\"关联方\">Affiliate</span>” <span class=\"term\" data-def=\"系指\">shall mean</span>... = “关联方”指……（第3天）"
             },
             {
-              "prompt": "The Consultant shall ______ professional advisory services to the Client <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the terms of this Agreement.",
-              "options": ["furnish", "render", "deliver", "supply"],
-              "answer": "render",
-              "explanation": "render services = 提供（专业）服务。render 侧重提供专业服务或协助，区别于 provide（最通用）和 furnish（侧重信息/文件）。（第4天）"
+              "prompt": "The Consultant <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ professional advisory services to the Client <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the terms of this Agreement.",
+              "options": [
+                "<span class=\"term\" data-def=\"提供；交付\">furnish</span>",
+                "<span class=\"term\" data-def=\"提供；给予\">render</span>",
+                "deliver",
+                "supply"
+              ],
+              "answer": "<span class=\"term\" data-def=\"提供；给予\">render</span>",
+              "explanation": "<span class=\"term\" data-def=\"提供；给予\">render</span> services = 提供（专业）服务。<span class=\"term\" data-def=\"提供；给予\">render</span> 侧重提供专业服务或协助，区别于 <span class=\"term\" data-def=\"提供\">provide</span>（最通用）和 <span class=\"term\" data-def=\"提供；交付\">furnish</span>（侧重信息/文件）。（第4天）"
             },
             {
-              "prompt": "The obligations under Section 7 (Confidentiality) shall ______ the termination or expiration of this Agreement.",
-              "options": ["outlast", "survive", "continue beyond", "extend past"],
+              "prompt": "The <span class=\"term\" data-def=\"义务（复数）\">obligations</span> under Section 7 (Confidentiality) <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement.",
+              "options": [
+                "outlast",
+                "survive",
+                "continue beyond",
+                "extend past"
+              ],
               "answer": "survive",
-              "explanation": "survive the termination or expiration = 在终止或届满后继续有效。survive 是法律英语中\u201c存续\u201d的标准用词。注意 expiration（自然到期）和 termination（主动终止）要并列使用以覆盖两种情形。（第5天）"
+              "explanation": "survive the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> = 在终止或届满后继续有效。survive 是法律英语中“存续”的标准用词。注意 <span class=\"term\" data-def=\"届满\">expiration</span>（自然到期）和 <span class=\"term\" data-def=\"终止\">termination</span>（主动终止）要并列使用以覆盖两种情形。（第5天）"
             }
           ]
         },
@@ -218,33 +400,48 @@
           "title": "练习D：合同结构与多义词辨析",
           "questions": [
             {
-              "prompt": "\u201cThe <span class=\"term\" data-def=\"期限\">term</span> of this Agreement shall be two (2) years.\u201d 此处 term 的含义是？",
-              "options": ["术语", "条款", "期限", "学期"],
+              "prompt": "“The <span class=\"term\" data-def=\"期限\">term</span> of this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be two (2) years.” 此处 <span class=\"term\" data-def=\"期限\">term</span> 的含义是？",
+              "options": [
+                "术语",
+                "条款",
+                "期限",
+                "学期"
+              ],
               "answer": "期限",
-              "explanation": "term 在 \u201cthe term of this Agreement shall be two (2) years\u201d 中指\u201c期限\u201d（单数 + 时间长度）。区别于 terms and conditions 中的\u201c条款\u201d（复数 + conditions）。（第1天+第5天）"
+              "explanation": "<span class=\"term\" data-def=\"期限\">term</span> 在 “the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be two (2) years” 中指“期限”（单数 + 时间长度）。区别于 terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> 中的“条款”（复数 + <span class=\"term\" data-def=\"条件（复数）\">conditions</span>）。（第1天+第5天）"
             },
             {
-              "prompt": "\u201cIn <span class=\"term\" data-def=\"对价；约因；代价\">consideration</span> of the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> herein contained...\u201d 此处 consideration 的含义是？（薄弱点复习）",
-              "options": ["考虑", "关注", "约因；对价", "条件"],
+              "prompt": "“In <span class=\"term\" data-def=\"对价；约因；代价\">consideration</span> of the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> <span class=\"term\" data-def=\"本协议中\">herein</span> contained...” 此处 <span class=\"term\" data-def=\"对价\">consideration</span> 的含义是？（薄弱点复习）",
+              "options": [
+                "考虑",
+                "关注",
+                "约因；对价",
+                "条件"
+              ],
               "answer": "约因；对价",
-              "explanation": "consideration 在合同法律语境中 = 约因/对价，是合同成立的必要条件之一（一方为换取另一方的承诺而支付的代价）。不是日常英语的\u201c考虑\u201d。（第2天+薄弱点）"
+              "explanation": "<span class=\"term\" data-def=\"对价\">consideration</span> 在合同法律语境中 = 约因/对价，是合同成立的必要条件之一（一方为换取另一方的承诺而支付的代价）。不是日常英语的“考虑”。（第2天+薄弱点）"
             },
             {
-              "prompt": "\u201cThis Agreement shall be effective upon <span class=\"term\" data-def=\"签署/执行\">execution</span> by both Parties.\u201d 此处 execution 的含义是？",
-              "options": ["执行", "签署", "处决", "实施"],
+              "prompt": "“This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be effective upon <span class=\"term\" data-def=\"签署/执行\">execution</span> by both Parties.” 此处 <span class=\"term\" data-def=\"签署\">execution</span> 的含义是？",
+              "options": [
+                "执行",
+                "签署",
+                "处决",
+                "实施"
+              ],
               "answer": "签署",
-              "explanation": "execution 在合同语境中 = 签署（非\u201c执行\u201d或\u201c处决\u201d）。execution of this Agreement = 本协议的签署。execute and deliver = 签署并交付。（第1天+第2天）"
+              "explanation": "<span class=\"term\" data-def=\"签署\">execution</span> 在合同语境中 = 签署（非“执行”或“处决”）。<span class=\"term\" data-def=\"签署\">execution</span> of this Agreement = 本协议的签署。<span class=\"term\" data-def=\"签署；执行\">execute</span> and deliver = 签署并交付。（第1天+第2天）"
             },
             {
               "prompt": "合同正文的标准排列顺序是？",
               "options": [
-                "定义条款 \u2192 鉴于条款 \u2192 通用条款 \u2192 实质条款",
-                "鉴于条款 \u2192 定义条款 \u2192 实质条款 \u2192 通用条款",
-                "实质条款 \u2192 鉴于条款 \u2192 定义条款 \u2192 通用条款",
-                "通用条款 \u2192 定义条款 \u2192 鉴于条款 \u2192 实质条款"
+                "定义条款 → 鉴于条款 → 通用条款 → 实质条款",
+                "鉴于条款 → 定义条款 → 实质条款 → 通用条款",
+                "实质条款 → 鉴于条款 → 定义条款 → 通用条款",
+                "通用条款 → 定义条款 → 鉴于条款 → 实质条款"
               ],
-              "answer": "鉴于条款 \u2192 定义条款 \u2192 实质条款 \u2192 通用条款",
-              "explanation": "合同标准结构：preamble（序言）\u2192 recitals（鉴于条款）\u2192 definitions（定义条款）\u2192 operative provisions（实质条款）\u2192 boilerplate（通用条款）\u2192 schedules（附件）。（第1天）"
+              "answer": "鉴于条款 → 定义条款 → 实质条款 → 通用条款",
+              "explanation": "合同标准结构：<span class=\"term\" data-def=\"前言\">preamble</span>（序言）→ <span class=\"term\" data-def=\"鉴于条款\">recitals</span>（鉴于条款）→ <span class=\"term\" data-def=\"定义条款\">definitions</span>（定义条款）→ <span class=\"term\" data-def=\"实质条款\">operative provisions</span>（实质条款）→ <span class=\"term\" data-def=\"样板条款\">boilerplate</span>（通用条款）→ <span class=\"term\" data-def=\"附表\">schedules</span>（附件）。（第1天）"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 与 <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 的区别是？",
@@ -254,40 +451,185 @@
                 "<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 义务更高",
                 "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 只用于英国法"
               ],
-              "answer": "best efforts 义务最高，reasonable efforts 允许考虑成本",
-              "explanation": "best efforts 要求义务方用尽一切合理手段（义务程度最高），reasonable efforts 允许考虑自身成本和可行性（义务程度中等）。合同起草时，代表义务方应争取 reasonable efforts。（第4天）"
+              "answer": "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 义务最高，<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 允许考虑成本",
+              "explanation": "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 要求义务方用尽一切合理手段（义务程度最高），<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 允许考虑自身成本和可行性（义务程度中等）。合同起草时，代表义务方应争取 <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>。（第4天）"
             }
           ]
         },
         {
           "style": "translation",
           "title": "练习E：综合英译中",
-          "instruction": "以下句子综合本周多天内容，翻译为中文后点击\u201c提交 AI 批改\u201d获取详细批改。",
+          "instruction": "以下句子综合本周多天内容，翻译为中文后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
-              "source": "WHEREAS, Provider is duly organized and existing under the laws of the State of Delaware, and has the requisite expertise to render the Services contemplated herein; and WHEREAS, Client desires to engage Provider to perform such Services, subject to the terms and conditions set forth hereof;",
+              "source": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>, Provider is <span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of the State of Delaware, and has the requisite expertise to <span class=\"term\" data-def=\"提供；给予\">render</span> the Services contemplated <span class=\"term\" data-def=\"本协议中\">herein</span>; and <span class=\"term\" data-def=\"鉴于\">WHEREAS</span>, Client desires to engage Provider to perform such Services, <span class=\"term\" data-def=\"以…为条件\">subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"规定\">set forth</span> <span class=\"term\" data-def=\"本协议的\">hereof</span>;",
               "reference": "鉴于，提供方系根据特拉华州法律正式组建并合法存续的实体，具备提供本协议所述服务所需的专业能力；及鉴于，客户方希望根据本协议规定的条款和条件聘请提供方履行上述服务；",
               "rubric": [
-                { "en": "WHEREAS", "ideal": "鉴于", "accept": ["鉴于"], "wrong": ["然而", "虽然"], "note": "WHEREAS 是合同鉴于条款的引导词（第2天）" },
-                { "en": "duly organized and existing", "ideal": "正式组建并合法存续", "accept": ["依法组建并有效存续", "合法设立并存续"], "wrong": ["正常运营"], "note": "duly organized = 正式/依法组建；existing = 合法存续（第2天）" },
-                { "en": "render the Services", "ideal": "提供服务", "accept": ["提供所述服务"], "wrong": ["使服务"], "note": "render = 提供（专业服务），第4天所学" },
-                { "en": "contemplated herein", "ideal": "本协议所述的/本协议预期的", "accept": ["本协议中规定的"], "wrong": ["在此考虑的"], "note": "contemplate 在法律中 = 预期/规定；herein = 在本协议中（第3天）" },
-                { "en": "subject to the terms and conditions set forth hereof", "ideal": "根据本协议规定的条款和条件", "accept": ["依据本协议载明的条款和条件"], "wrong": ["受制于条款"], "note": "subject to = 根据（第4天）；set forth = 规定（第3天）；hereof = of this Agreement（第3天）" }
+                {
+                  "en": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>",
+                  "ideal": "鉴于",
+                  "accept": [
+                    "鉴于"
+                  ],
+                  "wrong": [
+                    "然而",
+                    "虽然"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span> 是合同鉴于条款的引导词（第2天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing",
+                  "ideal": "正式组建并合法存续",
+                  "accept": [
+                    "依法组建并有效存续",
+                    "合法设立并存续"
+                  ],
+                  "wrong": [
+                    "正常运营"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> = 正式/依法组建；existing = 合法存续（第2天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"提供；给予\">render</span> the Services",
+                  "ideal": "提供服务",
+                  "accept": [
+                    "提供所述服务"
+                  ],
+                  "wrong": [
+                    "使服务"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"提供；给予\">render</span> = 提供（专业服务），第4天所学"
+                },
+                {
+                  "en": "contemplated <span class=\"term\" data-def=\"本协议中\">herein</span>",
+                  "ideal": "本协议所述的/本协议预期的",
+                  "accept": [
+                    "本协议中规定的"
+                  ],
+                  "wrong": [
+                    "在此考虑的"
+                  ],
+                  "note": "contemplate 在法律中 = 预期/规定；<span class=\"term\" data-def=\"本协议中\">herein</span> = 在本协议中（第3天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"以…为条件\">subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"规定\">set forth</span> <span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                  "ideal": "根据本协议规定的条款和条件",
+                  "accept": [
+                    "依据本协议载明的条款和条件"
+                  ],
+                  "wrong": [
+                    "受制于条款"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"以…为条件\">subject to</span> = 根据（第4天）；<span class=\"term\" data-def=\"规定\">set forth</span> = 规定（第3天）；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（第3天）"
+                }
               ]
             },
             {
-              "source": "This Agreement shall commence on the Effective Date and shall remain in full force and effect for an initial term of two (2) years. Upon the expiration of the initial term, this Agreement shall automatically renew for successive one (1) year renewal terms, unless either Party provides written notice of termination at least sixty (60) days prior to the expiration of the then-current term. Notwithstanding the foregoing, either Party may terminate this Agreement for cause upon thirty (30) days' prior written notice if the other Party commits a material breach of any provision hereof.",
+              "source": "This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"开始；起始\">commence</span> on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span> and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years. Upon the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"初始期限\">initial term</span>, this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> automatically renew for successive one (1) year <span class=\"term\" data-def=\"续期\">renewal</span> terms, unless either <span class=\"term\" data-def=\"当事人\">Party</span> provides written notice of <span class=\"term\" data-def=\"终止\">termination</span> at least sixty (60) days prior to the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"彼时现行的\">then-current</span> <span class=\"term\" data-def=\"期限\">term</span>. <span class=\"term\" data-def=\"尽管\">Notwithstanding</span> the foregoing, either <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement for cause upon thirty (30) days' prior written notice if the other <span class=\"term\" data-def=\"当事人\">Party</span> commits a <span class=\"term\" data-def=\"重大的\">material</span> breach of any <span class=\"term\" data-def=\"规定\">provision</span> <span class=\"term\" data-def=\"本协议的\">hereof</span>.",
               "reference": "本协议自生效日期起开始履行，初始期限为两（2）年，在此期间保持完全有效。初始期限届满后，本协议应自动续期为连续的一（1）年续期期限，除非任何一方在当时有效期限届满至少六十（60）日前发出终止的书面通知。尽管有上述规定，如一方严重违反本协议任何条款，另一方可在提前三十（30）日发出书面通知后因故终止本协议。",
               "rubric": [
-                { "en": "shall commence on the Effective Date", "ideal": "自生效日期起开始/生效", "accept": ["自生效日期起开始履行"], "wrong": ["将开始"], "note": "commence = 开始（法律正式用词，第5天）" },
-                { "en": "remain in full force and effect", "ideal": "保持完全有效", "accept": ["持续完全有效"], "wrong": ["保持有效", "仍然有效"], "note": "固定搭配，不可简化（错题复习）" },
-                { "en": "initial term of two (2) years", "ideal": "初始期限为两（2）年", "accept": ["初始期限两年"], "wrong": ["首期两年"], "note": "initial term = 初始期限（第5天）" },
-                { "en": "automatically renew", "ideal": "自动续期", "accept": ["自动续订"], "wrong": ["自动更新"], "note": "renew = 续期（第5天）" },
-                { "en": "the then-current term", "ideal": "当时有效的期限", "accept": ["届时的期限", "当期期限"], "wrong": ["当前期限"], "note": "then-current = 当时有效的/届时的（第5天）" },
-                { "en": "Notwithstanding the foregoing", "ideal": "尽管有上述规定", "accept": ["尽管有前述规定", "不论上述规定如何"], "wrong": ["不承担上述"], "note": "notwithstanding = 尽管（第5天）" },
-                { "en": "terminate for cause", "ideal": "因故终止", "accept": ["因违约终止"], "wrong": ["有原因地终止"], "note": "for cause = 因故/因正当理由（第5天）" },
-                { "en": "material breach", "ideal": "重大违约/严重违反", "accept": ["实质性违反"], "wrong": ["材料违约"], "note": "material = 重大的/实质性的（第3天），非\u201c材料\u201d" },
-                { "en": "any provision hereof", "ideal": "本协议的任何条款", "accept": ["本协议任何规定"], "wrong": ["任何条款"], "note": "hereof = of this Agreement（第3天），不可省略" }
+                {
+                  "en": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"开始；起始\">commence</span> on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>",
+                  "ideal": "自生效日期起开始/生效",
+                  "accept": [
+                    "自生效日期起开始履行"
+                  ],
+                  "wrong": [
+                    "将开始"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"开始；起始\">commence</span> = 开始（法律正式用词，第5天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
+                  "ideal": "保持完全有效",
+                  "accept": [
+                    "持续完全有效"
+                  ],
+                  "wrong": [
+                    "保持有效",
+                    "仍然有效"
+                  ],
+                  "note": "固定搭配，不可简化（错题复习）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years",
+                  "ideal": "初始期限为两（2）年",
+                  "accept": [
+                    "初始期限两年"
+                  ],
+                  "wrong": [
+                    "首期两年"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"初始期限\">initial term</span> = 初始期限（第5天）"
+                },
+                {
+                  "en": "automatically renew",
+                  "ideal": "自动续期",
+                  "accept": [
+                    "自动续订"
+                  ],
+                  "wrong": [
+                    "自动更新"
+                  ],
+                  "note": "renew = 续期（第5天）"
+                },
+                {
+                  "en": "the <span class=\"term\" data-def=\"彼时现行的\">then-current</span> <span class=\"term\" data-def=\"期限\">term</span>",
+                  "ideal": "当时有效的期限",
+                  "accept": [
+                    "届时的期限",
+                    "当期期限"
+                  ],
+                  "wrong": [
+                    "当前期限"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"彼时现行的\">then-current</span> = 当时有效的/届时的（第5天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> the foregoing",
+                  "ideal": "尽管有上述规定",
+                  "accept": [
+                    "尽管有前述规定",
+                    "不论上述规定如何"
+                  ],
+                  "wrong": [
+                    "不承担上述"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"尽管\">notwithstanding</span> = 尽管（第5天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"因故终止\">terminate for cause</span>",
+                  "ideal": "因故终止",
+                  "accept": [
+                    "因违约终止"
+                  ],
+                  "wrong": [
+                    "有原因地终止"
+                  ],
+                  "note": "for cause = 因故/因正当理由（第5天）"
+                },
+                {
+                  "en": "<span class=\"term\" data-def=\"重大的\">material</span> breach",
+                  "ideal": "重大违约/严重违反",
+                  "accept": [
+                    "实质性违反"
+                  ],
+                  "wrong": [
+                    "材料违约"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"重大的\">material</span> = 重大的/实质性的（第3天），非“材料”"
+                },
+                {
+                  "en": "any <span class=\"term\" data-def=\"规定\">provision</span> <span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                  "ideal": "本协议的任何条款",
+                  "accept": [
+                    "本协议任何规定"
+                  ],
+                  "wrong": [
+                    "任何条款"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（第3天），不可省略"
+                }
               ]
             }
           ]
@@ -299,25 +641,139 @@
           "questions": [
             {
               "source": "鉴于双方相互承诺的约因及本协议所载的其他有价约因（双方确认已收到且充分），双方特此同意如下：",
-              "reference": "NOW, THEREFORE, in consideration of the mutual covenants and other valuable consideration contained herein (the receipt and sufficiency of which are hereby acknowledged), the Parties hereby agree as follows:",
+              "reference": "NOW, THEREFORE, <span class=\"term\" data-def=\"鉴于\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and other <span class=\"term\" data-def=\"有价对价\">valuable consideration</span> contained <span class=\"term\" data-def=\"本协议中\">herein</span> (the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged), the Parties <span class=\"term\" data-def=\"兹；特此\">hereby</span> agree as follows:",
               "rubric": [
-                { "en": "鉴于", "ideal": "NOW, THEREFORE", "accept": ["Now Therefore"], "wrong": ["Whereas", "Because"], "note": "NOW THEREFORE 是鉴于条款结束后引出正文的过渡语（第2天）" },
-                { "en": "相互承诺的约因", "ideal": "in consideration of the mutual covenants", "accept": ["for the mutual covenants and consideration"], "wrong": ["considering the mutual promises"], "note": "in consideration of = 鉴于\u2026\u2026的约因（第2天）；mutual covenants = 相互承诺" },
-                { "en": "本协议所载的", "ideal": "contained herein", "accept": ["set forth herein", "provided herein"], "wrong": ["in this contract"], "note": "herein = in this Agreement（第3天）" },
-                { "en": "双方确认已收到且充分", "ideal": "the receipt and sufficiency of which are hereby acknowledged", "accept": ["which is hereby acknowledged as received and sufficient"], "wrong": ["both parties confirmed"], "note": "法律固定表达，确认约因的有效性" },
-                { "en": "双方特此同意如下", "ideal": "the Parties hereby agree as follows", "accept": ["the Parties agree as follows"], "wrong": ["both sides agree"], "note": "hereby = 特此（第3天+第5天）；as follows = 如下" }
+                {
+                  "en": "鉴于",
+                  "ideal": "NOW, THEREFORE",
+                  "accept": [
+                    "<span class=\"term\" data-def=\"因此\">Now Therefore</span>"
+                  ],
+                  "wrong": [
+                    "<span class=\"term\" data-def=\"鉴于\">Whereas</span>",
+                    "Because"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"因此\">NOW THEREFORE</span> 是鉴于条款结束后引出正文的过渡语（第2天）"
+                },
+                {
+                  "en": "相互承诺的约因",
+                  "ideal": "<span class=\"term\" data-def=\"鉴于\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
+                  "accept": [
+                    "for the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and <span class=\"term\" data-def=\"对价\">consideration</span>"
+                  ],
+                  "wrong": [
+                    "considering the mutual promises"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"鉴于\">in consideration of</span> = 鉴于……的约因（第2天）；<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> = 相互承诺"
+                },
+                {
+                  "en": "本协议所载的",
+                  "ideal": "contained <span class=\"term\" data-def=\"本协议中\">herein</span>",
+                  "accept": [
+                    "<span class=\"term\" data-def=\"规定\">set forth</span> <span class=\"term\" data-def=\"本协议中\">herein</span>",
+                    "provided <span class=\"term\" data-def=\"本协议中\">herein</span>"
+                  ],
+                  "wrong": [
+                    "in this contract"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"本协议中\">herein</span> = in this Agreement（第3天）"
+                },
+                {
+                  "en": "双方确认已收到且充分",
+                  "ideal": "the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged",
+                  "accept": [
+                    "which is <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged as received and sufficient"
+                  ],
+                  "wrong": [
+                    "both parties confirmed"
+                  ],
+                  "note": "法律固定表达，确认约因的有效性"
+                },
+                {
+                  "en": "双方特此同意如下",
+                  "ideal": "the Parties <span class=\"term\" data-def=\"兹；特此\">hereby</span> agree as follows",
+                  "accept": [
+                    "the Parties agree as follows"
+                  ],
+                  "wrong": [
+                    "both sides agree"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> = 特此（第3天+第5天）；as follows = 如下"
+                }
               ]
             },
             {
               "source": "承包方应以专业且符合行业水准的方式，按照附于本协议的附件A（工作说明书）中规定的技术规范，在工作范围内提供所有服务和交付物。时间至关重要。",
-              "reference": "Contractor shall provide all Services and Deliverables within the scope of work, in a professional and workmanlike manner, in accordance with the specifications set forth in Exhibit A (Statement of Work) attached hereto. Time is of the essence.",
+              "reference": "Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"提供\">provide</span> all Services and <span class=\"term\" data-def=\"交付成果\">Deliverables</span> within the <span class=\"term\" data-def=\"工作范围\">scope of work</span>, in a professional and workmanlike manner, <span class=\"term\" data-def=\"根据\">in accordance with</span> the <span class=\"term\" data-def=\"规格\">specifications</span> <span class=\"term\" data-def=\"规定\">set forth</span> in Exhibit A (Statement of Work) <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>. <span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span>.",
               "rubric": [
-                { "en": "以专业且符合行业水准的方式", "ideal": "in a professional and workmanlike manner", "accept": ["professionally and in a workmanlike manner"], "wrong": ["in a professional way"], "note": "in a professional and workmanlike manner 是法律固定搭配（第4天）" },
-                { "en": "按照\u2026\u2026技术规范", "ideal": "in accordance with the specifications", "accept": ["pursuant to the specifications"], "wrong": ["following the specs"], "note": "in accordance with = 按照（第4天）" },
-                { "en": "规定的", "ideal": "set forth in", "accept": ["specified in", "as set out in"], "wrong": ["written in"], "note": "set forth = 规定/载明（第3天）" },
-                { "en": "附于本协议的附件A", "ideal": "Exhibit A attached hereto", "accept": ["Exhibit A attached to this Agreement"], "wrong": ["Exhibit A"], "note": "attached hereto 不可省略（错题复习）" },
-                { "en": "在工作范围内", "ideal": "within the scope of work", "accept": ["under the scope of work"], "wrong": ["in the work range"], "note": "scope of work = 工作范围（第4天）" },
-                { "en": "时间至关重要", "ideal": "Time is of the essence", "accept": ["time is of the essence"], "wrong": ["Time is important", "Time is critical"], "note": "法律固定表达，不可替换（第4天）" }
+                {
+                  "en": "以专业且符合行业水准的方式",
+                  "ideal": "in a professional and workmanlike manner",
+                  "accept": [
+                    "professionally and in a workmanlike manner"
+                  ],
+                  "wrong": [
+                    "in a professional way"
+                  ],
+                  "note": "in a professional and workmanlike manner 是法律固定搭配（第4天）"
+                },
+                {
+                  "en": "按照……技术规范",
+                  "ideal": "<span class=\"term\" data-def=\"根据\">in accordance with</span> the <span class=\"term\" data-def=\"规格\">specifications</span>",
+                  "accept": [
+                    "pursuant to the <span class=\"term\" data-def=\"规格\">specifications</span>"
+                  ],
+                  "wrong": [
+                    "following the specs"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"根据\">in accordance with</span> = 按照（第4天）"
+                },
+                {
+                  "en": "规定的",
+                  "ideal": "<span class=\"term\" data-def=\"规定\">set forth</span> in",
+                  "accept": [
+                    "specified in",
+                    "as set out in"
+                  ],
+                  "wrong": [
+                    "written in"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"规定\">set forth</span> = 规定/载明（第3天）"
+                },
+                {
+                  "en": "附于本协议的附件A",
+                  "ideal": "Exhibit A <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>",
+                  "accept": [
+                    "Exhibit A attached to this Agreement"
+                  ],
+                  "wrong": [
+                    "Exhibit A"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 不可省略（错题复习）"
+                },
+                {
+                  "en": "在工作范围内",
+                  "ideal": "within the <span class=\"term\" data-def=\"工作范围\">scope of work</span>",
+                  "accept": [
+                    "under the <span class=\"term\" data-def=\"工作范围\">scope of work</span>"
+                  ],
+                  "wrong": [
+                    "in the work range"
+                  ],
+                  "note": "<span class=\"term\" data-def=\"工作范围\">scope of work</span> = 工作范围（第4天）"
+                },
+                {
+                  "en": "时间至关重要",
+                  "ideal": "<span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span>",
+                  "accept": [
+                    "<span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span>"
+                  ],
+                  "wrong": [
+                    "Time is important",
+                    "Time is critical"
+                  ],
+                  "note": "法律固定表达，不可替换（第4天）"
+                }
               ]
             }
           ]
@@ -327,7 +783,7 @@
     {
       "type": "summary",
       "heading": "7. 本周总结与下周预告",
-      "html": "<h3>第1周学习成果</h3><ul><li><strong>已学新词汇：</strong>73个核心术语和固定搭配</li><li><strong>覆盖内容：</strong>合同总体结构 \u2192 当事人条款 \u2192 定义条款 \u2192 标的与履行 \u2192 生效与期限</li><li><strong>里程碑：</strong>已具备阅读商务合同基本结构的能力，能识别合同各部分的功能和主要术语</li></ul><h3>本周关键要点回顾</h3><ol><li>合同六大结构：<span class=\"term\" data-def=\"前言/序言\">preamble</span> \u2192 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> \u2192 <span class=\"term\" data-def=\"定义条款\">definitions</span> \u2192 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> \u2192 <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span> \u2192 <span class=\"term\" data-def=\"附表/附件\">schedules</span></li><li>here- 家族词是法律英语的标志表达，翻译时不可省略</li><li>法律多义词（<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>, <span class=\"term\" data-def=\"上述事项\">the premises</span>, <span class=\"term\" data-def=\"期限\">term</span>, <span class=\"term\" data-def=\"签署/执行\">execution</span>, <span class=\"term\">hold</span>）需要根据语境判断</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 必须完整翻译为\u201c完全有效\u201d</li><li><span class=\"term\" data-def=\"届满/到期\">expiration</span>（自然到期）vs. <span class=\"term\" data-def=\"终止/解除\">termination</span>（主动终止）是两种不同的合同结束方式</li></ol><h3>下周预告：第2周 \u2014 权利与义务条款（Rights & Obligations）</h3><p>下周将深入合同的实质条款，学习如何表达权利、义务和限制：</p><ul><li>第1天：<span class=\"term\">shall</span>/<span class=\"term\">may</span>/<span class=\"term\">must</span> 的法律含义区分</li><li>第2天：保证与陈述（<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>）</li><li>第3天：条件与前提（<span class=\"term\" data-def=\"先决条件\">condition precedent</span>, <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>）</li><li>第4天：豁免与限制（<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>, <span class=\"term\" data-def=\"责任限制\">limitation of liability</span>）</li><li>第5天：保密条款（<span class=\"term\" data-def=\"保密信息\">confidential information</span>, <span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span>）</li></ul>"
+      "html": "<h3>第1周学习成果</h3><ul><li><strong>已学新词汇：</strong>73个核心术语和固定搭配</li><li><strong>覆盖内容：</strong>合同总体结构 → 当事人条款 → 定义条款 → 标的与履行 → 生效与期限</li><li><strong>里程碑：</strong>已具备阅读商务合同基本结构的能力，能识别合同各部分的功能和主要术语</li></ul><h3>本周关键要点回顾</h3><ol><li>合同六大结构：<span class=\"term\" data-def=\"前言/序言\">preamble</span> → <span class=\"term\" data-def=\"鉴于条款\">recitals</span> → <span class=\"term\" data-def=\"定义条款\">definitions</span> → <span class=\"term\" data-def=\"实质条款\">operative provisions</span> → <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span> → <span class=\"term\" data-def=\"附表/附件\">schedules</span></li><li>here- 家族词是法律英语的标志表达，翻译时不可省略</li><li>法律多义词（<span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>, <span class=\"term\" data-def=\"上述事项\">the premises</span>, <span class=\"term\" data-def=\"期限\">term</span>, <span class=\"term\" data-def=\"签署/执行\">execution</span>, <span class=\"term\" data-def=\"认定；持有\">hold</span>）需要根据语境判断</li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 必须完整翻译为“完全有效”</li><li><span class=\"term\" data-def=\"届满/到期\">expiration</span>（自然到期）vs. <span class=\"term\" data-def=\"终止/解除\">termination</span>（主动终止）是两种不同的合同结束方式</li></ol><h3>下周预告：第2周 — 权利与义务条款（Rights & <span class=\"term\" data-def=\"义务（复数）\">Obligations</span>）</h3><p>下周将深入合同的实质条款，学习如何表达权利、义务和限制：</p><ul><li>第1天：<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>/<span class=\"term\" data-def=\"可以（任择/许可）\">may</span>/<span class=\"term\" data-def=\"必须（绝对强制）\">must</span> 的法律含义区分</li><li>第2天：保证与陈述（<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>）</li><li>第3天：条件与前提（<span class=\"term\" data-def=\"先决条件\">condition precedent</span>, <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span>）</li><li>第4天：豁免与限制（<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>, <span class=\"term\" data-def=\"责任限制\">limitation of liability</span>）</li><li>第5天：保密条款（<span class=\"term\" data-def=\"保密信息\">confidential information</span>, <span class=\"term\" data-def=\"保密/不披露\">non-disclosure</span>）</li></ul>"
     }
   ]
 }

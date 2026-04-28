@@ -79,6 +79,7 @@ import { ref, computed, inject, onMounted, watch } from 'vue'
 import type { VocabPreloadSection, VocabWord } from '../../types/lesson'
 import type { CourseConfig } from '../../types/course'
 import { useCourseVocabAdd } from '../../composables/useCourseVocabAdd'
+import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
 const props = defineProps<{
   section: VocabPreloadSection
@@ -93,6 +94,8 @@ const {
   fetchExistingWords,
   addWords
 } = useCourseVocabAdd(config)
+
+const wordEditorStore = useWordEditorStore()
 
 const addedWords = ref<Set<string>>(new Set())
 const failedWords = ref<Set<string>>(new Set())
@@ -143,15 +146,17 @@ async function checkExisting() {
 
 async function addOne(w: VocabWord) {
   if (addedWords.value.has(w.word) || !selectedSource.value) return
-  const result = await addWords([{ word: w.word, def: w.def }])
-  const next = new Set(addedWords.value)
-  if (result.added.includes(w.word) || result.existed.includes(w.word)) {
-    next.add(w.word)
-    addedWords.value = next
-  } else {
-    failedWords.value = new Set([...failedWords.value, w.word])
-  }
+  // 与点击单词一致：先查再决定（命中 → 查看；未命中 → 创建态预填）
+  await wordEditorStore.openForCourse(w.word, w.def, {
+    source: selectedSource.value,
+    lang: config.lang,
+  })
 }
+
+// 编辑器关闭后重新核对该课词汇的入库状态（创建成功 / 已存在 / 用户取消都覆盖）
+watch(() => wordEditorStore.isOpen, (open, prev) => {
+  if (prev && !open) checkExisting()
+})
 
 async function addAll() {
   if (!selectedSource.value) return

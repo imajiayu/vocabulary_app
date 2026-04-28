@@ -1,17 +1,17 @@
 {
-  "title": "第1周 第6天 — 合同生效与期限（<span class=\"term\" data-def=\"生效日期\">Effective Date</span>, Term & Termination）",
-  "objective": "掌握合同生效、期限、续期和终止条款中的核心词汇和固定搭配，理解 <span class=\"term\" data-def=\"生效日期\">effective date</span>、term、commencement、expiration、renewal、termination 等术语在商务合同中的精确含义，能够准确阅读和翻译合同期限条款。",
+  "title": "第1周 第6天 — 合同生效与期限（<span class=\"term\" data-def=\"生效日期\">Effective Date</span>, <span class=\"term\" data-def=\"期限\">Term</span> & <span class=\"term\" data-def=\"终止\">Termination</span>）",
+  "objective": "掌握合同生效、期限、续期和终止条款中的核心词汇和固定搭配，理解 <span class=\"term\" data-def=\"生效日期\">effective date</span>、<span class=\"term\" data-def=\"期限\">term</span>、<span class=\"term\" data-def=\"开始\">commencement</span>、<span class=\"term\" data-def=\"届满\">expiration</span>、<span class=\"term\" data-def=\"续期\">renewal</span>、<span class=\"term\" data-def=\"终止\">termination</span> 等术语在商务合同中的精确含义，能够准确阅读和翻译合同期限条款。",
   "sections": [
     {
       "type": "grammar",
       "blocks": [
         {
           "type": "p",
-          "html": "上节回顾：第4天学习了合同标的与履行义务（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span> & Performance），掌握了 <span class=\"term\" data-def=\"标的/主题\">subject matter</span>、<span class=\"term\" data-def=\"交付成果\">deliverables</span>、<span class=\"term\" data-def=\"工作范围\">scope of work</span>、<span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span> 等术语，辨析了 <span class=\"term\">provide</span>/<span class=\"term\">furnish</span>/<span class=\"term\">render</span> 和 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>/<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 的区别。今天进入合同的时间维度——合同何时生效、持续多久、如何续期、如何终止。这些条款决定了合同关系的“生命周期”。"
+          "html": "上节回顾：第4天学习了合同标的与履行义务（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span> & <span class=\"term\" data-def=\"履行\">Performance</span>），掌握了 <span class=\"term\" data-def=\"标的/主题\">subject matter</span>、<span class=\"term\" data-def=\"交付成果\">deliverables</span>、<span class=\"term\" data-def=\"工作范围\">scope of work</span>、<span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span> 等术语，辨析了 <span class=\"term\" data-def=\"提供\">provide</span>/<span class=\"term\" data-def=\"提供；交付\">furnish</span>/<span class=\"term\" data-def=\"提供；给予\">render</span> 和 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>/<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 的区别。今天进入合同的时间维度——合同何时生效、持续多久、如何续期、如何终止。这些条款决定了合同关系的“生命周期”。"
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题回顾：</strong><ul><li><span class=\"term\">in full force and effect</span> = 完全有效（不可简化为“有效”）——今天学的期限条款中会大量出现这个搭配</li><li><span class=\"term\">held to be</span> = 被裁定为（非“被认为”）——法律语境 hold = 裁定</li><li><span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\">hereto</span> 等 here- 家族词不可省略——今天会继续出现 <span class=\"term\" data-def=\"本协议的\">hereof</span>、<span class=\"term\">hereunder</span></li></ul>"
+          "html": "<strong>错题回顾：</strong><ul><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（不可简化为“有效”）——今天学的期限条款中会大量出现这个搭配</li><li><span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为（非“被认为”）——法律语境 <span class=\"term\" data-def=\"认定；持有\">hold</span> = 裁定</li><li><span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> 等 here- 家族词不可省略——今天会继续出现 <span class=\"term\" data-def=\"本协议的\">hereof</span>、<span class=\"term\" data-def=\"依本协议\">hereunder</span></li></ul>"
         }
       ]
     },
@@ -30,46 +30,46 @@
           ],
           "rows": [
             [
-              "effective date",
+              "<span class=\"term\" data-def=\"生效日期\">effective date</span>",
               "/ɪˈfektɪv deɪt/",
               "n. 生效日期",
               "<span class=\"term\" data-def=\"自…起/截至\">as of</span> the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>; the <span class=\"term\" data-def=\"生效日期\">Effective Date</span> of this Agreement"
             ],
             [
-              "term",
+              "<span class=\"term\" data-def=\"期限\">term</span>",
               "/tɜːrm/",
               "n. 期限；有效期",
-              "the term of this Agreement; <span class=\"term\" data-def=\"初始期限\">initial term</span>; renewal term"
+              "the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement; <span class=\"term\" data-def=\"初始期限\">initial term</span>; <span class=\"term\" data-def=\"续期\">renewal</span> <span class=\"term\" data-def=\"期限\">term</span>"
             ],
             [
-              "commencement",
+              "<span class=\"term\" data-def=\"开始\">commencement</span>",
               "/kəˈmensmənt/",
               "n. 开始；起始",
-              "commencement date; upon commencement of"
+              "<span class=\"term\" data-def=\"起始日期\">commencement date</span>; upon <span class=\"term\" data-def=\"开始\">commencement</span> of"
             ],
             [
-              "commence",
+              "<span class=\"term\" data-def=\"开始；起始\">commence</span>",
               "/kəˈmens/",
               "v. 开始；着手",
-              "commence on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>; commence delivery"
+              "<span class=\"term\" data-def=\"开始；起始\">commence</span> on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>; <span class=\"term\" data-def=\"开始；起始\">commence</span> delivery"
             ],
             [
-              "expiration",
+              "<span class=\"term\" data-def=\"届满\">expiration</span>",
               "/ˌekspɪˈreɪʃən/",
               "n. 届满；到期",
-              "upon expiration of; expiration date; prior to expiration"
+              "upon <span class=\"term\" data-def=\"届满\">expiration</span> of; <span class=\"term\" data-def=\"届满\">expiration</span> date; prior to <span class=\"term\" data-def=\"届满\">expiration</span>"
             ],
             [
               "expire",
               "/ɪkˈspaɪər/",
               "v. 届满；期满",
-              "this Agreement shall expire on; unless earlier terminated or expired"
+              "this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> expire on; unless earlier terminated or expired"
             ],
             [
-              "renewal",
+              "<span class=\"term\" data-def=\"续期\">renewal</span>",
               "/rɪˈnjuːəl/",
               "n. 续期；续展",
-              "renewal term; automatic renewal; renewal notice"
+              "<span class=\"term\" data-def=\"续期\">renewal</span> <span class=\"term\" data-def=\"期限\">term</span>; <span class=\"term\" data-def=\"自动续期\">automatic renewal</span>; <span class=\"term\" data-def=\"续期\">renewal</span> notice"
             ],
             [
               "renew",
@@ -78,62 +78,62 @@
               "automatically renew; renew for successive periods"
             ],
             [
-              "termination",
+              "<span class=\"term\" data-def=\"终止\">termination</span>",
               "/ˌtɜːrmɪˈneɪʃən/",
               "n. 终止；解除",
-              "termination for cause; termination for convenience; early termination"
+              "<span class=\"term\" data-def=\"终止\">termination</span> for cause; <span class=\"term\" data-def=\"终止\">termination</span> for <span class=\"term\" data-def=\"便利\">convenience</span>; early <span class=\"term\" data-def=\"终止\">termination</span>"
             ],
             [
-              "terminate",
+              "<span class=\"term\" data-def=\"终止\">terminate</span>",
               "/ˈtɜːrmɪneɪt/",
               "v. 终止；解除",
-              "terminate this Agreement; terminate upon written notice"
+              "<span class=\"term\" data-def=\"终止\">terminate</span> this Agreement; <span class=\"term\" data-def=\"终止\">terminate</span> upon written notice"
             ],
             [
-              "initial term",
+              "<span class=\"term\" data-def=\"初始期限\">initial term</span>",
               "/ɪˈnɪʃəl tɜːrm/",
               "n. 初始期限",
               "for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years"
             ],
             [
-              "duration",
+              "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>",
               "/djʊˈreɪʃən/",
               "n. 存续期间；持续时间",
-              "for the duration of this Agreement; duration of the term"
+              "for the <span class=\"term\" data-def=\"期限；持续时间\">duration</span> of this Agreement; <span class=\"term\" data-def=\"期限；持续时间\">duration</span> of the <span class=\"term\" data-def=\"期限\">term</span>"
             ],
             [
-              "perpetual",
+              "<span class=\"term\" data-def=\"永久的\">perpetual</span>",
               "/pərˈpetʃuəl/",
               "adj. 永久的；永续的",
-              "perpetual license; in perpetuity"
+              "<span class=\"term\" data-def=\"永久的\">perpetual</span> license; in perpetuity"
             ],
             [
               "extend",
               "/ɪkˈstend/",
               "v. 延长；延期",
-              "extend the term; extend the deadline"
+              "extend the <span class=\"term\" data-def=\"期限\">term</span>; extend the deadline"
             ],
             [
-              "extension",
+              "<span class=\"term\" data-def=\"延期\">extension</span>",
               "/ɪkˈstenʃən/",
               "n. 延期；展期",
-              "extension of the term; grant an extension"
+              "<span class=\"term\" data-def=\"延期\">extension</span> of the <span class=\"term\" data-def=\"期限\">term</span>; grant an <span class=\"term\" data-def=\"延期\">extension</span>"
             ],
             [
-              "survival",
+              "<span class=\"term\" data-def=\"存续条款\">survival</span>",
               "/sərˈvaɪvəl/",
               "n. 存续；继续有效",
-              "survival clause; survival of obligations"
+              "<span class=\"term\" data-def=\"存续条款\">survival</span> <span class=\"term\" data-def=\"条款\">clause</span>; <span class=\"term\" data-def=\"存续条款\">survival</span> of <span class=\"term\" data-def=\"义务（复数）\">obligations</span>"
             ]
           ]
         },
         {
           "type": "note",
-          "html": "<strong>多义词辨析：term</strong><ul><li>日常英语：术语；学期</li><li>法律英语①：<strong>条款</strong>——terms and conditions = 条款和条件（第1天所学）</li><li>法律英语②：<strong>期限</strong>——the term of this Agreement = 本协议的期限（今天所学）</li></ul><p>区分技巧：出现在复数 <strong>terms</strong> 并搭配 conditions 时，通常指“条款”；出现在单数 <strong>term</strong> 并搭配时间长度时，指“期限”。</p>"
+          "html": "<strong>多义词辨析：<span class=\"term\" data-def=\"期限\">term</span></strong><ul><li>日常英语：术语；学期</li><li>法律英语①：<strong>条款</strong>——terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> = 条款和条件（第1天所学）</li><li>法律英语②：<strong>期限</strong>——the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement = 本协议的期限（今天所学）</li></ul><p>区分技巧：出现在复数 <strong>terms</strong> 并搭配 <span class=\"term\" data-def=\"条件（复数）\">conditions</span> 时，通常指“条款”；出现在单数 <strong><span class=\"term\" data-def=\"期限\">term</span></strong> 并搭配时间长度时，指“期限”。</p>"
         },
         {
           "type": "note",
-          "html": "<strong>词源记忆：commence vs. begin vs. start</strong><ul><li><span class=\"term\">commence</span>——源自拉丁语 <em>com-</em>（一起）+ <em>initiare</em>（开始），是法律英语中“开始”的标准用词</li><li>begin / start——日常英语，合同中很少使用</li><li>同理：<span class=\"term\">terminate</span>（终止）比 end / stop 更正式</li></ul><p>法律英语偏好拉丁语源词汇，因其含义更精确、更正式。</p>"
+          "html": "<strong>词源记忆：<span class=\"term\" data-def=\"开始；起始\">commence</span> vs. begin vs. start</strong><ul><li><span class=\"term\" data-def=\"开始；起始\">commence</span>——源自拉丁语 <em>com-</em>（一起）+ <em>initiare</em>（开始），是法律英语中“开始”的标准用词</li><li>begin / start——日常英语，合同中很少使用</li><li>同理：<span class=\"term\" data-def=\"终止\">terminate</span>（终止）比 end / stop 更正式</li></ul><p>法律英语偏好拉丁语源词汇，因其含义更精确、更正式。</p>"
         }
       ]
     },
@@ -190,7 +190,7 @@
               }
             ],
             [
-              "<span class=\"term\">terminate for cause</span>",
+              "<span class=\"term\" data-def=\"因故终止\">terminate for cause</span>",
               "因故终止；因违约终止",
               {
                 "en": "<span class=\"en-text\">Either Party may terminate this Agreement for cause upon thirty (30) days' prior written notice.</span>",
@@ -198,7 +198,7 @@
               }
             ],
             [
-              "<span class=\"term\">terminate for convenience</span>",
+              "<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span>",
               "任意终止；无因终止",
               {
                 "en": "<span class=\"en-text\">Client may terminate this Agreement for convenience upon ninety (90) days' prior written notice to Provider.</span>",
@@ -217,7 +217,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>中文母语者易错点：terminate for cause vs. terminate for convenience</strong><br><ul><li><span class=\"term\">terminate for cause</span> = 因故终止 / 因违约终止——需要有正当理由（如违约、违法等），类似中国法中的“法定解除”</li><li><span class=\"term\">terminate for convenience</span> = 任意终止 / 无因终止——不需要理由，只需提前通知，类似中国法中的“约定解除”</li></ul>常见错误：将 for <span class=\"term\" data-def=\"便利；无因\">convenience</span> 译为“为了方便”——这里 convenience 不是“方便”，而是表示“无需理由”。"
+          "html": "<strong>中文母语者易错点：<span class=\"term\" data-def=\"因故终止\">terminate for cause</span> vs. <span class=\"term\" data-def=\"无因终止\">terminate for convenience</span></strong><br><ul><li><span class=\"term\" data-def=\"因故终止\">terminate for cause</span> = 因故终止 / 因违约终止——需要有正当理由（如违约、违法等），类似中国法中的“法定解除”</li><li><span class=\"term\" data-def=\"无因终止\">terminate for convenience</span> = 任意终止 / 无因终止——不需要理由，只需提前通知，类似中国法中的“约定解除”</li></ul>常见错误：将 for <span class=\"term\" data-def=\"便利；无因\">convenience</span> 译为“为了方便”——这里 <span class=\"term\" data-def=\"便利\">convenience</span> 不是“方便”，而是表示“无需理由”。"
         }
       ]
     },
@@ -227,7 +227,7 @@
       "blocks": [
         {
           "type": "h3",
-          "html": "3a. expiration vs. termination"
+          "html": "3a. <span class=\"term\" data-def=\"届满\">expiration</span> vs. <span class=\"term\" data-def=\"终止\">termination</span>"
         },
         {
           "type": "p",
@@ -244,12 +244,12 @@
             [
               "<span class=\"term\" data-def=\"届满/到期\">expiration</span>",
               "（自然）届满；到期",
-              "合同期限自然到期，无需任何一方主动行为。如：The Agreement shall expire on December 31, 2027."
+              "合同期限自然到期，无需任何一方主动行为。如：The Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> expire on December 31, 2027."
             ],
             [
               "<span class=\"term\" data-def=\"终止/解除\">termination</span>",
               "（主动）终止；解除",
-              "一方或双方主动提前结束合同关系。如：Either Party may terminate this Agreement upon written notice."
+              "一方或双方主动提前结束合同关系。如：Either <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement upon written notice."
             ]
           ]
         },
@@ -259,11 +259,11 @@
         },
         {
           "type": "tip",
-          "html": "<strong>实务提示：</strong>合同中常见 “termination or expiration” 并列使用，以覆盖合同结束的两种情形（自然到期和主动终止）。起草 <span class=\"term\" data-def=\"存续条款\">survival</span>（存续）条款时，应写 “survive the termination <strong>or expiration</strong> of this Agreement” 而非仅写 “survive the termination”，否则可能被解释为仅在主动终止时存续。"
+          "html": "<strong>实务提示：</strong>合同中常见 “<span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span>” 并列使用，以覆盖合同结束的两种情形（自然到期和主动终止）。起草 <span class=\"term\" data-def=\"存续条款\">survival</span>（存续）条款时，应写 “survive the <span class=\"term\" data-def=\"终止\">termination</span> <strong>or <span class=\"term\" data-def=\"届满\">expiration</span></strong> of this Agreement” 而非仅写 “survive the <span class=\"term\" data-def=\"终止\">termination</span>”，否则可能被解释为仅在主动终止时存续。"
         },
         {
           "type": "h3",
-          "html": "3b. term vs. duration vs. period"
+          "html": "3b. <span class=\"term\" data-def=\"期限\">term</span> vs. <span class=\"term\" data-def=\"期限；持续时间\">duration</span> vs. period"
         },
         {
           "type": "table",
@@ -276,12 +276,12 @@
             [
               "<span class=\"term\" data-def=\"期限\">term</span>",
               "（合同的）期限",
-              "最常用，指合同的整体有效期。the term of this Agreement = 本协议期限"
+              "最常用，指合同的整体有效期。the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement = 本协议期限"
             ],
             [
-              "<span class=\"term\">duration</span>",
+              "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>",
               "存续期间；持续时间",
-              "强调从头到尾的持续时间。for the duration of = 在……期间"
+              "强调从头到尾的持续时间。for the <span class=\"term\" data-def=\"期限；持续时间\">duration</span> of = 在……期间"
             ],
             [
               "period",
@@ -292,7 +292,7 @@
         },
         {
           "type": "h3",
-          "html": "3c. <span class=\"term\" data-def=\"生效日期\">effective date</span> vs. execution date vs. commencement date"
+          "html": "3c. <span class=\"term\" data-def=\"生效日期\">effective date</span> vs. <span class=\"term\" data-def=\"签署日期\">execution date</span> vs. <span class=\"term\" data-def=\"起始日期\">commencement date</span>"
         },
         {
           "type": "table",
@@ -308,12 +308,12 @@
               "合同权利义务开始发生法律效力的日期，<strong>可以早于或晚于签署日</strong>"
             ],
             [
-              "<span class=\"term\">execution date</span>",
+              "<span class=\"term\" data-def=\"签署日期\">execution date</span>",
               "签署日期",
-              "各方实际签署合同的日期（execute = 签署，第2天所学）"
+              "各方实际签署合同的日期（<span class=\"term\" data-def=\"签署；执行\">execute</span> = 签署，第2天所学）"
             ],
             [
-              "<span class=\"term\">commencement date</span>",
+              "<span class=\"term\" data-def=\"起始日期\">commencement date</span>",
               "起始日期",
               "合同义务开始履行的日期，可能与 <span class=\"term\" data-def=\"生效日期\">effective date</span> 相同，也可能不同"
             ]
@@ -335,42 +335,42 @@
       "items": [
         {
           "title": "例句 1",
-          "sentence": "This Agreement shall be effective as of the date first written above (the “Effective Date”) and shall continue in full force and effect for an initial term of three (3) years, unless earlier terminated in accordance with the provisions hereof.",
+          "sentence": "This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be effective <span class=\"term\" data-def=\"自…起\">as of</span> the date first written above (the “<span class=\"term\" data-def=\"生效日期\">Effective Date</span>”) and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> continue <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of three (3) years, unless earlier terminated <span class=\"term\" data-def=\"根据\">in accordance with</span> the provisions <span class=\"term\" data-def=\"本协议的\">hereof</span>.",
           "structure": [
-            "<em>This Agreement shall be effective</em> — 主句，“本协议应生效”",
+            "<em>This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be effective</em> — 主句，“本协议应生效”",
             "<em><span class=\"term\" data-def=\"自…起/截至\">as of</span> the date first written above</em> — 时间状语，“自上方首先载明的日期起”；这是合同中指代开头日期的固定表达",
             "<em>(the “<span class=\"term\" data-def=\"生效日期\">Effective Date</span>”)</em> — 括号定义，将该日期定义为“生效日期”（回顾第3天定义条款）",
-            "<em>and shall continue in full force and effect</em> — 并列谓语，“并应保持完全有效”；<span class=\"term\">in full force and effect</span> 是法律固定搭配（复习错题）",
+            "<em>and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> continue <span class=\"term\" data-def=\"完全有效\">in full force and effect</span></em> — 并列谓语，“并应保持完全有效”；<span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 是法律固定搭配（复习错题）",
             "<em>for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of three (3) years</em> — 时间状语，“初始期限为三（3）年”",
             "<em>unless earlier terminated</em> — 条件状语，“除非提前终止”",
-            "<em><span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the provisions hereof</em> — 方式状语，“根据本协议条款”；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement"
+            "<em><span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the provisions <span class=\"term\" data-def=\"本协议的\">hereof</span></em> — 方式状语，“根据本协议条款”；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement"
           ],
           "translation": "本协议自上方首先载明的日期（“生效日期”）起生效，初始期限为三（3）年，在此期间保持完全有效，但根据本协议条款提前终止的除外。"
         },
         {
           "title": "例句 2",
-          "sentence": "Upon the expiration of the initial term, this Agreement shall automatically renew for successive one (1) year periods (each, a “Renewal Term”), unless either Party provides written notice of non-renewal to the other Party at least sixty (60) days prior to the expiration of the then-current term.",
+          "sentence": "Upon the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"初始期限\">initial term</span>, this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> automatically renew for successive one (1) year periods (each, a “<span class=\"term\" data-def=\"续期\">Renewal</span> <span class=\"term\" data-def=\"期限\">Term</span>”), unless either <span class=\"term\" data-def=\"当事人\">Party</span> provides written notice of non-<span class=\"term\" data-def=\"续期\">renewal</span> to the other <span class=\"term\" data-def=\"当事人\">Party</span> at least sixty (60) days prior to the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"彼时现行的\">then-current</span> <span class=\"term\" data-def=\"期限\">term</span>.",
           "structure": [
-            "<em>Upon the expiration of the <span class=\"term\" data-def=\"初始期限\">initial term</span></em> — 时间状语，“在初始期限届满后”",
-            "<em>this Agreement shall automatically renew</em> — 主句，“本协议应自动续期”",
+            "<em>Upon the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"初始期限\">initial term</span></em> — 时间状语，“在初始期限届满后”",
+            "<em>this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> automatically renew</em> — 主句，“本协议应自动续期”",
             "<em>for successive one (1) year periods</em> — 状语，“为连续的一（1）年期间”",
-            "<em>(each, a “Renewal Term”)</em> — 括号定义，“每次续期称为‘续期期限’”",
-            "<em>unless either Party provides written notice</em> — 条件从句，“除非任何一方发出书面通知”",
-            "<em>of non-renewal</em> — 通知的内容，“不续期的”",
-            "<em>to the other Party</em> — 通知的对象，“向另一方”",
+            "<em>(each, a “<span class=\"term\" data-def=\"续期\">Renewal</span> <span class=\"term\" data-def=\"期限\">Term</span>”)</em> — 括号定义，“每次续期称为‘续期期限’”",
+            "<em>unless either <span class=\"term\" data-def=\"当事人\">Party</span> provides written notice</em> — 条件从句，“除非任何一方发出书面通知”",
+            "<em>of non-<span class=\"term\" data-def=\"续期\">renewal</span></em> — 通知的内容，“不续期的”",
+            "<em>to the other <span class=\"term\" data-def=\"当事人\">Party</span></em> — 通知的对象，“向另一方”",
             "<em>at least sixty (60) days prior to</em> — 时间状语，“至少在……之前六十（60）日”",
-            "<em>the expiration of the then-current term</em> — “当时有效期限的届满”；<strong>then-current</strong> = 当时有效的/届时的（法律特有表达）"
+            "<em>the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"彼时现行的\">then-current</span> <span class=\"term\" data-def=\"期限\">term</span></em> — “当时有效期限的届满”；<strong><span class=\"term\" data-def=\"彼时现行的\">then-current</span></strong> = 当时有效的/届时的（法律特有表达）"
           ],
           "translation": "初始期限届满后，本协议应自动续期为连续的一（1）年期间（每次续期称为“续期期限”），除非任何一方在当时有效期限届满至少六十（60）日前向另一方发出不续期的书面通知。"
         },
         {
           "title": "例句 3",
-          "sentence": "Notwithstanding anything to the contrary contained herein, the obligations of the Parties set forth in Sections 7 (Confidentiality), 9 (Indemnification), and 11 (Limitation of Liability) shall survive the termination or expiration of this Agreement and shall remain in full force and effect for a period of three (3) years thereafter.",
+          "sentence": "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary contained <span class=\"term\" data-def=\"本协议中\">herein</span>, the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> of the Parties <span class=\"term\" data-def=\"规定\">set forth</span> in Sections 7 (Confidentiality), 9 (<span class=\"term\" data-def=\"赔偿；补偿\">Indemnification</span>), and 11 (<span class=\"term\" data-def=\"责任限制\">Limitation of Liability</span>) <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> survive the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> for a period of three (3) years thereafter.",
           "structure": [
-            "<em>Notwithstanding anything to the contrary contained herein</em> — 让步状语，“尽管本协议中有任何相反规定”；<span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span> = 尽管/不论；<span class=\"term\">herein</span> = in this Agreement",
-            "<em>the obligations of the Parties <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Sections 7, 9, and 11</em> — 主语，“双方在第7、9、11条中规定的义务”；<span class=\"term\" data-def=\"规定/载明\">set forth</span> = 规定（第3天所学）",
-            "<em>shall survive the termination or expiration</em> — 谓语，“在终止或届满后继续有效”",
-            "<em>and shall remain in full force and effect</em> — 并列谓语，“并应保持完全有效”",
+            "<em><span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary contained <span class=\"term\" data-def=\"本协议中\">herein</span></em> — 让步状语，“尽管本协议中有任何相反规定”；<span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span> = 尽管/不论；<span class=\"term\" data-def=\"本协议中\">herein</span> = in this Agreement",
+            "<em>the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> of the Parties <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Sections 7, 9, and 11</em> — 主语，“双方在第7、9、11条中规定的义务”；<span class=\"term\" data-def=\"规定/载明\">set forth</span> = 规定（第3天所学）",
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> survive the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span></em> — 谓语，“在终止或届满后继续有效”",
+            "<em>and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span></em> — 并列谓语，“并应保持完全有效”",
             "<em>for a period of three (3) years thereafter</em> — 时间状语，“此后三（3）年内”"
           ],
           "translation": "尽管本协议中有任何相反规定，双方在第7条（保密）、第9条（赔偿）和第11条（责任限制）中规定的义务在本协议终止或届满后继续有效，并在此后三（3）年内保持完全有效。"
@@ -425,7 +425,7 @@
               "content": "永久的；永续的"
             },
             {
-              "summary": "<span class=\"term\">duration</span>",
+              "summary": "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>",
               "content": "存续期间；持续时间"
             },
             {
@@ -437,11 +437,11 @@
               "content": "存续；继续有效（合同终止后某些条款继续有效）"
             },
             {
-              "summary": "<span class=\"term\">terminate for cause</span>",
+              "summary": "<span class=\"term\" data-def=\"因故终止\">terminate for cause</span>",
               "content": "因故终止；因违约终止"
             },
             {
-              "summary": "<span class=\"term\">terminate for convenience</span>",
+              "summary": "<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span>",
               "content": "任意终止；无因终止（非“为了方便终止”）"
             },
             {
@@ -449,7 +449,7 @@
               "content": "尽管；不论"
             },
             {
-              "summary": "<span class=\"term\">then-current</span>",
+              "summary": "<span class=\"term\" data-def=\"彼时现行的\">then-current</span>",
               "content": "当时有效的；届时的"
             },
             {
@@ -467,52 +467,52 @@
             {
               "prompt": "1. 届满；到期（自然到期）",
               "options": [
-                "termination",
-                "expiration",
-                "extension"
+                "<span class=\"term\" data-def=\"终止\">termination</span>",
+                "<span class=\"term\" data-def=\"届满\">expiration</span>",
+                "<span class=\"term\" data-def=\"延期\">extension</span>"
               ],
-              "answer": "expiration",
-              "explanation": "expiration = 届满/到期，指合同期限自然到期，区别于 termination（主动终止）。"
+              "answer": "<span class=\"term\" data-def=\"届满\">expiration</span>",
+              "explanation": "<span class=\"term\" data-def=\"届满\">expiration</span> = 届满/到期，指合同期限自然到期，区别于 <span class=\"term\" data-def=\"终止\">termination</span>（主动终止）。"
             },
             {
               "prompt": "2. 续期；续展",
               "options": [
-                "duration",
-                "renewal",
-                "commencement"
+                "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>",
+                "<span class=\"term\" data-def=\"续期\">renewal</span>",
+                "<span class=\"term\" data-def=\"开始\">commencement</span>"
               ],
-              "answer": "renewal",
-              "explanation": "renewal = 续期/续展。automatic renewal = 自动续期。renewal term = 续期期限。"
+              "answer": "<span class=\"term\" data-def=\"续期\">renewal</span>",
+              "explanation": "<span class=\"term\" data-def=\"续期\">renewal</span> = 续期/续展。<span class=\"term\" data-def=\"自动续期\">automatic renewal</span> = 自动续期。<span class=\"term\" data-def=\"续期\">renewal</span> <span class=\"term\" data-def=\"期限\">term</span> = 续期期限。"
             },
             {
               "prompt": "3. 永久的；永续的",
               "options": [
                 "initial",
-                "perpetual",
-                "subsequent"
+                "<span class=\"term\" data-def=\"永久的\">perpetual</span>",
+                "<span class=\"term\" data-def=\"后续的；解除（条件）\">subsequent</span>"
               ],
-              "answer": "perpetual",
-              "explanation": "perpetual = 永久的/永续的。perpetual license = 永久许可证。in perpetuity = 永久地。"
+              "answer": "<span class=\"term\" data-def=\"永久的\">perpetual</span>",
+              "explanation": "<span class=\"term\" data-def=\"永久的\">perpetual</span> = 永久的/永续的。<span class=\"term\" data-def=\"永久的\">perpetual</span> license = 永久许可证。in perpetuity = 永久地。"
             },
             {
               "prompt": "4. 存续（合同终止后某些条款继续有效）",
               "options": [
-                "extension",
-                "survival",
-                "duration"
+                "<span class=\"term\" data-def=\"延期\">extension</span>",
+                "<span class=\"term\" data-def=\"存续条款\">survival</span>",
+                "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>"
               ],
-              "answer": "survival",
-              "explanation": "survival = 存续，指合同终止或届满后某些条款继续有效。survival clause = 存续条款。"
+              "answer": "<span class=\"term\" data-def=\"存续条款\">survival</span>",
+              "explanation": "<span class=\"term\" data-def=\"存续条款\">survival</span> = 存续，指合同终止或届满后某些条款继续有效。<span class=\"term\" data-def=\"存续条款\">survival</span> <span class=\"term\" data-def=\"条款\">clause</span> = 存续条款。"
             },
             {
               "prompt": "5. 开始；起始",
               "options": [
                 "<span class=\"term\" data-def=\"生效日期\">effective date</span>",
-                "commencement",
-                "execution"
+                "<span class=\"term\" data-def=\"开始\">commencement</span>",
+                "<span class=\"term\" data-def=\"签署\">execution</span>"
               ],
-              "answer": "commencement",
-              "explanation": "commencement = 开始/起始。commencement date = 起始日期。commence 比 begin/start 更正式，是法律英语的标准用词。"
+              "answer": "<span class=\"term\" data-def=\"开始\">commencement</span>",
+              "explanation": "<span class=\"term\" data-def=\"开始\">commencement</span> = 开始/起始。<span class=\"term\" data-def=\"起始日期\">commencement date</span> = 起始日期。<span class=\"term\" data-def=\"开始；起始\">commence</span> 比 begin/start 更正式，是法律英语的标准用词。"
             }
           ]
         }
@@ -527,7 +527,7 @@
           "title": "练习A：术语选择",
           "questions": [
             {
-              "prompt": "1. <span class=\"term\" data-def=\"期限\">term</span>（the term of this Agreement）",
+              "prompt": "1. <span class=\"term\" data-def=\"期限\">term</span>（the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement）",
               "options": [
                 "术语",
                 "条件",
@@ -535,10 +535,10 @@
                 "条款"
               ],
               "answer": "期限；有效期",
-              "explanation": "term 在合同期限条款中意为‘期限/有效期’，不是‘术语’。the term of this Agreement = 本协议的期限。注意 term 是多义词，复数 terms 搭配 conditions 时指‘条款’。"
+              "explanation": "<span class=\"term\" data-def=\"期限\">term</span> 在合同期限条款中意为‘期限/有效期’，不是‘术语’。the <span class=\"term\" data-def=\"期限\">term</span> of this Agreement = 本协议的期限。注意 <span class=\"term\" data-def=\"期限\">term</span> 是多义词，复数 terms 搭配 <span class=\"term\" data-def=\"条件（复数）\">conditions</span> 时指‘条款’。"
             },
             {
-              "prompt": "2. <span class=\"term\">terminate for convenience</span>",
+              "prompt": "2. <span class=\"term\" data-def=\"无因终止\">terminate for convenience</span>",
               "options": [
                 "方便时终止",
                 "因故终止",
@@ -546,7 +546,7 @@
                 "协商终止"
               ],
               "answer": "任意终止；无因终止",
-              "explanation": "terminate for convenience = 任意终止/无因终止，不需要特定理由。for convenience 在此不是‘为了方便’，而是法律术语‘无因’。区别于 terminate for cause（因故终止，需要正当理由）。"
+              "explanation": "<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span> = 任意终止/无因终止，不需要特定理由。for <span class=\"term\" data-def=\"便利\">convenience</span> 在此不是‘为了方便’，而是法律术语‘无因’。区别于 <span class=\"term\" data-def=\"因故终止\">terminate for cause</span>（因故终止，需要正当理由）。"
             },
             {
               "prompt": "3. <span class=\"term\" data-def=\"存续条款\">survival</span>（合同条款语境）",
@@ -557,7 +557,7 @@
                 "恢复效力"
               ],
               "answer": "存续；继续有效",
-              "explanation": "survival 在合同中指某些条款在合同终止或届满后继续有效。survival clause = 存续条款，规定哪些条款在合同结束后仍然约束双方。"
+              "explanation": "<span class=\"term\" data-def=\"存续条款\">survival</span> 在合同中指某些条款在合同终止或届满后继续有效。<span class=\"term\" data-def=\"存续条款\">survival</span> <span class=\"term\" data-def=\"条款\">clause</span> = 存续条款，规定哪些条款在合同结束后仍然约束双方。"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span>",
@@ -568,7 +568,7 @@
                 "因此"
               ],
               "answer": "尽管；不论",
-              "explanation": "notwithstanding = 尽管/不论，是法律英语中常用的让步连词。Notwithstanding anything to the contrary = 尽管有任何相反规定。"
+              "explanation": "<span class=\"term\" data-def=\"尽管\">notwithstanding</span> = 尽管/不论，是法律英语中常用的让步连词。<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary = 尽管有任何相反规定。"
             },
             {
               "prompt": "5. <span class=\"term\" data-def=\"自…起/截至\">as of</span>（This Agreement is made <span class=\"term\" data-def=\"自…起/截至\">as of</span>...）",
@@ -579,7 +579,7 @@
                 "直到"
               ],
               "answer": "自……起",
-              "explanation": "as of 在合同中用于指定日期起点，意为‘自……起’。This Agreement is made as of January 1, 2026 = 本协议自2026年1月1日起订立。"
+              "explanation": "<span class=\"term\" data-def=\"自…起\">as of</span> 在合同中用于指定日期起点，意为‘自……起’。This Agreement is made <span class=\"term\" data-def=\"自…起\">as of</span> January 1, 2026 = 本协议自2026年1月1日起订立。"
             }
           ]
         },
@@ -588,59 +588,59 @@
           "title": "练习B：选词填空",
           "questions": [
             {
-              "prompt": "6. This Agreement shall ______ on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span> and shall continue for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years.",
+              "prompt": "6. This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span> and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> continue for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years.",
               "options": [
                 "begin",
                 "start",
-                "commence",
+                "<span class=\"term\" data-def=\"开始；起始\">commence</span>",
                 "initiate"
               ],
-              "answer": "commence",
-              "explanation": "commence = 开始（法律正式用语）。shall commence on the Effective Date = 自生效日期开始。法律英语中用 commence 而非 begin/start。"
+              "answer": "<span class=\"term\" data-def=\"开始；起始\">commence</span>",
+              "explanation": "<span class=\"term\" data-def=\"开始；起始\">commence</span> = 开始（法律正式用语）。<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"开始；起始\">commence</span> on the <span class=\"term\" data-def=\"生效日期\">Effective Date</span> = 自生效日期开始。法律英语中用 <span class=\"term\" data-def=\"开始；起始\">commence</span> 而非 begin/start。"
             },
             {
-              "prompt": "7. Unless renewed, this Agreement shall ______ on December 31, 2027.",
+              "prompt": "7. Unless renewed, this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ on December 31, 2027.",
               "options": [
-                "terminate",
+                "<span class=\"term\" data-def=\"终止\">terminate</span>",
                 "expire",
                 "end",
                 "finish"
               ],
               "answer": "expire",
-              "explanation": "expire = 届满/期满（自然到期）。shall expire on December 31 = 于12月31日届满。注意 expire 指自然到期，terminate 指主动终止。"
+              "explanation": "expire = 届满/期满（自然到期）。<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> expire on December 31 = 于12月31日届满。注意 expire 指自然到期，<span class=\"term\" data-def=\"终止\">terminate</span> 指主动终止。"
             },
             {
-              "prompt": "8. This Agreement shall remain ______ until terminated <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> Section 12.（复习错题）",
+              "prompt": "8. This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> ______ until terminated <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> Section 12.（复习错题）",
               "options": [
-                "valid and binding",
-                "in full force and effect",
+                "valid and <span class=\"term\" data-def=\"有约束力的\">binding</span>",
+                "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
                 "effective",
                 "enforced"
               ],
-              "answer": "in full force and effect",
-              "explanation": "remain in full force and effect = 保持完全有效，是法律固定搭配，不可简化为 remain effective 或 remain valid。（复习第1天错题）"
+              "answer": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
+              "explanation": "<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 保持完全有效，是法律固定搭配，不可简化为 <span class=\"term\" data-def=\"保持；仍然\">remain</span> effective 或 <span class=\"term\" data-def=\"保持；仍然\">remain</span> valid。（复习第1天错题）"
             },
             {
-              "prompt": "9. The obligations under Sections 5 and 8 shall ______ the termination or expiration of this Agreement.",
+              "prompt": "9. The <span class=\"term\" data-def=\"义务（复数）\">obligations</span> under Sections 5 and 8 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement.",
               "options": [
                 "survive",
                 "outlive",
                 "continue after",
-                "remain beyond"
+                "<span class=\"term\" data-def=\"保持；仍然\">remain</span> beyond"
               ],
               "answer": "survive",
-              "explanation": "survive the termination or expiration = 在终止或届满后继续有效。survive 在法律英语中的特殊含义是‘存续/继续有效’。"
+              "explanation": "survive the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> = 在终止或届满后继续有效。survive 在法律英语中的特殊含义是‘存续/继续有效’。"
             },
             {
-              "prompt": "10. Either Party may terminate this Agreement ______ if the other Party commits a material breach.",
+              "prompt": "10. Either <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement ______ if the other <span class=\"term\" data-def=\"当事人\">Party</span> commits a <span class=\"term\" data-def=\"重大的\">material</span> breach.",
               "options": [
-                "for convenience",
+                "for <span class=\"term\" data-def=\"便利\">convenience</span>",
                 "for cause",
                 "for reason",
                 "with cause"
               ],
               "answer": "for cause",
-              "explanation": "terminate for cause = 因故终止/因违约终止，需要正当理由。对比 terminate for convenience（无因终止）。cause 在此意为‘正当理由/事由’。"
+              "explanation": "<span class=\"term\" data-def=\"因故终止\">terminate for cause</span> = 因故终止/因违约终止，需要正当理由。对比 <span class=\"term\" data-def=\"无因终止\">terminate for convenience</span>（无因终止）。cause 在此意为‘正当理由/事由’。"
             }
           ]
         },
@@ -652,15 +652,15 @@
               "prompt": "11. <span class=\"term\" data-def=\"届满/到期\">expiration</span> 和 <span class=\"term\" data-def=\"终止/解除\">termination</span> 的区别是什么？",
               "options": [
                 "两者含义完全相同",
-                "expiration 是自然到期，termination 是主动终止",
-                "expiration 更正式，termination 更口语",
-                "expiration 用于短期合同，termination 用于长期合同"
+                "<span class=\"term\" data-def=\"届满\">expiration</span> 是自然到期，<span class=\"term\" data-def=\"终止\">termination</span> 是主动终止",
+                "<span class=\"term\" data-def=\"届满\">expiration</span> 更正式，<span class=\"term\" data-def=\"终止\">termination</span> 更口语",
+                "<span class=\"term\" data-def=\"届满\">expiration</span> 用于短期合同，<span class=\"term\" data-def=\"终止\">termination</span> 用于长期合同"
               ],
-              "answer": "expiration 是自然到期，termination 是主动终止",
-              "explanation": "expiration 指合同期限自然到期（如：合同约定2年期，2年后自然到期），termination 指一方或双方主动提前结束合同。两者是合同结束的两种不同方式。"
+              "answer": "<span class=\"term\" data-def=\"届满\">expiration</span> 是自然到期，<span class=\"term\" data-def=\"终止\">termination</span> 是主动终止",
+              "explanation": "<span class=\"term\" data-def=\"届满\">expiration</span> 指合同期限自然到期（如：合同约定2年期，2年后自然到期），<span class=\"term\" data-def=\"终止\">termination</span> 指一方或双方主动提前结束合同。两者是合同结束的两种不同方式。"
             },
             {
-              "prompt": "12. 合同中的 <span class=\"term\" data-def=\"存续条款\">survival</span> clause（存续条款）的作用是什么？",
+              "prompt": "12. 合同中的 <span class=\"term\" data-def=\"存续条款\">survival</span> <span class=\"term\" data-def=\"条款\">clause</span>（存续条款）的作用是什么？",
               "options": [
                 "让合同永远不会终止",
                 "自动续期合同",
@@ -668,21 +668,21 @@
                 "允许一方单方面修改合同"
               ],
               "answer": "保密、赔偿等条款在合同终止后仍约束双方",
-              "explanation": "survival clause（存续条款）规定合同中某些条款（如保密义务、赔偿责任、责任限制等）在合同终止或届满后继续有效。这确保了合同结束后，某些重要义务仍然受到法律保护。"
+              "explanation": "<span class=\"term\" data-def=\"存续条款\">survival</span> <span class=\"term\" data-def=\"条款\">clause</span>（存续条款）规定合同中某些条款（如保密义务、赔偿责任、责任限制等）在合同终止或届满后继续有效。这确保了合同结束后，某些重要义务仍然受到法律保护。"
             },
             {
-              "prompt": "13. <span class=\"term\" data-def=\"生效日期\">effective date</span> 和 <span class=\"term\">execution date</span> 有什么关系？",
+              "prompt": "13. <span class=\"term\" data-def=\"生效日期\">effective date</span> 和 <span class=\"term\" data-def=\"签署日期\">execution date</span> 有什么关系？",
               "options": [
                 "完全相同，只是表述不同",
-                "<span class=\"term\" data-def=\"生效日期\">effective date</span> 是合同生效日期，execution date 是合同签署日期，两者可以不同",
-                "<span class=\"term\" data-def=\"生效日期\">effective date</span> 一定早于 execution date",
-                "execution date 是合同终止日期"
+                "<span class=\"term\" data-def=\"生效日期\">effective date</span> 是合同生效日期，<span class=\"term\" data-def=\"签署日期\">execution date</span> 是合同签署日期，两者可以不同",
+                "<span class=\"term\" data-def=\"生效日期\">effective date</span> 一定早于 <span class=\"term\" data-def=\"签署日期\">execution date</span>",
+                "<span class=\"term\" data-def=\"签署日期\">execution date</span> 是合同终止日期"
               ],
-              "answer": "effective date 是合同生效日期，execution date 是合同签署日期，两者可以不同",
-              "explanation": "effective date（生效日期）是合同开始产生法律效力的日期，可以追溯到过去或延后到未来。execution date（签署日期）是各方实际签署合同的日期。两者可能不同，例如3月签署但约定1月1日生效（追溯生效）。"
+              "answer": "<span class=\"term\" data-def=\"生效日期\">effective date</span> 是合同生效日期，<span class=\"term\" data-def=\"签署日期\">execution date</span> 是合同签署日期，两者可以不同",
+              "explanation": "<span class=\"term\" data-def=\"生效日期\">effective date</span>（生效日期）是合同开始产生法律效力的日期，可以追溯到过去或延后到未来。<span class=\"term\" data-def=\"签署日期\">execution date</span>（签署日期）是各方实际签署合同的日期。两者可能不同，例如3月签署但约定1月1日生效（追溯生效）。"
             },
             {
-              "prompt": "14. <span class=\"term\">held to be</span> 在法律语境中的正确翻译是？（复习错题）",
+              "prompt": "14. <span class=\"term\" data-def=\"被裁定为\">held to be</span> 在法律语境中的正确翻译是？（复习错题）",
               "options": [
                 "被认为是",
                 "被持有为",
@@ -690,10 +690,10 @@
                 "被保留为"
               ],
               "answer": "被裁定为",
-              "explanation": "held to be 中 hold = 裁定（法律用语），held to be = 被裁定为/被判定为。不要译为日常含义的‘被认为是’。（复习第1天错题）"
+              "explanation": "<span class=\"term\" data-def=\"被裁定为\">held to be</span> 中 <span class=\"term\" data-def=\"认定；持有\">hold</span> = 裁定（法律用语），<span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为/被判定为。不要译为日常含义的‘被认为是’。（复习第1天错题）"
             },
             {
-              "prompt": "15. “<span class=\"term\" data-def=\"尽管/不受…影响\">Notwithstanding</span> anything to the contrary contained <span class=\"term\">herein</span>” 的正确翻译是？",
+              "prompt": "15. “<span class=\"term\" data-def=\"尽管/不受…影响\">Notwithstanding</span> anything to the contrary contained <span class=\"term\" data-def=\"本协议中\">herein</span>” 的正确翻译是？",
               "options": [
                 "不承担本协议中的任何相反责任",
                 "尽管本协议中有任何相反规定",
@@ -701,7 +701,7 @@
                 "本协议中的相反条款不适用"
               ],
               "answer": "尽管本协议中有任何相反规定",
-              "explanation": "Notwithstanding anything to the contrary contained herein = 尽管本协议中有任何相反规定。notwithstanding = 尽管；to the contrary = 相反的；herein = 在本协议中。这是合同中的高频固定表达。"
+              "explanation": "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary contained <span class=\"term\" data-def=\"本协议中\">herein</span> = 尽管本协议中有任何相反规定。<span class=\"term\" data-def=\"尽管\">notwithstanding</span> = 尽管；to the contrary = 相反的；<span class=\"term\" data-def=\"本协议中\">herein</span> = 在本协议中。这是合同中的高频固定表达。"
             }
           ]
         },
@@ -711,11 +711,11 @@
           "questions": [
             {
               "prompt": "1. <span class=\"en-text\">This Agreement shall be effective as of the Effective Date and shall remain in full force and effect for an initial term of two (2) years, unless earlier terminated pursuant to Section 10 hereof.</span>",
-              "source": "This Agreement shall be effective as of the Effective Date and shall remain in full force and effect for an initial term of two (2) years, unless earlier terminated pursuant to Section 10 hereof.",
+              "source": "This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be effective <span class=\"term\" data-def=\"自…起\">as of</span> the <span class=\"term\" data-def=\"生效日期\">Effective Date</span> and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years, unless earlier terminated pursuant to Section 10 <span class=\"term\" data-def=\"本协议的\">hereof</span>.",
               "reference": "本协议自生效日期起生效，初始期限为两（2）年，在此期间保持完全有效，但根据本协议第10条提前终止的除外。",
               "rubric": [
                 {
-                  "en": "shall be effective as of",
+                  "en": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be effective <span class=\"term\" data-def=\"自…起\">as of</span>",
                   "ideal": "自……起生效",
                   "accept": [
                     "从……起生效",
@@ -724,10 +724,10 @@
                   "wrong": [
                     "将有效"
                   ],
-                  "note": "as of = 自……起；effective = 生效"
+                  "note": "<span class=\"term\" data-def=\"自…起\">as of</span> = 自……起；effective = 生效"
                 },
                 {
-                  "en": "remain in full force and effect",
+                  "en": "<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
                   "ideal": "保持完全有效",
                   "accept": [
                     "持续完全有效",
@@ -737,10 +737,10 @@
                     "保持有效",
                     "仍然有效"
                   ],
-                  "note": "in full force and effect 是法律固定搭配，必须完整翻译，不可简化为“有效”（复习错题）"
+                  "note": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 是法律固定搭配，必须完整翻译，不可简化为“有效”（复习错题）"
                 },
                 {
-                  "en": "for an initial term of two (2) years",
+                  "en": "for an <span class=\"term\" data-def=\"初始期限\">initial term</span> of two (2) years",
                   "ideal": "初始期限为两（2）年",
                   "accept": [
                     "初始期限两年"
@@ -748,7 +748,7 @@
                   "wrong": [
                     "首期两年"
                   ],
-                  "note": "initial term = 初始期限"
+                  "note": "<span class=\"term\" data-def=\"初始期限\">initial term</span> = 初始期限"
                 },
                 {
                   "en": "unless earlier terminated",
@@ -762,7 +762,7 @@
                   "note": "unless earlier terminated = 除非提前终止"
                 },
                 {
-                  "en": "pursuant to Section 10 hereof",
+                  "en": "pursuant to Section 10 <span class=\"term\" data-def=\"本协议的\">hereof</span>",
                   "ideal": "根据本协议第10条",
                   "accept": [
                     "依据本协议第10条"
@@ -770,17 +770,17 @@
                   "wrong": [
                     "按照第10条"
                   ],
-                  "note": "pursuant to = 根据/依据；hereof = of this Agreement（本协议的）"
+                  "note": "pursuant to = 根据/依据；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）"
                 }
               ]
             },
             {
               "prompt": "2. <span class=\"en-text\">Upon the expiration of the initial term, this Agreement shall automatically renew for successive one (1) year periods, unless either Party provides written notice of non-renewal at least ninety (90) days prior to the expiration of the then-current term.</span>",
-              "source": "Upon the expiration of the initial term, this Agreement shall automatically renew for successive one (1) year periods, unless either Party provides written notice of non-renewal at least ninety (90) days prior to the expiration of the then-current term.",
+              "source": "Upon the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"初始期限\">initial term</span>, this Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> automatically renew for successive one (1) year periods, unless either <span class=\"term\" data-def=\"当事人\">Party</span> provides written notice of non-<span class=\"term\" data-def=\"续期\">renewal</span> at least ninety (90) days prior to the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"彼时现行的\">then-current</span> <span class=\"term\" data-def=\"期限\">term</span>.",
               "reference": "初始期限届满后，本协议应自动续期为连续的一（1）年期间，除非任何一方在当时有效期限届满至少九十（90）日前发出不续期的书面通知。",
               "rubric": [
                 {
-                  "en": "Upon the expiration of the initial term",
+                  "en": "Upon the <span class=\"term\" data-def=\"届满\">expiration</span> of the <span class=\"term\" data-def=\"初始期限\">initial term</span>",
                   "ideal": "初始期限届满后",
                   "accept": [
                     "在初始期限到期后",
@@ -789,7 +789,7 @@
                   "wrong": [
                     "在初始学期结束后"
                   ],
-                  "note": "upon the expiration of = 在……届满后"
+                  "note": "upon the <span class=\"term\" data-def=\"届满\">expiration</span> of = 在……届满后"
                 },
                 {
                   "en": "automatically renew",
@@ -815,7 +815,7 @@
                   "note": "successive = 连续的/相继的"
                 },
                 {
-                  "en": "written notice of non-renewal",
+                  "en": "written notice of non-<span class=\"term\" data-def=\"续期\">renewal</span>",
                   "ideal": "不续期的书面通知",
                   "accept": [
                     "书面的不续约通知"
@@ -823,10 +823,10 @@
                   "wrong": [
                     "书面通知"
                   ],
-                  "note": "non-renewal = 不续期，必须翻译出来"
+                  "note": "non-<span class=\"term\" data-def=\"续期\">renewal</span> = 不续期，必须翻译出来"
                 },
                 {
-                  "en": "the then-current term",
+                  "en": "the <span class=\"term\" data-def=\"彼时现行的\">then-current</span> <span class=\"term\" data-def=\"期限\">term</span>",
                   "ideal": "当时有效的期限/届时的期限",
                   "accept": [
                     "当期期限",
@@ -836,7 +836,7 @@
                     "当前期限",
                     "现在的期限"
                   ],
-                  "note": "then-current = 当时有效的/届时的（非“现在的”）"
+                  "note": "<span class=\"term\" data-def=\"彼时现行的\">then-current</span> = 当时有效的/届时的（非“现在的”）"
                 }
               ]
             }
@@ -849,55 +849,55 @@
             {
               "prompt": "1. 尽管本协议中有任何相反规定，第7条（保密）和第9条（赔偿）中规定的义务在本协议终止或届满后继续有效，并在此后两（2）年内保持完全有效。",
               "source": "尽管本协议中有任何相反规定，第7条（保密）和第9条（赔偿）中规定的义务在本协议终止或届满后继续有效，并在此后两（2）年内保持完全有效。",
-              "reference": "Notwithstanding anything to the contrary contained herein, the obligations set forth in Section 7 (Confidentiality) and Section 9 (Indemnification) shall survive the termination or expiration of this Agreement and shall remain in full force and effect for a period of two (2) years thereafter.",
+              "reference": "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary contained <span class=\"term\" data-def=\"本协议中\">herein</span>, the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> <span class=\"term\" data-def=\"规定\">set forth</span> in Section 7 (Confidentiality) and Section 9 (<span class=\"term\" data-def=\"赔偿；补偿\">Indemnification</span>) <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> survive the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span> of this Agreement and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> for a period of two (2) years thereafter.",
               "rubric": [
                 {
                   "en": "尽管……任何相反规定",
-                  "ideal": "Notwithstanding anything to the contrary contained herein",
+                  "ideal": "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary contained <span class=\"term\" data-def=\"本协议中\">herein</span>",
                   "accept": [
-                    "Notwithstanding anything to the contrary herein",
-                    "Notwithstanding any provision to the contrary"
+                    "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary <span class=\"term\" data-def=\"本协议中\">herein</span>",
+                    "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> any <span class=\"term\" data-def=\"规定\">provision</span> to the contrary"
                   ],
                   "wrong": [
                     "Despite the contrary",
                     "Although there are contrary provisions"
                   ],
-                  "note": "Notwithstanding anything to the contrary 是法律固定表达"
+                  "note": "<span class=\"term\" data-def=\"尽管\">Notwithstanding</span> anything to the contrary 是法律固定表达"
                 },
                 {
                   "en": "规定的义务",
-                  "ideal": "the obligations set forth in",
+                  "ideal": "the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> <span class=\"term\" data-def=\"规定\">set forth</span> in",
                   "accept": [
-                    "the obligations provided in",
-                    "the obligations under"
+                    "the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> provided in",
+                    "the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> under"
                   ],
                   "wrong": [
-                    "the obligations written in"
+                    "the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> written in"
                   ],
-                  "note": "set forth = 规定/载明（法律用语）"
+                  "note": "<span class=\"term\" data-def=\"规定\">set forth</span> = 规定/载明（法律用语）"
                 },
                 {
                   "en": "终止或届满后继续有效",
-                  "ideal": "shall survive the termination or expiration",
+                  "ideal": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> survive the <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span>",
                   "accept": [
-                    "shall survive termination or expiration"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> survive <span class=\"term\" data-def=\"终止\">termination</span> or <span class=\"term\" data-def=\"届满\">expiration</span>"
                   ],
                   "wrong": [
-                    "shall continue after termination"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> continue after <span class=\"term\" data-def=\"终止\">termination</span>"
                   ],
                   "note": "survive 是法律英语中“存续/继续有效”的标准用词"
                 },
                 {
                   "en": "保持完全有效",
-                  "ideal": "remain in full force and effect",
+                  "ideal": "<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>",
                   "accept": [
-                    "continue in full force and effect"
+                    "continue <span class=\"term\" data-def=\"完全有效\">in full force and effect</span>"
                   ],
                   "wrong": [
-                    "remain effective",
-                    "remain valid"
+                    "<span class=\"term\" data-def=\"保持；仍然\">remain</span> effective",
+                    "<span class=\"term\" data-def=\"保持；仍然\">remain</span> valid"
                   ],
-                  "note": "in full force and effect 是固定搭配，不可简化"
+                  "note": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 是固定搭配，不可简化"
                 },
                 {
                   "en": "此后两（2）年内",
@@ -920,7 +920,7 @@
     {
       "type": "summary",
       "heading": "7. 今日小结",
-      "html": "<ol><li><strong><span class=\"term\" data-def=\"生效日期\">effective date</span></strong>——生效日期，合同开始产生法律效力的日期，可以与签署日不同</li><li><strong><span class=\"term\" data-def=\"期限\">term</span></strong>——多义词！合同期限条款中 = 期限/有效期（复数 terms + conditions = 条款）</li><li><strong><span class=\"term\">commence</span> / <span class=\"term\" data-def=\"开始/生效\">commencement</span></strong>——开始/起始，法律英语中代替 begin/start 的正式用词</li><li><strong><span class=\"term\" data-def=\"届满/到期\">expiration</span> vs. <span class=\"term\" data-def=\"终止/解除\">termination</span></strong>——expiration 是自然到期，termination 是主动终止，两者覆盖合同结束的不同情形</li><li><strong><span class=\"term\" data-def=\"续期/续签\">renewal</span></strong>——续期/续展；<span class=\"term\">automatic renewal</span> = 自动续期</li><li><strong><span class=\"term\">terminate for cause</span></strong> = 因故/因违约终止；<strong><span class=\"term\">terminate for convenience</span></strong> = 任意/无因终止（for convenience ≠ “为了方便”）</li><li><strong><span class=\"term\" data-def=\"存续条款\">survival</span></strong>——存续条款，规定合同终止后哪些条款继续有效（保密、赔偿等）</li><li><strong><span class=\"term\" data-def=\"保持；继续\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong>——保持完全有效（固定搭配，不可简化）</li><li><strong><span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span></strong>——尽管/不论，常用于 “notwithstanding anything to the contrary”</li><li><strong><span class=\"term\" data-def=\"自…起/截至\">as of</span></strong>——自……起，用于指定合同生效日期</li><li><strong><span class=\"term\">then-current</span></strong>——当时有效的/届时的，法律特有表达</li><li><strong><span class=\"term\" data-def=\"永久的\">perpetual</span></strong>——永久的/永续的，如 perpetual license = 永久许可证</li></ol>\n<p><strong>第1周回顾：</strong>本周5天新课覆盖了合同的基本结构（第1天）→ 当事人（第2天）→ 定义条款（第3天）→ 标的与履行（第4天）→ 生效与期限（今天）。明天是<strong>复习日</strong>，将综合巩固第1周所有内容，不引入新知识点。</p>"
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"生效日期\">effective date</span></strong>——生效日期，合同开始产生法律效力的日期，可以与签署日不同</li><li><strong><span class=\"term\" data-def=\"期限\">term</span></strong>——多义词！合同期限条款中 = 期限/有效期（复数 terms + <span class=\"term\" data-def=\"条件（复数）\">conditions</span> = 条款）</li><li><strong><span class=\"term\" data-def=\"开始；起始\">commence</span> / <span class=\"term\" data-def=\"开始/生效\">commencement</span></strong>——开始/起始，法律英语中代替 begin/start 的正式用词</li><li><strong><span class=\"term\" data-def=\"届满/到期\">expiration</span> vs. <span class=\"term\" data-def=\"终止/解除\">termination</span></strong>——<span class=\"term\" data-def=\"届满\">expiration</span> 是自然到期，<span class=\"term\" data-def=\"终止\">termination</span> 是主动终止，两者覆盖合同结束的不同情形</li><li><strong><span class=\"term\" data-def=\"续期/续签\">renewal</span></strong>——续期/续展；<span class=\"term\" data-def=\"自动续期\">automatic renewal</span> = 自动续期</li><li><strong><span class=\"term\" data-def=\"因故终止\">terminate for cause</span></strong> = 因故/因违约终止；<strong><span class=\"term\" data-def=\"无因终止\">terminate for convenience</span></strong> = 任意/无因终止（for <span class=\"term\" data-def=\"便利\">convenience</span> ≠ “为了方便”）</li><li><strong><span class=\"term\" data-def=\"存续条款\">survival</span></strong>——存续条款，规定合同终止后哪些条款继续有效（保密、赔偿等）</li><li><strong><span class=\"term\" data-def=\"保持；继续\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong>——保持完全有效（固定搭配，不可简化）</li><li><strong><span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span></strong>——尽管/不论，常用于 “<span class=\"term\" data-def=\"尽管\">notwithstanding</span> anything to the contrary”</li><li><strong><span class=\"term\" data-def=\"自…起/截至\">as of</span></strong>——自……起，用于指定合同生效日期</li><li><strong><span class=\"term\" data-def=\"彼时现行的\">then-current</span></strong>——当时有效的/届时的，法律特有表达</li><li><strong><span class=\"term\" data-def=\"永久的\">perpetual</span></strong>——永久的/永续的，如 <span class=\"term\" data-def=\"永久的\">perpetual</span> license = 永久许可证</li></ol>\n<p><strong>第1周回顾：</strong>本周5天新课覆盖了合同的基本结构（第1天）→ 当事人（第2天）→ 定义条款（第3天）→ 标的与履行（第4天）→ 生效与期限（今天）。明天是<strong>复习日</strong>，将综合巩固第1周所有内容，不引入新知识点。</p>"
     }
   ]
 }

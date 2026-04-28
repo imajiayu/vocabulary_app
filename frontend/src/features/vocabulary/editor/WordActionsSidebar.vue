@@ -59,6 +59,14 @@
 
     <div class="actions-group">
       <template v-if="isEditing">
+        <button
+          v-if="isCreating"
+          @click="handleFetchDefinition"
+          :disabled="fetchDefDisabled"
+          class="action-btn btn-outline"
+        >
+          {{ isFetchingDefinition ? '获取中…' : '获取释义' }}
+        </button>
         <button @click="handleSave" :disabled="saveButtonDisabled" class="action-btn btn-primary">
           {{ saveButtonText }}
         </button>
@@ -89,10 +97,12 @@
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useWordEditorStore } from '../stores/wordEditor';
+import { useToast } from '@/shared/composables/useToast';
 
 // 使用 Pinia Store
 const store = useWordEditorStore();
-const { currentWord, isEditing, duplicateCheckState, isCreating, createContext } = storeToRefs(store);
+const { currentWord, isEditing, duplicateCheckState, isCreating, createContext, isFetchingDefinition } = storeToRefs(store);
+const toast = useToast();
 
 // Computed property to check if word has been marked as forgotten (lapse > 0)
 const isForgetButtonUsed = computed(() => {
@@ -164,6 +174,16 @@ const handleDelete = () => {
 
 const handleSave = () => {
   store.save();
+};
+
+const fetchDefDisabled = computed(() => {
+  if (isFetchingDefinition.value) return true;
+  return !currentWord.value?.word.trim();
+});
+
+const handleFetchDefinition = async () => {
+  const ok = await store.fetchDefinitionForCreate();
+  if (!ok && !isFetchingDefinition.value) toast.warning('获取释义失败，请检查单词或稍后再试');
 };
 </script>
 

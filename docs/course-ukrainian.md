@@ -250,7 +250,7 @@
 
 **blocks 中的 html 字段**支持内联标签：`<span class="uk-word">`, `<strong>`, `<em>`, `<code>`。
 
-**所有 `.uk-word` 元素必须带 `data-def` 属性**，包含该词在当前语境下的中文释义。这是单词点击气泡显示释义的唯一来源。词形变化的释义应标注语法信息（如"桌子（与格）"）。示例：
+**所有 `.uk-word` 元素必须带 `data-def` 属性**，包含该词在当前语境下的中文释义。这是单词点击气泡显示释义的首选来源（兜底见下方"释义解析优先级"）。词形变化的释义应标注语法信息（如"桌子（与格）"）。示例：
 ```html
 <span class="uk-word" data-def="桌子">стіл</span>
 <span class="uk-word" data-def="桌子（与格）">столу</span>
@@ -260,6 +260,19 @@ JSON 中的 html 字段同理：
 { "type": "p", "html": "Це <span class=\"uk-word\" data-def=\"桌子\">стіл</span>" }
 ```
 vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSection.vue` 自动输出为 `data-def`，无需在 html 中重复标注。
+
+### 释义解析优先级（前端运行时）
+
+前端在课程页"点击单词"和"选中文本→添加"两条路径上，释义按以下顺序解析：
+
+1. **DOM 节点上的 `data-def`** —— 当前课时直接命中，最准确（语境特化的释义如词形变化在这里才有意义）
+2. **跨课程释义索引** —— `useCourseDefinitionLookup.ts` 在课时页加载时后台扫描同语言的所有课时 JSON（提取 `vocab-preload.words[].def` + 所有 html 里的 `<span class="uk-word" data-def="...">`），建成 `Map<normalize(word), def>`。当 DOM 缺 `data-def` 时按 normalize 后的文本（NFC + trim + lowercase）兜底匹配
+3. 都没有 → 进入空白创建态，由用户/释义爬取填写
+
+**索引不是放松规范的借口**：
+- 索引只覆盖"在至少一个课时里已被正确标注过 `data-def`"的词。**首次出现的新词必须显式标 `data-def`**，否则索引里也没有数据
+- 索引按精确文本匹配，词形变化（столу 之于 стіл）不会自动归并 —— 每个变体在 DOM 上仍要带自己的语境化 `data-def`
+- 索引是兜底机制，给已经存在但偶尔漏标的词补救；不是免标许可
 
 ### 乌克兰语可点击标记规范
 

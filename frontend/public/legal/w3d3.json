@@ -1,5 +1,5 @@
 {
-  "title": "第3周 第3天 — 支付条款（Payment Terms）",
+  "title": "第3周 第3天 — 支付条款（<span class=\"term\" data-def=\"付款条件\">Payment Terms</span>）",
   "objective": "掌握商务合同支付条款的核心词汇，包括发票、付款期限（<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>/60）、分期付款、预付款和质保金等概念，能够准确翻译和理解合同中典型的支付条款。",
   "sections": [
     {
@@ -7,11 +7,11 @@
       "blocks": [
         {
           "type": "p",
-          "html": "<strong>上节回顾：</strong>上节课学习了“对价”（consideration）的法律含义——有效合同必须有对价，对价分为有价对价（<span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>）、充分对价（<span class=\"term\" data-def=\"充分对价；足够对价\">adequate consideration</span>）和名义对价（<span class=\"term\" data-def=\"名义对价；象征性对价\">nominal consideration</span>）等类型。<span class=\"term\" data-def=\"等价交换；一物换一物\">quid pro quo</span>（等价交换）是对价的核心本质。本节进入更具操作性的“支付条款”学习。"
+          "html": "<strong>上节回顾：</strong>上节课学习了“对价”（<span class=\"term\" data-def=\"对价\">consideration</span>）的法律含义——有效合同必须有对价，对价分为有价对价（<span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>）、充分对价（<span class=\"term\" data-def=\"充分对价；足够对价\">adequate consideration</span>）和名义对价（<span class=\"term\" data-def=\"名义对价；象征性对价\">nominal consideration</span>）等类型。<span class=\"term\" data-def=\"等价交换；一物换一物\">quid pro quo</span>（等价交换）是对价的核心本质。本节进入更具操作性的“支付条款”学习。"
         },
         {
           "type": "error-warn",
-          "html": "<strong>错题复习（mistakes.md 待攻克项）：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（❌ 错误：执行条款）</li><li><span class=\"term\" data-def=\"完全有效；具有完全效力\">in full force and effect</span> = 完全有效（⚠️ 注意：必须完整翻译，不可简化为“有效”）</li><li><span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span> = 被裁定为（❌ 错误：“被认为是”——合同语境中 hold = 裁定）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（⚠️ here- 家族词不可省略）</li></ul>"
+          "html": "<strong>错题复习（mistakes.md 待攻克项）：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款（❌ 错误：执行条款）</li><li><span class=\"term\" data-def=\"完全有效；具有完全效力\">in full force and effect</span> = 完全有效（⚠️ 注意：必须完整翻译，不可简化为“有效”）</li><li><span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span> = 被裁定为（❌ 错误：“被认为是”——合同语境中 <span class=\"term\" data-def=\"认定；持有\">hold</span> = 裁定）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（⚠️ here- 家族词不可省略）</li></ul>"
         }
       ]
     },
@@ -37,19 +37,19 @@
               "<span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span>",
               "/ˈpeɪmənt tɜːrmz/",
               "n. 付款条件；付款条款",
-              "the <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> herein; standard <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span>"
+              "the <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> <span class=\"term\" data-def=\"本协议中\">herein</span>; standard <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span>"
             ],
             [
               "<span class=\"term\" data-def=\"发票；账单\">invoice</span>",
               "/ˈɪnvɔɪs/",
               "n./v. 发票；账单（动词：开具发票）",
-              "issue/submit an invoice; upon receipt of invoice; undisputed invoice"
+              "issue/submit an <span class=\"term\" data-def=\"发票\">invoice</span>; upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of <span class=\"term\" data-def=\"发票\">invoice</span>; <span class=\"term\" data-def=\"无争议的\">undisputed</span> <span class=\"term\" data-def=\"发票\">invoice</span>"
             ],
             [
               "<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>",
               "/nɛt ˈθɜːrti/",
               "phr. 净30天（自发票日起30天内付清）",
-              "payment due <span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> days from date of invoice"
+              "<span class=\"term\" data-def=\"付款\">payment</span> due <span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> days from date of <span class=\"term\" data-def=\"发票\">invoice</span>"
             ],
             [
               "<span class=\"term\" data-def=\"净60天（自发票日起60天内付清）\">net 60</span>",
@@ -61,7 +61,7 @@
               "<span class=\"term\" data-def=\"分期付款；期款\">installment</span>",
               "/ɪnˈstɔːlmənt/",
               "n. 分期付款；期款（英: instalment）",
-              "pay in installments; equal monthly installments; final installment"
+              "pay in installments; equal monthly installments; final <span class=\"term\" data-def=\"分期付款\">installment</span>"
             ],
             [
               "<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>",
@@ -73,43 +73,43 @@
               "<span class=\"term\" data-def=\"质保金；尾款\">retention</span>",
               "/rɪˈtɛnʃən/",
               "n. 质保金；尾款（完工后扣留一定比例）",
-              "retention of 10%; release of retention; retention money"
+              "<span class=\"term\" data-def=\"质保金\">retention</span> of 10%; release of <span class=\"term\" data-def=\"质保金\">retention</span>; <span class=\"term\" data-def=\"质保金\">retention</span> money"
             ],
             [
               "<span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>",
               "/djuː deɪt/",
               "n. 到期日；截止付款日",
-              "the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span> of payment; on or before the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>"
+              "the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span> of <span class=\"term\" data-def=\"付款\">payment</span>; on or before the <span class=\"term\" data-def=\"到期日；截止付款日\">due date</span>"
             ],
             [
               "<span class=\"term\" data-def=\"逾期的；过期未付的\">overdue</span>",
               "/ˌoʊvərˈdjuː/",
               "adj. 逾期的；过期未付的",
-              "overdue payment; any amounts overdue; past due and overdue"
+              "<span class=\"term\" data-def=\"逾期的\">overdue</span> <span class=\"term\" data-def=\"付款\">payment</span>; any amounts <span class=\"term\" data-def=\"逾期的\">overdue</span>; past due and <span class=\"term\" data-def=\"逾期的\">overdue</span>"
             ],
             [
               "<span class=\"term\" data-def=\"汇款；付款（书面正式）\">remittance</span>",
               "/rɪˈmɪtəns/",
               "n. 汇款；付款（书面正式）",
-              "wire remittance; remittance advice; remittance of funds"
+              "wire <span class=\"term\" data-def=\"汇款\">remittance</span>; <span class=\"term\" data-def=\"汇款\">remittance</span> advice; <span class=\"term\" data-def=\"汇款\">remittance</span> of funds"
             ],
             [
               "<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>",
               "/ˈwaɪər ˈtrænsˌfɜːr/",
               "n. 电汇；电报划款（= telegraphic transfer / T/T）",
-              "by <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>; <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> to the designated account"
+              "by <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>; <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> to the <span class=\"term\" data-def=\"指定的\">designated</span> account"
             ],
             [
               "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>",
               "/lʊmp sʊm/",
               "n. 一次性总付；整笔付款",
-              "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> payment; pay in a <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>; fixed <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> fee"
+              "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> <span class=\"term\" data-def=\"付款\">payment</span>; pay in a <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>; fixed <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> fee"
             ],
             [
               "<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>",
               "/ˈmaɪlstoʊn ˈpeɪmənt/",
               "n. 里程碑付款（达到特定节点后触发付款）",
-              "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>; milestone-based <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span>"
+              "<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>; <span class=\"term\" data-def=\"里程碑\">milestone</span>-based <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span>"
             ],
             [
               "<span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span>",
@@ -127,19 +127,19 @@
               "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span>",
               "/ˈpeɪmənt ɪn fʊl/",
               "phr. 全额付款；全额清偿",
-              "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final settlement; upon <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span>"
+              "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final <span class=\"term\" data-def=\"结算；和解\">settlement</span>; upon <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span>"
             ],
             [
               "<span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span>",
               "/ˈpeɪmənt ˈʃɛdjuːl/",
               "n. 付款计划；付款时间表",
-              "the <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span> attached hereto; as per the <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span>"
+              "the <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span> <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>; as per the <span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span>"
             ]
           ]
         },
         {
           "type": "tip",
-          "html": "<strong>词源记忆：</strong><ul><li><span class=\"term\" data-def=\"发票；账单\">invoice</span>：来自法语 <em>envoyer</em>（送出），发票是“送出的账单”。</li><li><span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>：这里的 <em>net</em> 不是“网络”，而是拉丁语 <em>netus</em>（纯的/净的），意为“净30天内清款”。</li><li><span class=\"term\" data-def=\"分期付款；期款\">installment</span>：<em>install</em>（就位）+ <em>-ment</em>，每期付款是“分批就位”的钱。</li><li><span class=\"term\" data-def=\"质保金；尾款\">retention</span>：来自 <em>retain</em>（保留），质保金是“暂时扣留的钱”，质保期满后释放。</li><li><span class=\"term\" data-def=\"汇款；付款（书面正式）\">remittance</span>：<em>remit</em>（汇寄）+ <em>-ance</em>，比 payment 更正式，多用于国际汇款语境。</li></ul>"
+          "html": "<strong>词源记忆：</strong><ul><li><span class=\"term\" data-def=\"发票；账单\">invoice</span>：来自法语 <em>envoyer</em>（送出），发票是“送出的账单”。</li><li><span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>：这里的 <em><span class=\"term\" data-def=\"净额；扣除后\">net</span></em> 不是“网络”，而是拉丁语 <em>netus</em>（纯的/净的），意为“净30天内清款”。</li><li><span class=\"term\" data-def=\"分期付款；期款\">installment</span>：<em>install</em>（就位）+ <em>-ment</em>，每期付款是“分批就位”的钱。</li><li><span class=\"term\" data-def=\"质保金；尾款\">retention</span>：来自 <em>retain</em>（保留），质保金是“暂时扣留的钱”，质保期满后释放。</li><li><span class=\"term\" data-def=\"汇款；付款（书面正式）\">remittance</span>：<em><span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span></em>（汇寄）+ <em>-ance</em>，比 <span class=\"term\" data-def=\"付款\">payment</span> 更正式，多用于国际汇款语境。</li></ul>"
         }
       ]
     },
@@ -160,7 +160,7 @@
           ],
           "rows": [
             [
-              "payment shall be <span class=\"term\" data-def=\"到期应付\">due and payable</span>",
+              "<span class=\"term\" data-def=\"付款\">payment</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be <span class=\"term\" data-def=\"到期应付\">due and payable</span>",
               "付款到期应予支付",
               {
                 "en": "<span class=\"en-text\">All amounts shall be due and payable within thirty (30) days of invoice.</span>",
@@ -168,7 +168,7 @@
               }
             ],
             [
-              "upon <span class=\"term\">receipt</span> of <span class=\"term\" data-def=\"发票；账单\">invoice</span>",
+              "upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of <span class=\"term\" data-def=\"发票；账单\">invoice</span>",
               "收到发票后（即付）",
               {
                 "en": "<span class=\"en-text\">Client shall remit payment upon receipt of a valid invoice from Provider.</span>",
@@ -176,7 +176,7 @@
               }
             ],
             [
-              "<span class=\"term\">net</span> [number] days from the date of <span class=\"term\" data-def=\"发票；账单\">invoice</span>",
+              "<span class=\"term\" data-def=\"净额；扣除后\">net</span> [number] days from the date of <span class=\"term\" data-def=\"发票；账单\">invoice</span>",
               "自发票日起净[天数]天",
               {
                 "en": "<span class=\"en-text\">Payment is due net 30 days from the date of invoice.</span>",
@@ -200,7 +200,7 @@
               }
             ],
             [
-              "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final <span class=\"term\">settlement</span>",
+              "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final <span class=\"term\" data-def=\"结算；和解\">settlement</span>",
               "全额最终结算付款",
               {
                 "en": "<span class=\"en-text\">The foregoing amounts constitute payment in full and final settlement of all claims.</span>",
@@ -208,7 +208,7 @@
               }
             ],
             [
-              "<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> to the <span class=\"term\">designated</span> bank account",
+              "<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> to the <span class=\"term\" data-def=\"指定的\">designated</span> bank account",
               "电汇至指定银行账户",
               {
                 "en": "<span class=\"en-text\">All payments shall be made by wire transfer to the designated bank account set forth in Schedule A.</span>",
@@ -233,7 +233,7 @@
       "blocks": [
         {
           "type": "h3",
-          "html": "3.1 <span class=\"term\" data-def=\"预付款；定金\">advance payment</span> vs. deposit vs. <span class=\"term\" data-def=\"首付款\">down payment</span>"
+          "html": "3.1 <span class=\"term\" data-def=\"预付款；定金\">advance payment</span> vs. <span class=\"term\" data-def=\"定金\">deposit</span> vs. <span class=\"term\" data-def=\"首付款\">down payment</span>"
         },
         {
           "type": "p",
@@ -275,7 +275,7 @@
         },
         {
           "type": "h3",
-          "html": "3.2 <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> vs. installment vs. <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>"
+          "html": "3.2 <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> vs. <span class=\"term\" data-def=\"分期付款\">installment</span> vs. <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>"
         },
         {
           "type": "p",
@@ -309,7 +309,7 @@
         },
         {
           "type": "h3",
-          "html": "3.3 remittance vs. payment vs. disbursement"
+          "html": "3.3 <span class=\"term\" data-def=\"汇款\">remittance</span> vs. <span class=\"term\" data-def=\"付款\">payment</span> vs. <span class=\"term\" data-def=\"支出\">disbursement</span>"
         },
         {
           "type": "table",
@@ -321,7 +321,7 @@
           "firstColWord": true,
           "rows": [
             [
-              "<span class=\"term\">payment</span>",
+              "<span class=\"term\" data-def=\"付款\">payment</span>",
               "付款（通用）",
               "最通用，适用于所有付款语境"
             ],
@@ -345,39 +345,39 @@
       "items": [
         {
           "title": "例句 1 — 标准支付条款（分期+质保金）",
-          "sentence": "Client shall pay the Contract Price in the following installments: (i) thirty percent (30%) as an advance payment within five (5) Business Days of the Effective Date; (ii) sixty percent (60%) in equal monthly progress payments subject to a retention of ten percent (10%) of each such payment; and (iii) the retained amounts upon final acceptance of the Deliverables.",
+          "sentence": "Client <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> pay the Contract Price in the following installments: (i) thirty percent (30%) as an <span class=\"term\" data-def=\"预付款\">advance payment</span> within five (5) Business Days of the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>; (ii) sixty percent (60%) in equal monthly progress payments <span class=\"term\" data-def=\"以…为条件\">subject to</span> a <span class=\"term\" data-def=\"质保金\">retention</span> of ten percent (10%) of each such <span class=\"term\" data-def=\"付款\">payment</span>; and (iii) the retained amounts upon final acceptance of the <span class=\"term\" data-def=\"交付成果\">Deliverables</span>.",
           "structure": [
-            "<em>Client shall pay the Contract Price</em> — 主句：甲方应支付合同总价",
+            "<em>Client <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> pay the Contract Price</em> — 主句：甲方应支付合同总价",
             "<em>in the following installments</em> — 方式状语：按以下分期方式",
             "<em>(i) thirty percent (30%) as an <span class=\"term\" data-def=\"预付款；定金\">advance payment</span></em> — 第一期：30%作为预付款",
             "<em>within five (5) Business Days of the <span class=\"term\" data-def=\"生效日期\">Effective Date</span></em> — 时间：生效日起5个工作日内",
             "<em>(ii) sixty percent (60%) in equal monthly progress payments</em> — 第二期：60%按月进度款等额支付",
-            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a retention of ten percent (10%) of each such payment</em> — 条件：每次进度款扣留10%质保金",
+            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a <span class=\"term\" data-def=\"质保金\">retention</span> of ten percent (10%) of each such <span class=\"term\" data-def=\"付款\">payment</span></em> — 条件：每次进度款扣留10%质保金",
             "<em>(iii) the retained amounts upon final acceptance</em> — 第三期：最终验收后释放质保金"
           ],
           "translation": "甲方应按以下分期方式支付合同总价：（一）生效日起五（5）个工作日内，支付30%作为预付款；（二）按月等额支付进度款，共计60%，每次进度款扣留10%作为质保金；（三）交付物最终验收后，支付全部质保金。"
         },
         {
           "title": "例句 2 — 发票与付款期限条款",
-          "sentence": "Provider shall submit invoices to Client on a monthly basis, and all undisputed amounts set forth in such invoices shall be due and payable by Client within thirty (30) days of the date of receipt of each such invoice.",
+          "sentence": "Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> submit invoices to Client on a monthly basis, and all <span class=\"term\" data-def=\"无争议的\">undisputed</span> amounts <span class=\"term\" data-def=\"规定\">set forth</span> in such invoices <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be <span class=\"term\" data-def=\"到期应付\">due and payable</span> by Client within thirty (30) days of the date of <span class=\"term\" data-def=\"收到；收据\">receipt</span> of each such <span class=\"term\" data-def=\"发票\">invoice</span>.",
           "structure": [
-            "<em>Provider shall submit invoices to Client on a monthly basis</em> — 乙方须按月向甲方开具发票",
-            "<em>all undisputed amounts</em> — 所有无异议的款项（注意：<span class=\"term\">undisputed</span> 意味着有争议的款项可暂不支付）",
+            "<em>Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> submit invoices to Client on a monthly basis</em> — 乙方须按月向甲方开具发票",
+            "<em>all <span class=\"term\" data-def=\"无争议的\">undisputed</span> amounts</em> — 所有无异议的款项（注意：<span class=\"term\" data-def=\"无争议的\">undisputed</span> 意味着有争议的款项可暂不支付）",
             "<em><span class=\"term\" data-def=\"规定/载明\">set forth</span> in such invoices</em> — 定语从句修饰 amounts：发票中载明的款项",
-            "<em>shall be due and payable by Client</em> — 法律固定搭配：甲方到期应予支付",
-            "<em>within thirty (30) days of the date of receipt of each such invoice</em> — 时间：收到每张发票之日起30天内"
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be <span class=\"term\" data-def=\"到期应付\">due and payable</span> by Client</em> — 法律固定搭配：甲方到期应予支付",
+            "<em>within thirty (30) days of the date of <span class=\"term\" data-def=\"收到；收据\">receipt</span> of each such <span class=\"term\" data-def=\"发票\">invoice</span></em> — 时间：收到每张发票之日起30天内"
           ],
           "translation": "乙方须按月向甲方开具发票，甲方应在收到每张发票之日起三十（30）天内，支付该发票中载明的所有无异议款项。"
         },
         {
           "title": "例句 3 — 电汇付款方式条款",
-          "sentence": "All payments hereunder shall be made in United States Dollars by wire transfer of immediately available funds to the bank account designated by Provider in writing from time to time, free and clear of any deduction, withholding, or set-off.",
+          "sentence": "All payments <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made in United States Dollars by <span class=\"term\" data-def=\"电汇\">wire transfer</span> of immediately available funds to the bank account <span class=\"term\" data-def=\"指定的\">designated</span> by Provider in writing from time to time, free and clear of any <span class=\"term\" data-def=\"扣款\">deduction</span>, <span class=\"term\" data-def=\"预扣\">withholding</span>, or <span class=\"term\" data-def=\"抵销\">set-off</span>.",
           "structure": [
-            "<em>All payments hereunder</em> — 本协议项下的所有付款（<span class=\"term\">hereunder</span> = under this Agreement）",
-            "<em>shall be made in United States Dollars</em> — 以美元支付",
+            "<em>All payments <span class=\"term\" data-def=\"依本协议\">hereunder</span></em> — 本协议项下的所有付款（<span class=\"term\" data-def=\"依本协议\">hereunder</span> = under this Agreement）",
+            "<em><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made in United States Dollars</em> — 以美元支付",
             "<em>by <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> of immediately available funds</em> — 通过即时可用资金的电汇方式（<em>immediately available funds</em> = 立即可动用的资金，排除支票等需清算的支付方式）",
-            "<em>to the bank account designated by Provider in writing from time to time</em> — 汇至乙方不时以书面方式指定的银行账户",
-            "<em>free and clear of any deduction, withholding, or set-off</em> — 固定搭配：不得有任何扣减、预扣或抵销"
+            "<em>to the bank account <span class=\"term\" data-def=\"指定的\">designated</span> by Provider in writing from time to time</em> — 汇至乙方不时以书面方式指定的银行账户",
+            "<em>free and clear of any <span class=\"term\" data-def=\"扣款\">deduction</span>, <span class=\"term\" data-def=\"预扣\">withholding</span>, or <span class=\"term\" data-def=\"抵销\">set-off</span></em> — 固定搭配：不得有任何扣减、预扣或抵销"
           ],
           "translation": "本协议项下所有款项均应以美元通过电汇即时可用资金的方式支付至乙方不时书面指定的银行账户，且不得有任何扣减、预扣税款或抵销。"
         }
@@ -411,32 +411,32 @@
             {
               "prompt": "1. 质保金（完工后扣留的款项）",
               "options": [
-                "retention",
-                "deposit",
+                "<span class=\"term\" data-def=\"质保金\">retention</span>",
+                "<span class=\"term\" data-def=\"定金\">deposit</span>",
                 "<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>"
               ],
-              "answer": "retention",
-              "explanation": "retention = 质保金，完工后按比例扣留，质保期满后释放。deposit 是押金/定金，advance payment 是预付款。"
+              "answer": "<span class=\"term\" data-def=\"质保金\">retention</span>",
+              "explanation": "<span class=\"term\" data-def=\"质保金\">retention</span> = 质保金，完工后按比例扣留，质保期满后释放。<span class=\"term\" data-def=\"定金\">deposit</span> 是押金/定金，<span class=\"term\" data-def=\"预付款\">advance payment</span> 是预付款。"
             },
             {
               "prompt": "2. 一次性总付（不分期）",
               "options": [
-                "installment",
+                "<span class=\"term\" data-def=\"分期付款\">installment</span>",
                 "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>",
                 "<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>"
               ],
-              "answer": "lump sum",
-              "explanation": "lump sum = 一次性整笔支付。installment 是分期，milestone payment 是里程碑付款（按节点触发）。"
+              "answer": "<span class=\"term\" data-def=\"一次性总付\">lump sum</span>",
+              "explanation": "<span class=\"term\" data-def=\"一次性总付\">lump sum</span> = 一次性整笔支付。<span class=\"term\" data-def=\"分期付款\">installment</span> 是分期，<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span> 是里程碑付款（按节点触发）。"
             },
             {
               "prompt": "3. 逾期未付的（已超过截止日）",
               "options": [
                 "outstanding",
                 "pending",
-                "overdue"
+                "<span class=\"term\" data-def=\"逾期的\">overdue</span>"
               ],
-              "answer": "overdue",
-              "explanation": "overdue = 逾期的、已过截止日未付的。outstanding 偏中性（未结清），pending 是待处理的。"
+              "answer": "<span class=\"term\" data-def=\"逾期的\">overdue</span>",
+              "explanation": "<span class=\"term\" data-def=\"逾期的\">overdue</span> = 逾期的、已过截止日未付的。outstanding 偏中性（未结清），pending 是待处理的。"
             },
             {
               "prompt": "4. 电汇（= T/T）",
@@ -445,8 +445,8 @@
                 "<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>",
                 "cash"
               ],
-              "answer": "wire transfer",
-              "explanation": "wire transfer = 电汇（= T/T）。check 是支票，cash 是现金。"
+              "answer": "<span class=\"term\" data-def=\"电汇\">wire transfer</span>",
+              "explanation": "<span class=\"term\" data-def=\"电汇\">wire transfer</span> = 电汇（= T/T）。check 是支票，cash 是现金。"
             }
           ]
         }
@@ -467,48 +467,48 @@
                 "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>",
                 "<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>"
               ],
-              "answer": "net 30",
-              "explanation": "net 30 = 自发票日起30天内付清。这是最常见的付款期限表述。"
+              "answer": "<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>",
+              "explanation": "<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> = 自发票日起30天内付清。这是最常见的付款期限表述。"
             },
             {
               "prompt": "2. 总合同价款分12个月等额支付，每月支付的款项称为 ____。",
               "options": [
-                "remittance",
-                "installment",
-                "retention"
+                "<span class=\"term\" data-def=\"汇款\">remittance</span>",
+                "<span class=\"term\" data-def=\"分期付款\">installment</span>",
+                "<span class=\"term\" data-def=\"质保金\">retention</span>"
               ],
-              "answer": "installment",
-              "explanation": "installment = 分期付款。将总价分成多次支付，按固定时间周期（如每月）进行。"
+              "answer": "<span class=\"term\" data-def=\"分期付款\">installment</span>",
+              "explanation": "<span class=\"term\" data-def=\"分期付款\">installment</span> = 分期付款。将总价分成多次支付，按固定时间周期（如每月）进行。"
             },
             {
               "prompt": "3. 工程合同中，施工方开工前要求甲方先付20%的款项，这20%称为 ____。",
               "options": [
                 "<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>",
                 "<span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span>",
-                "final payment"
+                "final <span class=\"term\" data-def=\"付款\">payment</span>"
               ],
-              "answer": "advance payment",
-              "explanation": "advance payment = 预付款，合同签署后启动工程前先行支付的部分，通常可从后续进度款中扣回。"
+              "answer": "<span class=\"term\" data-def=\"预付款\">advance payment</span>",
+              "explanation": "<span class=\"term\" data-def=\"预付款\">advance payment</span> = 预付款，合同签署后启动工程前先行支付的部分，通常可从后续进度款中扣回。"
             },
             {
               "prompt": "4. Provider 向 Client 开具账单，要求支付本月服务费，这个账单称为 ____。",
               "options": [
-                "receipt",
-                "invoice",
+                "<span class=\"term\" data-def=\"收到；收据\">receipt</span>",
+                "<span class=\"term\" data-def=\"发票\">invoice</span>",
                 "statement"
               ],
-              "answer": "invoice",
-              "explanation": "invoice = 发票/账单。Provider 开具发票给 Client，是触发付款义务的凭证。"
+              "answer": "<span class=\"term\" data-def=\"发票\">invoice</span>",
+              "explanation": "<span class=\"term\" data-def=\"发票\">invoice</span> = 发票/账单。Provider 开具发票给 Client，是触发付款义务的凭证。"
             },
             {
               "prompt": "5. IT开发合同中，约定“完成需求文档后付30%，完成开发后付50%，验收通过后付20%”，这种付款方式是 ____。",
               "options": [
-                "installment",
+                "<span class=\"term\" data-def=\"分期付款\">installment</span>",
                 "<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>",
                 "<span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span>"
               ],
-              "answer": "milestone payment",
-              "explanation": "milestone payment = 里程碑付款，根据项目完成特定节点（deliverable交付、阶段验收等）后触发支付，适合IT开发、建设工程等复杂项目。"
+              "answer": "<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>",
+              "explanation": "<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span> = 里程碑付款，根据项目完成特定节点（deliverable交付、阶段验收等）后触发支付，适合IT开发、建设工程等复杂项目。"
             }
           ]
         }
@@ -523,31 +523,31 @@
           "instruction": "判断以下关于支付条款的陈述是否正确（“正确”或“错误”）。",
           "questions": [
             {
-              "prompt": "1. “<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>”中的 net 是“网络”的意思，表示可以通过网上银行付款。",
+              "prompt": "1. “<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>”中的 <span class=\"term\" data-def=\"净额；扣除后\">net</span> 是“网络”的意思，表示可以通过网上银行付款。",
               "options": [
                 "正确",
                 "错误"
               ],
               "answer": "错误",
-              "explanation": "net 30 中的 net 是“净”的意思（源自拉丁语），表示“净30天内付清”，与网络（network）无关。"
+              "explanation": "<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> 中的 <span class=\"term\" data-def=\"净额；扣除后\">net</span> 是“净”的意思（源自拉丁语），表示“净30天内付清”，与网络（network）无关。"
             },
             {
-              "prompt": "2. retention（质保金）通常在项目最终验收（final acceptance）后才释放给承包方。",
+              "prompt": "2. <span class=\"term\" data-def=\"质保金\">retention</span>（质保金）通常在项目最终验收（final acceptance）后才释放给承包方。",
               "options": [
                 "正确",
                 "错误"
               ],
               "answer": "正确",
-              "explanation": "正确。retention（质保金）是从进度款中暂时扣留的比例，在完工验收（final acceptance）后释放，用于保障工程质量。"
+              "explanation": "正确。<span class=\"term\" data-def=\"质保金\">retention</span>（质保金）是从进度款中暂时扣留的比例，在完工验收（final acceptance）后释放，用于保障工程质量。"
             },
             {
-              "prompt": "3. <span class=\"term\" data-def=\"预付款；定金\">advance payment</span>（预付款）和 deposit（押金）含义完全相同，可以互换使用。",
+              "prompt": "3. <span class=\"term\" data-def=\"预付款；定金\">advance payment</span>（预付款）和 <span class=\"term\" data-def=\"定金\">deposit</span>（押金）含义完全相同，可以互换使用。",
               "options": [
                 "正确",
                 "错误"
               ],
               "answer": "错误",
-              "explanation": "advance payment（预付款）和 deposit（押金/定金）含义不同：预付款是合同价的先期支付部分，押金/定金具有担保功能（违约可没收）。两者不能混用。"
+              "explanation": "<span class=\"term\" data-def=\"预付款\">advance payment</span>（预付款）和 <span class=\"term\" data-def=\"定金\">deposit</span>（押金/定金）含义不同：预付款是合同价的先期支付部分，押金/定金具有担保功能（违约可没收）。两者不能混用。"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> 与 T/T（telegraphic transfer）是同一种付款方式——电汇。",
@@ -556,16 +556,16 @@
                 "错误"
               ],
               "answer": "正确",
-              "explanation": "正确。wire transfer（电汇）= T/T = telegraphic transfer，在国际贸易合同中是最常用的跨境付款方式。"
+              "explanation": "正确。<span class=\"term\" data-def=\"电汇\">wire transfer</span>（电汇）= T/T = telegraphic transfer，在国际贸易合同中是最常用的跨境付款方式。"
             },
             {
-              "prompt": "5. <span class=\"term\" data-def=\"未结余额；欠款\">outstanding balance</span>（未结余额）与 overdue（逾期）含义相同，都表示已过期未付。",
+              "prompt": "5. <span class=\"term\" data-def=\"未结余额；欠款\">outstanding balance</span>（未结余额）与 <span class=\"term\" data-def=\"逾期的\">overdue</span>（逾期）含义相同，都表示已过期未付。",
               "options": [
                 "正确",
                 "错误"
               ],
               "answer": "错误",
-              "explanation": "outstanding balance 是中性词，仅表示“未结余额/欠款”，不一定已经逾期。overdue 才明确表示“已过截止日未付”（逾期）。"
+              "explanation": "<span class=\"term\" data-def=\"未结余额\">outstanding balance</span> 是中性词，仅表示“未结余额/欠款”，不一定已经逾期。<span class=\"term\" data-def=\"逾期的\">overdue</span> 才明确表示“已过截止日未付”（逾期）。"
             }
           ]
         }
@@ -580,54 +580,54 @@
           "instruction": "根据合同条款语境，选择最恰当的术语（注意中英文搭配的精确性）。",
           "questions": [
             {
-              "prompt": "1. “All amounts shall be ____ within 30 days of invoice.” 空白处应填入 ____。",
+              "prompt": "1. “All amounts <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be ____ within 30 days of <span class=\"term\" data-def=\"发票\">invoice</span>.” 空白处应填入 ____。",
               "options": [
-                "due and payable",
+                "<span class=\"term\" data-def=\"到期应付\">due and payable</span>",
                 "paid",
                 "sent"
               ],
-              "answer": "due and payable",
-              "explanation": "due and payable 是法律固定搭配，表示“到期应付”，比单独使用 due 或 payable 更正式完整。合同中几乎固定使用这个组合。"
+              "answer": "<span class=\"term\" data-def=\"到期应付\">due and payable</span>",
+              "explanation": "<span class=\"term\" data-def=\"到期应付\">due and payable</span> 是法律固定搭配，表示“到期应付”，比单独使用 due 或 payable 更正式完整。合同中几乎固定使用这个组合。"
             },
             {
-              "prompt": "2. 合同正文中引用付款时间表（合同附件），应写 “as per the ____ attached hereto as Exhibit B”。",
+              "prompt": "2. 合同正文中引用付款时间表（合同附件），应写 “as per the ____ <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> as Exhibit B”。",
               "options": [
                 "<span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span>",
                 "<span class=\"term\" data-def=\"付款计划；付款时间表\">payment schedule</span>",
-                "invoice"
+                "<span class=\"term\" data-def=\"发票\">invoice</span>"
               ],
-              "answer": "payment schedule",
-              "explanation": "payment schedule = 付款计划表，通常作为合同附件（Exhibit/Schedule）附于协议，列明各期付款时间和金额。"
+              "answer": "<span class=\"term\" data-def=\"付款计划\">payment schedule</span>",
+              "explanation": "<span class=\"term\" data-def=\"付款计划\">payment schedule</span> = 付款计划表，通常作为合同附件（Exhibit/Schedule）附于协议，列明各期付款时间和金额。"
             },
             {
-              "prompt": "3. “Client shall pay all ____ amounts within 30 days.” 哪个词表示只需支付没有异议的款项？",
+              "prompt": "3. “Client <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> pay all ____ amounts within 30 days.” 哪个词表示只需支付没有异议的款项？",
               "options": [
                 "outstanding",
                 "remaining",
-                "undisputed"
+                "<span class=\"term\" data-def=\"无争议的\">undisputed</span>"
               ],
-              "answer": "undisputed",
-              "explanation": "undisputed（无异议的）是支付条款的核心保护词——只要求甲方支付“无异议的款项”，对有合理争议的部分可暂缓支付，防止甲方以任何理由拖延付款。"
+              "answer": "<span class=\"term\" data-def=\"无争议的\">undisputed</span>",
+              "explanation": "<span class=\"term\" data-def=\"无争议的\">undisputed</span>（无异议的）是支付条款的核心保护词——只要求甲方支付“无异议的款项”，对有合理争议的部分可暂缓支付，防止甲方以任何理由拖延付款。"
             },
             {
-              "prompt": "4. “All payments shall be made ____ any deduction, withholding, or set-off.”（付款不得扣减）",
+              "prompt": "4. “All payments <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made ____ any <span class=\"term\" data-def=\"扣款\">deduction</span>, <span class=\"term\" data-def=\"预扣\">withholding</span>, or <span class=\"term\" data-def=\"抵销\">set-off</span>.”（付款不得扣减）",
               "options": [
                 "in spite of",
                 "free and clear of",
                 "excluding"
               ],
               "answer": "free and clear of",
-              "explanation": "free and clear of any deduction, withholding, or set-off 是合同固定搭配，意为“不得有任何扣减、预扣税或抵销”，保障收款方收到全额款项。"
+              "explanation": "free and clear of any <span class=\"term\" data-def=\"扣款\">deduction</span>, <span class=\"term\" data-def=\"预扣\">withholding</span>, or <span class=\"term\" data-def=\"抵销\">set-off</span> 是合同固定搭配，意为“不得有任何扣减、预扣税或抵销”，保障收款方收到全额款项。"
             },
             {
               "prompt": "5. 合同要求“收到发票后立即付款”（无缓冲天数），应写 ____。",
               "options": [
                 "<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>",
-                "upon receipt of invoice",
+                "upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of <span class=\"term\" data-def=\"发票\">invoice</span>",
                 "<span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span>"
               ],
-              "answer": "upon receipt of invoice",
-              "explanation": "upon receipt of invoice = 收到发票后（立即付款），是“即收即付”的标准表述，付款期限最短。比 net 30 等有固定天数的期限更快。"
+              "answer": "upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of <span class=\"term\" data-def=\"发票\">invoice</span>",
+              "explanation": "upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of <span class=\"term\" data-def=\"发票\">invoice</span> = 收到发票后（立即付款），是“即收即付”的标准表述，付款期限最短。比 <span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> 等有固定天数的期限更快。"
             }
           ]
         }
@@ -649,7 +649,7 @@
                 "操作规程"
               ],
               "answer": "实质条款",
-              "explanation": "operative provisions = 实质条款/正文条款（operative = 起实质性作用的）。“执行条款”是常见错误，因为 operative 的日常义是“运作中的”，但在合同语境中特指合同的核心条款部分（区别于 recitals 陈述部分）。"
+              "explanation": "<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质条款/正文条款（<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> = 起实质性作用的）。“执行条款”是常见错误，因为 <span class=\"term\" data-def=\"实质的；起作用的\">operative</span> 的日常义是“运作中的”，但在合同语境中特指合同的核心条款部分（区别于 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 陈述部分）。"
             },
             {
               "prompt": "2. <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 的完整准确翻译是 ____。",
@@ -659,7 +659,7 @@
                 "完全有效"
               ],
               "answer": "完全有效",
-              "explanation": "in full force and effect = 完全有效，是法律固定搭配，必须完整翻译。不可简化为“有效”（effective）或“生效”——那只是 in effect 的翻译。in full force and effect 强调合同在全部条款上完全有约束力。"
+              "explanation": "<span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效，是法律固定搭配，必须完整翻译。不可简化为“有效”（effective）或“生效”——那只是 in effect 的翻译。<span class=\"term\" data-def=\"完全有效\">in full force and effect</span> 强调合同在全部条款上完全有约束力。"
             },
             {
               "prompt": "3. <span class=\"term\" data-def=\"被裁定为\">held to be</span> 在合同/法律语境中应译为 ____。",
@@ -669,17 +669,17 @@
                 "被裁定为"
               ],
               "answer": "被裁定为",
-              "explanation": "held to be = 被裁定为/被判定为。合同语境中 hold（法院/仲裁庭“裁定”）不同于日常的 consider（“认为”）。翻译成“被认为”会丢失法律语境中的权威性。"
+              "explanation": "<span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为/被判定为。合同语境中 <span class=\"term\" data-def=\"认定；持有\">hold</span>（法院/仲裁庭“裁定”）不同于日常的 consider（“认为”）。翻译成“被认为”会丢失法律语境中的权威性。"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 的正确翻译是 ____。",
               "options": [
-                "附件（省略 hereto）",
+                "附件（省略 <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>）",
                 "附于本协议的",
                 "随函附上的"
               ],
               "answer": "附于本协议的",
-              "explanation": "attached hereto = 附于本协议的。hereto（= to this Agreement）是 here- 家族词，不可省略。若省略，读者无法知道附于“哪个”协议，造成法律歧义。"
+              "explanation": "<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的。<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>（= to this Agreement）是 here- 家族词，不可省略。若省略，读者无法知道附于“哪个”协议，造成法律歧义。"
             }
           ]
         }
@@ -696,35 +696,35 @@
             {
               "prompt": "1. <span class=\"term\" data-def=\"分期付款；期款\">installment</span> / <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> / <span class=\"term\" data-def=\"逾期的；过期未付的\">overdue</span> / <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span> — 哪个不是付款结构类术语？",
               "options": [
-                "installment",
+                "<span class=\"term\" data-def=\"分期付款\">installment</span>",
                 "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>",
-                "overdue",
+                "<span class=\"term\" data-def=\"逾期的\">overdue</span>",
                 "<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>"
               ],
-              "answer": "overdue",
-              "explanation": "installment、lump sum、milestone payment、progress payment 都是付款结构（付款方式）的术语。overdue 是描述付款状态（逾期）的词，不是付款结构术语，与其他三个不同类。"
+              "answer": "<span class=\"term\" data-def=\"逾期的\">overdue</span>",
+              "explanation": "<span class=\"term\" data-def=\"分期付款\">installment</span>、<span class=\"term\" data-def=\"一次性总付\">lump sum</span>、<span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>、<span class=\"term\" data-def=\"进度款\">progress payment</span> 都是付款结构（付款方式）的术语。<span class=\"term\" data-def=\"逾期的\">overdue</span> 是描述付款状态（逾期）的词，不是付款结构术语，与其他三个不同类。"
             },
             {
               "prompt": "2. <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> / <span class=\"term\" data-def=\"汇款；付款（书面正式）\">remittance</span> / <span class=\"term\" data-def=\"发票；账单\">invoice</span> / <span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span> — 哪个不是付款方式类术语？",
               "options": [
                 "<span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>",
-                "remittance",
-                "invoice",
+                "<span class=\"term\" data-def=\"汇款\">remittance</span>",
+                "<span class=\"term\" data-def=\"发票\">invoice</span>",
                 "<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>"
               ],
-              "answer": "invoice",
-              "explanation": "wire transfer、remittance、lump sum 都是付款方式/结构术语。invoice 是“发票”，是付款的凭证文件，不是付款方式，与其他三个不同类。"
+              "answer": "<span class=\"term\" data-def=\"发票\">invoice</span>",
+              "explanation": "<span class=\"term\" data-def=\"电汇\">wire transfer</span>、<span class=\"term\" data-def=\"汇款\">remittance</span>、<span class=\"term\" data-def=\"一次性总付\">lump sum</span> 都是付款方式/结构术语。<span class=\"term\" data-def=\"发票\">invoice</span> 是“发票”，是付款的凭证文件，不是付款方式，与其他三个不同类。"
             },
             {
               "prompt": "3. <span class=\"term\" data-def=\"预付款；定金\">advance payment</span> / <span class=\"term\" data-def=\"定金；保证金\">deposit</span> / <span class=\"term\" data-def=\"质保金；尾款\">retention</span> / <span class=\"term\" data-def=\"首付款\">down payment</span> — 哪个不是“预先支付”类术语？",
               "options": [
                 "<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>",
-                "deposit",
-                "retention",
+                "<span class=\"term\" data-def=\"定金\">deposit</span>",
+                "<span class=\"term\" data-def=\"质保金\">retention</span>",
                 "<span class=\"term\" data-def=\"首付款\">down payment</span>"
               ],
-              "answer": "retention",
-              "explanation": "advance payment、deposit、down payment 都是“合同开始时预先支付的款项”。retention 是“尾款/质保金”，是在合同接近尾声时扣留的款项，与其他三个时间方向相反，不同类。"
+              "answer": "<span class=\"term\" data-def=\"质保金\">retention</span>",
+              "explanation": "<span class=\"term\" data-def=\"预付款\">advance payment</span>、<span class=\"term\" data-def=\"定金\">deposit</span>、<span class=\"term\" data-def=\"首付款\">down payment</span> 都是“合同开始时预先支付的款项”。<span class=\"term\" data-def=\"质保金\">retention</span> 是“尾款/质保金”，是在合同接近尾声时扣留的款项，与其他三个时间方向相反，不同类。"
             }
           ]
         }
@@ -739,7 +739,7 @@
           "instruction": "以下句子翻译，选择最准确的中文对应。",
           "questions": [
             {
-              "prompt": "1. “Provider shall submit invoices to Client on a monthly basis.” 最准确的翻译是 ____。",
+              "prompt": "1. “Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> submit invoices to Client on a monthly basis.” 最准确的翻译是 ____。",
               "options": [
                 "甲方须按月向乙方提交发票",
                 "乙方须按月向甲方开具发票",
@@ -749,24 +749,24 @@
               "explanation": "on a monthly basis = 按月；submit invoices = 开具/提交发票。注意 Provider 是乙方（服务/产品提供方），Client 是甲方（委托/购买方）。"
             },
             {
-              "prompt": "2. “each <span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span> is <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a retention of ten percent (10%)” 最准确的翻译是 ____。",
+              "prompt": "2. “each <span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span> is <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> a <span class=\"term\" data-def=\"质保金\">retention</span> of ten percent (10%)” 最准确的翻译是 ____。",
               "options": [
                 "每次进度款均需预留10%（作为备用金）",
                 "每次进度款扣留10%作为质保金",
                 "进度款总额的10%须分开支付"
               ],
               "answer": "每次进度款扣留10%作为质保金",
-              "explanation": "subject to a retention of 10% = 扣留10%质保金。each such payment 指的是每次进度款（each progress payment）。注意 subject to 在此表示“须扣除...”。"
+              "explanation": "<span class=\"term\" data-def=\"以…为条件\">subject to</span> a <span class=\"term\" data-def=\"质保金\">retention</span> of 10% = 扣留10%质保金。each such <span class=\"term\" data-def=\"付款\">payment</span> 指的是每次进度款（each <span class=\"term\" data-def=\"进度款\">progress payment</span>）。注意 <span class=\"term\" data-def=\"以…为条件\">subject to</span> 在此表示“须扣除...”。"
             },
             {
-              "prompt": "3. “All payments hereunder shall be made in USD by <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>.” 翻译是 ____。",
+              "prompt": "3. “All payments <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be made in USD by <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span>.” 翻译是 ____。",
               "options": [
                 "本合同所有付款须以美元现金支付",
                 "本协议项下所有付款均以美元电汇方式支付",
                 "本合同付款可选择美元或电汇"
               ],
               "answer": "本协议项下所有付款均以美元电汇方式支付",
-              "explanation": "payments hereunder = 本协议项下的付款（hereunder = under this agreement）；in USD = 以美元；by wire transfer = 通过电汇方式。"
+              "explanation": "payments <span class=\"term\" data-def=\"依本协议\">hereunder</span> = 本协议项下的付款（<span class=\"term\" data-def=\"依本协议\">hereunder</span> = under this agreement）；in USD = 以美元；by <span class=\"term\" data-def=\"电汇\">wire transfer</span> = 通过电汇方式。"
             }
           ]
         }
@@ -805,10 +805,10 @@
                     "12次付款",
                     "12个月后付款"
                   ],
-                  "note": "installment = 分期款；equal = 等额；monthly = 按月"
+                  "note": "<span class=\"term\" data-def=\"分期付款\">installment</span> = 分期款；equal = 等额；monthly = 按月"
                 },
                 {
-                  "en": "due and payable",
+                  "en": "<span class=\"term\" data-def=\"到期应付\">due and payable</span>",
                   "ideal": "到期应付",
                   "accept": [
                     "到期支付",
@@ -818,10 +818,10 @@
                     "应当到期",
                     "到期"
                   ],
-                  "note": "due and payable 是法律固定搭配，必须完整翻译"
+                  "note": "<span class=\"term\" data-def=\"到期应付\">due and payable</span> 是法律固定搭配，必须完整翻译"
                 },
                 {
-                  "en": "on the first Business Day of each calendar month",
+                  "en": "on the first <span class=\"term\" data-def=\"工作日\">Business Day</span> of each calendar month",
                   "ideal": "于每个公历月第一个工作日",
                   "accept": [
                     "每个自然月第一个工作日"
@@ -830,7 +830,7 @@
                     "每个月的第一天",
                     "每月1日"
                   ],
-                  "note": "Business Day（工作日）不能译为“自然日”；calendar month = 公历月"
+                  "note": "<span class=\"term\" data-def=\"工作日\">Business Day</span>（工作日）不能译为“自然日”；calendar month = 公历月"
                 }
               ]
             },
@@ -839,7 +839,7 @@
               "reference": "交付物经最终验收后，乙方应就任何未结余额开具最终发票，甲方应在收到该发票之日起十五（15）个工作日内全额汇付。",
               "rubric": [
                 {
-                  "en": "Upon final acceptance of the Deliverables",
+                  "en": "Upon final acceptance of the <span class=\"term\" data-def=\"交付成果\">Deliverables</span>",
                   "ideal": "交付物经最终验收后",
                   "accept": [
                     "最终验收交付物后",
@@ -849,10 +849,10 @@
                     "收到交付物后",
                     "交付完成后"
                   ],
-                  "note": "final acceptance = 最终验收（注意是验收，不是“收到”）；Deliverables = 交付物"
+                  "note": "final acceptance = 最终验收（注意是验收，不是“收到”）；<span class=\"term\" data-def=\"交付成果\">Deliverables</span> = 交付物"
                 },
                 {
-                  "en": "final invoice",
+                  "en": "final <span class=\"term\" data-def=\"发票\">invoice</span>",
                   "ideal": "最终发票",
                   "accept": [
                     "结算发票"
@@ -860,10 +860,10 @@
                   "wrong": [
                     "最后的账单"
                   ],
-                  "note": "invoice 在合同语境中应译为“发票”，而非日常用语“账单”"
+                  "note": "<span class=\"term\" data-def=\"发票\">invoice</span> 在合同语境中应译为“发票”，而非日常用语“账单”"
                 },
                 {
-                  "en": "outstanding balance",
+                  "en": "<span class=\"term\" data-def=\"未结余额\">outstanding balance</span>",
                   "ideal": "未结余额",
                   "accept": [
                     "欠款",
@@ -876,7 +876,7 @@
                   "note": "outstanding = 未结清的；balance = 余额；合起来 = 未结余额/欠款"
                 },
                 {
-                  "en": "remit payment in full",
+                  "en": "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> <span class=\"term\" data-def=\"全额付款\">payment in full</span>",
                   "ideal": "全额汇付",
                   "accept": [
                     "全额支付",
@@ -886,10 +886,10 @@
                     "支付全部",
                     "付清"
                   ],
-                  "note": "remit = 汇款（正式）；in full = 全额。payment in full 是固定搭配"
+                  "note": "<span class=\"term\" data-def=\"（向税务局）缴纳\">remit</span> = 汇款（正式）；in full = 全额。<span class=\"term\" data-def=\"全额付款\">payment in full</span> 是固定搭配"
                 },
                 {
-                  "en": "within fifteen (15) Business Days of receipt thereof",
+                  "en": "within fifteen (15) Business Days of <span class=\"term\" data-def=\"收到；收据\">receipt</span> <span class=\"term\" data-def=\"其中的\">thereof</span>",
                   "ideal": "在收到该发票之日起十五（15）个工作日内",
                   "accept": [
                     "收到后15个工作日内"
@@ -898,7 +898,7 @@
                     "15天内",
                     "15个自然日内"
                   ],
-                  "note": "thereof = of it（指代 the final invoice）；Business Days 是工作日，不是自然日"
+                  "note": "<span class=\"term\" data-def=\"其中的\">thereof</span> = of it（指代 the final <span class=\"term\" data-def=\"发票\">invoice</span>）；Business Days 是工作日，不是自然日"
                 }
               ]
             },
@@ -907,7 +907,7 @@
               "reference": "合同总价按以下方式支付：（a）本协议签署之日起五（5）个工作日内支付30%的预付款；（b）其余70%按照本协议附件一所载的付款计划表支付。",
               "rubric": [
                 {
-                  "en": "advance payment of thirty percent (30%)",
+                  "en": "<span class=\"term\" data-def=\"预付款\">advance payment</span> of thirty percent (30%)",
                   "ideal": "30%的预付款",
                   "accept": [
                     "预付款30%"
@@ -916,10 +916,10 @@
                     "定金30%",
                     "首付款30%"
                   ],
-                  "note": "advance payment = 预付款，不是定金（deposit）或首付（down payment）"
+                  "note": "<span class=\"term\" data-def=\"预付款\">advance payment</span> = 预付款，不是定金（<span class=\"term\" data-def=\"定金\">deposit</span>）或首付（<span class=\"term\" data-def=\"首付款\">down payment</span>）"
                 },
                 {
-                  "en": "within five (5) Business Days of the execution of this Agreement",
+                  "en": "within five (5) Business Days of the <span class=\"term\" data-def=\"签署\">execution</span> of this Agreement",
                   "ideal": "本协议签署之日起五（5）个工作日内",
                   "accept": [
                     "协议签署后5个工作日内"
@@ -929,7 +929,7 @@
                     "5个自然日内",
                     "生效之日起"
                   ],
-                  "note": "execution = 签署（合同语境）；注意不是“生效”（effective date）"
+                  "note": "<span class=\"term\" data-def=\"签署\">execution</span> = 签署（合同语境）；注意不是“生效”（<span class=\"term\" data-def=\"生效日期\">effective date</span>）"
                 },
                 {
                   "en": "the remaining seventy percent (70%)",
@@ -944,7 +944,7 @@
                   "note": "remaining = 剩余的，表示在预付款之外还需支付的部分"
                 },
                 {
-                  "en": "in accordance with",
+                  "en": "<span class=\"term\" data-def=\"根据\">in accordance with</span>",
                   "ideal": "按照/依照",
                   "accept": [
                     "根据"
@@ -953,10 +953,10 @@
                     "依据法律",
                     "参照"
                   ],
-                  "note": "in accordance with 是合同高频表达，表示“按照/依照（某附件/条款）”"
+                  "note": "<span class=\"term\" data-def=\"根据\">in accordance with</span> 是合同高频表达，表示“按照/依照（某附件/条款）”"
                 },
                 {
-                  "en": "Schedule 1 hereto",
+                  "en": "Schedule 1 <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>",
                   "ideal": "附件一",
                   "accept": [
                     "本协议附件一",
@@ -966,7 +966,7 @@
                     "附录",
                     "清单1"
                   ],
-                  "note": "Schedule = 附件（合同附件常用 Schedule 或 Exhibit）；hereto = to this Agreement（附于本协议的）"
+                  "note": "Schedule = 附件（合同附件常用 Schedule 或 Exhibit）；<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = to this Agreement（附于本协议的）"
                 }
               ]
             }
@@ -983,10 +983,10 @@
           "questions": [
             {
               "source": "1. 甲方应在收到乙方发票之日起三十（30）个工作日内以电汇方式全额支付服务费，且不得扣减任何费用。",
-              "reference": "Client shall pay the Service Fee in full by wire transfer within thirty (30) Business Days of receipt of Provider's invoice, free and clear of any deduction.",
+              "reference": "Client <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> pay the Service Fee in full by <span class=\"term\" data-def=\"电汇\">wire transfer</span> within thirty (30) Business Days of <span class=\"term\" data-def=\"收到；收据\">receipt</span> of Provider's <span class=\"term\" data-def=\"发票\">invoice</span>, free and clear of any <span class=\"term\" data-def=\"扣款\">deduction</span>.",
               "rubric": [
                 {
-                  "en": "shall pay",
+                  "en": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> pay",
                   "ideal": "应支付/应付",
                   "accept": [
                     "须支付"
@@ -995,7 +995,7 @@
                     "可以支付",
                     "将支付"
                   ],
-                  "note": "shall 表法律义务，必须用 shall 而非 will 或 may"
+                  "note": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 表法律义务，必须用 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 而非 <span class=\"term\" data-def=\"将；将要（弱于 shall）\">will</span> 或 <span class=\"term\" data-def=\"可以（任择/许可）\">may</span>"
                 },
                 {
                   "en": "Service Fee",
@@ -1019,10 +1019,10 @@
                     "完全地",
                     "充分地"
                   ],
-                  "note": "in full = 全额，payment in full 是固定搭配"
+                  "note": "in full = 全额，<span class=\"term\" data-def=\"全额付款\">payment in full</span> 是固定搭配"
                 },
                 {
-                  "en": "by wire transfer",
+                  "en": "by <span class=\"term\" data-def=\"电汇\">wire transfer</span>",
                   "ideal": "以电汇方式",
                   "accept": [
                     "通过电汇",
@@ -1032,10 +1032,10 @@
                     "通过转账",
                     "汇款"
                   ],
-                  "note": "wire transfer = 电汇，是合同中常用的付款方式"
+                  "note": "<span class=\"term\" data-def=\"电汇\">wire transfer</span> = 电汇，是合同中常用的付款方式"
                 },
                 {
-                  "en": "within thirty (30) Business Days of receipt of",
+                  "en": "within thirty (30) Business Days of <span class=\"term\" data-def=\"收到；收据\">receipt</span> of",
                   "ideal": "在收到...之日起三十（30）个工作日内",
                   "accept": [
                     "收到后30个工作日内"
@@ -1044,10 +1044,10 @@
                     "30天内",
                     "收到后一个月内"
                   ],
-                  "note": "Business Days = 工作日（不是自然日）；of receipt of = 自收到...之日起"
+                  "note": "Business Days = 工作日（不是自然日）；of <span class=\"term\" data-def=\"收到；收据\">receipt</span> of = 自收到...之日起"
                 },
                 {
-                  "en": "free and clear of any deduction",
+                  "en": "free and clear of any <span class=\"term\" data-def=\"扣款\">deduction</span>",
                   "ideal": "不得扣减任何费用",
                   "accept": [
                     "无任何扣减",
@@ -1063,10 +1063,10 @@
             },
             {
               "source": "2. 乙方应在每个里程碑完成后五（5）个工作日内向甲方开具发票，注明已完成的交付物及应付金额。",
-              "reference": "Provider shall submit an invoice to Client within five (5) Business Days of completion of each Milestone, specifying the Deliverables completed and the amount due and payable.",
+              "reference": "Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> submit an <span class=\"term\" data-def=\"发票\">invoice</span> to Client within five (5) Business Days of completion of each <span class=\"term\" data-def=\"里程碑\">Milestone</span>, specifying the <span class=\"term\" data-def=\"交付成果\">Deliverables</span> completed and the amount <span class=\"term\" data-def=\"到期应付\">due and payable</span>.",
               "rubric": [
                 {
-                  "en": "submit an invoice",
+                  "en": "submit an <span class=\"term\" data-def=\"发票\">invoice</span>",
                   "ideal": "开具发票/提交发票",
                   "accept": [
                     "出具发票"
@@ -1075,10 +1075,10 @@
                     "发送账单",
                     "提供发票"
                   ],
-                  "note": "submit an invoice = 开具/提交发票，invoice 在合同中不译为“账单”"
+                  "note": "submit an <span class=\"term\" data-def=\"发票\">invoice</span> = 开具/提交发票，<span class=\"term\" data-def=\"发票\">invoice</span> 在合同中不译为“账单”"
                 },
                 {
-                  "en": "within five (5) Business Days of completion of each Milestone",
+                  "en": "within five (5) Business Days of completion of each <span class=\"term\" data-def=\"里程碑\">Milestone</span>",
                   "ideal": "在每个里程碑完成后五（5）个工作日内",
                   "accept": [
                     "每个里程碑完成后5个工作日内"
@@ -1087,7 +1087,7 @@
                     "5天内",
                     "每个节点后"
                   ],
-                  "note": "Business Days = 工作日；completion of each Milestone = 每个里程碑完成"
+                  "note": "Business Days = 工作日；completion of each <span class=\"term\" data-def=\"里程碑\">Milestone</span> = 每个里程碑完成"
                 },
                 {
                   "en": "specifying",
@@ -1103,7 +1103,7 @@
                   "note": "specifying 在此表示“在发票中注明/载明”"
                 },
                 {
-                  "en": "Deliverables completed",
+                  "en": "<span class=\"term\" data-def=\"交付成果\">Deliverables</span> completed",
                   "ideal": "已完成的交付物",
                   "accept": [
                     "完成的可交付成果"
@@ -1112,10 +1112,10 @@
                     "交付的东西",
                     "完成品"
                   ],
-                  "note": "Deliverables = 交付物（合同专有名词，大写）"
+                  "note": "<span class=\"term\" data-def=\"交付成果\">Deliverables</span> = 交付物（合同专有名词，大写）"
                 },
                 {
-                  "en": "amount due and payable",
+                  "en": "amount <span class=\"term\" data-def=\"到期应付\">due and payable</span>",
                   "ideal": "应付金额/到期应付金额",
                   "accept": [
                     "到期应付款项"
@@ -1124,7 +1124,7 @@
                     "金额",
                     "付款额"
                   ],
-                  "note": "due and payable = 到期应付，是法律固定搭配"
+                  "note": "<span class=\"term\" data-def=\"到期应付\">due and payable</span> = 到期应付，是法律固定搭配"
                 }
               ]
             }
@@ -1135,7 +1135,7 @@
     {
       "type": "summary",
       "heading": "8. 今日小结",
-      "html": "<h3>第3周 第3天 — 支付条款核心知识点</h3>\n<ul><li><strong>付款期限</strong>：<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> / <span class=\"term\" data-def=\"净60天（自发票日起60天内付清）\">net 60</span> = 自发票日起30/60天内付清（net 是“净”不是“网络”）</li><li><strong>付款结构</strong>：<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>（一次性）→ <span class=\"term\" data-def=\"分期付款；期款\">installment</span>（分期，固定周期）→ <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>（按节点）→ <span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span>（按进度）</li><li><strong>特殊付款类型</strong>：<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>（预付款）/ <span class=\"term\" data-def=\"质保金；尾款\">retention</span>（质保金，项目结束后释放）</li><li><strong>发票与汇款</strong>：<span class=\"term\" data-def=\"发票；账单\">invoice</span>（发票）→ 触发付款义务 → <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> / <span class=\"term\" data-def=\"汇款；付款（书面正式）\">remittance</span>（电汇/汇款）</li><li><strong>关键固定搭配</strong>：<span class=\"term\" data-def=\"到期应付\">due and payable</span>（到期应付）/ free and clear of any <span class=\"term\" data-def=\"扣款；扣除；扣减\">deduction</span>（不得扣减）/ <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final <span class=\"term\">settlement</span>（全额最终结算）</li><li><strong>here- 家族词复习</strong>：<span class=\"term\" data-def=\"在本协议项下\">hereunder</span>（本协议项下）/ <span class=\"term\" data-def=\"于本协议\">hereto</span>（附于本协议的）— 翻译时不可省略！</li></ul>\n<p><strong>下节预告（第3周 第4天）：</strong>利息与违约金 — interest, penalty, <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>, late payment, <span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span></p>"
+      "html": "<h3>第3周 第3天 — 支付条款核心知识点</h3>\n<ul><li><strong>付款期限</strong>：<span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span> / <span class=\"term\" data-def=\"净60天（自发票日起60天内付清）\">net 60</span> = 自发票日起30/60天内付清（<span class=\"term\" data-def=\"净额；扣除后\">net</span> 是“净”不是“网络”）</li><li><strong>付款结构</strong>：<span class=\"term\" data-def=\"一次性总付；整笔付款\">lump sum</span>（一次性）→ <span class=\"term\" data-def=\"分期付款；期款\">installment</span>（分期，固定周期）→ <span class=\"term\" data-def=\"里程碑付款\">milestone payment</span>（按节点）→ <span class=\"term\" data-def=\"进度款；阶段性付款\">progress payment</span>（按进度）</li><li><strong>特殊付款类型</strong>：<span class=\"term\" data-def=\"预付款；定金\">advance payment</span>（预付款）/ <span class=\"term\" data-def=\"质保金；尾款\">retention</span>（质保金，项目结束后释放）</li><li><strong>发票与汇款</strong>：<span class=\"term\" data-def=\"发票；账单\">invoice</span>（发票）→ 触发付款义务 → <span class=\"term\" data-def=\"电汇；电报划款\">wire transfer</span> / <span class=\"term\" data-def=\"汇款；付款（书面正式）\">remittance</span>（电汇/汇款）</li><li><strong>关键固定搭配</strong>：<span class=\"term\" data-def=\"到期应付\">due and payable</span>（到期应付）/ free and clear of any <span class=\"term\" data-def=\"扣款；扣除；扣减\">deduction</span>（不得扣减）/ <span class=\"term\" data-def=\"全额付款；全额清偿\">payment in full</span> and final <span class=\"term\" data-def=\"结算；和解\">settlement</span>（全额最终结算）</li><li><strong>here- 家族词复习</strong>：<span class=\"term\" data-def=\"在本协议项下\">hereunder</span>（本协议项下）/ <span class=\"term\" data-def=\"于本协议\">hereto</span>（附于本协议的）— 翻译时不可省略！</li></ul>\n<p><strong>下节预告（第3周 第4天）：</strong>利息与违约金 — <span class=\"term\" data-def=\"利息\">interest</span>, <span class=\"term\" data-def=\"罚款\">penalty</span>, <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span>, late <span class=\"term\" data-def=\"付款\">payment</span>, <span class=\"term\" data-def=\"违约利息；逾期利息\">default interest</span></p>"
     }
   ]
 }

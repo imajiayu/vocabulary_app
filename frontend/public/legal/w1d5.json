@@ -1,6 +1,6 @@
 {
-  "title": "第1周 第5天 — 合同标的与履行义务（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span> & Performance）",
-  "objective": "掌握合同标的条款与履行义务条款中的核心词汇和固定搭配，理解 <span class=\"term\" data-def=\"标的/主题\">subject matter</span>、deliverables、<span class=\"term\" data-def=\"工作范围\">scope of work</span>、milestone 等术语在商务合同中的精确含义，掌握 provide/furnish/render 和 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>/<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 的区别，能够准确阅读和翻译涉及合同标的与履行义务的条款。",
+  "title": "第1周 第5天 — 合同标的与履行义务（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span> & <span class=\"term\" data-def=\"履行\">Performance</span>）",
+  "objective": "掌握合同标的条款与履行义务条款中的核心词汇和固定搭配，理解 <span class=\"term\" data-def=\"标的/主题\">subject matter</span>、<span class=\"term\" data-def=\"交付成果\">deliverables</span>、<span class=\"term\" data-def=\"工作范围\">scope of work</span>、<span class=\"term\" data-def=\"里程碑\">milestone</span> 等术语在商务合同中的精确含义，掌握 <span class=\"term\" data-def=\"提供\">provide</span>/<span class=\"term\" data-def=\"提供；交付\">furnish</span>/<span class=\"term\" data-def=\"提供；给予\">render</span> 和 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>/<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 的区别，能够准确阅读和翻译涉及合同标的与履行义务的条款。",
   "sections": [
     {
       "type": "grammar",
@@ -8,11 +8,11 @@
       "blocks": [
         {
           "type": "p",
-          "html": "上节回顾：第3天学习了定义条款（Definitions Clause），掌握了 <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>、<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>、<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>、<span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\" data-def=\"其中的/该…的\">thereof</span> 等法律表达。今天进入合同正文的核心——标的条款（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span>）和履行义务（Performance Obligations），它们回答了“合同各方需要做什么、怎么做、何时做”这三个根本问题。"
+          "html": "上节回顾：第3天学习了定义条款（<span class=\"term\" data-def=\"定义条款\">Definitions</span> <span class=\"term\" data-def=\"条款\">Clause</span>），掌握了 <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>、<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>、<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>、<span class=\"term\" data-def=\"本协议的\">hereof</span>/<span class=\"term\" data-def=\"其中的/该…的\">thereof</span> 等法律表达。今天进入合同正文的核心——标的条款（<span class=\"term\" data-def=\"标的/主题\">Subject Matter</span>）和履行义务（<span class=\"term\" data-def=\"履行\">Performance</span> <span class=\"term\" data-def=\"义务（复数）\">Obligations</span>），它们回答了“合同各方需要做什么、怎么做、何时做”这三个根本问题。"
         },
         {
           "type": "error-warn",
-          "html": "<strong>上次错题回顾：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质性条款（非“执行条款”）——今天学的履行义务条款就属于 <span class=\"term\" data-def=\"实质条款\">operative provisions</span></li><li><span class=\"term\">in full force and effect</span> = 完全有效（法律固定搭配，不可简化为“有效”）</li><li><span class=\"term\">attached hereto</span> = 附于本协议的（hereto 不可省略）</li></ul>"
+          "html": "<strong>上次错题回顾：</strong><ul><li><span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质性条款（非“执行条款”）——今天学的履行义务条款就属于 <span class=\"term\" data-def=\"实质条款\">operative provisions</span></li><li><span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 完全有效（法律固定搭配，不可简化为“有效”）</li><li><span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的（<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> 不可省略）</li></ul>"
         },
         {
           "type": "table",
@@ -25,46 +25,46 @@
           "firstColWord": true,
           "rows": [
             [
-              "subject matter",
+              "<span class=\"term\" data-def=\"标的\">subject matter</span>",
               "/ˈsʌbdʒekt ˈmætər/",
               "n. 标的；标的物",
               "the <span class=\"term\" data-def=\"标的/主题\">subject matter</span> of this Agreement; <span class=\"term\" data-def=\"标的/主题\">subject matter</span> jurisdiction"
             ],
             [
-              "deliverables",
+              "<span class=\"term\" data-def=\"交付成果\">deliverables</span>",
               "/dɪˈlɪvərəblz/",
               "n. 交付物；应交付成果",
-              "the Services and Deliverables; key deliverables; deliverables schedule"
+              "the Services and <span class=\"term\" data-def=\"交付成果\">Deliverables</span>; key <span class=\"term\" data-def=\"交付成果\">deliverables</span>; <span class=\"term\" data-def=\"交付成果\">deliverables</span> schedule"
             ],
             [
-              "performance",
+              "<span class=\"term\" data-def=\"履行\">performance</span>",
               "/pərˈfɔːrməns/",
               "n. 履行；执行",
-              "performance of obligations; performance standards; specific performance"
+              "<span class=\"term\" data-def=\"履行\">performance</span> of <span class=\"term\" data-def=\"义务（复数）\">obligations</span>; <span class=\"term\" data-def=\"履行\">performance</span> standards; specific <span class=\"term\" data-def=\"履行\">performance</span>"
             ],
             [
-              "obligation",
+              "<span class=\"term\" data-def=\"义务\">obligation</span>",
               "/ˌɒblɪˈɡeɪʃən/",
               "n. 义务；责任",
-              "contractual obligations; discharge of obligations; perform obligations"
+              "contractual <span class=\"term\" data-def=\"义务（复数）\">obligations</span>; discharge of <span class=\"term\" data-def=\"义务（复数）\">obligations</span>; perform <span class=\"term\" data-def=\"义务（复数）\">obligations</span>"
             ],
             [
-              "due diligence",
+              "<span class=\"term\" data-def=\"尽职调查\">due diligence</span>",
               "/djuː ˈdɪlɪdʒəns/",
               "n. 尽职调查；审慎调查",
               "conduct <span class=\"term\" data-def=\"尽职调查\">due diligence</span>; <span class=\"term\" data-def=\"尽职调查\">due diligence</span> period; <span class=\"term\" data-def=\"尽职调查\">due diligence</span> review"
             ],
             [
-              "scope of work",
+              "<span class=\"term\" data-def=\"工作范围\">scope of work</span>",
               "/skoʊp əv wɜːrk/",
               "n. 工作范围",
               "within the <span class=\"term\" data-def=\"工作范围\">scope of work</span>; scope of Services; statement of work (SOW)"
             ],
             [
-              "milestone",
+              "<span class=\"term\" data-def=\"里程碑\">milestone</span>",
               "/ˈmaɪlstoʊn/",
               "n. 里程碑；阶段节点",
-              "key milestones; milestone payments; milestone schedule"
+              "key milestones; <span class=\"term\" data-def=\"里程碑\">milestone</span> payments; <span class=\"term\" data-def=\"里程碑\">milestone</span> schedule"
             ],
             [
               "deliver",
@@ -73,40 +73,40 @@
               "deliver the Goods; deliver notice; deliver on time"
             ],
             [
-              "provide",
+              "<span class=\"term\" data-def=\"提供\">provide</span>",
               "/prəˈvaɪd/",
               "v. 提供（最通用）",
-              "provide the Services; provide access to; provide assistance"
+              "<span class=\"term\" data-def=\"提供\">provide</span> the Services; <span class=\"term\" data-def=\"提供\">provide</span> access to; <span class=\"term\" data-def=\"提供\">provide</span> assistance"
             ],
             [
-              "furnish",
+              "<span class=\"term\" data-def=\"提供；交付\">furnish</span>",
               "/ˈfɜːrnɪʃ/",
               "v. 提供；供应（信息/文件）",
-              "furnish information; furnish documentation; furnish evidence"
+              "<span class=\"term\" data-def=\"提供；交付\">furnish</span> information; <span class=\"term\" data-def=\"提供；交付\">furnish</span> documentation; <span class=\"term\" data-def=\"提供；交付\">furnish</span> evidence"
             ],
             [
-              "render",
+              "<span class=\"term\" data-def=\"提供；给予\">render</span>",
               "/ˈrendər/",
               "v. 提供；作出（服务/协助）",
-              "render services; render assistance; render a decision"
+              "<span class=\"term\" data-def=\"提供；给予\">render</span> services; <span class=\"term\" data-def=\"提供；给予\">render</span> assistance; <span class=\"term\" data-def=\"提供；给予\">render</span> a decision"
             ],
             [
-              "turnkey",
+              "<span class=\"term\" data-def=\"交钥匙（工程）\">turnkey</span>",
               "/ˈtɜːrnkiː/",
               "adj. 交钥匙（的）；整包",
-              "turnkey project; turnkey solution; on a turnkey basis"
+              "<span class=\"term\" data-def=\"交钥匙（工程）\">turnkey</span> project; <span class=\"term\" data-def=\"交钥匙（工程）\">turnkey</span> solution; on a <span class=\"term\" data-def=\"交钥匙（工程）\">turnkey</span> basis"
             ],
             [
-              "specifications",
+              "<span class=\"term\" data-def=\"规格\">specifications</span>",
               "/ˌspesɪfɪˈkeɪʃənz/",
               "n. 规格；技术规范",
-              "technical specifications; conform to specifications; detailed specifications"
+              "technical <span class=\"term\" data-def=\"规格\">specifications</span>; conform to <span class=\"term\" data-def=\"规格\">specifications</span>; detailed <span class=\"term\" data-def=\"规格\">specifications</span>"
             ],
             [
-              "compliance",
+              "<span class=\"term\" data-def=\"合规\">compliance</span>",
               "/kəmˈplaɪəns/",
               "n. 合规；遵守",
-              "compliance with applicable Laws; in compliance with; compliance obligations"
+              "<span class=\"term\" data-def=\"合规\">compliance</span> with applicable Laws; in <span class=\"term\" data-def=\"合规\">compliance</span> with; <span class=\"term\" data-def=\"合规\">compliance</span> <span class=\"term\" data-def=\"义务（复数）\">obligations</span>"
             ],
             [
               "workmanlike",
@@ -118,11 +118,11 @@
         },
         {
           "type": "note",
-          "html": "<strong>多义词辨析：performance</strong><ul><li>日常英语：表演；性能；表现</li><li>法律英语①：<strong>履行</strong>——performance of obligations = 义务的履行</li><li>法律英语②：<strong>specific performance</strong> = 实际履行/强制履行（一种衡平法救济方式，法院命令违约方实际履行合同义务）</li></ul>"
+          "html": "<strong>多义词辨析：<span class=\"term\" data-def=\"履行\">performance</span></strong><ul><li>日常英语：表演；性能；表现</li><li>法律英语①：<strong>履行</strong>——<span class=\"term\" data-def=\"履行\">performance</span> of <span class=\"term\" data-def=\"义务（复数）\">obligations</span> = 义务的履行</li><li>法律英语②：<strong>specific <span class=\"term\" data-def=\"履行\">performance</span></strong> = 实际履行/强制履行（一种衡平法救济方式，法院命令违约方实际履行合同义务）</li></ul>"
         },
         {
           "type": "note",
-          "html": "<strong>多义词辨析：deliver</strong><ul><li>日常英语：递送、投递（快递）</li><li>法律英语①：<strong>交付</strong>——deliver the Goods = 交付货物（合同义务）</li><li>法律英语②：<strong>递交</strong>——deliver notice = 递送通知（程序要求）</li><li>法律英语③：<strong>签署交付</strong>——execute and deliver this Agreement = 签署并交付本协议（回顾第2天：execute = 签署）</li></ul>"
+          "html": "<strong>多义词辨析：deliver</strong><ul><li>日常英语：递送、投递（快递）</li><li>法律英语①：<strong>交付</strong>——deliver the Goods = 交付货物（合同义务）</li><li>法律英语②：<strong>递交</strong>——deliver notice = 递送通知（程序要求）</li><li>法律英语③：<strong>签署交付</strong>——<span class=\"term\" data-def=\"签署；执行\">execute</span> and deliver this Agreement = 签署并交付本协议（回顾第2天：<span class=\"term\" data-def=\"签署；执行\">execute</span> = 签署）</li></ul>"
         }
       ]
     },
@@ -207,7 +207,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>中文母语者易错点：<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 的翻译</strong><br><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 有两种常见含义，中文母语者容易混淆：<ul><li><strong>① 根据/依据</strong>（前置条件）：<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms hereof... = 根据本协议条款……</li><li><strong>② 须经/以……为条件</strong>（限制条件）：<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> approval by the Board... = 须经董事会批准……</li></ul>常见错误：将 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 译为“受制于”或“服从于”——语气过重，不符合法律翻译规范。"
+          "html": "<strong>中文母语者易错点：<span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 的翻译</strong><br><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 有两种常见含义，中文母语者容易混淆：<ul><li><strong>① 根据/依据</strong>（前置条件）：<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms <span class=\"term\" data-def=\"本协议的\">hereof</span>... = 根据本协议条款……</li><li><strong>② 须经/以……为条件</strong>（限制条件）：<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> approval by the Board... = 须经董事会批准……</li></ul>常见错误：将 <span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span> 译为“受制于”或“服从于”——语气过重，不符合法律翻译规范。"
         }
       ]
     },
@@ -217,7 +217,7 @@
       "blocks": [
         {
           "type": "h3",
-          "text": "3a. provide vs. furnish vs. render"
+          "text": "3a. <span class=\"term\" data-def=\"提供\">provide</span> vs. <span class=\"term\" data-def=\"提供；交付\">furnish</span> vs. <span class=\"term\" data-def=\"提供；给予\">render</span>"
         },
         {
           "type": "p",
@@ -233,18 +233,18 @@
           "firstColWord": false,
           "rows": [
             [
-              "<span class=\"term\">provide</span>",
-              "provide services / goods / access",
+              "<span class=\"term\" data-def=\"提供\">provide</span>",
+              "<span class=\"term\" data-def=\"提供\">provide</span> services / goods / access",
               "最通用，适用于一切“提供”场景"
             ],
             [
-              "<span class=\"term\">furnish</span>",
-              "furnish information / documents / evidence",
+              "<span class=\"term\" data-def=\"提供；交付\">furnish</span>",
+              "<span class=\"term\" data-def=\"提供；交付\">furnish</span> information / documents / evidence",
               "侧重提供信息、文件、证据等，含“供查阅/使用”之意"
             ],
             [
-              "<span class=\"term\">render</span>",
-              "render services / assistance / a judgment",
+              "<span class=\"term\" data-def=\"提供；给予\">render</span>",
+              "<span class=\"term\" data-def=\"提供；给予\">render</span> services / assistance / a judgment",
               "侧重提供专业服务、协助或作出判断/裁决"
             ]
           ]
@@ -255,7 +255,7 @@
         },
         {
           "type": "h3",
-          "text": "3b. best efforts vs. reasonable efforts"
+          "text": "3b. <span class=\"term\" data-def=\"尽最大努力\">best efforts</span> vs. <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>"
         },
         {
           "type": "p",
@@ -293,7 +293,7 @@
         },
         {
           "type": "h3",
-          "text": "3c. subject matter vs. object"
+          "text": "3c. <span class=\"term\" data-def=\"标的\">subject matter</span> vs. object"
         },
         {
           "type": "table",
@@ -328,38 +328,38 @@
       "items": [
         {
           "title": "例句 1",
-          "sentence": "Subject to the terms and conditions hereof, Provider shall provide the Services and Deliverables described in Exhibit A (Statement of Work) in accordance with the timeline and milestones set forth therein.",
+          "sentence": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"本协议的\">hereof</span>, Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"提供\">provide</span> the Services and <span class=\"term\" data-def=\"交付成果\">Deliverables</span> described in Exhibit A (Statement of Work) <span class=\"term\" data-def=\"根据\">in accordance with</span> the timeline and milestones <span class=\"term\" data-def=\"规定\">set forth</span> <span class=\"term\" data-def=\"其中\">therein</span>.",
           "structure": [
-            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms and conditions hereof</em> — 介词短语作状语，“根据本协议条款”；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（回顾第3天）",
-            "<em>Provider shall provide the Services and Deliverables</em> — 主句，<span class=\"term\">shall</span> 表示义务",
-            "<em>described in Exhibit A (Statement of Work)</em> — 过去分词作后置定语，修饰 Services and Deliverables",
+            "<em><span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"本协议的\">hereof</span></em> — 介词短语作状语，“根据本协议条款”；<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（回顾第3天）",
+            "<em>Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"提供\">provide</span> the Services and <span class=\"term\" data-def=\"交付成果\">Deliverables</span></em> — 主句，<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 表示义务",
+            "<em>described in Exhibit A (Statement of Work)</em> — 过去分词作后置定语，修饰 Services and <span class=\"term\" data-def=\"交付成果\">Deliverables</span>",
             "<em><span class=\"term\" data-def=\"根据/依照\">in accordance with</span> the timeline and milestones</em> — 方式状语，“按照时间表和里程碑”",
-            "<em><span class=\"term\" data-def=\"规定/载明\">set forth</span> therein</em> — 过去分词作后置定语，修饰 timeline and milestones；<span class=\"term\">therein</span> = in Exhibit A（在其中）"
+            "<em><span class=\"term\" data-def=\"规定/载明\">set forth</span> <span class=\"term\" data-def=\"其中\">therein</span></em> — 过去分词作后置定语，修饰 timeline and milestones；<span class=\"term\" data-def=\"其中\">therein</span> = in Exhibit A（在其中）"
           ],
           "translation": "根据本协议条款，提供方应按照附件A（工作说明书）中规定的时间表和里程碑，提供该附件中所述的服务及交付物。"
         },
         {
           "title": "例句 2",
-          "sentence": "Contractor shall perform the Services with the degree of skill and diligence that would be exercised by a reasonably competent contractor experienced in providing services similar in scope and complexity to the Services, and shall comply with all applicable Laws and regulations.",
+          "sentence": "Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> perform the Services with the degree of skill and diligence that would be exercised by a reasonably competent contractor experienced in providing services similar in scope and complexity to the Services, and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> comply with all applicable Laws and regulations.",
           "structure": [
-            "<em>Contractor shall perform the Services</em> — 主句",
+            "<em>Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> perform the Services</em> — 主句",
             "<em>with the degree of skill and diligence</em> — 方式状语，“以……的技能和勤勉程度”",
             "<em>that would be exercised by a reasonably competent contractor</em> — 定语从句，修饰 skill and diligence，“合理称职的承包商所应具有的”",
             "<em>experienced in providing services similar in scope and complexity to the Services</em> — 过去分词短语作后置定语，修饰 contractor，“在提供与本服务范围和复杂程度相似的服务方面有经验的”",
-            "<em>and shall comply with all applicable Laws and regulations</em> — 并列谓语"
+            "<em>and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> comply with all applicable Laws and regulations</em> — 并列谓语"
           ],
           "translation": "承包方应以在提供与本服务范围和复杂程度相似的服务方面具有经验的合理称职承包商所应具有的技能和勤勉程度履行服务，并应遵守所有适用法律法规。"
         },
         {
           "title": "例句 3",
-          "sentence": "No failure or delay by either party in exercising any right or remedy hereunder shall operate as a waiver thereof, nor shall any single or partial exercise of any such right or remedy preclude any other or further exercise thereof or the exercise of any other right or remedy.",
+          "sentence": "No failure or delay by either <span class=\"term\" data-def=\"当事人\">party</span> in exercising any <span class=\"term\" data-def=\"权利\">right</span> or remedy <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> operate as a <span class=\"term\" data-def=\"弃权\">waiver</span> <span class=\"term\" data-def=\"其中的\">thereof</span>, nor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> any single or partial exercise of any such <span class=\"term\" data-def=\"权利\">right</span> or remedy preclude any other or further exercise <span class=\"term\" data-def=\"其中的\">thereof</span> or the exercise of any other <span class=\"term\" data-def=\"权利\">right</span> or remedy.",
           "structure": [
-            "<em>No failure or delay ... shall operate as a waiver</em> — 主句，“任何未行使或延迟行使……不构成对……的放弃”",
-            "<em>by either party</em> — 介词短语作后置定语，“任何一方的”",
-            "<em>in exercising any right or remedy hereunder</em> — 介词短语作状语；<span class=\"term\">hereunder</span> = under this Agreement（在本协议项下）",
-            "<em>thereof</em> — 指代 any right or remedy（= of that right or remedy，对该权利或救济的）",
-            "<em>nor shall any single or partial exercise ... preclude</em> — <strong>nor 引导的否定倒装句</strong>，“任何一次或部分行使也不得排除”",
-            "<em>any other or further exercise thereof</em> — “其进一步或其他行使”"
+            "<em>No failure or delay ... <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> operate as a <span class=\"term\" data-def=\"弃权\">waiver</span></em> — 主句，“任何未行使或延迟行使……不构成对……的放弃”",
+            "<em>by either <span class=\"term\" data-def=\"当事人\">party</span></em> — 介词短语作后置定语，“任何一方的”",
+            "<em>in exercising any <span class=\"term\" data-def=\"权利\">right</span> or remedy <span class=\"term\" data-def=\"依本协议\">hereunder</span></em> — 介词短语作状语；<span class=\"term\" data-def=\"依本协议\">hereunder</span> = under this Agreement（在本协议项下）",
+            "<em><span class=\"term\" data-def=\"其中的\">thereof</span></em> — 指代 any <span class=\"term\" data-def=\"权利\">right</span> or remedy（= of that <span class=\"term\" data-def=\"权利\">right</span> or remedy，对该权利或救济的）",
+            "<em>nor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> any single or partial exercise ... preclude</em> — <strong>nor 引导的否定倒装句</strong>，“任何一次或部分行使也不得排除”",
+            "<em>any other or further exercise <span class=\"term\" data-def=\"其中的\">thereof</span></em> — “其进一步或其他行使”"
           ],
           "translation": "任何一方未能或延迟行使本协议项下的任何权利或救济，不构成对该权利或救济的放弃；任何一次或部分行使任何此等权利或救济，不排除其进一步或其他行使，也不排除行使任何其他权利或救济。"
         }
@@ -383,7 +383,7 @@
                 "运输费用"
               ],
               "answer": "交付物；应交付成果",
-              "explanation": "deliverables 指合同约定的应交付成果，可以是产品、软件、报告、设计稿等。注意 deliverable 作形容词时意为“可交付的”。"
+              "explanation": "<span class=\"term\" data-def=\"交付成果\">deliverables</span> 指合同约定的应交付成果，可以是产品、软件、报告、设计稿等。注意 deliverable 作形容词时意为“可交付的”。"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span>（合同语境）",
@@ -394,10 +394,10 @@
                 "截止日期"
               ],
               "answer": "里程碑；阶段节点",
-              "explanation": "milestone 在合同中指项目的关键阶段节点，通常与支付挂钩（milestone payments = 里程碑付款）。"
+              "explanation": "<span class=\"term\" data-def=\"里程碑\">milestone</span> 在合同中指项目的关键阶段节点，通常与支付挂钩（<span class=\"term\" data-def=\"里程碑\">milestone</span> payments = 里程碑付款）。"
             },
             {
-              "prompt": "<span class=\"term\" data-def=\"履行/履约\">performance</span>（performance of obligations）",
+              "prompt": "<span class=\"term\" data-def=\"履行/履约\">performance</span>（<span class=\"term\" data-def=\"履行\">performance</span> of <span class=\"term\" data-def=\"义务（复数）\">obligations</span>）",
               "options": [
                 "表演",
                 "性能",
@@ -405,7 +405,7 @@
                 "业绩"
               ],
               "answer": "履行（义务）",
-              "explanation": "performance 在法律语境中主要指“履行”合同义务，而非日常含义的“表演”或“性能”。performance of obligations = 义务的履行。"
+              "explanation": "<span class=\"term\" data-def=\"履行\">performance</span> 在法律语境中主要指“履行”合同义务，而非日常含义的“表演”或“性能”。<span class=\"term\" data-def=\"履行\">performance</span> of <span class=\"term\" data-def=\"义务（复数）\">obligations</span> = 义务的履行。"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"规格/技术要求\">specifications</span>",
@@ -416,7 +416,7 @@
                 "说明书"
               ],
               "answer": "规格；技术规范",
-              "explanation": "specifications 指合同中约定的产品或服务应满足的技术标准和具体要求。conform to specifications = 符合规格。"
+              "explanation": "<span class=\"term\" data-def=\"规格\">specifications</span> 指合同中约定的产品或服务应满足的技术标准和具体要求。conform to <span class=\"term\" data-def=\"规格\">specifications</span> = 符合规格。"
             },
             {
               "prompt": "<span class=\"term\" data-def=\"合规/遵守\">compliance</span>",
@@ -427,7 +427,7 @@
                 "完成"
               ],
               "answer": "合规；遵守",
-              "explanation": "compliance 指遵守法律法规或合同要求。compliance with applicable Laws = 遵守适用法律。注意不要与 complaint（投诉）混淆。"
+              "explanation": "<span class=\"term\" data-def=\"合规\">compliance</span> 指遵守法律法规或合同要求。<span class=\"term\" data-def=\"合规\">compliance</span> with applicable Laws = 遵守适用法律。注意不要与 complaint（投诉）混淆。"
             }
           ]
         },
@@ -437,59 +437,59 @@
           "instruction": "根据语境选择最恰当的术语填入合同条款空白处。",
           "questions": [
             {
-              "prompt": "The Service Provider shall ______ the Services <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> this Agreement.",
+              "prompt": "The Service Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ the Services <span class=\"term\" data-def=\"根据/依照\">in accordance with</span> this Agreement.",
               "options": [
                 "perform",
                 "performing",
                 "performed",
-                "performance"
+                "<span class=\"term\" data-def=\"履行\">performance</span>"
               ],
               "answer": "perform",
-              "explanation": "perform obligations/services 是法律英语中“履行义务/服务”的标准搭配。shall perform = 应当履行。"
+              "explanation": "perform <span class=\"term\" data-def=\"义务（复数）\">obligations</span>/services 是法律英语中“履行义务/服务”的标准搭配。<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> perform = 应当履行。"
             },
             {
-              "prompt": "The Contractor shall ______ all necessary documentation to the Client for review.",
+              "prompt": "The Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> ______ all necessary documentation to the Client for review.",
               "options": [
-                "render",
-                "furnish",
+                "<span class=\"term\" data-def=\"提供；给予\">render</span>",
+                "<span class=\"term\" data-def=\"提供；交付\">furnish</span>",
                 "deliver",
                 "comply"
               ],
-              "answer": "furnish",
-              "explanation": "furnish 常用于提供信息、文件、证据等场景。furnish documentation = 提供文件。provide 也可以，但 furnish 更精确地表达“供查阅”之意。"
+              "answer": "<span class=\"term\" data-def=\"提供；交付\">furnish</span>",
+              "explanation": "<span class=\"term\" data-def=\"提供；交付\">furnish</span> 常用于提供信息、文件、证据等场景。<span class=\"term\" data-def=\"提供；交付\">furnish</span> documentation = 提供文件。<span class=\"term\" data-def=\"提供\">provide</span> 也可以，但 <span class=\"term\" data-def=\"提供；交付\">furnish</span> 更精确地表达“供查阅”之意。"
             },
             {
-              "prompt": "______ the <span class=\"term\" data-def=\"预付款；定金\">advance payment</span>, Supplier shall deliver the Goods within five (5) Business Days.",
+              "prompt": "______ the <span class=\"term\" data-def=\"预付款；定金\">advance payment</span>, Supplier <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver the Goods within five (5) Business Days.",
               "options": [
-                "Upon receipt of",
-                "Under payment of",
+                "Upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of",
+                "Under <span class=\"term\" data-def=\"付款\">payment</span> of",
                 "On receiving the",
                 "At the time of"
               ],
-              "answer": "Upon receipt of",
-              "explanation": "upon receipt of = 收到……后，是合同中表示触发条件的标准搭配。Upon receipt of payment = 收到款项后。"
+              "answer": "Upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of",
+              "explanation": "upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of = 收到……后，是合同中表示触发条件的标准搭配。Upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of <span class=\"term\" data-def=\"付款\">payment</span> = 收到款项后。"
             },
             {
-              "prompt": "Provider shall use its ______ to complete the project by the Target Date.",
+              "prompt": "Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> use its ______ to complete the project by the Target Date.",
               "options": [
                 "good efforts",
-                "best efforts",
+                "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span>",
                 "great efforts",
                 "full efforts"
               ],
-              "answer": "best efforts",
-              "explanation": "best efforts（最大努力）代表最高程度的努力义务，要求义务方用尽一切合理手段。对比 reasonable efforts（合理努力）义务程度较低。"
+              "answer": "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span>",
+              "explanation": "<span class=\"term\" data-def=\"尽最大努力\">best efforts</span>（最大努力）代表最高程度的努力义务，要求义务方用尽一切合理手段。对比 <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>（合理努力）义务程度较低。"
             },
             {
-              "prompt": "All Services shall be performed ______ the Specifications <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Exhibit A.",
+              "prompt": "All Services <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be performed ______ the <span class=\"term\" data-def=\"规格\">Specifications</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Exhibit A.",
               "options": [
                 "according to",
-                "in accordance with",
+                "<span class=\"term\" data-def=\"根据\">in accordance with</span>",
                 "following up",
                 "based on"
               ],
-              "answer": "in accordance with",
-              "explanation": "in accordance with = 按照/根据，是法律英语中表示“遵循某标准/规定”的标准搭配。注意区别于 in compliance with（更强调合规义务）。"
+              "answer": "<span class=\"term\" data-def=\"根据\">in accordance with</span>",
+              "explanation": "<span class=\"term\" data-def=\"根据\">in accordance with</span> = 按照/根据，是法律英语中表示“遵循某标准/规定”的标准搭配。注意区别于 in <span class=\"term\" data-def=\"合规\">compliance</span> with（更强调合规义务）。"
             }
           ]
         },
@@ -507,7 +507,7 @@
                 "义务方必须不惜一切代价完成"
               ],
               "answer": "义务方可以考虑自身成本和可行性，采取合理步骤即可",
-              "explanation": "reasonable efforts 要求义务方采取合理步骤，但允许考虑自身成本和可行性。而 best efforts 要求更高，义务方需用尽一切合理手段，即使需要牺牲自身利益。"
+              "explanation": "<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 要求义务方采取合理步骤，但允许考虑自身成本和可行性。而 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 要求更高，义务方需用尽一切合理手段，即使需要牺牲自身利益。"
             },
             {
               "prompt": "合同中写明 “<span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span>” 的法律效果是什么？",
@@ -518,18 +518,18 @@
                 "仅适用于付款义务"
               ],
               "answer": "一旦迟延履行即构成违约，对方有权主张权利",
-              "explanation": "Time is of the essence 是法律术语，表示时间期限是合同的核心条款。一旦约定此条款，任何迟延都将构成重大违约（material breach），对方有权解除合同并索赔。"
+              "explanation": "<span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span> 是法律术语，表示时间期限是合同的核心条款。一旦约定此条款，任何迟延都将构成重大违约（<span class=\"term\" data-def=\"重大的\">material</span> breach），对方有权解除合同并索赔。"
             },
             {
-              "prompt": "<span class=\"term\">provide</span>、<span class=\"term\">furnish</span>、<span class=\"term\">render</span> 三者的区别是什么？",
+              "prompt": "<span class=\"term\" data-def=\"提供\">provide</span>、<span class=\"term\" data-def=\"提供；交付\">furnish</span>、<span class=\"term\" data-def=\"提供；给予\">render</span> 三者的区别是什么？",
               "options": [
                 "三者含义完全相同，可随意替换",
-                "provide 最通用；furnish 侧重提供文件/信息；render 侧重提供专业服务",
-                "provide 最正式；furnish 最口语化；render 已过时",
-                "provide 用于服务；furnish 用于货物；render 用于金钱"
+                "<span class=\"term\" data-def=\"提供\">provide</span> 最通用；<span class=\"term\" data-def=\"提供；交付\">furnish</span> 侧重提供文件/信息；<span class=\"term\" data-def=\"提供；给予\">render</span> 侧重提供专业服务",
+                "<span class=\"term\" data-def=\"提供\">provide</span> 最正式；<span class=\"term\" data-def=\"提供；交付\">furnish</span> 最口语化；<span class=\"term\" data-def=\"提供；给予\">render</span> 已过时",
+                "<span class=\"term\" data-def=\"提供\">provide</span> 用于服务；<span class=\"term\" data-def=\"提供；交付\">furnish</span> 用于货物；<span class=\"term\" data-def=\"提供；给予\">render</span> 用于金钱"
               ],
-              "answer": "provide 最通用；furnish 侧重提供文件/信息；render 侧重提供专业服务",
-              "explanation": "三者均可译为“提供”，但 provide 适用范围最广，furnish 常搭配 information/documents/evidence（信息/文件/证据），render 常搭配 services/assistance/judgment（服务/协助/裁决）。"
+              "answer": "<span class=\"term\" data-def=\"提供\">provide</span> 最通用；<span class=\"term\" data-def=\"提供；交付\">furnish</span> 侧重提供文件/信息；<span class=\"term\" data-def=\"提供；给予\">render</span> 侧重提供专业服务",
+              "explanation": "三者均可译为“提供”，但 <span class=\"term\" data-def=\"提供\">provide</span> 适用范围最广，<span class=\"term\" data-def=\"提供；交付\">furnish</span> 常搭配 information/documents/evidence（信息/文件/证据），<span class=\"term\" data-def=\"提供；给予\">render</span> 常搭配 services/assistance/judgment（服务/协助/裁决）。"
             },
             {
               "prompt": "“<span class=\"term\" data-def=\"以…为条件/受…约束\">Subject to</span> the terms <span class=\"term\" data-def=\"本协议的\">hereof</span>” 的正确翻译是？（复习 here- 家族词）",
@@ -540,18 +540,18 @@
                 "依附本合同条款"
               ],
               "answer": "根据本协议条款",
-              "explanation": "Subject to the terms hereof 中 subject to = 根据/依据（前置条件），hereof = of this Agreement。整体译为“根据本协议条款”。注意不要译为“受制于”。（复习 here- 家族词）"
+              "explanation": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span> the terms <span class=\"term\" data-def=\"本协议的\">hereof</span> 中 <span class=\"term\" data-def=\"以…为条件\">subject to</span> = 根据/依据（前置条件），<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement。整体译为“根据本协议条款”。注意不要译为“受制于”。（复习 here- 家族词）"
             },
             {
               "prompt": "今天学的“合同标的”和“履行义务”条款属于合同结构中的哪个部分？（复习第1天知识）",
               "options": [
-                "通用条款（boilerplate）",
-                "鉴于条款（recitals）",
-                "实质性条款（operative provisions）",
-                "定义条款（definitions）"
+                "通用条款（<span class=\"term\" data-def=\"样板条款\">boilerplate</span>）",
+                "鉴于条款（<span class=\"term\" data-def=\"鉴于条款\">recitals</span>）",
+                "实质性条款（<span class=\"term\" data-def=\"实质条款\">operative provisions</span>）",
+                "定义条款（<span class=\"term\" data-def=\"定义条款\">definitions</span>）"
               ],
-              "answer": "实质性条款（operative provisions）",
-              "explanation": "operative provisions = 实质性条款/正文条款，是合同中规定当事人核心权利义务的条款。今天学的标的条款和履行义务条款都属于 operative provisions。注意不是“执行条款”。（复习第1天错题）"
+              "answer": "实质性条款（<span class=\"term\" data-def=\"实质条款\">operative provisions</span>）",
+              "explanation": "<span class=\"term\" data-def=\"实质条款\">operative provisions</span> = 实质性条款/正文条款，是合同中规定当事人核心权利义务的条款。今天学的标的条款和履行义务条款都属于 <span class=\"term\" data-def=\"实质条款\">operative provisions</span>。注意不是“执行条款”。（复习第1天错题）"
             }
           ]
         },
@@ -561,11 +561,11 @@
           "instruction": "将以下合同条款翻译为中文，完成后点击“提交批改”获取详细批改。",
           "questions": [
             {
-              "source": "Subject to the terms and conditions of this Agreement, Provider shall deliver the Goods to the location designated by Client within thirty (30) days of the Effective Date.",
+              "source": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> of this Agreement, Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver the Goods to the location <span class=\"term\" data-def=\"指定的\">designated</span> by Client within thirty (30) days of the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>.",
               "reference": "根据本协议的条款和条件，提供方应在生效日期后三十（30）日内将货物交付至客户指定的地点。",
               "rubric": [
                 {
-                  "en": "Subject to",
+                  "en": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span>",
                   "ideal": "根据/依据",
                   "accept": [
                     "按照",
@@ -575,10 +575,10 @@
                     "受制于",
                     "服从于"
                   ],
-                  "note": "Subject to 在合同中表示“根据/在……条件下”，不是“受制于”"
+                  "note": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span> 在合同中表示“根据/在……条件下”，不是“受制于”"
                 },
                 {
-                  "en": "terms and conditions",
+                  "en": "terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span>",
                   "ideal": "条款和条件",
                   "accept": [
                     "条款",
@@ -590,7 +590,7 @@
                   "note": "terms = 条款，不是“术语”"
                 },
                 {
-                  "en": "shall deliver",
+                  "en": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver",
                   "ideal": "应交付/应当交付",
                   "accept": [
                     "须交付",
@@ -600,10 +600,10 @@
                     "可以交付",
                     "可能交付"
                   ],
-                  "note": "shall 表示法律义务"
+                  "note": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 表示法律义务"
                 },
                 {
-                  "en": "the location designated by Client",
+                  "en": "the location <span class=\"term\" data-def=\"指定的\">designated</span> by Client",
                   "ideal": "客户指定的地点",
                   "accept": [
                     "由客户指定的地点",
@@ -612,10 +612,10 @@
                   "wrong": [
                     "客户的地点"
                   ],
-                  "note": "designated = 指定的"
+                  "note": "<span class=\"term\" data-def=\"指定的\">designated</span> = 指定的"
                 },
                 {
-                  "en": "within thirty (30) days of the Effective Date",
+                  "en": "within thirty (30) days of the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>",
                   "ideal": "在生效日期后三十（30）日内",
                   "accept": [
                     "自生效日起30日内",
@@ -629,7 +629,7 @@
               ]
             },
             {
-              "source": "Contractor shall perform the Services in a professional and workmanlike manner, consistent with industry standards, and shall use reasonable efforts to complete the Deliverables by the milestones set forth in Schedule B.",
+              "source": "Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> perform the Services in a professional and workmanlike manner, consistent with industry standards, and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> use <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> to complete the <span class=\"term\" data-def=\"交付成果\">Deliverables</span> by the milestones <span class=\"term\" data-def=\"规定\">set forth</span> in Schedule B.",
               "reference": "承包方应以专业且符合行业水准的方式履行服务，符合行业标准，并应尽合理努力在附表B中规定的里程碑期限前完成交付物。",
               "rubric": [
                 {
@@ -656,7 +656,7 @@
                   "note": "consistent with = 符合/与……一致"
                 },
                 {
-                  "en": "shall use reasonable efforts",
+                  "en": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> use <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span>",
                   "ideal": "应尽合理努力/应使用合理努力",
                   "accept": [
                     "应采取合理措施"
@@ -664,10 +664,10 @@
                   "wrong": [
                     "应尽最大努力"
                   ],
-                  "note": "reasonable efforts 不等于 best efforts，义务程度不同"
+                  "note": "<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 不等于 <span class=\"term\" data-def=\"尽最大努力\">best efforts</span>，义务程度不同"
                 },
                 {
-                  "en": "milestones set forth in Schedule B",
+                  "en": "milestones <span class=\"term\" data-def=\"规定\">set forth</span> in Schedule B",
                   "ideal": "附表B中规定的里程碑",
                   "accept": [
                     "附件B中载明的里程碑"
@@ -675,7 +675,7 @@
                   "wrong": [
                     "时间表B"
                   ],
-                  "note": "set forth = 规定/载明（第3天所学）; Schedule = 附表/附件（第1天所学）"
+                  "note": "<span class=\"term\" data-def=\"规定\">set forth</span> = 规定/载明（第3天所学）; Schedule = 附表/附件（第1天所学）"
                 }
               ]
             }
@@ -688,11 +688,11 @@
           "questions": [
             {
               "source": "根据本协议的条款和条件，承包方应在工作范围内按照附件A中规定的技术规范提供所有服务。",
-              "reference": "Subject to the terms and conditions of this Agreement, Contractor shall provide all Services within the scope of work in accordance with the specifications set forth in Exhibit A.",
+              "reference": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> of this Agreement, Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"提供\">provide</span> all Services within the <span class=\"term\" data-def=\"工作范围\">scope of work</span> <span class=\"term\" data-def=\"根据\">in accordance with</span> the <span class=\"term\" data-def=\"规格\">specifications</span> <span class=\"term\" data-def=\"规定\">set forth</span> in Exhibit A.",
               "rubric": [
                 {
                   "en": "根据本协议条款",
-                  "ideal": "Subject to the terms and conditions of this Agreement",
+                  "ideal": "<span class=\"term\" data-def=\"以…为条件\">Subject to</span> the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> of this Agreement",
                   "accept": [
                     "Pursuant to this Agreement",
                     "Under the terms of this Agreement"
@@ -700,40 +700,40 @@
                   "wrong": [
                     "According to this Agreement"
                   ],
-                  "note": "合同中“根据”首选 subject to 或 pursuant to"
+                  "note": "合同中“根据”首选 <span class=\"term\" data-def=\"以…为条件\">subject to</span> 或 pursuant to"
                 },
                 {
                   "en": "承包方应",
-                  "ideal": "Contractor shall",
+                  "ideal": "Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>",
                   "accept": [
-                    "the Contractor shall"
+                    "the Contractor <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>"
                   ],
                   "wrong": [
-                    "Contractor will",
-                    "Contractor should"
+                    "Contractor <span class=\"term\" data-def=\"将；将要（弱于 shall）\">will</span>",
+                    "Contractor <span class=\"term\" data-def=\"应（建议性，非强制）\">should</span>"
                   ],
-                  "note": "shall 表示合同义务（第3天所学）"
+                  "note": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 表示合同义务（第3天所学）"
                 },
                 {
                   "en": "在工作范围内",
-                  "ideal": "within the scope of work",
+                  "ideal": "within the <span class=\"term\" data-def=\"工作范围\">scope of work</span>",
                   "accept": [
-                    "under the scope of work"
+                    "under the <span class=\"term\" data-def=\"工作范围\">scope of work</span>"
                   ],
-                  "note": "scope of work = 工作范围"
+                  "note": "<span class=\"term\" data-def=\"工作范围\">scope of work</span> = 工作范围"
                 },
                 {
                   "en": "按照……技术规范",
-                  "ideal": "in accordance with the specifications",
+                  "ideal": "<span class=\"term\" data-def=\"根据\">in accordance with</span> the <span class=\"term\" data-def=\"规格\">specifications</span>",
                   "accept": [
-                    "pursuant to the specifications",
-                    "according to the specifications"
+                    "pursuant to the <span class=\"term\" data-def=\"规格\">specifications</span>",
+                    "according to the <span class=\"term\" data-def=\"规格\">specifications</span>"
                   ],
-                  "note": "in accordance with = 按照（法律标准搭配）"
+                  "note": "<span class=\"term\" data-def=\"根据\">in accordance with</span> = 按照（法律标准搭配）"
                 },
                 {
                   "en": "附件A中规定的",
-                  "ideal": "set forth in Exhibit A",
+                  "ideal": "<span class=\"term\" data-def=\"规定\">set forth</span> in Exhibit A",
                   "accept": [
                     "as set out in Exhibit A",
                     "specified in Exhibit A"
@@ -741,33 +741,33 @@
                   "wrong": [
                     "written in Exhibit A"
                   ],
-                  "note": "set forth = 规定/载明（法律用语）"
+                  "note": "<span class=\"term\" data-def=\"规定\">set forth</span> = 规定/载明（法律用语）"
                 }
               ]
             },
             {
               "source": "收到预付款后，供应商应在五（5）个工作日内开始交付货物，时间至关重要。",
-              "reference": "Upon receipt of the advance payment, Supplier shall commence delivery of the Goods within five (5) Business Days. Time is of the essence with respect to such delivery.",
+              "reference": "Upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of the <span class=\"term\" data-def=\"预付款\">advance payment</span>, Supplier <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"开始；起始\">commence</span> delivery of the Goods within five (5) Business Days. <span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span> with respect to such delivery.",
               "rubric": [
                 {
                   "en": "收到预付款后",
-                  "ideal": "Upon receipt of the advance payment",
+                  "ideal": "Upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of the <span class=\"term\" data-def=\"预付款\">advance payment</span>",
                   "accept": [
-                    "After receiving the advance payment"
+                    "After receiving the <span class=\"term\" data-def=\"预付款\">advance payment</span>"
                   ],
                   "wrong": [
                     "When receiving"
                   ],
-                  "note": "upon receipt of = 收到……后（法律固定搭配）"
+                  "note": "upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of = 收到……后（法律固定搭配）"
                 },
                 {
                   "en": "应开始交付",
-                  "ideal": "shall commence delivery",
+                  "ideal": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"开始；起始\">commence</span> delivery",
                   "accept": [
-                    "shall begin delivery",
-                    "shall start delivery"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> begin delivery",
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> start delivery"
                   ],
-                  "note": "commence 比 begin/start 更正式"
+                  "note": "<span class=\"term\" data-def=\"开始；起始\">commence</span> 比 begin/start 更正式"
                 },
                 {
                   "en": "五（5）个工作日内",
@@ -783,15 +783,15 @@
                 },
                 {
                   "en": "时间至关重要",
-                  "ideal": "Time is of the essence",
+                  "ideal": "<span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span>",
                   "accept": [
-                    "time is of the essence"
+                    "<span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span>"
                   ],
                   "wrong": [
                     "Time is important",
                     "Time is critical"
                   ],
-                  "note": "Time is of the essence 是法律专用表达，不可替换为普通英语"
+                  "note": "<span class=\"term\" data-def=\"时间至关重要（法律效力）\">Time is of the essence</span> 是法律专用表达，不可替换为普通英语"
                 }
               ]
             }
@@ -802,7 +802,7 @@
     {
       "type": "summary",
       "heading": "6. 今日小结",
-      "html": "<ol><li><strong><span class=\"term\" data-def=\"标的/主题\">subject matter</span></strong>——合同标的/标的物，指合同权利义务所指向的具体事物</li><li><strong><span class=\"term\" data-def=\"交付成果\">deliverables</span></strong>——交付物/应交付成果，合同约定需交付的产品或成果</li><li><strong><span class=\"term\" data-def=\"工作范围\">scope of work</span></strong>（SOW）——工作范围，明确界定合同项下服务的具体内容</li><li><strong><span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span></strong>——里程碑/阶段节点，常与 milestone payments（里程碑付款）挂钩</li><li><strong><span class=\"term\" data-def=\"履行/履约\">performance</span></strong>——法律语境中首要含义是“履行”（非“表演”或“性能”）</li><li><strong>provide / furnish / render 三者辨析</strong>——provide 最通用；furnish 用于提供信息/文件；render 用于提供专业服务</li><li><strong><span class=\"term\" data-def=\"尽最大努力\">best efforts</span> vs. <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span></strong>——努力义务程度不同，<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 最高，<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 允许考虑自身成本</li><li><strong><span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span></strong>——法律效力：迟延即构成重大违约</li><li><strong><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></strong>——根据/须经（两种含义），不要译为“受制于”</li><li><strong><span class=\"term\" data-def=\"根据/依照\">in accordance with</span></strong>——按照/根据，法律英语中的标准搭配</li><li><strong>upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of</strong>——收到……后，表示触发条件的固定搭配</li><li><strong><span class=\"term\" data-def=\"交钥匙工程\">turnkey</span></strong>——交钥匙/整包，承包方完成全部工作后交付即可使用</li></ol>"
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"标的/主题\">subject matter</span></strong>——合同标的/标的物，指合同权利义务所指向的具体事物</li><li><strong><span class=\"term\" data-def=\"交付成果\">deliverables</span></strong>——交付物/应交付成果，合同约定需交付的产品或成果</li><li><strong><span class=\"term\" data-def=\"工作范围\">scope of work</span></strong>（SOW）——工作范围，明确界定合同项下服务的具体内容</li><li><strong><span class=\"term\" data-def=\"里程碑/阶段节点\">milestone</span></strong>——里程碑/阶段节点，常与 <span class=\"term\" data-def=\"里程碑\">milestone</span> payments（里程碑付款）挂钩</li><li><strong><span class=\"term\" data-def=\"履行/履约\">performance</span></strong>——法律语境中首要含义是“履行”（非“表演”或“性能”）</li><li><strong><span class=\"term\" data-def=\"提供\">provide</span> / <span class=\"term\" data-def=\"提供；交付\">furnish</span> / <span class=\"term\" data-def=\"提供；给予\">render</span> 三者辨析</strong>——<span class=\"term\" data-def=\"提供\">provide</span> 最通用；<span class=\"term\" data-def=\"提供；交付\">furnish</span> 用于提供信息/文件；<span class=\"term\" data-def=\"提供；给予\">render</span> 用于提供专业服务</li><li><strong><span class=\"term\" data-def=\"尽最大努力\">best efforts</span> vs. <span class=\"term\" data-def=\"合理努力\">reasonable efforts</span></strong>——努力义务程度不同，<span class=\"term\" data-def=\"尽最大努力\">best efforts</span> 最高，<span class=\"term\" data-def=\"合理努力\">reasonable efforts</span> 允许考虑自身成本</li><li><strong><span class=\"term\" data-def=\"时间至关重要（法律效力）\">time is of the essence</span></strong>——法律效力：迟延即构成重大违约</li><li><strong><span class=\"term\" data-def=\"以…为条件/受…约束\">subject to</span></strong>——根据/须经（两种含义），不要译为“受制于”</li><li><strong><span class=\"term\" data-def=\"根据/依照\">in accordance with</span></strong>——按照/根据，法律英语中的标准搭配</li><li><strong>upon <span class=\"term\" data-def=\"收到；收据\">receipt</span> of</strong>——收到……后，表示触发条件的固定搭配</li><li><strong><span class=\"term\" data-def=\"交钥匙工程\">turnkey</span></strong>——交钥匙/整包，承包方完成全部工作后交付即可使用</li></ol>"
     }
   ]
 }

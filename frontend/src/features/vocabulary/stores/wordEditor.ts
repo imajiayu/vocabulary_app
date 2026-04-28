@@ -44,6 +44,7 @@ function buildBlankWord(source: string, text = '', definition?: string): Word {
     remember_count: 0,
     forget_count: 0,
     avg_elapsed_time: 0,
+    updated_at: '',
   }
 }
 
@@ -433,6 +434,38 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     return true
   }
 
+  // ── 创建态：获取释义 ──
+  const isFetchingDefinition = ref(false)
+
+  /**
+   * 创建态下根据当前 word + createContext.lang 拉取释义，覆盖左侧表单
+   * 不依赖 wordId、不写 DB；保存时由 saveCreate 持久化
+   */
+  async function fetchDefinitionForCreate(): Promise<boolean> {
+    if (!isCreating.value || !createContext.value || !currentWord.value) return false
+    const wordText = currentWord.value.word.trim()
+    if (!wordText || isFetchingDefinition.value) return false
+
+    isFetchingDefinition.value = true
+    try {
+      const definition = await api.words.fetchDefinitionByTextDirect(
+        wordText,
+        createContext.value.lang
+      )
+      // 编辑表单展示纯文本，由 saveCreate 时再 strip → re-bold
+      currentWord.value = {
+        ...currentWord.value,
+        definition: stripBoldFromDefinition(definition),
+      }
+      return true
+    } catch (error) {
+      log.error('创建态获取释义失败:', error)
+      return false
+    } finally {
+      isFetchingDefinition.value = false
+    }
+  }
+
   /**
    * 异步获取释义并更新状态
    * @param lang 可选语言：传入可避免后端查 user_config 解析 source → lang
@@ -769,6 +802,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     isLoadingRelated,
     isCreating,
     createContext,
+    isFetchingDefinition,
 
     // Getters
     hasChanges,
@@ -779,6 +813,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     open,
     openForCourse,
     openForCreate,
+    fetchDefinitionForCreate,
     close,
     startEdit,
     cancelEdit,

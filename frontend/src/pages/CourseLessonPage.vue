@@ -68,6 +68,10 @@ import { checkCourseAccess } from '@/features/courses/composables/useCourseAcces
 import { summarizeLessonForAI } from '@/features/courses/utils/lessonSummary'
 import { useToast } from '@/shared/composables/useToast'
 import { getLessonsByCourse } from '@/features/courses/data/lessons'
+import {
+  lookupCourseDefinition,
+  prefetchCourseDefinitions,
+} from '@/features/courses/composables/useCourseDefinitionLookup'
 import LessonRenderer from '@/features/courses/components/LessonRenderer.vue'
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
 import CourseChat from '@/features/courses/components/interactions/CourseChat.vue'
@@ -92,7 +96,7 @@ const toast = useToast()
 
 // 全局点击单词/术语 → 用 WordEditorModal 替代旧 popover
 const PUNCT_RE = /[.,!?;:…—–\-"«»()"。，！？：；]/g
-function handleWordClick(e: MouseEvent) {
+async function handleWordClick(e: MouseEvent) {
   const target = e.target as HTMLElement | null
   if (!target) return
   const wordEl = target.closest(
@@ -108,7 +112,11 @@ function handleWordClick(e: MouseEvent) {
   if (!text) return
   if (!selectedSource.value) return
 
-  const def = wordEl.getAttribute('data-def') || undefined
+  // 优先 DOM 上的 data-def；没有则查跨课程释义索引兜底
+  let def = wordEl.getAttribute('data-def') || undefined
+  if (!def) {
+    def = await lookupCourseDefinition(text, config.value.lang)
+  }
   wordEditorStore.openForCourse(text, def, {
     source: selectedSource.value,
     lang: config.value.lang,
@@ -124,6 +132,8 @@ onMounted(async () => {
     return
   }
   loadSources()
+  // 后台预热跨课程释义索引，等用户选词/点词时已构建完毕
+  prefetchCourseDefinitions(config.value.lang)
   document.addEventListener('click', handleWordClick)
 })
 

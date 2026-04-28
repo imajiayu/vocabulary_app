@@ -1,13 +1,13 @@
 {
   "title": "第1周 第3天 — 合同当事人（Parties to a Contract）",
-  "objective": "掌握合同中描述当事人身份、引出背景和过渡到正式条款的核心术语，理解 whereas/witnesseth/<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 等法律英语特有表达的功能和用法。",
+  "objective": "掌握合同中描述当事人身份、引出背景和过渡到正式条款的核心术语，理解 <span class=\"term\" data-def=\"鉴于\">whereas</span>/<span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span>/<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 等法律英语特有表达的功能和用法。",
   "sections": [
     {
       "type": "grammar",
       "blocks": [
         {
           "type": "p",
-          "html": "上节回顾：第1天学习了合同的七大组成部分（title, preamble, recitals, definitions, <span class=\"term\" data-def=\"实质条款\">operative provisions</span>, boilerplate, schedules）。今天聚焦合同开头段落——当事人条款和引导语。"
+          "html": "上节回顾：第1天学习了合同的七大组成部分（<span class=\"term\" data-def=\"合同标题\">title</span>, <span class=\"term\" data-def=\"前言\">preamble</span>, <span class=\"term\" data-def=\"鉴于条款\">recitals</span>, <span class=\"term\" data-def=\"定义条款\">definitions</span>, <span class=\"term\" data-def=\"实质条款\">operative provisions</span>, <span class=\"term\" data-def=\"样板条款\">boilerplate</span>, <span class=\"term\" data-def=\"附表\">schedules</span>）。今天聚焦合同开头段落——当事人条款和引导语。"
         }
       ]
     },
@@ -29,25 +29,25 @@
               "<span class=\"term\" data-def=\"当事人/缔约方\">party</span>",
               "/ˈpɑːrti/",
               "n. 当事人；缔约方",
-              "contracting party; the parties hereto; third party"
+              "contracting <span class=\"term\" data-def=\"当事人\">party</span>; the parties <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>; third <span class=\"term\" data-def=\"当事人\">party</span>"
             ],
             [
               "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
               "/ˌhɪrɪnˈæftər/",
               "adv. 以下简称",
-              "hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span>; hereinafter called"
+              "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span>; <span class=\"term\" data-def=\"以下称为\">hereinafter</span> called"
             ],
             [
               "<span class=\"term\" data-def=\"鉴于\">whereas</span>",
               "/werˈæz/",
               "conj. 鉴于",
-              "WHEREAS, the Seller owns...; WHEREAS clauses"
+              "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>, the Seller owns...; <span class=\"term\" data-def=\"鉴于\">WHEREAS</span> clauses"
             ],
             [
               "<span class=\"term\" data-def=\"兹证明\">witnesseth</span>",
               "/ˈwɪtnəsɪθ/",
               "v. 兹证明；特此证明",
-              "Now, therefore, this Agreement witnesseth"
+              "Now, therefore, this Agreement <span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span>"
             ],
             [
               "<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>",
@@ -89,7 +89,7 @@
               "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
               "/ˈmjuːtʃuəl ˈkʌvənənts/",
               "n. 相互约定；双方承诺",
-              "the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements herein contained"
+              "the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements <span class=\"term\" data-def=\"本协议中\">herein</span> contained"
             ],
             [
               "<span class=\"term\" data-def=\"上述事项\">the premises</span>",
@@ -101,19 +101,19 @@
               "<span class=\"term\" data-def=\"称为\">referred to as</span>",
               "/rɪˈfɜːrd tuː æz/",
               "phr. 称为；简称为",
-              "hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Buyer\""
+              "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Buyer\""
             ],
             [
               "<span class=\"term\" data-def=\"鉴于条款（单数）\">recital</span>",
               "/rɪˈsaɪtəl/",
               "n. 叙述条款；鉴于条款",
-              "the recitals <span class=\"term\" data-def=\"规定/载明\">set forth</span> above; recital clauses"
+              "the <span class=\"term\" data-def=\"鉴于条款\">recitals</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> above; <span class=\"term\" data-def=\"鉴于条款（单数）\">recital</span> clauses"
             ]
           ]
         },
         {
           "type": "note",
-          "html": "<strong>⚠️ 易混淆：</strong><strong><span class=\"term\" data-def=\"上述事项\">the premises</span></strong> 在日常英语中意为“房屋/场所”，但在合同法律英语中常指“上述事项/前述内容”（即 recitals 中陈述的背景事实）。<code><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span></code> = 基于上述事项的约因。"
+          "html": "<strong>⚠️ 易混淆：</strong><strong><span class=\"term\" data-def=\"上述事项\">the premises</span></strong> 在日常英语中意为“房屋/场所”，但在合同法律英语中常指“上述事项/前述内容”（即 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 中陈述的背景事实）。<code><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span></code> = 基于上述事项的约因。"
         }
       ]
     },
@@ -207,7 +207,7 @@
       "blocks": [
         {
           "type": "h3",
-          "html": "3a. <span class=\"term\" data-def=\"签订/订立\">enter into</span> vs. sign vs. execute"
+          "html": "3a. <span class=\"term\" data-def=\"签订/订立\">enter into</span> vs. <span class=\"term\" data-def=\"签字；签署\">sign</span> vs. <span class=\"term\" data-def=\"签署；执行\">execute</span>"
         },
         {
           "type": "table",
@@ -223,24 +223,24 @@
               "指缔结合同关系，强调法律行为本身，最正式。<br>搭配：<span class=\"term\" data-def=\"签订/订立\">enter into</span> an agreement / a contract"
             ],
             [
-              "<span class=\"term\">sign</span>",
+              "<span class=\"term\" data-def=\"签字；签署\">sign</span>",
               "签字；签署",
-              "侧重物理签字动作，较口语化。<br>搭配：sign a document / sign on the dotted line"
+              "侧重物理签字动作，较口语化。<br>搭配：<span class=\"term\" data-def=\"签字；签署\">sign</span> a document / <span class=\"term\" data-def=\"签字；签署\">sign</span> on the dotted line"
             ],
             [
-              "<span class=\"term\">execute</span>",
+              "<span class=\"term\" data-def=\"签署；执行\">execute</span>",
               "签署；执行",
-              "极正式，同时含“签署”和“使生效”之意。<br>搭配：execute and deliver this Agreement"
+              "极正式，同时含“签署”和“使生效”之意。<br>搭配：<span class=\"term\" data-def=\"签署；执行\">execute</span> and deliver this Agreement"
             ]
           ]
         },
         {
           "type": "error-warn",
-          "html": "<strong>常见翻译错误：</strong><ul><li>“签合同”不要译为 sign a contract（偏口语），合同中应用 <span class=\"term\" data-def=\"签订/订立\">enter into</span> an agreement 或 <span class=\"term\">execute</span> this Agreement</li></ul>"
+          "html": "<strong>常见翻译错误：</strong><ul><li>“签合同”不要译为 <span class=\"term\" data-def=\"签字；签署\">sign</span> a contract（偏口语），合同中应用 <span class=\"term\" data-def=\"签订/订立\">enter into</span> an agreement 或 <span class=\"term\" data-def=\"签署；执行\">execute</span> this Agreement</li></ul>"
         },
         {
           "type": "h3",
-          "html": "3b. whereas vs. <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> vs. witnesseth"
+          "html": "3b. <span class=\"term\" data-def=\"鉴于\">whereas</span> vs. <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> vs. <span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span>"
         },
         {
           "type": "table",
@@ -253,12 +253,12 @@
             [
               "<span class=\"term\" data-def=\"鉴于\">whereas</span>",
               "鉴于",
-              "引出合同背景事实，位于 recitals（鉴于条款）部分。每条 WHEREAS 陈述一项背景。"
+              "引出合同背景事实，位于 <span class=\"term\" data-def=\"鉴于条款\">recitals</span>（鉴于条款）部分。每条 <span class=\"term\" data-def=\"鉴于\">WHEREAS</span> 陈述一项背景。"
             ],
             [
               "<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>",
               "因此，现",
-              "过渡语，衔接 recitals 与 <span class=\"term\" data-def=\"实质条款\">operative provisions</span>（正式条款）。表示“基于上述背景，双方同意如下”。"
+              "过渡语，衔接 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 与 <span class=\"term\" data-def=\"实质条款\">operative provisions</span>（正式条款）。表示“基于上述背景，双方同意如下”。"
             ],
             [
               "<span class=\"term\" data-def=\"兹证明\">witnesseth</span>",
@@ -269,7 +269,7 @@
         },
         {
           "type": "h3",
-          "html": "3c. party vs. person vs. entity"
+          "html": "3c. <span class=\"term\" data-def=\"当事人\">party</span> vs. <span class=\"term\" data-def=\"人（含自然人和法人）\">person</span> vs. entity"
         },
         {
           "type": "table",
@@ -282,10 +282,10 @@
             [
               "<span class=\"term\" data-def=\"当事人/缔约方\">party</span>",
               "当事人；缔约方",
-              "仅指合同签约方，范围最窄。the parties hereto = 本协议各方。"
+              "仅指合同签约方，范围最窄。the parties <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = 本协议各方。"
             ],
             [
-              "person",
+              "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>",
               "人士",
               "法律定义中范围最广，含自然人、公司、合伙企业、信托等一切法律主体。"
             ],
@@ -323,7 +323,7 @@
         },
         {
           "type": "h3",
-          "html": "鉴于条款（Whereas Clauses / Recitals）"
+          "html": "鉴于条款（<span class=\"term\" data-def=\"鉴于\">Whereas</span> Clauses / <span class=\"term\" data-def=\"鉴于条款\">Recitals</span>）"
         },
         {
           "type": "p",
@@ -342,7 +342,7 @@
         },
         {
           "type": "h3",
-          "html": "过渡条款（Transitional Clause）"
+          "html": "过渡条款（Transitional <span class=\"term\" data-def=\"条款\">Clause</span>）"
         },
         {
           "type": "p",
@@ -375,7 +375,7 @@
         },
         {
           "type": "tip",
-          "html": "<strong>💡 搭配提示：</strong><code>hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span></code> 是合同中引入简称的标准表达。注意 hereinafter 仅出现在首次定义简称时，后续条款直接使用简称即可。"
+          "html": "<strong>💡 搭配提示：</strong><code><span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span></code> 是合同中引入简称的标准表达。注意 <span class=\"term\" data-def=\"以下称为\">hereinafter</span> 仅出现在首次定义简称时，后续条款直接使用简称即可。"
         }
       ]
     },
@@ -385,26 +385,26 @@
       "items": [
         {
           "title": "长难句 1",
-          "sentence": "NOW, THEREFORE, <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements herein contained, and for other good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>, the receipt and sufficiency of which are hereby acknowledged, the parties agree as follows:",
+          "sentence": "NOW, THEREFORE, <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements <span class=\"term\" data-def=\"本协议中\">herein</span> contained, and for other good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>, the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged, the parties agree as follows:",
           "structure": [
             "<strong>主干：</strong>the parties agree as follows（双方协议如下）",
-            "<strong>原因状语①：</strong><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements herein contained（基于本协议所载的相互约定和承诺）",
+            "<strong>原因状语①：</strong><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> and agreements <span class=\"term\" data-def=\"本协议中\">herein</span> contained（基于本协议所载的相互约定和承诺）",
             "<strong>原因状语②：</strong>and for other good and <span class=\"term\" data-def=\"有价对价；有现实价值的对价\">valuable consideration</span>（以及其他充分有效的对价）",
-            "<strong>非限定性定语从句：</strong>the receipt and sufficiency of which are hereby acknowledged（双方特此确认已收到该等对价且对价充分）——修饰 consideration",
-            "<strong>过渡词：</strong>NOW, THEREFORE（因此，现）——衔接前面的 WHEREAS 鉴于条款，引出正式协议条款"
+            "<strong>非限定性定语从句：</strong>the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged（双方特此确认已收到该等对价且对价充分）——修饰 <span class=\"term\" data-def=\"对价\">consideration</span>",
+            "<strong>过渡词：</strong>NOW, THEREFORE（因此，现）——衔接前面的 <span class=\"term\" data-def=\"鉴于\">WHEREAS</span> 鉴于条款，引出正式协议条款"
           ],
           "translation": "因此，基于本协议所载的相互约定和承诺，以及其他充分有效的对价（双方特此确认已收到该等对价且对价充分），双方协议如下："
         },
         {
           "title": "长难句 2",
-          "sentence": "This Agreement is made and entered into <span class=\"term\" data-def=\"自…起/截至\">as of</span> the 15th day of January, 2026, <span class=\"term\" data-def=\"由…与…之间\">by and between</span> ABC Corporation, a company <span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of the State of Delaware, with its <span class=\"term\" data-def=\"主要营业地\">principal place of business</span> at 100 Main Street, Wilmington, Delaware (hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Seller\"), and XYZ Ltd., a company incorporated under the laws of England and Wales (hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Buyer\").",
+          "sentence": "This Agreement is made and entered into <span class=\"term\" data-def=\"自…起/截至\">as of</span> the 15th day of January, 2026, <span class=\"term\" data-def=\"由…与…之间\">by and between</span> ABC Corporation, a company <span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of the State of Delaware, with its <span class=\"term\" data-def=\"主要营业地\">principal place of business</span> at 100 Main Street, Wilmington, Delaware (<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Seller\"), and XYZ Ltd., a company incorporated under the laws of England and Wales (<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Buyer\").",
           "structure": [
             "<strong>主干：</strong>This Agreement is made and entered into（本协议签订）",
             "<strong>时间状语：</strong><span class=\"term\" data-def=\"自…起/截至\">as of</span> the 15th day of January, 2026（于2026年1月15日）",
             "<strong>当事人①：</strong><span class=\"term\" data-def=\"由…与…之间\">by and between</span> ABC Corporation（由ABC公司）",
             "<strong>同位语①：</strong>a company <span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of the State of Delaware（一家依特拉华州法律合法设立并存续的公司）",
             "<strong>介词短语：</strong>with its <span class=\"term\" data-def=\"主要营业地\">principal place of business</span> at 100 Main Street...（主要营业地位于……）",
-            "<strong>插入语：</strong>(hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Seller\")（以下简称“卖方”）",
+            "<strong>插入语：</strong>(<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> \"the Seller\")（以下简称“卖方”）",
             "<strong>当事人②：</strong>and XYZ Ltd.（与XYZ有限公司）",
             "<strong>同位语②：</strong>a company incorporated under the laws of England and Wales（一家依英格兰和威尔士法律设立的公司）"
           ],
@@ -412,13 +412,13 @@
         },
         {
           "title": "长难句 3",
-          "sentence": "WHEREAS, the parties have conducted arm's length negotiations and wish to memorialize their understanding in this Agreement, and WHEREAS, each party represents and warrants that it has the requisite corporate power and authority to <span class=\"term\" data-def=\"签订/订立\">enter into</span>, execute, and deliver this Agreement;",
+          "sentence": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>, the parties have conducted arm's length negotiations and wish to memorialize their understanding in this Agreement, and <span class=\"term\" data-def=\"鉴于\">WHEREAS</span>, each <span class=\"term\" data-def=\"当事人\">party</span> <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that it has the requisite corporate power and authority to <span class=\"term\" data-def=\"签订/订立\">enter into</span>, <span class=\"term\" data-def=\"签署；执行\">execute</span>, and deliver this Agreement;",
           "structure": [
             "<strong>鉴于条款①主干：</strong>the parties have conducted arm's length negotiations and wish to memorialize their understanding（双方经过公平独立的谈判，希望将其共识记载于本协议）",
             "<strong>关键搭配：</strong>arm's length negotiations = 公平独立的谈判（无关联关系的双方之间的谈判）",
             "<strong>关键搭配：</strong>memorialize = 记载；以书面形式记录",
-            "<strong>鉴于条款②主干：</strong>each party represents and warrants that...（各方声明并保证……）",
-            "<strong>宾语从句：</strong>it has the requisite corporate power and authority to <span class=\"term\" data-def=\"签订/订立\">enter into</span>, execute, and deliver this Agreement（其拥有签订、签署和交付本协议所需的公司权力和授权）"
+            "<strong>鉴于条款②主干：</strong>each <span class=\"term\" data-def=\"当事人\">party</span> <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that...（各方声明并保证……）",
+            "<strong>宾语从句：</strong>it has the requisite corporate power and authority to <span class=\"term\" data-def=\"签订/订立\">enter into</span>, <span class=\"term\" data-def=\"签署；执行\">execute</span>, and deliver this Agreement（其拥有签订、签署和交付本协议所需的公司权力和授权）"
           ],
           "translation": "鉴于，双方经过公平独立的谈判，希望将其共识记载于本协议中；并鉴于，各方声明并保证其拥有签订、签署和交付本协议所需的公司权力和授权；"
         }
@@ -452,22 +452,22 @@
             {
               "prompt": "1. 以下简称",
               "options": [
-                "hereinafter",
-                "whereas",
-                "witnesseth"
+                "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
+                "<span class=\"term\" data-def=\"鉴于\">whereas</span>",
+                "<span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span>"
               ],
-              "answer": "hereinafter",
-              "explanation": "hereinafter = 以下简称，是合同中引入简称的标准用语"
+              "answer": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
+              "explanation": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> = 以下简称，是合同中引入简称的标准用语"
             },
             {
               "prompt": "2. 上述事项（法律用语）",
               "options": [
                 "<span class=\"term\" data-def=\"上述事项\">the premises</span>",
                 "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
-                "recital"
+                "<span class=\"term\" data-def=\"鉴于条款（单数）\">recital</span>"
               ],
-              "answer": "the premises",
-              "explanation": "the premises 在合同中 = 上述事项（非房屋）"
+              "answer": "<span class=\"term\" data-def=\"上述事项\">the premises</span>",
+              "explanation": "<span class=\"term\" data-def=\"上述事项\">the premises</span> 在合同中 = 上述事项（非房屋）"
             },
             {
               "prompt": "3. 依法设立的",
@@ -476,8 +476,8 @@
                 "<span class=\"term\" data-def=\"依法设立\">duly organized</span>",
                 "<span class=\"term\" data-def=\"由…与…之间\">by and between</span>"
               ],
-              "answer": "duly organized",
-              "explanation": "duly organized = 依法设立，duly = 合法地/正式地"
+              "answer": "<span class=\"term\" data-def=\"依法设立\">duly organized</span>",
+              "explanation": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> = 依法设立，duly = 合法地/正式地"
             },
             {
               "prompt": "4. 相互约定；双方承诺",
@@ -486,18 +486,18 @@
                 "<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span>",
                 "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>"
               ],
-              "answer": "mutual covenants",
-              "explanation": "mutual covenants = 相互约定/双方承诺"
+              "answer": "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
+              "explanation": "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> = 相互约定/双方承诺"
             },
             {
               "prompt": "5. 签订；订立（合同）",
               "options": [
                 "<span class=\"term\" data-def=\"称为\">referred to as</span>",
                 "<span class=\"term\" data-def=\"签订/订立\">enter into</span>",
-                "party"
+                "<span class=\"term\" data-def=\"当事人\">party</span>"
               ],
-              "answer": "enter into",
-              "explanation": "enter into = 签订/订立，是合同签订的标准动词搭配"
+              "answer": "<span class=\"term\" data-def=\"签订\">enter into</span>",
+              "explanation": "<span class=\"term\" data-def=\"签订\">enter into</span> = 签订/订立，是合同签订的标准动词搭配"
             }
           ]
         }
@@ -512,7 +512,7 @@
           "instruction": "选择正确的中文释义。",
           "questions": [
             {
-              "prompt": "1. party（合同语境）",
+              "prompt": "1. <span class=\"term\" data-def=\"当事人\">party</span>（合同语境）",
               "options": [
                 "聚会；派对",
                 "当事人；缔约方",
@@ -520,10 +520,10 @@
                 "参与者；参加者"
               ],
               "answer": "当事人；缔约方",
-              "explanation": "party 在合同语境中指签约的一方，即合同当事人。注意与日常英语中的‘聚会’区分。"
+              "explanation": "<span class=\"term\" data-def=\"当事人\">party</span> 在合同语境中指签约的一方，即合同当事人。注意与日常英语中的‘聚会’区分。"
             },
             {
-              "prompt": "2. hereinafter",
+              "prompt": "2. <span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
               "options": [
                 "在此之前",
                 "以下简称",
@@ -531,10 +531,10 @@
                 "因此"
               ],
               "answer": "以下简称",
-              "explanation": "hereinafter 由 herein（在本文中）+ after（之后）构成，表示‘在本文以下部分’。hereinafter referred to as 是合同中引入简称的固定搭配。"
+              "explanation": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> 由 <span class=\"term\" data-def=\"本协议中\">herein</span>（在本文中）+ after（之后）构成，表示‘在本文以下部分’。<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> 是合同中引入简称的固定搭配。"
             },
             {
-              "prompt": "3. whereas（合同 recitals 中）",
+              "prompt": "3. <span class=\"term\" data-def=\"鉴于\">whereas</span>（合同 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 中）",
               "options": [
                 "然而",
                 "鉴于",
@@ -542,10 +542,10 @@
                 "尽管"
               ],
               "answer": "鉴于",
-              "explanation": "whereas 在合同 recitals 中用于引出背景事实，相当于‘鉴于’。每个 whereas 引出一条背景说明。"
+              "explanation": "<span class=\"term\" data-def=\"鉴于\">whereas</span> 在合同 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 中用于引出背景事实，相当于‘鉴于’。每个 <span class=\"term\" data-def=\"鉴于\">whereas</span> 引出一条背景说明。"
             },
             {
-              "prompt": "4. witnesseth",
+              "prompt": "4. <span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span>",
               "options": [
                 "目击者",
                 "兹证明；特此证明",
@@ -553,7 +553,7 @@
                 "见证条款"
               ],
               "answer": "兹证明；特此证明",
-              "explanation": "witnesseth 是 witness 的古英语第三人称单数形式（-eth 词尾），在合同中表示‘特此证明’，是极为正式的法律用语。"
+              "explanation": "<span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span> 是 witness 的古英语第三人称单数形式（-eth 词尾），在合同中表示‘特此证明’，是极为正式的法律用语。"
             },
             {
               "prompt": "5. <span class=\"term\" data-def=\"上述事项\">the premises</span>（<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span>）",
@@ -564,7 +564,7 @@
                 "承诺；保证"
               ],
               "answer": "上述事项（法律用语）",
-              "explanation": "the premises 在合同中指前面 recitals 陈述的背景事项，而非日常英语中的‘房屋/场所’。in consideration of the premises = 基于上述事项的约因。"
+              "explanation": "<span class=\"term\" data-def=\"上述事项\">the premises</span> 在合同中指前面 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 陈述的背景事项，而非日常英语中的‘房屋/场所’。<span class=\"term\" data-def=\"鉴于\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span> = 基于上述事项的约因。"
             }
           ]
         }
@@ -587,7 +587,7 @@
                 "set up"
               ],
               "answer": "entered into",
-              "explanation": "enter into 是合同签订的标准搭配。enter into an agreement/contract = 签订协议/合同。"
+              "explanation": "<span class=\"term\" data-def=\"签订\">enter into</span> 是合同签订的标准搭配。<span class=\"term\" data-def=\"签订\">enter into</span> an agreement/contract = 签订协议/合同。"
             },
             {
               "prompt": "7. This Agreement is made ______ the Licensor and the Licensee.",
@@ -597,19 +597,19 @@
                 "with and for",
                 "among and across"
               ],
-              "answer": "by and between",
-              "explanation": "by and between A and B 是合同中介绍双方当事人的固定格式。by 强调约束力，between 表示双方之间。"
+              "answer": "<span class=\"term\" data-def=\"由…与…之间\">by and between</span>",
+              "explanation": "<span class=\"term\" data-def=\"由…与…之间\">by and between</span> A and B 是合同中介绍双方当事人的固定格式。by 强调约束力，between 表示双方之间。"
             },
             {
               "prompt": "8. ABC Corporation (______ \"the Seller\") agrees to the following terms.",
               "options": [
-                "hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span>",
+                "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span>",
                 "which is known as",
-                "hereinbefore called",
+                "<span class=\"term\" data-def=\"前文中\">hereinbefore</span> called",
                 "also named as"
               ],
-              "answer": "hereinafter referred to as",
-              "explanation": "hereinafter referred to as 是合同中引入简称的标准搭配，通常置于公司全称和描述之后的括号中。"
+              "answer": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span>",
+              "explanation": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> 是合同中引入简称的标准搭配，通常置于公司全称和描述之后的括号中。"
             },
             {
               "prompt": "9. A corporation ______ under the laws of the State of California.",
@@ -619,19 +619,19 @@
                 "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing",
                 "officially registered and active"
               ],
-              "answer": "duly organized and existing",
-              "explanation": "duly organized and existing under the laws of... 是描述公司合法设立并存续的固定搭配。duly = 合法地，依法地。"
+              "answer": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing",
+              "explanation": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of... 是描述公司合法设立并存续的固定搭配。duly = 合法地，依法地。"
             },
             {
-              "prompt": "10. NOW, THEREFORE, ______ herein contained, the parties agree as follows:",
+              "prompt": "10. NOW, THEREFORE, ______ <span class=\"term\" data-def=\"本协议中\">herein</span> contained, the parties agree as follows:",
               "options": [
                 "because of the shared promises",
                 "<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
-                "with respect to the obligations",
+                "with respect to the <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
                 "for the purposes of the terms"
               ],
-              "answer": "in consideration of the mutual covenants",
-              "explanation": "in consideration of the mutual covenants 是合同过渡条款中表达约因的标准搭配。mutual covenants = 相互约定。"
+              "answer": "<span class=\"term\" data-def=\"鉴于\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
+              "explanation": "<span class=\"term\" data-def=\"鉴于\">in consideration of</span> the <span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> 是合同过渡条款中表达约因的标准搭配。<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span> = 相互约定。"
             }
           ]
         }
@@ -646,18 +646,18 @@
           "instruction": "选择正确答案。",
           "questions": [
             {
-              "prompt": "11. whereas 和 <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 在合同中的功能区别是什么？",
+              "prompt": "11. <span class=\"term\" data-def=\"鉴于\">whereas</span> 和 <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 在合同中的功能区别是什么？",
               "options": [
                 "两者功能相同，可互换使用",
-                "whereas 引出背景事实，<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 引出正式条款",
-                "whereas 表示条件，<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 表示结论",
-                "whereas 用于旧式合同，<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 用于现代合同"
+                "<span class=\"term\" data-def=\"鉴于\">whereas</span> 引出背景事实，<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 引出正式条款",
+                "<span class=\"term\" data-def=\"鉴于\">whereas</span> 表示条件，<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 表示结论",
+                "<span class=\"term\" data-def=\"鉴于\">whereas</span> 用于旧式合同，<span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span> 用于现代合同"
               ],
-              "answer": "whereas 引出背景事实，now therefore 引出正式条款",
-              "explanation": "whereas 用于 recitals 部分陈述背景和签约原因，now therefore 是过渡语，衔接 recitals 与 operative provisions（正式条款）。两者功能完全不同。"
+              "answer": "<span class=\"term\" data-def=\"鉴于\">whereas</span> 引出背景事实，<span class=\"term\" data-def=\"因此\">now therefore</span> 引出正式条款",
+              "explanation": "<span class=\"term\" data-def=\"鉴于\">whereas</span> 用于 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 部分陈述背景和签约原因，<span class=\"term\" data-def=\"因此\">now therefore</span> 是过渡语，衔接 <span class=\"term\" data-def=\"鉴于条款\">recitals</span> 与 <span class=\"term\" data-def=\"实质条款\">operative provisions</span>（正式条款）。两者功能完全不同。"
             },
             {
-              "prompt": "12. witnesseth 中的 -eth 词尾是什么？",
+              "prompt": "12. <span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span> 中的 -eth 词尾是什么？",
               "options": [
                 "名词后缀，表示“行为”",
                 "witness 的古英语第三人称单数形式，表示“特此证明”",
@@ -665,10 +665,10 @@
                 "拉丁语词源的标志"
               ],
               "answer": "witness 的古英语第三人称单数形式，表示“特此证明”",
-              "explanation": "witnesseth 中的 -eth 是古英语（Early Modern English）第三人称单数动词词尾，相当于现代英语的 -s/-es。witnesseth = witnesses，在法律文书中保留了这一古老形式。"
+              "explanation": "<span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span> 中的 -eth 是古英语（Early Modern English）第三人称单数动词词尾，相当于现代英语的 -s/-es。<span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span> = witnesses，在法律文书中保留了这一古老形式。"
             },
             {
-              "prompt": "13. <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> 中的 consideration 在合同法中的含义是什么？",
+              "prompt": "13. <span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> 中的 <span class=\"term\" data-def=\"对价\">consideration</span> 在合同法中的含义是什么？",
               "options": [
                 "考虑；深思熟虑",
                 "体贴；关怀",
@@ -676,18 +676,18 @@
                 "条件；前提"
               ],
               "answer": "约因/对价（合同成立的必要要素）",
-              "explanation": "consideration 在合同法中是一个核心概念，指合同成立所必需的‘约因’或‘对价’——即双方各自付出的东西（如金钱、服务、承诺）。in consideration of = 基于……的对价。"
+              "explanation": "<span class=\"term\" data-def=\"对价\">consideration</span> 在合同法中是一个核心概念，指合同成立所必需的‘约因’或‘对价’——即双方各自付出的东西（如金钱、服务、承诺）。<span class=\"term\" data-def=\"鉴于\">in consideration of</span> = 基于……的对价。"
             },
             {
-              "prompt": "14. hereinafter 和 hereinbefore 的区别是什么？",
+              "prompt": "14. <span class=\"term\" data-def=\"以下称为\">hereinafter</span> 和 <span class=\"term\" data-def=\"前文中\">hereinbefore</span> 的区别是什么？",
               "options": [
-                "hereinafter 指“在本文以下部分”，hereinbefore 指“在本文以上部分”",
-                "两者含义相同，hereinbefore 更正式",
-                "hereinafter 用于正文，hereinbefore 用于附件",
-                "hereinafter 指未来，hereinbefore 指过去"
+                "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> 指“在本文以下部分”，<span class=\"term\" data-def=\"前文中\">hereinbefore</span> 指“在本文以上部分”",
+                "两者含义相同，<span class=\"term\" data-def=\"前文中\">hereinbefore</span> 更正式",
+                "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> 用于正文，<span class=\"term\" data-def=\"前文中\">hereinbefore</span> 用于附件",
+                "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> 指未来，<span class=\"term\" data-def=\"前文中\">hereinbefore</span> 指过去"
               ],
-              "answer": "hereinafter 指“在本文以下部分”，hereinbefore 指“在本文以上部分”",
-              "explanation": "hereinafter = herein + after（本文以下），hereinbefore = herein + before（本文以上）。两者方向相反。hereinafter 最常见于首次定义简称时。"
+              "answer": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> 指“在本文以下部分”，<span class=\"term\" data-def=\"前文中\">hereinbefore</span> 指“在本文以上部分”",
+              "explanation": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> = <span class=\"term\" data-def=\"本协议中\">herein</span> + after（本文以下），<span class=\"term\" data-def=\"前文中\">hereinbefore</span> = <span class=\"term\" data-def=\"本协议中\">herein</span> + before（本文以上）。两者方向相反。<span class=\"term\" data-def=\"以下称为\">hereinafter</span> 最常见于首次定义简称时。"
             },
             {
               "prompt": "15. arm's length negotiations 的含义是什么？",
@@ -717,16 +717,16 @@
               "reference": "本协议由甲方（一家依中华人民共和国法律合法设立并存续的有限责任公司，以下简称“服务方”）与乙方（以下简称“客户”）签订。",
               "rubric": [
                 {
-                  "en": "by and between",
+                  "en": "<span class=\"term\" data-def=\"由…与…之间\">by and between</span>",
                   "ideal": "由……与……之间签订/由……与……签订",
                   "accept": [
                     "和",
                     "与"
                   ],
-                  "note": "by and between 是合同中表示双方签约的固定搭配"
+                  "note": "<span class=\"term\" data-def=\"由…与…之间\">by and between</span> 是合同中表示双方签约的固定搭配"
                 },
                 {
-                  "en": "duly organized and existing under the laws of",
+                  "en": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of",
                   "ideal": "依……法律合法设立并存续",
                   "accept": [
                     "依法设立",
@@ -746,7 +746,7 @@
                   "note": "LLC 的标准译法"
                 },
                 {
-                  "en": "hereinafter referred to as",
+                  "en": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span>",
                   "ideal": "以下简称",
                   "accept": [
                     "下称",
@@ -761,7 +761,7 @@
               "reference": "鉴于，服务方在信息技术咨询领域拥有专业知识和经验，且客户希望聘用服务方提供特定咨询服务；",
               "rubric": [
                 {
-                  "en": "WHEREAS",
+                  "en": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>",
                   "ideal": "鉴于",
                   "accept": [
                     "鉴于"
@@ -813,10 +813,10 @@
                     "因此",
                     "所以"
                   ],
-                  "note": "NOW, THEREFORE 是 WHEREAS 之后的固定过渡语"
+                  "note": "NOW, THEREFORE 是 <span class=\"term\" data-def=\"鉴于\">WHEREAS</span> 之后的固定过渡语"
                 },
                 {
-                  "en": "in consideration of",
+                  "en": "<span class=\"term\" data-def=\"鉴于\">in consideration of</span>",
                   "ideal": "基于……的对价/鉴于……的对价",
                   "accept": [
                     "考虑到",
@@ -825,10 +825,10 @@
                   "wrong": [
                     "鉴于"
                   ],
-                  "note": "⚠️ in consideration of 在合同中 = 基于对价，不是“鉴于”（鉴于 = whereas）"
+                  "note": "⚠️ <span class=\"term\" data-def=\"鉴于\">in consideration of</span> 在合同中 = 基于对价，不是“鉴于”（鉴于 = <span class=\"term\" data-def=\"鉴于\">whereas</span>）"
                 },
                 {
-                  "en": "mutual covenants",
+                  "en": "<span class=\"term\" data-def=\"相互承诺\">mutual covenants</span>",
                   "ideal": "相互约定/相互承诺",
                   "accept": [
                     "共同约定",
@@ -837,21 +837,21 @@
                   "note": "covenants = 约定/承诺（法律用语）"
                 },
                 {
-                  "en": "contained herein",
+                  "en": "contained <span class=\"term\" data-def=\"本协议中\">herein</span>",
                   "ideal": "本协议所载/本协议所含",
                   "accept": [
                     "包含在本协议"
                   ],
-                  "note": "herein = 在本协议中（here- 家族词）"
+                  "note": "<span class=\"term\" data-def=\"本协议中\">herein</span> = 在本协议中（here- 家族词）"
                 },
                 {
-                  "en": "the receipt and sufficiency of which are hereby acknowledged",
+                  "en": "the <span class=\"term\" data-def=\"收到；收据\">receipt</span> and sufficiency of which are <span class=\"term\" data-def=\"兹；特此\">hereby</span> acknowledged",
                   "ideal": "特此确认对价的收悉和充分性",
                   "accept": [
                     "确认收悉",
                     "确认充分"
                   ],
-                  "note": "hereby = 特此；acknowledged = 确认"
+                  "note": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> = 特此；acknowledged = 确认"
                 }
               ]
             }
@@ -869,23 +869,23 @@
           "questions": [
             {
               "source": "1. 本协议由[甲公司]（一家依[某管辖区]法律设立的公司，以下简称“甲方”）与[乙公司]（以下简称“乙方”）于[日期]签订。",
-              "reference": "This Agreement is entered into as of [date] by and between [Company A], a corporation duly organized under the laws of [jurisdiction] (hereinafter referred to as 'Party A'), and [Company B] (hereinafter referred to as 'Party B').",
+              "reference": "This Agreement is entered into <span class=\"term\" data-def=\"自…起\">as of</span> [date] <span class=\"term\" data-def=\"由…与…之间\">by and between</span> [Company A], a corporation <span class=\"term\" data-def=\"依法设立\">duly organized</span> under the laws of [jurisdiction] (<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> '<span class=\"term\" data-def=\"当事人\">Party</span> A'), and [Company B] (<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> '<span class=\"term\" data-def=\"当事人\">Party</span> B').",
               "rubric": [
                 {
                   "en": "签订",
-                  "ideal": "enter into/is entered into",
+                  "ideal": "<span class=\"term\" data-def=\"签订\">enter into</span>/is entered into",
                   "accept": [
                     "entered",
                     "made by"
                   ],
                   "wrong": [
-                    "sign"
+                    "<span class=\"term\" data-def=\"签字；签署\">sign</span>"
                   ],
-                  "note": "签订合同 = enter into an agreement（非 sign，sign 更侧重物理签字）"
+                  "note": "签订合同 = <span class=\"term\" data-def=\"签订\">enter into</span> an agreement（非 <span class=\"term\" data-def=\"签字；签署\">sign</span>，<span class=\"term\" data-def=\"签字；签署\">sign</span> 更侧重物理签字）"
                 },
                 {
                   "en": "依法设立",
-                  "ideal": "duly organized under the laws of",
+                  "ideal": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> under the laws of",
                   "accept": [
                     "organized under the laws",
                     "established under"
@@ -894,33 +894,33 @@
                 },
                 {
                   "en": "以下简称",
-                  "ideal": "hereinafter referred to as",
+                  "ideal": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span>",
                   "accept": [
-                    "hereinafter",
-                    "referred to as"
+                    "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
+                    "<span class=\"term\" data-def=\"称为\">referred to as</span>"
                   ],
-                  "note": "hereinafter = 以下/在下文中"
+                  "note": "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> = 以下/在下文中"
                 },
                 {
                   "en": "于[日期]",
-                  "ideal": "as of [date]",
+                  "ideal": "<span class=\"term\" data-def=\"自…起\">as of</span> [date]",
                   "accept": [
                     "on [date]",
                     "dated"
                   ],
-                  "note": "as of 表示协议生效日期"
+                  "note": "<span class=\"term\" data-def=\"自…起\">as of</span> 表示协议生效日期"
                 }
               ]
             },
             {
               "source": "2. 鉴于，双方经过公平独立的谈判，希望将各自的权利和义务记载于本协议中；",
-              "reference": "WHEREAS, the parties have conducted arm's length negotiations and desire to set forth their respective rights and obligations in this Agreement;",
+              "reference": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>, the parties have conducted arm's length negotiations and desire to <span class=\"term\" data-def=\"规定\">set forth</span> their respective rights and <span class=\"term\" data-def=\"义务（复数）\">obligations</span> in this Agreement;",
               "rubric": [
                 {
                   "en": "鉴于",
-                  "ideal": "WHEREAS",
+                  "ideal": "<span class=\"term\" data-def=\"鉴于\">WHEREAS</span>",
                   "accept": [
-                    "Whereas"
+                    "<span class=\"term\" data-def=\"鉴于\">Whereas</span>"
                   ],
                   "note": "合同前言固定格式"
                 },
@@ -938,40 +938,40 @@
                 },
                 {
                   "en": "各自的权利和义务",
-                  "ideal": "respective rights and obligations",
+                  "ideal": "respective rights and <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
                   "accept": [
-                    "rights and obligations",
+                    "rights and <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
                     "respective rights"
                   ],
                   "note": "respective = 各自的"
                 },
                 {
                   "en": "记载于",
-                  "ideal": "set forth in",
+                  "ideal": "<span class=\"term\" data-def=\"规定\">set forth</span> in",
                   "accept": [
                     "set out in",
                     "contained in",
                     "stipulated in"
                   ],
-                  "note": "set forth = 载明/规定（法律用语）"
+                  "note": "<span class=\"term\" data-def=\"规定\">set forth</span> = 载明/规定（法律用语）"
                 }
               ]
             },
             {
               "source": "3. 各方声明并保证，其拥有签署和交付本协议以及履行本协议项下义务的完全公司权力和授权。",
-              "reference": "Each party represents and warrants that it has full corporate power and authority to execute and deliver this Agreement and to perform its obligations hereunder.",
+              "reference": "Each <span class=\"term\" data-def=\"当事人\">party</span> <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that it has full corporate power and authority to <span class=\"term\" data-def=\"签署；执行\">execute</span> and deliver this Agreement and to perform its <span class=\"term\" data-def=\"义务（复数）\">obligations</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span>.",
               "rubric": [
                 {
                   "en": "声明并保证",
-                  "ideal": "represents and warrants",
+                  "ideal": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span>",
                   "accept": [
-                    "represent and warrant",
-                    "represents and warrants"
+                    "<span class=\"term\" data-def=\"陈述；声明\">represent</span> and <span class=\"term\" data-def=\"保证\">warrant</span>",
+                    "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span>"
                   ],
                   "wrong": [
-                    "state and guarantee"
+                    "state and <span class=\"term\" data-def=\"保证\">guarantee</span>"
                   ],
-                  "note": "represents and warrants 是法律文书中的固定搭配"
+                  "note": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> 是法律文书中的固定搭配"
                 },
                 {
                   "en": "完全的公司权力和授权",
@@ -984,33 +984,33 @@
                 },
                 {
                   "en": "签署和交付",
-                  "ideal": "execute and deliver",
+                  "ideal": "<span class=\"term\" data-def=\"签署；执行\">execute</span> and deliver",
                   "accept": [
-                    "execute",
-                    "sign and deliver"
+                    "<span class=\"term\" data-def=\"签署；执行\">execute</span>",
+                    "<span class=\"term\" data-def=\"签字；签署\">sign</span> and deliver"
                   ],
                   "wrong": [
-                    "sign"
+                    "<span class=\"term\" data-def=\"签字；签署\">sign</span>"
                   ],
-                  "note": "execute = 签署（比 sign 更正式）；deliver = 交付"
+                  "note": "<span class=\"term\" data-def=\"签署；执行\">execute</span> = 签署（比 <span class=\"term\" data-def=\"签字；签署\">sign</span> 更正式）；deliver = 交付"
                 },
                 {
                   "en": "履行义务",
-                  "ideal": "perform its obligations",
+                  "ideal": "perform its <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
                   "accept": [
-                    "fulfill its obligations",
-                    "carry out its obligations"
+                    "<span class=\"term\" data-def=\"履行\">fulfill</span> its <span class=\"term\" data-def=\"义务（复数）\">obligations</span>",
+                    "carry out its <span class=\"term\" data-def=\"义务（复数）\">obligations</span>"
                   ],
-                  "note": "perform obligations 是法律文书中的标准搭配"
+                  "note": "perform <span class=\"term\" data-def=\"义务（复数）\">obligations</span> 是法律文书中的标准搭配"
                 },
                 {
                   "en": "在本协议项下",
-                  "ideal": "hereunder",
+                  "ideal": "<span class=\"term\" data-def=\"依本协议\">hereunder</span>",
                   "accept": [
                     "under this Agreement",
-                    "herein"
+                    "<span class=\"term\" data-def=\"本协议中\">herein</span>"
                   ],
-                  "note": "hereunder = under this agreement（here- 家族词）"
+                  "note": "<span class=\"term\" data-def=\"依本协议\">hereunder</span> = under this agreement（here- 家族词）"
                 }
               ]
             }
@@ -1021,7 +1021,7 @@
     {
       "type": "summary",
       "heading": "8. 今日小结",
-      "html": "<ol><li><strong>party</strong>（当事人）——合同中最基础的概念，the parties hereto = 本协议各方</li><li><strong>hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span></strong>——引入简称的标准搭配，仅在首次出现时使用</li><li><strong>whereas</strong>——鉴于条款的引导词，用于陈述签约背景和事实</li><li><strong>witnesseth</strong>——古英语形式的“证明”，-eth = 第三人称单数词尾</li><li><strong><span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span></strong>——从鉴于条款过渡到正式条款的衔接语</li><li><strong><span class=\"term\" data-def=\"签订/订立\">enter into</span></strong>——签订合同的标准动词搭配（非 sign，sign 仅指物理签字动作）</li><li><strong><span class=\"term\" data-def=\"由…与…之间\">by and between</span></strong>——介绍双方当事人的固定格式</li><li><strong><span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of</strong>——描述公司合法设立并存续的固定搭配</li><li><strong><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span></strong>——基于……的约因/对价（consideration = 约因，合同法核心概念）</li><li><strong><span class=\"term\" data-def=\"上述事项\">the premises</span></strong>——法律用语中指“上述事项”而非“房屋”</li><li><strong>arm's length</strong>——公平独立的（非关联方之间的交易/谈判）</li></ol>"
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"当事人\">party</span></strong>（当事人）——合同中最基础的概念，the parties <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = 本协议各方</li><li><strong><span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span></strong>——引入简称的标准搭配，仅在首次出现时使用</li><li><strong><span class=\"term\" data-def=\"鉴于\">whereas</span></strong>——鉴于条款的引导词，用于陈述签约背景和事实</li><li><strong><span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span></strong>——古英语形式的“证明”，-eth = 第三人称单数词尾</li><li><strong><span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span></strong>——从鉴于条款过渡到正式条款的衔接语</li><li><strong><span class=\"term\" data-def=\"签订/订立\">enter into</span></strong>——签订合同的标准动词搭配（非 <span class=\"term\" data-def=\"签字；签署\">sign</span>，<span class=\"term\" data-def=\"签字；签署\">sign</span> 仅指物理签字动作）</li><li><strong><span class=\"term\" data-def=\"由…与…之间\">by and between</span></strong>——介绍双方当事人的固定格式</li><li><strong><span class=\"term\" data-def=\"依法设立\">duly organized</span> and existing under the laws of</strong>——描述公司合法设立并存续的固定搭配</li><li><strong><span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span></strong>——基于……的约因/对价（<span class=\"term\" data-def=\"对价\">consideration</span> = 约因，合同法核心概念）</li><li><strong><span class=\"term\" data-def=\"上述事项\">the premises</span></strong>——法律用语中指“上述事项”而非“房屋”</li><li><strong>arm's length</strong>——公平独立的（非关联方之间的交易/谈判）</li></ol>"
     }
   ]
 }

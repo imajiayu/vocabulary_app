@@ -23,6 +23,7 @@ export interface Word {
   remember_count: number;
   forget_count: number;
   avg_elapsed_time: number;
+  updated_at: string;  // ISO 时间戳，DB 触发器维护，客户端缓存指纹用
 }
 
 export interface RelatedWord {

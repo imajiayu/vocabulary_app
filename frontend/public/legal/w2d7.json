@@ -17,7 +17,7 @@
             [
               "第1天",
               "情态动词法律含义",
-              "<span class=\"term\">shall</span>, <span class=\"term\">may</span>, <span class=\"term\">must</span>, <span class=\"term\" data-def=\"义务\">obligation</span>, <span class=\"term\" data-def=\"关税；税\">duty</span>, <span class=\"term\" data-def=\"有约束力的\">binding</span>, <span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>, <span class=\"term\" data-def=\"同意/许可\">consent</span>, <span class=\"term\" data-def=\"自由裁量权\">discretion</span>"
+              "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>, <span class=\"term\" data-def=\"可以（任择/许可）\">may</span>, <span class=\"term\" data-def=\"必须（绝对强制）\">must</span>, <span class=\"term\" data-def=\"义务\">obligation</span>, <span class=\"term\" data-def=\"关税；税\">duty</span>, <span class=\"term\" data-def=\"有约束力的\">binding</span>, <span class=\"term\" data-def=\"可执行的/可强制执行的\">enforceable</span>, <span class=\"term\" data-def=\"同意/许可\">consent</span>, <span class=\"term\" data-def=\"自由裁量权\">discretion</span>"
             ],
             [
               "第2天",
@@ -57,23 +57,23 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>遗留错题 1：<span class=\"term\" data-def=\"实质条款\">operative provisions</span></strong><br><ul><li>❌ 错误翻译：“执行条款”</li><li>✅ 正确翻译：<strong>实质条款 / 正文条款</strong></li><li>记忆要点：operative 在法律英语中 = 实质性的、有效的。合同中 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 是规定双方核心权利义务的正文部分，与 <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span>（通用条款）相对。</li></ul>"
+          "html": "<strong>遗留错题 1：<span class=\"term\" data-def=\"实质条款\">operative provisions</span></strong><br><ul><li>❌ 错误翻译：“执行条款”</li><li>✅ 正确翻译：<strong>实质条款 / 正文条款</strong></li><li>记忆要点：<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> 在法律英语中 = 实质性的、有效的。合同中 <span class=\"term\" data-def=\"实质条款\">operative provisions</span> 是规定双方核心权利义务的正文部分，与 <span class=\"term\" data-def=\"样板条款/通用条款\">boilerplate</span>（通用条款）相对。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>遗留错题 2：<span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong><br><ul><li>❌ 错误翻译：漏译或简化为“有效”</li><li>✅ 正确翻译：<strong>完全有效</strong>（法律固定搭配，必须完整翻译）</li><li>记忆要点：force = 法律效力，effect = 法律效果。full 不可省略。常见搭配：remain <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 保持完全有效。</li></ul>"
+          "html": "<strong>遗留错题 2：<span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong><br><ul><li>❌ 错误翻译：漏译或简化为“有效”</li><li>✅ 正确翻译：<strong>完全有效</strong>（法律固定搭配，必须完整翻译）</li><li>记忆要点：force = 法律效力，effect = 法律效果。full 不可省略。常见搭配：<span class=\"term\" data-def=\"保持；仍然\">remain</span> <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 保持完全有效。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>遗留错题 3：<span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></strong><br><ul><li>❌ 错误翻译：“被认为是”</li><li>✅ 正确翻译：<strong>被裁定为 / 被判定为</strong></li><li>记忆要点：hold 在法律语境中 = 裁定、判定。The court held that... = 法院裁定……。</li></ul>"
+          "html": "<strong>遗留错题 3：<span class=\"term\" data-def=\"被裁定为/被判定为\">held to be</span></strong><br><ul><li>❌ 错误翻译：“被认为是”</li><li>✅ 正确翻译：<strong>被裁定为 / 被判定为</strong></li><li>记忆要点：<span class=\"term\" data-def=\"认定；持有\">hold</span> 在法律语境中 = 裁定、判定。The court held that... = 法院裁定……。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>遗留错题 4：<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 不可省略</strong><br><ul><li>❌ 错误翻译：只译为“附件”</li><li>✅ 正确翻译：<strong>附于本协议的</strong></li><li>记忆要点：hereto = to this Agreement。attached hereto = “附于本协议的”，不能省略 hereto 而简化为“附件”（附件 = exhibit / schedule / annex）。</li></ul>"
+          "html": "<strong>遗留错题 4：<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> 不可省略</strong><br><ul><li>❌ 错误翻译：只译为“附件”</li><li>✅ 正确翻译：<strong>附于本协议的</strong></li><li>记忆要点：<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = to this Agreement。<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = “附于本协议的”，不能省略 <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> 而简化为“附件”（附件 = exhibit / schedule / annex）。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>遗留错题 5：<span class=\"term\" data-def=\"上述事项\">the premises</span></strong><br><ul><li>❌ 错误翻译：“房屋”</li><li>✅ 正确翻译：<strong>上述事项 / 鉴于事项</strong>（合同法律语境）</li><li>记忆要点：在合同的 <span class=\"term\" data-def=\"因此/有鉴于此\">NOW THEREFORE</span> 过渡段中，“<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span>” 中的 premises 指前面 WHEREAS 条款中陈述的全部背景事实，不是日常英语的“房屋/场所”。</li></ul>"
+          "html": "<strong>遗留错题 5：<span class=\"term\" data-def=\"上述事项\">the premises</span></strong><br><ul><li>❌ 错误翻译：“房屋”</li><li>✅ 正确翻译：<strong>上述事项 / 鉴于事项</strong>（合同法律语境）</li><li>记忆要点：在合同的 <span class=\"term\" data-def=\"因此/有鉴于此\">NOW THEREFORE</span> 过渡段中，“<span class=\"term\" data-def=\"鉴于/考虑到\">in consideration of</span> <span class=\"term\" data-def=\"上述事项\">the premises</span>” 中的 premises 指前面 <span class=\"term\" data-def=\"鉴于\">WHEREAS</span> 条款中陈述的全部背景事实，不是日常英语的“房屋/场所”。</li></ul>"
         },
         {
           "type": "h3",
@@ -81,15 +81,15 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>易错点 1：<span class=\"term\">shall</span> vs. <span class=\"term\">may</span> vs. <span class=\"term\">must</span> 混淆</strong><br><ul><li>❌ 常见错误：将三者混为一谈，或将 shall 译为“将要”</li><li>✅ 正确区分：<ul><li><span class=\"term\">shall</span> = 义务（应/应当）— 施加合同义务</li><li><span class=\"term\">may</span> = 权利/许可（可以）— 授予权利或许可</li><li><span class=\"term\">must</span> = 强制要求（必须）— 法律/法规强制</li></ul></li><li>记忆要点：在合同中，“The Provider shall deliver...” = 提供方<strong>应</strong>交付……（义务）；“The Client may terminate...” = 客户方<strong>可以</strong>终止……（权利）。</li></ul>"
+          "html": "<strong>易错点 1：<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> vs. <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> vs. <span class=\"term\" data-def=\"必须（绝对强制）\">must</span> 混淆</strong><br><ul><li>❌ 常见错误：将三者混为一谈，或将 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 译为“将要”</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> = 义务（应/应当）— 施加合同义务</li><li><span class=\"term\" data-def=\"可以（任择/许可）\">may</span> = 权利/许可（可以）— 授予权利或许可</li><li><span class=\"term\" data-def=\"必须（绝对强制）\">must</span> = 强制要求（必须）— 法律/法规强制</li></ul></li><li>记忆要点：在合同中，“The Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver...” = 提供方<strong>应</strong>交付……（义务）；“The Client <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span>...” = 客户方<strong>可以</strong>终止……（权利）。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>易错点 2：<span class=\"term\" data-def=\"陈述/声明\">representation</span> vs. <span class=\"term\" data-def=\"保证/担保\">warranty</span> 混淆</strong><br><ul><li>❌ 常见错误：将两者视为同义词</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"陈述/声明\">representation</span> = 陈述（对事实的声明，侧重过去和现在）</li><li><span class=\"term\" data-def=\"保证/担保\">warranty</span> = 保证（对事实或质量的担保，侧重将来的持续性）</li></ul></li><li>记忆要点：违反 representation → 可主张欺诈（fraud）；违反 warranty → 可主张违约（breach）。实务中两者常连用 <span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>（陈述与保证）以覆盖两种救济。</li></ul>"
+          "html": "<strong>易错点 2：<span class=\"term\" data-def=\"陈述/声明\">representation</span> vs. <span class=\"term\" data-def=\"保证/担保\">warranty</span> 混淆</strong><br><ul><li>❌ 常见错误：将两者视为同义词</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"陈述/声明\">representation</span> = 陈述（对事实的声明，侧重过去和现在）</li><li><span class=\"term\" data-def=\"保证/担保\">warranty</span> = 保证（对事实或质量的担保，侧重将来的持续性）</li></ul></li><li>记忆要点：违反 <span class=\"term\" data-def=\"陈述\">representation</span> → 可主张欺诈（fraud）；违反 <span class=\"term\" data-def=\"保证\">warranty</span> → 可主张违约（breach）。实务中两者常连用 <span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>（陈述与保证）以覆盖两种救济。</li></ul>"
         },
         {
           "type": "error-warn",
-          "html": "<strong>易错点 3：<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> vs. <span class=\"term\" data-def=\"放弃（权利）\">waive</span> vs. <span class=\"term\" data-def=\"免责声明\">disclaimer</span></strong><br><ul><li>❌ 常见错误：将 waiver（弃权）和 disclaimer（免责声明）混淆</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>（名词）= 弃权；放弃权利的行为</li><li><span class=\"term\" data-def=\"放弃（权利）\">waive</span>（动词）= 放弃（权利）</li><li><span class=\"term\" data-def=\"免责声明\">disclaimer</span> = 免责声明（声明不对某事承担责任）</li></ul></li><li>记忆要点：waiver 是主动放弃自己已有的权利；disclaimer 是预先声明自己不承担某项责任。</li></ul>"
+          "html": "<strong>易错点 3：<span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> vs. <span class=\"term\" data-def=\"放弃（权利）\">waive</span> vs. <span class=\"term\" data-def=\"免责声明\">disclaimer</span></strong><br><ul><li>❌ 常见错误：将 <span class=\"term\" data-def=\"弃权\">waiver</span>（弃权）和 <span class=\"term\" data-def=\"免责声明\">disclaimer</span>（免责声明）混淆</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span>（名词）= 弃权；放弃权利的行为</li><li><span class=\"term\" data-def=\"放弃（权利）\">waive</span>（动词）= 放弃（权利）</li><li><span class=\"term\" data-def=\"免责声明\">disclaimer</span> = 免责声明（声明不对某事承担责任）</li></ul></li><li>记忆要点：<span class=\"term\" data-def=\"弃权\">waiver</span> 是主动放弃自己已有的权利；<span class=\"term\" data-def=\"免责声明\">disclaimer</span> 是预先声明自己不承担某项责任。</li></ul>"
         },
         {
           "type": "error-warn",
@@ -97,7 +97,7 @@
         },
         {
           "type": "error-warn",
-          "html": "<strong>易错点 5：<span class=\"term\" data-def=\"先决条件\">condition precedent</span> vs. <span class=\"term\" data-def=\"解除条件\">condition subsequent</span></strong><br><ul><li>❌ 常见错误：分不清“先决条件”和“解除条件”</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"先决条件\">condition precedent</span> = 先决条件（条件满足后义务才生效）</li><li><span class=\"term\" data-def=\"解除条件\">condition subsequent</span> = 解除条件（条件发生后义务终止）</li></ul></li><li>记忆要点：precedent = 在前的（pre-），条件在义务之前；subsequent = 在后的（sub- + sequent），条件在义务之后。</li></ul>"
+          "html": "<strong>易错点 5：<span class=\"term\" data-def=\"先决条件\">condition precedent</span> vs. <span class=\"term\" data-def=\"解除条件\">condition subsequent</span></strong><br><ul><li>❌ 常见错误：分不清“先决条件”和“解除条件”</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"先决条件\">condition precedent</span> = 先决条件（条件满足后义务才生效）</li><li><span class=\"term\" data-def=\"解除条件\">condition subsequent</span> = 解除条件（条件发生后义务终止）</li></ul></li><li>记忆要点：<span class=\"term\" data-def=\"先例；先决\">precedent</span> = 在前的（pre-），条件在义务之前；<span class=\"term\" data-def=\"后续的；解除（条件）\">subsequent</span> = 在后的（sub- + sequent），条件在义务之后。</li></ul>"
         }
       ]
     },
@@ -119,7 +119,7 @@
           ],
           "rows": [
             [
-              "<span class=\"term\">herein</span>",
+              "<span class=\"term\" data-def=\"本协议中\">herein</span>",
               "in this Agreement",
               "在本协议中",
               "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span> = 如本协议中所用"
@@ -128,49 +128,49 @@
               "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
               "of this Agreement",
               "本协议的",
-              "the terms hereof = 本协议的条款"
+              "the terms <span class=\"term\" data-def=\"本协议的\">hereof</span> = 本协议的条款"
             ],
             [
-              "<span class=\"term\">hereto</span>",
+              "<span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span>",
               "to this Agreement",
               "于本协议；本协议的",
-              "the Parties hereto = 本协议各方；attached hereto = 附于本协议的"
+              "the Parties <span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span> = 本协议各方；<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的"
             ],
             [
-              "<span class=\"term\">hereunder</span>",
+              "<span class=\"term\" data-def=\"依本协议\">hereunder</span>",
               "under this Agreement",
               "在本协议项下",
-              "obligations hereunder = 本协议项下的义务"
+              "<span class=\"term\" data-def=\"义务（复数）\">obligations</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span> = 本协议项下的义务"
             ],
             [
-              "<span class=\"term\">hereby</span>",
+              "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
               "by this Agreement / by this means",
               "特此；以此",
-              "The Parties hereby agree = 双方特此同意"
+              "The Parties <span class=\"term\" data-def=\"兹；特此\">hereby</span> agree = 双方特此同意"
             ],
             [
               "<span class=\"term\" data-def=\"以下称为\">hereinafter</span>",
               "after this point in this Agreement",
               "以下称；下称",
-              "hereinafter <span class=\"term\" data-def=\"称为\">referred to as</span> = 以下简称"
+              "<span class=\"term\" data-def=\"以下称为\">hereinafter</span> <span class=\"term\" data-def=\"称为\">referred to as</span> = 以下简称"
             ],
             [
-              "<span class=\"term\">herewith</span>",
+              "<span class=\"term\" data-def=\"随附\">herewith</span>",
               "with this Agreement / together with this",
               "随本协议；与此一同",
-              "enclosed herewith = 随函附上"
+              "enclosed <span class=\"term\" data-def=\"随附\">herewith</span> = 随函附上"
             ],
             [
-              "<span class=\"term\">hereinbefore</span>",
+              "<span class=\"term\" data-def=\"前文中\">hereinbefore</span>",
               "before this point in this Agreement",
               "在本协议前述部分",
-              "as hereinbefore stated = 如本协议前述所述"
+              "as <span class=\"term\" data-def=\"前文中\">hereinbefore</span> stated = 如本协议前述所述"
             ]
           ]
         },
         {
           "type": "tip",
-          "html": "<strong>核心记忆法：</strong>here = this Agreement，后接的介词决定含义。同理，there- 家族词中 there = that Agreement（该协议）：<span class=\"term\">therein</span>（在其中）、<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>（其中的）、<span class=\"term\">thereto</span>（对其）、<span class=\"term\">thereunder</span>（在其项下）。where- 家族词中 where = which（该…）：<span class=\"term\">wherein</span>（其中）、<span class=\"term\">whereby</span>（凭此）。"
+          "html": "<strong>核心记忆法：</strong>here = this Agreement，后接的介词决定含义。同理，there- 家族词中 there = that Agreement（该协议）：<span class=\"term\" data-def=\"其中\">therein</span>（在其中）、<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>（其中的）、<span class=\"term\" data-def=\"随附于此\">thereto</span>（对其）、<span class=\"term\" data-def=\"依其\">thereunder</span>（在其项下）。where- 家族词中 where = which（该…）：<span class=\"term\" data-def=\"在其中\">wherein</span>（其中）、<span class=\"term\" data-def=\"凭此；据此\">whereby</span>（凭此）。"
         },
         {
           "type": "p",
@@ -178,15 +178,15 @@
         },
         {
           "type": "p",
-          "html": "1. <span class=\"en-text\">Each Party hereby represents and warrants that it has full power and authority to enter into this Agreement.</span><br>— 各方特此陈述并保证，其拥有签订本协议的全部权力和权限。（hereby = 特此）"
+          "html": "1. <span class=\"en-text\">Each Party hereby represents and warrants that it has full power and authority to enter into this Agreement.</span><br>— 各方特此陈述并保证，其拥有签订本协议的全部权力和权限。（<span class=\"term\" data-def=\"兹；特此\">hereby</span> = 特此）"
         },
         {
           "type": "p",
-          "html": "2. <span class=\"en-text\">The Receiving Party shall not disclose any Confidential Information to any third party except as permitted hereunder.</span><br>— 接收方不得向任何第三方披露任何保密信息，本协议项下允许的除外。（hereunder = 在本协议项下）"
+          "html": "2. <span class=\"en-text\">The Receiving Party shall not disclose any Confidential Information to any third party except as permitted hereunder.</span><br>— 接收方不得向任何第三方披露任何保密信息，本协议项下允许的除外。（<span class=\"term\" data-def=\"依本协议\">hereunder</span> = 在本协议项下）"
         },
         {
           "type": "p",
-          "html": "3. <span class=\"en-text\">The limitations of liability set forth herein shall not apply to losses arising from gross negligence or willful misconduct.</span><br>— 本协议中规定的责任限制不适用于因重大过失或故意不当行为导致的损失。（herein = 在本协议中）"
+          "html": "3. <span class=\"en-text\">The limitations of liability set forth herein shall not apply to losses arising from gross negligence or willful misconduct.</span><br>— 本协议中规定的责任限制不适用于因重大过失或故意不当行为导致的损失。（<span class=\"term\" data-def=\"本协议中\">herein</span> = 在本协议中）"
         }
       ]
     },
@@ -199,7 +199,7 @@
           "title": "练习A：术语选择（8道，覆盖5天内容）",
           "questions": [
             {
-              "prompt": "1. 在合同条款中，<span class=\"term\">shall</span> 表达的法律含义是：",
+              "prompt": "1. 在合同条款中，<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 表达的法律含义是：",
               "options": [
                 "将来时态（将要）",
                 "义务（应/应当）",
@@ -207,7 +207,7 @@
                 "可能性（可能）"
               ],
               "answer": "义务（应/应当）",
-              "explanation": "shall 在合同中表示义务，翻译为“应/应当”。不是将来时的“将”。例：The Provider shall deliver... = 提供方应交付……（第1天）"
+              "explanation": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 在合同中表示义务，翻译为“应/应当”。不是将来时的“将”。例：The Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver... = 提供方应交付……（第1天）"
             },
             {
               "prompt": "2. <span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span> 的标准中文翻译是：",
@@ -218,7 +218,7 @@
                 "表述与承诺"
               ],
               "answer": "陈述与保证",
-              "explanation": "representations and warranties = 陈述与保证。representation 侧重对事实的声明，warranty 侧重对事实/质量的担保，两者连用以覆盖不同救济方式。（第2天）"
+              "explanation": "<span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span> = 陈述与保证。<span class=\"term\" data-def=\"陈述\">representation</span> 侧重对事实的声明，<span class=\"term\" data-def=\"保证\">warranty</span> 侧重对事实/质量的担保，两者连用以覆盖不同救济方式。（第2天）"
             },
             {
               "prompt": "3. <span class=\"term\" data-def=\"先决条件\">condition precedent</span> 的正确翻译是：",
@@ -229,7 +229,7 @@
                 "预设条件"
               ],
               "answer": "先决条件",
-              "explanation": "condition precedent = 先决条件，指在义务生效之前必须满足的条件。precedent = 在前的（pre-）。（第3天）"
+              "explanation": "<span class=\"term\" data-def=\"先决条件\">condition precedent</span> = 先决条件，指在义务生效之前必须满足的条件。<span class=\"term\" data-def=\"先例；先决\">precedent</span> = 在前的（pre-）。（第3天）"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span> 的正确翻译是：",
@@ -240,7 +240,7 @@
                 "偿还并保证安全"
               ],
               "answer": "赔偿并使免受损害",
-              "explanation": "indemnify and hold harmless 是法律固定搭配。indemnify = 赔偿（事后补偿），hold harmless = 使免受损害（预防性保护），两者连用覆盖最大保护范围。（第4天）"
+              "explanation": "<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span> 是法律固定搭配。<span class=\"term\" data-def=\"赔偿\">indemnify</span> = 赔偿（事后补偿），<span class=\"term\" data-def=\"使免受损害\">hold harmless</span> = 使免受损害（预防性保护），两者连用覆盖最大保护范围。（第4天）"
             },
             {
               "prompt": "5. <span class=\"term\" data-def=\"保密信息\">confidential information</span> 的标准翻译是：",
@@ -251,7 +251,7 @@
                 "私密数据"
               ],
               "answer": "保密信息",
-              "explanation": "confidential information = 保密信息。在保密条款中，这是最核心的定义术语，通常会在定义条款中详细界定其范围。（第5天）"
+              "explanation": "<span class=\"term\" data-def=\"保密信息\">confidential information</span> = 保密信息。在保密条款中，这是最核心的定义术语，通常会在定义条款中详细界定其范围。（第5天）"
             },
             {
               "prompt": "6. <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span> 的正确翻译是：",
@@ -262,7 +262,7 @@
                 "有意犯罪"
               ],
               "answer": "故意不当行为",
-              "explanation": "willful misconduct = 故意不当行为。willful = 故意的，misconduct = 不当行为。在责任限制条款中，故意不当行为通常被排除在免责范围之外。（第4天）"
+              "explanation": "<span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span> = 故意不当行为。willful = 故意的，misconduct = 不当行为。在责任限制条款中，故意不当行为通常被排除在免责范围之外。（第4天）"
             },
             {
               "prompt": "7. <span class=\"term\" data-def=\"契约/承诺\">covenant</span> 在合同法律语境中的含义是：",
@@ -273,7 +273,7 @@
                 "证书；凭证"
               ],
               "answer": "承诺；（持续性的）合同义务",
-              "explanation": "covenant 在法律语境中指持续性的合同义务/承诺，区别于 warranty（对事实的保证）。covenant 侧重“承诺将来做或不做某事”。（第2天）"
+              "explanation": "<span class=\"term\" data-def=\"契约\">covenant</span> 在法律语境中指持续性的合同义务/承诺，区别于 <span class=\"term\" data-def=\"保证\">warranty</span>（对事实的保证）。<span class=\"term\" data-def=\"契约\">covenant</span> 侧重“承诺将来做或不做某事”。（第2天）"
             },
             {
               "prompt": "8. <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> 的正确翻译是：",
@@ -284,7 +284,7 @@
                 "紧急援助"
               ],
               "answer": "禁令救济",
-              "explanation": "injunctive relief = 禁令救济。法院发出的命令，要求一方做或停止做某事。在保密条款中常用：违反保密义务的一方可被申请禁令救济。（第5天）"
+              "explanation": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 禁令救济。法院发出的命令，要求一方做或停止做某事。在保密条款中常用：违反保密义务的一方可被申请禁令救济。（第5天）"
             }
           ]
         },
@@ -295,90 +295,90 @@
             {
               "prompt": "1. The Provider ______ deliver the Goods within thirty (30) days of the <span class=\"term\" data-def=\"生效日期\">Effective Date</span>.",
               "options": [
-                "shall",
-                "may",
+                "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>",
+                "<span class=\"term\" data-def=\"可以（任择/许可）\">may</span>",
                 "might",
                 "could"
               ],
-              "answer": "shall",
-              "explanation": "shall 用于施加合同义务。“The Provider shall deliver...” = 提供方应交付……。这里表达的是义务而非权利，所以用 shall，不用 may。（第1天）"
+              "answer": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>",
+              "explanation": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 用于施加合同义务。“The Provider <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> deliver...” = 提供方应交付……。这里表达的是义务而非权利，所以用 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>，不用 <span class=\"term\" data-def=\"可以（任择/许可）\">may</span>。（第1天）"
             },
             {
-              "prompt": "2. Each Party ______ that it has the legal capacity to <span class=\"term\" data-def=\"签订/订立\">enter into</span> this Agreement.",
+              "prompt": "2. Each <span class=\"term\" data-def=\"当事人\">Party</span> ______ that it has the legal capacity to <span class=\"term\" data-def=\"签订/订立\">enter into</span> this Agreement.",
               "options": [
                 "says and promises",
-                "represents and warrants",
+                "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span>",
                 "states and guarantees",
                 "declares and assures"
               ],
-              "answer": "represents and warrants",
-              "explanation": "represents and warrants 是法律固定搭配，“陈述并保证”。Each Party represents and warrants that... = 各方陈述并保证……（第2天）"
+              "answer": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span>",
+              "explanation": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> 是法律固定搭配，“陈述并保证”。Each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that... = 各方陈述并保证……（第2天）"
             },
             {
-              "prompt": "3. The closing of the transaction shall be ______ the satisfaction of the conditions precedent <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Section 5.",
+              "prompt": "3. The closing of the transaction <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be ______ the <span class=\"term\" data-def=\"满足；履约完成\">satisfaction</span> of the <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"先例；先决\">precedent</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Section 5.",
               "options": [
                 "based on",
                 "depending on",
-                "subject to",
+                "<span class=\"term\" data-def=\"以…为条件\">subject to</span>",
                 "according to"
               ],
-              "answer": "subject to",
-              "explanation": "subject to = 根据/在……条件下。subject to the satisfaction of certain conditions = 在满足特定条件的前提下。（第3天）"
+              "answer": "<span class=\"term\" data-def=\"以…为条件\">subject to</span>",
+              "explanation": "<span class=\"term\" data-def=\"以…为条件\">subject to</span> = 根据/在……条件下。<span class=\"term\" data-def=\"以…为条件\">subject to</span> the <span class=\"term\" data-def=\"满足；履约完成\">satisfaction</span> of certain <span class=\"term\" data-def=\"条件（复数）\">conditions</span> = 在满足特定条件的前提下。（第3天）"
             },
             {
-              "prompt": "4. <span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span> EITHER PARTY'S TOTAL LIABILITY EXCEED THE AMOUNTS PAID UNDER THIS AGREEMENT. This clause is an example of a ______.",
+              "prompt": "4. <span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span> EITHER <span class=\"term\" data-def=\"当事人\">PARTY</span>'S TOTAL LIABILITY EXCEED THE AMOUNTS PAID UNDER THIS AGREEMENT. This <span class=\"term\" data-def=\"条款\">clause</span> is an example of a ______.",
               "options": [
-                "waiver",
-                "disclaimer",
-                "limitation of liability",
-                "indemnification"
+                "<span class=\"term\" data-def=\"弃权\">waiver</span>",
+                "<span class=\"term\" data-def=\"免责声明\">disclaimer</span>",
+                "<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>",
+                "<span class=\"term\" data-def=\"赔偿；补偿\">indemnification</span>"
               ],
-              "answer": "limitation of liability",
-              "explanation": "limitation of liability = 责任限制。合同中专门约定一方赔偿责任的上限，保护义务方避免无限赔偿。（第4天）"
+              "answer": "<span class=\"term\" data-def=\"责任限制\">limitation of liability</span>",
+              "explanation": "<span class=\"term\" data-def=\"责任限制\">limitation of liability</span> = 责任限制。合同中专门约定一方赔偿责任的上限，保护义务方避免无限赔偿。（第4天）"
             },
             {
-              "prompt": "5. The Parties shall <span class=\"term\" data-def=\"签订/订立\">enter into</span> a ______ agreement to protect the <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> exchanged during negotiations.",
+              "prompt": "5. The Parties <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"签订/订立\">enter into</span> a ______ agreement to protect the <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> exchanged during negotiations.",
               "options": [
                 "non-compete",
-                "non-disclosure",
+                "<span class=\"term\" data-def=\"保密\">non-disclosure</span>",
                 "non-solicitation",
-                "non-binding"
+                "non-<span class=\"term\" data-def=\"有约束力的\">binding</span>"
               ],
-              "answer": "non-disclosure",
-              "explanation": "non-disclosure agreement (NDA) = 保密协议。non-disclosure = 不披露/保密，是保密条款的核心概念。（第5天）"
+              "answer": "<span class=\"term\" data-def=\"保密\">non-disclosure</span>",
+              "explanation": "<span class=\"term\" data-def=\"保密\">non-disclosure</span> agreement (<span class=\"term\" data-def=\"保密协议\">NDA</span>) = 保密协议。<span class=\"term\" data-def=\"保密\">non-disclosure</span> = 不披露/保密，是保密条款的核心概念。（第5天）"
             },
             {
-              "prompt": "6. The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> may disclose <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> to its employees, ______ such employees are bound by obligations of confidentiality.",
+              "prompt": "6. The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> disclose <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> to its employees, ______ such employees are bound by <span class=\"term\" data-def=\"义务（复数）\">obligations</span> of confidentiality.",
               "options": [
                 "as long as",
                 "in case",
-                "provided that",
+                "<span class=\"term\" data-def=\"但是\">provided that</span>",
                 "unless"
               ],
-              "answer": "provided that",
-              "explanation": "provided that = 但须满足……/但以……为条件。用于在授予权利或施加义务的同时附加限制条件。（第3天）"
+              "answer": "<span class=\"term\" data-def=\"但是\">provided that</span>",
+              "explanation": "<span class=\"term\" data-def=\"但是\">provided that</span> = 但须满足……/但以……为条件。用于在授予权利或施加义务的同时附加限制条件。（第3天）"
             },
             {
-              "prompt": "7. <span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span> EITHER PARTY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, OR ______.",
+              "prompt": "7. <span class=\"term\" data-def=\"在任何情况下不得\">IN NO EVENT SHALL</span> EITHER <span class=\"term\" data-def=\"当事人\">PARTY</span> BE LIABLE FOR ANY INDIRECT, INCIDENTAL, OR ______.",
               "options": [
-                "actual damages",
-                "direct damages",
-                "consequential damages",
-                "nominal damages"
+                "actual <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>",
+                "<span class=\"term\" data-def=\"直接损害\">direct damages</span>",
+                "<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>",
+                "nominal <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>"
               ],
-              "answer": "consequential damages",
-              "explanation": "consequential damages = 间接损失/后果性损失。指因违约间接导致的损失（如利润损失），通常在责任限制条款中被排除。（第4天）"
+              "answer": "<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span>",
+              "explanation": "<span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> = 间接损失/后果性损失。指因违约间接导致的损失（如利润损失），通常在责任限制条款中被排除。（第4天）"
             },
             {
-              "prompt": "8. No failure or delay by either Party to exercise any right hereunder shall operate to ______ such right.",
+              "prompt": "8. No failure or delay by either <span class=\"term\" data-def=\"当事人\">Party</span> to exercise any <span class=\"term\" data-def=\"权利\">right</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> operate to ______ such <span class=\"term\" data-def=\"权利\">right</span>.",
               "options": [
-                "waive",
+                "<span class=\"term\" data-def=\"放弃（权利）\">waive</span>",
                 "disclaim",
                 "forfeit",
                 "abandon"
               ],
-              "answer": "waive",
-              "explanation": "waive = 放弃（权利）。No failure to exercise any right hereunder shall constitute a waiver... = 未行使本协议项下任何权利不构成弃权。waive 是动词，waiver 是名词。（第3天+第4天）"
+              "answer": "<span class=\"term\" data-def=\"放弃（权利）\">waive</span>",
+              "explanation": "<span class=\"term\" data-def=\"放弃（权利）\">waive</span> = 放弃（权利）。No failure to exercise any <span class=\"term\" data-def=\"权利\">right</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> constitute a <span class=\"term\" data-def=\"弃权\">waiver</span>... = 未行使本协议项下任何权利不构成弃权。<span class=\"term\" data-def=\"放弃（权利）\">waive</span> 是动词，<span class=\"term\" data-def=\"弃权\">waiver</span> 是名词。（第3天+第4天）"
             }
           ]
         },
@@ -390,56 +390,56 @@
               "prompt": "1. <span class=\"term\" data-def=\"陈述/声明\">representation</span> 和 <span class=\"term\" data-def=\"保证/担保\">warranty</span> 的核心区别是：",
               "options": [
                 "两者完全相同，可以互换",
-                "representation 侧重对事实的陈述，warranty 侧重对事实/质量的保证",
-                "representation 是书面的，warranty 是口头的",
-                "representation 约束力更强"
+                "<span class=\"term\" data-def=\"陈述\">representation</span> 侧重对事实的陈述，<span class=\"term\" data-def=\"保证\">warranty</span> 侧重对事实/质量的保证",
+                "<span class=\"term\" data-def=\"陈述\">representation</span> 是书面的，<span class=\"term\" data-def=\"保证\">warranty</span> 是口头的",
+                "<span class=\"term\" data-def=\"陈述\">representation</span> 约束力更强"
               ],
-              "answer": "representation 侧重对事实的陈述，warranty 侧重对事实/质量的保证",
-              "explanation": "representation = 陈述（声明某一事实为真，侧重过去和现在），warranty = 保证（担保某一事实持续为真或某一质量标准得到满足）。违反 representation 可主张欺诈，违反 warranty 可主张违约。（第2天）"
+              "answer": "<span class=\"term\" data-def=\"陈述\">representation</span> 侧重对事实的陈述，<span class=\"term\" data-def=\"保证\">warranty</span> 侧重对事实/质量的保证",
+              "explanation": "<span class=\"term\" data-def=\"陈述\">representation</span> = 陈述（声明某一事实为真，侧重过去和现在），<span class=\"term\" data-def=\"保证\">warranty</span> = 保证（担保某一事实持续为真或某一质量标准得到满足）。违反 <span class=\"term\" data-def=\"陈述\">representation</span> 可主张欺诈，违反 <span class=\"term\" data-def=\"保证\">warranty</span> 可主张违约。（第2天）"
             },
             {
               "prompt": "2. <span class=\"term\" data-def=\"过失/疏忽\">negligence</span> 和 <span class=\"term\" data-def=\"重大过失\">gross negligence</span> 的区别是：",
               "options": [
-                "negligence 是一般过失，gross negligence 是重大过失",
+                "<span class=\"term\" data-def=\"过失\">negligence</span> 是一般过失，<span class=\"term\" data-def=\"重大过失\">gross negligence</span> 是重大过失",
                 "两者含义相同，只是程度副词不同",
-                "negligence 是故意的，gross negligence 是过失的",
-                "gross negligence 只适用于刑法"
+                "<span class=\"term\" data-def=\"过失\">negligence</span> 是故意的，<span class=\"term\" data-def=\"重大过失\">gross negligence</span> 是过失的",
+                "<span class=\"term\" data-def=\"重大过失\">gross negligence</span> 只适用于刑法"
               ],
-              "answer": "negligence 是一般过失，gross negligence 是重大过失",
-              "explanation": "negligence = 一般过失（未尽合理注意义务），gross negligence = 重大过失（严重违反注意义务，近乎故意）。责任限制条款通常排除 gross negligence 和 willful misconduct。（第4天）"
+              "answer": "<span class=\"term\" data-def=\"过失\">negligence</span> 是一般过失，<span class=\"term\" data-def=\"重大过失\">gross negligence</span> 是重大过失",
+              "explanation": "<span class=\"term\" data-def=\"过失\">negligence</span> = 一般过失（未尽合理注意义务），<span class=\"term\" data-def=\"重大过失\">gross negligence</span> = 重大过失（严重违反注意义务，近乎故意）。责任限制条款通常排除 <span class=\"term\" data-def=\"重大过失\">gross negligence</span> 和 <span class=\"term\" data-def=\"故意不当行为\">willful misconduct</span>。（第4天）"
             },
             {
               "prompt": "3. 保密条款中，<span class=\"term\" data-def=\"披露方\">disclosing party</span> 和 <span class=\"term\" data-def=\"接收方\">receiving party</span> 的关系是：",
               "options": [
-                "disclosing party 是信息披露方，receiving party 是信息接收方",
+                "<span class=\"term\" data-def=\"披露方\">disclosing party</span> 是信息披露方，<span class=\"term\" data-def=\"接收方\">receiving party</span> 是信息接收方",
                 "两者可以互换",
-                "disclosing party 承担保密义务",
-                "receiving party 是仲裁方"
+                "<span class=\"term\" data-def=\"披露方\">disclosing party</span> 承担保密义务",
+                "<span class=\"term\" data-def=\"接收方\">receiving party</span> 是仲裁方"
               ],
-              "answer": "disclosing party 是信息披露方，receiving party 是信息接收方",
-              "explanation": "disclosing party = 披露方（提供保密信息的一方），receiving party = 接收方（接收保密信息的一方）。保密条款中的义务主要约束 receiving party。（第5天）"
+              "answer": "<span class=\"term\" data-def=\"披露方\">disclosing party</span> 是信息披露方，<span class=\"term\" data-def=\"接收方\">receiving party</span> 是信息接收方",
+              "explanation": "<span class=\"term\" data-def=\"披露方\">disclosing party</span> = 披露方（提供保密信息的一方），<span class=\"term\" data-def=\"接收方\">receiving party</span> = 接收方（接收保密信息的一方）。保密条款中的义务主要约束 <span class=\"term\" data-def=\"接收方\">receiving party</span>。（第5天）"
             },
             {
               "prompt": "4. <span class=\"term\" data-def=\"弃权/放弃声明\">waiver</span> 和 <span class=\"term\" data-def=\"免责声明\">disclaimer</span> 的区别是：",
               "options": [
                 "两者含义相同",
-                "waiver 是主动放弃已有权利，disclaimer 是预先声明不承担责任",
-                "waiver 由法院决定，disclaimer 由当事人决定",
-                "disclaimer 比 waiver 效力更强"
+                "<span class=\"term\" data-def=\"弃权\">waiver</span> 是主动放弃已有权利，<span class=\"term\" data-def=\"免责声明\">disclaimer</span> 是预先声明不承担责任",
+                "<span class=\"term\" data-def=\"弃权\">waiver</span> 由法院决定，<span class=\"term\" data-def=\"免责声明\">disclaimer</span> 由当事人决定",
+                "<span class=\"term\" data-def=\"免责声明\">disclaimer</span> 比 <span class=\"term\" data-def=\"弃权\">waiver</span> 效力更强"
               ],
-              "answer": "waiver 是主动放弃已有权利，disclaimer 是预先声明不承担责任",
-              "explanation": "waiver = 弃权（一方自愿放弃其已有的合同权利），disclaimer = 免责声明（预先声明不对某事项承担责任或不作出某种保证）。例：disclaimer of warranties = 保证免责声明。（第3天+第4天）"
+              "answer": "<span class=\"term\" data-def=\"弃权\">waiver</span> 是主动放弃已有权利，<span class=\"term\" data-def=\"免责声明\">disclaimer</span> 是预先声明不承担责任",
+              "explanation": "<span class=\"term\" data-def=\"弃权\">waiver</span> = 弃权（一方自愿放弃其已有的合同权利），<span class=\"term\" data-def=\"免责声明\">disclaimer</span> = 免责声明（预先声明不对某事项承担责任或不作出某种保证）。例：<span class=\"term\" data-def=\"保证免责声明\">disclaimer of warranties</span> = 保证免责声明。（第3天+第4天）"
             },
             {
-              "prompt": "5. <span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> 和 <span class=\"term\">confidential</span> 的侧重点区别是：",
+              "prompt": "5. <span class=\"term\" data-def=\"专有的/所有权的\">proprietary</span> 和 <span class=\"term\" data-def=\"保密的\">confidential</span> 的侧重点区别是：",
               "options": [
-                "proprietary 侧重所有权/专有性，confidential 侧重保密性",
+                "<span class=\"term\" data-def=\"专有的\">proprietary</span> 侧重所有权/专有性，<span class=\"term\" data-def=\"保密的\">confidential</span> 侧重保密性",
                 "两者完全相同",
-                "proprietary 仅用于技术领域",
-                "confidential 比 proprietary 保护范围更窄"
+                "<span class=\"term\" data-def=\"专有的\">proprietary</span> 仅用于技术领域",
+                "<span class=\"term\" data-def=\"保密的\">confidential</span> 比 <span class=\"term\" data-def=\"专有的\">proprietary</span> 保护范围更窄"
               ],
-              "answer": "proprietary 侧重所有权/专有性，confidential 侧重保密性",
-              "explanation": "proprietary = 专有的/私有的（强调所有权归属），confidential = 保密的（强调信息不可公开）。proprietary information 和 confidential information 有重叠，但前者更强调知识产权归属。（第5天）"
+              "answer": "<span class=\"term\" data-def=\"专有的\">proprietary</span> 侧重所有权/专有性，<span class=\"term\" data-def=\"保密的\">confidential</span> 侧重保密性",
+              "explanation": "<span class=\"term\" data-def=\"专有的\">proprietary</span> = 专有的/私有的（强调所有权归属），<span class=\"term\" data-def=\"保密的\">confidential</span> = 保密的（强调信息不可公开）。<span class=\"term\" data-def=\"专有信息\">proprietary information</span> 和 <span class=\"term\" data-def=\"保密信息\">confidential information</span> 有重叠，但前者更强调知识产权归属。（第5天）"
             }
           ]
         },
@@ -450,57 +450,57 @@
             {
               "prompt": "1. 合同中要表达“如一方违约，另一方<strong>有权</strong>终止本协议”，应使用：",
               "options": [
-                "shall terminate this Agreement",
-                "may terminate this Agreement",
-                "must terminate this Agreement",
-                "will terminate this Agreement"
+                "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement",
+                "<span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement",
+                "<span class=\"term\" data-def=\"必须（绝对强制）\">must</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement",
+                "<span class=\"term\" data-def=\"将；将要（弱于 shall）\">will</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement"
               ],
-              "answer": "may terminate this Agreement",
-              "explanation": "may 用于授予权利/许可。“一方有权终止” = may terminate。如果用 shall terminate 则变成义务（应终止），含义完全不同。（第1天）"
+              "answer": "<span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement",
+              "explanation": "<span class=\"term\" data-def=\"可以（任择/许可）\">may</span> 用于授予权利/许可。“一方有权终止” = <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span>。如果用 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"终止\">terminate</span> 则变成义务（应终止），含义完全不同。（第1天）"
             },
             {
               "prompt": "2. 合同中约定“交割的前提是买方已完成尽职调查并对结果满意”，这属于：",
               "options": [
-                "condition precedent（先决条件）",
-                "condition subsequent（解除条件）",
-                "warranty（保证）",
-                "covenant（承诺）"
+                "<span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）",
+                "<span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件）",
+                "<span class=\"term\" data-def=\"保证\">warranty</span>（保证）",
+                "<span class=\"term\" data-def=\"契约\">covenant</span>（承诺）"
               ],
-              "answer": "condition precedent（先决条件）",
-              "explanation": "需要在交割前先满足的条件 = condition precedent（先决条件）。condition subsequent 是义务生效后，因某事件发生而终止义务的解除条件。（第3天）"
+              "answer": "<span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）",
+              "explanation": "需要在交割前先满足的条件 = <span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）。<span class=\"term\" data-def=\"解除条件\">condition subsequent</span> 是义务生效后，因某事件发生而终止义务的解除条件。（第3天）"
             },
             {
               "prompt": "3. 合同中要表达“A方应赔偿B方因第三方索赔导致的全部损失，并使B方免受损害”，应使用：",
               "options": [
                 "compensate and protect",
-                "pay damages to",
-                "indemnify and hold harmless",
+                "pay <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span> to",
+                "<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>",
                 "reimburse and defend"
               ],
-              "answer": "indemnify and hold harmless",
-              "explanation": "“一方应赔偿另一方因第三方索赔导致的全部损失并使其免受损害” 使用 indemnify and hold harmless 这一法律固定搭配。（第4天）"
+              "answer": "<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>",
+              "explanation": "“一方应赔偿另一方因第三方索赔导致的全部损失并使其免受损害” 使用 <span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span> 这一法律固定搭配。（第4天）"
             },
             {
               "prompt": "4. 保密条款中，接收方在法律要求下被迫向法院披露保密信息，这属于：",
               "options": [
-                "breach of confidentiality",
-                "permitted disclosure",
-                "waiver of confidentiality",
-                "voluntary disclosure"
+                "<span class=\"term\" data-def=\"违反保密义务\">breach of confidentiality</span>",
+                "<span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span>",
+                "<span class=\"term\" data-def=\"弃权\">waiver</span> of confidentiality",
+                "voluntary <span class=\"term\" data-def=\"披露\">disclosure</span>"
               ],
-              "answer": "permitted disclosure",
-              "explanation": "保密条款中允许的例外披露情形 = permitted disclosure（允许的披露/许可披露）。常见的许可披露情形包括：法律要求的披露、向关联方的披露等。（第5天）"
+              "answer": "<span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span>",
+              "explanation": "保密条款中允许的例外披露情形 = <span class=\"term\" data-def=\"允许的披露\">permitted disclosure</span>（允许的披露/许可披露）。常见的许可披露情形包括：法律要求的披露、向关联方的披露等。（第5天）"
             },
             {
               "prompt": "5. 合同约定“任何一方的赔偿责任总额不得超过本协议项下已支付的金额”，其中的金额限制在法律上称为：",
               "options": [
                 "floor",
                 "threshold",
-                "cap",
+                "<span class=\"term\" data-def=\"上限\">cap</span>",
                 "ceiling"
               ],
-              "answer": "cap",
-              "explanation": "cap = 赔偿上限/限额。“责任总额不得超过已支付金额” 是典型的 cap（上限）条款。limitation of liability 是更大的概念，cap 是其中具体的限额机制。（第4天）"
+              "answer": "<span class=\"term\" data-def=\"上限\">cap</span>",
+              "explanation": "<span class=\"term\" data-def=\"上限\">cap</span> = 赔偿上限/限额。“责任总额不得超过已支付金额” 是典型的 <span class=\"term\" data-def=\"上限\">cap</span>（上限）条款。<span class=\"term\" data-def=\"责任限制\">limitation of liability</span> 是更大的概念，<span class=\"term\" data-def=\"上限\">cap</span> 是其中具体的限额机制。（第4天）"
             }
           ]
         },
@@ -510,11 +510,11 @@
           "instruction": "以下句子综合本周多天内容，翻译为中文后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
-              "source": "Each Party hereby represents and warrants that: (a) it is duly organized and validly existing under the laws of its jurisdiction of incorporation; (b) the execution, delivery and performance of this Agreement have been duly authorized by all necessary corporate action; and (c) this Agreement constitutes a legal, valid and binding obligation, enforceable against such Party in accordance with its terms, subject to applicable bankruptcy and insolvency laws.",
+              "source": "Each <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"兹；特此\">hereby</span> <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that: (a) it is <span class=\"term\" data-def=\"依法设立\">duly organized</span> and validly existing under the laws of its jurisdiction of incorporation; (b) the <span class=\"term\" data-def=\"签署\">execution</span>, delivery and <span class=\"term\" data-def=\"履行\">performance</span> of this Agreement have been duly authorized by all necessary corporate action; and (c) this Agreement constitutes a legal, valid and <span class=\"term\" data-def=\"有约束力的\">binding</span> <span class=\"term\" data-def=\"义务\">obligation</span>, <span class=\"term\" data-def=\"可执行的\">enforceable</span> against such <span class=\"term\" data-def=\"当事人\">Party</span> <span class=\"term\" data-def=\"根据\">in accordance with</span> its terms, <span class=\"term\" data-def=\"以…为条件\">subject to</span> applicable bankruptcy and insolvency laws.",
               "reference": "各方特此陈述并保证：(a) 其系根据其注册地法律正式组建并合法存续；(b) 本协议的签署、交付和履行已经其全部必要的公司行为正式授权；(c) 本协议构成对该方合法、有效且具有约束力的义务，可根据其条款对该方强制执行，但须受适用的破产和资不抵债相关法律的约束。",
               "rubric": [
                 {
-                  "en": "hereby represents and warrants",
+                  "en": "<span class=\"term\" data-def=\"兹；特此\">hereby</span> <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span>",
                   "ideal": "特此陈述并保证",
                   "accept": [
                     "兹陈述并保证"
@@ -523,10 +523,10 @@
                     "代表和担保",
                     "声明并保修"
                   ],
-                  "note": "represents and warrants = 陈述并保证，hereby = 特此（第2天+here-家族词）"
+                  "note": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> = 陈述并保证，<span class=\"term\" data-def=\"兹；特此\">hereby</span> = 特此（第2天+here-家族词）"
                 },
                 {
-                  "en": "duly organized and validly existing",
+                  "en": "<span class=\"term\" data-def=\"依法设立\">duly organized</span> and validly existing",
                   "ideal": "正式组建并合法存续",
                   "accept": [
                     "依法组建并有效存续"
@@ -537,7 +537,7 @@
                   "note": "duly = 正式地/适当地，validly = 合法地/有效地"
                 },
                 {
-                  "en": "execution, delivery and performance",
+                  "en": "<span class=\"term\" data-def=\"签署\">execution</span>, delivery and <span class=\"term\" data-def=\"履行\">performance</span>",
                   "ideal": "签署、交付和履行",
                   "accept": [
                     "签订、交付和履行"
@@ -545,7 +545,7 @@
                   "wrong": [
                     "执行、递送和表现"
                   ],
-                  "note": "execution = 签署（非执行），performance = 履行（非表现）（第1周+第1天）"
+                  "note": "<span class=\"term\" data-def=\"签署\">execution</span> = 签署（非执行），<span class=\"term\" data-def=\"履行\">performance</span> = 履行（非表现）（第1周+第1天）"
                 },
                 {
                   "en": "duly authorized by all necessary corporate action",
@@ -559,7 +559,7 @@
                   "note": "corporate action = 公司行为（股东决议、董事会决议等）"
                 },
                 {
-                  "en": "legal, valid and binding obligation",
+                  "en": "legal, valid and <span class=\"term\" data-def=\"有约束力的\">binding</span> <span class=\"term\" data-def=\"义务\">obligation</span>",
                   "ideal": "合法、有效且具有约束力的义务",
                   "accept": [
                     "合法、有效和有约束力的义务"
@@ -567,10 +567,10 @@
                   "wrong": [
                     "法律有效的绑定义务"
                   ],
-                  "note": "binding = 具有约束力的（第1天）"
+                  "note": "<span class=\"term\" data-def=\"有约束力的\">binding</span> = 具有约束力的（第1天）"
                 },
                 {
-                  "en": "enforceable against such Party",
+                  "en": "<span class=\"term\" data-def=\"可执行的\">enforceable</span> against such <span class=\"term\" data-def=\"当事人\">Party</span>",
                   "ideal": "可对该方强制执行",
                   "accept": [
                     "可针对该方执行"
@@ -578,10 +578,10 @@
                   "wrong": [
                     "该方可执行的"
                   ],
-                  "note": "enforceable = 可强制执行的（第1天）"
+                  "note": "<span class=\"term\" data-def=\"可执行的\">enforceable</span> = 可强制执行的（第1天）"
                 },
                 {
-                  "en": "subject to applicable bankruptcy and insolvency laws",
+                  "en": "<span class=\"term\" data-def=\"以…为条件\">subject to</span> applicable bankruptcy and insolvency laws",
                   "ideal": "但须受适用的破产和资不抵债相关法律的约束",
                   "accept": [
                     "受适用破产法律限制"
@@ -589,16 +589,16 @@
                   "wrong": [
                     "受制于破产法"
                   ],
-                  "note": "subject to = 须受……约束/但以……为条件（第3天）"
+                  "note": "<span class=\"term\" data-def=\"以…为条件\">subject to</span> = 须受……约束/但以……为条件（第3天）"
                 }
               ]
             },
             {
-              "source": "The Receiving Party shall hold all Confidential Information in strict confidence and shall not disclose any Confidential Information to any third party without the prior written consent of the Disclosing Party; provided, however, that the Receiving Party may disclose Confidential Information to its directors, officers, employees and advisors who have a need to know such information, provided that such persons are bound by obligations of confidentiality no less restrictive than those set forth herein. In the event of a breach of this Section, the Disclosing Party shall be entitled to seek injunctive relief in addition to any other remedies available at law or in equity.",
+              "source": "The <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"认定；持有\">hold</span> all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> in strict confidence and <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not disclose any <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> to any third <span class=\"term\" data-def=\"当事人\">party</span> without the prior written <span class=\"term\" data-def=\"同意\">consent</span> of the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span>; <span class=\"term\" data-def=\"但是\">provided, however, that</span> the <span class=\"term\" data-def=\"接收方\">Receiving Party</span> <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> disclose <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> to its directors, officers, employees and advisors who have a need to know such information, <span class=\"term\" data-def=\"但是\">provided that</span> such persons are bound by <span class=\"term\" data-def=\"义务（复数）\">obligations</span> of confidentiality no less restrictive than those <span class=\"term\" data-def=\"规定\">set forth</span> <span class=\"term\" data-def=\"本协议中\">herein</span>. In the event of a breach of this Section, the <span class=\"term\" data-def=\"披露方\">Disclosing Party</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be entitled to seek <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> in addition to any other <span class=\"term\" data-def=\"救济（手段）\">remedies</span> available at law or in equity.",
               "reference": "接收方应对全部保密信息严格保密，未经披露方事先书面同意，不得向任何第三方披露任何保密信息；但接收方可以向其有知悉必要的董事、高管、员工和顾问披露保密信息，但前提是该等人员须受到不低于本协议中规定的保密义务的约束。如违反本条规定，披露方除有权寻求法律上或衡平法上的任何其他救济外，还有权寻求禁令救济。",
               "rubric": [
                 {
-                  "en": "hold all Confidential Information in strict confidence",
+                  "en": "<span class=\"term\" data-def=\"认定；持有\">hold</span> all <span class=\"term\" data-def=\"保密信息\">Confidential Information</span> in strict confidence",
                   "ideal": "对全部保密信息严格保密",
                   "accept": [
                     "严格保守全部保密信息"
@@ -606,10 +606,10 @@
                   "wrong": [
                     "严格持有保密信息"
                   ],
-                  "note": "hold in confidence = 保密，不是“持有”（第5天）"
+                  "note": "<span class=\"term\" data-def=\"认定；持有\">hold</span> in confidence = 保密，不是“持有”（第5天）"
                 },
                 {
-                  "en": "prior written consent",
+                  "en": "prior written <span class=\"term\" data-def=\"同意\">consent</span>",
                   "ideal": "事先书面同意",
                   "accept": [
                     "书面事先同意"
@@ -618,10 +618,10 @@
                     "预先同意",
                     "之前的书面许可"
                   ],
-                  "note": "prior written consent 是法律固定搭配，三个词都不可省略"
+                  "note": "prior written <span class=\"term\" data-def=\"同意\">consent</span> 是法律固定搭配，三个词都不可省略"
                 },
                 {
-                  "en": "provided, however, that",
+                  "en": "<span class=\"term\" data-def=\"但是\">provided, however, that</span>",
                   "ideal": "但",
                   "accept": [
                     "但是",
@@ -630,7 +630,7 @@
                   "wrong": [
                     "提供"
                   ],
-                  "note": "provided that = 但须/但以……为条件（第3天）"
+                  "note": "<span class=\"term\" data-def=\"但是\">provided that</span> = 但须/但以……为条件（第3天）"
                 },
                 {
                   "en": "need to know",
@@ -644,7 +644,7 @@
                   "note": "need to know 是保密条款中的限定概念，只有必须知悉的人才能获取"
                 },
                 {
-                  "en": "obligations of confidentiality no less restrictive than those set forth herein",
+                  "en": "<span class=\"term\" data-def=\"义务（复数）\">obligations</span> of confidentiality no less restrictive than those <span class=\"term\" data-def=\"规定\">set forth</span> <span class=\"term\" data-def=\"本协议中\">herein</span>",
                   "ideal": "不低于本协议中规定的保密义务",
                   "accept": [
                     "与本协议规定同等严格的保密义务"
@@ -652,10 +652,10 @@
                   "wrong": [
                     "与此相似的保密义务"
                   ],
-                  "note": "no less restrictive = 不低于/不弱于；set forth = 规定；herein = 在本协议中"
+                  "note": "no less restrictive = 不低于/不弱于；<span class=\"term\" data-def=\"规定\">set forth</span> = 规定；<span class=\"term\" data-def=\"本协议中\">herein</span> = 在本协议中"
                 },
                 {
-                  "en": "injunctive relief",
+                  "en": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>",
                   "ideal": "禁令救济",
                   "accept": [
                     "禁制令救济"
@@ -664,10 +664,10 @@
                     "强制执行",
                     "注射救济"
                   ],
-                  "note": "injunctive relief = 禁令救济（第5天）"
+                  "note": "<span class=\"term\" data-def=\"禁令救济\">injunctive relief</span> = 禁令救济（第5天）"
                 },
                 {
-                  "en": "remedies available at law or in equity",
+                  "en": "<span class=\"term\" data-def=\"救济（手段）\">remedies</span> available at law or in equity",
                   "ideal": "法律上或衡平法上可获得的救济",
                   "accept": [
                     "法律或衡平法上的任何其他救济"
@@ -688,31 +688,31 @@
           "questions": [
             {
               "source": "卖方陈述并保证：(a) 其对标的资产拥有完整且无瑕疵的所有权；(b) 标的资产不存在任何留置权或担保权益。如上述任何陈述或保证被裁定为不真实或不准确，买方有权终止本协议并要求卖方赔偿买方因此遭受的全部损失，并使买方免受损害。任何一方未行使本协议项下任何权利，不构成对该权利的放弃。",
-              "reference": "The Seller represents and warrants that: (a) it has good and clear title to the Subject Assets, free and clear of any defects; and (b) the Subject Assets are free and clear of any liens or security interests. If any of the foregoing representations or warranties is held to be untrue or inaccurate, the Buyer may terminate this Agreement and the Seller shall indemnify and hold harmless the Buyer against all losses suffered by the Buyer as a result thereof. No failure by either Party to exercise any right hereunder shall constitute a waiver of such right.",
+              "reference": "The Seller <span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that: (a) it has good and clear <span class=\"term\" data-def=\"合同标题\">title</span> to the Subject Assets, free and clear of any defects; and (b) the Subject Assets are free and clear of any liens or security interests. If any of the foregoing representations or warranties is <span class=\"term\" data-def=\"被裁定为\">held to be</span> untrue or inaccurate, the Buyer <span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span> this Agreement and the Seller <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span> the Buyer against all losses suffered by the Buyer as a result <span class=\"term\" data-def=\"其中的\">thereof</span>. No failure by either <span class=\"term\" data-def=\"当事人\">Party</span> to exercise any <span class=\"term\" data-def=\"权利\">right</span> <span class=\"term\" data-def=\"依本协议\">hereunder</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> constitute a <span class=\"term\" data-def=\"弃权\">waiver</span> of such <span class=\"term\" data-def=\"权利\">right</span>.",
               "rubric": [
                 {
                   "en": "陈述并保证",
-                  "ideal": "represents and warrants",
+                  "ideal": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span>",
                   "accept": [
-                    "represents and warrants that"
+                    "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> that"
                   ],
                   "wrong": [
                     "says and promises",
                     "states and guarantees"
                   ],
-                  "note": "represents and warrants 是法律固定搭配（第2天）"
+                  "note": "<span class=\"term\" data-def=\"声明并保证\">represents and warrants</span> 是法律固定搭配（第2天）"
                 },
                 {
                   "en": "完整且无瑕疵的所有权",
-                  "ideal": "good and clear title",
+                  "ideal": "good and clear <span class=\"term\" data-def=\"合同标题\">title</span>",
                   "accept": [
-                    "good and marketable title"
+                    "good and marketable <span class=\"term\" data-def=\"合同标题\">title</span>"
                   ],
                   "wrong": [
                     "complete ownership",
                     "full ownership"
                   ],
-                  "note": "good and clear title 是法律固定搭配，表示“完整且无瑕疵的所有权”"
+                  "note": "good and clear <span class=\"term\" data-def=\"合同标题\">title</span> 是法律固定搭配，表示“完整且无瑕疵的所有权”"
                 },
                 {
                   "en": "留置权或担保权益",
@@ -723,11 +723,11 @@
                   "wrong": [
                     "pledges or guarantees"
                   ],
-                  "note": "lien = 留置权，security interest = 担保权益"
+                  "note": "lien = 留置权，security <span class=\"term\" data-def=\"利息\">interest</span> = 担保权益"
                 },
                 {
                   "en": "被裁定为不真实或不准确",
-                  "ideal": "is held to be untrue or inaccurate",
+                  "ideal": "is <span class=\"term\" data-def=\"被裁定为\">held to be</span> untrue or inaccurate",
                   "accept": [
                     "is determined to be untrue"
                   ],
@@ -735,52 +735,52 @@
                     "is considered false",
                     "is found wrong"
                   ],
-                  "note": "held to be = 被裁定为（遗留错题！不是“被认为”）"
+                  "note": "<span class=\"term\" data-def=\"被裁定为\">held to be</span> = 被裁定为（遗留错题！不是“被认为”）"
                 },
                 {
                   "en": "有权终止",
-                  "ideal": "may terminate",
+                  "ideal": "<span class=\"term\" data-def=\"可以（任择/许可）\">may</span> <span class=\"term\" data-def=\"终止\">terminate</span>",
                   "accept": [
-                    "shall have the right to terminate"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> have the <span class=\"term\" data-def=\"权利\">right</span> to <span class=\"term\" data-def=\"终止\">terminate</span>"
                   ],
                   "wrong": [
-                    "shall terminate",
-                    "will terminate"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> <span class=\"term\" data-def=\"终止\">terminate</span>",
+                    "<span class=\"term\" data-def=\"将；将要（弱于 shall）\">will</span> <span class=\"term\" data-def=\"终止\">terminate</span>"
                   ],
-                  "note": "有权 = may（第1天），不是 shall（义务）"
+                  "note": "有权 = <span class=\"term\" data-def=\"可以（任择/许可）\">may</span>（第1天），不是 <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>（义务）"
                 },
                 {
                   "en": "赔偿并使免受损害",
-                  "ideal": "indemnify and hold harmless",
+                  "ideal": "<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>",
                   "accept": [
-                    "indemnify and hold the Buyer harmless"
+                    "<span class=\"term\" data-def=\"赔偿\">indemnify</span> and <span class=\"term\" data-def=\"认定；持有\">hold</span> the Buyer harmless"
                   ],
                   "wrong": [
                     "compensate and protect"
                   ],
-                  "note": "indemnify and hold harmless 是法律固定搭配（第4天）"
+                  "note": "<span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span> 是法律固定搭配（第4天）"
                 },
                 {
                   "en": "不构成对该权利的放弃",
-                  "ideal": "shall not constitute a waiver of such right",
+                  "ideal": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not constitute a <span class=\"term\" data-def=\"弃权\">waiver</span> of such <span class=\"term\" data-def=\"权利\">right</span>",
                   "accept": [
-                    "shall not be deemed a waiver"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> not be deemed a <span class=\"term\" data-def=\"弃权\">waiver</span>"
                   ],
                   "wrong": [
-                    "does not mean giving up the right"
+                    "does not mean giving up the <span class=\"term\" data-def=\"权利\">right</span>"
                   ],
-                  "note": "waiver = 弃权（第3天+第4天）"
+                  "note": "<span class=\"term\" data-def=\"弃权\">waiver</span> = 弃权（第3天+第4天）"
                 },
                 {
                   "en": "本协议项下",
-                  "ideal": "hereunder",
+                  "ideal": "<span class=\"term\" data-def=\"依本协议\">hereunder</span>",
                   "accept": [
                     "under this Agreement"
                   ],
                   "wrong": [
                     "in this contract"
                   ],
-                  "note": "hereunder = under this Agreement（here-家族词复习）"
+                  "note": "<span class=\"term\" data-def=\"依本协议\">hereunder</span> = under this Agreement（here-家族词复习）"
                 }
               ]
             }
@@ -791,7 +791,7 @@
     {
       "type": "summary",
       "heading": "5. 今日小结",
-      "html": "<h3>第2周学习成果</h3>\n<ul><li><strong>核心能力：</strong>掌握了合同中权利与义务条款的核心表达方式</li><li><strong>覆盖内容：</strong>情态动词法律含义 → 陈述与保证 → 条件与前提 → 豁免与责任限制 → 保密条款</li><li><strong>里程碑：</strong>能够阅读和理解合同中的权利义务条款、保密条款和责任限制条款</li></ul>\n<h3>第2周关键要点回顾</h3>\n<ol><li><span class=\"term\">shall</span>（义务）vs. <span class=\"term\">may</span>（权利）vs. <span class=\"term\">must</span>（强制）— 合同中最重要的三个情态动词</li><li><span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>（陈述与保证）— 合同中对事实的声明和担保</li><li><span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）vs. <span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件）— 两种条件类型</li><li><span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>（赔偿并使免受损害）— 赔偿条款核心表达</li><li><span class=\"term\" data-def=\"责任限制\">limitation of liability</span> + <span class=\"term\" data-def=\"上限\">cap</span> + <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> — 责任限制条款三要素</li><li>保密条款核心角色：<span class=\"term\" data-def=\"披露方\">disclosing party</span>（披露方）vs. <span class=\"term\" data-def=\"接收方\">receiving party</span>（接收方）</li><li>违反保密义务可寻求 <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>（禁令救济）</li></ol>\n<h3>第1周遗留错题复习情况</h3>\n<p>本课已对以下5个遗留错题进行复习并融入练习：<span class=\"term\" data-def=\"实质条款\">operative provisions</span>、<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>、<span class=\"term\" data-def=\"被裁定为\">held to be</span>、<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>、<span class=\"term\" data-def=\"上述事项\">the premises</span>。请在后续学习中持续关注这些知识点。</p>\n<h3>下周预告：第3周 — 支付与对价条款（Payment & Consideration）</h3>\n<p>下周将学习合同中关于支付、价格和对价的核心术语：</p>\n<ul><li>第1天：对价基础 — <span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>, <span class=\"term\" data-def=\"相互对价；互惠对价\">mutual consideration</span>, <span class=\"term\" data-def=\"充分对价；足够对价\">adequate consideration</span></li><li>第2天：支付条款 — <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span>, <span class=\"term\" data-def=\"发票；账单\">invoice</span>, <span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>, <span class=\"term\" data-def=\"分期付款；期款\">installment</span></li><li>第3天：利息与违约金 — <span class=\"term\" data-def=\"利息；利率\">interest</span>, <span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span>, <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span></li><li>第4天：税费与扣款 — <span class=\"term\">withholding</span>, <span class=\"term\" data-def=\"总额化（补偿）；税后净额补足义务\">gross-up</span>, <span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span></li><li>第5天：货币与汇率 — <span class=\"term\" data-def=\"面额；计价货币\">denomination</span>, <span class=\"term\" data-def=\"汇率；兑换率\">exchange rate</span>, <span class=\"term\" data-def=\"兑换；换算\">conversion</span></li></ul>"
+      "html": "<h3>第2周学习成果</h3>\n<ul><li><strong>核心能力：</strong>掌握了合同中权利与义务条款的核心表达方式</li><li><strong>覆盖内容：</strong>情态动词法律含义 → 陈述与保证 → 条件与前提 → 豁免与责任限制 → 保密条款</li><li><strong>里程碑：</strong>能够阅读和理解合同中的权利义务条款、保密条款和责任限制条款</li></ul>\n<h3>第2周关键要点回顾</h3>\n<ol><li><span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span>（义务）vs. <span class=\"term\" data-def=\"可以（任择/许可）\">may</span>（权利）vs. <span class=\"term\" data-def=\"必须（绝对强制）\">must</span>（强制）— 合同中最重要的三个情态动词</li><li><span class=\"term\" data-def=\"陈述与保证\">representations and warranties</span>（陈述与保证）— 合同中对事实的声明和担保</li><li><span class=\"term\" data-def=\"先决条件\">condition precedent</span>（先决条件）vs. <span class=\"term\" data-def=\"解除条件\">condition subsequent</span>（解除条件）— 两种条件类型</li><li><span class=\"term\" data-def=\"赔偿并使免受损害\">indemnify and hold harmless</span>（赔偿并使免受损害）— 赔偿条款核心表达</li><li><span class=\"term\" data-def=\"责任限制\">limitation of liability</span> + <span class=\"term\" data-def=\"上限\">cap</span> + <span class=\"term\" data-def=\"间接损害赔偿\">consequential damages</span> — 责任限制条款三要素</li><li>保密条款核心角色：<span class=\"term\" data-def=\"披露方\">disclosing party</span>（披露方）vs. <span class=\"term\" data-def=\"接收方\">receiving party</span>（接收方）</li><li>违反保密义务可寻求 <span class=\"term\" data-def=\"禁令救济\">injunctive relief</span>（禁令救济）</li></ol>\n<h3>第1周遗留错题复习情况</h3>\n<p>本课已对以下5个遗留错题进行复习并融入练习：<span class=\"term\" data-def=\"实质条款\">operative provisions</span>、<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>、<span class=\"term\" data-def=\"被裁定为\">held to be</span>、<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>、<span class=\"term\" data-def=\"上述事项\">the premises</span>。请在后续学习中持续关注这些知识点。</p>\n<h3>下周预告：第3周 — 支付与对价条款（<span class=\"term\" data-def=\"付款\">Payment</span> & <span class=\"term\" data-def=\"对价\">Consideration</span>）</h3>\n<p>下周将学习合同中关于支付、价格和对价的核心术语：</p>\n<ul><li>第1天：对价基础 — <span class=\"term\" data-def=\"对价；约因；代价\">consideration</span>, <span class=\"term\" data-def=\"相互对价；互惠对价\">mutual consideration</span>, <span class=\"term\" data-def=\"充分对价；足够对价\">adequate consideration</span></li><li>第2天：支付条款 — <span class=\"term\" data-def=\"付款条件；付款条款\">payment terms</span>, <span class=\"term\" data-def=\"发票；账单\">invoice</span>, <span class=\"term\" data-def=\"净30天（自发票日起30天内付清）\">net 30</span>, <span class=\"term\" data-def=\"分期付款；期款\">installment</span></li><li>第3天：利息与违约金 — <span class=\"term\" data-def=\"利息；利率\">interest</span>, <span class=\"term\" data-def=\"罚款；惩罚性违约金\">penalty</span>, <span class=\"term\" data-def=\"预定损害赔偿；约定损害赔偿金\">liquidated damages</span></li><li>第4天：税费与扣款 — <span class=\"term\" data-def=\"预扣\">withholding</span>, <span class=\"term\" data-def=\"总额化（补偿）；税后净额补足义务\">gross-up</span>, <span class=\"term\" data-def=\"抵销；（以债权）相互抵销\">set-off</span></li><li>第5天：货币与汇率 — <span class=\"term\" data-def=\"面额；计价货币\">denomination</span>, <span class=\"term\" data-def=\"汇率；兑换率\">exchange rate</span>, <span class=\"term\" data-def=\"兑换；换算\">conversion</span></li></ul>"
     }
   ]
 }

@@ -243,6 +243,40 @@ export class WordsApi {
   }
 
   /**
+   * 仅根据单词文本 + 语言获取释义（不依赖 wordId / 不写 DB / 不查 user_config）
+   * 创建态用：先拉释义预填表单，由 saveCreate 真正写库
+   * 复用 fetchDefinition 的 Edge Function + AI fallback + bold 处理逻辑
+   */
+  static async fetchDefinitionByTextDirect(
+    wordText: string,
+    lang: SourceLang
+  ): Promise<DefinitionObject> {
+    const cleaned = wordText.trim()
+    if (!cleaned) throw new Error('单词不能为空')
+
+    let rawDefinition: DefinitionObject
+    const { data, error: fnError } = await supabase.functions.invoke('fetch-definition', {
+      body: { word: cleaned, lang },
+    })
+
+    if (fnError || !data?.success) {
+      if (lang !== 'en') {
+        try {
+          rawDefinition = await fetchDefinitionFromAI(cleaned, lang)
+        } catch {
+          throw new Error(data?.error || fnError?.message || '获取释义失败')
+        }
+      } else {
+        throw new Error(data?.error || fnError?.message || '获取释义失败')
+      }
+    } else {
+      rawDefinition = data.definition as DefinitionObject
+    }
+
+    return applyBoldToDefinition(rawDefinition, cleaned)
+  }
+
+  /**
    * 按 (user, source, word) 查询单条单词记录，未命中返回 null
    * 唯一约束 unique_word_per_user(word, user_id, source) 保证最多 1 条
    */
@@ -455,6 +489,48 @@ export class WordsApi {
     const word = this.transformWord(wordResult.data)
     word.related_words = relatedWords
     return word
+  }
+
+  /**
+   * 拉取本地缓存指纹：(count, max(updated_at))
+   * 客户端比对本地指纹决定是命中、增量同步还是全量重拉
+   */
+  static async getWordsFingerprintDirect(): Promise<{ count: number; maxUpdatedAt: string | null }> {
+    const { data, error } = await supabase.rpc('get_words_fingerprint')
+    throwIfError(error, '获取单词指纹失败')
+    const row = (data as Array<{ word_count: number; max_updated_at: string | null }> | null)?.[0]
+    return {
+      count: Number(row?.word_count) || 0,
+      maxUpdatedAt: row?.max_updated_at ?? null,
+    }
+  }
+
+  /**
+   * 增量拉取：updated_at > sinceIso 的所有单词（含关联词）
+   * 用于客户端缓存命中后的差量同步
+   */
+  static async getWordsSinceDirect(sinceIso: string): Promise<Word[]> {
+    const userId = getCurrentUserId()
+
+    const allRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
+      supabase
+        .from('words')
+        .select('*')
+        .eq('user_id', userId)
+        .gt('updated_at', sinceIso)
+        .order('updated_at', { ascending: true })
+        .range(from, to)
+    )
+
+    if (allRows.length === 0) return []
+
+    const words = allRows.map(row => this.transformWord(row))
+    const wordIds = words.map(w => w.id)
+    const relatedWordsMap = await this.getRelatedWordsByIds(wordIds)
+    for (const word of words) {
+      word.related_words = relatedWordsMap.get(word.id) || []
+    }
+    return words
   }
 
   /**
@@ -1113,7 +1189,8 @@ export class WordsApi {
       last_spell: (row.last_spell as string) || null,
       remember_count: Number(row.remember_count) || 0,
       forget_count: Number(row.forget_count) || 0,
-      avg_elapsed_time: Number(row.avg_elapsed_time) || 0
+      avg_elapsed_time: Number(row.avg_elapsed_time) || 0,
+      updated_at: (row.updated_at as string) || ''
     }
   }
 }

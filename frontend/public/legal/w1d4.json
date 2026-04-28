@@ -1,5 +1,5 @@
 {
-  "title": "第1周 第4天 — 定义条款（Definitions Clause）",
+  "title": "第1周 第4天 — 定义条款（<span class=\"term\" data-def=\"定义条款\">Definitions</span> <span class=\"term\" data-def=\"条款\">Clause</span>）",
   "objective": "掌握合同定义条款中的核心词汇和固定搭配，理解 <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>、<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>、<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> 等法律表达的精确含义，学会阅读和起草合同定义条款。",
   "sections": [
     {
@@ -7,7 +7,7 @@
       "blocks": [
         {
           "type": "p",
-          "html": "上节回顾：第2天学习了合同当事人条款（party, hereinafter, whereas, witnesseth, <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>）和过渡条款的标准格式。今天进入合同正文的第一个核心板块——定义条款（Definitions），它决定了整份合同中关键术语的确切含义。"
+          "html": "上节回顾：第2天学习了合同当事人条款（<span class=\"term\" data-def=\"当事人\">party</span>, <span class=\"term\" data-def=\"以下称为\">hereinafter</span>, <span class=\"term\" data-def=\"鉴于\">whereas</span>, <span class=\"term\" data-def=\"兹证明（古体）\">witnesseth</span>, <span class=\"term\" data-def=\"因此/有鉴于此\">now therefore</span>）和过渡条款的标准格式。今天进入合同正文的第一个核心板块——定义条款（<span class=\"term\" data-def=\"定义条款\">Definitions</span>），它决定了整份合同中关键术语的确切含义。"
         }
       ]
     },
@@ -41,7 +41,7 @@
               "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>",
               "/æz juːzd hɪrˈɪn/",
               "phr. 如本协议所使用的",
-              "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>, the following terms shall have the following meanings"
+              "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>, the following terms <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> have the following meanings"
             ],
             [
               "<span class=\"term\" data-def=\"除非上下文另有要求\">unless the context otherwise requires</span>",
@@ -53,13 +53,13 @@
               "<span class=\"term\" data-def=\"关联方/关联公司\">affiliate</span>",
               "/əˈfɪliət/",
               "n. 关联方；关联公司",
-              "any affiliate of the Company; affiliate and subsidiary"
+              "any <span class=\"term\" data-def=\"关联方\">affiliate</span> of the Company; <span class=\"term\" data-def=\"关联方\">affiliate</span> and subsidiary"
             ],
             [
               "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>",
               "/ˈpɜːrsən/",
               "n. 人士（含自然人和法人实体）",
-              "“Person” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any individual, corporation, partnership, or other entity"
+              "“<span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any individual, corporation, partnership, or other entity"
             ],
             [
               "<span class=\"term\" data-def=\"工作日/营业日\">business day</span>",
@@ -77,7 +77,7 @@
               "<span class=\"term\" data-def=\"重大的/实质性的\">material</span>",
               "/məˈtɪriəl/",
               "adj. 重大的；实质性的",
-              "material breach; material adverse effect; material change"
+              "<span class=\"term\" data-def=\"重大的\">material</span> breach; <span class=\"term\" data-def=\"重大的\">material</span> adverse effect; <span class=\"term\" data-def=\"重大的\">material</span> change"
             ],
             [
               "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
@@ -89,35 +89,35 @@
               "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
               "/hɪrˈɒv/",
               "adv. 本协议的（= of this Agreement）",
-              "Section 3 hereof; the terms hereof; <span class=\"term\" data-def=\"自…起/截至\">as of</span> the date hereof"
+              "Section 3 <span class=\"term\" data-def=\"本协议的\">hereof</span>; the terms <span class=\"term\" data-def=\"本协议的\">hereof</span>; <span class=\"term\" data-def=\"自…起/截至\">as of</span> the date <span class=\"term\" data-def=\"本协议的\">hereof</span>"
             ],
             [
               "<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>",
               "/ðɛrˈɒv/",
               "adv. 其（= of that / of it）",
-              "the terms and conditions thereof; any amendment or modification thereof"
+              "the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"其中的\">thereof</span>; any <span class=\"term\" data-def=\"修正案\">amendment</span> or modification <span class=\"term\" data-def=\"其中的\">thereof</span>"
             ],
             [
               "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>",
               "/əˈskraɪb/",
               "v. 赋予（含义）",
-              "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in...; ascribed thereto"
+              "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in...; ascribed <span class=\"term\" data-def=\"随附于此\">thereto</span>"
             ],
             [
               "<span class=\"term\" data-def=\"规定/载明\">set forth</span>",
               "/sɛt fɔːrθ/",
               "v. 载明；规定；列明",
-              "as <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Schedule A; the definitions <span class=\"term\" data-def=\"规定/载明\">set forth</span> herein"
+              "as <span class=\"term\" data-def=\"规定/载明\">set forth</span> in Schedule A; the <span class=\"term\" data-def=\"定义条款\">definitions</span> <span class=\"term\" data-def=\"规定/载明\">set forth</span> <span class=\"term\" data-def=\"本协议中\">herein</span>"
             ]
           ]
         },
         {
           "type": "note",
-          "html": "<strong>⚠️ 多义词辨析：material</strong><ul><li>日常英语：材料；物质（名词） / 物质的（形容词）</li><li>法律英语：<strong>重大的；实质性的</strong>（形容词）——这是合同中最常见的含义</li><li><strong>material breach</strong> = 重大违约（非“物质违约”）</li><li><strong>material adverse effect</strong> = 重大不利影响</li></ul>"
+          "html": "<strong>⚠️ 多义词辨析：<span class=\"term\" data-def=\"重大的\">material</span></strong><ul><li>日常英语：材料；物质（名词） / 物质的（形容词）</li><li>法律英语：<strong>重大的；实质性的</strong>（形容词）——这是合同中最常见的含义</li><li><strong><span class=\"term\" data-def=\"重大的\">material</span> breach</strong> = 重大违约（非“物质违约”）</li><li><strong><span class=\"term\" data-def=\"重大的\">material</span> adverse effect</strong> = 重大不利影响</li></ul>"
         },
         {
           "type": "note",
-          "html": "<strong>⚠️ 多义词辨析：person</strong><ul><li>日常英语：人；个人</li><li>法律英语：<strong>人士</strong>——范围远大于日常用法，涵盖自然人（individual）、公司（corporation）、合伙企业（partnership）、信托（trust）等一切法律主体</li><li>合同定义条款中几乎都会对 Person 作扩展定义</li></ul>"
+          "html": "<strong>⚠️ 多义词辨析：<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span></strong><ul><li>日常英语：人；个人</li><li>法律英语：<strong>人士</strong>——范围远大于日常用法，涵盖自然人（individual）、公司（corporation）、合伙企业（partnership）、信托（trust）等一切法律主体</li><li>合同定义条款中几乎都会对 <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span> 作扩展定义</li></ul>"
         }
       ]
     },
@@ -154,7 +154,7 @@
               }
             ],
             [
-              "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>, the following terms shall have the following meanings",
+              "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>, the following terms <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> have the following meanings",
               "如本协议所使用的，以下术语具有以下含义",
               {
                 "en": "<span class=\"en-text\">As used herein, the following capitalized terms shall have the following meanings.</span>",
@@ -186,7 +186,7 @@
               }
             ],
             [
-              "as <span class=\"term\">defined</span> <span class=\"term\" data-def=\"本协议的\">herein</span>",
+              "as <span class=\"term\" data-def=\"已定义的\">defined</span> <span class=\"term\" data-def=\"本协议的\">herein</span>",
               "如本协议所定义的",
               {
                 "en": "<span class=\"en-text\">Each Affiliate, as defined herein, shall be bound by the terms of this Agreement.</span>",
@@ -211,7 +211,7 @@
       "blocks": [
         {
           "type": "h3",
-          "text": "3a. hereof vs. thereof vs. herein vs. therein"
+          "text": "3a. <span class=\"term\" data-def=\"本协议的\">hereof</span> vs. <span class=\"term\" data-def=\"其中的\">thereof</span> vs. <span class=\"term\" data-def=\"本协议中\">herein</span> vs. <span class=\"term\" data-def=\"其中\">therein</span>"
         },
         {
           "type": "table",
@@ -230,23 +230,23 @@
             [
               "<span class=\"term\" data-def=\"其中的/该…的\">thereof</span>",
               "其……的",
-              "there（该事物）+ of（的）= of that / of it<br>例：the terms and conditions <span class=\"term\" data-def=\"其中的/该…的\">thereof</span> = 其条款和条件"
+              "there（该事物）+ of（的）= of that / of it<br>例：the terms and <span class=\"term\" data-def=\"条件（复数）\">conditions</span> <span class=\"term\" data-def=\"其中的/该…的\">thereof</span> = 其条款和条件"
             ],
             [
-              "herein",
+              "<span class=\"term\" data-def=\"本协议中\">herein</span>",
               "在本协议中",
-              "here（本协议）+ in（在……中）= in this Agreement<br>例：as used <span class=\"term\">herein</span> = 如本协议所使用的"
+              "here（本协议）+ in（在……中）= in this Agreement<br>例：as used <span class=\"term\" data-def=\"本协议中\">herein</span> = 如本协议所使用的"
             ],
             [
-              "therein",
+              "<span class=\"term\" data-def=\"其中\">therein</span>",
               "在其中",
-              "there（该事物）+ in（在……中）= in that / in it<br>例：the obligations contained therein = 其中所含的义务"
+              "there（该事物）+ in（在……中）= in that / in it<br>例：the <span class=\"term\" data-def=\"义务（复数）\">obligations</span> contained <span class=\"term\" data-def=\"其中\">therein</span> = 其中所含的义务"
             ]
           ]
         },
         {
           "type": "error-warn",
-          "html": "<strong>常见翻译错误：</strong><ul><li><span class=\"term\" data-def=\"本协议的\">hereof</span> 不要译为“在此之上”或“在此之前”，正确翻译为“本协议的”</li><li><span class=\"term\" data-def=\"其中的/该…的\">thereof</span> 不要与 <span class=\"term\" data-def=\"本协议的\">hereof</span> 混淆——hereof 指本协议，thereof 指前文提到的其他事物</li></ul>"
+          "html": "<strong>常见翻译错误：</strong><ul><li><span class=\"term\" data-def=\"本协议的\">hereof</span> 不要译为“在此之上”或“在此之前”，正确翻译为“本协议的”</li><li><span class=\"term\" data-def=\"其中的/该…的\">thereof</span> 不要与 <span class=\"term\" data-def=\"本协议的\">hereof</span> 混淆——<span class=\"term\" data-def=\"本协议的\">hereof</span> 指本协议，<span class=\"term\" data-def=\"其中的\">thereof</span> 指前文提到的其他事物</li></ul>"
         },
         {
           "type": "h3",
@@ -264,7 +264,7 @@
             [
               "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>",
               "系指；应当指",
-              "最正式，合同定义条款的标准用法。shall 表示确定性和约束力。"
+              "最正式，合同定义条款的标准用法。<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 表示确定性和约束力。"
             ],
             [
               "means",
@@ -378,7 +378,7 @@
         },
         {
           "type": "tip",
-          "html": "<strong>💡 here- / there- / where- 家族总结：</strong><ul><li><strong>hereof</strong> = of this (Agreement)（本协议的）</li><li><strong>herein</strong> = in this (Agreement)（在本协议中）</li><li><strong>hereto</strong> = to this (Agreement)（对本协议；本协议所附的）</li><li><strong>thereof</strong> = of that / of it（其……的）</li><li><strong>therein</strong> = in that / in it（在其中）</li><li><strong>thereto</strong> = to that / to it（对其）</li><li><strong>whereby</strong> = by which（据此；凭借）</li></ul><p>这些词在合同中替代了重复使用合同名称或先行词，使语言更简洁、更正式。</p>"
+          "html": "<strong>💡 here- / there- / where- 家族总结：</strong><ul><li><strong><span class=\"term\" data-def=\"本协议的\">hereof</span></strong> = of this (Agreement)（本协议的）</li><li><strong><span class=\"term\" data-def=\"本协议中\">herein</span></strong> = in this (Agreement)（在本协议中）</li><li><strong><span class=\"term\" data-def=\"本协议附；附于本协议\">hereto</span></strong> = to this (Agreement)（对本协议；本协议所附的）</li><li><strong><span class=\"term\" data-def=\"其中的\">thereof</span></strong> = of that / of it（其……的）</li><li><strong><span class=\"term\" data-def=\"其中\">therein</span></strong> = in that / in it（在其中）</li><li><strong><span class=\"term\" data-def=\"随附于此\">thereto</span></strong> = to that / to it（对其）</li><li><strong><span class=\"term\" data-def=\"凭此；据此\">whereby</span></strong> = by which（据此；凭借）</li></ul><p>这些词在合同中替代了重复使用合同名称或先行词，使语言更简洁、更正式。</p>"
         }
       ]
     },
@@ -387,11 +387,11 @@
       "items": [
         {
           "title": "长难句 1",
-          "sentence": "“Affiliate” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>, with respect to any Person, any other Person that directly or indirectly controls, is controlled by, or is under common control with such Person, where “control” means the possession, directly or indirectly, of the power to direct or cause the direction of the management and policies of a Person, whether through the ownership of voting securities, by contract, or otherwise.",
+          "sentence": "“<span class=\"term\" data-def=\"关联方\">Affiliate</span>” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>, with respect to any <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>, any other <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span> that directly or indirectly controls, is controlled by, or is under common control with such <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>, where “control” means the possession, directly or indirectly, of the power to direct or cause the direction of the management and policies of a <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>, whether through the ownership of voting securities, by contract, or otherwise.",
           "structure": [
-            "<strong>主干：</strong>“Affiliate” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> ... any other Person（“关联方”是指……任何其他人士）",
-            "<strong>限定范围：</strong>with respect to any Person（就任何人士而言）",
-            "<strong>定语从句（三个并列关系）：</strong>that directly or indirectly controls, is controlled by, or is under common control with such Person（直接或间接控制该人士、受该人士控制或与该人士受共同控制的）",
+            "<strong>主干：</strong>“<span class=\"term\" data-def=\"关联方\">Affiliate</span>” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> ... any other <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>（“关联方”是指……任何其他人士）",
+            "<strong>限定范围：</strong>with respect to any <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>（就任何人士而言）",
+            "<strong>定语从句（三个并列关系）：</strong>that directly or indirectly controls, is controlled by, or is under common control with such <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>（直接或间接控制该人士、受该人士控制或与该人士受共同控制的）",
             "<strong>补充定义“控制”：</strong>where “control” means the possession ... of the power to direct or cause the direction of the management and policies（其中“控制”是指拥有……指导或促使指导某人士的管理和政策的权力）",
             "<strong>控制的实现方式（三种并列）：</strong>whether through the ownership of voting securities, by contract, or otherwise（无论是通过持有有表决权的证券、通过合同或以其他方式）"
           ],
@@ -399,12 +399,12 @@
         },
         {
           "title": "长难句 2",
-          "sentence": "“Material Adverse Effect” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any event, change, circumstance, or occurrence that, individually or in the aggregate, has had or would reasonably be expected to have a material adverse effect on (a) the business, assets, financial condition, or results of operations of the Company and its Subsidiaries, taken as a whole, or (b) the ability of the Seller to consummate the transactions contemplated by this Agreement.",
+          "sentence": "“<span class=\"term\" data-def=\"重大的\">Material</span> Adverse Effect” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any event, change, circumstance, or occurrence that, individually or in the <span class=\"term\" data-def=\"累计的\">aggregate</span>, has had or would reasonably be expected to have a <span class=\"term\" data-def=\"重大的\">material</span> adverse effect on (a) the business, assets, financial <span class=\"term\" data-def=\"条件\">condition</span>, or results of operations of the Company and its Subsidiaries, taken as a whole, or (b) the ability of the Seller to consummate the transactions contemplated by this Agreement.",
           "structure": [
-            "<strong>主干：</strong>“Material Adverse Effect” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any event, change, circumstance, or occurrence（“重大不利影响”是指任何事件、变化、情况或事项）",
-            "<strong>定语从句主干：</strong>that ... has had or would reasonably be expected to have a material adverse effect on...（已经产生或可合理预期将对……产生重大不利影响的）",
-            "<strong>插入语：</strong>individually or in the aggregate（单独或合计）",
-            "<strong>影响范围 (a)：</strong>the business, assets, financial condition, or results of operations of the Company and its Subsidiaries, taken as a whole（公司及其子公司整体的业务、资产、财务状况或经营成果）",
+            "<strong>主干：</strong>“<span class=\"term\" data-def=\"重大的\">Material</span> Adverse Effect” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> any event, change, circumstance, or occurrence（“重大不利影响”是指任何事件、变化、情况或事项）",
+            "<strong>定语从句主干：</strong>that ... has had or would reasonably be expected to have a <span class=\"term\" data-def=\"重大的\">material</span> adverse effect on...（已经产生或可合理预期将对……产生重大不利影响的）",
+            "<strong>插入语：</strong>individually or in the <span class=\"term\" data-def=\"累计的\">aggregate</span>（单独或合计）",
+            "<strong>影响范围 (a)：</strong>the business, assets, financial <span class=\"term\" data-def=\"条件\">condition</span>, or results of operations of the Company and its Subsidiaries, taken as a whole（公司及其子公司整体的业务、资产、财务状况或经营成果）",
             "<strong>影响范围 (b)：</strong>the ability of the Seller to consummate the transactions contemplated by this Agreement（卖方完成本协议拟进行的交易的能力）",
             "<strong>关键词：</strong>consummate = 完成/达成（交易）；contemplated by = 拟进行的/预期的"
           ],
@@ -412,11 +412,11 @@
         },
         {
           "title": "长难句 3",
-          "sentence": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>, (i) words importing the singular include the plural and vice versa, (ii) references to any statute or statutory provision shall include any subordinate legislation made under it, and (iii) any reference to a “day” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> a calendar day unless specifically stated to be a <span class=\"term\" data-def=\"工作日/营业日\">Business Day</span>.",
+          "sentence": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>, (i) words importing the singular include the plural and vice versa, (ii) references to any statute or statutory <span class=\"term\" data-def=\"规定\">provision</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> include any subordinate legislation made under it, and (iii) any reference to a “day” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> a calendar day unless specifically stated to be a <span class=\"term\" data-def=\"工作日/营业日\">Business Day</span>.",
           "structure": [
             "<strong>条件状语：</strong><span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>（除非上下文另有要求）",
             "<strong>规则 (i)：</strong>words importing the singular include the plural and vice versa（表示单数的词语包含复数含义，反之亦然）",
-            "<strong>规则 (ii)：</strong>references to any statute or statutory provision shall include any subordinate legislation made under it（对任何法规或法律条文的引用均包含据其制定的附属立法）",
+            "<strong>规则 (ii)：</strong>references to any statute or statutory <span class=\"term\" data-def=\"规定\">provision</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> include any subordinate legislation made under it（对任何法规或法律条文的引用均包含据其制定的附属立法）",
             "<strong>规则 (iii)：</strong>any reference to a “day” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span> a calendar day unless specifically stated to be a <span class=\"term\" data-def=\"工作日/营业日\">Business Day</span>（对“日”的任何引用均指日历日，除非明确规定为工作日）",
             "<strong>关键词：</strong>importing = 含有……意义的；subordinate legislation = 附属立法/下位法；vice versa = 反之亦然"
           ],
@@ -449,39 +449,39 @@
             {
               "prompt": "1. 是指；系指（定义条款引导词）",
               "name": "m1",
-              "answer": "shall mean",
-              "explanation": "shall mean = 是指/系指，定义条款的标准引导词",
+              "answer": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
+              "explanation": "<span class=\"term\" data-def=\"系指\">shall mean</span> = 是指/系指，定义条款的标准引导词",
               "options": [
                 {
-                  "value": "shall mean",
+                  "value": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
                   "html": "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>"
                 },
                 {
-                  "value": "set forth",
+                  "value": "<span class=\"term\" data-def=\"规定\">set forth</span>",
                   "html": "<span class=\"term\" data-def=\"规定/载明\">set forth</span>"
                 },
                 {
-                  "value": "ascribe",
-                  "html": "ascribe"
+                  "value": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>",
+                  "html": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>"
                 }
               ]
             },
             {
               "prompt": "2. 关联方；关联公司",
               "name": "m2",
-              "answer": "affiliate",
-              "explanation": "affiliate = 关联方/关联公司，指存在控制或共同控制关系的实体",
+              "answer": "<span class=\"term\" data-def=\"关联方\">affiliate</span>",
+              "explanation": "<span class=\"term\" data-def=\"关联方\">affiliate</span> = 关联方/关联公司，指存在控制或共同控制关系的实体",
               "options": [
                 {
-                  "value": "person",
-                  "html": "person"
+                  "value": "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>",
+                  "html": "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>"
                 },
                 {
-                  "value": "affiliate",
-                  "html": "affiliate"
+                  "value": "<span class=\"term\" data-def=\"关联方\">affiliate</span>",
+                  "html": "<span class=\"term\" data-def=\"关联方\">affiliate</span>"
                 },
                 {
-                  "value": "effective date",
+                  "value": "<span class=\"term\" data-def=\"生效日期\">effective date</span>",
                   "html": "<span class=\"term\" data-def=\"生效日期\">effective date</span>"
                 }
               ]
@@ -489,19 +489,19 @@
             {
               "prompt": "3. 本协议的（= of this Agreement）",
               "name": "m3",
-              "answer": "hereof",
-              "explanation": "hereof = of this Agreement = 本协议的",
+              "answer": "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+              "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement = 本协议的",
               "options": [
                 {
-                  "value": "thereof",
-                  "html": "thereof"
+                  "value": "<span class=\"term\" data-def=\"其中的\">thereof</span>",
+                  "html": "<span class=\"term\" data-def=\"其中的\">thereof</span>"
                 },
                 {
-                  "value": "hereof",
-                  "html": "hereof"
+                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span>"
                 },
                 {
-                  "value": "as used herein",
+                  "value": "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>",
                   "html": "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>"
                 }
               ]
@@ -509,19 +509,19 @@
             {
               "prompt": "4. 重大的；实质性的",
               "name": "m4",
-              "answer": "material",
-              "explanation": "material 在合同中 = 重大的/实质性的，非日常的‘材料/物质’",
+              "answer": "<span class=\"term\" data-def=\"重大的\">material</span>",
+              "explanation": "<span class=\"term\" data-def=\"重大的\">material</span> 在合同中 = 重大的/实质性的，非日常的‘材料/物质’",
               "options": [
                 {
-                  "value": "material",
-                  "html": "material"
+                  "value": "<span class=\"term\" data-def=\"重大的\">material</span>",
+                  "html": "<span class=\"term\" data-def=\"重大的\">material</span>"
                 },
                 {
-                  "value": "business day",
+                  "value": "<span class=\"term\" data-def=\"工作日\">business day</span>",
                   "html": "<span class=\"term\" data-def=\"工作日/营业日\">business day</span>"
                 },
                 {
-                  "value": "including without limitation",
+                  "value": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
                   "html": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>"
                 }
               ]
@@ -529,19 +529,19 @@
             {
               "prompt": "5. 载明；规定；列明",
               "name": "m5",
-              "answer": "set forth",
-              "explanation": "set forth = 载明/规定/列明，法律文书标准用语",
+              "answer": "<span class=\"term\" data-def=\"规定\">set forth</span>",
+              "explanation": "<span class=\"term\" data-def=\"规定\">set forth</span> = 载明/规定/列明，法律文书标准用语",
               "options": [
                 {
-                  "value": "ascribe",
-                  "html": "ascribe"
+                  "value": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>",
+                  "html": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>"
                 },
                 {
-                  "value": "shall have the meaning",
+                  "value": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span>",
                   "html": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span>"
                 },
                 {
-                  "value": "set forth",
+                  "value": "<span class=\"term\" data-def=\"规定\">set forth</span>",
                   "html": "<span class=\"term\" data-def=\"规定/载明\">set forth</span>"
                 }
               ]
@@ -560,10 +560,10 @@
           "instruction": "选择正确的中文释义。",
           "questions": [
             {
-              "prompt": "1. material（合同语境）",
+              "prompt": "1. <span class=\"term\" data-def=\"重大的\">material</span>（合同语境）",
               "name": "a1",
               "answer": "重大的；实质性的",
-              "explanation": "material 在合同法律语境中表示‘重大的、实质性的’，material breach = 重大违约，material adverse effect = 重大不利影响。不要与日常含义‘材料/物质’混淆。",
+              "explanation": "<span class=\"term\" data-def=\"重大的\">material</span> 在合同法律语境中表示‘重大的、实质性的’，<span class=\"term\" data-def=\"重大的\">material</span> breach = 重大违约，<span class=\"term\" data-def=\"重大的\">material</span> adverse effect = 重大不利影响。不要与日常含义‘材料/物质’混淆。",
               "options": [
                 {
                   "value": "材料的；物质的",
@@ -584,10 +584,10 @@
               ]
             },
             {
-              "prompt": "2. Person（合同定义条款中）",
+              "prompt": "2. <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>（合同定义条款中）",
               "name": "a2",
               "answer": "人士（含自然人和法人实体）",
-              "explanation": "Person 在合同定义条款中通常被扩展定义为包括自然人、公司、合伙企业、信托等一切法律主体，远超日常含义的‘个人’。",
+              "explanation": "<span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span> 在合同定义条款中通常被扩展定义为包括自然人、公司、合伙企业、信托等一切法律主体，远超日常含义的‘个人’。",
               "options": [
                 {
                   "value": "个人；自然人",
@@ -608,10 +608,10 @@
               ]
             },
             {
-              "prompt": "3. affiliate",
+              "prompt": "3. <span class=\"term\" data-def=\"关联方\">affiliate</span>",
               "name": "a3",
               "answer": "关联方；关联公司",
-              "explanation": "affiliate 指与某一主体存在控制或共同控制关系的其他实体。在合同中通常定义为直接或间接控制、受控制或受共同控制的人士。",
+              "explanation": "<span class=\"term\" data-def=\"关联方\">affiliate</span> 指与某一主体存在控制或共同控制关系的其他实体。在合同中通常定义为直接或间接控制、受控制或受共同控制的人士。",
               "options": [
                 {
                   "value": "附属机构",
@@ -632,10 +632,10 @@
               ]
             },
             {
-              "prompt": "4. hereof",
+              "prompt": "4. <span class=\"term\" data-def=\"本协议的\">hereof</span>",
               "name": "a4",
               "answer": "本协议的（= of this Agreement）",
-              "explanation": "hereof = here + of = of this Agreement。Section 3 hereof = 本协议第3条。here- 家族词是法律英语的标志性特征。",
+              "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = here + of = of this Agreement。Section 3 <span class=\"term\" data-def=\"本协议的\">hereof</span> = 本协议第3条。here- 家族词是法律英语的标志性特征。",
               "options": [
                 {
                   "value": "在此之前",
@@ -659,7 +659,7 @@
               "prompt": "5. <span class=\"term\" data-def=\"规定/载明\">set forth</span>",
               "name": "a5",
               "answer": "载明；规定；列明",
-              "explanation": "set forth 是法律英语中表示‘载明/规定/列出’的标准搭配。as set forth in = 如……所载明的。",
+              "explanation": "<span class=\"term\" data-def=\"规定\">set forth</span> 是法律英语中表示‘载明/规定/列出’的标准搭配。as <span class=\"term\" data-def=\"规定\">set forth</span> in = 如……所载明的。",
               "options": [
                 {
                   "value": "出发；启程",
@@ -687,17 +687,17 @@
           "instruction": "选择最恰当的词语填入合同条款空白处。",
           "questions": [
             {
-              "prompt": "6. “<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” ______ any non-public information disclosed by either party.",
+              "prompt": "6. “<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” ______ any non-public information disclosed by either <span class=\"term\" data-def=\"当事人\">party</span>.",
               "name": "b1",
-              "answer": "shall mean",
-              "explanation": "shall mean 是合同定义条款中引出定义的标准搭配。‘X’ shall mean... = ‘X’是指……",
+              "answer": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
+              "explanation": "<span class=\"term\" data-def=\"系指\">shall mean</span> 是合同定义条款中引出定义的标准搭配。‘X’ <span class=\"term\" data-def=\"系指\">shall mean</span>... = ‘X’是指……",
               "options": [
                 {
-                  "value": "is defined as",
-                  "html": "is defined as"
+                  "value": "is <span class=\"term\" data-def=\"已定义的\">defined</span> as",
+                  "html": "is <span class=\"term\" data-def=\"已定义的\">defined</span> as"
                 },
                 {
-                  "value": "shall mean",
+                  "value": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
                   "html": "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>"
                 },
                 {
@@ -711,10 +711,10 @@
               ]
             },
             {
-              "prompt": "7. “Losses” shall include all damages, liabilities, and expenses, ______ reasonable attorneys’ fees.",
+              "prompt": "7. “Losses” <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> include all <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>, liabilities, and expenses, ______ reasonable attorneys’ fees.",
               "name": "b2",
-              "answer": "including without limitation",
-              "explanation": "including without limitation（包括但不限于）是合同中表示列举不穷尽的标准搭配，确保所列事项仅为示例而非全部。与 including but not limited to 同义。",
+              "answer": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
+              "explanation": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>（包括但不限于）是合同中表示列举不穷尽的标准搭配，确保所列事项仅为示例而非全部。与 including but not limited to 同义。",
               "options": [
                 {
                   "value": "such as",
@@ -725,7 +725,7 @@
                   "html": "for example"
                 },
                 {
-                  "value": "including without limitation",
+                  "value": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
                   "html": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>"
                 },
                 {
@@ -735,17 +735,17 @@
               ]
             },
             {
-              "prompt": "8. “<span class=\"term\" data-def=\"生效日期\">Effective Date</span>” ______ Section 12.1 hereof.",
+              "prompt": "8. “<span class=\"term\" data-def=\"生效日期\">Effective Date</span>” ______ Section 12.1 <span class=\"term\" data-def=\"本协议的\">hereof</span>.",
               "name": "b3",
-              "answer": "shall have the meaning ascribed to it in",
-              "explanation": "shall have the meaning ascribed to it in [Section X] 是合同中交叉引用定义的标准表达。ascribe = 赋予（含义）。",
+              "answer": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in",
+              "explanation": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in [Section X] 是合同中交叉引用定义的标准表达。<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span> = 赋予（含义）。",
               "options": [
                 {
                   "value": "is explained in",
                   "html": "is explained in"
                 },
                 {
-                  "value": "shall have the meaning ascribed to it in",
+                  "value": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in",
                   "html": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in"
                 },
                 {
@@ -759,17 +759,17 @@
               ]
             },
             {
-              "prompt": "9. ______, the following capitalized terms shall have the meanings <span class=\"term\" data-def=\"规定/载明\">set forth</span> below:",
+              "prompt": "9. ______, the following capitalized terms <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> have the meanings <span class=\"term\" data-def=\"规定/载明\">set forth</span> below:",
               "name": "b4",
-              "answer": "As used herein",
-              "explanation": "As used herein（如本协议所使用的）是定义条款开头的标准引导语，限定术语适用范围为本协议。In this document 是日常表达，不符合法律文书用语规范；For the purpose of 通常用于说明目的而非引出定义；With reference to 表示‘关于/参照’，不是定义条款的惯用引导语。",
+              "answer": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>",
+              "explanation": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>（如本协议所使用的）是定义条款开头的标准引导语，限定术语适用范围为本协议。In this document 是日常表达，不符合法律文书用语规范；For the purpose of 通常用于说明目的而非引出定义；With reference to 表示‘关于/参照’，不是定义条款的惯用引导语。",
               "options": [
                 {
                   "value": "In this document",
                   "html": "In this document"
                 },
                 {
-                  "value": "As used herein",
+                  "value": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>",
                   "html": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>"
                 },
                 {
@@ -783,17 +783,17 @@
               ]
             },
             {
-              "prompt": "10. ______, the singular shall include the plural and vice versa.",
+              "prompt": "10. ______, the singular <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> include the plural and vice versa.",
               "name": "b5",
-              "answer": "Unless the context otherwise requires",
-              "explanation": "Unless the context otherwise requires（除非上下文另有要求）是定义条款中常见的灵活性限定语，给定义留出解释空间。If not stated differently 是非正式表达，法律文书中不使用；Except when noted 表示‘除非另有注明’，用于脚注而非定义条款；Provided that 表示‘但是/前提是’，用于附加条件而非灵活性限定。",
+              "answer": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>",
+              "explanation": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>（除非上下文另有要求）是定义条款中常见的灵活性限定语，给定义留出解释空间。If not stated differently 是非正式表达，法律文书中不使用；Except when noted 表示‘除非另有注明’，用于脚注而非定义条款；<span class=\"term\" data-def=\"但是\">Provided that</span> 表示‘但是/前提是’，用于附加条件而非灵活性限定。",
               "options": [
                 {
                   "value": "If not stated differently",
                   "html": "If not stated differently"
                 },
                 {
-                  "value": "Unless the context otherwise requires",
+                  "value": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>",
                   "html": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>"
                 },
                 {
@@ -801,7 +801,7 @@
                   "html": "Except when noted"
                 },
                 {
-                  "value": "Provided that",
+                  "value": "<span class=\"term\" data-def=\"但是\">Provided that</span>",
                   "html": "<span class=\"term\" data-def=\"但是/前提是\">Provided that</span>"
                 }
               ]
@@ -817,7 +817,7 @@
               "prompt": "11. 合同中使用 <span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> 的目的是什么？",
               "name": "c1",
               "answer": "列举仅为示例，不排除未列出的其他事项",
-              "explanation": "including without limitation / including but not limited to 的功能是声明所列事项仅为示例性列举，避免被解读为穷尽性列举（即不排除其他未列出的事项）。",
+              "explanation": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> / including but not limited to 的功能是声明所列事项仅为示例性列举，避免被解读为穷尽性列举（即不排除其他未列出的事项）。",
               "options": [
                 {
                   "value": "限制列举范围，仅限所列事项",
@@ -838,26 +838,26 @@
               ]
             },
             {
-              "prompt": "12. hereof 和 thereof 的区别是什么？",
+              "prompt": "12. <span class=\"term\" data-def=\"本协议的\">hereof</span> 和 <span class=\"term\" data-def=\"其中的\">thereof</span> 的区别是什么？",
               "name": "c2",
-              "answer": "hereof = of this Agreement（本协议的）; thereof = of that / of it（其……的）",
-              "explanation": "hereof 中的 here 指代 this Agreement（本协议），thereof 中的 there 指代前文提到的某个事物。两者的区别在于指代对象不同。",
+              "answer": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）",
+              "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 中的 here 指代 this Agreement（本协议），<span class=\"term\" data-def=\"其中的\">thereof</span> 中的 there 指代前文提到的某个事物。两者的区别在于指代对象不同。",
               "options": [
                 {
                   "value": "两者含义相同，可互换使用",
                   "html": "两者含义相同，可互换使用"
                 },
                 {
-                  "value": "hereof = of this Agreement（本协议的）; thereof = of that / of it（其……的）",
-                  "html": "hereof = of this Agreement（本协议的）; thereof = of that / of it（其……的）"
+                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）",
+                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）"
                 },
                 {
-                  "value": "hereof 用于正文，thereof 用于附件",
-                  "html": "hereof 用于正文，thereof 用于附件"
+                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 用于正文，<span class=\"term\" data-def=\"其中的\">thereof</span> 用于附件",
+                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 用于正文，<span class=\"term\" data-def=\"其中的\">thereof</span> 用于附件"
                 },
                 {
-                  "value": "hereof 表示过去，thereof 表示将来",
-                  "html": "hereof 表示过去，thereof 表示将来"
+                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 表示过去，<span class=\"term\" data-def=\"其中的\">thereof</span> 表示将来",
+                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 表示过去，<span class=\"term\" data-def=\"其中的\">thereof</span> 表示将来"
                 }
               ]
             },
@@ -886,10 +886,10 @@
               ]
             },
             {
-              "prompt": "14. material breach 应如何翻译？",
+              "prompt": "14. <span class=\"term\" data-def=\"重大的\">material</span> breach 应如何翻译？",
               "name": "c4",
               "answer": "重大违约（非‘物质违约’或‘实质违约’）",
-              "explanation": "material breach 是合同法中的核心概念，指一方当事人对合同核心义务的严重违反，其严重程度足以使另一方有权解除合同或要求损害赔偿。material = 重大的。",
+              "explanation": "<span class=\"term\" data-def=\"重大的\">material</span> breach 是合同法中的核心概念，指一方当事人对合同核心义务的严重违反，其严重程度足以使另一方有权解除合同或要求损害赔偿。<span class=\"term\" data-def=\"重大的\">material</span> = 重大的。",
               "options": [
                 {
                   "value": "物质违约",
@@ -910,10 +910,10 @@
               ]
             },
             {
-              "prompt": "15. ascribe 在 <span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it 中的含义是什么？",
+              "prompt": "15. <span class=\"term\" data-def=\"赋予（含义）\">ascribe</span> 在 <span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it 中的含义是什么？",
               "name": "c5",
               "answer": "赋予（含义）",
-              "explanation": "ascribe 在法律语境中常与 meaning 搭配，表示‘赋予含义’。shall have the meaning ascribed to it = 具有赋予其的含义。",
+              "explanation": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span> 在法律语境中常与 meaning 搭配，表示‘赋予含义’。<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it = 具有赋予其的含义。",
               "options": [
                 {
                   "value": "归因于",
@@ -941,11 +941,11 @@
           "instruction": "将以下合同定义条款翻译为中文，完成后点击“提交 AI 批改”获取详细批改。",
           "questions": [
             {
-              "source": "As used herein, unless the context otherwise requires, the following capitalized terms shall have the following meanings:",
+              "source": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>, <span class=\"term\" data-def=\"除非上下文另有要求\">unless the context otherwise requires</span>, the following capitalized terms <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> have the following meanings:",
               "reference": "如本协议所使用的，除非上下文另有要求，以下首字母大写术语具有以下含义：",
               "rubric": [
                 {
-                  "en": "As used herein",
+                  "en": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>",
                   "ideal": "如本协议所使用的",
                   "accept": [
                     "本协议中使用的",
@@ -954,10 +954,10 @@
                   "wrong": [
                     "如此处所用"
                   ],
-                  "note": "herein = in this Agreement"
+                  "note": "<span class=\"term\" data-def=\"本协议中\">herein</span> = in this Agreement"
                 },
                 {
-                  "en": "unless the context otherwise requires",
+                  "en": "<span class=\"term\" data-def=\"除非上下文另有要求\">unless the context otherwise requires</span>",
                   "ideal": "除非上下文另有要求",
                   "accept": [
                     "除非上下文另有规定",
@@ -978,22 +978,22 @@
                   "note": "合同中定义的术语通常首字母大写"
                 },
                 {
-                  "en": "shall have the following meanings",
+                  "en": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> have the following meanings",
                   "ideal": "具有以下含义",
                   "accept": [
                     "有以下含义",
                     "意义如下"
                   ],
-                  "note": "shall 在合同中表示义务或确定性"
+                  "note": "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> 在合同中表示义务或确定性"
                 }
               ]
             },
             {
-              "source": "“Affiliate” shall mean, with respect to any Person, any other Person that directly or indirectly controls, is controlled by, or is under common control with such Person.",
+              "source": "“<span class=\"term\" data-def=\"关联方\">Affiliate</span>” <span class=\"term\" data-def=\"系指\">shall mean</span>, with respect to any <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>, any other <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span> that directly or indirectly controls, is controlled by, or is under common control with such <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>.",
               "reference": "“关联方”是指就任何人士而言，直接或间接控制该人士、受该人士控制或与该人士受共同控制的任何其他人士。",
               "rubric": [
                 {
-                  "en": "Affiliate",
+                  "en": "<span class=\"term\" data-def=\"关联方\">Affiliate</span>",
                   "ideal": "关联方/关联公司",
                   "accept": [
                     "关联企业"
@@ -1002,10 +1002,10 @@
                     "附属公司",
                     "子公司"
                   ],
-                  "note": "affiliate 的范围大于 subsidiary（子公司）"
+                  "note": "<span class=\"term\" data-def=\"关联方\">affiliate</span> 的范围大于 subsidiary（子公司）"
                 },
                 {
-                  "en": "shall mean",
+                  "en": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
                   "ideal": "是指",
                   "accept": [
                     "指",
@@ -1014,7 +1014,7 @@
                   "note": "定义条款的标准引导词"
                 },
                 {
-                  "en": "with respect to any Person",
+                  "en": "with respect to any <span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span>",
                   "ideal": "就任何人士而言",
                   "accept": [
                     "就任何人而言",
@@ -1034,11 +1034,11 @@
               ]
             },
             {
-              "source": "“Confidential Information” shall mean all non-public information disclosed by one party to the other, whether orally, in writing, or in any other form, including without limitation trade secrets, business plans, financial data, and customer lists.",
+              "source": "“<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” <span class=\"term\" data-def=\"系指\">shall mean</span> all non-public information disclosed by one <span class=\"term\" data-def=\"当事人\">party</span> to the other, whether orally, in writing, or in any other form, <span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> trade secrets, business plans, financial data, and customer lists.",
               "reference": "“保密信息”是指一方向另一方披露的所有非公开信息，无论以口头、书面或其他任何形式披露，包括但不限于商业秘密、商业计划、财务数据和客户名单。",
               "rubric": [
                 {
-                  "en": "Confidential Information",
+                  "en": "<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>",
                   "ideal": "保密信息/机密信息",
                   "accept": [
                     "秘密信息"
@@ -1068,7 +1068,7 @@
                   "note": "三种披露形式的并列"
                 },
                 {
-                  "en": "including without limitation",
+                  "en": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
                   "ideal": "包括但不限于",
                   "accept": [
                     "包括但不限于",
@@ -1101,23 +1101,23 @@
           "questions": [
             {
               "source": "“工作日”是指除星期六、星期日或中华人民共和国法定公共假期以外的任何日期。",
-              "reference": "“Business Day” shall mean any day other than a Saturday, Sunday, or any public holiday in the People’s Republic of China.",
+              "reference": "“<span class=\"term\" data-def=\"工作日\">Business Day</span>” <span class=\"term\" data-def=\"系指\">shall mean</span> any day other than a Saturday, Sunday, or any public holiday in the People’s Republic of China.",
               "rubric": [
                 {
                   "en": "工作日",
-                  "ideal": "Business Day",
+                  "ideal": "<span class=\"term\" data-def=\"工作日\">Business Day</span>",
                   "accept": [
-                    "business day",
+                    "<span class=\"term\" data-def=\"工作日\">business day</span>",
                     "Working Day"
                   ],
                   "note": "合同中通常首字母大写作为定义术语"
                 },
                 {
                   "en": "是指",
-                  "ideal": "shall mean",
+                  "ideal": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
                   "accept": [
                     "means",
-                    "shall refer to"
+                    "<span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> refer to"
                   ],
                   "wrong": [
                     "is"
@@ -1150,25 +1150,25 @@
             },
             {
               "source": "“重大不利影响”是指任何单独或合计已经对公司的业务、财务状况或经营成果产生或可合理预期将产生重大不利影响的事件、变化或事项。",
-              "reference": "“Material Adverse Effect” shall mean any event, change, or occurrence that, individually or in the aggregate, has had or would reasonably be expected to have a material adverse effect on the business, financial condition, or results of operations of the Company.",
+              "reference": "“<span class=\"term\" data-def=\"重大的\">Material</span> Adverse Effect” <span class=\"term\" data-def=\"系指\">shall mean</span> any event, change, or occurrence that, individually or in the <span class=\"term\" data-def=\"累计的\">aggregate</span>, has had or would reasonably be expected to have a <span class=\"term\" data-def=\"重大的\">material</span> adverse effect on the business, financial <span class=\"term\" data-def=\"条件\">condition</span>, or results of operations of the Company.",
               "rubric": [
                 {
                   "en": "重大不利影响",
-                  "ideal": "Material Adverse Effect",
+                  "ideal": "<span class=\"term\" data-def=\"重大的\">Material</span> Adverse Effect",
                   "accept": [
-                    "material adverse effect",
-                    "material adverse change"
+                    "<span class=\"term\" data-def=\"重大的\">material</span> adverse effect",
+                    "<span class=\"term\" data-def=\"重大的\">material</span> adverse change"
                   ],
                   "note": "MAE 是并购合同中的核心定义"
                 },
                 {
                   "en": "单独或合计",
-                  "ideal": "individually or in the aggregate",
+                  "ideal": "individually or in the <span class=\"term\" data-def=\"累计的\">aggregate</span>",
                   "accept": [
                     "individually or collectively",
-                    "separately or in aggregate"
+                    "separately or in <span class=\"term\" data-def=\"累计的\">aggregate</span>"
                   ],
-                  "note": "in the aggregate = 合计"
+                  "note": "in the <span class=\"term\" data-def=\"累计的\">aggregate</span> = 合计"
                 },
                 {
                   "en": "已经产生或可合理预期将产生",
@@ -1196,7 +1196,7 @@
             },
             {
               "source": "“损失”一词包括但不限于因违反本协议而产生或与之相关的任何及所有损害赔偿、责任、费用和开支（包括合理的律师费）。",
-              "reference": "The term “Losses” shall include, without limitation, any and all damages, liabilities, costs, and expenses (including reasonable attorneys’ fees) arising out of or in connection with any breach of this Agreement.",
+              "reference": "The <span class=\"term\" data-def=\"期限\">term</span> “Losses” <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> include, without limitation, any and all <span class=\"term\" data-def=\"损害赔偿（金）\">damages</span>, liabilities, costs, and expenses (including reasonable attorneys’ fees) arising out of or in connection with any breach of this Agreement.",
               "rubric": [
                 {
                   "en": "损失",
@@ -1268,7 +1268,7 @@
     {
       "type": "summary",
       "heading": "8. 今日小结",
-      "html": "<ol><li><strong><span class=\"term\" data-def=\"系指/应当指\">shall mean</span></strong>——定义条款的标准引导词，“X” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>... = “X”是指……</li><li><strong><span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in</strong>——交叉引用定义的标准表达</li><li><strong><span class=\"term\" data-def=\"如本协议所用\">as used herein</span></strong>——限定术语适用范围为本协议</li><li><strong><span class=\"term\" data-def=\"除非上下文另有要求\">unless the context otherwise requires</span></strong>——灵活性限定语，为定义留出解释空间</li><li><strong>affiliate</strong>——关联方（控制/受控制/共同控制关系）</li><li><strong>person</strong>（法律定义）——范围涵盖自然人和一切法人实体</li><li><strong>material</strong>——重大的、实质性的（非“物质的”），material breach = 重大违约</li><li><strong><span class=\"term\" data-def=\"包括但不限于\">including without limitation</span></strong>——包括但不限于，表示示例性而非穷尽性列举</li><li><strong>hereof / thereof</strong>——here- 和 there- 家族词，分别指代本协议和前文提到的事物</li><li><strong><span class=\"term\" data-def=\"规定/载明\">set forth</span></strong>——载明、规定，as <span class=\"term\" data-def=\"规定/载明\">set forth</span> in = 如……所载明的</li><li><strong>ascribe</strong>——赋予（含义），常与 meaning 搭配使用</li><li><strong><span class=\"term\" data-def=\"生效日期\">effective date</span> / <span class=\"term\" data-def=\"工作日/营业日\">business day</span></strong>——合同中必定出现的基础定义术语</li></ol>"
+      "html": "<ol><li><strong><span class=\"term\" data-def=\"系指/应当指\">shall mean</span></strong>——定义条款的标准引导词，“X” <span class=\"term\" data-def=\"系指/应当指\">shall mean</span>... = “X”是指……</li><li><strong><span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in</strong>——交叉引用定义的标准表达</li><li><strong><span class=\"term\" data-def=\"如本协议所用\">as used herein</span></strong>——限定术语适用范围为本协议</li><li><strong><span class=\"term\" data-def=\"除非上下文另有要求\">unless the context otherwise requires</span></strong>——灵活性限定语，为定义留出解释空间</li><li><strong><span class=\"term\" data-def=\"关联方\">affiliate</span></strong>——关联方（控制/受控制/共同控制关系）</li><li><strong><span class=\"term\" data-def=\"人（含自然人和法人）\">person</span></strong>（法律定义）——范围涵盖自然人和一切法人实体</li><li><strong><span class=\"term\" data-def=\"重大的\">material</span></strong>——重大的、实质性的（非“物质的”），<span class=\"term\" data-def=\"重大的\">material</span> breach = 重大违约</li><li><strong><span class=\"term\" data-def=\"包括但不限于\">including without limitation</span></strong>——包括但不限于，表示示例性而非穷尽性列举</li><li><strong><span class=\"term\" data-def=\"本协议的\">hereof</span> / <span class=\"term\" data-def=\"其中的\">thereof</span></strong>——here- 和 there- 家族词，分别指代本协议和前文提到的事物</li><li><strong><span class=\"term\" data-def=\"规定/载明\">set forth</span></strong>——载明、规定，as <span class=\"term\" data-def=\"规定/载明\">set forth</span> in = 如……所载明的</li><li><strong><span class=\"term\" data-def=\"赋予（含义）\">ascribe</span></strong>——赋予（含义），常与 meaning 搭配使用</li><li><strong><span class=\"term\" data-def=\"生效日期\">effective date</span> / <span class=\"term\" data-def=\"工作日/营业日\">business day</span></strong>——合同中必定出现的基础定义术语</li></ol>"
     }
   ]
 }

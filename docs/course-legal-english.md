@@ -238,7 +238,7 @@
 
 **blocks 中的 html 字段**支持内联标签：`<span class="term">`, `<strong>`, `<em>`, `<code>`。
 
-**所有 `.term` 元素必须带 `data-def` 属性**，包含该术语的中文释义。这是单词点击气泡显示释义的唯一来源。示例：
+**所有 `.term` 元素必须带 `data-def` 属性**，包含该术语的中文释义。这是单词点击气泡显示释义的首选来源（兜底见下方"释义解析优先级"）。示例：
 ```html
 <span class="term" data-def="对价；约因">consideration</span>
 ```
@@ -247,6 +247,19 @@ JSON 中的 html 字段同理：
 { "type": "p", "html": "<span class=\"term\" data-def=\"对价；约因\">consideration</span> 是合同成立的要素" }
 ```
 vocab-preload 的 JSON 数据中，`words[].def` 字段会由 `VocabPreloadSection.vue` 自动输出为 `data-def`，无需在 html 中重复标注。
+
+### 释义解析优先级（前端运行时）
+
+前端在课程页"点击术语"和"选中文本→添加"两条路径上，释义按以下顺序解析：
+
+1. **DOM 节点上的 `data-def`** —— 当前课时直接命中，最准确（语境特化的释义在这里才有意义）
+2. **跨课程释义索引** —— `useCourseDefinitionLookup.ts` 在课时页加载时后台扫描同语言的所有课时 JSON（提取 `vocab-preload.words[].def` + 所有 html 里的 `<span class="term" data-def="...">`），建成 `Map<normalize(text), def>`。当 DOM 缺 `data-def` 时按 normalize 后的文本（NFC + trim + lowercase）兜底匹配，覆盖单词和词组
+3. 都没有 → 进入空白创建态，由用户/释义爬取填写
+
+**索引不是放松规范的借口**：
+- 索引只覆盖"在至少一个课时里已被正确标注过 `data-def`"的词组/词。**首次出现的新术语必须显式标 `data-def`**，否则索引里也没有数据
+- 索引按精确文本匹配；同一术语的不同形态（如 `executes` 与 `execute`）不会自动归并
+- 索引是兜底机制，给已经存在但偶尔漏标的词补救；不是免标许可
 
 ### 英文术语可点击标记规范
 
