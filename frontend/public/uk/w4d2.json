@@ -1,0 +1,338 @@
+{
+  "title": "第4周 第2天 — 三性综合判断强化",
+  "objective": "把第1周「名词性别」的所有难点（ь 结尾、外来词、-о/-а 阳性特例、抽象 -ість 阴性、-ння/-ття 中性）打包训练。本课不教新规则，只把已学过的判断流程练到「看一眼就知道」的地步。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 速查回顾",
+      "blocks": [
+        { "type": "h3", "text": "三性判断流程图（背下来）" },
+        { "type": "p", "html": "看到一个新名词，按照下面这个固定顺序问自己 4 个问题，几乎所有词都能 5 秒内判出性别：" },
+        {
+          "type": "table",
+          "headers": ["第几步", "看什么", "结论"],
+          "firstColWord": false,
+          "rows": [
+            ["①", "是不是 кафе / кіно / меню / метро / радіо / таксі / журі / піаніно / банджо 这类外来词不变格？", "是 → <strong>中性</strong>"],
+            ["②", "是不是 батько / тато / дядько / дідо / суддя / староста / колега / воєвода 这种语义指人的特例？", "是 → <strong>阳性</strong>"],
+            ["③", "看词尾。辅音 / -й / -р / -к / -т 等 → 阳性；-а / -я → 阴性；-о / -е / -ння / -ття / -ччя / -ззя / -я（前是辅音群）→ 中性", "按词尾判定"],
+            ["④", "如果词尾是 ь —— 必须靠记。常见规律：抽象名词 -ість 全是阴性；月份名 -ень 全是阳性；其他词逐个记", "看记忆规则"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆口诀：</strong>「外来不变都中性 → 语义看人就是阳 → 词尾看清直接定 → ь 结尾要分清」。" },
+
+        { "type": "h3", "text": "三类最容易栽跟头的词" },
+        { "type": "error-warn", "html": "<ol><li><strong>ь 结尾词的性别</strong>：不能从词尾判断，必须靠记。本周高频词中：阳性 — <span class=\"uk-word\" data-def=\"老师（阳）\">вчитель</span>、<span class=\"uk-word\" data-def=\"教师（阳，写法变体）\">учитель</span>、<span class=\"uk-word\" data-def=\"天\">день</span>、<span class=\"uk-word\" data-def=\"月份\">місяць</span>、<span class=\"uk-word\" data-def=\"火\">вогонь</span>、<span class=\"uk-word\" data-def=\"客人\">гість</span>、<span class=\"uk-word\" data-def=\"野兽\">звір</span>、<span class=\"uk-word\" data-def=\"石头\">камінь</span>、<span class=\"uk-word\" data-def=\"船\">корабель</span>、<span class=\"uk-word\" data-def=\"零\">нуль</span>、<span class=\"uk-word\" data-def=\"爷爷\">дідусь</span>；阴性 — <span class=\"uk-word\" data-def=\"夜晚\">ніч</span>、<span class=\"uk-word\" data-def=\"秋天\">осінь</span>、<span class=\"uk-word\" data-def=\"盐\">сіль</span>、<span class=\"uk-word\" data-def=\"影子\">тінь</span>、<span class=\"uk-word\" data-def=\"死亡\">смерть</span>、<span class=\"uk-word\" data-def=\"血\">кров</span>、<span class=\"uk-word\" data-def=\"爱\">любов</span>、<span class=\"uk-word\" data-def=\"回答\">відповідь</span>、<span class=\"uk-word\" data-def=\"旅行\">подорож</span>、<span class=\"uk-word\" data-def=\"喜悦\">радість</span>、<span class=\"uk-word\" data-def=\"新闻\">новість</span>、<span class=\"uk-word\" data-def=\"速度\">швидкість</span>。</li><li><strong>-о/-а 结尾的阳性特例</strong>：从语义上能看出指男性 / 表示头衔时，即使长得像阴性也是阳性。如 <span class=\"uk-word\" data-def=\"父亲\">батько</span>、<span class=\"uk-word\" data-def=\"爸爸\">тато</span>、<span class=\"uk-word\" data-def=\"叔叔\">дядько</span>、<span class=\"uk-word\" data-def=\"爷爷\">дідо</span>、<span class=\"uk-word\" data-def=\"法官\">суддя</span>、<span class=\"uk-word\" data-def=\"村长\">староста</span>、<span class=\"uk-word\" data-def=\"同事\">колега</span>。</li><li><strong>不变外来词的中性</strong>：<span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span>、<span class=\"uk-word\" data-def=\"电影\">кіно</span>、<span class=\"uk-word\" data-def=\"菜单\">меню</span>、<span class=\"uk-word\" data-def=\"地铁\">метро</span>、<span class=\"uk-word\" data-def=\"广播\">радіо</span>、<span class=\"uk-word\" data-def=\"出租车\">таксі</span>、<span class=\"uk-word\" data-def=\"评委团\">журі</span>、<span class=\"uk-word\" data-def=\"钢琴\">піаніно</span>、<span class=\"uk-word\" data-def=\"班卓琴\">банджо</span>、<span class=\"uk-word\" data-def=\"照片\">фото</span>。看到这些词无论它在句中怎么用，词形都不变。</li></ol>" },
+
+        { "type": "h3", "text": "性别一致性 —— 指示代词 цей / ця / це" },
+        { "type": "p", "html": "性别不仅决定词尾，还决定能跟它搭配的指示代词。复习一下：" },
+        {
+          "type": "table",
+          "headers": ["性别", "「这个」", "示例"],
+          "firstColWord": false,
+          "rows": [
+            ["阳性", "<span class=\"uk-word\" data-def=\"这个（阳）\">цей</span>", "<span class=\"uk-text\">цей стіл</span>（这张桌子）"],
+            ["阴性", "<span class=\"uk-word\" data-def=\"这个（阴）\">ця</span>", "<span class=\"uk-text\">ця книга</span>（这本书）"],
+            ["中性", "<span class=\"uk-word\" data-def=\"这（中）\">це</span>", "<span class=\"uk-text\">це вікно</span>（这扇窗）"]
+          ]
+        },
+        { "type": "note", "html": "<strong>小心：</strong>表示「这是」的句首 <span class=\"uk-word\" data-def=\"这是\">це</span> 和指示代词 <span class=\"uk-word\" data-def=\"这（中）\">це</span> 形式相同，但用法不同 —— 前者是独立的「这是…」句型（后接任何性别名词），后者是中性指示代词（只跟中性名词）。比较：<br><span class=\"uk-text\">Це книга.</span>（这是书。）— це 是「这是」<br><span class=\"uk-text\">Ця книга цікава.</span>（这本书有趣。）— ця 是阴性指示代词，配 книга" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "性别 + 指示代词搭配",
+          "items": [
+            { "text": "Це цей стіл.", "translation": "这是这张桌子。（书面较少这样用，演示搭配）" },
+            { "text": "Ця жінка — лікар.", "translation": "这个女人是医生。" },
+            { "text": "Цей вечір тут.", "translation": "这个傍晚就在这里（即时此刻）。" },
+            { "text": "Це піаніно там.", "translation": "那架钢琴在那里。" },
+            { "text": "Ця осінь — гарна.", "translation": "这个秋天很美。" },
+            { "text": "Ця подорож — мрія.", "translation": "这次旅行是个梦想。" }
+          ]
+        },
+        {
+          "heading": "易混词造句对比",
+          "items": [
+            { "text": "Тато — лікар.", "translation": "爸爸是医生。（тато 阳性 + лікар 阳性）" },
+            { "text": "Мама — лікар.", "translation": "妈妈是医生。（мама 阴性，但 лікар 在主格仍用原形）" },
+            { "text": "Це таксі.", "translation": "这是出租车。（外来词不变，中性）" },
+            { "text": "Ніч тут.", "translation": "夜晚到了。（ніч 阴性 ь 结尾）" },
+            { "text": "День тут.", "translation": "天亮了。（день 阳性 ь 结尾）" },
+            { "text": "Радість тут.", "translation": "喜悦在这里。（-ість 全是阴性）" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：判断单词性别（12题）",
+          "instruction": "选择每个名词的正确性别。请用四步流程：先看是否外来不变 → 再看是否人物特例 → 再看词尾 → 最后处理 ь 结尾。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"爷爷\">дідусь</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "ь 结尾，但语义指男性 + 是日常常用词 → 阳性。需记。",
+              "hints": ["从语义入手：「爷爷」一定指男性", "ь 结尾要靠记忆"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"夜晚\">ніч</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "ь 结尾的常见阴性词。注意：ніч 字面没有 ь，但 ч 是软辅音；这是 ь 类阴性词的高频成员。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"红菜汤\">борщ</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "辅音 -щ 结尾，无生命物品 → 阳性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"出租车\">таксі</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "外来不变格名词，全部归为中性。",
+              "hints": ["别看到 -і 结尾就以为是阴性复数", "外来不变词的统一规则"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"女演员\">актриса</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "-а 结尾，且语义是女性 → 阴性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"父亲\">батько</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "-о 结尾看着像中性，但语义指男性 → 阳性特例。同类还有 тато / дядько / дідо。",
+              "hints": ["语义指人 + 是男性 → 优先按语义", "-о 结尾的阳性特例只有少数几个"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"喜悦\">радість</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "-ість 结尾的抽象名词全部是阴性。规则非常稳定。",
+              "hints": ["-ість 是高度规则的后缀"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"知识\">знання</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "-ння 结尾全部是中性。同类还有 завдання / питання / навчання / читання / кохання。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"教师\">учитель</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "ь 结尾，语义指人（默认男性） → 阳性。和 вчитель 是同一个词的两种写法。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"喉咙\">горло</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "-о 结尾的物品 / 身体部位 → 中性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"星期日\">неділя</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "-я 结尾，前面是辅音 л → 阴性。同类：пісня / станція / лінія / історія。",
+              "hints": ["-я 结尾，且不是 -ння/-ття/-ччя 之类的中性后缀"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"船\">корабель</span>",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "ь 结尾的物品名，是阳性。需记忆。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：找出不同性别的词（6题）",
+          "instruction": "下列每组 4 个名词中，有 1 个性别与其他 3 个不同，请选出来。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span> / <span class=\"uk-word\" data-def=\"猫\">кіт</span> / <span class=\"uk-word\" data-def=\"水\">вода</span> / <span class=\"uk-word\" data-def=\"面包\">хліб</span>",
+              "options": ["стіл", "кіт", "вода", "хліб"],
+              "answer": "вода",
+              "explanation": "стіл / кіт / хліб 都是阳性辅音结尾；вода 是阴性 -а 结尾。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"咖啡馆\">кафе</span> / <span class=\"uk-word\" data-def=\"窗户\">вікно</span> / <span class=\"uk-word\" data-def=\"地铁\">метро</span> / <span class=\"uk-word\" data-def=\"喉咙\">горло</span>",
+              "options": ["кафе", "вікно", "метро", "都是同一性别（中性）"],
+              "answer": "都是同一性别（中性）",
+              "explanation": "陷阱题！这 4 个词都是中性 —— 外来不变词 кафе / метро 中性，-о 结尾物品 вікно / горло 也是中性。",
+              "hints": ["先排除外来不变词", "再判断 -о 结尾的物品"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师（阳）\">вчитель</span> / <span class=\"uk-word\" data-def=\"夜晚\">ніч</span> / <span class=\"uk-word\" data-def=\"天\">день</span> / <span class=\"uk-word\" data-def=\"火\">вогонь</span>",
+              "options": ["вчитель", "ніч", "день", "вогонь"],
+              "answer": "ніч",
+              "explanation": "вчитель / день / вогонь 都是 ь / 软辅音结尾的阳性词；ніч 是阴性。",
+              "hints": ["ь 结尾的性别要靠记", "看哪个词在「阴性 ь」清单里"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"父亲\">батько</span> / <span class=\"uk-word\" data-def=\"爸爸\">тато</span> / <span class=\"uk-word\" data-def=\"叔叔\">дядько</span> / <span class=\"uk-word\" data-def=\"村庄\">село</span>",
+              "options": ["батько", "тато", "дядько", "село"],
+              "answer": "село",
+              "explanation": "前 3 个是 -о/-а 结尾的阳性特例（指男性）；село 是普通中性 -о 结尾。",
+              "hints": ["-о 结尾的特例都是男性人物", "село 不指人"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"喜悦\">радість</span> / <span class=\"uk-word\" data-def=\"新闻\">новість</span> / <span class=\"uk-word\" data-def=\"客人\">гість</span> / <span class=\"uk-word\" data-def=\"温柔\">ніжність</span>",
+              "options": ["радість", "новість", "гість", "ніжність"],
+              "answer": "гість",
+              "explanation": "-ість 结尾全部阴性；гість（客人）虽然也 ь 结尾，但不是 -ість 后缀，且语义指人 → 阳性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"工作\">робота</span> / <span class=\"uk-word\" data-def=\"地址\">адреса</span> / <span class=\"uk-word\" data-def=\"傍晚\">вечір</span> / <span class=\"uk-word\" data-def=\"医院\">лікарня</span>",
+              "options": ["робота", "адреса", "вечір", "лікарня"],
+              "answer": "вечір",
+              "explanation": "робота / адреса / лікарня 都是阴性 -а/-я；вечір 是阳性辅音结尾。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 C：填入指示代词（цей / ця / це）（6题）",
+          "instruction": "根据后面名词的性别，填入正确的指示代词。提示：阳性 цей，阴性 ця，中性 це。注意大小写。",
+          "questions": [
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"自行车\">велосипед</span> — мій. (这辆…是我的)",
+              "answer": "Цей",
+              "accept": ["Цей", "цей"],
+              "explanation": "велосипед 辅音结尾 → 阳性 → цей。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"地址\">адреса</span> — наша. (这个…是我们的)",
+              "answer": "Ця",
+              "accept": ["Ця", "ця"],
+              "explanation": "адреса 以 -а 结尾 → 阴性 → ця。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"钢琴\">піаніно</span> — нове. (这架…是新的)",
+              "answer": "Це",
+              "accept": ["Це", "це"],
+              "explanation": "піаніно 是外来不变词 → 中性 → це。",
+              "hints": ["外来词如何归类？"]
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"爷爷\">дідусь</span> тут. (这位…在这里)",
+              "answer": "Цей",
+              "accept": ["Цей", "цей"],
+              "explanation": "дідусь 虽然 ь 结尾，但语义指男性 → 阳性 → цей。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"夜晚\">ніч</span> — холодна. (这个…是冷的)",
+              "answer": "Ця",
+              "accept": ["Ця", "ця"],
+              "explanation": "ніч 是 ь 结尾的阴性词 → ця。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"红菜汤\">борщ</span> — гарячий. (这碗…是热的)",
+              "answer": "Цей",
+              "accept": ["Цей", "цей"],
+              "explanation": "борщ 辅音 -щ 结尾 → 阳性 → цей。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：写出名词的性别（5题）",
+          "instruction": "根据下面给出的名词，写出它的性别（用「阳性」「阴性」「中性」回答）。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"音乐\">музика</span> — ____",
+              "answer": "阴性",
+              "accept": ["阴性", "阴", "f", "fem", "fem.", "feminine"],
+              "explanation": "музика 以 -а 结尾 → 阴性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"班卓琴\">банджо</span> — ____",
+              "answer": "中性",
+              "accept": ["中性", "中", "n", "neut", "neuter"],
+              "explanation": "外来不变词 → 一律中性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"法官\">суддя</span> — ____",
+              "answer": "阳性",
+              "accept": ["阳性", "阳", "m", "masc", "masculine"],
+              "explanation": "-я 结尾看像阴性，但 суддя 语义指男性 / 头衔 → 阳性特例。",
+              "hints": ["语义和词尾冲突时优先看语义", "看 w1d6 学过的特殊名词"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"作业\">завдання</span> — ____",
+              "answer": "中性",
+              "accept": ["中性", "中", "n", "neut", "neuter"],
+              "explanation": "-ння 结尾后缀 → 中性。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"可能性\">можливість</span> — ____",
+              "answer": "阴性",
+              "accept": ["阴性", "阴", "f", "fem", "fem.", "feminine"],
+              "explanation": "-ість 结尾的抽象名词 → 阴性。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：易错点专项（5题）",
+          "instruction": "下面这些题目专门针对中文母语者最易错的几类陷阱，请认真判断。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"同事\">колега</span> 是阳性还是阴性？",
+              "options": ["只能是阳性", "只能是阴性", "看实际指代的人"],
+              "answer": "看实际指代的人",
+              "explanation": "колега 是「双性词」—— 当指男性同事时是阳性，指女性同事时是阴性。词形不变，但配的代词、形容词会变。同类还有 староста / суддя。",
+              "hints": ["有些 -а 结尾的指人词可以双性"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"血\">кров</span> 是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "ь 暗藏（кро<strong>в</strong> 在传统标记中带软音），属于「ь 结尾阴性」清单中的物质名词。同类：любов。",
+              "hints": ["这是「物质 + 抽象」类阴性词"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"客人\">гість</span> 是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阳性",
+              "explanation": "ь 结尾，但语义默认指男性 → 阳性。要和 -ість 后缀的阴性词区分开。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"姓氏\">прізвище</span> 是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "中性",
+              "explanation": "-ще 结尾的物品 / 抽象名词 → 中性。同类还有 обличчя（脸）也是中性 -ччя 结尾。",
+              "hints": ["-ще / -ччя 结尾归到中性后缀那一类"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"梦想\">мрія</span> 是什么性别？",
+              "options": ["阳性", "阴性", "中性"],
+              "answer": "阴性",
+              "explanation": "-я 结尾且前面是元音 -і → 阴性 -ія 后缀。同类：надія / професія / станція / лінія / історія。",
+              "hints": ["-ія 结尾的抽象名词都是阴性"]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>四步判断流程</strong>：外来不变 → 语义看人 → 看词尾 → 处理 ь 结尾。这套流程对几乎所有名词都适用。</li><li><strong>三类高频陷阱</strong>：① -о/-а 结尾的男性人物词（батько / тато / дядько / суддя / колега 等）是阳性；② 不变外来词（кафе / кіно / метро / таксі / піаніно 等）一律中性；③ ь 结尾词中，-ість 是阴性，月份名 -ень 是阳性，其他需逐个记忆。</li><li><strong>性别决定搭配</strong>：цей / ця / це 必须跟名词性别一致。后续学形容词搭配、动词过去时等也都依赖性别判断。</li></ol><p><strong>下节预告：</strong>明天我们做<strong>复数综合</strong> —— 把第2周三性各自的复数规则混合在一起练，外加 ь 结尾词的复数（这一类会有些特殊变化），还有不规则复数（діти / люди / друзі / очі / вуха）的稳固训练。</p>"
+    }
+  ]
+}

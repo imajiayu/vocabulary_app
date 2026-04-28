@@ -52,24 +52,34 @@ export const ukrainianLessons: LessonMeta[] = [
   { week: 3, day: 5, id: 'w3d5', title: '宾格:阴性名词', topic: 'а→у / я→ю / ь 不变' },
   { week: 3, day: 6, id: 'w3d6', title: '宾格:中性名词 + 三性综合', topic: '中性宾格 = 主格 + 综合判断' },
   { week: 3, day: 7, id: 'w3d7', title: '复习日', topic: '主格与宾格综合练习', review: true },
+
+  // 第4周：性 + 数 + 主格 + 宾格 综合巩固
+  { week: 4, day: 1, id: 'w4d1', title: '本周词汇预载', topic: '添加本周综合巩固单词到背单词App', vocab: true },
+  { week: 4, day: 2, id: 'w4d2', title: '三性综合判断强化', topic: 'ь 结尾、外来词、特例混合训练' },
+  { week: 4, day: 3, id: 'w4d3', title: '复数综合', topic: '三性 + 飘忽元音 + 不规则' },
+  { week: 4, day: 4, id: 'w4d4', title: '主格综合 + 句型扩展', topic: '复数主语 + ці 指示代词 + 句型混合' },
+  { week: 4, day: 5, id: 'w4d5', title: '宾格综合（无生命）', topic: '阴性 -а→-у、阳性/中性不变、复数不变' },
+  { week: 4, day: 6, id: 'w4d6', title: '宾格难点：有生命阳性', topic: '飘忽元音 8 兄弟稳固训练' },
+  { week: 4, day: 7, id: 'w4d7', title: '复习日', topic: '性/数/主格/宾格 三合一综合测验', review: true },
 ]
 
 export const ukrainianFutureWeeks: FutureWeek[] = [
-  { week: 4, title: '动词现在时变位', topic: 'Дієвідмінювання дієслів' },
-  { week: 5, title: '动词变位巩固 + 日常对话', topic: '简单日常对话' },
-  { week: 6, title: '属格', topic: 'Родовий відмінок' },
-  { week: 7, title: '形容词性数配合', topic: 'Прикметники' },
-  { week: 8, title: '与格', topic: 'Давальний відмінок' },
-  { week: 9, title: '工具格', topic: 'Орудний відмінок' },
-  { week: 10, title: '方位格', topic: 'Місцевий відмінок' },
-  { week: 11, title: '动词过去时', topic: 'Минулий час' },
-  { week: 12, title: '综合复习', topic: '整合所有语法知识' },
+  { week: 5, title: '动词现在时变位', topic: 'Дієвідмінювання дієслів' },
+  { week: 6, title: '动词变位巩固 + 日常对话', topic: '简单日常对话' },
+  { week: 7, title: '属格', topic: 'Родовий відмінок' },
+  { week: 8, title: '形容词性数配合', topic: 'Прикметники' },
+  { week: 9, title: '与格', topic: 'Давальний відмінок' },
+  { week: 10, title: '工具格', topic: 'Орудний відмінок' },
+  { week: 11, title: '方位格', topic: 'Місцевий відмінок' },
+  { week: 12, title: '动词过去时', topic: 'Минулий час' },
+  { week: 13, title: '综合复习', topic: '整合所有语法知识' },
 ]
 
 export const ukrainianWeekTitles: Record<number, string> = {
   1: '名词性别（Рід іменників）',
   2: '名词性别巩固 + 名词复数',
   3: '主格与宾格（Називний і Знахідний відмінок）',
+  4: '性 / 数 / 主格 / 宾格 综合巩固',
 }
 
 // ── 法律英语课程 ──

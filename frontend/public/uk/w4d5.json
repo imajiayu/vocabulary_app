@@ -1,0 +1,369 @@
+{
+  "title": "第4周 第5天 — 宾格综合（无生命）",
+  "objective": "把第3周宾格的「无生命阳性 = 主格」「阴性 а→у / я→ю / ь 不变」「中性 = 主格」混合训练。今天只处理无生命名词，明天专攻有生命阳性 + 飘忽元音难点。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 宾格速查（无生命）",
+      "blocks": [
+        { "type": "h3", "text": "宾格 — 一张表收齐三性无生命变化" },
+        {
+          "type": "table",
+          "headers": ["性别 / 词尾", "宾格变化", "举例"],
+          "firstColWord": false,
+          "rows": [
+            ["阳性辅音（无生命）", "宾格 = 主格", "<span class=\"uk-word\" data-def=\"红菜汤\">борщ</span> → <span class=\"uk-word\" data-def=\"红菜汤（宾）\">борщ</span>"],
+            ["阳性 ь / -й（无生命）", "宾格 = 主格", "<span class=\"uk-word\" data-def=\"船\">корабель</span> → <span class=\"uk-word\" data-def=\"船（宾）\">корабель</span>"],
+            ["阴性 -а", "-а → -у", "<span class=\"uk-word\" data-def=\"地址\">адреса</span> → <span class=\"uk-word\" data-def=\"地址（宾）\">адресу</span>"],
+            ["阴性 -я", "-я → -ю", "<span class=\"uk-word\" data-def=\"星期日\">неділя</span> → <span class=\"uk-word\" data-def=\"星期日（宾）\">неділю</span>"],
+            ["阴性 ь / -ість", "不变", "<span class=\"uk-word\" data-def=\"夜晚\">ніч</span> → <span class=\"uk-word\" data-def=\"夜晚（宾）\">ніч</span>；<span class=\"uk-word\" data-def=\"喜悦\">радість</span> → <span class=\"uk-word\" data-def=\"喜悦（宾）\">радість</span>"],
+            ["中性 -о / -е / -ння", "宾格 = 主格", "<span class=\"uk-word\" data-def=\"窗户\">вікно</span> → <span class=\"uk-word\" data-def=\"窗户（宾）\">вікно</span>；<span class=\"uk-word\" data-def=\"作业\">завдання</span> → <span class=\"uk-word\" data-def=\"作业（宾）\">завдання</span>"],
+            ["不变外来词", "永远不变", "<span class=\"uk-word\" data-def=\"出租车\">таксі</span>、<span class=\"uk-word\" data-def=\"地铁\">метро</span>、<span class=\"uk-word\" data-def=\"钢琴\">піаніно</span>"],
+            ["无生命复数（任何性别）", "宾格 = 主格", "<span class=\"uk-word\" data-def=\"书（复）\">книги</span> → <span class=\"uk-word\" data-def=\"书（宾复）\">книги</span>"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>核心规律：</strong>无生命名词中只有<strong>阴性 -а/-я</strong> 在宾格中真的换了衣服（→ -у/-ю）。其他情况都和主格长得一模一样 —— 抓住这一条，无生命宾格基本不会错。" },
+
+        { "type": "h3", "text": "宾格出现在哪里？" },
+        { "type": "p", "html": "宾格回答 <span class=\"uk-word\" data-def=\"谁\">кого?</span>（谁）/ <span class=\"uk-word\" data-def=\"什么\">що?</span>（什么），出现在两类位置：" },
+        { "type": "grammar-box", "html": "<p><strong>① 直接宾语</strong> —— 动词后表示「把谁 / 把什么」。第3周我们已经学过 5 个动词的「我 + 宾格」结构：<br><span class=\"uk-text\">Я <span class=\"uk-word\" data-def=\"我读\">читаю</span> / <span class=\"uk-word\" data-def=\"我写\">пишу</span> / <span class=\"uk-word\" data-def=\"我看\">бачу</span> / <span class=\"uk-word\" data-def=\"我买\">купую</span> / <span class=\"uk-word\" data-def=\"我爱\">люблю</span> + 宾格名词</span>。</p><p><strong>② 介词宾语</strong> —— 某些介词（про / на / в / у）后面接宾格。常见用法：</p><ul><li><strong>про + 宾格</strong> = 关于… → <span class=\"uk-text\">писати про <span class=\"uk-word\" data-def=\"音乐（宾）\">музику</span></span>（写关于音乐的事）</li><li><strong>в / у + 宾格</strong> = 进入…（运动） → <span class=\"uk-text\">іти в <span class=\"uk-word\" data-def=\"商店（宾）\">магазин</span></span>（去商店）</li><li><strong>на + 宾格</strong> = 到…上去（运动） → <span class=\"uk-text\">іти на <span class=\"uk-word\" data-def=\"火车（宾）\">потяг</span></span>（去搭火车）</li></ul>" },
+        { "type": "note", "html": "<strong>区分动作和位置：</strong><span class=\"uk-text\">в магазин</span>（去商店 — 宾格，方向）vs <span class=\"uk-text\">в магазині</span>（在商店 — 方位格，位置）。今天先练宾格 = 方向 / 直接对象，方位格放第10周。" },
+
+        { "type": "h3", "text": "阴性变化 — 三组对比" },
+        { "type": "p", "html": "把已学的阴性词分三组细看 —— 这是无生命宾格唯一会变形的部分：" },
+        {
+          "type": "table",
+          "headers": ["类型", "示例（主格 → 宾格）", "判断方法"],
+          "firstColWord": false,
+          "rows": [
+            ["-а → -у", "<span class=\"uk-word\" data-def=\"水（主）\">вода</span> → <span class=\"uk-word\" data-def=\"水（宾）\">воду</span>；<span class=\"uk-word\" data-def=\"奶牛（主）\">корова</span> → <span class=\"uk-word\" data-def=\"奶牛（宾）\">корову</span>；<span class=\"uk-word\" data-def=\"夹克（主）\">куртка</span> → <span class=\"uk-word\" data-def=\"夹克（宾）\">куртку</span>", "硬辅音 + -а"],
+            ["-я → -ю", "<span class=\"uk-word\" data-def=\"厨房（主）\">кухня</span> → <span class=\"uk-word\" data-def=\"厨房（宾）\">кухню</span>；<span class=\"uk-word\" data-def=\"星期日（主）\">неділя</span> → <span class=\"uk-word\" data-def=\"星期日（宾）\">неділю</span>；<span class=\"uk-word\" data-def=\"梦想（主）\">мрія</span> → <span class=\"uk-word\" data-def=\"梦想（宾）\">мрію</span>", "软辅音 + -я"],
+            ["ь / 软辅音", "<span class=\"uk-word\" data-def=\"夜晚（主）\">ніч</span> → <span class=\"uk-word\" data-def=\"夜晚（宾）\">ніч</span>；<span class=\"uk-word\" data-def=\"喜悦（主）\">радість</span> → <span class=\"uk-word\" data-def=\"喜悦（宾）\">радість</span>；<span class=\"uk-word\" data-def=\"盐（主）\">сіль</span> → <span class=\"uk-word\" data-def=\"盐（宾）\">сіль</span>", "ь / 软辅音 → 不变"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆口诀：</strong>「-а 改 -у、-я 改 -ю、ь 不变」。三个动作配三种词尾，节奏感很强 —— 多读几遍就能形成肌肉记忆。" },
+
+        { "type": "h3", "text": "中文母语者的常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要把所有阴性词都加 -у</strong>。-я 结尾 → -ю（不是 -у）；ь 结尾 → 不变（不是加 -у）。<br>错误：<span class=\"uk-text\">Я люблю кухну.</span>（错）→ 正确：<span class=\"uk-text\">Я люблю <span class=\"uk-word\" data-def=\"厨房（宾）\">кухню</span>.</span><br>错误：<span class=\"uk-text\">Я люблю нічу.</span>（错）→ 正确：<span class=\"uk-text\">Я люблю <span class=\"uk-word\" data-def=\"夜晚（宾）\">ніч</span>.</span></li><li><strong>不要给阳性 / 中性无生命名词加变化</strong>。<br>错误：<span class=\"uk-text\">Я читаю борща.</span>（错；这是「有生命」结构）→ 正确：<span class=\"uk-text\">Я читаю <span class=\"uk-word\" data-def=\"杂志（宾）\">журнал</span>.</span><br>错误：<span class=\"uk-text\">Я бачу вікну.</span>（错）→ 正确：<span class=\"uk-text\">Я бачу <span class=\"uk-word\" data-def=\"窗户（宾）\">вікно</span>.</span></li><li><strong>外来不变词永远不变</strong> —— 即使在宾格也不变：<span class=\"uk-text\">Я купую <span class=\"uk-word\" data-def=\"出租车票（宾）\">таксі</span>.</span></li></ol>" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "动词 + 阴性宾格（变化最大）",
+          "items": [
+            { "text": "Я люблю каву.", "translation": "我喜欢咖啡。（кава → каву）" },
+            { "text": "Я купую куртку.", "translation": "我买夹克。（куртка → куртку）" },
+            { "text": "Я читаю книгу.", "translation": "我读书。（книга → книгу）" },
+            { "text": "Я пишу адресу.", "translation": "我写地址。（адреса → адресу）" },
+            { "text": "Я бачу неділю на календарі.", "translation": "我在日历上看到星期日。（неділя → неділю）" },
+            { "text": "Я люблю історію.", "translation": "我喜欢历史。（історія → історію）" },
+            { "text": "Я купую сіль.", "translation": "我买盐。（сіль → 不变）" }
+          ]
+        },
+        {
+          "heading": "动词 + 阳性 / 中性无生命（不变）",
+          "items": [
+            { "text": "Я читаю журнал.", "translation": "我读杂志。（журнал → 不变）" },
+            { "text": "Я купую велосипед.", "translation": "我买自行车。（велосипед → 不变）" },
+            { "text": "Я люблю борщ.", "translation": "我喜欢红菜汤。（борщ → 不变）" },
+            { "text": "Я бачу вікно.", "translation": "我看到窗户。（вікно → 不变）" },
+            { "text": "Я люблю літо.", "translation": "我喜欢夏天。（літо → 不变）" },
+            { "text": "Я купую таксі.", "translation": "我（叫）了出租车。（外来不变）" }
+          ]
+        },
+        {
+          "heading": "介词 про / в / на + 宾格",
+          "items": [
+            { "text": "Я пишу про музику.", "translation": "我写关于音乐的事。（музика → музику）" },
+            { "text": "Я читаю про подорож.", "translation": "我读关于旅行的事。（подорож ь 结尾 → 不变）" },
+            { "text": "Я іду в магазин.", "translation": "我去商店。（магазин 阳无生命 → 不变）" },
+            { "text": "Я іду на роботу.", "translation": "我去上班。（робота → роботу）" }
+          ]
+        },
+        {
+          "heading": "复数无生命宾格 = 复数主格",
+          "items": [
+            { "text": "Я купую яблука.", "translation": "我买苹果（复）。（яблука → 不变）" },
+            { "text": "Я люблю книги.", "translation": "我喜欢书（复）。（книги → 不变）" },
+            { "text": "Я читаю газети.", "translation": "我读报纸（复）。（газети → 不变）" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：选出正确的宾格形式（10题）",
+          "instruction": "下面每题给出一个动词后接的宾语，选出正确的宾格形式。",
+          "questions": [
+            {
+              "prompt": "Я читаю ____ (книга).",
+              "options": ["книга", "книгу", "книги"],
+              "answer": "книгу",
+              "explanation": "阴性 -а → -у。",
+              "hints": ["阴性 -а 在宾格中改 -у"]
+            },
+            {
+              "prompt": "Я люблю ____ (літо).",
+              "options": ["літа", "літі", "літо"],
+              "answer": "літо",
+              "explanation": "中性 -о 无生命 → 宾格 = 主格 = літо。"
+            },
+            {
+              "prompt": "Я купую ____ (велосипед).",
+              "options": ["велосипеда", "велосипед", "велосипеду"],
+              "answer": "велосипед",
+              "explanation": "阳性辅音无生命 → 宾格 = 主格 = велосипед。",
+              "hints": ["велосипед 是无生命物品"]
+            },
+            {
+              "prompt": "Я бачу ____ (адреса).",
+              "options": ["адреси", "адресу", "адреса"],
+              "answer": "адресу",
+              "explanation": "阴性 -а → -у → адресу。"
+            },
+            {
+              "prompt": "Я люблю ____ (музика).",
+              "options": ["музика", "музикі", "музику"],
+              "answer": "музику",
+              "explanation": "阴性 -а → -у → музику。"
+            },
+            {
+              "prompt": "Я люблю ____ (неділя).",
+              "options": ["неділю", "неділі", "неділя"],
+              "answer": "неділю",
+              "explanation": "阴性 -я → -ю → неділю。",
+              "hints": ["软辅音后的 -я 改成 -ю，不是 -у"]
+            },
+            {
+              "prompt": "Я бачу ____ (ніч).",
+              "options": ["ніч", "ночу", "ночі"],
+              "answer": "ніч",
+              "explanation": "阴性 ь / 软辅音结尾 → 宾格不变。",
+              "hints": ["注意 ь 结尾的阴性词在宾格里不变"]
+            },
+            {
+              "prompt": "Я купую ____ (таксі).",
+              "options": ["таксі", "таксію", "таксіу"],
+              "answer": "таксі",
+              "explanation": "外来不变词 → 永远是 таксі。"
+            },
+            {
+              "prompt": "Я люблю ____ (історія).",
+              "options": ["історію", "історії", "історія"],
+              "answer": "історію",
+              "explanation": "阴性 -ія → -ію。"
+            },
+            {
+              "prompt": "Я бачу ____ (місто).",
+              "options": ["місто", "міста", "місту"],
+              "answer": "місто",
+              "explanation": "中性 -о 无生命 → 宾格 = 主格。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：哪句话用对了宾格？（5题）",
+          "instruction": "在下面每组的两个句子中，选出宾格形式用得正确的那个。",
+          "questions": [
+            {
+              "prompt": "「我喜欢护士」",
+              "options": [
+                "Я люблю медсестра.",
+                "Я люблю медсестру.",
+                "Я люблю медсестри."
+              ],
+              "answer": "Я люблю медсестру.",
+              "explanation": "медсестра 阴性 -а → -у → медсестру。注意：如果指有生命的护士，宾格阴性还是用 -у（阴性宾格不区分生命/无生命，明天会重申）。"
+            },
+            {
+              "prompt": "「我读关于音乐的事」",
+              "options": [
+                "Я читаю про музика.",
+                "Я читаю про музику.",
+                "Я читаю про музика."
+              ],
+              "answer": "Я читаю про музику.",
+              "explanation": "про + 宾格；музика → музику。",
+              "hints": ["про 后面接宾格，注意 -а → -у"]
+            },
+            {
+              "prompt": "「我买椅子」（注意：单数）",
+              "options": [
+                "Я купую стілець.",
+                "Я купую стільця.",
+                "Я купую стільцю."
+              ],
+              "answer": "Я купую стілець.",
+              "explanation": "стілець 阳性无生命 → 宾格 = 主格 = стілець。",
+              "hints": ["椅子是无生命，宾格不变", "明天才会用 стільця 形式（有生命才用）"]
+            },
+            {
+              "prompt": "「我喜欢秋天」",
+              "options": [
+                "Я люблю осінь.",
+                "Я люблю осіню.",
+                "Я люблю осіні."
+              ],
+              "answer": "Я люблю осінь.",
+              "explanation": "осінь 阴性 ь 结尾 → 宾格不变 → осінь。"
+            },
+            {
+              "prompt": "「我看几本书」",
+              "options": [
+                "Я бачу книгу.",
+                "Я бачу книги.",
+                "Я бачу книгів."
+              ],
+              "answer": "Я бачу книги.",
+              "explanation": "复数无生命 → 宾格 = 复数主格 = книги。",
+              "hints": ["复数无生命名词宾格不变"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 C：写出正确的宾格（8题）",
+          "instruction": "根据括号里的中文提示，把名词写成正确的宾格形式。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____. (奶牛)",
+              "answer": "корову",
+              "accept": ["корову", "Корову"],
+              "explanation": "корова → корову（-а → -у）。即便 корова 是有生命动物，阴性宾格仍然是 -у。",
+              "hints": ["阴性词不分生命 / 无生命，统一用 -у"]
+            },
+            {
+              "prompt": "Я бачу ____. (机场)",
+              "answer": "аеропорт",
+              "accept": ["аеропорт", "Аеропорт"],
+              "explanation": "аеропорт 阳性辅音无生命 → 宾格 = 主格。"
+            },
+            {
+              "prompt": "Я купую ____. (面包)",
+              "answer": "хліб",
+              "accept": ["хліб", "Хліб"],
+              "explanation": "хліб 阳性辅音无生命 → 宾格 = 主格。"
+            },
+            {
+              "prompt": "Я пишу про ____. (历史)",
+              "answer": "історію",
+              "accept": ["історію", "Історію"],
+              "explanation": "історія → історію。про + 宾格。",
+              "hints": ["-ія 是阴性 -я 的子类型，宾格 → -ію"]
+            },
+            {
+              "prompt": "Я читаю ____. (报纸)",
+              "answer": "газету",
+              "accept": ["газету", "Газету"],
+              "explanation": "газета → газету（-а → -у）。"
+            },
+            {
+              "prompt": "Я люблю ____. (盐)",
+              "answer": "сіль",
+              "accept": ["сіль", "Сіль"],
+              "explanation": "сіль 阴性 ь 结尾 → 宾格不变。"
+            },
+            {
+              "prompt": "Я бачу ____. (湖)",
+              "answer": "озеро",
+              "accept": ["озеро", "Озеро"],
+              "explanation": "озеро 中性 -о 无生命 → 宾格 = 主格。"
+            },
+            {
+              "prompt": "Я купую ____. (披萨)",
+              "answer": "піцу",
+              "accept": ["піцу", "Піцу"],
+              "explanation": "піца → піцу（-а → -у）。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：复数宾格（4题）",
+          "instruction": "无生命复数的宾格 = 主格。请把括号里的单数词换成正确的复数宾格形式。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____. (苹果，复数 = 苹果们)",
+              "answer": "яблука",
+              "accept": ["яблука", "Яблука"],
+              "explanation": "яблуко 中性 -о → 复数 -а → яблука；无生命宾格 = 主格 → яблука。"
+            },
+            {
+              "prompt": "Я читаю ____. (杂志，复数)",
+              "answer": "журнали",
+              "accept": ["журнали", "Журнали"],
+              "explanation": "журнал → 复数 журнали；无生命宾格 = 主格 → журнали。"
+            },
+            {
+              "prompt": "Я купую ____. (书，复数)",
+              "answer": "книги",
+              "accept": ["книги", "Книги"],
+              "explanation": "книга → 复数 книги（后舌音 -г + -и）；宾格 = 主格 → книги。",
+              "hints": ["阴性 -а 复数 → -и/-і"]
+            },
+            {
+              "prompt": "Я бачу ____. (城市，复数)",
+              "answer": "міста",
+              "accept": ["міста", "Міста"],
+              "explanation": "місто → 复数 міста（中性 -о → -а）；宾格 = 主格 → міста。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：判断对错（5题）",
+          "instruction": "下面的句子是否合乎语法（宾格用对了吗）？",
+          "questions": [
+            {
+              "prompt": "Я читаю книга.",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "应改为 Я читаю книгу（阴性 -а → -у）。"
+            },
+            {
+              "prompt": "Я купую велосипед.",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "велосипед 阳性无生命 → 宾格 = 主格，正确。"
+            },
+            {
+              "prompt": "Я люблю кухну.",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "кухня → 宾格应是 кухню（-я → -ю，不是 -у）。"
+            },
+            {
+              "prompt": "Я бачу вікну.",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "вікно 中性无生命 → 宾格不变 → 应为 Я бачу вікно。"
+            },
+            {
+              "prompt": "Я люблю радість.",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "радість 阴性 ь 结尾 → 宾格不变。",
+              "hints": ["-ість 阴性宾格不变"]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>无生命名词的宾格</strong>：阳性、中性、ь 结尾阴性、外来词 —— 全部不变。<strong>只有阴性 -а / -я 改成 -у / -ю</strong>。</li><li><strong>阴性宾格不分生命与否</strong> —— 即使是 жінка / корова 这种有生命的阴性词，宾格仍然是 -у（这一点比阳性简单很多，记住就好）。</li><li><strong>复数无生命宾格 = 复数主格</strong>。</li><li><strong>介词 про / в / на + 宾格</strong>：写关于、去某地等结构里都是宾格。</li></ol><p><strong>下节预告：</strong>明天我们攻克<strong>有生命阳性宾格</strong> —— 这是整个第3-4周最难的一个点。除了「-а / -я」的标准变化外，还有飘忽元音 8 兄弟（кота / пса / коня / учня / ведмедя / зайця / стільця 中的 стільця 是无生命特例 / хлопця / продавця）需要稳固训练。</p>"
+    }
+  ]
+}

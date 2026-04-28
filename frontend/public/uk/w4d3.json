@@ -1,0 +1,386 @@
+{
+  "title": "第4周 第3天 — 复数综合",
+  "objective": "把第2周「名词复数」的所有规则做一次完整复盘 —— 三性各自的常规变化、ь 结尾词的特殊变化、飘忽元音词的复数（вечір → вечори、заєць → зайці），以及必须背熟的不规则复数。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 复数规则速查",
+      "blocks": [
+        { "type": "h3", "text": "三性复数 —— 一张表全记住" },
+        {
+          "type": "table",
+          "headers": ["性别", "单数词尾", "复数词尾", "举例"],
+          "firstColWord": false,
+          "rows": [
+            ["阳性", "辅音", "-и", "<span class=\"uk-word\" data-def=\"桌子\">стіл</span> → <span class=\"uk-word\" data-def=\"桌子（复）\">столи</span>"],
+            ["阳性", "-к / -г / -х （后舌音）", "-и", "<span class=\"uk-word\" data-def=\"公园\">парк</span> → <span class=\"uk-word\" data-def=\"公园（复）\">парки</span>"],
+            ["阳性", "ь / -й", "-і", "<span class=\"uk-word\" data-def=\"老师（阳）\">вчитель</span> → <span class=\"uk-word\" data-def=\"老师们\">вчителі</span>"],
+            ["阴性", "-а", "-и", "<span class=\"uk-word\" data-def=\"书\">книга</span> → <span class=\"uk-word\" data-def=\"书（复）\">книги</span>"],
+            ["阴性", "-я", "-і", "<span class=\"uk-word\" data-def=\"厨房\">кухня</span> → <span class=\"uk-word\" data-def=\"厨房（复）\">кухні</span>"],
+            ["阴性", "ь / -ість", "-і", "<span class=\"uk-word\" data-def=\"夜晚\">ніч</span> → <span class=\"uk-word\" data-def=\"夜晚（复）\">ночі</span>；<span class=\"uk-word\" data-def=\"喜悦\">радість</span> → <span class=\"uk-word\" data-def=\"喜悦（复）\">радості</span>"],
+            ["中性", "-о", "-а", "<span class=\"uk-word\" data-def=\"窗户\">вікно</span> → <span class=\"uk-word\" data-def=\"窗户（复）\">вікна</span>"],
+            ["中性", "-е", "-я", "<span class=\"uk-word\" data-def=\"心脏\">серце</span> → <span class=\"uk-word\" data-def=\"心脏（复）\">серця</span>"],
+            ["中性", "-ння / -ття", "-ння (不变)", "<span class=\"uk-word\" data-def=\"作业\">завдання</span> → <span class=\"uk-word\" data-def=\"作业（复）\">завдання</span>（拼写不变，重音可能移动）"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>速记诀：</strong>「<strong>阳辅 -и、阳ь -і；阴 -а -и、阴 -я -і；中 -о -а、中 -е -я」</strong>。后舌音（к/г/х）属于阳性，但走 -и 的路。" },
+
+        { "type": "h3", "text": "ь 结尾词的复数 —— 注意软音的位置" },
+        { "type": "p", "html": "ь 结尾词变复数时，ь 会消失，换成 -і（因为 -і 本身就是软元音）。看几组对比：" },
+        {
+          "type": "table",
+          "headers": ["单数", "性别", "复数", "中文"],
+          "firstColWord": true,
+          "rows": [
+            ["вчитель", "阳", "<span class=\"uk-word\" data-def=\"老师们\">вчителі</span>", "老师们"],
+            ["учитель", "阳", "<span class=\"uk-word\" data-def=\"教师们\">учителі</span>", "教师们"],
+            ["день", "阳", "<span class=\"uk-word\" data-def=\"日子\">дні</span>", "日子（注意：飘忽元音 е 消失）"],
+            ["камінь", "阳", "<span class=\"uk-word\" data-def=\"石头（复）\">камені</span>", "石头们（飘忽元音 і → е）"],
+            ["звір", "阳", "<span class=\"uk-word\" data-def=\"野兽（复）\">звірі</span>", "野兽们"],
+            ["ніч", "阴", "<span class=\"uk-word\" data-def=\"夜晚（复）\">ночі</span>", "夜晚（复）"],
+            ["осінь", "阴", "<span class=\"uk-word\" data-def=\"秋天（复）\">осені</span>", "秋天（复，少用）"],
+            ["сіль", "阴", "<span class=\"uk-word\" data-def=\"盐（复）\">солі</span>", "盐（复，飘忽元音 і → о）"],
+            ["новість", "阴", "<span class=\"uk-word\" data-def=\"新闻（复）\">новини</span> ⚠️", "新闻 — <strong>不规则！</strong>请直接背"]
+          ]
+        },
+        { "type": "error-warn", "html": "<strong>新闻是不规则词！</strong><span class=\"uk-word\" data-def=\"新闻（单）\">новина</span> 才是 -а 结尾的常规阴性，复数 <span class=\"uk-word\" data-def=\"新闻（复）\">новини</span>。<span class=\"uk-word\" data-def=\"新闻\">новість</span> 是带 -ість 后缀的同义词，复数也写作 <span class=\"uk-word\" data-def=\"新闻（复）\">новини</span> 或 <span class=\"uk-word\" data-def=\"新闻（复）\">новості</span>。日常优先用 новина / новини 这一对。" },
+
+        { "type": "h3", "text": "飘忽元音 —— 复数中的 е/о 消失术" },
+        { "type": "p", "html": "有一类阳性词，单数里在词尾前有一个「飘忽」的元音 е 或 о —— 一旦词尾发生变化（变复数、变格），这个元音就消失。本周 d1 词汇表里有几个这样的词：" },
+        {
+          "type": "table",
+          "headers": ["单数（主格）", "复数", "宾格（之后会用）", "中文"],
+          "firstColWord": true,
+          "rows": [
+            ["вечір", "<span class=\"uk-word\" data-def=\"傍晚（复）\">вечори</span>", "<span class=\"uk-word\" data-def=\"傍晚（宾）\">вечір</span>（无生命=主格）", "傍晚 — і 飘忽 → 复数变 е → о"],
+            ["заєць", "<span class=\"uk-word\" data-def=\"兔子们\">зайці</span>", "<span class=\"uk-word\" data-def=\"兔子（宾）\">зайця</span>", "兔子 — е 消失 + є → й"],
+            ["стілець", "<span class=\"uk-word\" data-def=\"椅子们\">стільці</span>", "<span class=\"uk-word\" data-def=\"椅子（宾，无生命=主）\">стілець</span>", "椅子 — е 消失"],
+            ["палець", "<span class=\"uk-word\" data-def=\"手指（复）\">пальці</span>", "—（无生命）", "手指 — е 消失"],
+            ["хлопець", "<span class=\"uk-word\" data-def=\"男孩们\">хлопці</span>", "<span class=\"uk-word\" data-def=\"男孩（宾）\">хлопця</span>", "男孩 — е 消失"],
+            ["продавець", "<span class=\"uk-word\" data-def=\"售货员们\">продавці</span>", "<span class=\"uk-word\" data-def=\"售货员（宾）\">продавця</span>", "售货员 — е 消失"],
+            ["олівець", "<span class=\"uk-word\" data-def=\"铅笔（复）\">олівці</span>", "—（无生命）", "铅笔 — е 消失"],
+            ["учень", "<span class=\"uk-word\" data-def=\"学生们\">учні</span>", "<span class=\"uk-word\" data-def=\"学生（宾）\">учня</span>", "学生 — е 消失"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆技巧：</strong>看到 <strong>-ець / -ень / -ір</strong> 结尾的阳性词，自动启动「飘忽元音」雷达 —— 90% 的情况是变复数 / 变格时这个 е 或 і 会消失。" },
+
+        { "type": "h3", "text": "必须背熟的不规则复数" },
+        {
+          "type": "table",
+          "headers": ["单数", "复数", "中文", "备注"],
+          "firstColWord": true,
+          "rows": [
+            ["людина", "<span class=\"uk-word\" data-def=\"人们\">люди</span>", "人 → 人们", "「人」整体换词"],
+            ["дитина", "<span class=\"uk-word\" data-def=\"孩子们\">діти</span>", "孩子 → 孩子们", "「孩子」整体换词"],
+            ["друг", "<span class=\"uk-word\" data-def=\"朋友们\">друзі</span>", "朋友 → 朋友们", "辅音 г → з + -і"],
+            ["око", "<span class=\"uk-word\" data-def=\"眼睛（复）\">очі</span>", "眼睛", "整体换词"],
+            ["вухо", "<span class=\"uk-word\" data-def=\"耳朵（复）\">вуха</span>", "耳朵", "走中性 -о → -а 的常规路（不算很不规则）"],
+            ["ім'я", "<span class=\"uk-word\" data-def=\"名字（复）\">імена</span>", "名字", "中性 -я 类异常"],
+            ["плем'я", "<span class=\"uk-word\" data-def=\"部落（复）\">племена</span>", "部落", "同 ім'я 类型"],
+            ["мати", "<span class=\"uk-word\" data-def=\"妈妈们\">матері</span>", "母亲", "整体换词"],
+            ["брат", "<span class=\"uk-word\" data-def=\"兄弟们\">брати</span>", "兄弟（复）", "常规阳性 -и，但读音重音变化"]
+          ]
+        },
+        { "type": "note", "html": "<strong>幼仔名词的复数</strong>（кошеня / цуценя / теля 等 -еня/-я 结尾）走特殊路径，加 -т-：<span class=\"uk-word\" data-def=\"小猫们\">кошенята</span>、<span class=\"uk-word\" data-def=\"小狗们\">цуценята</span>、<span class=\"uk-word\" data-def=\"小牛们\">телята</span>。本周不强练，知道有这回事即可。" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "三性复数对比",
+          "items": [
+            { "text": "Це столи.", "translation": "这是几张桌子。（阳 -и）" },
+            { "text": "Це парки.", "translation": "这是公园（复）。（阳后舌音 -и）" },
+            { "text": "Це вчителі.", "translation": "这是老师们。（阳 ь → -і）" },
+            { "text": "Це книги.", "translation": "这是书（复）。（阴 -а → -и）" },
+            { "text": "Це кухні.", "translation": "这是厨房（复）。（阴 -я → -і）" },
+            { "text": "Це ночі.", "translation": "这是夜晚（复）。（阴 ь → -і）" },
+            { "text": "Це вікна.", "translation": "这是窗户（复）。（中 -о → -а）" },
+            { "text": "Це серця.", "translation": "这是心脏（复）。（中 -е → -я）" }
+          ]
+        },
+        {
+          "heading": "飘忽元音 + 不规则复数",
+          "items": [
+            { "text": "Хлопці там.", "translation": "男孩们在那里。（飘忽 е 消失）" },
+            { "text": "Учні тут.", "translation": "学生们在这里。（飘忽 е 消失）" },
+            { "text": "Зайці там.", "translation": "兔子们在那里。（飘忽 е，є→й）" },
+            { "text": "Діти тут.", "translation": "孩子们在这里。（不规则）" },
+            { "text": "Люди — друзі.", "translation": "人们是朋友。（两个不规则复数同时出现）" },
+            { "text": "Очі — це вікно душі.", "translation": "眼睛是心灵的窗户。（очі 不规则；душі 暂不强求）" },
+            { "text": "Імена — там.", "translation": "名字（们）在那里。（ім'я → імена 不规则）" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：三性复数选择（10题）",
+          "instruction": "选出每个名词的正确复数形式。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"桌子\">стіл</span> 的复数是？",
+              "options": ["столи", "столі", "стола"],
+              "answer": "столи",
+              "explanation": "阳性辅音结尾 → -и。",
+              "hints": ["阳性常规规则"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师（阳）\">вчитель</span> 的复数是？",
+              "options": ["вчители", "вчителі", "вчителя"],
+              "answer": "вчителі",
+              "explanation": "阳性 ь / -й 结尾 → -і。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"公园\">парк</span> 的复数是？",
+              "options": ["парки", "паркі", "парка"],
+              "answer": "парки",
+              "explanation": "阳性后舌音 -к 结尾 → -и（拼写规则要求 к 后只能跟 -и 不能跟 -і）。",
+              "hints": ["к/г/х 后舌音的拼写规则"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"书\">книга</span> 的复数是？",
+              "options": ["книгі", "книги", "книгу"],
+              "answer": "книги",
+              "explanation": "阴性 -а 结尾 + 后舌音 г → -и（书面规则）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"厨房\">кухня</span> 的复数是？",
+              "options": ["кухни", "кухні", "кухня"],
+              "answer": "кухні",
+              "explanation": "阴性 -я 结尾 → -і。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"夜晚\">ніч</span> 的复数是？",
+              "options": ["ночи", "ночі", "ніча"],
+              "answer": "ночі",
+              "explanation": "阴性 ь / 软辅音结尾 → -і。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">вікно</span> 的复数是？",
+              "options": ["вікна", "вікни", "вікнє"],
+              "answer": "вікна",
+              "explanation": "中性 -о → -а。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"心脏\">серце</span> 的复数是？",
+              "options": ["серца", "серцє", "серця"],
+              "answer": "серця",
+              "explanation": "中性 -е → -я。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"出租车\">таксі</span> 的复数是？",
+              "options": ["таксі", "таксіи", "таксіа"],
+              "answer": "таксі",
+              "explanation": "外来不变词 — 单复数同形不变。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"地铁\">метро</span> 的复数是？",
+              "options": ["метро", "метра", "метри"],
+              "answer": "метро",
+              "explanation": "外来不变词 — 不变。",
+              "hints": ["外来词不参与变格 / 变数"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：飘忽元音 / ь 结尾词的复数（6题）",
+          "instruction": "这些词在变复数时词尾前的元音会改变或消失，请选出正确答案。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"男孩\">хлопець</span> 的复数是？",
+              "options": ["хлопеці", "хлопці", "хлопеці"],
+              "answer": "хлопці",
+              "explanation": "-ець 结尾 → 复数 е 消失 + 加 -і → хлопці。",
+              "hints": ["飘忽元音 е 消失"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"学生（阳）\">учень</span> 的复数是？",
+              "options": ["учени", "учні", "ученя"],
+              "answer": "учні",
+              "explanation": "-ень 结尾 → 复数 е 消失 + -і → учні。",
+              "hints": ["飘忽元音 е 消失，剩 уч + ні"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"傍晚\">вечір</span> 的复数是？",
+              "options": ["вечіри", "вечори", "вечеря"],
+              "answer": "вечори",
+              "explanation": "вечір → вечори。-ір 中的 і 是飘忽元音，复数变成 о。同类：вітер → вітри。",
+              "hints": ["і → о 的飘忽元音变化"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"风\">вітер</span> 的复数是？",
+              "options": ["вітери", "вітри", "ветер"],
+              "answer": "вітри",
+              "explanation": "вітер → вітри。е 是飘忽元音，复数消失。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"喜悦\">радість</span> 的复数是？",
+              "options": ["радості", "радости", "радоста"],
+              "answer": "радості",
+              "explanation": "-ість 阴性 → 复数 -ості。规律稳定。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"日子\">день</span> 的复数是？",
+              "options": ["дні", "дені", "дня"],
+              "answer": "дні",
+              "explanation": "день → дні。е 是飘忽元音，消失后剩 дн + -і。",
+              "hints": ["这是高频不规则之一，要记住"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 C：写出复数（8题）",
+          "instruction": "写出下面单词的复数形式（主格）。注意大小写。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"猫\">кіт</span> → ____",
+              "answer": "коти",
+              "accept": ["коти", "Коти"],
+              "explanation": "阳性辅音 -т → -и → коти。i → о 是因为 i 是开口音节闭合时产生的，复数恢复为 о。",
+              "hints": ["这是规则之一：单数开音节 і 复数变 о"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"家\">дім</span> → ____",
+              "answer": "доми",
+              "accept": ["доми", "будинки", "Доми"],
+              "explanation": "дім → доми（与 кіт→коти 同类）。日常常用 будинки（建筑物）替代 → 也接受。",
+              "hints": ["і → о 的变化"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"水果（注：花朵）\">квітка</span> → ____",
+              "answer": "квітки",
+              "accept": ["квітки", "Квітки"],
+              "explanation": "阴性 -а 结尾，前面是 к → -и（后舌音规则）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"狗（雄）\">пес</span> → ____",
+              "answer": "пси",
+              "accept": ["пси", "Пси"],
+              "explanation": "пес → пси。е 是飘忽元音，消失。",
+              "hints": ["飘忽元音 е 消失"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户\">вікно</span> → ____",
+              "answer": "вікна",
+              "accept": ["вікна", "Вікна"],
+              "explanation": "中性 -о → -а。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"作业\">завдання</span> → ____",
+              "answer": "завдання",
+              "accept": ["завдання", "Завдання"],
+              "explanation": "中性 -ння 结尾 — 复数和单数拼写一致（重音可能略变）。",
+              "hints": ["-ння / -ття 的特殊行为"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"孩子\">дитина</span> → ____",
+              "answer": "діти",
+              "accept": ["діти", "Діти"],
+              "explanation": "不规则！дитина → діти。整体换词。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"朋友\">друг</span> → ____",
+              "answer": "друзі",
+              "accept": ["друзі", "Друзі"],
+              "explanation": "不规则！друг → друзі。词尾 г 软化为 з + -і。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：复数 → 单数还原（5题）",
+          "instruction": "下面给的是复数形式，请写出对应的单数（主格）。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师们\">вчителі</span> → ____",
+              "answer": "вчитель",
+              "accept": ["вчитель", "Вчитель"],
+              "explanation": "阳性 ь 结尾 → 复数 -і → 单数加回 ь → вчитель。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"人们\">люди</span> → ____",
+              "answer": "людина",
+              "accept": ["людина", "Людина"],
+              "explanation": "不规则！люди 的单数是 людина（整体换词）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"眼睛（复）\">очі</span> → ____",
+              "answer": "око",
+              "accept": ["око", "Око"],
+              "explanation": "不规则！очі 的单数是 око。",
+              "hints": ["这是中性不规则之一"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"售货员们\">продавці</span> → ____",
+              "answer": "продавець",
+              "accept": ["продавець", "Продавець"],
+              "explanation": "复数 -ці → 单数加回飘忽元音 е → продавець。",
+              "hints": ["看 d1 词汇预载第三组"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"日子\">дні</span> → ____",
+              "answer": "день",
+              "accept": ["день", "День"],
+              "explanation": "复数 дні → 单数加回飘忽元音 е → день。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：判断复数形式正误（5题）",
+          "instruction": "看下面的复数形式，判断它是「正确」还是「错误」。如果错误请记住正确写法。",
+          "questions": [
+            {
+              "prompt": "вікни（来自 вікно）",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "中性 -о 复数应该是 -а → 正确写法是 вікна。"
+            },
+            {
+              "prompt": "вчителі（来自 вчитель）",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "阳性 ь 结尾 → -і，写法正确。"
+            },
+            {
+              "prompt": "учні（来自 учень）",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "飘忽元音 е 消失 + -і → учні，写法正确。"
+            },
+            {
+              "prompt": "стіли（来自 стіл）",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "стіл → столи。i → о 是开闭音节交替的标准变化。",
+              "hints": ["注意 і / о 的交替"]
+            },
+            {
+              "prompt": "діти（来自 дитина）",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "дитина → діти 是必须背的不规则之一。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>三性复数主流</strong>：阳辅 → -и（后舌音也是 -и）；阳 ь → -і；阴 -а → -и；阴 -я / ь → -і；中 -о → -а；中 -е → -я。</li><li><strong>飘忽元音规律</strong>：-ець / -ень / -ір 等结尾的阳性词，变复数时词尾前的 е / і 会消失或变 о（хлопець → хлопці、вечір → вечори、вітер → вітри）。</li><li><strong>必背的不规则</strong>：людина→люди、дитина→діти、друг→друзі、око→очі、вухо→вуха、ім'я→імена、мати→матері。</li><li><strong>外来不变词</strong>：метро / кафе / таксі / піаніно 这类词永远不变，单复数同形。</li></ol><p><strong>下节预告：</strong>明天我们做<strong>主格综合</strong> —— 在巩固性别 + 复数的同时，把所有学过的「主格句型」（Це + 名词、名词 + тут/там、主语 — 名词）混合起来练，并且引入<strong>复数主语</strong>的句子（Це <span class=\"uk-word\" data-def=\"老师们\">вчителі</span>. 等）。</p>"
+    }
+  ]
+}

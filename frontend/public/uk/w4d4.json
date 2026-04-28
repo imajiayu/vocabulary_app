@@ -1,0 +1,366 @@
+{
+  "title": "第4周 第4天 — 主格综合 + 句型扩展",
+  "objective": "把第3周「主格 = 字典原形 + 三种句型」的内容做深度巩固。重点：① 复数主语的主格用法；② 指示代词复数 ці；③ 把「Це / 名词 + тут / 主语 — 名词」三种句型混合训练，让你看到任何主格句子都能立刻识别。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 主格速查",
+      "blocks": [
+        { "type": "h3", "text": "主格 = 字典原形" },
+        { "type": "p", "html": "牢记：<strong>字典里查到的名词形式 = 主格</strong>。所以主格不需要变形 —— 你之前两周学到的所有「单数原形」和「复数原形」全是主格。今天的难点不在于变形，而在于<strong>识别哪些位置必须用主格</strong>。" },
+        { "type": "grammar-box", "html": "<p><strong>主格出现的 4 个标准位置：</strong></p><ol><li><span class=\"uk-text\">Це + 主格</span> —— 这是…</li><li><span class=\"uk-text\">主格 + тут / там</span> —— …在这里 / 那里</li><li><span class=\"uk-text\">主语（主格） — 表语（主格）</span> —— X 是 Y</li><li><span class=\"uk-text\">主语（主格） + 动词 + 宾语</span> —— X 做 Y（动词的主语永远是主格；w3 我们见过 я / він / вона 等代词主语，今天扩展到名词主语）</li></ol>" },
+
+        { "type": "h3", "text": "复数主语 + ось / це / тут" },
+        { "type": "p", "html": "复数主语完全可以用同样的句型，只要 名词 / 代词 都用复数主格：" },
+        {
+          "type": "table",
+          "headers": ["乌克兰语", "中文", "说明"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"uk-text\">Це <span class=\"uk-word\" data-def=\"书（复）\">книги</span>.</span>", "这是几本书。", "Це 后用复数主格"],
+            ["<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"老师们\">Вчителі</span> тут.</span>", "老师们在这里。", "复数主语 + тут"],
+            ["<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"看\">Ось</span> <span class=\"uk-word\" data-def=\"孩子们\">діти</span>.</span>", "看，孩子们。", "ось 后接主格指物 / 人"],
+            ["<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"我们\">Ми</span> — <span class=\"uk-word\" data-def=\"朋友们\">друзі</span>.</span>", "我们是朋友。", "代词主语 + 复数表语"],
+            ["<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"他们\">Вони</span> — <span class=\"uk-word\" data-def=\"学生们\">учні</span>.</span>", "他们是学生。", "вони + 复数表语"]
+          ]
+        },
+
+        { "type": "h3", "text": "指示代词在性数上要一致" },
+        { "type": "p", "html": "之前我们见过 цей / ця / це（这个）。变复数时全部归一为 <strong>ці</strong>，无论原性别：" },
+        {
+          "type": "table",
+          "headers": ["指示代词", "适用名词", "示例"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"uk-word\" data-def=\"这个（阳）\">цей</span>", "阳性单数", "<span class=\"uk-text\">цей <span class=\"uk-word\" data-def=\"傍晚\">вечір</span></span>（这个傍晚）"],
+            ["<span class=\"uk-word\" data-def=\"这个（阴）\">ця</span>", "阴性单数", "<span class=\"uk-text\">ця <span class=\"uk-word\" data-def=\"地址\">адреса</span></span>（这个地址）"],
+            ["<span class=\"uk-word\" data-def=\"这（中）\">це</span>", "中性单数", "<span class=\"uk-text\">це <span class=\"uk-word\" data-def=\"窗户\">вікно</span></span>（这扇窗）"],
+            ["<span class=\"uk-word\" data-def=\"这些（复）\">ці</span>", "三性复数", "<span class=\"uk-text\">ці <span class=\"uk-word\" data-def=\"书（复）\">книги</span></span>（这些书）<br><span class=\"uk-text\">ці <span class=\"uk-word\" data-def=\"窗户（复）\">вікна</span></span>（这些窗）<br><span class=\"uk-text\">ці <span class=\"uk-word\" data-def=\"老师们\">вчителі</span></span>（这些老师）"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>记忆提示：</strong>复数指示代词 <span class=\"uk-word\" data-def=\"这些\">ці</span> 不区分原名词的性别 —— 一进复数就只有这一个。同理「那些」是 <span class=\"uk-word\" data-def=\"那些\">ті</span>（也是单一形式）。" },
+
+        { "type": "h3", "text": "хто? / що? 复数也是同一个" },
+        { "type": "p", "html": "提问词在主格里只有两个：<span class=\"uk-word\" data-def=\"谁\">хто?</span>（有生命）/ <span class=\"uk-word\" data-def=\"什么\">що?</span>（无生命）。无论单数还是复数，提问词都不变。回答时根据语境用单数或复数主格。" },
+        {
+          "type": "table",
+          "headers": ["问句", "回答（单）", "回答（复）"],
+          "firstColWord": false,
+          "rows": [
+            ["<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"谁\">Хто</span> тут?</span>（谁在这里？）", "<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"老师（阳）\">Вчитель</span> тут.</span>", "<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"老师们\">Вчителі</span> тут.</span>"],
+            ["<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"什么\">Що</span> там?</span>（那里是什么？）", "<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"窗户\">Вікно</span> там.</span>", "<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"窗户（复）\">Вікна</span> там.</span>"]
+          ]
+        },
+
+        { "type": "h3", "text": "中文母语者的常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要把 「Це」 当成「这个」配名词</strong>。Це 是「这是…」的句首独立结构，所有性别名词都接在它后面：<span class=\"uk-text\">Це <span class=\"uk-word\" data-def=\"桌子\">стіл</span>.</span>（阳）/ <span class=\"uk-text\">Це <span class=\"uk-word\" data-def=\"书\">книга</span>.</span>（阴）/ <span class=\"uk-text\">Це <span class=\"uk-word\" data-def=\"窗户\">вікно</span>.</span>（中）/ <span class=\"uk-text\">Це <span class=\"uk-word\" data-def=\"孩子们\">діти</span>.</span>（复）。<strong>「这个 + 名词」</strong>才需要按性别选 цей / ця / це / ці。</li><li><strong>「主语 — 名词」中两端都用主格</strong>，不能因为表语在「是」的右边就以为它是宾语。比较：<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"她\">Вона</span> — <span class=\"uk-word\" data-def=\"医生\">лікар</span>.</span>（她是医生。两端都是主格）vs <span class=\"uk-text\"><span class=\"uk-word\" data-def=\"她\">Вона</span> любить <span class=\"uk-word\" data-def=\"医生（宾）\">лікаря</span>.</span>（她爱医生。这里 лікаря 才是宾格 —— 明天复盘）。</li><li><strong>动词的主语必须是主格</strong>。中文里说「我读书」三个词都不变；乌克兰语里「我」「读」用主格 / 主格变位形式，但「书」要变成<strong>宾格</strong>：<span class=\"uk-text\"><span class=\"uk-word\" data-def=\"我\">Я</span> читаю <span class=\"uk-word\" data-def=\"书（宾）\">книгу</span>.</span></li></ol>" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "「Це + 主格」混合三性 + 复数",
+          "items": [
+            { "text": "Це банк.", "translation": "这是银行。（阳）" },
+            { "text": "Це адреса.", "translation": "这是地址。（阴）" },
+            { "text": "Це піаніно.", "translation": "这是钢琴。（中性，不变外来词）" },
+            { "text": "Це бутерброди.", "translation": "这是几个三明治。（阳复）" },
+            { "text": "Це актриси.", "translation": "这是几位女演员。（阴复）" },
+            { "text": "Це горла.", "translation": "这是几个喉咙。（中复，少用，但语法正确）" }
+          ]
+        },
+        {
+          "heading": "「主语 — 名词」 + 代词主语",
+          "items": [
+            { "text": "Тато — викладач.", "translation": "爸爸是讲师。" },
+            { "text": "Дідусь — лікар.", "translation": "爷爷是医生。" },
+            { "text": "Жінка — медсестра.", "translation": "这位女性是护士。" },
+            { "text": "Ми — вегетаріанці.", "translation": "我们是素食主义者。" },
+            { "text": "Вони — учні.", "translation": "他们是学生。" },
+            { "text": "Я — актор.", "translation": "我是演员。" }
+          ]
+        },
+        {
+          "heading": "ось / це 引导 + 复数主语",
+          "items": [
+            { "text": "Ось вчителі.", "translation": "看，老师们。" },
+            { "text": "Ось велосипед.", "translation": "看，自行车。" },
+            { "text": "Ось сини.", "translation": "看，儿子们。" },
+            { "text": "Діти тут, а батьки там.", "translation": "孩子们在这里，父母们在那里。" },
+            { "text": "Хто там? — Це продавці.", "translation": "那是谁？— 是售货员们。" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：找出主语（10题）",
+          "instruction": "在下面每个句子中，找出充当主语的词或词组。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师们\">Вчителі</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["вчителі", "тут", "це"],
+              "answer": "вчителі",
+              "explanation": "复数主语 → 仍然是主格。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"看\">Ось</span> <span class=\"uk-word\" data-def=\"红菜汤\">борщ</span>.",
+              "options": ["ось", "борщ", "没有主语"],
+              "answer": "борщ",
+              "explanation": "ось 是引导词，「看」；borscht 是后面的主格名词 = 主语 / 被介绍的对象。",
+              "hints": ["ось 不是名词", "看后面接什么"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"我\">Я</span> — <span class=\"uk-word\" data-def=\"讲师\">викладач</span>.",
+              "options": ["я", "викладач", "—"],
+              "answer": "я",
+              "explanation": "「主语 — 表语」中，左边的 я 是主语；викладач 是表语（也用主格）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"孩子们\">Діти</span> <span class=\"uk-word\" data-def=\"在那里\">там</span>.",
+              "options": ["діти", "там", "це"],
+              "answer": "діти",
+              "explanation": "діти（孩子们）是主语，不规则复数。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"这是\">Це</span> <span class=\"uk-word\" data-def=\"音乐\">музика</span>.",
+              "options": ["це", "музика", "都是主语"],
+              "answer": "музика",
+              "explanation": "Це 是「这是」结构的引导词，музика 才是真正的主语 / 被介绍的对象。",
+              "hints": ["Це 是「这是」，不是「这个」"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"售货员们\">Продавці</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>, <span class=\"uk-word\" data-def=\"而\">а</span> <span class=\"uk-word\" data-def=\"讲师\">викладач</span> <span class=\"uk-word\" data-def=\"在那里\">там</span>.",
+              "options": ["продавці", "продавці і викладач", "тут і там"],
+              "answer": "продавці і викладач",
+              "explanation": "复合句有两个并列主语：продавці（在这里）和 викладач（在那里）。",
+              "hints": ["а 是连词「而」，连接两个分句", "每个分句各有自己的主语"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"我们\">Ми</span> — <span class=\"uk-word\" data-def=\"朋友们\">друзі</span>.",
+              "options": ["ми", "друзі", "—"],
+              "answer": "ми",
+              "explanation": "ми 是主语；друзі 是表语（复数主格）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"自行车\">Велосипед</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>.",
+              "options": ["велосипед", "тут", "це"],
+              "answer": "велосипед",
+              "explanation": "велосипед 是主语，阳性辅音结尾的物品。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"谁\">Хто</span> <span class=\"uk-word\" data-def=\"在这里\">тут</span>?",
+              "options": ["хто", "тут", "省略了"],
+              "answer": "хто",
+              "explanation": "疑问句的主语就是疑问词 хто（谁）。",
+              "hints": ["疑问代词在主格中也充当主语"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"夜晚\">Ніч</span>, <span class=\"uk-word\" data-def=\"傍晚\">вечір</span> — <span class=\"uk-word\" data-def=\"这\">це</span> <span class=\"uk-word\" data-def=\"时间\">час</span> <span class=\"uk-word\" data-def=\"睡眠\">сну</span>.",
+              "options": ["ніч і вечір", "це", "час сну"],
+              "answer": "ніч і вечір",
+              "explanation": "复合主语：ніч（夜晚）+ вечір（傍晚）。це 在这里是「就是 / 也就是」的强调词，час сну 是表语。",
+              "hints": ["看左边的两个名词", "中间的 це 是连接的强调，不是主语"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：选指示代词 цей/ця/це/ці（8题）",
+          "instruction": "为下面的名词选择正确的指示代词「这个 / 这（中）/ 这些」。",
+          "questions": [
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"奶牛\">корова</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "ця",
+              "explanation": "корова 阴性单数 → ця。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"机场\">аеропорт</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "цей",
+              "explanation": "аеропорт 阳性辅音结尾 → цей。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"班卓琴\">банджо</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "це",
+              "explanation": "банджо 不变外来词 → 中性 → це。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"桌子（复）\">столи</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "ці",
+              "explanation": "复数 → 一律 ці，无论性别。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"夹克\">куртка</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "ця",
+              "explanation": "куртка 阴性 -а 结尾 → ця。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"星期日\">неділя</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "ця",
+              "explanation": "неділя 阴性 -я 结尾 → ця。",
+              "hints": ["看 -я 前面是辅音 → 阴性"]
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"地铁\">метро</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "це",
+              "explanation": "метро 不变外来词 → 中性 → це。"
+            },
+            {
+              "prompt": "____ <span class=\"uk-word\" data-def=\"售货员们\">продавці</span>",
+              "options": ["цей", "ця", "це", "ці"],
+              "answer": "ці",
+              "explanation": "продавці 是 продавець 的复数 → ці。",
+              "hints": ["飘忽元音 е 已消失 → -і 是复数标志"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 C：用人称代词作主语（5题）",
+          "instruction": "根据括号里的提示填入正确的人称代词主格（я / ти / він / вона / воно / ми / ви / вони）。",
+          "questions": [
+            {
+              "prompt": "____ — <span class=\"uk-word\" data-def=\"女演员\">актриса</span>. (我)",
+              "answer": "Я",
+              "accept": ["Я", "я"],
+              "explanation": "「我是女演员。」第一人称 → я。"
+            },
+            {
+              "prompt": "____ — <span class=\"uk-word\" data-def=\"演员（男）\">актор</span>. (他)",
+              "answer": "Він",
+              "accept": ["Він", "він"],
+              "explanation": "«他是演员。» актор 阳性 → він。"
+            },
+            {
+              "prompt": "____ — <span class=\"uk-word\" data-def=\"售货员\">продавець</span>. (你，单数非正式)",
+              "answer": "Ти",
+              "accept": ["Ти", "ти"],
+              "explanation": "「你是售货员。」非正式单数 → ти。"
+            },
+            {
+              "prompt": "____ — <span class=\"uk-word\" data-def=\"老师们\">вчителі</span>. (他们)",
+              "answer": "Вони",
+              "accept": ["Вони", "вони"],
+              "explanation": "「他们是老师。」复数第三人称 → вони。"
+            },
+            {
+              "prompt": "____ — <span class=\"uk-word\" data-def=\"医生\">лікар</span>. (她)",
+              "answer": "Вона",
+              "accept": ["Вона", "вона"],
+              "explanation": "「她是医生。」女性指代 → вона。注：лікар 在主格保持原形（这是头衔通用规则）。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：用主格补全句子（7题）",
+          "instruction": "根据括号里的中文提示，写出对应的乌克兰语主格名词（单数原形或复数主格）。",
+          "questions": [
+            {
+              "prompt": "Ось ____. (船)",
+              "answer": "корабель",
+              "accept": ["корабель", "Корабель"],
+              "explanation": "船 = корабель（阳性 ь 结尾，主格原形）。"
+            },
+            {
+              "prompt": "Це ____. (女孩)",
+              "answer": "дівчина",
+              "accept": ["дівчина", "Дівчина"],
+              "explanation": "女孩 = дівчина（阴性 -а 结尾）。"
+            },
+            {
+              "prompt": "____ тут. (孩子们)",
+              "answer": "Діти",
+              "accept": ["Діти", "діти"],
+              "explanation": "孩子们 = діти（дитина 的不规则复数）。"
+            },
+            {
+              "prompt": "Ось ____. (兔子们)",
+              "answer": "зайці",
+              "accept": ["зайці", "Зайці"],
+              "explanation": "兔子们 = зайці（заєць → зайці，飘忽元音 е 消失）。",
+              "hints": ["заєць 的复数会失去飘忽元音"]
+            },
+            {
+              "prompt": "Це ____. (椅子，单数)",
+              "answer": "стілець",
+              "accept": ["стілець", "Стілець"],
+              "explanation": "椅子（单）= стілець（阳性 -ець 结尾）。"
+            },
+            {
+              "prompt": "____ — лікар. (爷爷)",
+              "answer": "Дідусь",
+              "accept": ["Дідусь", "дідусь"],
+              "explanation": "爷爷 = дідусь（阳性 ь 结尾，作主语用主格原形）。"
+            },
+            {
+              "prompt": "Ось ____. (钢琴)",
+              "answer": "піаніно",
+              "accept": ["піаніно", "Піаніно"],
+              "explanation": "钢琴 = піаніно（不变外来词，永远是这个形式）。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：хто? 还是 що?（5题，含复数）",
+          "instruction": "判断下列名词在主格中应该用 хто?（谁）还是 що?（什么）来提问。",
+          "questions": [
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"老师们\">вчителі</span>",
+              "options": ["хто?", "що?"],
+              "answer": "хто?",
+              "explanation": "老师 = 人 → хто?（提问词不分单复数）。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"窗户（复）\">вікна</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "窗户 = 物 → що?。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"花\">квітка</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "植物 → 无生命 → що?。",
+              "hints": ["植物虽活但语法上无生命"]
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"兔子们\">зайці</span>",
+              "options": ["хто?", "що?"],
+              "answer": "хто?",
+              "explanation": "动物 = 有生命 → хто?。"
+            },
+            {
+              "prompt": "<span class=\"uk-word\" data-def=\"红菜汤\">борщ</span>",
+              "options": ["хто?", "що?"],
+              "answer": "що?",
+              "explanation": "汤是物 → що?。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>主格 = 字典原形</strong>，无论单数还是复数。Це / 名词 + тут / 主语 — 名词 / 动词主语 — 这 4 个位置统统用主格。</li><li><strong>复数指示代词 ці</strong>（这些）和 <strong>ті</strong>（那些）不区分性别，覆盖三性所有名词的复数。</li><li><strong>提问词 хто? / що? 单复数同形</strong>。回答的名词按语境选单数或复数主格。</li><li><strong>识别陷阱</strong>：Це 是「这是」（句首独立），不是「这个」；「主语 — 名词」结构两端都是主格，破折号代替了被省略的「是」。</li></ol><p><strong>下节预告：</strong>明天我们做<strong>宾格综合（无生命）</strong> —— 把第3周学过的「无生命阳性 = 主格」「阴性 а→у / я→ю / ь 不变」「中性 = 主格」三类规则混合训练。最难的「有生命阳性 + 飘忽元音」放到第6天专题攻克。</p>"
+    }
+  ]
+}

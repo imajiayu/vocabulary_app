@@ -1,0 +1,367 @@
+{
+  "title": "第4周 第6天 — 宾格难点：有生命阳性 + 飘忽元音",
+  "objective": "把第3周第4天的「有生命阳性宾格」做深度强化训练。重点：① 宾格 = 加 -а/-я（属格相同形式）；② 飘忽元音 8 兄弟（кота / пса / коня / учня / ведмедя / хлопця / продавця / зайця）的稳固记忆；③ 阴性 + 中性宾格的对照不再区分生命，仅阳性区分。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 有生命阳性宾格速查",
+      "blocks": [
+        { "type": "h3", "text": "核心规则：宾格 = 主格 + -а/-я（取决于词尾硬 / 软）" },
+        { "type": "p", "html": "和阴性 / 中性 / 无生命阳性截然不同 —— <strong>有生命阳性</strong>名词的宾格<strong>必须变形</strong>。规律是「加 -а 或 -я」：" },
+        {
+          "type": "table",
+          "headers": ["主格词尾", "宾格规则", "例词（主格 → 宾格）"],
+          "firstColWord": false,
+          "rows": [
+            ["硬辅音", "+ -а", "<span class=\"uk-word\" data-def=\"儿子（主）\">син</span> → <span class=\"uk-word\" data-def=\"儿子（宾）\">сина</span>"],
+            ["硬辅音", "+ -а", "<span class=\"uk-word\" data-def=\"医生（主）\">лікар</span> → <span class=\"uk-word\" data-def=\"医生（宾）\">лікаря</span>（р 是软辅音 → -я；注意 лікар 的 р 在变格时表现为软辅音）"],
+            ["硬辅音", "+ -а", "<span class=\"uk-word\" data-def=\"鸟（主）\">птах</span> → <span class=\"uk-word\" data-def=\"鸟（宾）\">птаха</span>"],
+            ["软辅音 ь / -й", "+ -я（ь 消失）", "<span class=\"uk-word\" data-def=\"马（主）\">кінь</span> → <span class=\"uk-word\" data-def=\"马（宾）\">коня</span>（ь 消失 + 加 -я + 飘忽 і → о）"],
+            ["软辅音 ь / -й", "+ -я（ь 消失）", "<span class=\"uk-word\" data-def=\"熊（主）\">ведмідь</span> → <span class=\"uk-word\" data-def=\"熊（宾）\">ведмедя</span>（ь 消失 + 加 -я + 飘忽 і → е）"],
+            ["-ець / -ень", "+ -я（ь 消失 + 飘忽 е 消失）", "<span class=\"uk-word\" data-def=\"学生（主）\">учень</span> → <span class=\"uk-word\" data-def=\"学生（宾）\">учня</span>"],
+            ["-ець / -ень", "+ -я（ь 消失 + 飘忽 е 消失）", "<span class=\"uk-word\" data-def=\"男孩（主）\">хлопець</span> → <span class=\"uk-word\" data-def=\"男孩（宾）\">хлопця</span>"],
+            ["-ець", "+ -я", "<span class=\"uk-word\" data-def=\"售货员（主）\">продавець</span> → <span class=\"uk-word\" data-def=\"售货员（宾）\">продавця</span>"],
+            ["-єць", "+ -я", "<span class=\"uk-word\" data-def=\"兔子（主）\">заєць</span> → <span class=\"uk-word\" data-def=\"兔子（宾）\">зайця</span>（飘忽 е + є → й）"],
+            ["飘忽 е（短词）", "е 消失 + 加 -а", "<span class=\"uk-word\" data-def=\"狗-雄（主）\">пес</span> → <span class=\"uk-word\" data-def=\"狗（宾）\">пса</span>"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>判断硬还是软：</strong>词尾是 ь 或 -й → 加 -я；词尾是普通辅音 → 加 -а。例外：<span class=\"uk-word\" data-def=\"医生\">лікар</span> 等几个 -р 结尾的词在变格时表现为软辅音，宾格 → -я（лікаря）。" },
+
+        { "type": "h3", "text": "飘忽元音的「8 兄弟」 — 必背清单" },
+        { "type": "p", "html": "下面这 8 个高频有生命阳性词都涉及飘忽元音。请反复读、反复写，让肌肉记忆形成。" },
+        {
+          "type": "grammar-box",
+          "html": "<ol><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"猫（主）\">кіт</span> → <span class=\"uk-word\" data-def=\"猫（宾）\">кота</span></span> — 飘忽 і → о。<br><span class=\"uk-text\">Я люблю кота.</span>（我喜欢猫。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"狗-雄（主）\">пес</span> → <span class=\"uk-word\" data-def=\"狗（宾）\">пса</span></span> — 飘忽 е 消失。<br><span class=\"uk-text\">Я бачу пса.</span>（我看见狗。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"马（主）\">кінь</span> → <span class=\"uk-word\" data-def=\"马（宾）\">коня</span></span> — ь 消失 + 飘忽 і → о。<br><span class=\"uk-text\">Я люблю коня.</span>（我喜欢马。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"学生（主）\">учень</span> → <span class=\"uk-word\" data-def=\"学生（宾）\">учня</span></span> — ь 消失 + 飘忽 е 消失。<br><span class=\"uk-text\">Я бачу учня.</span>（我看见学生。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"熊（主）\">ведмідь</span> → <span class=\"uk-word\" data-def=\"熊（宾）\">ведмедя</span></span> — ь 消失 + 飘忽 і → е。<br><span class=\"uk-text\">Я бачу ведмедя.</span>（我看见熊。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"男孩（主）\">хлопець</span> → <span class=\"uk-word\" data-def=\"男孩（宾）\">хлопця</span></span> — ь 消失 + 飘忽 е 消失。<br><span class=\"uk-text\">Я бачу хлопця.</span>（我看见男孩。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"售货员（主）\">продавець</span> → <span class=\"uk-word\" data-def=\"售货员（宾）\">продавця</span></span> — ь 消失 + 飘忽 е 消失。<br><span class=\"uk-text\">Я бачу продавця.</span>（我看见售货员。）</li><li><span class=\"uk-text\"><span class=\"uk-word\" data-def=\"兔子（主）\">заєць</span> → <span class=\"uk-word\" data-def=\"兔子（宾）\">зайця</span></span> — ь 消失 + 飘忽 е 消失 + є → й。<br><span class=\"uk-text\">Я бачу зайця.</span>（我看见兔子。）</li></ol>"
+        },
+        { "type": "note", "html": "<strong>注意：</strong>本周 d1 词汇里的 <span class=\"uk-word\" data-def=\"椅子\">стілець</span>、<span class=\"uk-word\" data-def=\"手指\">палець</span> 也是 -ець 结尾、有飘忽元音的词，但它们是<strong>无生命</strong>，所以宾格 = 主格（不变）：<span class=\"uk-text\">Я купую <span class=\"uk-word\" data-def=\"椅子（宾，无生命=主）\">стілець</span>.</span>。飘忽元音只在变复数时显现：стільці / пальці。" },
+
+        { "type": "h3", "text": "对比：有生命 vs 无生命阳性的宾格" },
+        {
+          "type": "table",
+          "headers": ["主格", "类别", "宾格", "示例句"],
+          "firstColWord": true,
+          "rows": [
+            ["стілець", "无生命", "<span class=\"uk-word\" data-def=\"椅子（宾，无生命）\">стілець</span>", "<span class=\"uk-text\">Я купую стілець.</span>"],
+            ["хлопець", "有生命", "<span class=\"uk-word\" data-def=\"男孩（宾）\">хлопця</span>", "<span class=\"uk-text\">Я бачу хлопця.</span>"],
+            ["палець", "无生命", "<span class=\"uk-word\" data-def=\"手指（宾，无生命）\">палець</span>", "<span class=\"uk-text\">Я бачу палець.</span>"],
+            ["заєць", "有生命", "<span class=\"uk-word\" data-def=\"兔子（宾）\">зайця</span>", "<span class=\"uk-text\">Я бачу зайця.</span>"],
+            ["велосипед", "无生命", "<span class=\"uk-word\" data-def=\"自行车（宾，无生命）\">велосипед</span>", "<span class=\"uk-text\">Я купую велосипед.</span>"],
+            ["продавець", "有生命", "<span class=\"uk-word\" data-def=\"售货员（宾）\">продавця</span>", "<span class=\"uk-text\">Я бачу продавця.</span>"]
+          ]
+        },
+        { "type": "tip", "html": "<strong>判断技巧：</strong>看到 -ець / -ень 结尾的阳性词，<strong>先判断有生命 / 无生命</strong>，再决定宾格变不变。指人 / 动物 → 变（去 ь，去 е，加 я）；物品 → 不变。" },
+
+        { "type": "h3", "text": "中文母语者的常见误区" },
+        { "type": "error-warn", "html": "<ol><li><strong>不要把无生命阳性也加 -а</strong>。书 / 自行车 / 桌子等物品的宾格仍然 = 主格。<br>错误：<span class=\"uk-text\">Я купую велосипеда.</span>（错）→ 正确：<span class=\"uk-text\">Я купую <span class=\"uk-word\" data-def=\"自行车（宾）\">велосипед</span>.</span></li><li><strong>不要把阴性也按有生命加 -а</strong>。阴性宾格永远是 -у/-ю/不变（不分生命），不要被「这是个人」干扰。<br>错误：<span class=\"uk-text\">Я люблю медсестра.</span>（错）→ 正确：<span class=\"uk-text\">Я люблю <span class=\"uk-word\" data-def=\"护士（宾）\">медсестру</span>.</span></li><li><strong>飘忽元音必须真的「飘走」</strong>。不能保留：<br>错误：<span class=\"uk-text\">Я бачу ученя.</span>（错）→ 正确：<span class=\"uk-text\">Я бачу <span class=\"uk-word\" data-def=\"学生（宾）\">учня</span>.</span><br>错误：<span class=\"uk-text\">Я бачу ведміддя.</span>（错）→ 正确：<span class=\"uk-text\">Я бачу <span class=\"uk-word\" data-def=\"熊（宾）\">ведмедя</span>.</span></li></ol>" }
+      ]
+    },
+
+    {
+      "type": "examples",
+      "heading": "2. 例句",
+      "groups": [
+        {
+          "heading": "飘忽元音 8 兄弟（必读）",
+          "items": [
+            { "text": "Я люблю кота.", "translation": "我喜欢猫。" },
+            { "text": "Я бачу пса.", "translation": "我看见狗。" },
+            { "text": "Я люблю коня.", "translation": "我喜欢马。" },
+            { "text": "Я бачу учня.", "translation": "我看见学生。" },
+            { "text": "Я бачу ведмедя.", "translation": "我看见熊。" },
+            { "text": "Я бачу хлопця.", "translation": "我看见男孩。" },
+            { "text": "Я бачу продавця.", "translation": "我看见售货员。" },
+            { "text": "Я бачу зайця.", "translation": "我看见兔子。" }
+          ]
+        },
+        {
+          "heading": "其他有生命阳性宾格",
+          "items": [
+            { "text": "Я люблю сина.", "translation": "我爱儿子。（син → сина）" },
+            { "text": "Я бачу лікаря.", "translation": "我看见医生。（лікар → лікаря）" },
+            { "text": "Я бачу птаха.", "translation": "我看见鸟。（птах → птаха）" },
+            { "text": "Я люблю актора.", "translation": "我喜欢这位演员。（актор → актора）" },
+            { "text": "Я бачу викладача.", "translation": "我看见讲师。（викладач → викладача）" },
+            { "text": "Я люблю дідуся.", "translation": "我爱爷爷。（дідусь → дідуся，ь → -я）" }
+          ]
+        },
+        {
+          "heading": "对比无生命（不变）",
+          "items": [
+            { "text": "Я купую велосипед.", "translation": "我买自行车。（无生命阳性，不变）" },
+            { "text": "Я купую стілець.", "translation": "我买椅子。（-ець 结尾但无生命，不变）" },
+            { "text": "Я бачу палець.", "translation": "我看见手指。（无生命，不变）" },
+            { "text": "Я бачу банк.", "translation": "我看见银行。（无生命，不变）" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "exercises",
+      "heading": "3. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习 A：飘忽元音 8 兄弟（10题）",
+          "instruction": "下面 10 题专门训练 8 个飘忽元音的有生命阳性宾格，请选出正确形式。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____ (кіт).",
+              "options": ["кіт", "кота", "коту"],
+              "answer": "кота",
+              "explanation": "кіт → кота（飘忽 і → о，加 -а）。"
+            },
+            {
+              "prompt": "Я бачу ____ (пес).",
+              "options": ["пес", "песа", "пса"],
+              "answer": "пса",
+              "explanation": "пес → пса（飘忽 е 消失）。"
+            },
+            {
+              "prompt": "Я люблю ____ (кінь).",
+              "options": ["кіня", "коня", "кінь"],
+              "answer": "коня",
+              "explanation": "кінь → коня（ь 消失 + 飘忽 і → о + 加 -я）。",
+              "hints": ["ь 消失，飘忽元音变 о"]
+            },
+            {
+              "prompt": "Я бачу ____ (учень).",
+              "options": ["учня", "ученя", "учень"],
+              "answer": "учня",
+              "explanation": "учень → учня（ь 消失 + 飘忽 е 消失 + 加 -я）。"
+            },
+            {
+              "prompt": "Я бачу ____ (ведмідь).",
+              "options": ["ведміда", "ведмедя", "ведмідю"],
+              "answer": "ведмедя",
+              "explanation": "ведмідь → ведмедя（ь 消失 + 飘忽 і → е + 加 -я）。",
+              "hints": ["飘忽元音 і 在变格时变 е"]
+            },
+            {
+              "prompt": "Я бачу ____ (хлопець).",
+              "options": ["хлопеца", "хлопця", "хлопець"],
+              "answer": "хлопця",
+              "explanation": "хлопець → хлопця（ь 消失 + 飘忽 е 消失 + 加 -я）。"
+            },
+            {
+              "prompt": "Я бачу ____ (продавець).",
+              "options": ["продавца", "продавця", "продавцю"],
+              "answer": "продавця",
+              "explanation": "продавець → продавця。同 хлопець 的变化模式。"
+            },
+            {
+              "prompt": "Я бачу ____ (заєць).",
+              "options": ["заєця", "зайця", "зайця"],
+              "answer": "зайця",
+              "explanation": "заєць → зайця（ь 消失 + 飘忽 е 消失 + є → й + 加 -я）。",
+              "hints": ["最复杂的一个，є 变 й"]
+            },
+            {
+              "prompt": "Я люблю ____ (син).",
+              "options": ["сину", "сина", "син"],
+              "answer": "сина",
+              "explanation": "син → сина（普通硬辅音 + -а）。"
+            },
+            {
+              "prompt": "Я бачу ____ (лікар).",
+              "options": ["лікар", "лікару", "лікаря"],
+              "answer": "лікаря",
+              "explanation": "лікар → лікаря（р 在变格时是软辅音 → 加 -я）。",
+              "hints": ["лікар 是软辅音 -р 结尾的特例"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 B：有生命 vs 无生命对比（6题）",
+          "instruction": "下面每题给出一个 -ець / -ень / -ір 等容易混淆的词，请选出正确的宾格形式。",
+          "questions": [
+            {
+              "prompt": "Я купую ____ (стілець).",
+              "options": ["стілець", "стільця", "стільцю"],
+              "answer": "стілець",
+              "explanation": "椅子 = 无生命 → 宾格 = 主格 = стілець。",
+              "hints": ["椅子是物品，无生命"]
+            },
+            {
+              "prompt": "Я бачу ____ (хлопець).",
+              "options": ["хлопець", "хлопця", "хлопцю"],
+              "answer": "хлопця",
+              "explanation": "男孩 = 有生命 → 宾格变化 → хлопця。"
+            },
+            {
+              "prompt": "Я бачу ____ (палець).",
+              "options": ["палець", "пальця", "палцу"],
+              "answer": "палець",
+              "explanation": "手指 = 无生命 → 宾格 = 主格 = палець。"
+            },
+            {
+              "prompt": "Я бачу ____ (заєць).",
+              "options": ["заєць", "зайця", "заєця"],
+              "answer": "зайця",
+              "explanation": "兔子 = 动物 = 有生命 → 宾格 → зайця。"
+            },
+            {
+              "prompt": "Я купую ____ (вечір).",
+              "options": ["вечір", "вечора", "вечеря"],
+              "answer": "вечір",
+              "explanation": "傍晚 = 抽象 / 无生命 → 宾格 = 主格 = вечір。",
+              "hints": ["вечір 不是人或动物"]
+            },
+            {
+              "prompt": "Я бачу ____ (звір).",
+              "options": ["звір", "звіра", "звіря"],
+              "answer": "звіра",
+              "explanation": "野兽 = 动物 = 有生命 → 加 -а → звіра。",
+              "hints": ["звір 是 ь 类阳性吗？看 d1 — 它是普通 -р 阳性，宾格 -а"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 C：写出有生命阳性宾格（8题）",
+          "instruction": "把括号里的有生命阳性名词改成正确的宾格形式。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____. (爸爸 — тато)",
+              "answer": "тата",
+              "accept": ["тата", "Тата"],
+              "explanation": "тато → тата。-о 结尾的阳性特例：宾格 -о → -а。",
+              "hints": ["-о 结尾的男性人物词宾格也是变形的"]
+            },
+            {
+              "prompt": "Я бачу ____. (法官 — суддя)",
+              "answer": "суддю",
+              "accept": ["суддю", "Суддю"],
+              "explanation": "суддя → суддю。-я 结尾的阳性特例：宾格 -я → -ю（保持「软」）。"
+            },
+            {
+              "prompt": "Я бачу ____. (邻居 — сусід)",
+              "answer": "сусіда",
+              "accept": ["сусіда", "Сусіда"],
+              "explanation": "сусід → сусіда。普通硬辅音 + -а。"
+            },
+            {
+              "prompt": "Я бачу ____. (老师 — вчитель)",
+              "answer": "вчителя",
+              "accept": ["вчителя", "Вчителя"],
+              "explanation": "вчитель → вчителя。ь 消失 + -я。"
+            },
+            {
+              "prompt": "Я люблю ____. (爷爷 — дідусь)",
+              "answer": "дідуся",
+              "accept": ["дідуся", "Дідуся"],
+              "explanation": "дідусь → дідуся。ь 消失 + -я。"
+            },
+            {
+              "prompt": "Я бачу ____. (狮子 — лев)",
+              "answer": "лева",
+              "accept": ["лева", "Лева"],
+              "explanation": "лев → лева。普通硬辅音 + -а。"
+            },
+            {
+              "prompt": "Я бачу ____. (兔子 — кролик)",
+              "answer": "кролика",
+              "accept": ["кролика", "Кролика"],
+              "explanation": "кролик → кролика。普通硬辅音 + -а。"
+            },
+            {
+              "prompt": "Я бачу ____. (演员 — актор)",
+              "answer": "актора",
+              "accept": ["актора", "Актора"],
+              "explanation": "актор → актора。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习 D：综合宾格填空（5题）",
+          "instruction": "根据括号提示填入正确的宾格 —— 注意分辨阴性 / 中性 / 无生命阳性 / 有生命阳性。",
+          "questions": [
+            {
+              "prompt": "Я люблю ____. (狗 — пес)",
+              "answer": "пса",
+              "accept": ["пса", "Пса"],
+              "explanation": "пес 有生命阳性 → пса（飘忽 е 消失）。"
+            },
+            {
+              "prompt": "Я бачу ____. (女孩 — дівчина)",
+              "answer": "дівчину",
+              "accept": ["дівчину", "Дівчину"],
+              "explanation": "дівчина 阴性 -а → -у（不分生命）。"
+            },
+            {
+              "prompt": "Я купую ____. (椅子 — стілець)",
+              "answer": "стілець",
+              "accept": ["стілець", "Стілець"],
+              "explanation": "стілець 无生命阳性 → 宾格 = 主格。"
+            },
+            {
+              "prompt": "Я бачу ____. (孩子 — дитина)",
+              "answer": "дитину",
+              "accept": ["дитину", "Дитину"],
+              "explanation": "дитина 阴性 -а → -у（即使是人，阴性仍按 -у 规则）。",
+              "hints": ["阴性宾格不分生命"]
+            },
+            {
+              "prompt": "Я люблю ____. (太阳 — сонце)",
+              "answer": "сонце",
+              "accept": ["сонце", "Сонце"],
+              "explanation": "сонце 中性无生命 → 宾格 = 主格。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习 E：判断对错（6题）",
+          "instruction": "判断下面的句子是否合乎语法。错误的请记下正确写法。",
+          "questions": [
+            {
+              "prompt": "Я бачу учня.",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "учень 有生命 → 宾格 учня（ь 消失 + 飘忽 е 消失 + -я），正确。"
+            },
+            {
+              "prompt": "Я купую стільця.",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "стілець 是无生命 → 宾格 = 主格 → стілець，不是 стільця。"
+            },
+            {
+              "prompt": "Я люблю кота.",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "猫是有生命 → кіт → кота，正确。"
+            },
+            {
+              "prompt": "Я бачу хлопеця.",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "хлопець 的飘忽 е 必须消失 → хлопця，不是 хлопеця。",
+              "hints": ["飘忽元音必须真的飘走"]
+            },
+            {
+              "prompt": "Я бачу медсестра.",
+              "options": ["正确", "错误"],
+              "answer": "错误",
+              "explanation": "医师 / 护士的女性形式 медсестра 是阴性 → 宾格 -а → -у → медсестру。阴性宾格不分生命。"
+            },
+            {
+              "prompt": "Я бачу зайця.",
+              "options": ["正确", "错误"],
+              "answer": "正确",
+              "explanation": "兔子是动物 = 有生命 → заєць → зайця（最复杂的飘忽元音变化）。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "summary",
+      "heading": "4. 今日小结",
+      "html": "<p><strong>今天的核心收获：</strong></p><ol><li><strong>有生命阳性宾格 = 加 -а / -я</strong>。硬辅音 → -а（син → сина）；ь / -й → -я（кінь → коня，учень → учня）。</li><li><strong>飘忽元音 8 兄弟</strong>：кота / пса / коня / учня / ведмедя / хлопця / продавця / зайця —— 这是必须能瞬间反应的 8 个高频形式。</li><li><strong>无生命 -ець / -ір 不变</strong>：стілець / палець / вечір 是无生命 → 宾格 = 主格。<strong>看到 -ець / -ень 不要条件反射地变形 —— 先判断有生命 / 无生命。</strong></li><li><strong>阴性永远不分生命</strong>：жінка / медсестра / дитина 都按 -а → -у 处理，不要因为是人就加 -а。</li></ol><p><strong>下节预告：</strong>明天是<strong>第4周复习日 / 期中测试</strong>。把整个 4 周（性 + 数 + 主格 + 宾格）做一次三合一综合测验，检验学习成果。从第5周起进入<strong>动词现在时变位</strong>，乌克兰语终于可以「动起来」。</p>"
+    }
+  ]
+}
