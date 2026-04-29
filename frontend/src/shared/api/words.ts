@@ -561,6 +561,8 @@ export class WordsApi {
   static async getWordsSinceDirect(sinceIso: string): Promise<Word[]> {
     const userId = getCurrentUserId()
 
+    // 按 (updated_at, id) 排序：updated_at 单独不稳定，多行同 microsecond（批量导入 / RPC / 触发器并发）
+    // 时 offset 分页会漏行或重复行；id 作 tiebreaker 使分页边界稳定
     const allRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
       supabase
         .from('words')
@@ -568,6 +570,7 @@ export class WordsApi {
         .eq('user_id', userId)
         .gt('updated_at', sinceIso)
         .order('updated_at', { ascending: true })
+        .order('id', { ascending: true })
         .range(from, to)
     )
 

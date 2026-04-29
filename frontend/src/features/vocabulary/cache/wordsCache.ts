@@ -8,6 +8,12 @@
  *
  * 跨账号天然隔离：cache key 含 userId
  * QuotaExceededError 降级：写入失败时清除缓存继续运行（下次进页面照常全量加载）
+ *
+ * 不变性约束：
+ * - updated_at 由 words 表的 BEFORE UPDATE 触发器维护，仅追踪 words 表自身的变更
+ * - words_relations 表的写入（关系生成 / 删除）不会冒泡到 words.updated_at，
+ *   因此本缓存不保证 related_words 的新鲜度。需要最新关系数据的页面应直接查询，
+ *   或显式失效缓存（关系生成成功后调用 clear()）
  */
 import type { Word } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'

@@ -419,16 +419,23 @@ const applyPendingDirty = (snapshot: Word[]): Word[] => {
     return result;
 };
 
+// 服务端 ORDER BY word 用 PG default collation；前端用 locale-aware Collator 与之对齐
+// （JS 默认 < 比较按 UTF-16 code unit，对 Cyrillic / 带变音字符与 PG 行为不一致）
+const wordCollator = new Intl.Collator(undefined, { sensitivity: 'variant' })
+
 // 后台校验本地缓存指纹，按差异选择"什么都不做 / 增量 / 全量重拉"
+// 全程在 await 边界检查 shouldStopLoading：用户离开页面后立即放弃，不写缓存
 const reconcileWithRemote = async (userId: string, localFp: wordsCache.WordsFingerprint) => {
     pendingDirty = new Map();
     try {
         const remote = await api.words.getWordsFingerprintDirect();
+        if (shouldStopLoading.value) return;
         if (wordsCache.fingerprintEqual(localFp, remote)) return;
 
         // 全量重拉：先在本地数组里收集完，再 swap，避免 UI 闪烁
         const fullReload = async () => {
             const firstResp = await api.words.getWordsPaginatedDirect(batchSize.value, 0);
+            if (shouldStopLoading.value) return;
             const collected: Word[] = [...firstResp.words];
 
             if (firstResp.has_more) {
@@ -440,12 +447,14 @@ const reconcileWithRemote = async (userId: string, localFp: wordsCache.WordsFing
                 await concurrentMap(
                     offsets,
                     async (offset) => {
+                        if (shouldStopLoading.value) return;
                         const r = await api.words.getWordsPaginatedDirect(batchSize.value, offset);
                         slots[(offset - batchSize.value) / batchSize.value] = r.words;
                     },
                     4,
                     { retries: 2, retryDelay: 500 },
                 );
+                if (shouldStopLoading.value) return;
                 for (const s of slots) if (s) collected.push(...s);
             }
 
@@ -466,10 +475,13 @@ const reconcileWithRemote = async (userId: string, localFp: wordsCache.WordsFing
         if (
             localFp.count === remote.count &&
             remote.maxUpdatedAt &&
-            (!localFp.maxUpdatedAt || remote.maxUpdatedAt > localFp.maxUpdatedAt)
+            localFp.maxUpdatedAt &&
+            remote.maxUpdatedAt > localFp.maxUpdatedAt
         ) {
-            const since = localFp.maxUpdatedAt ?? '1970-01-01T00:00:00Z';
-            const sinceWords = await api.words.getWordsSinceDirect(since);
+            // localFp.maxUpdatedAt 在此分支必非空：count 相等 && remote.maxUpdatedAt 非空 → count > 0
+            // → 本地至少有一条 word，updated_at NOT NULL → localFp.maxUpdatedAt 非空
+            const sinceWords = await api.words.getWordsSinceDirect(localFp.maxUpdatedAt);
+            if (shouldStopLoading.value) return;
             if (sinceWords.length === 0) {
                 // count 相同但 maxUpdatedAt 不一致却拉不到 since 之后的更新 → 异常，全量兜底
                 return fullReload();
@@ -492,9 +504,9 @@ const reconcileWithRemote = async (userId: string, localFp: wordsCache.WordsFing
                     inserted = true;
                 }
             }
-            // 与服务端 ORDER BY word 对齐（用 < 与 PG C/default collation 在 ASCII 上一致；中文等字符差异可忽略）
+            // 与服务端 ORDER BY word 对齐（locale-aware Collator，处理 Cyrillic / diacritic）
             if (inserted) {
-                words.value.sort((a, b) => a.word < b.word ? -1 : a.word > b.word ? 1 : 0);
+                words.value.sort((a, b) => wordCollator.compare(a.word, b.word));
                 totalWords.value = words.value.length;
                 loadedWords.value = words.value.length;
             }
