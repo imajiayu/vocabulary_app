@@ -119,11 +119,14 @@ export function parseAiReviewResponse(raw: string): AiReviewQuestion[] {
 }
 
 /**
- * 端到端：生成并保存指定 UTC 日期的 AI 复习 session。
- * 会覆盖同日已存在的 session。
+ * 端到端：生成并保存指定 UTC 日期 + source 的 AI 复习 session。
+ * 会覆盖同 (date, source) 已存在的 session。
  */
-export async function generateAiReviewSession(date: string): Promise<AiReviewSession> {
-  const dailyRows = await AiReviewApi.getDailyReviewWords(date)
+export async function generateAiReviewSession(
+  date: string,
+  source: string,
+): Promise<AiReviewSession> {
+  const dailyRows = await AiReviewApi.getDailyReviewWords(date, source)
   if (dailyRows.length === 0) {
     throw new Error('当天没有复习记录，无法生成 AI 复习')
   }
@@ -143,5 +146,5 @@ export async function generateAiReviewSession(date: string): Promise<AiReviewSes
   })
 
   const questions = parseAiReviewResponse(raw)
-  return AiReviewApi.upsertSession(date, wordIds, questions)
+  return AiReviewApi.upsertSession(date, source, wordIds, questions)
 }

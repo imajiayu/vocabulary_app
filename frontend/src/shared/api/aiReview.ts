@@ -20,6 +20,7 @@ export interface AiReviewSession {
   id: number
   user_id: string
   date: string
+  source: string
   word_ids: number[]
   questions: AiReviewQuestion[]
   created_at: string
@@ -38,14 +39,15 @@ export interface DailyReviewWordRow {
 }
 
 export class AiReviewApi {
-  /** 读取指定 UTC 日期的 session（不存在返回 null） */
-  static async getSession(date: string): Promise<AiReviewSession | null> {
+  /** 读取指定 UTC 日期 + source 的 session（不存在返回 null） */
+  static async getSession(date: string, source: string): Promise<AiReviewSession | null> {
     const userId = getCurrentUserId()
     const { data, error } = await supabase
       .from('ai_review_sessions')
       .select('*')
       .eq('user_id', userId)
       .eq('date', date)
+      .eq('source', source)
       .maybeSingle()
 
     if (error) throw new Error(`读取 AI 复习会话失败: ${error.message}`)
@@ -53,9 +55,10 @@ export class AiReviewApi {
     return data as AiReviewSession
   }
 
-  /** UPSERT：同一天的 session 直接覆盖 */
+  /** UPSERT：同一 (date, source) 的 session 直接覆盖 */
   static async upsertSession(
     date: string,
+    source: string,
     wordIds: number[],
     questions: AiReviewQuestion[],
   ): Promise<AiReviewSession> {
@@ -66,11 +69,12 @@ export class AiReviewApi {
         {
           user_id: userId,
           date,
+          source,
           word_ids: wordIds,
           questions,
           updated_at: new Date().toISOString(),
         },
-        { onConflict: 'user_id,date' },
+        { onConflict: 'user_id,date,source' },
       )
       .select()
       .single()
@@ -79,13 +83,14 @@ export class AiReviewApi {
     return data as AiReviewSession
   }
 
-  /** 列出 [start, end] 区间内有 session 的日期（UTC） */
-  static async listSessionDates(startDate: string, endDate: string): Promise<string[]> {
+  /** 列出 [start, end] 区间内当前 source 已生成 session 的 UTC 日期 */
+  static async listSessionDates(startDate: string, endDate: string, source: string): Promise<string[]> {
     const userId = getCurrentUserId()
     const { data, error } = await supabase
       .from('ai_review_sessions')
       .select('date')
       .eq('user_id', userId)
+      .eq('source', source)
       .gte('date', startDate)
       .lte('date', endDate)
 
@@ -93,8 +98,8 @@ export class AiReviewApi {
     return (data ?? []).map((row) => row.date as string)
   }
 
-  /** 列出 [start, end] 区间内有 review_history 的 UTC 日期（便于在日期栏打标） */
-  static async listHistoryDates(startDate: string, endDate: string): Promise<string[]> {
+  /** 列出 [start, end] 区间内当前 source 有 review_history 的 UTC 日期（便于在日期栏打标） */
+  static async listHistoryDates(startDate: string, endDate: string, source: string): Promise<string[]> {
     const userId = getCurrentUserId()
     // PostgREST 的 gte/lte 作用在 timestamptz 上；转为 UTC 起止时刻
     const startTs = `${startDate}T00:00:00Z`
@@ -103,6 +108,7 @@ export class AiReviewApi {
       .from('review_history')
       .select('reviewed_at')
       .eq('user_id', userId)
+      .eq('source', source)
       .gte('reviewed_at', startTs)
       .lte('reviewed_at', endTs)
 
@@ -116,19 +122,20 @@ export class AiReviewApi {
   }
 
   /**
-   * 读取指定 UTC 日期用户做过的单词（聚合到 word_id）
+   * 读取指定 UTC 日期 + source 下用户做过的单词（聚合到 word_id）
    * 返回的 has_failure 标志用于前端排序（失败优先）
    */
-  static async getDailyReviewWords(date: string): Promise<DailyReviewWordRow[]> {
+  static async getDailyReviewWords(date: string, source: string): Promise<DailyReviewWordRow[]> {
     const userId = getCurrentUserId()
     const startTs = `${date}T00:00:00Z`
     const endTs = `${date}T23:59:59.999Z`
 
-    // 1) 取当天所有 review_history 条目
+    // 1) 取当天 + 当前 source 的所有 review_history 条目
     const { data: historyRows, error: histErr } = await supabase
       .from('review_history')
       .select('word_id, remembered')
       .eq('user_id', userId)
+      .eq('source', source)
       .gte('reviewed_at', startTs)
       .lte('reviewed_at', endTs)
 

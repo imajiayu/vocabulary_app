@@ -8,6 +8,7 @@
   >
     <template #topbar-center>
       <span class="page-title">AI 复习</span>
+      <span class="source-badge" :title="`当前来源：${currentSource || '加载中'}`">{{ currentSource || '—' }}</span>
     </template>
 
     <div class="rail-wrapper">
@@ -93,17 +94,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import PageLayout from '@/shared/components/layout/PageLayout.vue'
 import Loading from '@/shared/components/feedback/Loading.vue'
 import DateRail from '@/features/vocabulary/ai-review/DateRail.vue'
 import QuestionCard from '@/features/vocabulary/ai-review/QuestionCard.vue'
 import { AiReviewApi, type AiReviewSession } from '@/shared/api/aiReview'
 import { generateAiReviewSession } from '@/shared/services/aiReviewService'
-import { getUtcToday } from '@/shared/utils/date'
+import { getUtcToday, addDays } from '@/shared/utils/date'
+import { useSourceSelectionReadOnly } from '@/shared/composables/useSourceSelection'
 import { logger } from '@/shared/utils/logger'
 
 const log = logger.create('AiReviewPage')
+
+const { currentSource, initializeFromData: initSource } = useSourceSelectionReadOnly()
 
 const selectedDate = ref(getUtcToday())
 const session = ref<AiReviewSession | null>(null)
@@ -115,6 +119,10 @@ const sessionDatesSet = ref<Set<string>>(new Set())
 const historyDatesSet = ref<Set<string>>(new Set())
 const loadedRanges = ref<Array<[string, string]>>([])
 
+// DateRail mount 时会立即 emit 一次 needLoad；此时 currentSource 可能还在加载，
+// 缓存这次请求范围，等 source 就绪后补发。
+const pendingRange = ref<[string, string] | null>(null)
+
 const hasHistoryToday = computed(() => historyDatesSet.value.has(selectedDate.value))
 const historyWordCount = ref<number | null>(null)
 
@@ -123,12 +131,17 @@ function formatDateLabel(d: string): string {
 }
 
 async function loadRangeMeta(start: string, end: string) {
+  const src = currentSource.value
+  if (!src) {
+    pendingRange.value = [start, end]
+    return
+  }
   if (loadedRanges.value.some(([s, e]) => s === start && e === end)) return
   loadedRanges.value.push([start, end])
   try {
     const [sessions, histories] = await Promise.all([
-      AiReviewApi.listSessionDates(start, end),
-      AiReviewApi.listHistoryDates(start, end),
+      AiReviewApi.listSessionDates(start, end, src),
+      AiReviewApi.listHistoryDates(start, end, src),
     ])
     for (const d of sessions) sessionDatesSet.value.add(d)
     for (const d of histories) historyDatesSet.value.add(d)
@@ -138,18 +151,20 @@ async function loadRangeMeta(start: string, end: string) {
 }
 
 async function loadSessionFor(date: string) {
+  const src = currentSource.value
+  if (!src) return
   isLoading.value = true
   errorMsg.value = null
   try {
-    const [s] = await Promise.all([AiReviewApi.getSession(date)])
+    const s = await AiReviewApi.getSession(date, src)
     session.value = s
     if (!s) {
       if (!historyDatesSet.value.has(date)) {
-        const hs = await AiReviewApi.listHistoryDates(date, date)
+        const hs = await AiReviewApi.listHistoryDates(date, date, src)
         if (hs.length > 0) historyDatesSet.value.add(date)
       }
       if (historyDatesSet.value.has(date)) {
-        const rows = await AiReviewApi.getDailyReviewWords(date)
+        const rows = await AiReviewApi.getDailyReviewWords(date, src)
         historyWordCount.value = rows.length
       } else {
         historyWordCount.value = 0
@@ -166,11 +181,13 @@ async function loadSessionFor(date: string) {
 }
 
 async function generate() {
+  const src = currentSource.value
+  if (!src) return
   if (isGenerating.value) return
   isGenerating.value = true
   errorMsg.value = null
   try {
-    const s = await generateAiReviewSession(selectedDate.value)
+    const s = await generateAiReviewSession(selectedDate.value, src)
     session.value = s
     sessionDatesSet.value.add(selectedDate.value)
   } catch (e) {
@@ -185,9 +202,39 @@ async function regenerate() {
   await generate()
 }
 
+// 切 source 时重置全部状态并重新拉数据
+watch(currentSource, (src, prev) => {
+  if (!src) return
+  // 首次拿到 source：把 DateRail 已经 emit 的初始范围补发
+  if (!prev) {
+    if (pendingRange.value) {
+      const [s, e] = pendingRange.value
+      pendingRange.value = null
+      void loadRangeMeta(s, e)
+    }
+    void loadSessionFor(selectedDate.value)
+    return
+  }
+  // 切 source：清旧数据，重新拉
+  sessionDatesSet.value.clear()
+  historyDatesSet.value.clear()
+  loadedRanges.value = []
+  session.value = null
+  historyWordCount.value = null
+  errorMsg.value = null
+  // 重新覆盖 DateRail 当前可见的范围（默认近 30 天到 today）
+  const today = getUtcToday()
+  void loadRangeMeta(addDays(today, -29), today)
+  void loadSessionFor(selectedDate.value)
+})
+
 watch(selectedDate, (d) => {
   void loadSessionFor(d)
-}, { immediate: true })
+})
+
+onMounted(() => {
+  void initSource()
+})
 </script>
 
 <style scoped>
@@ -197,6 +244,23 @@ watch(selectedDate, (d) => {
   font-weight: 600;
   color: var(--primitive-ink-800);
   letter-spacing: 0.02em;
+}
+
+.source-badge {
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px 2px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--primitive-copper-600);
+  background: var(--primitive-paper-100);
+  border: 1px solid var(--primitive-copper-400);
+  border-radius: var(--radius-xs);
+  font-variant-caps: all-small-caps;
+  user-select: none;
 }
 
 .ai-review-content {
@@ -211,21 +275,6 @@ watch(selectedDate, (d) => {
   z-index: 3;
   margin-inline: calc(-1 * var(--space-2));
   padding-inline: var(--space-2);
-}
-.rail-wrapper::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -10px;
-  height: 10px;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(15, 23, 42, 0.06) 0%,
-    rgba(15, 23, 42, 0) 100%
-  );
-  opacity: 0.7;
 }
 
 /* ——— Body ——— */
