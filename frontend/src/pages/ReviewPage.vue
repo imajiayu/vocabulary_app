@@ -37,12 +37,8 @@
             <!-- 复习速度指示器（非lapse模式） -->
             <ReviewSpeedIndicator v-if="mode !== 'mode_lapse'" />
 
-            <!-- Lapse 模式：进度指示器（同一行） -->
-            <div v-if="mode === 'mode_lapse'" class="lapse-progress-inline">
-              <span class="lapse-progress-value" :class="{ negative: progress < 0 }">
-                {{ progress >= 0 ? '+' : '' }}{{ Math.round(progress) }}%
-              </span>
-            </div>
+            <!-- Lapse 模式：单词毕业速度 + 预估完成时间 -->
+            <LapseEtaIndicator v-if="mode === 'mode_lapse'" />
           </div>
         </div>
       </template>
@@ -144,6 +140,7 @@ import { BaseIcon } from '@/shared/components/base'
 import WordSideBar from '@/features/vocabulary/sidebar/WordSideBar.vue'
 import ReviewRightPanel from '@/features/vocabulary/review/ReviewRightPanel.vue'
 import ReviewSpeedIndicator from '@/features/vocabulary/review/ReviewSpeedIndicator.vue'
+import LapseEtaIndicator from '@/features/vocabulary/review/LapseEtaIndicator.vue'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
 import { useToast } from '@/shared/composables/useToast'
 import { provideReviewContext } from '@/features/vocabulary/review/context'
@@ -305,7 +302,6 @@ const {
   isCompleted,
   totalWords,
   currentIndex,
-  progress,
   wordResults,
   shuffle,
   globalIndex,
@@ -739,30 +735,6 @@ onUnmounted(() => {
   color: var(--color-text-secondary);
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   Lapse 进度指示器 - 内联紧凑设计
-   ══════════════════════════════════════════════════════════════════════════ */
-
-.lapse-progress-inline {
-  display: flex;
-  align-items: center;
-  padding: 0.25rem 0.625rem;
-  background: var(--primitive-paper-300);
-  border-radius: var(--radius-full);
-}
-
-.lapse-progress-value {
-  font-family: var(--font-data);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--primitive-olive-600);
-  letter-spacing: 0.02em;
-}
-
-.lapse-progress-value.negative {
-  color: var(--primitive-brick-600);
-}
-
 /* ── 进度计数器 ── */
 .progress-counter {
   display: flex;
@@ -1027,14 +999,6 @@ onUnmounted(() => {
   .badge {
     padding: 0.15rem 0.4rem;
     font-size: 0.6rem;
-  }
-
-  .lapse-progress-inline {
-    padding: 0.15rem 0.4rem;
-  }
-
-  .lapse-progress-value {
-    font-size: 0.65rem;
   }
 
   .progress-counter .current {

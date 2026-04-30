@@ -13,6 +13,9 @@ const GAP_SEQUENCE = [1, 3, 7, 15] as const
 export function useLapseSession() {
   const wordGapLevels = ref<Map<number, number>>(new Map())
   const graduatedCount = ref(0)
+  // 真实毕业计数：仅在 processLapseResult 升级到顶级时递增，用于驱动毕业速率指标
+  // graduatedCount 还会被 stopLapseWord / removeWordFromLapseSession 递增，会污染速率统计
+  const realGraduatedCount = ref(0)
   const initialWordCount = ref(0)
   const graduatedWords = ref<Word[]>([])
 
@@ -73,6 +76,7 @@ export function useLapseSession() {
 
     if (graduated) {
       graduatedCount.value++
+      realGraduatedCount.value++
       graduatedWords.value.push(word)
       wordGapLevels.value.delete(word.id)
       api.words.clearLapseDirect(word.id).catch(log.error)
@@ -124,6 +128,7 @@ export function useLapseSession() {
   const reset = () => {
     wordGapLevels.value = new Map()
     graduatedCount.value = 0
+    realGraduatedCount.value = 0
     initialWordCount.value = 0
     graduatedWords.value = []
     lastLapseResult.value = null
@@ -132,6 +137,7 @@ export function useLapseSession() {
   return {
     wordGapLevels,
     graduatedCount,
+    realGraduatedCount,
     initialWordCount,
     graduatedWords,
     lastLapseResult,

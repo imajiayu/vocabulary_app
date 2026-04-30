@@ -220,6 +220,7 @@ export const useReviewStore = defineStore('review', () => {
     initialWordCount: lapse.initialWordCount,
     wordGapLevels: lapse.wordGapLevels,
     graduatedCount: lapse.graduatedCount,
+    realGraduatedCount: lapse.realGraduatedCount,
     lastLapseResult: lapse.lastLapseResult,
 
     // 计算属性
