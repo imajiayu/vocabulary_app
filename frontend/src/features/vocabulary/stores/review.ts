@@ -169,6 +169,7 @@ export const useReviewStore = defineStore('review', () => {
     queue.initialOffset.value = 0
     result.reviewLoadsCache.value = null
     result.spellLoadsCache.value = null
+    lapse.reset()
     await queue.initializeShuffle()
     await queue.loadSettings()
     await loadWords(true)
@@ -181,6 +182,7 @@ export const useReviewStore = defineStore('review', () => {
   const restoreFromProgress = async (): Promise<boolean> => {
     result.reviewLoadsCache.value = null
     result.spellLoadsCache.value = null
+    lapse.reset()
 
     return queue.restoreFromProgress(
       mode,
@@ -221,6 +223,7 @@ export const useReviewStore = defineStore('review', () => {
     wordGapLevels: lapse.wordGapLevels,
     graduatedCount: lapse.graduatedCount,
     realGraduatedCount: lapse.realGraduatedCount,
+    totalCorrect: lapse.totalCorrect,
     lastLapseResult: lapse.lastLapseResult,
 
     // 计算属性

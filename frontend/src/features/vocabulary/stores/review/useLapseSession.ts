@@ -16,6 +16,10 @@ export function useLapseSession() {
   // 真实毕业计数：仅在 processLapseResult 升级到顶级时递增，用于驱动毕业速率指标
   // graduatedCount 还会被 stopLapseWord / removeWordFromLapseSession 递增，会污染速率统计
   const realGraduatedCount = ref(0)
+  // 有效推进次数：仅在 remembered=true 且 level 实际前进（含毕业）时 +1
+  // 与 remainingCorrect 同语义（Σ(maxLevel - level)），保证 ETA 分子分母一致
+  // 慢速答对（elapsedTime >= 4）不推进 level，故也不计入，避免 ETA 高估速率
+  const totalCorrect = ref(0)
   const initialWordCount = ref(0)
   const graduatedWords = ref<Word[]>([])
 
@@ -55,6 +59,7 @@ export function useLapseSession() {
     } else {
       const newLevel = elapsedTime >= 4 ? currentLevel : currentLevel + 1
       newLevelForResult = newLevel
+      if (newLevel > currentLevel) totalCorrect.value++
 
       if (newLevel >= GAP_SEQUENCE.length) {
         graduated = true
@@ -129,6 +134,7 @@ export function useLapseSession() {
     wordGapLevels.value = new Map()
     graduatedCount.value = 0
     realGraduatedCount.value = 0
+    totalCorrect.value = 0
     initialWordCount.value = 0
     graduatedWords.value = []
     lastLapseResult.value = null
@@ -138,6 +144,7 @@ export function useLapseSession() {
     wordGapLevels,
     graduatedCount,
     realGraduatedCount,
+    totalCorrect,
     initialWordCount,
     graduatedWords,
     lastLapseResult,
@@ -148,3 +155,5 @@ export function useLapseSession() {
     reset,
   }
 }
+
+export const LAPSE_GAP_SEQUENCE = GAP_SEQUENCE
