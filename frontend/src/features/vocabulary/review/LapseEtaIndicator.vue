@@ -22,11 +22,19 @@ const {
   totalCorrect,
   wordQueue,
   wordGapLevels,
+  lastLapseResult,
 } = storeToRefs(reviewStore)
+
+// 距离上次作答超过该阈值视为挂机，elapsed 暂停累加
+const IDLE_THRESHOLD_MS = 60_000
+const TICK_MS = 1000
 
 // 每秒主动 tick，让 elapsed / 速率 / ETA 即使无答题事件也能平滑刷新
 const now = ref(Date.now())
 const sessionStartTime = ref(0)
+const lastAnswerAt = ref(0)
+// 累计活跃秒数（已剔除挂机时间）— 直接用作 elapsedSeconds
+const activeSeconds = ref(0)
 let tickHandle: number | null = null
 
 // EMA 平滑 ETA，避免答错让 level 重置时 ETA 暴涨
@@ -37,10 +45,7 @@ const shouldDisplay = computed(() => {
   return mode.value === 'mode_lapse' && initialWordCount.value > 0
 })
 
-const elapsedSeconds = computed(() => {
-  if (sessionStartTime.value === 0) return 0
-  return Math.max(0, (now.value - sessionStartTime.value) / 1000)
-})
+const elapsedSeconds = computed(() => activeSeconds.value)
 
 // 队列中所有词剩余还需答对几次才能毕业（已毕业的词已从 queue 中移除，故不计入）
 const remainingCorrect = computed(() => {
@@ -108,8 +113,11 @@ const etaText = computed(() => {
 })
 
 const startSession = () => {
-  sessionStartTime.value = Date.now()
-  now.value = Date.now()
+  const t = Date.now()
+  sessionStartTime.value = t
+  now.value = t
+  lastAnswerAt.value = t
+  activeSeconds.value = 0
   smoothedEtaSeconds.value = null
 }
 
@@ -118,6 +126,8 @@ watch(mode, () => {
     startSession()
   } else {
     sessionStartTime.value = 0
+    lastAnswerAt.value = 0
+    activeSeconds.value = 0
     smoothedEtaSeconds.value = null
   }
 })
@@ -128,13 +138,25 @@ watch(initialWordCount, (newVal) => {
   }
 })
 
+// 任何作答（答对/答错/慢速答对）都会刷新 lastLapseResult，作为活跃信号
+watch(lastLapseResult, () => {
+  lastAnswerAt.value = Date.now()
+})
+
 onMounted(() => {
   if (mode.value === 'mode_lapse') {
     startSession()
   }
   tickHandle = window.setInterval(() => {
-    now.value = Date.now()
-  }, 1000)
+    const t = Date.now()
+    now.value = t
+    if (
+      sessionStartTime.value > 0 &&
+      t - lastAnswerAt.value <= IDLE_THRESHOLD_MS
+    ) {
+      activeSeconds.value += TICK_MS / 1000
+    }
+  }, TICK_MS)
 })
 
 onUnmounted(() => {
