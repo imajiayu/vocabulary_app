@@ -9,6 +9,8 @@
  *
  * GET  /quick-add-word → 返回用户的 source 列表 + 默认值
  * POST /quick-add-word → { "word": "apple", "source": "IELTS" }
+ *   - 同步调用 fetch-definition Edge Function 拿释义并入库
+ *   - 返回 message 中包含每个已添加单词的简短释义
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -21,6 +23,12 @@ const corsHeaders = {
 interface UserConfig {
   user_id: string
   default_source: string
+}
+
+interface DefinitionObject {
+  phonetic?: { us?: string; uk?: string; ipa?: string }
+  definitions?: string[]
+  examples?: { en: string; zh: string }[]
 }
 
 function json(data: unknown, status = 200) {
@@ -55,6 +63,52 @@ function getSupabase() {
   )
 }
 
+// 单词加粗（移植自 frontend/src/shared/utils/definition.ts）
+function boldWordInSentence(sentence: string, word: string): string {
+  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const pattern = new RegExp(
+    `(?<!<strong>)(?<!\\p{L})(${escaped})(?!\\p{L})(?!<\\/strong>)`, 'giu'
+  )
+  return sentence.replace(pattern, '<strong>$1</strong>')
+}
+
+function applyBoldToDefinition(def: DefinitionObject, word: string): DefinitionObject {
+  if (!def.examples?.length) return def
+  return {
+    ...def,
+    examples: def.examples.map(ex => ({ ...ex, en: boldWordInSentence(ex.en, word) })),
+  }
+}
+
+// 调用同项目下的 fetch-definition Edge Function
+async function fetchDefinition(word: string, lang: string): Promise<DefinitionObject | null> {
+  try {
+    const url = `${Deno.env.get('SUPABASE_URL')}/functions/v1/fetch-definition`
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ word, lang }),
+    })
+    if (!resp.ok) return null
+    const body = await resp.json()
+    if (!body.success || !body.definition) return null
+    return body.definition as DefinitionObject
+  } catch {
+    return null
+  }
+}
+
+// 从释义对象中提取简短文本，用于返回 message
+function shortDefinitionText(def: DefinitionObject | null): string {
+  if (!def?.definitions?.length) return ''
+  const first = def.definitions[0].replace(/\s+/g, ' ').trim()
+  if (!first || first === '暂无释义') return ''
+  return first.length > 60 ? `${first.slice(0, 60)}…` : first
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -66,16 +120,18 @@ Deno.serve(async (req) => {
 
   const supabase = getSupabase()
 
-  // GET: 从 user_config 读取 source 列表
+  // 读取 user_config（GET 和 POST 都要用）
+  const { data: cfgRow } = await supabase
+    .from('user_config')
+    .select('config')
+    .eq('user_id', user.user_id)
+    .single()
+
+  const sources: string[] = cfgRow?.config?.sources?.sourceOrder || []
+  const customSources: Record<string, string> = cfgRow?.config?.sources?.customSources || {}
+
+  // GET: 返回 source 列表
   if (req.method === 'GET') {
-    const { data } = await supabase
-      .from('user_config')
-      .select('config')
-      .eq('user_id', user.user_id)
-      .single()
-
-    const sources: string[] = data?.config?.sources?.sourceOrder || []
-
     return json({
       success: true,
       sources,
@@ -83,7 +139,6 @@ Deno.serve(async (req) => {
     })
   }
 
-  // 仅接受 POST
   if (req.method !== 'POST') {
     return json({ success: false, error: 'Method not allowed' }, 405)
   }
@@ -114,41 +169,60 @@ Deno.serve(async (req) => {
     return json({ success: false, error: 'No valid words provided' }, 400)
   }
 
-  const today = new Date().toISOString().split('T')[0]
-  const rows = normalized.map(word => ({
-    user_id: user.user_id,
-    word,
-    definition: '{}',
-    source,
-    date_added: today,
-    next_review: today,
-    stop_review: 0,
-  }))
+  // 该 source 对应的语言（找不到默认 en）
+  const lang = customSources[source] || 'en'
 
-  const added: string[] = []
+  // 并行抓释义（每个词独立失败处理，互不影响）
+  const definitions = await Promise.all(
+    normalized.map(async (word) => {
+      const raw = await fetchDefinition(word, lang)
+      return raw ? applyBoldToDefinition(raw, word) : null
+    })
+  )
+
+  const today = new Date().toISOString().split('T')[0]
+
+  const added: { word: string; def: string }[] = []
   const duplicates: string[] = []
   const errors: string[] = []
 
-  for (const row of rows) {
+  for (let i = 0; i < normalized.length; i++) {
+    const word = normalized[i]
+    const def = definitions[i]
+    const row = {
+      user_id: user.user_id,
+      word,
+      definition: def ? JSON.stringify(def) : '{}',
+      source,
+      date_added: today,
+      next_review: today,
+      stop_review: 0,
+    }
+
     const { error } = await supabase.from('words').insert(row)
     if (!error) {
-      added.push(row.word)
+      added.push({ word, def: shortDefinitionText(def) })
     } else if (error.code === '23505') {
-      duplicates.push(row.word)
+      duplicates.push(word)
     } else {
-      errors.push(`${row.word}: ${error.message}`)
+      errors.push(`${word}: ${error.message}`)
     }
   }
 
   const parts: string[] = []
-  if (added.length > 0) parts.push(`已添加: ${added.join(', ')}`)
+  if (added.length > 0) {
+    const addedText = added
+      .map(({ word, def }) => (def ? `${word} (${def})` : word))
+      .join(', ')
+    parts.push(`已添加: ${addedText}`)
+  }
   if (duplicates.length > 0) parts.push(`已存在: ${duplicates.join(', ')}`)
   if (errors.length > 0) parts.push(`错误: ${errors.join('; ')}`)
 
   return json({
     success: errors.length === 0,
     message: parts.join(' | '),
-    added,
+    added: added.map(a => a.word),
     duplicates,
     errors,
   })
