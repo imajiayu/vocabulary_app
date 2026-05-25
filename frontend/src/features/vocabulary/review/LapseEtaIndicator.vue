@@ -17,7 +17,7 @@ import { LAPSE_GAP_SEQUENCE } from '@/features/vocabulary/stores/review/useLapse
 const reviewStore = useReviewStore()
 const {
   mode,
-  initialWordCount,
+  totalWords,
   realGraduatedCount,
   totalCorrect,
   wordQueue,
@@ -42,7 +42,7 @@ const smoothedEtaSeconds = ref<number | null>(null)
 const EMA_ALPHA = 0.3
 
 const shouldDisplay = computed(() => {
-  return mode.value === 'mode_lapse' && initialWordCount.value > 0
+  return mode.value === 'mode_lapse' && totalWords.value > 0
 })
 
 const elapsedSeconds = computed(() => activeSeconds.value)
@@ -132,8 +132,9 @@ watch(mode, () => {
   }
 })
 
-watch(initialWordCount, (newVal) => {
-  if (newVal > 0 && mode.value === 'mode_lapse') {
+// 仅在 0→N 的会话边界重启 ETA 计时；中途删词（N→N-1）不应清空 elapsed/EMA
+watch(totalWords, (newVal, oldVal) => {
+  if (oldVal === 0 && newVal > 0 && mode.value === 'mode_lapse') {
     startSession()
   }
 })

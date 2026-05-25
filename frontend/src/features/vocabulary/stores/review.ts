@@ -53,7 +53,7 @@ export const useReviewStore = defineStore('review', () => {
 
   const progressPercent = computed(() => {
     if (mode.value === 'mode_lapse') {
-      return lapse.progress()
+      return lapse.progress(queue.totalWords.value)
     }
     return 0
   })
@@ -69,10 +69,8 @@ export const useReviewStore = defineStore('review', () => {
       resetQueue,
       silent,
       progress.cancelPendingIndex,
-      lapse.initialWordCount,
       lapse.graduatedCount,
-      lapse.wordGapLevels,
-      lapse.graduatedWords
+      lapse.wordGapLevels
     )
   }
 
@@ -155,7 +153,7 @@ export const useReviewStore = defineStore('review', () => {
   }
 
   const removeWordFromLapseSession = (wordId: number): void => {
-    lapse.removeWordFromLapseSession(queue.wordQueue.value, wordId)
+    lapse.removeWordFromLapseSession(queue.wordQueue.value, wordId, queue.totalWords)
     queueVersion.value++
   }
 
@@ -186,10 +184,8 @@ export const useReviewStore = defineStore('review', () => {
 
     return queue.restoreFromProgress(
       mode,
-      lapse.initialWordCount,
       lapse.graduatedCount,
-      lapse.wordGapLevels,
-      lapse.graduatedWords
+      lapse.wordGapLevels
     )
   }
 
@@ -218,8 +214,6 @@ export const useReviewStore = defineStore('review', () => {
     spellLoadsCache: result.spellLoadsCache,
     spellWeakWords: result.spellWeakWords,
     sessionStats: result.sessionStats,
-    graduatedWords: lapse.graduatedWords,
-    initialWordCount: lapse.initialWordCount,
     wordGapLevels: lapse.wordGapLevels,
     graduatedCount: lapse.graduatedCount,
     realGraduatedCount: lapse.realGraduatedCount,

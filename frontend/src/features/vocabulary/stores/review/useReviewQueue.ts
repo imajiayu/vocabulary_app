@@ -69,10 +69,8 @@ export function useReviewQueue() {
     resetQueue = false,
     silent = false,
     cancelPendingIndex: () => void,
-    initialWordCountRef?: { value: number },
     graduatedCountRef?: { value: number },
-    wordGapLevelsRef?: { value: Map<number, number> },
-    graduatedWordsRef?: { value: Word[] }
+    wordGapLevelsRef?: { value: Map<number, number> }
   ): Promise<void> => {
     if (resetQueue) cancelPendingIndex()
 
@@ -115,10 +113,8 @@ export function useReviewQueue() {
         wordQueue.value = newWords
         currentIndex.value = 0
         totalWords.value = newWords.length
-        if (initialWordCountRef) initialWordCountRef.value = newWords.length
         if (graduatedCountRef) graduatedCountRef.value = 0
         if (wordGapLevelsRef) wordGapLevelsRef.value = new Map()
-        if (graduatedWordsRef) graduatedWordsRef.value = []
         hasMore.value = false
 
         const lapseWordIds = newWords.map(w => w.id)
@@ -201,10 +197,8 @@ export function useReviewQueue() {
 
   const restoreFromProgress = async (
     modeRef: { value: ReviewMode },
-    initialWordCountRef: { value: number },
     graduatedCountRef: { value: number },
-    wordGapLevelsRef: { value: Map<number, number> },
-    graduatedWordsRef: { value: Word[] }
+    wordGapLevelsRef: { value: Map<number, number> }
   ): Promise<boolean> => {
     isLoading.value = true
 
@@ -221,7 +215,6 @@ export function useReviewQueue() {
       const { progress } = data
 
       modeRef.value = progress.mode as ReviewMode
-      totalWords.value = data.total
 
       const wordIds = progress.word_ids
 
@@ -230,13 +223,13 @@ export function useReviewQueue() {
         const lapseWords = words.filter(w => w.lapse > 0)
 
         wordQueue.value = lapseWords
-        initialWordCountRef.value = progress.initial_lapse_word_count || lapseWords.length
-        graduatedCountRef.value = Math.max(0, initialWordCountRef.value - lapseWords.length)
-        graduatedWordsRef.value = []
+        totalWords.value = progress.initial_lapse_word_count || lapseWords.length
+        graduatedCountRef.value = Math.max(0, totalWords.value - lapseWords.length)
         wordGapLevelsRef.value = new Map()
         hasMore.value = false
         currentIndex.value = 0
       } else {
+        totalWords.value = data.total
         const savedIndex = progress.current_index || 0
         const batchSize = settings.value.batchSize
 
@@ -268,6 +261,7 @@ export function useReviewQueue() {
     if (allIdx === -1) return
 
     allWordIds.value.splice(allIdx, 1)
+    totalWords.value = Math.max(0, totalWords.value - 1)
 
     api.progress.updateProgressSnapshotDirect(allWordIds.value)
       .catch(err => log.warn('Failed to update snapshot:', err))

@@ -14,14 +14,12 @@ export function useLapseSession() {
   const wordGapLevels = ref<Map<number, number>>(new Map())
   const graduatedCount = ref(0)
   // 真实毕业计数：仅在 processLapseResult 升级到顶级时递增，用于驱动毕业速率指标
-  // graduatedCount 还会被 stopLapseWord / removeWordFromLapseSession 递增，会污染速率统计
+  // graduatedCount 还会被 stopLapseWord 递增，会污染速率统计
   const realGraduatedCount = ref(0)
   // 有效推进次数：仅在 remembered=true 且 level 实际前进（含毕业）时 +1
   // 与 remainingCorrect 同语义（Σ(maxLevel - level)），保证 ETA 分子分母一致
   // 慢速答对（elapsedTime >= 4）不推进 level，故也不计入，避免 ETA 高估速率
   const totalCorrect = ref(0)
-  const initialWordCount = ref(0)
-  const graduatedWords = ref<Word[]>([])
 
   const lastLapseResult = ref<{
     word: string
@@ -82,7 +80,6 @@ export function useLapseSession() {
     if (graduated) {
       graduatedCount.value++
       realGraduatedCount.value++
-      graduatedWords.value.push(word)
       wordGapLevels.value.delete(word.id)
       api.words.clearLapseDirect(word.id).catch(log.error)
       api.progress.updateProgressSnapshotDirect(wordQueue.map(w => w.id))
@@ -96,9 +93,8 @@ export function useLapseSession() {
   ) => {
     if (wordQueue.length === 0) return
 
-    const removedWord = wordQueue.shift()
+    wordQueue.shift()
     graduatedCount.value++
-    if (removedWord) graduatedWords.value.push(removedWord)
     wordGapLevels.value.delete(wordId)
 
     api.words.clearLapseDirect(wordId).catch(log.error)
@@ -108,26 +104,21 @@ export function useLapseSession() {
 
   const removeWordFromLapseSession = (
     wordQueue: Word[],
-    wordId: number
+    wordId: number,
+    totalWordsRef: { value: number }
   ) => {
     const queueIndex = wordQueue.findIndex(w => w.id === wordId)
-    if (queueIndex !== -1) {
-      wordQueue.splice(queueIndex, 1)
-      wordGapLevels.value.delete(wordId)
-      graduatedCount.value++
-      api.progress.updateProgressSnapshotDirect(wordQueue.map(w => w.id))
-        .catch(err => log.warn('Failed to update lapse snapshot:', err))
-      return
-    }
-    const gradIndex = graduatedWords.value.findIndex(w => w.id === wordId)
-    if (gradIndex !== -1) {
-      graduatedWords.value.splice(gradIndex, 1)
-    }
+    if (queueIndex === -1) return
+    wordQueue.splice(queueIndex, 1)
+    wordGapLevels.value.delete(wordId)
+    totalWordsRef.value = Math.max(0, totalWordsRef.value - 1)
+    api.progress.updateProgressSnapshotDirect(wordQueue.map(w => w.id))
+      .catch(err => log.warn('Failed to update lapse snapshot:', err))
   }
 
-  const progress = () => {
-    if (initialWordCount.value === 0) return 0
-    return Math.round((graduatedCount.value / initialWordCount.value) * 100)
+  const progress = (totalWords: number) => {
+    if (totalWords === 0) return 0
+    return Math.round((graduatedCount.value / totalWords) * 100)
   }
 
   const reset = () => {
@@ -135,8 +126,6 @@ export function useLapseSession() {
     graduatedCount.value = 0
     realGraduatedCount.value = 0
     totalCorrect.value = 0
-    initialWordCount.value = 0
-    graduatedWords.value = []
     lastLapseResult.value = null
   }
 
@@ -145,8 +134,6 @@ export function useLapseSession() {
     graduatedCount,
     realGraduatedCount,
     totalCorrect,
-    initialWordCount,
-    graduatedWords,
     lastLapseResult,
     processLapseResult,
     stopLapseWord,

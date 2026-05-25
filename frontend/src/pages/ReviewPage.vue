@@ -160,14 +160,6 @@ const sidebarWordChange = (finalWord: Word) => {
   const index = reviewStore.wordQueue.findIndex(w => w.id === finalWord.id)
   if (index !== -1) {
     reviewStore.wordQueue.splice(index, 1, finalWord)
-    return
-  }
-  // Lapse 模式：毕业词在 graduatedWords 中
-  if (mode.value === 'mode_lapse') {
-    const gradIndex = graduatedWords.value.findIndex(w => w.id === finalWord.id)
-    if (gradIndex !== -1) {
-      graduatedWords.value.splice(gradIndex, 1, finalWord)
-    }
   }
 }
 
@@ -307,9 +299,7 @@ const {
   globalIndex,
   notification,
   persistError,
-  graduatedWords,
   graduatedCount,
-  initialWordCount,
   wordGapLevels,
   spellWeakWords,
   sessionStats,
@@ -415,7 +405,7 @@ const displayIndex = computed(() => {
 
 const displayTotal = computed(() => {
   if (mode.value === 'mode_lapse') {
-    return initialWordCount.value
+    return totalWords.value
   }
   return currentWord.value ? totalWords.value : 0
 })
