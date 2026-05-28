@@ -419,11 +419,16 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       }
     }
 
-    // 后台持久化
+    // 后台持久化（传 lang 触发 word 规范化，如乌克兰语 ' / ' → ʼ）
+    const saveLang: SourceLang = (() => {
+      const { settings } = useSettings()
+      const customSources = settings.value?.sources?.customSources as Record<string, SourceLang> | undefined
+      return customSources?.[currentWord.value?.source || ''] ?? 'en'
+    })()
     api.words.updateWordDirect(wordId, {
       word: wordText,
       definition: boldedDef
-    })
+    }, saveLang)
       .then(() => {
         if (wordFieldChanged) fetchDefinitionAsync(wordId)
       })

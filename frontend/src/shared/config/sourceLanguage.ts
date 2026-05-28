@@ -34,7 +34,8 @@ const UK_CONFIG: SourceLanguageConfig = {
   inputPattern: /^[а-яА-ЯіІїЇєЄґҐʼ' \-]$/,
   sanitizePattern: /[^а-яА-ЯіІїЇєЄґҐʼ' \-]/g,
   wordPattern: /[а-яіїєґʼ']+/gi,
-  normalizeInput: (text: string) => text.replace(/'/g, 'ʼ'),
+  // ASCII ' (U+0027) 与智能右单引号 ' (U+2019) 在乌克兰语词内都应为修饰字母撇号 ʼ (U+02BC)
+  normalizeInput: (text: string) => text.replace(/['’]/g, 'ʼ'),
   keyboardLayout: [
     ['Й','Ц','У','К','Е','Н','Г','Ш','Щ','З','Х','Ї'],
     ['Ф','І','В','А','П','Р','О','Л','Д','Ж','Є'],

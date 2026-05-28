@@ -224,12 +224,13 @@
 <script setup lang="ts">
 import { ref, computed, watch, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { Save, Loader2, Plus, Trash2, Columns as ColumnsIcon } from 'lucide-vue-next'
-import type { Word, DefinitionObject } from '@/shared/types'
+import type { Word, DefinitionObject, SourceLang } from '@/shared/types'
 import type { UpdateWordPayload } from '@/shared/api/words'
 import { applyBoldToDefinition, stripBoldFromDefinition } from '@/shared/utils/definition'
 import { api } from '@/shared/api'
 import { concurrentMap } from '@/shared/utils/concurrent'
 import { logger } from '@/shared/utils/logger'
+import { useSettings } from '@/shared/composables/useSettings'
 
 const log = logger.create('WordTable')
 
@@ -323,6 +324,13 @@ function toggleColumn(key: string) {
 const visibleColumnDefs = computed(() =>
     COLUMN_DEFS.filter(c => visibleColumns.value.has(c.key))
 )
+
+// ── source → lang 解析（用于持久化时语言特定规范化，如乌克兰语 ' → ʼ）──
+const { settings } = useSettings()
+function langOfSource(source: string | undefined | null): SourceLang {
+    const customSources = settings.value?.sources?.customSources as Record<string, SourceLang> | undefined
+    return customSources?.[source || ''] ?? 'en'
+}
 
 // ── Row selection ───────────────────────────────────────────
 
@@ -582,7 +590,7 @@ async function saveAll(): Promise<void> {
         if (!nr.word.trim()) continue
         if (nr.duplicateState === 'duplicate') continue
         try {
-            const created = await api.words.createWordDirect(nr.word.trim(), nr.source)
+            const created = await api.words.createWordDirect(nr.word.trim(), nr.source, undefined, langOfSource(nr.source))
             removeNewRow(nr.tempId)
             emit('wordAdded', created)
         } catch (err) {
@@ -594,14 +602,15 @@ async function saveAll(): Promise<void> {
     // Save dirty existing rows
     const ids = [...dirtyIds.value].filter(id => !duplicateIds.has(id))
     if (ids.length > 0) {
-        const items = ids.map(id => ({ id, patch: buildPatch(id) }))
+        const sourceOf = (id: number) => props.filteredWords.find(w => w.id === id)?.source
+        const items = ids.map(id => ({ id, patch: buildPatch(id), source: sourceOf(id) }))
 
         await concurrentMap(
             items,
-            async ({ id, patch }) => {
+            async ({ id, patch, source }) => {
                 savingIds.add(id)
                 try {
-                    const updated = await api.words.updateWordDirect(id, patch)
+                    const updated = await api.words.updateWordDirect(id, patch, langOfSource(source))
                     refreshDraftFromWord(updated)
                     emit('saved', updated)
                     return updated
@@ -742,7 +751,7 @@ async function saveNewRow(nr: NewRow): Promise<void> {
     if (nr.duplicateState === 'duplicate') return
 
     try {
-        const created = await api.words.createWordDirect(trimmed, nr.source)
+        const created = await api.words.createWordDirect(trimmed, nr.source, undefined, langOfSource(nr.source))
         removeNewRow(nr.tempId)
         emit('wordAdded', created)
     } catch (err) {

@@ -160,17 +160,25 @@ Deno.serve(async (req) => {
     return json({ success: false, error: (e as Error).message }, 400)
   }
 
-  // 标准化：trim + lowercase + NFC + 去重
+  // 该 source 对应的语言（找不到默认 en）
+  const lang = customSources[source] || 'en'
+
+  // 语言特定的字符规范化：
+  // - 乌克兰语：ASCII ' (U+0027) 与智能右单引号 ' (U+2019) 在词内一律应为修饰字母撇号 ʼ (U+02BC)
+  //   （与前端 frontend/src/shared/config/sourceLanguage.ts UK_CONFIG.normalizeInput 保持一致）
+  const langNormalize = (w: string): string => {
+    if (lang === 'uk') return w.replace(/['’]/g, 'ʼ')
+    return w
+  }
+
+  // 标准化：NFC + 语言特定 + trim + lowercase + 去重
   const normalized = [...new Set(
-    words.map(w => w.normalize('NFC').trim().toLowerCase()).filter(w => w.length > 0)
+    words.map(w => langNormalize(w.normalize('NFC')).trim().toLowerCase()).filter(w => w.length > 0)
   )]
 
   if (normalized.length === 0) {
     return json({ success: false, error: 'No valid words provided' }, 400)
   }
-
-  // 该 source 对应的语言（找不到默认 en）
-  const lang = customSources[source] || 'en'
 
   // 并行抓释义（每个词独立失败处理，互不影响）
   const definitions = await Promise.all(

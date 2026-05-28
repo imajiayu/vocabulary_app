@@ -136,11 +136,16 @@ function sanitizeFetchedDefinition(def: DefinitionObject): DefinitionObject {
 export class WordsApi {
   /**
    * 更新单词信息（Supabase 直连）
+   * @param lang 可选，若传入且 payload 含 word 字段则做语言特定规范化（如乌克兰语 ' → ʼ）
    */
-  static async updateWordDirect(wordId: number, data: UpdateWordPayload): Promise<Word> {
+  static async updateWordDirect(wordId: number, data: UpdateWordPayload, lang?: SourceLang): Promise<Word> {
     const userId = getCurrentUserId()
     const payload: Record<string, unknown> = { ...data }
 
+    // word 字段规范化（lang 提供时；与 createWordDirect / batchImportWordsDirect 行为一致）
+    if (typeof payload.word === 'string' && lang) {
+      payload.word = normalizeWordText(payload.word, lang)
+    }
     // definition 需要 JSON.stringify
     if (payload.definition && typeof payload.definition === 'object') {
       payload.definition = JSON.stringify(payload.definition)
@@ -186,11 +191,14 @@ export class WordsApi {
   /**
    * 批量更新单词（Supabase 直连）
    */
-  static async batchUpdateDirect(wordIds: number[], updateData: Partial<UpdateWordPayload>): Promise<Word[]> {
+  static async batchUpdateDirect(wordIds: number[], updateData: Partial<UpdateWordPayload>, lang?: SourceLang): Promise<Word[]> {
     if (wordIds.length === 0) return []
     const userId = getCurrentUserId()
     const payload: Record<string, unknown> = { ...updateData }
 
+    if (typeof payload.word === 'string' && lang) {
+      payload.word = normalizeWordText(payload.word, lang)
+    }
     if (payload.definition && typeof payload.definition === 'object') {
       payload.definition = JSON.stringify(payload.definition)
     }
