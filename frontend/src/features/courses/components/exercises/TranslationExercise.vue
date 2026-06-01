@@ -88,7 +88,7 @@ export interface AIFeedbackItem {
 
 function onInput(qi: number, val: string) {
   inputs.value[qi] = val
-  exerciseState.textarea[`t${qi}`] = val
+  exerciseState.textarea[`t${props.groupIndex}_${qi}`] = val
 }
 
 async function callAIGrading(source: string, userText: string, reference?: string): Promise<AIFeedback> {
@@ -115,13 +115,13 @@ async function gradeAll() {
     try {
       const result = await callAIGrading(q.source, userText, q.reference)
       feedbacks.value[qi] = result
-      exerciseState.aiResults[`${qi}`] = result
+      exerciseState.aiResults[`${props.groupIndex}_${qi}`] = result
     } catch {
       // 降级到本地 rubric（包含 API key 未配置、网络失败等所有情况）
       if (q.rubric) {
         localGrades.value[qi] = gradeWithRubric(userText, q.rubric)
       }
-      exerciseState.aiResults[`${qi}`] = 'fallback'
+      exerciseState.aiResults[`${props.groupIndex}_${qi}`] = 'fallback'
     }
   }
 
@@ -135,15 +135,15 @@ async function gradeAll() {
 onMounted(() => {
   // 恢复 textarea
   for (let qi = 0; qi < props.group.questions.length; qi++) {
-    if (exerciseState.textarea[`t${qi}`]) {
-      inputs.value[qi] = exerciseState.textarea[`t${qi}`]
+    if (exerciseState.textarea[`t${props.groupIndex}_${qi}`]) {
+      inputs.value[qi] = exerciseState.textarea[`t${props.groupIndex}_${qi}`]
     }
   }
   // 恢复 AI 结果
   if (exerciseState.translateGraded.includes(props.groupIndex)) {
     graded.value = true
     for (let qi = 0; qi < props.group.questions.length; qi++) {
-      const saved = exerciseState.aiResults[`${qi}`]
+      const saved = exerciseState.aiResults[`${props.groupIndex}_${qi}`]
       if (saved && saved !== 'fallback') {
         feedbacks.value[qi] = saved as AIFeedback
       } else if (saved === 'fallback') {

@@ -112,7 +112,7 @@ function splitPrompt(prompt: string, qi: number) {
 
 function onInput(qi: number, val: string) {
   inputs.value[qi] = val
-  exerciseState.fillBlank[`fb${qi}`] = val
+  exerciseState.fillBlank[`fb${props.groupIndex}_${qi}`] = val
 }
 
 function grade() {
@@ -145,7 +145,7 @@ function showNextHint(qi: number, total: number) {
 onMounted(() => {
   // 恢复输入
   for (let qi = 0; qi < props.group.questions.length; qi++) {
-    const key = `fb${qi}`
+    const key = `fb${props.groupIndex}_${qi}`
     if (exerciseState.fillBlank[key]) {
       inputs.value[qi] = exerciseState.fillBlank[key]
     }

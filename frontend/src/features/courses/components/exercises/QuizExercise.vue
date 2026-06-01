@@ -120,7 +120,7 @@ function showNextHint(qi: number, total: number) {
   const current = hintsUsed.value[qi] || 0
   if (current < total) {
     hintsUsed.value[qi] = current + 1
-    exerciseState.hintsUsed[`quiz_${qi}`] = current + 1
+    exerciseState.hintsUsed[`quiz_${props.groupIndex}_${qi}`] = current + 1
   }
 }
 
@@ -135,7 +135,7 @@ onMounted(() => {
   }
   // 恢复提示
   for (let qi = 0; qi < props.group.questions.length; qi++) {
-    const key = `quiz_${qi}`
+    const key = `quiz_${props.groupIndex}_${qi}`
     if (exerciseState.hintsUsed[key]) {
       hintsUsed.value[qi] = exerciseState.hintsUsed[key]
     }
