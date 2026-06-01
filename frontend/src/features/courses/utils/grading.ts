@@ -25,6 +25,13 @@ export function levenshtein(a: string, b: string): number {
   return dp[m][n]
 }
 
+// ── HTML 剥离 ──
+// JSON 课时里 quiz.answer / fill-blank.answer / explanation 可能含 <span class="term"...>
+// 比较、匹配前必须剥到纯文本；显示侧应改走 v-html(wrap(...))。
+export function stripHtml(s: string): string {
+  return s.replace(/<[^>]*>/g, '').trim()
+}
+
 // ── 文本归一化 ──
 
 export function normalize(s: string): string {
@@ -126,8 +133,12 @@ export function gradeWithRubric(userText: string, rubric: RubricItem[]): GradeRe
 // ── 填空题匹配 ──
 
 export function matchFillBlank(userVal: string, answer: string, acceptList: string[] = []): boolean {
-  const accepted = [answer.toLowerCase(), ...acceptList.map(a => a.toLowerCase().trim())]
-  const userNorm = userVal.toLowerCase().trim()
+  // answer / acceptList 可能含 <span class="term"...>，需先剥 HTML
+  const accepted = [
+    stripHtml(answer).toLowerCase(),
+    ...acceptList.map(a => stripHtml(a).toLowerCase().trim())
+  ]
+  const userNorm = stripHtml(userVal).toLowerCase().trim()
 
   // 精确匹配
   if (accepted.includes(userNorm)) return true

@@ -35,9 +35,9 @@
         <template v-else>
           <strong>❌ 错误</strong>
           <span v-if="inputs[qi]">（你填了 {{ inputs[qi] }}）</span>
-          。正确答案：<strong>{{ q.answer }}</strong>
+          。正确答案：<strong v-html="wrap(q.answer)" />
         </template>
-        <span v-if="q.explanation"> — {{ q.explanation }}</span>
+        <span v-if="q.explanation"> — <span v-html="wrap(q.explanation)" /></span>
       </div>
 
       <!-- 渐进提示 -->

@@ -14,8 +14,8 @@
           v-for="opt in q.options"
           :key="opt"
           :class="{
-            'correct-answer': graded && stripHtml(opt) === q.answer,
-            'wrong-answer': graded && answers[qi] === stripHtml(opt) && answers[qi] !== q.answer
+            'correct-answer': graded && stripHtml(opt) === stripHtml(q.answer),
+            'wrong-answer': graded && answers[qi] === stripHtml(opt) && answers[qi] !== stripHtml(q.answer)
           }"
         >
           <input
@@ -31,15 +31,15 @@
       </div>
 
       <!-- 判题结果 -->
-      <div v-if="graded" class="course-quiz-result" :class="answers[qi] === q.answer ? 'correct' : 'wrong'">
-        <template v-if="answers[qi] === q.answer">
+      <div v-if="graded" class="course-quiz-result" :class="answers[qi] === stripHtml(q.answer) ? 'correct' : 'wrong'">
+        <template v-if="answers[qi] === stripHtml(q.answer)">
           <strong>✅ 正确！</strong>
-          <span v-if="q.explanation"> {{ q.explanation }}</span>
+          <span v-if="q.explanation"> <span v-html="wrap(q.explanation)" /></span>
         </template>
         <template v-else>
           <strong>❌ 错误</strong>
-          <span v-if="answers[qi]">（你选了 {{ answers[qi] }}）</span>。正确答案：<strong>{{ q.answer }}</strong>
-          <span v-if="q.explanation"> — {{ q.explanation }}</span>
+          <span v-if="answers[qi]">（你选了 {{ answers[qi] }}）</span>。正确答案：<strong v-html="wrap(q.answer)" />
+          <span v-if="q.explanation"> — <span v-html="wrap(q.explanation)" /></span>
         </template>
       </div>
 
@@ -75,6 +75,7 @@ import { ref, computed, inject, onMounted } from 'vue'
 import type { QuizGroup } from '../../types/lesson'
 import type { ExerciseState } from '../../composables/useExerciseState'
 import { useCourseHtml } from '../../composables/useCourseHtml'
+import { stripHtml } from '../../utils/grading'
 
 const { wrap } = useCourseHtml()
 
@@ -95,12 +96,8 @@ const allAnswered = computed(() =>
 )
 
 const correctCount = computed(() =>
-  props.group.questions.filter((q, i) => answers.value[i] === q.answer).length
+  props.group.questions.filter((q, i) => answers.value[i] === stripHtml(q.answer)).length
 )
-
-function stripHtml(s: string): string {
-  return s.replace(/<[^>]*>/g, '').trim()
-}
 
 function onSelect(qi: number, val: string) {
   answers.value[qi] = val
