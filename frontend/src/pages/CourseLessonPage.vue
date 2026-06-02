@@ -55,6 +55,7 @@
     <!-- 交互组件 -->
     <WordEditorModal v-if="lesson" />
     <CourseChat v-if="lesson" />
+    <CourseNoteSticky v-if="lesson" :course="courseId" :lesson-id="lessonId" />
   </div>
 </template>
 
@@ -75,6 +76,7 @@ import {
 import LessonRenderer from '@/features/courses/components/LessonRenderer.vue'
 import WordEditorModal from '@/features/vocabulary/editor/WordEditorModal.vue'
 import CourseChat from '@/features/courses/components/interactions/CourseChat.vue'
+import CourseNoteSticky from '@/features/courses/components/CourseNoteSticky.vue'
 import CourseTopBar from '@/features/courses/components/navigation/CourseTopBar.vue'
 import { useWordEditorStore } from '@/features/vocabulary/stores/wordEditor'
 
