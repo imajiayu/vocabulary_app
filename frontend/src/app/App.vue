@@ -31,11 +31,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import { useRouter } from 'vue-router'
 import { ToastContainer, BaseSkeleton } from '@/shared/components/base'
+import type { ToastApi, ToastOptions } from '@/shared/composables/useToast'
 
 const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null)
+
+// 在 App 根组件提供 toast：ToastContainer 是 RouterView 的兄弟节点，
+// 其内部 provide 无法到达页面，必须由共同祖先 App 委托 toastRef 提供。
+const toastApi: ToastApi = {
+  add: (options: ToastOptions) => toastRef.value?.add(options) ?? '',
+  remove: (id: string) => toastRef.value?.remove(id),
+  success: (message, options) => toastRef.value?.success(message, options) ?? '',
+  error: (message, options) => toastRef.value?.error(message, options) ?? '',
+  warning: (message, options) => toastRef.value?.warning(message, options) ?? '',
+  info: (message, options) => toastRef.value?.info(message, options) ?? ''
+}
+provide('toast', toastApi)
 
 // 页面过渡动画
 const router = useRouter()

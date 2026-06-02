@@ -1,64 +1,101 @@
 <template>
-  <div v-if="notes.length" class="note-stack">
-    <div
-      v-for="note in notes"
-      :key="note.key"
-      class="note-item"
-      :class="{ 'is-collapsed': collapsed[note.key] }"
-    >
-      <!-- 收起态：贴右边缘的小书签 -->
-      <button
-        v-if="collapsed[note.key]"
-        type="button"
-        class="note-tab"
-        title="展开便笺"
-        @click="toggle(note.key)"
-      >
-        <span class="note-tab-icon" aria-hidden="true">✶</span>
-        <span class="note-tab-text">给宝宝的话</span>
-      </button>
-
-      <!-- 展开态：便笺卡片 -->
-      <article v-else class="note-card">
-        <header class="note-card-head" @click="toggle(note.key)">
-          <span class="note-card-kicker">
-            {{ note.author ? `来自 ${note.author}` : '给宝宝的话' }}
+  <div v-if="notes.length" class="note-root">
+    <!-- 浮窗卡片：从左下角向上弹开，限高内滚，不被顶栏遮挡 -->
+    <transition name="note-pop">
+      <section v-show="open" class="note-window">
+        <header class="note-window-head">
+          <span class="note-window-title">
+            <span class="note-window-star" aria-hidden="true">✶</span>
+            给宝宝的话
           </span>
-          <span class="note-card-collapse" aria-hidden="true">×</span>
-        </header>
-
-        <p class="note-card-body">{{ note.body }}</p>
-
-        <!-- 她已写过的回复 -->
-        <div v-if="note.reply" class="note-reply-done">
-          <span class="note-reply-label">你的回复</span>
-          <p class="note-reply-text">{{ note.reply }}</p>
-        </div>
-
-        <!-- 回复输入 -->
-        <div class="note-reply-box">
-          <textarea
-            v-model="drafts[note.key]"
-            class="note-reply-input"
-            :placeholder="note.reply ? '修改回复…' : '回复小狗……'"
-            rows="2"
-          />
           <button
             type="button"
-            class="note-reply-send"
-            :disabled="sending[note.key] || !(drafts[note.key] || '').trim()"
-            @click="submitReply(note.key)"
+            class="note-window-close"
+            title="收起"
+            aria-label="收起便笺"
+            @click="close"
           >
-            {{ sending[note.key] ? '发送中…' : '发送' }}
+            ×
           </button>
+        </header>
+
+        <div class="note-window-body">
+          <article
+            v-for="(note, i) in notes"
+            :key="note.key"
+            class="note-block"
+            :class="{ 'is-divided': i > 0 }"
+          >
+            <span v-if="note.author" class="note-block-from">
+              来自 {{ note.author }}
+            </span>
+
+            <p class="note-block-body">{{ note.body }}</p>
+
+            <!-- 她已写过的回复 -->
+            <div v-if="note.reply" class="note-reply-done">
+              <span class="note-reply-label">
+                你的回复
+                <time v-if="note.repliedAt" class="note-reply-time">
+                  {{ formatRepliedAt(note.repliedAt) }}
+                </time>
+              </span>
+              <p class="note-reply-text">{{ note.reply }}</p>
+            </div>
+
+            <!-- 回复输入 -->
+            <div class="note-reply-box">
+              <textarea
+                v-model="drafts[note.key]"
+                class="note-reply-input"
+                :placeholder="note.reply ? '修改回复…' : '回复小狗……'"
+                rows="2"
+              />
+              <button
+                type="button"
+                class="note-reply-send"
+                :disabled="sending[note.key] || !(drafts[note.key] || '').trim()"
+                @click="submitReply(note.key)"
+              >
+                {{ sending[note.key] ? '发送中…' : '发送' }}
+              </button>
+            </div>
+          </article>
         </div>
-      </article>
-    </div>
+      </section>
+    </transition>
+
+    <!-- 浮标：常驻左下角，关着时带一颗小红点提示 -->
+    <button
+      type="button"
+      class="note-fab"
+      :class="{ 'is-open': open }"
+      :title="open ? '收起便笺' : '给宝宝的话'"
+      :aria-label="open ? '收起便笺' : '给宝宝的话'"
+      @click="toggle"
+    >
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v9A1.5 1.5 0 0 1 19.5 18h-15A1.5 1.5 0 0 1 3 16.5v-9Z"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M4 7.5 12 13l8-5.5"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span v-if="!open" class="note-fab-dot" aria-hidden="true" />
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useCourseNote } from '@/features/courses/composables/useCourseNote'
 import { useToast } from '@/shared/composables/useToast'
 
@@ -70,22 +107,27 @@ const props = defineProps<{
 const { notes, fetchNotes, reply } = useCourseNote(props.course, props.lessonId)
 const toast = useToast()
 
-const collapsed = reactive<Record<string, boolean>>({})
+const open = ref(false)
 const drafts = reactive<Record<string, string>>({})
 const sending = reactive<Record<string, boolean>>({})
 
-function collapseKey(noteKey: string): string {
-  return `courseNote.collapsed.${props.course}.${noteKey}`
+function toggle() {
+  open.value = !open.value
 }
 
-function toggle(noteKey: string) {
-  const next = !collapsed[noteKey]
-  collapsed[noteKey] = next
-  try {
-    localStorage.setItem(collapseKey(noteKey), next ? '1' : '0')
-  } catch {
-    // ignore
-  }
+function close() {
+  open.value = false
+}
+
+/** 回复时间显示为本地「M月D日 HH:mm」，纯展示用途（非业务日期） */
+function formatRepliedAt(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  const mm = d.getMonth() + 1
+  const dd = d.getDate()
+  const hh = String(d.getHours()).padStart(2, '0')
+  const mi = String(d.getMinutes()).padStart(2, '0')
+  return `${mm}月${dd}日 ${hh}:${mi}`
 }
 
 async function submitReply(noteKey: string) {
@@ -104,126 +146,194 @@ async function submitReply(noteKey: string) {
 
 onMounted(async () => {
   await fetchNotes()
-  // 默认展开；按 localStorage 恢复每条便笺的收起状态
-  for (const note of notes.value) {
-    try {
-      collapsed[note.key] = localStorage.getItem(collapseKey(note.key)) === '1'
-    } catch {
-      collapsed[note.key] = false
-    }
-  }
+  // 打开课时页时，只要这门课有便笺（_notes jsonb）就自动弹开
+  if (notes.value.length) open.value = true
 })
 </script>
 
 <style scoped>
-.note-stack {
+/* ── 浮标：右下角，叠在 CourseChat 浮标上方 ── */
+.note-fab {
   position: fixed;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 60;
+  bottom: 90px;
+  right: 28px;
+  z-index: 10000;
+  width: 52px;
+  height: 52px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
-  pointer-events: none;
-}
-
-.note-item {
-  pointer-events: auto;
-}
-
-/* ── 收起态：贴边书签 ── */
-.note-tab {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 12px 7px;
+  justify-content: center;
   background: var(--course-accent, #7a2e2e);
   color: var(--course-accent-on, #fdfbf5);
   border: none;
-  border-radius: 10px 0 0 10px;
-  box-shadow: var(--shadow-md, 0 6px 18px rgba(0, 0, 0, 0.12));
+  border-radius: 50%;
+  box-shadow: 0 8px 22px -8px var(--course-accent-shadow, rgba(122, 46, 46, 0.5));
   cursor: pointer;
-  font-family: var(--font-serif, "Lora", serif);
-  transition: padding-right 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.note-tab:hover {
-  padding-right: 11px;
-  box-shadow: 0 8px 22px -8px var(--course-accent-shadow, rgba(122, 46, 46, 0.4));
+.note-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px -8px var(--course-accent-shadow, rgba(122, 46, 46, 0.55));
 }
 
-.note-tab-icon {
-  font-size: 15px;
-  line-height: 1;
+.note-fab.is-open {
+  transform: scale(0.92);
+  opacity: 0.85;
 }
 
-.note-tab-text {
-  writing-mode: vertical-rl;
-  letter-spacing: 0.18em;
-  font-size: 12px;
+.note-fab svg {
+  width: 22px;
+  height: 22px;
 }
 
-/* ── 展开态：便笺卡片 ── */
-.note-card {
-  width: 280px;
+/* 关着时的「有便笺」小红点 */
+.note-fab-dot {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e8543e;
+  box-shadow: 0 0 0 2px var(--course-accent, #7a2e2e);
+  animation: note-dot-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes note-dot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.7;
+  }
+}
+
+/* ── 浮窗：从右下浮标上方弹出，bottom 锚定 + 限高内滚 ── */
+.note-window {
+  position: fixed;
+  bottom: 154px;
+  right: 28px;
+  z-index: 10001;
+  width: 400px;
   max-width: calc(100vw - 32px);
+  /* 上限留出顶栏与两枚浮标的空间，向上生长绝不被顶栏遮挡 */
+  max-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
   background: var(--course-highlight, #fbf3f3);
   border: 1px solid var(--course-accent-soft-strong, rgba(122, 46, 46, 0.14));
-  border-right: none;
-  border-radius: 14px 0 0 14px;
-  box-shadow: var(--shadow-md, 0 6px 18px rgba(0, 0, 0, 0.12));
-  padding: 16px 18px 18px;
+  border-radius: 16px;
+  box-shadow: 0 18px 48px -16px rgba(0, 0, 0, 0.28);
   font-family: var(--font-serif, "Lora", serif);
-  position: relative;
+  overflow: hidden;
 }
 
-.note-card::before {
-  /* 左侧装订色条，强调便笺感 */
+.note-window::before {
+  /* 顶部装订色条，呼应便笺感 */
   content: "";
   position: absolute;
   left: 0;
+  right: 0;
   top: 0;
-  bottom: 0;
-  width: 4px;
+  height: 4px;
   background: var(--course-accent, #7a2e2e);
-  border-radius: 14px 0 0 14px;
 }
 
-.note-card-head {
+.note-window-head {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  padding: 14px 14px 10px 18px;
 }
 
-.note-card-kicker {
-  font-size: 11px;
+.note-window-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--course-accent, #7a2e2e);
   font-weight: 600;
+  color: var(--course-accent, #7a2e2e);
 }
 
-.note-card-collapse {
-  font-size: 18px;
+.note-window-star {
+  font-size: 13px;
+}
+
+.note-window-close {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  font-size: 19px;
   line-height: 1;
   color: var(--color-text-tertiary, #9a8f80);
-  transition: color 0.15s ease;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
-.note-card-head:hover .note-card-collapse {
+.note-window-close:hover {
   color: var(--course-accent, #7a2e2e);
+  background: var(--course-accent-soft, rgba(122, 46, 46, 0.08));
 }
 
-.note-card-body {
+/* ── 可滚动内容区 ── */
+.note-window-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 18px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--course-accent-soft-strong, rgba(122, 46, 46, 0.24)) transparent;
+}
+
+.note-window-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.note-window-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.note-window-body::-webkit-scrollbar-thumb {
+  background: var(--course-accent-soft-strong, rgba(122, 46, 46, 0.24));
+  border-radius: 3px;
+}
+
+/* 多条便笺时的分隔 */
+.note-block.is-divided {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--course-accent-soft-strong, rgba(122, 46, 46, 0.2));
+}
+
+.note-block-from {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary, #9a8f80);
+  margin-bottom: 6px;
+}
+
+.note-block-body {
   margin: 0;
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--color-text-primary, #2c2620);
   white-space: pre-wrap;
   word-break: break-word;
@@ -238,12 +348,24 @@ onMounted(async () => {
 }
 
 .note-reply-label {
-  display: block;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
   font-size: 10.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-text-tertiary, #9a8f80);
   margin-bottom: 4px;
+}
+
+.note-reply-time {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary, #9a8f80);
+  opacity: 0.8;
+  white-space: nowrap;
 }
 
 .note-reply-text {
@@ -267,6 +389,7 @@ onMounted(async () => {
   width: 100%;
   box-sizing: border-box;
   resize: vertical;
+  max-height: 30vh;
   padding: 8px 10px;
   border: 1px solid var(--color-border-medium, #e0d8cc);
   border-radius: 8px;
@@ -301,14 +424,38 @@ onMounted(async () => {
   cursor: not-allowed;
 }
 
-/* ── 移动端：收窄，避免遮挡正文 ── */
+/* ── 弹出动画：从左下角放大浮现 ── */
+.note-pop-enter-active {
+  transition: transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.18s ease;
+}
+
+.note-pop-leave-active {
+  transition: transform 0.16s ease, opacity 0.16s ease;
+}
+
+.note-pop-enter-from,
+.note-pop-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.94);
+  transform-origin: bottom right;
+}
+
+/* ── 移动端 ── */
 @media (max-width: 768px) {
-  .note-stack {
-    gap: 8px;
+  .note-fab {
+    bottom: 74px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
   }
 
-  .note-card {
-    width: 240px;
+  .note-window {
+    left: 16px;
+    right: 16px;
+    bottom: 132px;
+    width: auto;
+    max-width: none;
+    max-height: calc(100vh - 172px);
   }
 }
 </style>

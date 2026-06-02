@@ -1,0 +1,2698 @@
+[
+  {
+    "word": "а",
+    "hash": "823c4eb3e895adc925a755d89cea1c6c46954c999d23604e0091788b75496159"
+  },
+  {
+    "word": "або",
+    "hash": "e844e92cbb9e4bcd1e860e53b09f4ed6d903e8c110493fe55f8493afd55735ce"
+  },
+  {
+    "word": "автобус",
+    "hash": "e452f8c53a5858b35c89ce4d99d19a594838a14f28028b90f130066a575a0400"
+  },
+  {
+    "word": "адреса",
+    "hash": "484b42ed04e82f6454dde5ae118fe8feeb1186b191279baac67fc13298f1a067"
+  },
+  {
+    "word": "аеропорт",
+    "hash": "bcb65c28c5a30a5146153161e4b2576792e4867e0df7eb237fc905dc116ad5a7"
+  },
+  {
+    "word": "актор",
+    "hash": "4c49edbb4039607dd1f59a91b460d8efc5809b05d24b1a82e3e09dea444ca1a1"
+  },
+  {
+    "word": "актриса",
+    "hash": "819d34f2db5ea3a99320135c148a4ff0c8aec0913170c8e9a6b63b7ff451e690"
+  },
+  {
+    "word": "але",
+    "hash": "a909ca3591ae9abc59567d971141ecd1e9da757aa0bb8a365060605b6e1309ac"
+  },
+  {
+    "word": "англійська",
+    "hash": "5bfd901218c6fad3900be1f9c981470539dae74ceff237c9f0c206aa3d4c0ceb"
+  },
+  {
+    "word": "аптека",
+    "hash": "50d239523a390585e0e98026586be6a3d613e9b6a5a3c20db47ff828742b06e1"
+  },
+  {
+    "word": "атланта",
+    "hash": "be5f1ed7da8043bae78fd98f020463aad3998e69c4d6374b8bc2614c228ed252"
+  },
+  {
+    "word": "бабуся",
+    "hash": "b8fb2fbf2a9e553d782e2842308b47a2c220c7728b7f4a8a0fbfa1918058b5e0"
+  },
+  {
+    "word": "багато",
+    "hash": "d3b76bd122936bdc72d2bc642d0c2cbeedc10d1d8dfddcbd4771d64b54a443b0"
+  },
+  {
+    "word": "банан",
+    "hash": "6182fbc92d4f5cb7676861b6b54b0530ca5e7e442715bc0260a8582203a3bc12"
+  },
+  {
+    "word": "банджо",
+    "hash": "c17baee6d96faed64fb30c0a681c199a834d6cb3628ddd19b4a1a3b088ebcf8a"
+  },
+  {
+    "word": "банк",
+    "hash": "92f2b1f60a959ce294239666c60d33d77ab9dd0a4f6a193859b72c523a53368b"
+  },
+  {
+    "word": "басейн",
+    "hash": "418d52e1eeb8cda36fb42d1ce9c11cf15c5e39d1ea5b81486ffc6ed3c6b6832f"
+  },
+  {
+    "word": "баскетбол",
+    "hash": "3f236176a74165071f9019c1b9786005a91d00d115584670181a27eaff47917e"
+  },
+  {
+    "word": "батько",
+    "hash": "78825d80b8a7e72bf79cf9086dd482223a84e3031df9bd5d668ebfa052d82410"
+  },
+  {
+    "word": "бачити",
+    "hash": "da2d5f2ea98404191b35227cdaf8fdae0dcf016d56dcc123152a7b62030ec89c"
+  },
+  {
+    "word": "без",
+    "hash": "ad158ee098775f951de0b33c526e3713a4edc1452e37a44e49aef95ad01a4cc7"
+  },
+  {
+    "word": "безробітний",
+    "hash": "6b67f61cb874a00ce121e0f1a8d436b9280199de21b2d6e440622ddd66978b07"
+  },
+  {
+    "word": "березень",
+    "hash": "68a9aa625ff1db6518bd6b5e422bcc23e908197cb72f3352e3088bd75dd53e37"
+  },
+  {
+    "word": "бібліотека",
+    "hash": "ff6b8a68982fb7a720542fdd3cc0a1c72dd340f4731fb1b982b5b7579ba04842"
+  },
+  {
+    "word": "бігати",
+    "hash": "1dd228c1d94853184d487980298efed2ec27f034d4f319a6d83c42d3a9991485"
+  },
+  {
+    "word": "бігти",
+    "hash": "e4cb6635f8d30ead715d23414011ba42277f7b4c56b82d90e50b1bd390d8a3e0"
+  },
+  {
+    "word": "бізнес",
+    "hash": "ec9eb0bb602a90aebed544aa7915cedf465410302330a478936fea9c944800c6"
+  },
+  {
+    "word": "бізнесмен",
+    "hash": "a6cd036b24c170d99c454db1e803e957c6bc3ff0eadb3deabd713c878aa992c9"
+  },
+  {
+    "word": "білет",
+    "hash": "8c7d4dd0079085aaee6bdc46325ec590c8c96be033783a9ad191c2872bdd42ed"
+  },
+  {
+    "word": "білий",
+    "hash": "a7f647570b9ff0f0a1f17097290df51155e3c86b9c5f1757fcad6f3bfb36f969"
+  },
+  {
+    "word": "блакитний",
+    "hash": "35c10032e735a510c2cccc839331407a6e2afa1a98caf0a9ed3cff3200e35929"
+  },
+  {
+    "word": "блог",
+    "hash": "be3981a9435a9cb9e39a1dac676e25d24525499a023527323638a0ffd18f8584"
+  },
+  {
+    "word": "борщ",
+    "hash": "d4dcca0e1d43471fddbf402c78cd525502207a147133e631b14e4132ad8512af"
+  },
+  {
+    "word": "брат",
+    "hash": "d99306448e987d2ba1fcec05cfa520ffb0d0df90d6caea50b1263dc62637e5e4"
+  },
+  {
+    "word": "брати",
+    "hash": "a0e23abfaca7f72e9d4681f0f6df53071ab365809f8237b851363ff86079a89d"
+  },
+  {
+    "word": "брудний",
+    "hash": "4b0b7752bbc9fa8b279222d8f3f8c746f74988706e98c41d84a8c7bd47975261"
+  },
+  {
+    "word": "будинок",
+    "hash": "098575d8712032339d7b7e18fe9b408b9568691dab88dc4f504ade20d3ba1549"
+  },
+  {
+    "word": "будь ласка",
+    "hash": "d4c894dc46550651c161cb516f5f91d2531b36ffc23870facddcb8808e216c4a"
+  },
+  {
+    "word": "бутерброд",
+    "hash": "185390e74faa85ed07aae8f45026754579709df253d2549534b7d969b8727834"
+  },
+  {
+    "word": "бути",
+    "hash": "5685d62ebfbaf71421bf4d072b5f28039a12fd61fed5e8141529e311412131e1"
+  },
+  {
+    "word": "в",
+    "hash": "b8012cb642c887a0a4f6f8e52fc6d97946274076ba64b113dff1db0a0ca37caa"
+  },
+  {
+    "word": "важкий",
+    "hash": "e812a7cd1bef57fca322abfecb428c8a0f85a2e2c1ffa9f546e41f33758b1759"
+  },
+  {
+    "word": "важливий",
+    "hash": "64ab11c3c7c9554fb11cd3ed2b0014781a04681356bb0846f8054aea9253b012"
+  },
+  {
+    "word": "вам",
+    "hash": "c3753450d0d75ed363e23a1e3c86be15d50f36a58ddbf563d39fc3ddcac07183"
+  },
+  {
+    "word": "вареники",
+    "hash": "e415ec372a56301c900ab86acfb70de70bba6d7829d68b1ef68773aabc0dd4ed"
+  },
+  {
+    "word": "вас звати",
+    "hash": "fffefe993ec9f7d2fdefa7dcf41b7a63664f99eb0d64df8e043b78cb5b81afd9"
+  },
+  {
+    "word": "ваш",
+    "hash": "334228f7e2015665bd9eaa9599fd463b7ae77389a1b523ef5634868018089218"
+  },
+  {
+    "word": "вебдизайн",
+    "hash": "18cc7f3299432a85f3114f05a40254f2ba09bccf7e6418c9cff96f05df3abca9"
+  },
+  {
+    "word": "вегетаріанець",
+    "hash": "cee86a8cd1c8d6a89f3be353b160a2463cd324efa7637532de2aa182083186e7"
+  },
+  {
+    "word": "вегетаріанка",
+    "hash": "483adbbc56403edd608532806026784dc4d8bd2772933473506168821bde3a61"
+  },
+  {
+    "word": "вегетаріанці",
+    "hash": "ce7e31f821b5fbe65cf984fc075197039c5b55283000fb408cc25726f0473808"
+  },
+  {
+    "word": "ведмідь",
+    "hash": "92f19c7e57c65f0ed7f0e9304d8d19c0cc3c49f966a81e28f3d9475ccaeb19a0"
+  },
+  {
+    "word": "великий",
+    "hash": "c156bd206e9b42eb0f1de4dcb942191c4246f93f863d06a8ec4a1c07b98b885f"
+  },
+  {
+    "word": "велосипед",
+    "hash": "0469f75bb5f0018e31f3f050de0b63cc10694f770c88e9d00e731d398212d346"
+  },
+  {
+    "word": "вересень",
+    "hash": "bbd2d8540578213ad8603b5f4e866597e0e8cff3ab673c802c0f765bad8b6856"
+  },
+  {
+    "word": "весло",
+    "hash": "b5e5ff7f1676b6f93196a11637b2e3c5d4a03b17cc9b149b9d7bba45a903a938"
+  },
+  {
+    "word": "весна",
+    "hash": "320aa54e9263352017278d7b2f2707471d7ee2d0ad1777d213134c22eaa61fd5"
+  },
+  {
+    "word": "вечеря",
+    "hash": "1bbb0a526570ceb4d6182d17ae09bf0293a8ca1fbd77fae67fbfe0352a8d5a92"
+  },
+  {
+    "word": "вечір",
+    "hash": "cc783f7bc26e91dd0c881be4807d63f890269b241694228c4ca4c80692468bf0"
+  },
+  {
+    "word": "вже",
+    "hash": "c2a2dbfc374f3fe8bfab9e904e8e2a85ea94caad67f18c8379887a9ff8cca173"
+  },
+  {
+    "word": "взуття",
+    "hash": "7a178e313651be8e30c068c8c9f57c334cf2eabb265eeee97d09f5ee5389228f"
+  },
+  {
+    "word": "ви",
+    "hash": "e6fd95940cc2bb2b1b3f676621368ecc717cadc3df5873938a73b32a44953349"
+  },
+  {
+    "word": "вибачте",
+    "hash": "b45fd5cc05a784136d042a10ab9ccb730d0f72da831c28ba042e35896d28b508"
+  },
+  {
+    "word": "виделка",
+    "hash": "e1d02249067d2fee1bc499fe5345ae341b633e4ab6c9bb60f38d9a65c810a8fd"
+  },
+  {
+    "word": "викладач",
+    "hash": "76e4b887cf53e4fcca2047d00899129a4a0ac1e816a3793e245f7796781cb3d8"
+  },
+  {
+    "word": "вино",
+    "hash": "6da0252af1514896a51445ca60e18c560062e6b159f1c4e30d7f2e615a7b2b0f"
+  },
+  {
+    "word": "високий",
+    "hash": "f5183d0858171059b3b1ab933e87b7fa501f7aebad6ada0940b97215f5d4a6af"
+  },
+  {
+    "word": "вихід",
+    "hash": "91b11fcb2cb2c4a9943d21f78b5308877216901c364b4220488328e557c14da0"
+  },
+  {
+    "word": "вівторок",
+    "hash": "41e360b933d69a66e93d1fab4df9cfb4249ee7769d5a95dee835192e55cd0967"
+  },
+  {
+    "word": "відкривати",
+    "hash": "4dcab87539689a9ce4bf811d33b45a3f62513e77bb0fa264052888044d38a3da"
+  },
+  {
+    "word": "відповідь",
+    "hash": "cd0c15c27bbb0a701209bc65b7f71efaefb16bc44b84fbd2a0dffc5dd5e077b6"
+  },
+  {
+    "word": "відпочивати",
+    "hash": "5048b512cb6d5b68f7fde07f52c6d55b5d7bf4d32535604eacbb4591c6833cbb"
+  },
+  {
+    "word": "відпустка",
+    "hash": "c9fa2f2195620d7cc3640f910a14f56a19318c12b66e89ce2997fea66323dcd2"
+  },
+  {
+    "word": "відро",
+    "hash": "e67274ad7ce37f4a78f9b0f791f1f9cfcb0c65c8225d9b756da2f6c4f77b7813"
+  },
+  {
+    "word": "візит",
+    "hash": "1e67528894b4bfee088bd3a92d35f0192c6827ca66ab14af01c05b2ba0ba2064"
+  },
+  {
+    "word": "вікно",
+    "hash": "2437de828354e0d991d116133f6965cf11a8efa97d6558ca4a17a2df10298850"
+  },
+  {
+    "word": "віктор",
+    "hash": "19357629e193239012f58cf026e226000582701d17e285536f8e39d512580279"
+  },
+  {
+    "word": "вікторія",
+    "hash": "fc2629aed75b545d356d88830ed7289c0744e60f2bcd03bf4da14ac18e7c61c9"
+  },
+  {
+    "word": "він",
+    "hash": "eff8e1f04537dfc98156c6efdcb472891f2bb4ad8354c7260303f42f6fabe372"
+  },
+  {
+    "word": "вірш",
+    "hash": "fd6e9364249f7814fe5857b339f899bbe2008ae30b07296a3ed3ed46fbb20c86"
+  },
+  {
+    "word": "вісім",
+    "hash": "92c05aa7299cfb81aba932eb2bb64f7dfb8c6cd21c07022724768f3c0c9ad04d"
+  },
+  {
+    "word": "вісімдесят",
+    "hash": "96cf88bd1978930214669d65a76530e081df8d18356c86621af78457cc735416"
+  },
+  {
+    "word": "вісімнадцять",
+    "hash": "d1df0df3d6fa4ac4d4ca0c567a87a6911f11dd6e63bd16c86d03c681b5835866"
+  },
+  {
+    "word": "вісімсот",
+    "hash": "a85374eb4c6efe88590d8dadeef6240cc653625a778885716d7e00e42c2cb932"
+  },
+  {
+    "word": "вітер",
+    "hash": "7481d1b59e296fe9932f2c555b12cbf14009312092f122f4d535e458723ada44"
+  },
+  {
+    "word": "вовк",
+    "hash": "614073a0d1e79dc12171979466e9898121c063ed10faa7971bcf407eef159564"
+  },
+  {
+    "word": "вогонь",
+    "hash": "36b55efddb15b87716a815373501f9b79b3ae61ad10bb2ca6966aafc59f27beb"
+  },
+  {
+    "word": "вода",
+    "hash": "0611a1b7ac680b4aabc004248affa719f13a9254f7c5c110a54248100323f532"
+  },
+  {
+    "word": "водій",
+    "hash": "168a6e878d180987ad363cba8f453c08713b4f2a2688273b4486b1dc0737441b"
+  },
+  {
+    "word": "воєвода",
+    "hash": "0dfc6516a1168644951c1917fd71557d714feb81bc8c600849e7d4e190d17ad5"
+  },
+  {
+    "word": "вокзал",
+    "hash": "b5983479bff1dbf2d6c397fc0ff1c582eac1c68c24105e99777ab3081a866468"
+  },
+  {
+    "word": "волосся",
+    "hash": "a15107f8bd209b926f45b43f75f35d64169cf8f4a3e85a87873fce9c3f5e8d86"
+  },
+  {
+    "word": "вона",
+    "hash": "93d9719f128bba049cdafe2db22d474ce6bc223872ae97a110c804bfe625a996"
+  },
+  {
+    "word": "вони",
+    "hash": "5afa0c210342bd03ec1901fa829e09356c6ee4e986ea5353beeac2131027c2a5"
+  },
+  {
+    "word": "воно",
+    "hash": "4f9b7de45c28daa54a00960a2b71cd72331ef752e35afb2ad954aa9dc5810a0a"
+  },
+  {
+    "word": "все",
+    "hash": "c3089753a24678feea05b4fc2eb902106cb659791139a62da818012712ef0182"
+  },
+  {
+    "word": "вулиця",
+    "hash": "d50c52304b9bd80bcd56e42d7e1a4b158db2f73b6c20cfd33d96b0db12e5e74c"
+  },
+  {
+    "word": "вухо",
+    "hash": "2abce55afa0886a3ddacdee2ea175aced613cee394e0d46de8d589ca1c80fbd2"
+  },
+  {
+    "word": "вхід",
+    "hash": "cea3b92cd5adb104d454b73baecd18b1542a0092fcfc22cd7a1ff09980039d9d"
+  },
+  {
+    "word": "вчитель",
+    "hash": "24a3b76f0db3ea0d3d770f111ad785a613cff86167a4571bcb3e7035367f1a72"
+  },
+  {
+    "word": "вчити",
+    "hash": "b50478e175895bdbcdf8d80749fb76c9d8d82e59ca9175ef93977d80531c8ac3"
+  },
+  {
+    "word": "вчора",
+    "hash": "fbf126bf18139698cc2c5f0e3ae205b807647c61f8d59327d525d07fd42f59e7"
+  },
+  {
+    "word": "газета",
+    "hash": "d2fb23f82e2c92b19ba81492cc1c211b3dce102ddcab2d4b68987eec4998f49a"
+  },
+  {
+    "word": "газом",
+    "hash": "045315ac672d518a015b281c9d1d945530e4905769babba4db604b41ed4d8b34"
+  },
+  {
+    "word": "гарний",
+    "hash": "6f7935a2e415d0b2cb1d8ca107c408a5c13d229511e0171a948bf5961939401d"
+  },
+  {
+    "word": "гарячий",
+    "hash": "353a18c26bbf31418083c8e58cd473b9137132b9f79d4485258a9d614550a1c4"
+  },
+  {
+    "word": "гість",
+    "hash": "9bb446029fa982631158f3a1f8e48a23b0267fc357d18a314f3e48cc7d3a82ed"
+  },
+  {
+    "word": "гніздо",
+    "hash": "4b77ea2b3c9f6a3de87cbaf0a81e52f7fa1262c2e972fddac8259366619ebaf9"
+  },
+  {
+    "word": "говорити",
+    "hash": "4de00da6eeacd3371f021d6dd6373ef922a56190fbddbdddee134b5eeda5c808"
+  },
+  {
+    "word": "година",
+    "hash": "9e26ad106148582986d2d8e7048f25398247e7828b5e618d99b53a2ad0a68991"
+  },
+  {
+    "word": "голова",
+    "hash": "6170b4891dd4c214db5a43e10fc874a80c7e43fb58b8b833bcaa68e6faddb7e5"
+  },
+  {
+    "word": "гора",
+    "hash": "69d05a4d1d06cc07117df7b19aea3266c7ebc1484f5d365a64f7ffcf1d2a7521"
+  },
+  {
+    "word": "горіх",
+    "hash": "dab03810dc69b4fdef613a215f089b85c936ab2332435bec4e95c5fa870739c8"
+  },
+  {
+    "word": "горло",
+    "hash": "bf3d146bcacaecc16bf086e65479103a6bf6dd0236781fadade0e0f25f8ab99b"
+  },
+  {
+    "word": "готель",
+    "hash": "1854b2ca2594741379c32517d0b6e29e662efb14b1626896f823a33cee8e30d6"
+  },
+  {
+    "word": "готувати",
+    "hash": "2275e69b6de10a4fc585e3c4b616a72d8ac151e01b577296dbffb6fa2b49b35c"
+  },
+  {
+    "word": "грати",
+    "hash": "41c1a293f3aff124c3b15372cab64192f43be39f2f983d4d1ed2206d5f05e6cb"
+  },
+  {
+    "word": "грати на",
+    "hash": "efb716a3bae6802e6f6285b83932b9ea859c08c5f50dadcacd8f5b123d1fdc51"
+  },
+  {
+    "word": "грати у",
+    "hash": "2dbd6deeee6bd9a2d805c16dd5d35574a91c0ff7b3a0b2d3815497187c63e73a"
+  },
+  {
+    "word": "гриб",
+    "hash": "932b50628eca1cfb58a9742ce5c444a7f8c698db63213c2b7c3c4228765d2c72"
+  },
+  {
+    "word": "гривня",
+    "hash": "b740342fea2ccf384b272308186b5b3d3a919a1330bce4e5cab47c4c9d91ad01"
+  },
+  {
+    "word": "гроші",
+    "hash": "98e69b4219d73c1aacb90d2038738be19e8116527e1ad21c172ea752bc32d45f"
+  },
+  {
+    "word": "грудень",
+    "hash": "7da8cd8759e7e5528974b647571a342e3db2777e947dc354a7ea92a6aad9b15d"
+  },
+  {
+    "word": "давати",
+    "hash": "58e52b41c1ffb11ffe61b7cf64cc816768109c8eeac53dc2946459a1cb32e697"
+  },
+  {
+    "word": "дайте",
+    "hash": "2eefb609592e3104160f5d443bec0fcb062ca174bf884e56012dbf151f788010"
+  },
+  {
+    "word": "два",
+    "hash": "86879b3ea456e970d141644f759486ebbc22c0fb7f4adf0c954d5b223c735652"
+  },
+  {
+    "word": "двадцять",
+    "hash": "6e7756afef8415dc0e6cca45b79ddf8dea2ad7ab34167dc3569166ddf6ad06ab"
+  },
+  {
+    "word": "дванадцять",
+    "hash": "2e8e6263f6ac5213261b512a8aab37bd889465cd1066c66633a93b5b5528549f"
+  },
+  {
+    "word": "дві тисячі",
+    "hash": "d7704014f897f464679341a1169a7ec00f0b16ef806ad73c87ca3e1cad7c8408"
+  },
+  {
+    "word": "двісті",
+    "hash": "e45855c0478cb634234a935e522a30eced070516c4877197295b0efb9bf5ab5b"
+  },
+  {
+    "word": "де",
+    "hash": "c02c3f0b59807f0749ead3771ba1870c9799b2f7a284889bad21bc26cb49cd26"
+  },
+  {
+    "word": "девʼяносто",
+    "hash": "0a127484ba681fa215c11963ce1a6dc65bfb1eb43e9632259798560eee541b17"
+  },
+  {
+    "word": "девʼятнадцять",
+    "hash": "3cf06c47c14a1ed05069139b2ffa99438e35a116a130e596c3ab52bb1c110507"
+  },
+  {
+    "word": "девʼятсот",
+    "hash": "55d92162c4ab1518733a3e8257ef5e155afaee5d9d3d123241c5e42b3e1fbe33"
+  },
+  {
+    "word": "девʼять",
+    "hash": "721d2244a038ee86bdc7ad6a3b422cd78d76296f99036849d9ab76f809a64eb7"
+  },
+  {
+    "word": "денвер",
+    "hash": "9c3f0c293d587ddb60182210d1aeb96546adecdd5968cafb1218014b99ffb500"
+  },
+  {
+    "word": "день",
+    "hash": "8eae90e5e96cb43c8dea5e3a572ec4e380624c51f7a7d1ed2266c7d003efec8a"
+  },
+  {
+    "word": "дерево",
+    "hash": "e72d0410e669b9d23757f097dfdbf3934c9cc4b014eee204d9b5b138f0eda0b1"
+  },
+  {
+    "word": "десерт",
+    "hash": "7b825c28d38a18f95e03cffeb418cbb6ccda251a5b1fd588f435179d683c2e9c"
+  },
+  {
+    "word": "десять",
+    "hash": "1a78579c814fcd0cfc1879f57f2bc7e7e7bf8fe4c7fae3521870bbfd719d83a8"
+  },
+  {
+    "word": "дешевий",
+    "hash": "9fe9194324f7791a755ca244b85c45e12c5ef9b62a21159c5a510048e236bccb"
+  },
+  {
+    "word": "дешево",
+    "hash": "cfeea78b65f80abcb62708a3f30c34623c118da78ab35adb44a5cc3a35a8c2b7"
+  },
+  {
+    "word": "дзеркало",
+    "hash": "866dbdbc1d4e20a7ce5e4a9fd2735dbec17e31de7cbfa707c42a2f995fd6793f"
+  },
+  {
+    "word": "дизайнер",
+    "hash": "2b350aa7256718234e6a0bd8331fdea592db90ec9a304c396df3dbf79a320604"
+  },
+  {
+    "word": "директор",
+    "hash": "391c00329bcc18cdeee767bbbe4b60d1a7b187f7404e338709e6c7fc1cd63963"
+  },
+  {
+    "word": "дитина",
+    "hash": "915d6932bd5b234ea47dda45daebfd44c214969813383b3c68c421d639a43902"
+  },
+  {
+    "word": "дівчина",
+    "hash": "41ab74eb032722e13260b0684b5310a1e47e59862f259a65b29756016f051876"
+  },
+  {
+    "word": "дід",
+    "hash": "ed653aa6313c80e2c67ec165a88f957028caba9a88b0cbc93ca844864a0d8c2c"
+  },
+  {
+    "word": "дідо",
+    "hash": "57ed46d638d71ad7e26a9a830fc3306940699adecb67be509b69fd76b3b3fd2b"
+  },
+  {
+    "word": "дідусь",
+    "hash": "6f12b11ef986babf45c39490f4ba452768cb3c28ffc3774c477ea53f9a25f436"
+  },
+  {
+    "word": "дім",
+    "hash": "a132fcc343bd4de8e97368ad34c662f6d68e66985c1b3e89cabb74910f3558b7"
+  },
+  {
+    "word": "для",
+    "hash": "66ccd407f7d57636fee94791d542aa5caf741059e67a9a3b32aedf798df01058"
+  },
+  {
+    "word": "до",
+    "hash": "102dcd5d8636066da5369bd19de39959138d57f97c6c82bedab9bd8d7b20870b"
+  },
+  {
+    "word": "до побачення",
+    "hash": "bdac1feff8bbf9b4b10f5f55c654d088acc4c168bca911bc7cf4f137eb22af12"
+  },
+  {
+    "word": "добраніч",
+    "hash": "b7c1c3ef8256313ef2d50f34a251820f3a8c5491033092b212222bf40380dcd4"
+  },
+  {
+    "word": "добре",
+    "hash": "09c6f659a57904de0c85d02ae9c2cb9192968db1ce9f9aaad9d35fe0adbfa529"
+  },
+  {
+    "word": "добрий",
+    "hash": "145c459c9454d7d05dc642b57941b409f7ab34c5aa816d6cc331f40abbba492a"
+  },
+  {
+    "word": "добрий день",
+    "hash": "f30f8fec742796dfc7e27922dba549892c1a742a51f2cc68ad2bf986f7dae656"
+  },
+  {
+    "word": "доброго ранку",
+    "hash": "cb8c8631a44598f5ece01cbc0a48932cdab7c79e2d7ab5917e8904b9cce4d421"
+  },
+  {
+    "word": "довгий",
+    "hash": "ca79575896d3402e799f4c0eb5f8fb2f5e1e0aa8c79fb6d66fabdd0190fa163e"
+  },
+  {
+    "word": "долар",
+    "hash": "1745532d02b94197ede6520abee09cc4580e977160fae0ddbf526436b9e6447b"
+  },
+  {
+    "word": "донька",
+    "hash": "d06ce70fb87f1f954925f32a27f6d3719c7c235efa4a1e64ef713c9c489d9457"
+  },
+  {
+    "word": "допомагати",
+    "hash": "c5ea592cf42fac20032188ed0c6cb181bf83a4bdaf2cc0a81d679dc1d9462f56"
+  },
+  {
+    "word": "допомога",
+    "hash": "ae04886d0d3f37fc28fc29fd2bb321d4c6c0508aeeaa5fea4212f137210b3ad0"
+  },
+  {
+    "word": "дорога",
+    "hash": "78aafb41707037a80281f1b707c71b22245ad99a00f510b51c6b7c7b6c4aeb10"
+  },
+  {
+    "word": "дорогий",
+    "hash": "218597384d330a511a85201aeda589d474965994d61aedbbd13e0a8a64bd986d"
+  },
+  {
+    "word": "дорого",
+    "hash": "9d0d3e6f5e1517084d4285b3ccd77c3f582c2d291e97bd1fe355ae7506063da1"
+  },
+  {
+    "word": "дощ",
+    "hash": "037fe7ea3820b83aa939db4be9d816b4df5d503ab3761983ed9f09cd0a63b8ae"
+  },
+  {
+    "word": "друг",
+    "hash": "a963d21beea64b7e2630a5ddd1a7e8673fd457896ffdae03242bda9f147aa354"
+  },
+  {
+    "word": "дружина",
+    "hash": "22fa66290a4d91c9f450f7a2a07cbc2ae16f90dea0477f699042fa7f9994d187"
+  },
+  {
+    "word": "дуже",
+    "hash": "e777d99ffa15884669290a341f82c9e58d20cac61669359885f907e28bcf6529"
+  },
+  {
+    "word": "дуже приємно",
+    "hash": "8fafa178068bd2042adb000d281cafd05132b470dd4ad86257146667badc2ad2"
+  },
+  {
+    "word": "думати",
+    "hash": "33b58ed617f88cdf3a302bb467932eab526245e3b08ba214e07c3cf03d5ef7bb"
+  },
+  {
+    "word": "дядько",
+    "hash": "26f50037327688fc213b3e8c42e9cbc45d9a39c6ed42cf481203b34c0ca92459"
+  },
+  {
+    "word": "дякую",
+    "hash": "545eaed8c684a588bb0b78723e608af7b42c15f8d1f124c09d42010af7305304"
+  },
+  {
+    "word": "є",
+    "hash": "28241c5bad421aa208d98462286338d6a44e710debbcd7982cf04e84f3e9544d"
+  },
+  {
+    "word": "живіт",
+    "hash": "a29d0a7a9874d275f653817d5429dd2af0d59340bafeb23e913bc64fe16effde"
+  },
+  {
+    "word": "жити",
+    "hash": "0d208aa3bf2f99918314888ab097074d15134dd9a308278fabbde2cfd839103b"
+  },
+  {
+    "word": "життя",
+    "hash": "8586130b5de7384c3bb5f03f5c952d35671c3673fb8323c38fa85e7a67fc1bdb"
+  },
+  {
+    "word": "жінка",
+    "hash": "d89ba3f6f9fbf4cb0902c44cd06a33851a0dc00f22ea9a9f9777f949eeda0243"
+  },
+  {
+    "word": "жовтень",
+    "hash": "bf1d57b468af69c9120e2fa80d654a2185a41c3921ec34c661b5098586b074d1"
+  },
+  {
+    "word": "жовтий",
+    "hash": "e470e014e602482aa7e256d2220377e576ebc239301691ed3956814d304ed7b8"
+  },
+  {
+    "word": "журі",
+    "hash": "47177c83cfcd1fb2835f944265e8cc3f99e720a5b1ec39569278f24d32e660d7"
+  },
+  {
+    "word": "журнал",
+    "hash": "8ed1ff9bd2c40395b1ab3f2af51c167b2bdd1b262dcce132a0f687b7450c9c35"
+  },
+  {
+    "word": "журналіст",
+    "hash": "0234e3ed3df7455bcc326881cf765bc9b79c49ea9f4e78eeae78829909343017"
+  },
+  {
+    "word": "журналістка",
+    "hash": "ee6ec7c76a9c92234281aee8bdd4ef58b145471fa19e85f5c65ca0a0d42e4433"
+  },
+  {
+    "word": "з",
+    "hash": "3051067c6324c63f833a7bb009fdc9e6ad9a518fb37678185c68a38d346a4463"
+  },
+  {
+    "word": "з ким",
+    "hash": "6ffc8f8c77c79f84b77b8d4a188768076dc68c7ceb066a7ae5f5e951d319c262"
+  },
+  {
+    "word": "з цукром",
+    "hash": "4a514d27da600b6a9150e4edb4e20d7c745449b1eacb135e75eaae9984e9f950"
+  },
+  {
+    "word": "з чим",
+    "hash": "a0f65aef6a8ae06b0d5938e05c7e4963293665cf90acef89af1b63fa0c37b04a"
+  },
+  {
+    "word": "за професією",
+    "hash": "4ff647b721821a77454ef6a1b4652c68eed6176dd742ee01f3a82fe3401c7026"
+  },
+  {
+    "word": "завдання",
+    "hash": "27f3798a831677c35cd2ed714f00741bbece24ea5c98c1790b8f0709dbcff942"
+  },
+  {
+    "word": "завжди",
+    "hash": "ac7cee2f8f3177646f667eb30c536d54695bbb30a3e1e119a97602af2ddc61af"
+  },
+  {
+    "word": "завтра",
+    "hash": "ea547cc196d055b23e2406fed3028965a79d1b8c090873273dc9ebffe6974c7b"
+  },
+  {
+    "word": "задача",
+    "hash": "26de1b4a28bc62a798638658778f4f885039ab96523f3f9e4b670435cc01d596"
+  },
+  {
+    "word": "заєць",
+    "hash": "718a33799738f248ef84ba69f7c07f28593c1dcbbd59db95e1218d79dd3ee1a6"
+  },
+  {
+    "word": "закінчувати",
+    "hash": "6bcd49ee5c13dc9a078465e565b7dd1905cf116e75f74bb75001bddd034172d6"
+  },
+  {
+    "word": "закривати",
+    "hash": "dded305578e25f1bb435bfcdd9abadead8762263d9348c541b6479a8763f1a22"
+  },
+  {
+    "word": "замовити",
+    "hash": "c671a6d6e02935ce2d2559be46bcfd117e1f37590f94c4606d56baede195fbbc"
+  },
+  {
+    "word": "запитання",
+    "hash": "1e6af899c20d608a435e11e91488b0f236f69fa1185634d09403701062ea842c"
+  },
+  {
+    "word": "зараз",
+    "hash": "87357c7c03c265b6b1cc0fd2f05a4f01f1aabad66c8fd69286e18acbdee22f4f"
+  },
+  {
+    "word": "звати",
+    "hash": "d8824f7b0acdd37830b525f76004144122a58c9ad4b42384f9e8810fde1a9b1b"
+  },
+  {
+    "word": "звір",
+    "hash": "fe2bd34305b804f9f44b305db7bbd2b1df73aaef5316d903c80b8c19649b3fea"
+  },
+  {
+    "word": "здоровʼя",
+    "hash": "6d1387d0a9ab24afd2a045d10523e84a0e84f2d601ce524a09d867aef1559547"
+  },
+  {
+    "word": "зелений",
+    "hash": "ad2b8e7ab07c5986d54b168a1593eec083c2fa1b53865d39652da6506356c22b"
+  },
+  {
+    "word": "земля",
+    "hash": "f3f5c2c67e4c9d6de81e165418afd24e924308346d3b78aa1ba52cb69f822014"
+  },
+  {
+    "word": "зима",
+    "hash": "1c76dc1f7979ef34ee06294d502a7e15db3a74555de5663018a4608b820095b2"
+  },
+  {
+    "word": "зірка",
+    "hash": "4252b9ea280c4633dfbd190b2ca7ba5f2ac8799042f6d85f8fbb9eab4826f856"
+  },
+  {
+    "word": "знання",
+    "hash": "500da3d74ff6c2205b188e1f662d2a8a420fba3b3a20e020ff580de7605b3107"
+  },
+  {
+    "word": "знати",
+    "hash": "f734bf002513190c2d0df89bf5f941bf387d7b16f1b9084e8293800674a76f72"
+  },
+  {
+    "word": "знаходити",
+    "hash": "d88a293020eb0cbd661e8971bb8d10a4df1be743b3ea1ef63e5ac22be1bb9134"
+  },
+  {
+    "word": "зошит",
+    "hash": "343478ff49905b0cbbf4bf7ed87990f6014332074b451e1a8704613ee4db8a42"
+  },
+  {
+    "word": "зручний",
+    "hash": "7333342d2d8a09f10af73caa88e63a633e04fbc64459fc79133e0a83868b68d8"
+  },
+  {
+    "word": "зуб",
+    "hash": "adb2b1dcfcdaabb0d818cbd1bd7aa94054a017b80276ecbf40286f1d1b94fff3"
+  },
+  {
+    "word": "зупинка",
+    "hash": "9416e12fe7eb53a63e1a7511c34ef2a11c8249b4ce9273063545141f4eee7de6"
+  },
+  {
+    "word": "зустріч",
+    "hash": "8717926159fda5540fd87a1e675088f0a05a2a86d7b0471dd5b2615a3ff5ce30"
+  },
+  {
+    "word": "і",
+    "hash": "4c4bd3909198c0fef87c94106187e31c51a838c09c2178cb4954bd2b8ea1df50"
+  },
+  {
+    "word": "іграшка",
+    "hash": "6b266994e9ee7b55505de8bf2686f65ce2e6ff1158e5a1545cc4249f0052b810"
+  },
+  {
+    "word": "їжа",
+    "hash": "b1957311d765bc7754efffa1b42ac2391a86d9f0898efdda34db0ed82ca27782"
+  },
+  {
+    "word": "її",
+    "hash": "1e91e8543601241c2906a4de6a4af2f59f8d79cb5abd5fc199679d61c592eebb"
+  },
+  {
+    "word": "їм",
+    "hash": "2ba65521beb592c9362e01515aeb70a97c7d6c2b65ab7bff93f3132e1c7b2b63"
+  },
+  {
+    "word": "імʼя",
+    "hash": "f1587b0886b27551edec6313f2f863822af34a7da218f7072f47ce048ccfbecf"
+  },
+  {
+    "word": "інженер",
+    "hash": "1401357a80942560d70ec294b0085d66411dc04610adcaaafbbb3b411a48d6fa"
+  },
+  {
+    "word": "їсти",
+    "hash": "bb8c968526b5029b1261e9c41ca727389a8528b83877408e8e177599e06b889a"
+  },
+  {
+    "word": "історія",
+    "hash": "99fe90d600f51a13367f0c6b59a2430e3fd29e2b045c969ec61fbcb14ada3cda"
+  },
+  {
+    "word": "їхати",
+    "hash": "110a9f78452a83243255cf660308f6d41c04c479e8fd56688e44dd8fe0ef4be2"
+  },
+  {
+    "word": "його",
+    "hash": "a861386604e4adea8666c8aece3c138f89c09b8d63817318bd024b0baf3a40be"
+  },
+  {
+    "word": "йти",
+    "hash": "d2c35728b87483a654e0f8bcc9a3a099f737a9a42a60fc97e5c8059a88134ace"
+  },
+  {
+    "word": "кава",
+    "hash": "622f9c9e5b506a345e03bf2aa165dd3294f8c18c18a8f8194e01f6353d453aae"
+  },
+  {
+    "word": "камінь",
+    "hash": "a86fb4b2840c02b3e71beb68c8accc06abe7495a6fb84638b10730dd1e63fd4b"
+  },
+  {
+    "word": "капуста",
+    "hash": "54af9e8fba188b3a0d16865685198fcb02608f2fee12854331228f59f9a4f5a8"
+  },
+  {
+    "word": "карта",
+    "hash": "7566e3f4f0a3d1e3e955354b182477702b26d3863699918759f124e68213cd9e"
+  },
+  {
+    "word": "картопля",
+    "hash": "07d228e37831ffd521c3ddfdb73ac8c82ce2f09fc79187d8144177cb37a77de6"
+  },
+  {
+    "word": "кафе",
+    "hash": "e833a4f7906023689936c859c78fd10bf6d3c206353a9143783a2eef81c93fea"
+  },
+  {
+    "word": "каченя",
+    "hash": "658074e4df469a30118fe361f027b824b4dbcbf6471501f14ceacbd116807b37"
+  },
+  {
+    "word": "качка",
+    "hash": "beb8961cd5fff40d5dad38a979da5e1453ac144c95634762cfc287f7d9d665dd"
+  },
+  {
+    "word": "каша",
+    "hash": "dc5730215798dba2a4b02f1f257ea898332a8c099f5595cd480d19dbdf57e271"
+  },
+  {
+    "word": "квартира",
+    "hash": "41b9fca086bfb412e258ae5071456b48d2b21ad6d1a36e55c33f9b5e55c95928"
+  },
+  {
+    "word": "квітень",
+    "hash": "16b61d2b533a5624c5d3f557493d13f19459b4dbd23e02aabbb1bd2ec04b9f6e"
+  },
+  {
+    "word": "квітка",
+    "hash": "049cde34494bfda1e01d77b249b0fcc130219031e0a8a760f03fb3a96451afe5"
+  },
+  {
+    "word": "київ",
+    "hash": "e574b8438a7d7344c26cabcf5f8cb99a133aa0b00524d8a988f3d968289b3a51"
+  },
+  {
+    "word": "кімната",
+    "hash": "90fc9530425e03c6f73427acf17ad8e3107d550c12111c5a63a939294b7c183f"
+  },
+  {
+    "word": "кіно",
+    "hash": "6c8b65956968340f8f83bac915e022c2ca3d8209763930c1a9710c2c5507a22f"
+  },
+  {
+    "word": "кінотеатр",
+    "hash": "6639068d240572427e539d390c91f7396322d1cc5f680f54084bec53ed896806"
+  },
+  {
+    "word": "кінь",
+    "hash": "a38bcbd80b732b08194d8babc99e08d9176e46a42d7cf23e4e5a0a6d9401d6e3"
+  },
+  {
+    "word": "кіт",
+    "hash": "01c405a4ac44e957c3baf7a6ea489049bdbff5c8d69f4a171639ed454e62f70d"
+  },
+  {
+    "word": "ключ",
+    "hash": "1de36a32af798da0c1ac9297603a320ed8fe567cf21c9177112a4ce914ebb8be"
+  },
+  {
+    "word": "книга",
+    "hash": "695b9685757ab1a5731425e4c8e0a6768093a9785faa71270c522c2c96690619"
+  },
+  {
+    "word": "ковбаса",
+    "hash": "b7fd9170770e9006c007cac9eeb2f66cecb00c5ef642255e389beb35742c89d0"
+  },
+  {
+    "word": "козеня",
+    "hash": "61c8f7d2778703ae9b48ff4aa70eb5e636419ba421c22f019c9ea919bf1f8cf4"
+  },
+  {
+    "word": "колега",
+    "hash": "4348e07cbee5398b8c35ec67b02d3112f2147bafdb001957b32db3e71da26aa2"
+  },
+  {
+    "word": "колесо",
+    "hash": "f0dd6315c85b71c705f426c68468da422eeec356b2dd4d1d4823f5a37035c0d9"
+  },
+  {
+    "word": "коли",
+    "hash": "36a2e2705129d38a174623c0b4597d7e0645531d6d64b26b0ce34deacfa36bd0"
+  },
+  {
+    "word": "коліно",
+    "hash": "8ed175b5078ee446e90a97f8712ea32e38bd3a27abcad2bab433b65ee185df26"
+  },
+  {
+    "word": "колір",
+    "hash": "168ac75487d5d5fa2499baec5365aff6c8123d54971db8e5f24c8179eb54efd4"
+  },
+  {
+    "word": "компʼютер",
+    "hash": "5d853ae2116f70cf30472094f09ff6afb0367ee3bd8fd35830e79b789facda98"
+  },
+  {
+    "word": "корабель",
+    "hash": "7e3ed710eb8b0e4f41b05eae9dd534e8657ded7c86cb0322f2b6d91ec1865e92"
+  },
+  {
+    "word": "коричневий",
+    "hash": "b9f1714d66c1d1a1d97949f45562f3ee32b52a4a22389ac77acc10f5bc49071a"
+  },
+  {
+    "word": "корова",
+    "hash": "3f1dc2e04cba4b221fc71ab403e036c069e96b067b214de8b7bb12b3d21c2a36"
+  },
+  {
+    "word": "короткий",
+    "hash": "a46e5c9f5a09f983d4896391c8dd8070fbc8003d248c9fd22c5c9d932cec2432"
+  },
+  {
+    "word": "костюм",
+    "hash": "e594a510d50cae470269274988b889e9bb9c56f78b507e556a624ad45eeec1cc"
+  },
+  {
+    "word": "кохання",
+    "hash": "b3e1153dea52e265c6dd254c96bc3cdfb72994ec6380ce03bf258afb0b0868f2"
+  },
+  {
+    "word": "кошеня",
+    "hash": "f010994f021dc4b6bfeade6807b31159e2021566f1d965d3c480a60f6a5dab28"
+  },
+  {
+    "word": "країна",
+    "hash": "67911e0524624c03ffcb74f841cc73a46953ea2daa1bbc66ac86a2a0ad07316a"
+  },
+  {
+    "word": "крило",
+    "hash": "45a06e83999d4356452c898276bb0b1c80307885dedb395643760241b9ad4ae4"
+  },
+  {
+    "word": "крісло",
+    "hash": "b6a4a76c7a0324d15597cfa5229de83d82cb1de30374094c5bb65081c3d23b42"
+  },
+  {
+    "word": "кров",
+    "hash": "ceddb4e61c10db7839d6b60d0ff97c82059f1a942789a6cb2390b570ed49d4c8"
+  },
+  {
+    "word": "кролик",
+    "hash": "c58c89e93fefd5e84f1cf3ad96b7eadea3edc17adb0718898c7a5027cf3f03b2"
+  },
+  {
+    "word": "кросівки",
+    "hash": "b598de2ae0893fbd08bdec4c19f82af202d153d2656b2514a732309ea4d29067"
+  },
+  {
+    "word": "кузня",
+    "hash": "21636d977cef2fb33de4eb884df138f0269ad3964b57d6d043122c19262aec69"
+  },
+  {
+    "word": "купити",
+    "hash": "1b64133425ad0de1e2cf328989489a339cd8688da27842c7b81aa4acac722cd5"
+  },
+  {
+    "word": "купувати",
+    "hash": "16ff5af84d9a6641b14172d040c3698062611aa4c2d72a08b096ee92672d22b5"
+  },
+  {
+    "word": "курка",
+    "hash": "9cc5746823f4d376bda4b4f43543a797223957540a01bb419bc6d951d73822e4"
+  },
+  {
+    "word": "куртка",
+    "hash": "c360ddd7d858251cd9d5be8ea005b9f66750966edcfd4a0dcb6b606914e9e766"
+  },
+  {
+    "word": "курча",
+    "hash": "a128a3715e775c20e097a9ca8d7e1a64954086f7e1362c8756536d63e4861758"
+  },
+  {
+    "word": "куток",
+    "hash": "4ec7cb1948bd860c9cfa1e9e55214ab18e356d7e8cfe7b1a81103e4ef4785438"
+  },
+  {
+    "word": "кухня",
+    "hash": "07c473093067d1eed4847269c089f18599bb22d944b99dbe3c03088296f5c2a2"
+  },
+  {
+    "word": "лампа",
+    "hash": "d3fde316ec430beef80ef02106cd18cf742536756a5ba984c7769c95fb38f50a"
+  },
+  {
+    "word": "ласкаво просимо",
+    "hash": "40ab3275b372cf705113b13f11895de1d94250d0564f487174210047b1b11ea3"
+  },
+  {
+    "word": "лев",
+    "hash": "75e2c03af89c7da705557eb345d313e64d7885ea1223f39d237230b728521fe9"
+  },
+  {
+    "word": "легкий",
+    "hash": "b5ebf4a1d22fa24c3d423504ce739432f3ff9b1e4f3895fcba8de6e2a476435b"
+  },
+  {
+    "word": "летіти",
+    "hash": "945bcd087bf5c2b0298f2671babf7d848f77c8ccc2cc42abdf718d2d19b64734"
+  },
+  {
+    "word": "лимоном",
+    "hash": "eebc6229fa9a7d0829ccf531e5b6e59870cddcb4b832d2b4b4fc9cf8c4bb6707"
+  },
+  {
+    "word": "лимону",
+    "hash": "f9abbb0cf9685503237131f8449ed75dcaf210f522ab561d031839755ec0d450"
+  },
+  {
+    "word": "липень",
+    "hash": "18a77b30dcccb7ba8fa1734fedeeab870876a38a36b32bddf0446c6c10e015c9"
+  },
+  {
+    "word": "лист",
+    "hash": "5719a8dd095f4f7cf6f8254a3ee81b36b4bb6f8c19b35daf8439dbce066f0c8d"
+  },
+  {
+    "word": "листопад",
+    "hash": "0b07c35dd255d873e5f530c326a6245327d81680a345327afc1aa1a3ebf36476"
+  },
+  {
+    "word": "лівий",
+    "hash": "4121427db2be60148609254d3709f655062fdd560b61555bde531cdcfa31f9fc"
+  },
+  {
+    "word": "ліжко",
+    "hash": "87eed024721b7d75cdfb0521b60f145a51ea445e200f5d25a3441d076d7194d6"
+  },
+  {
+    "word": "лікар",
+    "hash": "835b54f285b43d592afce28f74c28fe5e54279b7df9ee43f6b97041c7107e721"
+  },
+  {
+    "word": "лікарня",
+    "hash": "63df5b83146fe0058a2d0c46054787cac8cb1fb4aef88256fd33589d5b148146"
+  },
+  {
+    "word": "лінія",
+    "hash": "18a53360f6cbaf71e1195857eae346cfbf380fb15d2d83e57677468c32430eba"
+  },
+  {
+    "word": "літак",
+    "hash": "ad18163a3cf688fe04da92434859a39ab3cccec64afb22a6496687bb6330618f"
+  },
+  {
+    "word": "література",
+    "hash": "3b6cab356a7ae3ed216351a6f713d86bdca1e5492014bd555dcca51efdd22a5f"
+  },
+  {
+    "word": "літо",
+    "hash": "039a4fcd116f0289073be55b33dd71fb0485ba16e0649a9be983b62c5bf15d90"
+  },
+  {
+    "word": "ложка",
+    "hash": "87eb1a8e77248e8d3db6823f72fc1569d92cb1876f1a63c5ce1d6b0da886b0a3"
+  },
+  {
+    "word": "лоша",
+    "hash": "3dd2f3780ff38df8229ff50ab007347039a952ab8b2d4fd4a312bfa57a70d211"
+  },
+  {
+    "word": "любити",
+    "hash": "62a7834944b50c8beb5bb980e9c2005e1c87b9997c9bf9d20e1c022af655e077"
+  },
+  {
+    "word": "любов",
+    "hash": "6d0a272932351cd7ec0c7ebce6f47d670c698416ecc317dd89ee016fb0562bb8"
+  },
+  {
+    "word": "люди",
+    "hash": "e85da55ff80acfb6936dd1c0793c17f1da6be41733dad43a9ddcc1df049ba47d"
+  },
+  {
+    "word": "людина",
+    "hash": "6ff83abecacc653ff211850b5508f925d6d62fb98c6524634650d2bdaa485267"
+  },
+  {
+    "word": "лютий",
+    "hash": "9032ce52d1cb976294de2b565cf5c6af7a3011379b75c82327c7f87d5c12a0f1"
+  },
+  {
+    "word": "мʼясо",
+    "hash": "3037ddd246c2ab77359c5058e6cb9bfc7229655f2baddd89d0a06e23625d86b6"
+  },
+  {
+    "word": "мʼяч",
+    "hash": "1cf70ce1625f2d2c5f54981e268a1f1bd56c4fc362732c726b967a291c56b2d5"
+  },
+  {
+    "word": "магазин",
+    "hash": "8a1e748399c1e5857d21c0e2805f695734eeee548bf380b8d75923944265bef3"
+  },
+  {
+    "word": "майонез",
+    "hash": "f49d3ee4e597f8d965fbf7289305b4f0ca222264ce763beb565382052660d3cb"
+  },
+  {
+    "word": "макарони",
+    "hash": "c92c6d986274e8be5e5ff172e0ca23f495c24e7f81623cca120b455cefe87112"
+  },
+  {
+    "word": "маленький",
+    "hash": "90732b6f8c3318c7ee1d70bcb9859f5c3c50b32bd89821745543789c5be8aceb"
+  },
+  {
+    "word": "мало",
+    "hash": "711e3156755f6a9037ae6f6c9a6b78b7465d85824fe845142ea10f95f746878b"
+  },
+  {
+    "word": "маля",
+    "hash": "846b6e569433d36af870ad01bad36a39743286e63215c1fd9fa67cc6f3d26bea"
+  },
+  {
+    "word": "мама",
+    "hash": "d2a8dc30e406597daf352c99a74964b8e556e23905535bff0e04f50b5764263b"
+  },
+  {
+    "word": "масло",
+    "hash": "8b3c965ad09cc1526d30f8ab9bcf47e1299308dfaedf066cddc9d7d07909f668"
+  },
+  {
+    "word": "мати",
+    "hash": "43cc9dd684469fdbf9868d918f744acb81ba8fa1e1a6e5b83aeb8cb3a84d3ae7"
+  },
+  {
+    "word": "машина",
+    "hash": "f0e87d62375e7356f04510eb33932b8fe1cfe1d89c8bb7f898000c8b93234792"
+  },
+  {
+    "word": "мед",
+    "hash": "103956509ce041dfdf0ef28f97a266d6e7e44ae4146f3e08d1571af8ba8fdb5b"
+  },
+  {
+    "word": "медсестра",
+    "hash": "1006a1b42e83c301de92d0e215a8ddb920f72f71b65954940db92e7f2b2efbeb"
+  },
+  {
+    "word": "мене звати",
+    "hash": "8a6b278df4e17a5efe9536b9df9e9cf0b987eb5968e0d9467baf77cdb611f5b6"
+  },
+  {
+    "word": "мене звуть",
+    "hash": "ba7836ea57f988e013c8b6f4fbb8633f7d3607739c81f537655cea86b5a5f0bb"
+  },
+  {
+    "word": "менеджер",
+    "hash": "ed8353ffe0d5be057ea0a50b3c22e34c6da2743ab64ec5f985f52c0f09b85e19"
+  },
+  {
+    "word": "мені",
+    "hash": "d1b6b8915266ba1b8a75dcec34a0797c2f16b6b7485287f8f5d3b5d10b5a5985"
+  },
+  {
+    "word": "мені теж",
+    "hash": "a18b21a391ed11eaef3ffaad245fe993905815cc9a4b217107450e9c617f4f5b"
+  },
+  {
+    "word": "меню",
+    "hash": "44e3907380c1d07c5d25ee09f3777a361a715c4d3325a998f009cffaeab47c17"
+  },
+  {
+    "word": "метро",
+    "hash": "bb8cb2d348534e77f57d1a732f313d823f8e4a9726501843d08c86cbac0fcdf5"
+  },
+  {
+    "word": "ми",
+    "hash": "89a46a478e1fcd226ba845b746177fcac104772f5cfe5e016423adbe3dc7db8e"
+  },
+  {
+    "word": "миша",
+    "hash": "a943bc3d576cb58372c5d9d19854bf195d5f923eda8e11aff0f3fd77036bd0f4"
+  },
+  {
+    "word": "мій",
+    "hash": "e25292ca678b2af81921df0f75d94748a51ff730f158e0f744d1b28125504296"
+  },
+  {
+    "word": "мільйони",
+    "hash": "535590a525ffe7bc63f65a2b0113547e66f677f18d365dcb07c27e3af856e3ed"
+  },
+  {
+    "word": "місто",
+    "hash": "2758b6f2f672de2449c133cf0ed6a1bff386dc1803f10e53e646e89834e57848"
+  },
+  {
+    "word": "місце",
+    "hash": "9fb2530df6fe4b513b90aa0f3bbe30f56855e5d3106ba139655145b09dfde3c2"
+  },
+  {
+    "word": "місяць",
+    "hash": "c4ebb7d4447804fb9539d7aca7207f2b660f65d448bb8fc19cbeccc1077d19b2"
+  },
+  {
+    "word": "мова",
+    "hash": "696af86102da5a2071f1c1b7ece7d5ea191e72aed5da6587289c59be0e198d6b"
+  },
+  {
+    "word": "могти",
+    "hash": "082a09f2be3c765be630004f59bf35ebe6e6c7ffe1cc1d8f10ca95868bab84cb"
+  },
+  {
+    "word": "можливість",
+    "hash": "4c69ae697ffd2050b37ae7abecd897478fcd5bd9fd71be7a6c936194c134514a"
+  },
+  {
+    "word": "молодий",
+    "hash": "01509f16e28412017570af89dcedabe8984aa1d5dd55eb3092760da30185e384"
+  },
+  {
+    "word": "молодість",
+    "hash": "0d47179c2e943a9e146a1938ee5f63fd2309a8f4c32eafa458895df326b48bde"
+  },
+  {
+    "word": "молодший",
+    "hash": "af99d5eddaddf57c08d574794eab1cd87dd208593dda4676ac70a3a57b786d7f"
+  },
+  {
+    "word": "молоко",
+    "hash": "69f91741a4c2027f00bdde614c877e743b03aac5e829078acbae9d7c1c1c4565"
+  },
+  {
+    "word": "море",
+    "hash": "127eee75ef5d6b65202efc9f6a6e0a21e6d4acb26deaaf18d03cf468aeb41b21"
+  },
+  {
+    "word": "морква",
+    "hash": "1aefa1c0caa91f39cd0c2871ad33951ef7acab1102dc78438730ee3c3924a59a"
+  },
+  {
+    "word": "мрія",
+    "hash": "726d151442a5bddb176a239f0b2cf8b57c90621ea84ef5bfea8299e3fbbf11c8"
+  },
+  {
+    "word": "музей",
+    "hash": "e143c07fd74064bddbe9e0887e47e825cc0c9860bbd272bd30cacf5cf58ac6b7"
+  },
+  {
+    "word": "музика",
+    "hash": "a4efdd99298cd0bd68c39917d831ebbfc6672406a4b75a774331207435cd5921"
+  },
+  {
+    "word": "мюслі",
+    "hash": "d14d4f5047f317b195d1e7cea26be8da6cf25a676f5267c318deb71b3f979933"
+  },
+  {
+    "word": "на",
+    "hash": "284852b2c5506ed24045eed776295780b4aad9cb01cdb3edf4a6fdb46f268369"
+  },
+  {
+    "word": "на вокзалі",
+    "hash": "f258bd28fc9aac97a359fb2b6f31515fd7505579904afdf1f52daa8cb551456b"
+  },
+  {
+    "word": "на здоровʼя",
+    "hash": "69ec22e5f0667e91065258d5547a09ed9ac61fdb9561e28621d60d63df6235ff"
+  },
+  {
+    "word": "на обід",
+    "hash": "1a4ebea8edd2d31b73b570d0be70ff1c9e70c7ac0428ba3b40b00ab12f8d3ba2"
+  },
+  {
+    "word": "на пошті",
+    "hash": "b9b048330c654eff20a60763f144d713e49f36bfbc627a67beaeeafe3458484f"
+  },
+  {
+    "word": "на сніданок",
+    "hash": "08ef1265bc38d7d66cdc9364a83f7c33a40b19abe441fb3d1ee869c5dcff5cef"
+  },
+  {
+    "word": "навчання",
+    "hash": "5ef901437427e4a79fb25d7f5bd174f4e7f9e57b7546ebb29263edfc9e1c552f"
+  },
+  {
+    "word": "надія",
+    "hash": "2effc07d548c927f9525d853710b916c2bb553cda8940262b6cfe9375c3db402"
+  },
+  {
+    "word": "наш",
+    "hash": "ce84ebd823a8776744ff9bc49b7a04b329023197fc02fc34fded12a4ea07eb8c"
+  },
+  {
+    "word": "не",
+    "hash": "962b65e329ec694a68641cde5cd8078987a78e698d4c3d23503bb51059130958"
+  },
+  {
+    "word": "небо",
+    "hash": "e84dcf13f327e528ede99ebf3ba611be6eaaa8e478825f54f1039875fb30bc0a"
+  },
+  {
+    "word": "неділя",
+    "hash": "a1ca6469401ae49ac86130bec3ce6124c14930501e53c840762999e00e0654c1"
+  },
+  {
+    "word": "немає",
+    "hash": "524e7de7cf8c515c099d78f3b198b1b13c79fb37ef624e36fa2b8126a3ce86d8"
+  },
+  {
+    "word": "низький",
+    "hash": "0bfaad6743bb9a13a7de443a3953447dd7c0a2f7b5a8f586e685d4b713d587a9"
+  },
+  {
+    "word": "ні",
+    "hash": "cfd2605fdcc061bfc58468a991400a0579f397d35274067993007cdc6d657f50"
+  },
+  {
+    "word": "ніж",
+    "hash": "6310c7457df4cce7a6e53ef4f732810e51be53ed2d200cf00e3149abe8328764"
+  },
+  {
+    "word": "ніжність",
+    "hash": "cdb5354e6d3c92b7d966bdd694ad95831e45b04a9e07518826831d77641a9ef0"
+  },
+  {
+    "word": "ніколи",
+    "hash": "c2b43d635ec91a42e0d04489a99d1ec73467325ca2e4bd903ce3a66126a8de0d"
+  },
+  {
+    "word": "ніч",
+    "hash": "31286248b3444f37526e988154c0a11f002f1aadb7388e08ea7eed765edf76eb"
+  },
+  {
+    "word": "новий",
+    "hash": "c423247cb2d69a90172068e66c323ff05aacfde20224d45a15a402bc39ec9d00"
+  },
+  {
+    "word": "новість",
+    "hash": "3d1a8259c8b9cf4cca03a9aa6a7a411ef7964820dd9ff0b236c703491f492f3c"
+  },
+  {
+    "word": "нога",
+    "hash": "be242d3d9cd9bd5e37f0266f100117de97d9f0e495a01a8e5afb4a00439e48bd"
+  },
+  {
+    "word": "номер",
+    "hash": "5bac7f828071606f4bf9f0e21152fd1a83f89204843108b8035d20e200ec5512"
+  },
+  {
+    "word": "нуль",
+    "hash": "094d18f58f520d753c00e7be353d127807c7b6a1fc660c0224cd5473438ea366"
+  },
+  {
+    "word": "обід",
+    "hash": "77476f10385decacb69173977ff2992956c92968a992195aca1473b7cf399d69"
+  },
+  {
+    "word": "обличчя",
+    "hash": "3c9f7f216844ca217180401b0c8aad42be2cdd6117161c9024a15ac0951238ae"
+  },
+  {
+    "word": "овочі",
+    "hash": "e086cf5f695dd1cf70a41c8097d812e21846c95dd239f1ae68f1f09186141b7f"
+  },
+  {
+    "word": "огірок",
+    "hash": "8e79883607500756505c3e07755f3da962ed5b3a713b3e22d38904f0f2cd19ef"
+  },
+  {
+    "word": "оголошення",
+    "hash": "af0a4cf727f4ae8ce30ad13ce22eb901dc0d852c79751ae05909ea9a3b15aee3"
+  },
+  {
+    "word": "одеса",
+    "hash": "1bd2ea9e843f0b95f0eecdaa20ef0db29310cb3def8c818825604a0f31851caf"
+  },
+  {
+    "word": "один",
+    "hash": "c5cffb9e60232cdf6f395101a5987dcb1b5df343397604bfeca92cba411c784f"
+  },
+  {
+    "word": "один мільйон",
+    "hash": "f96a29dff0cafec066c75717514d36e5b65caee6c7fe8a8fed109e5f92255c79"
+  },
+  {
+    "word": "один мільярд",
+    "hash": "ec95cc77f940b8c30100b3ff9b0c87c6f555857fb6a537d3d0d03e35a7592e6c"
+  },
+  {
+    "word": "одинадцять",
+    "hash": "7a0ede396d48a606be3f2a8ad9cfc24aed2ba6117ca0aa6608b184c93a684f8d"
+  },
+  {
+    "word": "одяг",
+    "hash": "83745a32ef3a823f36d4d72e97feadfd32caaf2d1c4b7f896499f72966351879"
+  },
+  {
+    "word": "озеро",
+    "hash": "f5c9ac9d93c91b228c8dc09fb751ad1b824bff728cd4fdd9d977b1362642f277"
+  },
+  {
+    "word": "око",
+    "hash": "cc3787ba239d438bb07ade32d84eff5028482a7eda1d057c0a201564c2c3e819"
+  },
+  {
+    "word": "окуляри",
+    "hash": "fb95c302e76f5ffca99a881291d22fe4f124a9c0d16bf32cb3a724f5f335ef8f"
+  },
+  {
+    "word": "олівець",
+    "hash": "5f2406db5ad3f762d78a6782d4df45c69c536adbe1acd342015456b15806e245"
+  },
+  {
+    "word": "онук",
+    "hash": "1850adf0986686f6652244f15e36f40dacbf185cfa42342fa5843b8ca7894139"
+  },
+  {
+    "word": "онука",
+    "hash": "964d32d16c289d890c0eced3913da0922949b3aace3937c9c2d4b2603b3a73cf"
+  },
+  {
+    "word": "оповідання",
+    "hash": "2f471d9c9e2783c4708e1afed613ae7fbaa4eccc9e0905311fc9cf1041491a24"
+  },
+  {
+    "word": "оранжевий",
+    "hash": "39d34b9c9f50dd03602ef6c4065772628b2b35536a178540a3b55d9e68c258a7"
+  },
+  {
+    "word": "осінь",
+    "hash": "ec9f619eefae24725aa10532464a762026ed703d25d933449df4e8c12dd5c393"
+  },
+  {
+    "word": "ось",
+    "hash": "e86f840415af753fccc1c24bbb239b882b8363c868b03d7a0336a6c2e6f888b9"
+  },
+  {
+    "word": "офіс",
+    "hash": "7a8e22a0b0196320cdbd9a99357e55f511f91ccc2724020b9fc6d77d59937add"
+  },
+  {
+    "word": "офіціант",
+    "hash": "26ceb4a5e0ddf79fd146708ed00ff8d58c4dde0b128bcfcefa68888ce86cd0fe"
+  },
+  {
+    "word": "офіціантка",
+    "hash": "acf6aef77b467dd331e0eb64e884527c360ed89e01cb7bab7ec360ae702ba787"
+  },
+  {
+    "word": "пʼятдесят",
+    "hash": "c5b9a8f3a95086d9c77a0b408d158a24ed6ed08651cdff40dd773337e0ed8b45"
+  },
+  {
+    "word": "пʼятнадцять",
+    "hash": "076f9778bcd93002ab92bee71cb466c1070d0dc634ff8e4e835f12f554b54af6"
+  },
+  {
+    "word": "пʼятниця",
+    "hash": "e801de90446c4e9bb3357b59d626422e976f2248381ec3c67f959bf92a821098"
+  },
+  {
+    "word": "пʼятсот",
+    "hash": "39f0074b7b70cadf49a09e0f0b08296304137584ff8da3fcc0e5b53f1762434e"
+  },
+  {
+    "word": "пʼять",
+    "hash": "fd26f920cb45b60cd5f5881066ae4c40f9d99fe6ce58f118095a4f0901998d50"
+  },
+  {
+    "word": "пʼять тисяч",
+    "hash": "e681d383a0d62e0b8d9b3b1d5ed2ffa7f88a9152201ed069408621b087e79271"
+  },
+  {
+    "word": "павук",
+    "hash": "1b02598e7e56ef2b03cfa45fdf49cf02bf9efab0f3684169d30de25b711dfc08"
+  },
+  {
+    "word": "палець",
+    "hash": "49b3519f65f66be85b09c90a5d7efe8af84939fd08612672b78c2f83731f91af"
+  },
+  {
+    "word": "пальто",
+    "hash": "d9e4a6c4878615d621ccfef52ae25596394a4c6e666dfb4102930a4f3b5c8d42"
+  },
+  {
+    "word": "парасолька",
+    "hash": "25dc3a9b09a4d4802856e730b307deb8728ecd1bc1035c85945d710b05eedf69"
+  },
+  {
+    "word": "парасоля",
+    "hash": "ba3f912895bfa1d6a157198bda70d1ff38d4b82fe6475747e9356842331726a1"
+  },
+  {
+    "word": "парк",
+    "hash": "2742b50ee7c3d84e5459d89f3fbb2e8a2025b4fcb9fc4c87ab0e8e902d92b7bf"
+  },
+  {
+    "word": "пасує",
+    "hash": "74868226b64fc2f650f8e52aa7021e46e906387b6ec10713efcd53ed3681de16"
+  },
+  {
+    "word": "пекарня",
+    "hash": "e680b738fa4ece29c7c7a8519199fa592e270776b8df6c23617822e7499414b7"
+  },
+  {
+    "word": "пенсіонер",
+    "hash": "88d5ce65c3fa98a9e7960d3b5aeea78303c77bc2af015eb72af5f806786a7f88"
+  },
+  {
+    "word": "пенсіонерка",
+    "hash": "be6118c6f64a7846b607db94afb0b0f76220cbe8ef9ace7b2accb988c4534bce"
+  },
+  {
+    "word": "перед",
+    "hash": "485cf066a34d0d0367ccdc898b19d7de62f514ee87ada49febd9edb701d089e0"
+  },
+  {
+    "word": "перекладач",
+    "hash": "770caf6ef9c0277ae1882cc60694394310e1561488c0557727ad8ffa36a626c6"
+  },
+  {
+    "word": "перепрошую",
+    "hash": "df29b290d456f9f625135867917496e639d884fe630b604b9199603fb6d8fb8a"
+  },
+  {
+    "word": "перо",
+    "hash": "d901007b82ff0896306e1ecf9a95ad018a6bdc4ad423644031bb12915ac31ed0"
+  },
+  {
+    "word": "пес",
+    "hash": "2a52d7384b5d831b61eb2ed82ee3a1aca6650888d119a6fd163f36a6b3fcda39"
+  },
+  {
+    "word": "пиво",
+    "hash": "ba8aecf2dba464f7945f25a22e993619cfc914763cb07cc8c42de0b5e218f482"
+  },
+  {
+    "word": "писати",
+    "hash": "58463dd730b5e7290d7438032480f67f971b3bfa662113856ebfaa219d36cfd1"
+  },
+  {
+    "word": "письменник",
+    "hash": "079c2aa6626279575404c2d2122e58baead9fa0b3bc8c4c5e960422632ac0052"
+  },
+  {
+    "word": "письменниця",
+    "hash": "4a0958e68dd6bb4dc2a9c14482ac45a5d1e588a6e5e8b99aa0513fd4c9b0d4f4"
+  },
+  {
+    "word": "питання",
+    "hash": "2b2439931c3c48899f9da6ef952f83dd2a0d0d3a2862c8611272a7325b204467"
+  },
+  {
+    "word": "пити",
+    "hash": "245e61d5f75e5766e4cc23be347c787e8cd1d3f26a9443b454a559b70da70fd6"
+  },
+  {
+    "word": "піаніно",
+    "hash": "4382b755aafc862fed030a804dc372fb54397c2d870b75255648178a4c869bb4"
+  },
+  {
+    "word": "підручник",
+    "hash": "2ac2d1a6441ea8af8cd01d240061df1cf22e572d9e5a87d79f91c2d8d46b2456"
+  },
+  {
+    "word": "пізно",
+    "hash": "0b7a3f781bcfdc1a5c4bcd1ea7c55f5c8763df2c38c2a215b83f7f27dc1e8f04"
+  },
+  {
+    "word": "після",
+    "hash": "a200b9d6e754023ea55e01c2d563c409c2043f7ed2e121ea9cf7f00bbc9b0560"
+  },
+  {
+    "word": "пісня",
+    "hash": "9fe57d16c3d5d704c62d6b283cc7a100fac58deb13b4410a924b51808e7f8af4"
+  },
+  {
+    "word": "піца",
+    "hash": "78b80ecd1fa602689356ed0a8c86bd23a205d325ecf9fe20d702dbba4b91591a"
+  },
+  {
+    "word": "планувати",
+    "hash": "359259a607b8ef1aeb016a2c921109724930392576bb22dbda94c1a58366d706"
+  },
+  {
+    "word": "платити",
+    "hash": "32785bbd6e3e118295b5640b6df4c1697d0caee3c9de84d328531db7eb25a515"
+  },
+  {
+    "word": "племʼя",
+    "hash": "18c18b208d9581e1d8c736f036c2e0267bfa2f74f577eabe50323d80eec10e27"
+  },
+  {
+    "word": "плече",
+    "hash": "1cf878897cbfd5c4c9572b0a9ee2fad078a71b1523a9ec8c6eed2359da14e46b"
+  },
+  {
+    "word": "площа",
+    "hash": "f2d8305c855577bd90be4b1eda3c958c8dccce3ae2e5c85ec9f6be2802cb10cd"
+  },
+  {
+    "word": "побачення",
+    "hash": "1d476211f2f560aa5f97a6b797f5643b4bdd20cb416ac7f988f915d69b12c63c"
+  },
+  {
+    "word": "повільний",
+    "hash": "b73aaf9e4b9e1865a9970fa60f5634c7f596931ce995ed830e092e13c37dc61b"
+  },
+  {
+    "word": "поганий",
+    "hash": "47b5a9f148a1469dc24efd2bf3d794648063b509e6d8c8f623c097fa877c38d3"
+  },
+  {
+    "word": "погано",
+    "hash": "8883d4407c4027c15662b444ee0a32b7b98ecd0d82eee0eed6d6a7f3b4c37399"
+  },
+  {
+    "word": "погода",
+    "hash": "c1d5a8964405c68ecb993ff52cb026e0db5b5b2685f2ad02d9b836686fcbbe78"
+  },
+  {
+    "word": "подарунок",
+    "hash": "ed56055bb53fd6451ad940af4d2f16bd512910f013abd7ec21e2c004e7349af0"
+  },
+  {
+    "word": "подорож",
+    "hash": "c843d97d0dfde0a4ee4a4132dbe1b2b3785c9e4f113fd66c45d370b24c479e0f"
+  },
+  {
+    "word": "подорожувати",
+    "hash": "60d1dc6c925df34cc400f9f06a280526c9735d7c8c6d9c2f3401ff2b22e42e99"
+  },
+  {
+    "word": "подруга",
+    "hash": "bd6f9579ff8d455078fa5a3d5664a978df0aba69509a076a5cd1adf8688456ce"
+  },
+  {
+    "word": "позавчора",
+    "hash": "1a2af9287dd1743d64378e33a0fbf9a2df6c63604156315c3d342abce8609d87"
+  },
+  {
+    "word": "показувати",
+    "hash": "82fae8b303f084350f579292e9c764595f5a924258cebd097430358584181a4a"
+  },
+  {
+    "word": "поле",
+    "hash": "2a5d049b869df02891601234b7f3adb45c254a3116b91c26d0622d44c4bbdc50"
+  },
+  {
+    "word": "полиця",
+    "hash": "806b1d3ded8dce89d409b5ca2886081990ba187b1dd5ba26eb9a41331cfd0280"
+  },
+  {
+    "word": "поліція",
+    "hash": "8ae30d8878964a402c4b4233abf192969a18a27a8357546310e93aaf4da107b9"
+  },
+  {
+    "word": "помаранчевий",
+    "hash": "9c8c101e2b76e0042d91b88405cc646c412b81f353351a3c5a2cef880b60cd27"
+  },
+  {
+    "word": "помилка",
+    "hash": "c420581914daa91a37abc74583d4c1ea81d4c455db2d5372ba595b4dbb924f29"
+  },
+  {
+    "word": "помідор",
+    "hash": "8a48a7ffd428aba57a03dd49811265b2b5770508d3022a09f59414eb5a9c38b0"
+  },
+  {
+    "word": "понеділок",
+    "hash": "57684d84038bbcc2fdc2c3c0b612e247dd7d2c3307794450cd9595c6f716a1cf"
+  },
+  {
+    "word": "порося",
+    "hash": "9f235e3a5c2e6eff37982a2cefc8ad36fd3dfc846573dad43a66d254ed140355"
+  },
+  {
+    "word": "потім",
+    "hash": "d7110d347efff2954b047bae183435adc5eddabc0b751e2c47e43122116761bd"
+  },
+  {
+    "word": "потяг",
+    "hash": "5e79cdd04fe7e4e57f1c6483446d04d995375953bce52512d024a3988574ea13"
+  },
+  {
+    "word": "починати",
+    "hash": "d0396570d166e8f061929e2dbeda7f88503e91873bfe2d9e0ddeadb70c95a93c"
+  },
+  {
+    "word": "почуття",
+    "hash": "099f5b9c3ebaf2669486c0b28e720cd9c38fbe54718904f4071bb20bd3bf77ce"
+  },
+  {
+    "word": "пошта",
+    "hash": "ecf1cbf9acfc9ab660ad6884d24d1d1f7516c2608dce9ebd50cd7037c4f1ccd4"
+  },
+  {
+    "word": "правий",
+    "hash": "3cdbd3c18ee67057715b476c732f6b472ba7e3bf84cf8d92fc8f614bd3f80fc4"
+  },
+  {
+    "word": "працювати",
+    "hash": "ef2c44b38bb823825d5212761964a3373b4d6559bba091147a28039d710f7122"
+  },
+  {
+    "word": "привіт",
+    "hash": "5e7d04a7d8a1d9c665fc624610114b9ec466d23b154148dd74250050fb9e7f19"
+  },
+  {
+    "word": "принесіть",
+    "hash": "b4fb226ebc9b49183038e89f9abeeaa9c74e02e7a96f033d4705ab2f5e9bc11e"
+  },
+  {
+    "word": "прізвище",
+    "hash": "b32166b72a5d2437233f3f5fb2faa04bae1aee9ea19b5369a994df5b593c4852"
+  },
+  {
+    "word": "про",
+    "hash": "b626b337acfa3990e51d55287ce3491e95eb6af5054f6e6ea2306d440b99d6a9"
+  },
+  {
+    "word": "проблема",
+    "hash": "b6703e28e2985e6d27eeae1617971ce08946dec55bb7d0b9e2d0c140c9ec83bd"
+  },
+  {
+    "word": "програміст",
+    "hash": "cbe132941b5c1dcddb11a12e81393c5da7e82f1d394af50d1feace3a7e96096a"
+  },
+  {
+    "word": "продавець",
+    "hash": "3fbb9cef77101703eacb1e0da7ef52fee7404bd53ed6e423d4413c88c0113a36"
+  },
+  {
+    "word": "професія",
+    "hash": "d0e44d91b38d58a1fcbbf74a9be2375f129afa9b123149e0f7eddd1d9e2cf366"
+  },
+  {
+    "word": "психолог",
+    "hash": "cf6aaf8b9197faac5a64417217104c19c8eee20e0ffab723fc2b049859bd1eb6"
+  },
+  {
+    "word": "птах",
+    "hash": "b363c58d549c5e95ad34a78f7a0b64b69ccf748f6c3b9932268e2d2edcd285f1"
+  },
+  {
+    "word": "радіо",
+    "hash": "39ab0720833ee5b79d9935aa4578d66f25039bad46253cf0d00c2d23bc500b55"
+  },
+  {
+    "word": "радість",
+    "hash": "309135617895b26d9bfef26e9eba68ea276a714fc51c332ef9e318642c577fdc"
+  },
+  {
+    "word": "разом",
+    "hash": "b4cc5bc19711ea3dc60e34c3ab0d061daa9f6bddae7b8629083752d48f405b9e"
+  },
+  {
+    "word": "рано",
+    "hash": "01760af0a5d274bb446d2b79b5a539311407b4ab196b2dced081eb6c9d3c7902"
+  },
+  {
+    "word": "ранок",
+    "hash": "fdf39ad1193ef9e2ffe2cbe2004c131eb08e77663c4651179d6b0ba0e4dd5392"
+  },
+  {
+    "word": "рахунок",
+    "hash": "a240e4d2f621dd4029837b503214d9cf15514bf079640205e4998a28bc9e4ce2"
+  },
+  {
+    "word": "ресторан",
+    "hash": "047a01d70891ed1e3c485f405884fdcaef30058e3a490755650f5d822b251d7e"
+  },
+  {
+    "word": "риба",
+    "hash": "6b1861fb0911499cbdf622c4b1c5a567680cd5d14c4a940c34f0dc7d7928664c"
+  },
+  {
+    "word": "рис",
+    "hash": "47335d405c9ace5983323ceda29c67c1a2f951ff4b4e6dbc43d2ab1d24430290"
+  },
+  {
+    "word": "рік",
+    "hash": "aac520aa973a539573317d9baa908e1b3617ffa4237fc28ae5ba7ce360aac059"
+  },
+  {
+    "word": "річ",
+    "hash": "cb8eda3e44e06f29b480d04025f7f1b8f6707e38b774ccb24fdef4b6c48882ad"
+  },
+  {
+    "word": "річка",
+    "hash": "20dd0cb20711bc09f03fac3febaa971c4348a9c4c0e645dcd49bf14e415fe75a"
+  },
+  {
+    "word": "робити",
+    "hash": "7d00a938bdf41d57d8e0ce37e2196269a280fce6538ca0d079911c3ed0c32f12"
+  },
+  {
+    "word": "робота",
+    "hash": "084c8b801da95433a817d079dadeadd0df1a43a2b245316dea1d66724f4e9bb4"
+  },
+  {
+    "word": "рожевий",
+    "hash": "46224dabe01a02645db801034d87b971aace48fcc57ea54ee8bac78c3bbd830c"
+  },
+  {
+    "word": "розуміти",
+    "hash": "4b82cc051998ecec279be5c7f0d3c92bab9f8a29d407f86709311502002b6dbd"
+  },
+  {
+    "word": "рука",
+    "hash": "d7121c802dddef5bb99ffe9fb4c112699b520b790bf165b99f47c39ba085bea6"
+  },
+  {
+    "word": "ручка",
+    "hash": "ffd23cd317416c8f0f81f4c33f06d143b6f198041ba31510e88d50c07cac6731"
+  },
+  {
+    "word": "рюкзак",
+    "hash": "401b9e72a5d81ca679723b5700846ea0e388bfd5d894fdbb9e0b0ba0eb49a434"
+  },
+  {
+    "word": "сад",
+    "hash": "e4b16ee4be9e8cdeab4548ad06e08d29efb61b8da6e1ab1ca6bfa644ff342355"
+  },
+  {
+    "word": "салат",
+    "hash": "22ef2b07874f1fab0c5c5068fba4cd8a25a9088d15838fda65957e614dfb6bae"
+  },
+  {
+    "word": "сало",
+    "hash": "f895a702e8ae8b70f6108d090b69b42fd77291b25e52f643f553ae59741895fd"
+  },
+  {
+    "word": "светр",
+    "hash": "ddc728b7a9ade7c1f1a853ddd1a0c4755af25f7904e6b77abc26a615e104a454"
+  },
+  {
+    "word": "свиня",
+    "hash": "60c1620c14856c83f08d76082abcf25975c2b7f96c3b97ef60fc56129e2587bd"
+  },
+  {
+    "word": "секретар",
+    "hash": "2a1425bb3aee878dfa12794515e268fe4f0fb685c9e51971063065a0df44e4e8"
+  },
+  {
+    "word": "секретарка",
+    "hash": "855846863b498340663a08aa39169c76f8440104bbe355da8d4280ac4479df98"
+  },
+  {
+    "word": "село",
+    "hash": "c2bb9b626607a4d6f5fadd7f494b62c4fde7264e0b509dbc44d4926f8bf85ef9"
+  },
+  {
+    "word": "середа",
+    "hash": "3bfa84a420dde3bc67c3495ecb025920a8443d5fcb954296cf1362bbe1490ba8"
+  },
+  {
+    "word": "серпень",
+    "hash": "d75c237933ec072de951bd15eb01666569a1b560f169baacd923f200a263597d"
+  },
+  {
+    "word": "серце",
+    "hash": "9d0a8f6bb6c5b705e1245a2b6d113745211f40b4fb998d63adb31f8ee520290b"
+  },
+  {
+    "word": "сестра",
+    "hash": "41bb67b6e832736050a63ba0291f8ca6800a9c77998dfd3870882e81ffee3382"
+  },
+  {
+    "word": "сидіти",
+    "hash": "6e8e5b161b6b99fd2fac07b0adc67f884be3e1d4467a0b21282be54132da2765"
+  },
+  {
+    "word": "син",
+    "hash": "2e4d189f2ee190d8f5a5ec02a10a0e2f79fd0dc441c3e9d2f4bc5cd7ba5657d7"
+  },
+  {
+    "word": "синій",
+    "hash": "e1cd69d590012fadf88c29b2bc518facc3ab5e45acbd51dd6d05b44784e3eb38"
+  },
+  {
+    "word": "сир",
+    "hash": "bf5e6264617c0fb9e848e3e73678edd83637cdbf29598c4ec9a8c0ce10ebaccc"
+  },
+  {
+    "word": "сік",
+    "hash": "fb8b449fe16ea51463029b9ef2a1065712cab6540d1c8683b95bdfe838153922"
+  },
+  {
+    "word": "сіль",
+    "hash": "5ee9609bd619990321e2cbff822b09de6c93d07c0670de9b30bb443a919aafd6"
+  },
+  {
+    "word": "сім",
+    "hash": "40025905e07cf88371b8adda06510d9c345b9d872bc3da114a6cb512d3186efc"
+  },
+  {
+    "word": "сімʼя",
+    "hash": "d7563c61ae295d48a507d55aace938a660bd726cc2f2119337f1b7bac075608d"
+  },
+  {
+    "word": "сімдесят",
+    "hash": "7c7d87d02cbf147db9751068fb349ff6d3db8ad091df2b4325d2ed4a0cab81a0"
+  },
+  {
+    "word": "сімнадцять",
+    "hash": "78ca91e031ca1f16182ffc417313cf73e4ceae3bb368de9757d596300dfafeea"
+  },
+  {
+    "word": "сімсот",
+    "hash": "5aafc1c2d34335756f0d32b9eaedab982054b17b83e944f70d4b584a970c924b"
+  },
+  {
+    "word": "сірий",
+    "hash": "385dfcac4f8b6903534d5ff48fb4fb7407380bec788f6118211d1b19f00ffc33"
+  },
+  {
+    "word": "січень",
+    "hash": "53f2ad7508b4126bbc8c5981f256e7cbfc5998bc842792fee81bdf4a7a267a7f"
+  },
+  {
+    "word": "сказати",
+    "hash": "b28c470ec4c16dd7c32d33e9cd70f618117fbc96c407fdf27e9ccd9b44408f22"
+  },
+  {
+    "word": "скільки",
+    "hash": "28fb1f091aee145b218d1ddfec839b7728adcebcd7ef818367081e2acfc4f9cf"
+  },
+  {
+    "word": "словник",
+    "hash": "dd7b312bce2ce19215deceff9c9c36bcff960ea4f1f412cc5dfdf25bcf5c8f49"
+  },
+  {
+    "word": "слово",
+    "hash": "cf65b8df27f536bbf7724c3aa9ebf9d2ffd56406fd4121563f23065335e50892"
+  },
+  {
+    "word": "слон",
+    "hash": "8af16c2f70751ae7c4a01a07a7cacc104931cf5e8fd17a7599e240b9edd52fa9"
+  },
+  {
+    "word": "слухати",
+    "hash": "b832da6f81ad70de04032626a3459860884865327c6886619b954d3a391a42fc"
+  },
+  {
+    "word": "смачний",
+    "hash": "a85b3767bb767b19a7c7ebda9eedde1958979f5517731eabd7c8518fab1c72ef"
+  },
+  {
+    "word": "смерть",
+    "hash": "e77a8fce908c42298bb2b6231a454a354471bef9dd203d545f545bf622b63093"
+  },
+  {
+    "word": "сніг",
+    "hash": "583b90fc6a9a9b13261073b464ca9dfc93b5fdca0f332eebb73ce0dc24e99797"
+  },
+  {
+    "word": "сніданок",
+    "hash": "f0b308b077d06cf1d7bb5dc28f66cdef473ed31d9341252ed5ed583aaa643683"
+  },
+  {
+    "word": "собака",
+    "hash": "b37b813500a387198ef943e150e773c13def41668d6b40fe0e629941ab8172d1"
+  },
+  {
+    "word": "сонце",
+    "hash": "952f70615783e75f3b05431259988b1c52b3d1c54155df93689573d039042bb5"
+  },
+  {
+    "word": "сорок",
+    "hash": "7bc3164b7693904c9c14d1ecb57e1d4dd65738601486c1e0b2ed665b61621842"
+  },
+  {
+    "word": "сорочка",
+    "hash": "f3da6f57435fc6ac73ea81d2a1356445a805acd9fc06ffac5f431d4a4e0980b1"
+  },
+  {
+    "word": "спальня",
+    "hash": "a01cd0c3f09d643ec9d98e0c42aad44f4f6674ac6ea54a7da708e17e74153e9f"
+  },
+  {
+    "word": "спати",
+    "hash": "c5185cba60ae33f8253806113da9ed2e550ef7805cc52666959b389bfdc0818c"
+  },
+  {
+    "word": "спина",
+    "hash": "5c2200c73be48266c9eed2931ab482a0e1e615a6d405f998b1ea30310077ec9b"
+  },
+  {
+    "word": "співати",
+    "hash": "c16d6343b36bea014f43142b3467a0e4474996bd44c4c1e929acf82e54e3c653"
+  },
+  {
+    "word": "спідниця",
+    "hash": "e1739cb4d952c3cea180dba7f96ac36dfed54bb0fa57966000a3ce7b1e11716c"
+  },
+  {
+    "word": "спорт",
+    "hash": "fbcd420aaade33103ca6fd37520f893839023b368cf1cd880af66d7f00f99130"
+  },
+  {
+    "word": "справа",
+    "hash": "1675544c347ff1e15612f22f4ffbf5fad93338cf0f0903be2d0c0ccd45a45671"
+  },
+  {
+    "word": "стадіон",
+    "hash": "0c7edc7b5c0e223bc1c674fe386337b3cf4dea42a72953a1bb8f11ce10c0f622"
+  },
+  {
+    "word": "станція",
+    "hash": "7250b6e27d088587c4b9b253f92038206fb27384b1fa68cec1a15e00a3dbd10b"
+  },
+  {
+    "word": "старий",
+    "hash": "4ea4867b7df570b9b82fd9fe450d65b3f509a462adde5e82ccecb54c92d43285"
+  },
+  {
+    "word": "староста",
+    "hash": "a6d53a1736e73d6289871bd566829e7f1ebedd2c75398397f54f65b16de4c7e2"
+  },
+  {
+    "word": "старший",
+    "hash": "4dd97411f5febd994522269421dbec20d0489d77fc177b483b118fc9bf186e84"
+  },
+  {
+    "word": "старшина",
+    "hash": "433b9896e3b7264d93a61a5c95653bcfea9c98eb68ae0e28797d5d4d3433d7f3"
+  },
+  {
+    "word": "стіл",
+    "hash": "9c873c6c7cae7448756ddf42069b7c64e55af17053ead42cde25425d04ea54d5"
+  },
+  {
+    "word": "стілець",
+    "hash": "8f34336763f2faed6409412c533002c1e4943d603db9692b372e6fb006b86d02"
+  },
+  {
+    "word": "стіна",
+    "hash": "fba2d0230618c2d83956cdfc64b5dfdc011bd144426a7c60f29d16f54c53f30c"
+  },
+  {
+    "word": "сто",
+    "hash": "e909bf37ebf6000878075275c7bf3ec463a2432c8c05837b5871abe3df8857b8"
+  },
+  {
+    "word": "сто тисяч",
+    "hash": "749feeff3e79e1ced5ee2b9377e6314d787a737767b82c2936e61a608ea540c1"
+  },
+  {
+    "word": "столиця",
+    "hash": "622f3b3d4c637d1a95b42c0a0df13df496663b6b58d60d643fb7557a0d0ccb41"
+  },
+  {
+    "word": "сторінка",
+    "hash": "1bac4f2008d42b6a64aee016819840a57cf41d5fd32a1faac9023a083dc2b534"
+  },
+  {
+    "word": "стояти",
+    "hash": "704254213a6c91df8351ce58c7e6524e0b680e3367b79c2f144f01a12c7e3c18"
+  },
+  {
+    "word": "студент",
+    "hash": "c82c59638b3bd23af56584e4cd7db5ad2a400532290f5a08ca0db09c18b67857"
+  },
+  {
+    "word": "студентка",
+    "hash": "ee2c7a9d04f0f86b5781f1cc66a4bfbfeb7d2f1f48780c8424c201357469653a"
+  },
+  {
+    "word": "субота",
+    "hash": "a28d439453cea227e77869e6afa1595f4198188aff83b38c8e5a5435ab1f19eb"
+  },
+  {
+    "word": "суддя",
+    "hash": "00987dd2f89e0665b811c2ebaa2214f6a0450ee52e9b9bdb4f1076e29726cfb6"
+  },
+  {
+    "word": "сукня",
+    "hash": "bc45fdb491b7383ff2dfa093a1aaa6a4f7030277dcbf20b706e86feae9b16d6b"
+  },
+  {
+    "word": "сумка",
+    "hash": "0ac87f7811d82b3b252b966dd67893c57f2dcf6d29b0cc13f7b56340177a519b"
+  },
+  {
+    "word": "суп",
+    "hash": "d76dfced11026a4f944851408d73c0c17d1fc41240c12b5352b0d697e6921226"
+  },
+  {
+    "word": "сусід",
+    "hash": "f721bbbac7514f1fc8415af4acd18150e833f39619384e1edaacfb4f6d243a9c"
+  },
+  {
+    "word": "сьогодні",
+    "hash": "8ce628a46e9e1964995f6f45be1884af09e8e2076da7176cbcfe4eefe1d0da99"
+  },
+  {
+    "word": "та",
+    "hash": "9a5e1719011675a2d71f79747a9a618f415bdccc02234f2007c3870b0338c403"
+  },
+  {
+    "word": "так",
+    "hash": "f369410106408b6ea3923b9c724833cc26905710b7433d585e39736318101a3e"
+  },
+  {
+    "word": "так собі",
+    "hash": "39e53c70d6aa96dd1fd02d2036a654dbd29d8f999afcd12f6491c7897aaa5239"
+  },
+  {
+    "word": "також",
+    "hash": "e99f02d5e68a1823a1af0f3207a0df975115e9fa4b56c4653a373c986cbaa0e0"
+  },
+  {
+    "word": "таксі",
+    "hash": "9df16fbbc0a0024b67681513be1af4be660c9d7d75d7c7a721b47e14e8303fbc"
+  },
+  {
+    "word": "там",
+    "hash": "5fc41460262c5978a9d2ef8a7d2b2f1207f0ac54d7ac527b7e0d8123bc9b7e42"
+  },
+  {
+    "word": "танцювати",
+    "hash": "643f4c3071c98cb7d02143e9a1606c593a04eeb461bb7f15909d55ce17bbd92c"
+  },
+  {
+    "word": "тарілка",
+    "hash": "217070583943a41c9f736fa483fce147a24acc3f0f2587ab06ec53621d9b4213"
+  },
+  {
+    "word": "тато",
+    "hash": "0f41ee550cca5c23cfc1c1f4a48409cf2eeafd88ec6717ec2453aeeb2f52335b"
+  },
+  {
+    "word": "тварина",
+    "hash": "b619200efceb652a5ccd3ff8830818dc6083b71d51058c0b29f4bee03eddae68"
+  },
+  {
+    "word": "твій",
+    "hash": "79b32ccb78698ac96f9c0625fce1d227ced41125d27eae15aa1a1cc2844e9763"
+  },
+  {
+    "word": "театр",
+    "hash": "489a2d6d6f1bdf1b661aa32cef5030472669045e3913399433ff55cb14e7ca8c"
+  },
+  {
+    "word": "теж",
+    "hash": "a9349260c31ac8f908c6af70ed7e3c65bd95bf8b328f604917889406c2e25f05"
+  },
+  {
+    "word": "телефон",
+    "hash": "544c4eb6ab8f49537f323781805928fe47581cfc55a3a73d7ffb28af9cce9286"
+  },
+  {
+    "word": "теля",
+    "hash": "4c192afae70018ed19b3fab2fb975525fa4c1c6b1b7d96645b1898cb8ebf627b"
+  },
+  {
+    "word": "теніс",
+    "hash": "7906fa95ecab15cb3a4d37a2946439d62ada56d679425c76bdd9b64e0d49f690"
+  },
+  {
+    "word": "тепер",
+    "hash": "e4be658ee17a44eaaf4d11506fcb9efcd3c851ef6179f767f26afcc5f115f619"
+  },
+  {
+    "word": "ти",
+    "hash": "a7980a84d5d8774916a0829a055e49b7896841115397b1a4ff3a7cbcc59ad4fe"
+  },
+  {
+    "word": "тисяча",
+    "hash": "c522804d0980d8678878c6baa76f945385a22d859ab11ee765ffeca686d3480e"
+  },
+  {
+    "word": "тіло",
+    "hash": "8847209b4670aa9f63403beb9dc1cc420f85218b845c6b0e3b0f77e3240197bd"
+  },
+  {
+    "word": "тінь",
+    "hash": "5770493b3670f93e56295092b9a8bc504b2873de16c4316837e59f60eb6e8125"
+  },
+  {
+    "word": "тітка",
+    "hash": "8dc1225a79541190b4afd9899bc52fd07c0eb4082d1f0e18722e40e2c163ef30"
+  },
+  {
+    "word": "тобі",
+    "hash": "1c2d979d70d893266ddccf1ba57c06dff116a4f84898e050d7cc75d8388e4c5f"
+  },
+  {
+    "word": "тома",
+    "hash": "5d75de8c6c977cebad520a4c3d4bda9f5ac0fea8a2838b47562da1e52754cea6"
+  },
+  {
+    "word": "торт",
+    "hash": "b120ecc0553ce343ce7c507aff367c11102a840028f81fa4272f7412fd3cb1a8"
+  },
+  {
+    "word": "травень",
+    "hash": "346e377790c580e102cd13e1926c43bc361f5f8dfdfd0ff6792d3ca50dfe4d54"
+  },
+  {
+    "word": "трамвай",
+    "hash": "29faf0cca695e226792ebc3c0f51ca8b09f12027e65cfd96476fc656d0355a2b"
+  },
+  {
+    "word": "три",
+    "hash": "cbbb1ed220dfbef61e203a3cf5c39529a23d957452676f9499036ffff2eedd8d"
+  },
+  {
+    "word": "тридцять",
+    "hash": "aa06eca952dacb4812dce96a2f4771f8f563516ca0e2306f3d2df5616fa24bf2"
+  },
+  {
+    "word": "тринадцять",
+    "hash": "714686c845ea3db21f926525695aa85b10844efa1061bf34ec9e0ef04429ef4a"
+  },
+  {
+    "word": "триста",
+    "hash": "e975c7d7cd6afb001afa084e99aa024d8d07a0ad370b7aa3ffcb3cd1b06b213f"
+  },
+  {
+    "word": "туалет",
+    "hash": "649c148741df6fc94481e5bc00a89a21f7842948217eec0f9917e66cdb993baf"
+  },
+  {
+    "word": "турист",
+    "hash": "9eb3319ee4e36c9281ae95fdc28833f3d1a54c064dfcae29794e5d7502552fa5"
+  },
+  {
+    "word": "тут",
+    "hash": "589a5647c5b0747d0141a18a749f9b67f2668df81d625e7744f8f26da03bda81"
+  },
+  {
+    "word": "туфлі",
+    "hash": "7e52af7f8db1992f7d2ef7883601c608fe25f82fa92b0823be695a49013acd88"
+  },
+  {
+    "word": "у",
+    "hash": "beee80c256b458da481e27298893e41760a978aa0fd3eccf277eba4998540106"
+  },
+  {
+    "word": "у вас є",
+    "hash": "d57198df6cb7c6127085a5ae5adc2f831cd2fd9d3a4929ef72c5095195159fab"
+  },
+  {
+    "word": "у вас немає",
+    "hash": "e5dbd57f001669a39051d1682ce76c5640bcc82f84c37802a5a920aee39c12be"
+  },
+  {
+    "word": "у мене",
+    "hash": "01d07f2919c1af2e9d54198465d36c9b7dccd74a3ddf532a1e94648ae04ba509"
+  },
+  {
+    "word": "у мене є",
+    "hash": "ec4ad0c6d8d18f539e909f840f51158e13cf77f6eb238e46f70de4ee06e4abd6"
+  },
+  {
+    "word": "у мене немає",
+    "hash": "d8c3e882524848202c382f11102df1659560fa73e93bfc67272735697e39d32c"
+  },
+  {
+    "word": "українська",
+    "hash": "40328c2a29abd19d936c7a7295143e45703644e563961d2df8d336c097810c56"
+  },
+  {
+    "word": "улюблений",
+    "hash": "69cdc3825396ee3ab106a2a03d777f3f235740966e37a1d4048ca93ad37f28d8"
+  },
+  {
+    "word": "університет",
+    "hash": "de3923e3f14caa7a19259b80f1b980d126d668c2745ef7ac8e5f231f41861981"
+  },
+  {
+    "word": "урок",
+    "hash": "a460e7a2c20a799384a093bd73cf7100fd740ba9a2d9261920b4f0a27d5487d2"
+  },
+  {
+    "word": "учениця",
+    "hash": "192c2ce5a13ea04e144c3b40932e3579e80bf082efd2cfdbe58fce52df1a5026"
+  },
+  {
+    "word": "учень",
+    "hash": "0a61df405d5f40b53635075169dd590fb6b83767e05200347d0b64ba8374d13a"
+  },
+  {
+    "word": "учитель",
+    "hash": "a2c9fb78079bb98bbf040993ead909dc0d3e256fb59efcdc4291dd9e06de98f3"
+  },
+  {
+    "word": "фільм",
+    "hash": "e995904e02421cc9a9393b7d73901e47456c9c471aa951d031412d4e4a546cf3"
+  },
+  {
+    "word": "фіолетовий",
+    "hash": "87d13dbcd432b0d8fa465eb814693a39955175aa9297cca4b9234f010033344b"
+  },
+  {
+    "word": "фонтан",
+    "hash": "97dcea5b77390235db0573d07c1c0dcfb923eea8edb6421be13b7e24a1833307"
+  },
+  {
+    "word": "фото",
+    "hash": "5cea446a41d5cf2bfa3373f95bf4ec5245d2b23ccddac0028cd630248d2a0836"
+  },
+  {
+    "word": "фотографувати",
+    "hash": "00e050385b9773d19ead730d92f5e5e9a505bb5bfcf6d7948aa4806059be2ed3"
+  },
+  {
+    "word": "фрукти",
+    "hash": "0f043271b4f04e7fb2fd9aa46dd526e40163bd254082c4d5fd61ff06dda26c5a"
+  },
+  {
+    "word": "футбол",
+    "hash": "d7f159676274cb524b1a1029074881860fd7a88f3d37afc5cdd20d46cc84f24f"
+  },
+  {
+    "word": "футболка",
+    "hash": "6c9319c27299c4046a5ff513ded3953be8c5789c2ae89af3c326ce463ef7d337"
+  },
+  {
+    "word": "хвилина",
+    "hash": "06d5c669ce70b3da8ca10433541998eb54194bef6454cc78bce72189b286e61c"
+  },
+  {
+    "word": "хліб",
+    "hash": "9b9536869d1b38af9a792e16b7fbb44b9964b54d99fd476e7cc32b13cf0db226"
+  },
+  {
+    "word": "хлопець",
+    "hash": "5c63a6889c2c61c83ef9692aa5bcc986ad92f0d1a0b2ac98aebb330261cd2c48"
+  },
+  {
+    "word": "хлопчик",
+    "hash": "6843d3ee5426d1ed2a35c04b71df56531dd40092bfaf9018c2e473e2c8b7cd37"
+  },
+  {
+    "word": "хмара",
+    "hash": "e3a235cc34ddba45825ffada877edda08f30ea715537e997e68e6077da81e200"
+  },
+  {
+    "word": "хобі",
+    "hash": "83f24860ccb44a09230b69b1d95292de80b23a0a1c618384ff2cf34a52bb25c4"
+  },
+  {
+    "word": "ходити",
+    "hash": "702b2d6a60df10dd6ebeb940ced528a7e17eaeff7c60851e0dd669316ca0a14b"
+  },
+  {
+    "word": "холодильник",
+    "hash": "d78ae1e865f440d564f68b7e04f524f3594be5aae544224cc93a7d6e35ab46b7"
+  },
+  {
+    "word": "холодний",
+    "hash": "f0d4608294fe9253c98b61065db97c02a70017aa78956ea3abf2865d5d92fb67"
+  },
+  {
+    "word": "хотіти",
+    "hash": "8b7bf6e05e542c7479300a217b3c756d19ab645639a0d952ac6814249685f8b8"
+  },
+  {
+    "word": "хто",
+    "hash": "9ec809ec598ea7ac980d8aee413b2d2e06b3f4c60b7ff4dd8972fc6bb41c2e47"
+  },
+  {
+    "word": "хустка",
+    "hash": "92a21c4051edd17239e32ecfb20bc320c9aae153ce45915aa195f0bd101d4017"
+  },
+  {
+    "word": "це",
+    "hash": "7bf187d1aaa605bcf6e95c8ea82257a935254f0063d5d17a9b426a07452babf2"
+  },
+  {
+    "word": "це коштує",
+    "hash": "f13bebf4a8f34514a113278da96f9be00250d55c303796569d29ad56356248e7"
+  },
+  {
+    "word": "цей обід коштує",
+    "hash": "7708db1e79f5eccb5ed8b8d2a6bb18341131de0e9475fd04abc989095af7d965"
+  },
+  {
+    "word": "цей суп коштує",
+    "hash": "da5f34865dd0bf1a042528592e79608dd270a0372489f7cf535f4ee0f0506c07"
+  },
+  {
+    "word": "центр",
+    "hash": "10d959dc9dd5dd0e22dd0b470b921de3ea1c833d025c1a508fee2f997897d292"
+  },
+  {
+    "word": "церква",
+    "hash": "083d7b2472d2dc7a4bd244e6f2c37a5c0228b8f1466bf05e62bf1a09a8a7d5ef"
+  },
+  {
+    "word": "цибуля",
+    "hash": "ecb38f7156b74be77687ed33bf8a1f2a28fe32bdf17730b8b32e0457a6d6560f"
+  },
+  {
+    "word": "ці",
+    "hash": "282f85b246d51a02d0e905738480baaf8b93b2c7c37eb0dd2cbd567aa17d560c"
+  },
+  {
+    "word": "цікавий",
+    "hash": "b0ef6554323655e1ac70eb0fb419e2726332b66a439b393e7958b6e228fb4f1c"
+  },
+  {
+    "word": "ціна",
+    "hash": "2c8251387ddf246e8be12a1c76f5320ece7269d751e291873e3eaa9f68481208"
+  },
+  {
+    "word": "цукор",
+    "hash": "5a9f2834eec5c75aa646f1d5ad57e59e0cebcaa023ecad356f06859e9233d10f"
+  },
+  {
+    "word": "цуценя",
+    "hash": "4e0e8e896cee2b2c8ef867938581152843701c41796fdb9cb955dbcf28c2d41e"
+  },
+  {
+    "word": "чай",
+    "hash": "7ce1859ed1548a3eb08bc1353d0e555783b965fe66f470d5cf3df41e66a82f4f"
+  },
+  {
+    "word": "чайник",
+    "hash": "1bf205ce9bef59223b3ff615fcdbb2041058db2b936829ec89533172b99db6e6"
+  },
+  {
+    "word": "час",
+    "hash": "3b717961ddfdfb919640a578d8ddb5b267fe8ece1b63aba1a1d98a589c07c7e8"
+  },
+  {
+    "word": "чашка",
+    "hash": "e76f300a4d03c1a9c4d5ee0dc67ca929f05958c221f77b0a3686a66129ba5e37"
+  },
+  {
+    "word": "чекати",
+    "hash": "9b128078838d5016780718acba40ccf16751e6573ffa777333f31cfcc175e0b1"
+  },
+  {
+    "word": "червень",
+    "hash": "e097c559bf88d9a024acf3eebb9edbec10a2a753d6244fc2439b86f58743439c"
+  },
+  {
+    "word": "червоний",
+    "hash": "0d55dd09f226af20731c910dc54bcc6d417f3463a3243913a66e427c7d8b3c2e"
+  },
+  {
+    "word": "четвер",
+    "hash": "36ff68e60d53ac141f27e0c9e5a4fd4418470e1937db0a720b31654078a600d9"
+  },
+  {
+    "word": "чи",
+    "hash": "5fc059e1ea519f7b37a4c56fcadd1f46b3420f4bf0bf96e9e116a1a08c3fc38e"
+  },
+  {
+    "word": "чий",
+    "hash": "058d2a26b4f98b937ad70522dd5b95bd2c4a76d9c8c6bb74fcf683749ed6cbf2"
+  },
+  {
+    "word": "число",
+    "hash": "9c0bc9dcd048c665e763febc7b50b28f97190b16666c9623f65de51a1731e2bf"
+  },
+  {
+    "word": "чистий",
+    "hash": "84719f8a5277aa1b9cc4d1b297b3a92fcab583cb37089508108034dce0679ae7"
+  },
+  {
+    "word": "читання",
+    "hash": "dfad5c6f69e6ef9f492b70edcf61040555ea23319bae42c13779235ac72a88b0"
+  },
+  {
+    "word": "читати",
+    "hash": "7682ae8e4b5db844821fc36ee795dc9886ed18a09e6d31b9d1fd125107c2e235"
+  },
+  {
+    "word": "чоботи",
+    "hash": "042259a7b3b3ef6de57174b2836e4c9d2752371297f1cc15746ec34f33736b84"
+  },
+  {
+    "word": "чоловік",
+    "hash": "42fab05fa7b043a853de0be4f1516e7d1a93bbf46dabe3e0388c56f5c9e4f116"
+  },
+  {
+    "word": "чому",
+    "hash": "8dad5f115cadfb34905c4aaa6d57e58593c6ef62c6b2f7a645307c8e8ebcf905"
+  },
+  {
+    "word": "чорний",
+    "hash": "29b92c670666009c37f54bf6161cfb4800566159db912986f04b615f920b7118"
+  },
+  {
+    "word": "чотири",
+    "hash": "127dbc6a75c3ba15fe840410ba4421eb70f291994276e5b2465115eefbb9c4b9"
+  },
+  {
+    "word": "чотириста",
+    "hash": "589840275daef6c3476833245d6e579e14237ce65407975d40709255e88494ef"
+  },
+  {
+    "word": "чотирнадцять",
+    "hash": "3d8073d2946c70fd55f5bec8eff49bb8fb1b2a216b683a59a92e464a402de8f3"
+  },
+  {
+    "word": "чути",
+    "hash": "cbbe04c5c51ed81cb4efeed2b8f9659e1b1a63f9e44ea12e4e5a7d98f962da28"
+  },
+  {
+    "word": "шапка",
+    "hash": "b2f41b064613b1a1c044ecac61763619b845ccc09517a5b8d813c3a8529dc06c"
+  },
+  {
+    "word": "шахи",
+    "hash": "ff9a9221ef389e8939318bc57a190c9adf1406ef6b63264fa45a0cad940088e3"
+  },
+  {
+    "word": "швидкий",
+    "hash": "6b0edad7d325032e3c0ff027fc128c51ebba3beb59f41a2a8b25e2e23b5d510b"
+  },
+  {
+    "word": "швидкість",
+    "hash": "428ee89b5198f8bd5f381d88d37bee9e099bd908fe046d9bed6d3dea09cd36d3"
+  },
+  {
+    "word": "шістдесят",
+    "hash": "d3e0ded7193ce12e1464933889dbe820c7bbf727a3412d4ef081eb6768ea4c0c"
+  },
+  {
+    "word": "шістнадцять",
+    "hash": "a6c7e80e2be15c9925d30e0b744324823ea834423bad47410ec46e944065555c"
+  },
+  {
+    "word": "шістсот",
+    "hash": "4081edd0099aea77844d5f28ec2312f7ab9af1820dc4bb2b7e5ccacedaebd368"
+  },
+  {
+    "word": "шість",
+    "hash": "f590f611eac06ebc9567a5285ac615f9d13de8202339dcc78697e9e2c7de024e"
+  },
+  {
+    "word": "школа",
+    "hash": "f399e8caebdfc85545e73237081c1e739d02b41e93ef05878dc9e2e8b2dcfba9"
+  },
+  {
+    "word": "шорти",
+    "hash": "262e34186282c70cfcc210947f173056bb3838dce798efa11c429c6a18eb31c7"
+  },
+  {
+    "word": "шукати",
+    "hash": "3cc93794dd4b7527153aed8a37440d50c29bb5102b1af8eb22de5c9be9c125d9"
+  },
+  {
+    "word": "ще",
+    "hash": "93cddbdbcf542f2d1d060f03b85f9ec88124a51a476bb47078458dc0af2b48e8"
+  },
+  {
+    "word": "щеня",
+    "hash": "d72282033f37789594b98f197402ed4a842016fd0abd1a35b1e0ebcac21df57d"
+  },
+  {
+    "word": "що",
+    "hash": "411d687f1fc1a7db6b236d0ec11d565bdfe8737199301c6ba66641861461d4d4"
+  },
+  {
+    "word": "я",
+    "hash": "9b21f5cf014c9efb35110dcccf3a74eab7fb903d1ca2f4054b3dad9ffabb7727"
+  },
+  {
+    "word": "яблуко",
+    "hash": "b7610af5dc9022320fd671613ebdb5255cb78fd5fd58d6b7f142b75363335407"
+  },
+  {
+    "word": "яйце",
+    "hash": "a5efea6a8aa352f44f7f7bf552d208b02168849fac4759e4a381bd6dde177a60"
+  },
+  {
+    "word": "як",
+    "hash": "dd15e94517219a018af035134d6176bcd06598fd874f3cf2c37fe56034918ce4"
+  },
+  {
+    "word": "який",
+    "hash": "cbc7496ad94e1021384fd964bdaa7c774152bd6c43836aa33f9dfe4068aacdbb"
+  }
+]

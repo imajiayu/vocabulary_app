@@ -1,0 +1,20 @@
+# TTS 模型文件（robinhad/ukrainian-tts，446MB，不入库）
+model.pth
+feats_stats.npz
+spk_xvector.ark
+config.yaml
+
+# Python 虚拟环境与缓存
+venv/
+__pycache__/
+
+# 生成输出（MP3 批量输出 + 测试试听）
+out/
+listen/
+
+# 中间 / 工作文件（可由脚本重新生成）
+words.old.json
+local_orphan.txt
+server_orphan.txt
+orphan.json
+missing.json

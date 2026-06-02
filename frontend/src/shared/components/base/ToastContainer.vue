@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide } from 'vue'
+import { ref } from 'vue'
 import BaseIcon from './BaseIcon.vue'
 
 export interface Toast {
@@ -93,20 +93,15 @@ const warning = (message: string, options?: Partial<ToastOptions>) =>
 const info = (message: string, options?: Partial<ToastOptions>) =>
   addToast({ ...options, type: 'info', message })
 
-// 提供给子组件
-const toastApi = {
+// 暴露给父组件（App.vue 通过 ref 拿到后 provide('toast') 给所有页面）
+defineExpose({
   add: addToast,
   remove: removeToast,
   success,
   error,
   warning,
   info
-}
-
-provide('toast', toastApi)
-
-// 暴露给父组件
-defineExpose(toastApi)
+})
 </script>
 
 <style scoped>
