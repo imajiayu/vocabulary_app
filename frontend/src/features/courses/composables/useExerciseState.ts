@@ -1,14 +1,18 @@
 /**
- * 练习状态持久化 composable（URL 无关 + 向前兼容 + Supabase 真相源）
+ * 练习状态持久化 composable —— 云端单一真相源（Supabase only）。
  *
- * 存储 key 只与业务 ID 挂钩：`exercise.${courseId}.${lessonId}`
- * 代码重构、路由变更、组件改名都不影响已有数据。
+ * 不再使用 localStorage：所有答题记录只存 course_progress.progress._exercises[lessonId]。
+ * 打开课时（挂载）即异步从云端拉取并填充 state；答题时短 debounce 实时写回云端。
  *
- * Envelope 格式保证未知字段透传 —— 未来增字段时，旧版本代码仍能读取旧数据
- * 且不丢失它不认识的字段。
+ * 多端语义：每台设备挂载时先把云端记录读入内存 state，新答案叠加其上后整体写回，
+ * 因此「本设备未答、云端已答」的题目会被带入，「本设备本次新答」的题目也会保留。
+ * 仅当两台设备在同一秒级窗口内并发答同一课时时，才可能后写覆盖（同一用户，罕见，可接受）。
+ *
+ * Envelope 格式（{schemaVersion, updatedAt, data, ...extras}）继续沿用以兼容历史云端数据，
+ * 并为未来新增字段保留透传能力；updatedAt 仅作元数据，不再参与合并裁决。
  */
 
-import { reactive, watch } from 'vue'
+import { reactive, watch, nextTick } from 'vue'
 import { loadFromSupabase, saveToSupabase } from './useCourseExerciseSync'
 
 const SCHEMA_VERSION = 1
@@ -48,7 +52,7 @@ function nowIso(): string {
   return new Date().toISOString()
 }
 
-/** 从任意形状的 parsed 对象提取 ExerciseState。兼容旧平铺格式（v8 之前）。 */
+/** 从任意形状的 parsed 对象提取 ExerciseState。兼容旧平铺格式与 envelope 格式。 */
 function unwrapData(parsed: unknown): ExerciseState {
   if (!parsed || typeof parsed !== 'object') return createEmpty()
   const obj = parsed as Record<string, unknown>
@@ -60,45 +64,25 @@ function unwrapData(parsed: unknown): ExerciseState {
   return { ...createEmpty(), ...(obj as Partial<ExerciseState>) }
 }
 
-/** 尝试从 localStorage 取 envelope（含 updatedAt），失败返回 null */
-function readLocalEnvelope(key: string): StoredEnvelope | null {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return null
-    const parsed = JSON.parse(raw) as Record<string, unknown>
-    const data = unwrapData(parsed)
-    const updatedAt = typeof parsed.updatedAt === 'string' ? parsed.updatedAt : nowIso()
-    const schemaVersion = typeof parsed.schemaVersion === 'number' ? parsed.schemaVersion : 0
-    return { ...parsed, schemaVersion, updatedAt, data }
-  } catch {
-    return null
-  }
-}
+const MAP_KEYS = ['radio', 'textarea', 'fillBlank', 'aiResults', 'hintsUsed'] as const
+const ARRAY_KEYS = ['quizGraded', 'fillBlankGraded', 'translateGraded'] as const
 
 /**
- * 一次性迁移：读旧 key（旧 exercise.js 使用的 `exercise_v8_${pathname}` 格式），
- * 写入新 key 并删除旧 key。
+ * 把云端记录并入内存 state：云端为底，加载期间用户已输入的新答案胜（冲突取本地）。
+ * 只补云端独有的键 / 数组元素，绝不删除本地已有内容 —— 保证两侧答案并集不丢失。
  */
-function migrateLegacyKey(newKey: string, legacyKeys: string[]): StoredEnvelope | null {
-  for (const legacyKey of legacyKeys) {
-    try {
-      const raw = localStorage.getItem(legacyKey)
-      if (!raw) continue
-      const parsed = JSON.parse(raw)
-      const data = unwrapData(parsed)
-      const envelope: StoredEnvelope = {
-        schemaVersion: SCHEMA_VERSION,
-        updatedAt: nowIso(),
-        data
-      }
-      localStorage.setItem(newKey, JSON.stringify(envelope))
-      localStorage.removeItem(legacyKey)
-      return envelope
-    } catch {
-      // 忽略，尝试下一个
+function mergeRemoteInto(state: ExerciseState, remote: ExerciseState) {
+  for (const key of MAP_KEYS) {
+    const localMap = state[key] as Record<string, unknown>
+    const remoteMap = remote[key] as Record<string, unknown>
+    for (const k of Object.keys(remoteMap)) {
+      if (!(k in localMap)) localMap[k] = remoteMap[k]
     }
   }
-  return null
+  for (const key of ARRAY_KEYS) {
+    const union = [...new Set([...remote[key], ...state[key]])]
+    state[key].splice(0, state[key].length, ...union)
+  }
 }
 
 export interface UseExerciseStateOptions {
@@ -106,77 +90,45 @@ export interface UseExerciseStateOptions {
   courseId: string
   /** 课时 ID，如 "w1d2" */
   lessonId: string
-  /** 课程 URL 前缀，仅用于 legacy 迁移，如 "/legal"、"/uk" */
-  basePath: string
 }
 
 export function useExerciseState(options: UseExerciseStateOptions) {
-  const { courseId, lessonId, basePath } = options
+  const { courseId, lessonId } = options
 
-  const storageKey = `exercise.${courseId}.${lessonId}`
+  const state = reactive<ExerciseState>(createEmpty())
 
-  // 旧 key 格式：
-  //   1) exercise_v8_/legal/w1d2.html  — 旧 exercise.js 使用 location.pathname
-  //   2) exercise_v8_/legal/w1d2       — 新代码早期版本（过渡期可能有）
-  const legacyKeys = [
-    `exercise_v8_${basePath}/${lessonId}.html`,
-    `exercise_v8_${basePath}/${lessonId}`
-  ]
-
-  // ── 1. 初始化：本地 → legacy 迁移 ──
-  let localEnvelope = readLocalEnvelope(storageKey)
-  if (!localEnvelope) {
-    localEnvelope = migrateLegacyKey(storageKey, legacyKeys)
-  }
-
-  const initial = localEnvelope ? localEnvelope.data : createEmpty()
-  const state = reactive<ExerciseState>(initial)
-
-  // 记录 envelope 中未知字段（未来版本可能新增），写回时透传
+  // envelope 中未知字段（未来版本可能新增），写回时透传
   let envelopeExtras: Record<string, unknown> = {}
-  if (localEnvelope) {
-    const { schemaVersion: _sv, updatedAt: _ua, data: _d, ...rest } = localEnvelope
-    envelopeExtras = rest
-  }
 
-  let lastUpdatedAt = localEnvelope?.updatedAt || nowIso()
+  let loadDone = false       // 初始云端拉取是否完成
+  let userDirty = false      // 加载完成前用户是否已答题
+  let applyingRemote = false // 合并云端数据期间，抑制 watcher 触发的自动保存
 
-  // ── 2. 异步合并 Supabase ──
+  // ── 打开课时即拉取云端记录 ──
   loadFromSupabase(courseId, lessonId).then(remote => {
-    if (!remote) return
-    const remoteTs = new Date(remote.updatedAt || 0).getTime()
-    const localTs = new Date(lastUpdatedAt).getTime()
-    if (remoteTs > localTs) {
-      // 云端更新，覆盖本地
-      const remoteData = unwrapData(remote)
-      Object.assign(state, createEmpty(), remoteData)
-      lastUpdatedAt = remote.updatedAt
-      // 保留 envelope 未知字段
+    applyingRemote = true
+    if (remote) {
+      mergeRemoteInto(state, unwrapData(remote))
       const { schemaVersion: _sv, updatedAt: _ua, data: _d, ...rest } = remote
       envelopeExtras = { ...envelopeExtras, ...rest }
-      writeLocal()
-    } else if (localTs > remoteTs) {
-      // 本地更新，推到云端
-      writeRemote()
     }
-    // 相等则不动
+    loadDone = true
+    // 合并产生的 state mutation 会异步触发 watcher；applyingRemote 拦截这一轮，
+    // nextTick 在 watcher flush 之后再解锁，避免把刚拉取的数据原样回写（多端 ping-pong）。
+    nextTick(() => {
+      applyingRemote = false
+      // 用户在加载期间答了题 → 把「云端 ∪ 本地新答案」推上云端
+      if (userDirty) writeRemote()
+    })
   })
 
-  // ── 3. 写入 ──
+  // ── 写入云端 ──
   function buildEnvelope(): StoredEnvelope {
     return {
       ...envelopeExtras,
       schemaVersion: SCHEMA_VERSION,
-      updatedAt: lastUpdatedAt,
+      updatedAt: nowIso(),
       data: { ...state }
-    }
-  }
-
-  function writeLocal() {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(buildEnvelope()))
-    } catch {
-      // ignore
     }
   }
 
@@ -184,21 +136,22 @@ export function useExerciseState(options: UseExerciseStateOptions) {
     saveToSupabase(courseId, lessonId, buildEnvelope())
   }
 
-  // ── 4. 自动保存 ──
-  let localTimer: ReturnType<typeof setTimeout> | null = null
+  // ── 答题实时同步（短 debounce 批量合并连续输入）──
   let remoteTimer: ReturnType<typeof setTimeout> | null = null
-
-  function scheduleSave() {
-    lastUpdatedAt = nowIso()
-
-    if (localTimer) clearTimeout(localTimer)
-    localTimer = setTimeout(writeLocal, 300)
-
+  function scheduleRemoteSave() {
     if (remoteTimer) clearTimeout(remoteTimer)
-    remoteTimer = setTimeout(writeRemote, 3000)
+    remoteTimer = setTimeout(writeRemote, 800)
   }
 
-  watch(state, scheduleSave, { deep: true })
+  watch(state, () => {
+    if (applyingRemote) return
+    // 加载尚未完成：先标脏不写，待 merge 后统一推送，避免覆盖云端真实记录
+    if (!loadDone) {
+      userDirty = true
+      return
+    }
+    scheduleRemoteSave()
+  }, { deep: true })
 
   return { state }
 }

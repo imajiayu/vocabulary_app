@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, inject, onMounted, watch } from 'vue'
 import type { QuizGroup } from '../../types/lesson'
 import type { ExerciseState } from '../../composables/useExerciseState'
 import { useCourseHtml } from '../../composables/useCourseHtml'
@@ -124,8 +124,8 @@ function showNextHint(qi: number, total: number) {
   }
 }
 
-// 恢复状态
-onMounted(() => {
+// 从 exerciseState 恢复本地视图（只补不删，幂等可重复执行）
+function restore() {
   // 恢复选择
   for (let qi = 0; qi < props.group.questions.length; qi++) {
     const key = `${groupKey}q${qi}`
@@ -144,5 +144,9 @@ onMounted(() => {
   if (exerciseState.quizGraded.includes(props.groupIndex)) {
     graded.value = true
   }
-})
+}
+
+// 挂载即恢复；云端记录异步到达后（exerciseState 被合并）再次恢复，保证新设备打开即显示
+onMounted(restore)
+watch(exerciseState, restore, { deep: true })
 </script>

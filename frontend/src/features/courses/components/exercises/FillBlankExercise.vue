@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, inject, onMounted, watch } from 'vue'
 import type { FillBlankGroup } from '../../types/lesson'
 import type { ExerciseState } from '../../composables/useExerciseState'
 import { matchFillBlank } from '../../utils/grading'
@@ -142,7 +142,8 @@ function showNextHint(qi: number, total: number) {
   }
 }
 
-onMounted(() => {
+// 从 exerciseState 恢复本地视图（只补不删，幂等可重复执行）
+function restore() {
   // 恢复输入
   for (let qi = 0; qi < props.group.questions.length; qi++) {
     const key = `fb${props.groupIndex}_${qi}`
@@ -157,9 +158,13 @@ onMounted(() => {
       hintsUsed.value[qi] = exerciseState.hintsUsed[key]
     }
   }
-  // 恢复判题
+  // 恢复判题（grade 内 push 有 includes 守卫，重复执行不会改动 exerciseState）
   if (exerciseState.fillBlankGraded.includes(props.groupIndex)) {
     grade()
   }
-})
+}
+
+// 挂载即恢复；云端记录异步到达后（exerciseState 被合并）再次恢复，保证新设备打开即显示
+onMounted(restore)
+watch(exerciseState, restore, { deep: true })
 </script>

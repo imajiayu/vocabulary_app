@@ -7,6 +7,7 @@
 import { ref } from 'vue'
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
+import { serializeCourseWrite } from './useCourseExerciseSync'
 
 export function useCourseProgress(courseId: string) {
   const progress = ref<Record<string, boolean>>({})
@@ -18,7 +19,7 @@ export function useCourseProgress(courseId: string) {
       .select('progress')
       .eq('user_id', userId)
       .eq('course', courseId)
-      .single()
+      .maybeSingle()
 
     if (data?.progress) {
       // 排除 _exercises 子键，只取 checkbox 进度
@@ -34,24 +35,27 @@ export function useCourseProgress(courseId: string) {
   }
 
   async function saveProgress() {
-    const userId = getCurrentUserId()
-    // 读取完整 progress（包含 _exercises），合并 checkbox 数据后写回
-    const { data: existing } = await supabase
-      .from('course_progress')
-      .select('progress')
-      .eq('user_id', userId)
-      .eq('course', courseId)
-      .single()
+    // 与练习答案写入共用串行锁：进入临界区后再 re-read，避免互相覆盖（丢失更新）
+    return serializeCourseWrite(async () => {
+      const userId = getCurrentUserId()
+      // 读取完整 progress（包含 _exercises），合并 checkbox 数据后写回
+      const { data: existing } = await supabase
+        .from('course_progress')
+        .select('progress')
+        .eq('user_id', userId)
+        .eq('course', courseId)
+        .maybeSingle()
 
-    const merged = { ...(existing?.progress as Record<string, unknown> || {}), ...progress.value }
+      const merged = { ...(existing?.progress as Record<string, unknown> || {}), ...progress.value }
 
-    await supabase
-      .from('course_progress')
-      .upsert({
-        user_id: userId,
-        course: courseId,
-        progress: merged
-      }, { onConflict: 'user_id,course' })
+      await supabase
+        .from('course_progress')
+        .upsert({
+          user_id: userId,
+          course: courseId,
+          progress: merged
+        }, { onConflict: 'user_id,course' })
+    })
   }
 
   function toggleLesson(lessonId: string) {

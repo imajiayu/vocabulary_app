@@ -75,8 +75,7 @@ const hasExercises = props.lesson.sections.some(s => s.type === 'exercises')
 if (hasExercises) {
   const { state } = useExerciseState({
     courseId: props.config.id,
-    lessonId: props.lessonId,
-    basePath: props.config.basePath
+    lessonId: props.lessonId
   })
   provide('exerciseState', state)
 }

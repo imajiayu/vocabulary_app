@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, inject, onMounted, watch } from 'vue'
 import type { TranslationGroup } from '../../types/lesson'
 import type { ExerciseState } from '../../composables/useExerciseState'
 import type { GradeResult } from '../../utils/grading'
@@ -132,7 +132,11 @@ async function gradeAll() {
   }
 }
 
-onMounted(() => {
+// 从 exerciseState 恢复本地视图（只补不删，幂等可重复执行）
+function restore() {
+  // 批改进行中不恢复：gradeAll 已清空 feedbacks 并在逐条写 aiResults，
+  // 此时 watch 触发的恢复会把上一轮旧结果填回，造成新结果到达前闪现旧内容。
+  if (grading.value) return
   // 恢复 textarea
   for (let qi = 0; qi < props.group.questions.length; qi++) {
     if (exerciseState.textarea[`t${props.groupIndex}_${qi}`]) {
@@ -155,5 +159,9 @@ onMounted(() => {
       }
     }
   }
-})
+}
+
+// 挂载即恢复；云端记录异步到达后（exerciseState 被合并）再次恢复，保证新设备打开即显示
+onMounted(restore)
+watch(exerciseState, restore, { deep: true })
 </script>
