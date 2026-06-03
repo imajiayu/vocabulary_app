@@ -83,6 +83,9 @@
         <button @click="handleMarkForgot" :disabled="isForgetButtonUsed" class="action-btn btn-warning">
           {{ isForgetButtonUsed ? '已设为忘记' : '设为忘记' }}
         </button>
+        <button @click="handleDowngradeSpell" :disabled="isSpellDowngradeDisabled" class="action-btn btn-warning">
+          拼写降级
+        </button>
         <button @click="handleResetSpelling" :disabled="isSpellResetDisabled" class="action-btn btn-warning">
           {{ isSpellResetDisabled ? '已重置拼写' : '重置拼写' }}
         </button>
@@ -124,6 +127,12 @@ const isSpellResetDisabled = computed(() => {
   return s === null || s === undefined || s === 0;
 });
 
+const isSpellDowngradeDisabled = computed(() => {
+  if (!currentWord.value) return true;
+  const s = currentWord.value.spell_strength;
+  return s === null || s === undefined || s === 0;
+});
+
 const toggleSpell = () => {
   if (isSpellStopped.value) {
     store.restoreSpell();
@@ -143,6 +152,11 @@ const toggleReview = () => {
 const handleMarkForgot = () => {
   if (isForgetButtonUsed.value) return;
   store.markForgot(); // async internally but fire-and-forget from UI
+};
+
+const handleDowngradeSpell = () => {
+  if (isSpellDowngradeDisabled.value) return;
+  store.downgradeSpell();
 };
 
 const handleResetSpelling = () => {

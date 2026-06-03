@@ -654,6 +654,24 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     }
   }
 
+  function downgradeSpell(): boolean {
+    if (!currentWord.value) return false
+
+    const wordId = currentWord.value.id
+    const newStrength = parseFloat(Math.max(0, (currentWord.value.spell_strength ?? 0) - 1.0).toFixed(2))
+    const updatePayload = { spell_strength: newStrength }
+
+    currentWord.value = { ...currentWord.value, ...updatePayload }
+    originalWord.value = { ...currentWord.value }
+
+    onWordUpdatedCallbacks.value.forEach(cb => cb({ ...currentWord.value! }))
+
+    api.words.updateWordDirect(wordId, updatePayload)
+      .catch(error => { log.error('拼写降级失败:', error) })
+
+    return true
+  }
+
   /**
    * 标记单词为"已掌握"（停止复习）— 乐观更新
    * @param closeAfter 是否在操作后关闭模态框
@@ -825,6 +843,7 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     save,
     deleteWord,
     markForgot,
+    downgradeSpell,
     resetSpelling,
     markMastered,
     markSpellMastered,
