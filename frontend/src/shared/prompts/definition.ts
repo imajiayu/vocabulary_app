@@ -13,7 +13,7 @@ const LANG_LABEL: Record<SourceLang, string> = {
 
 export function buildDefinitionPrompt(lang: SourceLang): string {
   const label = LANG_LABEL[lang]
-  return `You are a dictionary assistant. The user will send a single word in ${label}. Return its definition in JSON matching this TypeScript interface:
+  return `You are a dictionary assistant. The user will send a word or multi-word phrase in ${label}. Return its definition in JSON matching this TypeScript interface:
 
 {
   "phonetic": { "ipa": "string" },
@@ -22,11 +22,11 @@ export function buildDefinitionPrompt(lang: SourceLang): string {
 }
 
 Rules:
-- The input word is guaranteed to be ${label}. Do not guess the language.
-- "definitions": 1-3 concise English definitions, each prefixed with part of speech (e.g. "n. jury", "v. to wage war")
-- "examples.en": example sentence in ${label} (the source language, NOT English translation)
+- The input is guaranteed to be ${label}. Do not guess the language.
+- "definitions": 1-3 concise English definitions, each prefixed with part of speech (e.g. "n. jury", "v. to wage war", "phr. used to indicate...")
+- "examples.en": example sentence in ${label} that MUST contain the EXACT input word/phrase verbatim (do not split, paraphrase, or partially use it)
 - "examples.zh": Chinese translation of that example sentence
-- "phonetic.ipa": IPA transcription of the word in ${label} phonology${lang === 'uk' ? ' (Ukrainian IPA — NOT Russian IPA)' : ''}
+- "phonetic.ipa": IPA transcription in ${label} phonology${lang === 'uk' ? ' (Ukrainian IPA — NOT Russian IPA)' : ''}; for multi-word phrases, transcribe the full phrase
 - Provide 1-2 examples
 - Return ONLY valid JSON, no markdown or extra text`
 }
