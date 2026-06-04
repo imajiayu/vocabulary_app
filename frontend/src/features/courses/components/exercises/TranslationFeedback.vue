@@ -44,7 +44,7 @@
     <!-- 参考译文 -->
     <div v-if="reference" class="course-grade-reference">
       <strong>📖 参考译文：</strong>
-      <blockquote>{{ reference }}</blockquote>
+      <blockquote v-html="reference"></blockquote>
     </div>
   </div>
 </template>

@@ -89,7 +89,6 @@
           stroke-linejoin="round"
         />
       </svg>
-      <span v-if="!open" class="note-fab-dot" aria-hidden="true" />
     </button>
   </div>
 </template>
@@ -187,30 +186,6 @@ onMounted(async () => {
   height: 22px;
 }
 
-/* 关着时的「有便笺」小红点 */
-.note-fab-dot {
-  position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #e8543e;
-  box-shadow: 0 0 0 2px var(--course-accent, #7a2e2e);
-  animation: note-dot-pulse 1.8s ease-in-out infinite;
-}
-
-@keyframes note-dot-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.25);
-    opacity: 0.7;
-  }
-}
 
 /* ── 浮窗：从右下浮标上方弹出，bottom 锚定 + 限高内滚 ── */
 .note-window {
