@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useWordEditorStore } from '../stores/wordEditor';
 import { useToast } from '@/shared/composables/useToast';
@@ -106,6 +106,9 @@ import { useToast } from '@/shared/composables/useToast';
 const store = useWordEditorStore();
 const { currentWord, isEditing, duplicateCheckState, isCreating, createContext, isFetchingDefinition } = storeToRefs(store);
 const toast = useToast();
+
+// 本次浮窗内是否已执行过拼写降级（按一次即禁用，关闭重开浮窗组件重挂载自动复位）
+const spellDowngradedThisSession = ref(false);
 
 // Computed property to check if word has been marked as forgotten (lapse > 0)
 const isForgetButtonUsed = computed(() => {
@@ -128,6 +131,7 @@ const isSpellResetDisabled = computed(() => {
 });
 
 const isSpellDowngradeDisabled = computed(() => {
+  if (spellDowngradedThisSession.value) return true;
   if (!currentWord.value) return true;
   const s = currentWord.value.spell_strength;
   return s === null || s === undefined || s === 0;
@@ -157,6 +161,7 @@ const handleMarkForgot = () => {
 const handleDowngradeSpell = () => {
   if (isSpellDowngradeDisabled.value) return;
   store.downgradeSpell();
+  spellDowngradedThisSession.value = true;
 };
 
 const handleResetSpelling = () => {
