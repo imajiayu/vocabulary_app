@@ -659,7 +659,11 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     const wordId = currentWord.value.id
     const newStrength = parseFloat(Math.max(0, (currentWord.value.spell_strength ?? 0) - 1.0).toFixed(2))
-    const updatePayload = { spell_strength: newStrength }
+    // 降级意味着该词未掌握牢固，若此前已"不再拼写"，需翻转回 0 重新纳入拼写队列
+    const updatePayload: { spell_strength: number; stop_spell?: number } = { spell_strength: newStrength }
+    if (currentWord.value.stop_spell === 1) {
+      updatePayload.stop_spell = 0
+    }
 
     currentWord.value = { ...currentWord.value, ...updatePayload }
     originalWord.value = { ...currentWord.value }
