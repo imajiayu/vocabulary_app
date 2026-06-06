@@ -3,15 +3,18 @@
  *
  * 移植自 backend/core/review_repetition.py
  */
-import { findOptimalDay, findOptimalDayForStrong } from './loadBalancer'
+import { findOptimalDay, findOptimalDayForStrong, leastLoadedDayInRange } from './loadBalancer'
 import type { LoadBalanceParams } from './loadBalancer'
 
 export const LOW_EF_THRESHOLD = 2.5
 
+/** 失败词（遗忘）调度的最大推迟天数：宁可超限就近重测，也不被负荷推远 */
+export const LAPSE_MAX_DEFER = 2
+
 const EF_DELTA_MAP: Record<number, number> = {
   5: 0.15,
   4: 0.08,
-  3: -0.02,
+  3: 0,      // 答对就不该掉 EF（对齐经典 SM-2 q=3：EF 基本不变），避免"记得但偏慢"长期拉低 EF
   2: -0.20,
   1: -0.40,
 }
@@ -23,7 +26,7 @@ export function calculateScore(
   remembered: boolean,
   elapsedTime: number,
   thresholdFast = 2,
-  thresholdSlow = 5
+  thresholdSlow = 8   // 放宽至 8s：≤8s 的"记得但偏慢"仍可拿 4 分，仅 ≥8s 才降到最低的 3
 ): number {
   if (!remembered) return 1
 
@@ -123,17 +126,26 @@ export function calculateSrsParameters(
   }
 }
 
+/**
+ * 是否判定为"已掌握、自动停止复习"。
+ *
+ * 仅依据 EF 与连续成功次数（repetition 在任何一次遗忘时清零，本身即"距上次失败以来的
+ * 连续成功数"，是天然的近期表现信号）。不再使用累计遗忘率——后者永不衰减，会让早期
+ * 失败过的词永远无法毕业。
+ */
+export function shouldStopReview(easeFactor: number, repetition: number): boolean {
+  return easeFactor >= 3.0 && repetition >= 6
+}
+
 export function shouldApplyLoadBalancing(
   easeFactor: number,
   repetition: number,
-  score: number,
-  forgetRate?: number
+  score: number
 ): boolean {
   return (
     easeFactor <= LOW_EF_THRESHOLD ||
     repetition < 3 ||
-    score <= 3 ||
-    (forgetRate !== undefined && forgetRate >= 0.3)
+    score <= 3
   )
 }
 
@@ -155,8 +167,7 @@ export function calculateSrsParametersWithLoadBalancing(
   lapse: number,
   dailyReviewLimit: number,
   currentLoads: number[],
-  maxPrepDays: number = 45,
-  forgetRate?: number
+  maxPrepDays: number = 45
 ): SrsResult {
   // 1. 基础 SM-2 计算
   const basic = calculateSrsParameters(score, interval, repetition, easeFactor, lapse)
@@ -170,14 +181,25 @@ export function calculateSrsParametersWithLoadBalancing(
   }
 
   // 3. 低强度单词 → 负荷均衡（填谷策略）
-  if (shouldApplyLoadBalancing(easeFactorNew, repetitionNew, score, forgetRate)) {
+  if (shouldApplyLoadBalancing(easeFactorNew, repetitionNew, score)) {
     const params: LoadBalanceParams = {
       baseInterval: constrainedInterval,
       dailyLimit: dailyReviewLimit,
       currentLoads,
     }
     const result = findOptimalDay(params)
-    return { ...basic, interval: constrainedInterval, scheduledDay: result.chosenDay }
+    let scheduledDay = result.chosenDay
+
+    // B3：失败词（遗忘）必须近期重测——若负荷把它推迟超过 LAPSE_MAX_DEFER 天，
+    // 改为在 [1, base+LAPSE_MAX_DEFER] 内就近调度（宁可超限也不远推）。
+    if (score < 3 && currentLoads.length > 0) {
+      const cap = Math.min(constrainedInterval + LAPSE_MAX_DEFER, currentLoads.length)
+      if (scheduledDay > cap) {
+        scheduledDay = leastLoadedDayInRange(currentLoads, 1, cap)
+      }
+    }
+
+    return { ...basic, interval: constrainedInterval, scheduledDay }
   }
 
   // 4. 高强度单词 → 向后搜索，避免峰值堆积

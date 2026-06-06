@@ -3,9 +3,23 @@
  *
  * 移植自 backend/core/spell_repetition.py
  */
-import { findOptimalDay, findOptimalDayForStrong } from './loadBalancer'
+import { findOptimalDay, findOptimalDayForStrong, leastLoadedDayInRange } from './loadBalancer'
 import type { LoadBalanceParams } from './loadBalancer'
 import type { SpellingData } from '@/shared/types'
+
+/** 失败/极弱拼写词的最大推迟天数：宁可超限就近重测，也不被负荷无界后推 */
+export const SPELL_LAPSE_MAX_DEFER = 2
+
+/**
+ * 强制推迟上限：若负荷均衡把 rawDay 推到 cap 之外，改为在 [lowBound, cap] 内取负荷最低天
+ * （并列取最早，允许超限）。用于落实"严格推迟上限"的设计意图——findOptimalDay 的向后
+ * 搜索阶段本身并不尊重 maxDeviationDays，会把弱词推到远超上限的天。
+ */
+export function clampDeferral(rawDay: number, lowBound: number, cap: number, loads: number[]): number {
+  if (loads.length === 0) return rawDay
+  if (rawDay <= cap) return rawDay
+  return leastLoadedDayInRange(loads, lowBound, cap)
+}
 
 const NON_TYPING_KEYS = new Set([
   'ArrowLeft', 'ArrowRight', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Escape', 'Backspace'
@@ -274,7 +288,10 @@ export function calculateSpellStrengthWithLoadBalancing(
 
   // 4. 极低强度或未记住 → 不参与完整负荷均衡，但仍检查硬上限
   if (newStrength < 0.8 || !remembered) {
-    const clampedInterval = enforceSpellLimit(basicInterval, spellLoads, dailySpellLimit)
+    const rawDay = enforceSpellLimit(basicInterval, spellLoads, dailySpellLimit)
+    // 失败/极弱词必须近期重测：若被硬上限无界后推超过 SPELL_LAPSE_MAX_DEFER 天，就近超限调度
+    const cap = Math.min(basicInterval + SPELL_LAPSE_MAX_DEFER, spellLoads.length)
+    const clampedInterval = clampDeferral(rawDay, 1, cap, spellLoads)
     return { strengthChange, interval: clampedInterval, breakdownInfo }
   }
 
@@ -300,7 +317,10 @@ export function calculateSpellStrengthWithLoadBalancing(
       minDeviationDays: 1,
     }
     const result = findOptimalDay(params)
-    optimizedInterval = result.chosenDay
+    // findOptimalDay 的向后/回拉阶段不尊重 maxDelay，可能把弱词推到远超上限的天 →
+    // 强制推迟上限：超出 base+maxDelay 时在 [base, cap] 内就近超限（不早于 SM 调度的 base）。
+    const cap = Math.min(basicInterval + maxDelay, spellLoads.length)
+    optimizedInterval = clampDeferral(result.chosenDay, basicInterval, cap, spellLoads)
   } else {
     // 6. 高强度（> 2.5）→ 向后寻找负荷较小的日期
     const params: LoadBalanceParams = {

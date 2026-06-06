@@ -20,6 +20,34 @@ export interface LoadBalanceResult {
   phase: string          // 选择阶段
 }
 
+/**
+ * backward 搜索下限：不把基础间隔压缩到一半以下。
+ * 例如 baseInterval=10 时，回拉最早只到 day 5，避免负荷均衡严重缩短记忆间隔。
+ */
+export function computeBackwardFloor(baseInterval: number): number {
+  return Math.max(1, Math.floor(baseInterval * 0.5))
+}
+
+/**
+ * 在 [lo, hi]（1-indexed，闭区间）内找负荷最低的天，并列时取最早。
+ * 用于"宁可超限也要就近调度"的兜底场景（如失败词近期重测）。
+ */
+export function leastLoadedDayInRange(loads: number[], lo: number, hi: number): number {
+  const maxDay = loads.length
+  const start = Math.max(1, lo)
+  const end = Math.min(hi, maxDay)
+  let bestDay = start
+  let bestLoad = Infinity
+  for (let day = start; day <= end; day++) {
+    const load = loads[day - 1]
+    if (load < bestLoad) {
+      bestLoad = load
+      bestDay = day
+    }
+  }
+  return bestDay
+}
+
 export function computeSearchWindow(params: LoadBalanceParams): [number, number] {
   const maxDeviationRatio = params.maxDeviationRatio ?? 0.5
   const maxDeviationDays = params.maxDeviationDays ?? 7
@@ -40,7 +68,8 @@ export function computeSearchWindow(params: LoadBalanceParams): [number, number]
  *
  *   Phase 1 (first_fit): [start, end] 窗口内最早的未满天
  *   Phase 2 (forward):   [end+1, maxDay] 向后扩展，最早的未满天
- *   Phase 3 (backward):  [start-1 .. 1] 向前搜索，最近的未满天
+ *   Phase 3 (backward):  [start-1 .. backwardFloor] 向前搜索，最近的未满天
+ *                        （backwardFloor = floor(baseInterval*0.5)，不把间隔压缩过半）
  *   Phase 4 (fallback):  全部满员，窗口内最低负荷天（允许超限）
  */
 export function findOptimalDay(params: LoadBalanceParams): LoadBalanceResult {
@@ -66,8 +95,9 @@ export function findOptimalDay(params: LoadBalanceParams): LoadBalanceResult {
     }
   }
 
-  // Phase 3: 向前搜索 — 窗口前最近的未满天
-  for (let day = start - 1; day >= 1; day--) {
+  // Phase 3: 向前搜索 — 窗口前最近的未满天（不低于 backward 下限，避免间隔被压缩过半）
+  const backwardFloor = computeBackwardFloor(params.baseInterval)
+  for (let day = start - 1; day >= backwardFloor; day--) {
     if (params.currentLoads[day - 1] < params.dailyLimit) {
       return { chosenDay: day, baseInterval: params.baseInterval, phase: 'backward' }
     }
@@ -95,7 +125,8 @@ export function findOptimalDay(params: LoadBalanceParams): LoadBalanceResult {
  *   Phase 1 (base):      基准天 < 70% dailyLimit → 直接返回
  *   Phase 2 (best_fit):  [start, end] 窗口内负荷最低的未满天
  *   Phase 3 (forward):   [end+1, maxDay] 向后扩展，最早的未满天
- *   Phase 4 (backward):  [start-1 .. 1] 向前搜索，最近的未满天
+ *   Phase 4 (backward):  [start-1 .. backwardFloor] 向前搜索，最近的未满天
+ *                        （backwardFloor = floor(baseInterval*0.5)，不把间隔压缩过半）
  *   Phase 5 (fallback):  全部满员，窗口内最低负荷天（允许超限）
  */
 export function findOptimalDayForStrong(params: LoadBalanceParams): LoadBalanceResult {
@@ -139,8 +170,9 @@ export function findOptimalDayForStrong(params: LoadBalanceParams): LoadBalanceR
     }
   }
 
-  // Phase 4: 向前搜索 — 窗口前最近的未满天
-  for (let day = start - 1; day >= 1; day--) {
+  // Phase 4: 向前搜索 — 窗口前最近的未满天（不低于 backward 下限，避免间隔被压缩过半）
+  const backwardFloor = computeBackwardFloor(params.baseInterval)
+  for (let day = start - 1; day >= backwardFloor; day--) {
     if (params.currentLoads[day - 1] < params.dailyLimit) {
       return { chosenDay: day, baseInterval: params.baseInterval, phase: 'backward' }
     }

@@ -6,6 +6,7 @@ import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
 import { applyBoldToDefinition } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
+import { selectDueWordIds, orderDueByUrgency } from '@/shared/core/dueSelection'
 import { addDays } from '@/shared/utils/date'
 import type { Word, DefinitionObject, ReviewBreakdown, SpellingBreakdown, RelatedWord, SourceLang } from '@/shared/types'
 import { normalizeWordText } from '@/shared/config/sourceLanguage'
@@ -828,7 +829,7 @@ export class WordsApi {
     const dueRows = await paginateSupabase<Record<string, unknown>>((from, to) =>
       supabase
         .from('words')
-        .select('id, word')
+        .select('id, word, next_review')
         .eq('user_id', userId)
         .eq('stop_review', 0)
         .not('next_review', 'is', null)
@@ -837,15 +838,16 @@ export class WordsApi {
         .range(from, to)
     )
 
-    // 前端按首字母排序（不区分大小写）
-    const sortedDue = (dueRows || []).sort((a, b) =>
-      (a.word as string).toLowerCase().localeCompare((b.word as string).toLowerCase())
+    // 按紧急度（next_review 最逾期优先）选取，再按字母重排展示——
+    // 避免"先字母排序再截断 limit"导致字母靠后的词被长期饿死（B1）。
+    const dueIds = selectDueWordIds(
+      (dueRows || []).map(r => ({
+        id: r.id as number,
+        word: r.word as string,
+        next_review: r.next_review as string,
+      })),
+      limit
     )
-    let dueIds = sortedDue.map(r => r.id as number)
-
-    if (limit) {
-      dueIds = dueIds.slice(0, limit)
-    }
 
     // 2. 查询低 EF 额外单词（排除今天已复习的）
     if (lowEfExtraCount > 0) {
@@ -916,7 +918,7 @@ export class WordsApi {
       paginateSupabase<SpellRow>((from, to) =>
         supabase
           .from('words')
-          .select('id, word')
+          .select('id, word, spell_next_review')
           .eq('user_id', baseFilter.user_id)
           .eq('stop_spell', baseFilter.stop_spell)
           .eq('source', baseFilter.source)
@@ -956,8 +958,6 @@ export class WordsApi {
       ),
     ])
 
-    const groups = [dueRows, neverSpelledRows, notYetDueRows]
-
     // Fisher-Yates 洗牌辅助函数
     const shuffleArray = <T>(arr: T[]): T[] => {
       for (let i = arr.length - 1; i > 0; i--) {
@@ -967,19 +967,30 @@ export class WordsApi {
       return arr
     }
 
-    // 对每个分组内部排序或随机，然后按优先级拼接
+    const sortByWord = (group: SpellRow[]) =>
+      group.sort((a, b) =>
+        (a.word as string).toLowerCase().localeCompare((b.word as string).toLowerCase())
+      )
+
     const result: number[] = []
-    for (const group of groups) {
+
+    // P0 到期组：非 shuffle 时按 spell_next_review 紧急度排序（最逾期优先），
+    // 避免"先字母排序再截断 limit"导致字母靠后的到期词被饿死（S1）。shuffle 时随机本身即非饿死。
+    if (dueRows.length > 0) {
+      const ordered = shuffle
+        ? shuffleArray(dueRows)
+        : orderDueByUrgency(dueRows.map(r => ({
+            id: r.id as number,
+            word: r.word as string,
+            next_review: r.spell_next_review as string,
+          })))
+      result.push(...ordered.map(r => r.id as number))
+    }
+
+    // P1 从未拼写 / P2 未到期：保持原有分组内排序（字母或随机）
+    for (const group of [neverSpelledRows, notYetDueRows]) {
       if (group.length === 0) continue
-
-      if (shuffle) {
-        shuffleArray(group)
-      } else {
-        group.sort((a, b) =>
-          (a.word as string).toLowerCase().localeCompare((b.word as string).toLowerCase())
-        )
-      }
-
+      shuffle ? shuffleArray(group) : sortByWord(group)
       result.push(...group.map(r => r.id as number))
     }
 

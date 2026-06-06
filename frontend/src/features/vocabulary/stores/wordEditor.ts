@@ -607,7 +607,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
       const userSettings = await loadSettings()
       const source = word.source || 'IELTS'
       const sourceLearning = userSettings.sourceSettings[source]?.learning
-      const dailyLimit = sourceLearning?.dailySpellLimit || 200
+      // fallback 100，与 wordResultService 普通拼写路径的默认上限对齐
+      const dailyLimit = sourceLearning?.dailySpellLimit || 100
       const maxPrepDays = sourceLearning?.maxPrepDays || 45
 
       let loads: number[]

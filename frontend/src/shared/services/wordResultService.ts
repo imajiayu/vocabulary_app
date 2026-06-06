@@ -4,7 +4,7 @@
  * 编排算法计算 + Supabase 持久化，替代后端 word_update_service.py
  * 移植自 backend/services/word_update_service.py
  */
-import { calculateScore, calculateSrsParametersWithLoadBalancing } from '@/shared/core/reviewRepetition'
+import { calculateScore, calculateSrsParametersWithLoadBalancing, shouldStopReview } from '@/shared/core/reviewRepetition'
 import { calculateSpellStrengthWithLoadBalancing } from '@/shared/core/spellRepetition'
 import { WordsApi } from '@/shared/api/words'
 import type { ReviewNotificationData } from '@/shared/api/words'
@@ -66,12 +66,6 @@ export function calculateReviewResult(
   const maxPrepDays = sourceLearning?.maxPrepDays || 45
   const dailyReviewLimit = sourceLearning?.dailyReviewLimit || 100
 
-  // 计算遗忘率（包含本次结果）
-  const newRememberCount = rememberCount + (remembered ? 1 : 0)
-  const newForgetCount = forgetCount + (remembered ? 0 : 1)
-  const totalAfter = newRememberCount + newForgetCount
-  const forgetRate = totalAfter >= 5 ? newForgetCount / totalAfter : 0
-
   const srs = calculateSrsParametersWithLoadBalancing(
     score,
     interval,
@@ -80,12 +74,12 @@ export function calculateReviewResult(
     lapse,
     dailyReviewLimit,
     reviewLoads,
-    maxPrepDays,
-    forgetRate
+    maxPrepDays
   )
 
   const nextReviewDate = addDays(today, srs.scheduledDay)
-  const shouldStopReview = srs.easeFactor >= 3.0 && srs.repetition >= 6 && forgetRate < 0.3
+  // 毕业判定：仅看 EF 与连续成功次数（repetition 遗忘即清零，天然反映近期表现）
+  const shouldStopReviewFlag = shouldStopReview(srs.easeFactor, srs.repetition)
 
   const easeFactorChange = Math.round((srs.easeFactor - oldEaseFactor) * 100) / 100
 
@@ -103,7 +97,7 @@ export function calculateReviewResult(
         repetition: srs.repetition,
         interval: srs.interval,
       },
-      mastered: shouldStopReview,
+      mastered: shouldStopReviewFlag,
     },
     persistData: {
       word_id: word.id,
@@ -117,7 +111,7 @@ export function calculateReviewResult(
       next_review: nextReviewDate,
       lapse: srs.lapse,
       avg_elapsed_time: avgElapsedTime,
-      should_stop_review: shouldStopReview,
+      should_stop_review: shouldStopReviewFlag,
       current_remember_count: rememberCount,
       current_forget_count: forgetCount,
     },

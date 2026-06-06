@@ -299,7 +299,8 @@ export function useReviewResult() {
     const today = new Date().toISOString().split('T')[0]
     const { chosenDay } = findOptimalDay({
       baseInterval: 1,
-      dailyLimit: ctx.userSettings.sourceSettings[ctx.source]?.learning?.dailySpellLimit || 200,
+      // fallback 100，与 wordResultService 普通拼写路径的默认上限对齐
+      dailyLimit: ctx.userSettings.sourceSettings[ctx.source]?.learning?.dailySpellLimit || 100,
       currentLoads: spellLoadsCache.value,
     })
 

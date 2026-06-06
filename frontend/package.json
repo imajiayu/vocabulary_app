@@ -8,6 +8,8 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint src --ext .ts,.vue",
     "format": "prettier --write src"
   },
@@ -28,6 +30,7 @@
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.8.3",
     "vite": "^7.1.2",
+    "vitest": "^3.2.6",
     "vue-tsc": "^3.0.5"
   }
 }

@@ -9,6 +9,7 @@ npm install
 npm run dev         # 开发服务器
 npm run build       # 生产构建（type-check + vite build）
 npm run type-check  # 仅 TypeScript 类型检查
+npm run test        # vitest 单元测试（core 算法）
 npm run lint        # ESLint（需安装 eslint）
 npm run format      # Prettier（需安装 prettier）
 ```
