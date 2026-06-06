@@ -1,0 +1,733 @@
+{
+  "title": "第4周 第6天 — 争议解决（<span class=\"term\" data-def=\"争议解决\">Dispute Resolution</span>）",
+  "objective": "掌握商务合同争议解决条款的核心词汇，理解多层次争议解决机制（<span class=\"term\" data-def=\"友好和解\">amicable settlement</span> → <span class=\"term\" data-def=\"调解\">mediation</span> → <span class=\"term\" data-def=\"仲裁\">arbitration</span>/<span class=\"term\" data-def=\"诉讼\">litigation</span>），辨析 <span class=\"term\" data-def=\"仲裁\">arbitration</span>、<span class=\"term\" data-def=\"诉讼\">litigation</span> 与 <span class=\"term\" data-def=\"调解\">mediation</span> 的区别，区分 <span class=\"term\" data-def=\"适用法律\">governing law</span>（适用法律）、<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>（管辖权）与 <span class=\"term\" data-def=\"审判地\">venue</span>/<span class=\"term\" data-def=\"法院地\">forum</span>（审判地），并能准确翻译典型仲裁条款。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "引言",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "<strong>上节回顾：</strong>上节课（第4周第5天）学习了免责与不可抗力条款的核心词汇——<span class=\"term\" data-def=\"不可抗力\">force majeure</span>（不可抗力）、<span class=\"term\" data-def=\"天灾；不可抗拒的自然力\">act of God</span>（天灾）、<span class=\"term\" data-def=\"合同受挫；履行不能\">frustration</span>（合同受挫）、<span class=\"term\" data-def=\"履行不能；不可能\">impossibility</span>（履行不能）、<span class=\"term\" data-def=\"超出合理控制范围之外\">beyond the reasonable control</span>（超出合理控制范围）、<span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>（义务中止）等。今天进入第4周收官的核心话题——<span class=\"term\" data-def=\"争议解决\">dispute resolution</span>（争议解决），学习当合同发生<span class=\"term\" data-def=\"违约\">breach</span>或<span class=\"term\" data-def=\"争议\">dispute</span>时，双方如何通过和解、调解、仲裁或诉讼来解决争端。"
+        },
+        {
+          "type": "note",
+          "html": "<strong>本课定位：</strong>争议解决条款是合同的「最后一道防线」。前几周学习的<span class=\"term\" data-def=\"违约\">breach</span>、<span class=\"term\" data-def=\"救济\">remedy</span>、<span class=\"term\" data-def=\"损害赔偿金\">damages</span>，最终都要通过某种程序去主张。本课的关键是理解一套合同典型的<strong>多层次（多级）争议解决机制</strong>：先<span class=\"term\" data-def=\"友好和解\">amicable settlement</span>（友好协商）→ 不成则<span class=\"term\" data-def=\"调解\">mediation</span>（第三方调解）→ 仍不成则<span class=\"term\" data-def=\"仲裁\">arbitration</span>（仲裁）或<span class=\"term\" data-def=\"诉讼\">litigation</span>（诉讼）。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "1. 核心词汇",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "争议解决条款（dispute resolution clause）是几乎每份商务合同的标准条款，以下 17 个术语是翻译此类条款的核心。"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "英文",
+            "音标",
+            "中文",
+            "常见搭配"
+          ],
+          "firstColWord": true,
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"争议解决\">dispute resolution</span>",
+              "/dɪˈspjuːt ˌrezəˈluːʃən/",
+              "n. 争议解决",
+              "<span class=\"term\" data-def=\"争议解决\">dispute resolution</span> clause; <span class=\"term\" data-def=\"替代性争议解决\">alternative dispute resolution</span> (ADR); <span class=\"term\" data-def=\"争议解决\">dispute resolution</span> mechanism"
+            ],
+            [
+              "<span class=\"term\" data-def=\"争议\">dispute</span>",
+              "/dɪˈspjuːt/",
+              "n./v. 争议；争端；争辩",
+              "any <span class=\"term\" data-def=\"争议\">dispute</span> arising out of; settle a <span class=\"term\" data-def=\"争议\">dispute</span>; the <span class=\"term\" data-def=\"争议\">dispute</span> in question"
+            ],
+            [
+              "<span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+              "/ˌɑːbɪˈtreɪʃən/",
+              "n. 仲裁",
+              "settled by <span class=\"term\" data-def=\"仲裁\">arbitration</span>; refer to <span class=\"term\" data-def=\"仲裁\">arbitration</span>; <span class=\"term\" data-def=\"仲裁\">arbitration</span> proceedings; rules of <span class=\"term\" data-def=\"仲裁\">arbitration</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"仲裁员\">arbitrator</span>",
+              "/ˈɑːbɪtreɪtər/",
+              "n. 仲裁员",
+              "appoint an <span class=\"term\" data-def=\"仲裁员\">arbitrator</span>; sole <span class=\"term\" data-def=\"仲裁员\">arbitrator</span>; a panel of three <span class=\"term\" data-def=\"仲裁员\">arbitrators</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>",
+              "/ɑːˈbaɪtrəl əˈwɔːd/",
+              "n. 仲裁裁决",
+              "the <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> shall be final and binding; enforce the <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>; render an <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"调解\">mediation</span>",
+              "/ˌmiːdiˈeɪʃən/",
+              "n. 调解；调停",
+              "submit to <span class=\"term\" data-def=\"调解\">mediation</span>; through <span class=\"term\" data-def=\"调解\">mediation</span>; <span class=\"term\" data-def=\"调解\">mediation</span> proceedings"
+            ],
+            [
+              "<span class=\"term\" data-def=\"调解员\">mediator</span>",
+              "/ˈmiːdieɪtər/",
+              "n. 调解员；调停人",
+              "appoint a <span class=\"term\" data-def=\"调解员\">mediator</span>; a neutral <span class=\"term\" data-def=\"调解员\">mediator</span>; the <span class=\"term\" data-def=\"调解员\">mediator</span> facilitates"
+            ],
+            [
+              "<span class=\"term\" data-def=\"诉讼\">litigation</span>",
+              "/ˌlɪtɪˈɡeɪʃən/",
+              "n. 诉讼",
+              "resort to <span class=\"term\" data-def=\"诉讼\">litigation</span>; commence <span class=\"term\" data-def=\"诉讼\">litigation</span>; the cost of <span class=\"term\" data-def=\"诉讼\">litigation</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>",
+              "/ˌdʒʊərɪsˈdɪkʃən/",
+              "n. 管辖权；司法管辖区",
+              "exclusive <span class=\"term\" data-def=\"管辖权\">jurisdiction</span>; <span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span> of; the courts of competent <span class=\"term\" data-def=\"管辖权\">jurisdiction</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"适用法律\">governing law</span>",
+              "/ˈɡʌvənɪŋ lɔː/",
+              "n. 适用法律；管辖法律",
+              "the <span class=\"term\" data-def=\"适用法律\">governing law</span> of this Agreement; governed by the laws of; <span class=\"term\" data-def=\"适用法律\">governing law</span> clause"
+            ],
+            [
+              "<span class=\"term\" data-def=\"审判地\">venue</span>",
+              "/ˈvenjuː/",
+              "n. 审判地；管辖地点；开庭地",
+              "the <span class=\"term\" data-def=\"审判地\">venue</span> of arbitration; the <span class=\"term\" data-def=\"审判地\">venue</span> shall be; proper <span class=\"term\" data-def=\"审判地\">venue</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"法院地\">forum</span>",
+              "/ˈfɔːrəm/",
+              "n. 法院地；审理场所；管辖法院",
+              "exclusive <span class=\"term\" data-def=\"法院地\">forum</span>; <span class=\"term\" data-def=\"不便审理法院\">forum non conveniens</span>; choice of <span class=\"term\" data-def=\"法院地\">forum</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"友好和解\">amicable settlement</span>",
+              "/ˈæmɪkəbl ˈsetlmənt/",
+              "n. 友好和解；友好协商解决",
+              "reach an <span class=\"term\" data-def=\"友好和解\">amicable settlement</span>; through <span class=\"term\" data-def=\"友好和解\">amicable</span> negotiation; fail to reach an <span class=\"term\" data-def=\"友好和解\">amicable settlement</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"和解\">settlement</span>",
+              "/ˈsetlmənt/",
+              "n. 和解；解决；结算",
+              "reach a <span class=\"term\" data-def=\"和解\">settlement</span>; <span class=\"term\" data-def=\"和解\">settlement</span> agreement; out-of-court <span class=\"term\" data-def=\"和解\">settlement</span>; full and final <span class=\"term\" data-def=\"和解\">settlement</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span>",
+              "/əˈraɪzɪŋ aʊt əv ɔːr ɪn kəˈnekʃən wɪð/",
+              "phr. 因……产生或与……有关的",
+              "any dispute <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> this Agreement; <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> the performance hereof"
+            ],
+            [
+              "<span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span>",
+              "/səbˈmɪt tuː ðə ˌdʒʊərɪsˈdɪkʃən/",
+              "v. 服从……管辖；接受……管辖",
+              "<span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span> of the courts of; irrevocably <span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span>; the parties <span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span>"
+            ],
+            [
+              "<span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>",
+              "/ˈbaɪndɪŋ ˌɑːbɪˈtreɪʃən/",
+              "n. 有约束力的仲裁",
+              "final and <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>; settled by <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>; the award shall be binding"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>词源记忆：</strong><span class=\"term\" data-def=\"仲裁\">arbitration</span> 源自拉丁语 <em>arbiter</em>（裁判者、公断人），所以 <span class=\"term\" data-def=\"仲裁员\">arbitrator</span> 就是「居中作出判断的人」。<span class=\"term\" data-def=\"调解\">mediation</span> 源自 <em>medius</em>（中间），<span class=\"term\" data-def=\"调解员\">mediator</span> 是「站在中间帮双方沟通的人」，但不作裁决。<span class=\"term\" data-def=\"诉讼\">litigation</span> 源自 <em>litigare</em>（争讼、打官司），指通过法院的正式诉讼。<span class=\"term\" data-def=\"管辖权\">jurisdiction</span> = juris（法律）+ diction（说、宣告），即「宣告法律的权力」——管辖权。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "固定搭配",
+            "中文",
+            "例句"
+          ],
+          "firstColWord": false,
+          "rows": [
+            [
+              "any dispute <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span>",
+              "因……产生或与……有关的任何争议",
+              {
+                "en": "<span class=\"en-text\">Any dispute arising out of or in connection with this Agreement shall be settled by arbitration.</span>",
+                "zh": "因本协议产生或与本协议有关的任何争议，均应通过仲裁解决。"
+              }
+            ],
+            [
+              "settled by <span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+              "通过仲裁解决",
+              {
+                "en": "<span class=\"en-text\">All disputes shall be finally settled by arbitration under the rules of the relevant arbitration institution.</span>",
+                "zh": "一切争议均应根据有关仲裁机构的规则通过仲裁最终解决。"
+              }
+            ],
+            [
+              "final and <span class=\"term\" data-def=\"有约束力的仲裁\">binding</span>",
+              "终局的且有约束力的",
+              {
+                "en": "<span class=\"en-text\">The arbitral award shall be final and binding upon both parties.</span>",
+                "zh": "仲裁裁决为终局裁决，对双方均具有约束力。"
+              }
+            ],
+            [
+              "reach an <span class=\"term\" data-def=\"友好和解\">amicable settlement</span>",
+              "达成友好和解",
+              {
+                "en": "<span class=\"en-text\">The parties shall first endeavour to reach an amicable settlement through friendly negotiation.</span>",
+                "zh": "双方应首先努力通过友好协商达成友好和解。"
+              }
+            ],
+            [
+              "<span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span> of",
+              "服从……的管辖",
+              {
+                "en": "<span class=\"en-text\">The parties irrevocably submit to the exclusive jurisdiction of the courts of Hong Kong.</span>",
+                "zh": "双方不可撤销地服从香港法院的专属管辖。"
+              }
+            ],
+            [
+              "be governed by the laws of",
+              "受……法律管辖；适用……法律",
+              {
+                "en": "<span class=\"en-text\">This Agreement shall be governed by and construed in accordance with the laws of England and Wales.</span>",
+                "zh": "本协议受英格兰和威尔士法律管辖，并据其解释。"
+              }
+            ],
+            [
+              "the <span class=\"term\" data-def=\"审判地\">venue</span> of <span class=\"term\" data-def=\"仲裁\">arbitration</span> shall be",
+              "仲裁地点应为；仲裁地应为",
+              {
+                "en": "<span class=\"en-text\">The venue of arbitration shall be Singapore, and the proceedings shall be conducted in English.</span>",
+                "zh": "仲裁地点应为新加坡，仲裁程序应以英文进行。"
+              }
+            ],
+            [
+              "refer the <span class=\"term\" data-def=\"争议\">dispute</span> to <span class=\"term\" data-def=\"调解\">mediation</span>",
+              "将争议提交调解",
+              {
+                "en": "<span class=\"en-text\">If negotiation fails, either party may refer the dispute to mediation before commencing arbitration.</span>",
+                "zh": "若协商不成，任何一方均可在启动仲裁前将争议提交调解。"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. 词汇辨析",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "3a. <span class=\"term\" data-def=\"仲裁\">arbitration</span> vs. <span class=\"term\" data-def=\"诉讼\">litigation</span> vs. <span class=\"term\" data-def=\"调解\">mediation</span>"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "术语",
+            "中文",
+            "裁决者",
+            "结果约束力",
+            "特点"
+          ],
+          "firstColWord": false,
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"调解\">mediation</span>",
+              "调解",
+              "<span class=\"term\" data-def=\"调解员\">mediator</span>（调解员，居中协调）",
+              "无强制约束力（除非各方另签和解协议）",
+              "第三方促成双方自愿和解，不作裁判，最温和"
+            ],
+            [
+              "<span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+              "仲裁",
+              "<span class=\"term\" data-def=\"仲裁员\">arbitrator</span>（仲裁员/仲裁庭）",
+              "有约束力（<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> final and binding）",
+              "私密、专业、可跨境执行（纽约公约），程序较灵活"
+            ],
+            [
+              "<span class=\"term\" data-def=\"诉讼\">litigation</span>",
+              "诉讼",
+              "法院/法官（judge）",
+              "有约束力（判决 judgment，可上诉）",
+              "公开、正式、由国家司法机关管辖，程序最严格"
+            ]
+          ]
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p><strong>记忆口诀：</strong></p><ul><li><span class=\"term\" data-def=\"调解\">mediation</span>（调解）——<strong>「劝」</strong>：第三方<span class=\"term\" data-def=\"调解员\">mediator</span>只能「劝和」，自己不下判断，劝不成就散。</li><li><span class=\"term\" data-def=\"仲裁\">arbitration</span>（仲裁）——<strong>「裁」</strong>：<span class=\"term\" data-def=\"仲裁员\">arbitrator</span>居中「裁判」，作出 <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>，有约束力但走的是私人程序。</li><li><span class=\"term\" data-def=\"诉讼\">litigation</span>（诉讼）——<strong>「判」</strong>：法院公开「审判」，出判决，最具国家强制力。</li></ul><p>在多层次条款里，三者常按由温和到强硬的顺序排列：先 <span class=\"term\" data-def=\"友好和解\">amicable settlement</span> → 再 <span class=\"term\" data-def=\"调解\">mediation</span> → 最后 <span class=\"term\" data-def=\"仲裁\">arbitration</span> 或 <span class=\"term\" data-def=\"诉讼\">litigation</span>（二者通常二选一，因为约定仲裁后一般就排除了法院诉讼）。</p>"
+        },
+        {
+          "type": "h3",
+          "text": "3b. <span class=\"term\" data-def=\"适用法律\">governing law</span> vs. <span class=\"term\" data-def=\"管辖权\">jurisdiction</span> vs. <span class=\"term\" data-def=\"审判地\">venue</span>/<span class=\"term\" data-def=\"法院地\">forum</span>"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "术语",
+            "中文",
+            "回答的问题",
+            "举例"
+          ],
+          "firstColWord": false,
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"适用法律\">governing law</span>",
+              "适用法律",
+              "<strong>用「哪国/哪地的法律」</strong>来解释合同、判断对错？",
+              "This Agreement is governed by the laws of New York（适用纽约州法律）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>",
+              "管辖权",
+              "<strong>「哪个法院/机构」有权</strong>审理这个案子？",
+              "submit to the jurisdiction of the courts of England（服从英国法院管辖）"
+            ],
+            [
+              "<span class=\"term\" data-def=\"审判地\">venue</span> / <span class=\"term\" data-def=\"法院地\">forum</span>",
+              "审判地 / 法院地",
+              "<strong>「在哪个具体地点」</strong>开庭审理或仲裁？",
+              "the venue of arbitration shall be Singapore（仲裁地点为新加坡）"
+            ]
+          ]
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>中文母语者高频混淆：</strong><ul><li><strong><span class=\"term\" data-def=\"适用法律\">governing law</span> ≠ <span class=\"term\" data-def=\"管辖权\">jurisdiction</span></strong>：前者是「按哪套法律的实体规则判」（实体法选择），后者是「哪个法院有权管这个案子」（程序/管辖）。二者完全可以不一致——例如约定适用<strong>英国法</strong>，但由<strong>新加坡</strong>仲裁庭审理。翻译时绝不能把 governing law 译成「管辖权」。</li><li><strong><span class=\"term\" data-def=\"管辖权\">jurisdiction</span> 有两义</strong>：一指「管辖权」（the court has jurisdiction），一指「司法管辖区/法域」（a foreign jurisdiction = 一个外国法域）。须看语境。</li><li><strong><span class=\"term\" data-def=\"审判地\">venue</span>（审判地）≠ <span class=\"term\" data-def=\"管辖权\">jurisdiction</span>（管辖权）</strong>：venue 只是「具体在哪开庭」的地点问题，jurisdiction 是「有没有权审」的权力问题。仲裁条款里常说 venue/seat of arbitration（仲裁地）。</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "4. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1：典型仲裁条款",
+          "sentence": "Any dispute, controversy or claim <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> this Agreement, including any question regarding its existence, validity or termination, shall be referred to and finally resolved by <span class=\"term\" data-def=\"仲裁\">arbitration</span>, and the <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> shall be final and binding upon the parties.",
+          "structure": [
+            "<em>Any dispute, controversy or claim <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> this Agreement</em> — 主语：因本协议产生或与本协议有关的任何争议、纠纷或索赔（arising out of = 因……产生；in connection with = 与……有关，二者并列以扩大覆盖范围）",
+            "<em>including any question regarding its existence, validity or termination</em> — 插入的同位/补充成分：包括关于本协议存在、效力或终止的任何问题（这是「分离原则」条款，确保合同本身被质疑时仲裁条款仍有效）",
+            "<em>shall be referred to and finally resolved by <span class=\"term\" data-def=\"仲裁\">arbitration</span></em> — 谓语：应提交仲裁并最终解决（refer to arbitration = 提交仲裁）",
+            "<em>the <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> shall be final and binding upon the parties</em> — 并列分句：仲裁裁决为终局裁决，对双方均有约束力（final and binding = 终局且有约束力）"
+          ],
+          "translation": "因本协议产生或与本协议有关的任何争议、纠纷或索赔，包括有关本协议存在、效力或终止的任何问题，均应提交仲裁并最终解决，且仲裁裁决为终局裁决，对双方均具有约束力。"
+        },
+        {
+          "title": "例句 2：适用法律与管辖条款",
+          "sentence": "This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be governed by and construed in accordance with the laws of the State of New York, and each party irrevocably <span class=\"term\" data-def=\"服从……管辖\">submits to the jurisdiction</span> of the courts of competent <span class=\"term\" data-def=\"管辖权\">jurisdiction</span> located in New York County.",
+          "structure": [
+            "<em>This Agreement <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be governed by and construed in accordance with the laws of the State of New York</em> — 适用法律条款：本协议受纽约州法律管辖并据其解释（be governed by = 受……管辖；construed in accordance with = 据……解释，这两个短语固定连用）",
+            "<em>each party irrevocably <span class=\"term\" data-def=\"服从……管辖\">submits to the jurisdiction</span> of the courts</em> — 管辖条款：各方不可撤销地服从法院管辖（irrevocably = 不可撤销地；submit to the jurisdiction of = 服从……管辖）",
+            "<em>courts of competent <span class=\"term\" data-def=\"管辖权\">jurisdiction</span> located in New York County</em> — 定语：位于纽约县的有管辖权的法院（competent jurisdiction = 有管辖权的；此处 jurisdiction 第一处指「管辖」，第二处 competent jurisdiction 指法院的「管辖权」）"
+          ],
+          "translation": "本协议受纽约州法律管辖并据其解释，且各方不可撤销地服从位于纽约县的有管辖权法院的管辖。"
+        },
+        {
+          "title": "例句 3：多层次争议解决条款",
+          "sentence": "The parties <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> first attempt to resolve any <span class=\"term\" data-def=\"争议\">dispute</span> through <span class=\"term\" data-def=\"友好和解\">amicable</span> negotiation; failing which, the <span class=\"term\" data-def=\"争议\">dispute</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be submitted to <span class=\"term\" data-def=\"调解\">mediation</span>; and if no <span class=\"term\" data-def=\"和解\">settlement</span> is reached within sixty (60) days, the <span class=\"term\" data-def=\"争议\">dispute</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be finally settled by <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>.",
+          "structure": [
+            "<em>The parties <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> first attempt to resolve any <span class=\"term\" data-def=\"争议\">dispute</span> through <span class=\"term\" data-def=\"友好和解\">amicable</span> negotiation</em> — 第一层：双方应首先通过友好协商解决任何争议（first attempt = 首先尝试）",
+            "<em>failing which, the <span class=\"term\" data-def=\"争议\">dispute</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be submitted to <span class=\"term\" data-def=\"调解\">mediation</span></em> — 第二层：协商不成的，争议应提交调解（failing which = 若不成功，是法律英语连接「失败则」的固定表达）",
+            "<em>if no <span class=\"term\" data-def=\"和解\">settlement</span> is reached within sixty (60) days, the <span class=\"term\" data-def=\"争议\">dispute</span> <span class=\"term\" data-def=\"应当（法律强制义务）\">shall</span> be finally settled by <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span></em> — 第三层：若60天内未达成和解，争议应通过有约束力的仲裁最终解决（finally settled = 最终解决）"
+          ],
+          "translation": "双方应首先通过友好协商解决任何争议；协商不成的，应将争议提交调解；若在六十（60）日内仍未达成和解，则该争议应通过有约束力的仲裁最终解决。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "5. 单词记忆",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "5a. 闪卡自测"
+        },
+        {
+          "type": "p",
+          "html": "看到英文术语，想一想中文意思，然后点击展开答案："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"仲裁\">arbitration</span></summary><div class=\"answer-content\">仲裁<br><em>由<span class=\"term\" data-def=\"仲裁员\">arbitrator</span>作出 <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>，final and binding</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"调解\">mediation</span></summary><div class=\"answer-content\">调解；调停<br><em><span class=\"term\" data-def=\"调解员\">mediator</span> 居中促和，无强制约束力</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"诉讼\">litigation</span></summary><div class=\"answer-content\">诉讼<br><em>通过法院公开审判，最具国家强制力</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"适用法律\">governing law</span></summary><div class=\"answer-content\">适用法律<br><em>用哪套法律的实体规则解释合同</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"管辖权\">jurisdiction</span></summary><div class=\"answer-content\">管辖权；司法管辖区<br><em>哪个法院/机构有权审理</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"审判地\">venue</span></summary><div class=\"answer-content\">审判地；开庭地<br><em>在哪个具体地点开庭/仲裁</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span></summary><div class=\"answer-content\">仲裁裁决<br><em>shall be final and binding upon the parties</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"友好和解\">amicable settlement</span></summary><div class=\"answer-content\">友好和解<br><em>多层次争议解决的第一层：友好协商</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span></summary><div class=\"answer-content\">因……产生或与……有关的<br><em>仲裁条款覆盖争议范围的固定表达</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span></summary><div class=\"answer-content\">服从……管辖<br><em>the parties submit to the jurisdiction of the courts of...</em></div></details></div></div>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "5b. 配对选择：看中文选英文",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "5b. 配对选择：看中文选英文",
+          "questions": [
+            {
+              "prompt": "1. 仲裁（由仲裁员作出有约束力裁决）",
+              "options": [
+                "<span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+                "<span class=\"term\" data-def=\"调解\">mediation</span>",
+                "<span class=\"term\" data-def=\"诉讼\">litigation</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+              "explanation": "arbitration = 仲裁，由 arbitrator 作出 arbitral award；mediation 是调解（无约束力），litigation 是诉讼（走法院）"
+            },
+            {
+              "prompt": "2. 调解（第三方居中促和，不作裁决）",
+              "options": [
+                "<span class=\"term\" data-def=\"诉讼\">litigation</span>",
+                "<span class=\"term\" data-def=\"调解\">mediation</span>",
+                "<span class=\"term\" data-def=\"和解\">settlement</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"调解\">mediation</span>",
+              "explanation": "mediation = 调解，由 mediator 居中协调促成自愿和解；settlement 是和解（结果），litigation 是诉讼"
+            },
+            {
+              "prompt": "3. 适用法律（用哪套法律解释合同）",
+              "options": [
+                "<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>",
+                "<span class=\"term\" data-def=\"审判地\">venue</span>",
+                "<span class=\"term\" data-def=\"适用法律\">governing law</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"适用法律\">governing law</span>",
+              "explanation": "governing law = 适用法律（实体法选择）；jurisdiction 是管辖权（哪个法院有权审），venue 是审判地（在哪开庭）"
+            },
+            {
+              "prompt": "4. 管辖权（哪个法院有权审理）",
+              "options": [
+                "<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>",
+                "<span class=\"term\" data-def=\"适用法律\">governing law</span>",
+                "<span class=\"term\" data-def=\"法院地\">forum</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>",
+              "explanation": "jurisdiction = 管辖权，指哪个法院/机构有权审理；governing law 是适用法律，forum 是法院地/审理场所"
+            },
+            {
+              "prompt": "5. 仲裁裁决（仲裁庭作出的终局决定）",
+              "options": [
+                "<span class=\"term\" data-def=\"和解\">settlement</span>",
+                "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>",
+                "<span class=\"term\" data-def=\"调解\">mediation</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>",
+              "explanation": "arbitral award = 仲裁裁决，shall be final and binding；settlement 是和解，mediation 是调解程序"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "6. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语理解选择",
+          "instruction": "根据语境选择最准确的术语。",
+          "questions": [
+            {
+              "prompt": "1. 合同约定「This Agreement is governed by the laws of England」，意思是用英国法律解释合同。这里的 governed by 对应的术语是：",
+              "options": [
+                "<span class=\"term\" data-def=\"管辖权\">jurisdiction</span>（管辖权）",
+                "<span class=\"term\" data-def=\"适用法律\">governing law</span>（适用法律）",
+                "<span class=\"term\" data-def=\"审判地\">venue</span>（审判地）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"适用法律\">governing law</span>（适用法律）",
+              "explanation": "governed by the laws of = 受……法律管辖，对应 governing law（适用法律，实体法选择）；jurisdiction 是「哪个法院有权审」，venue 是「在哪开庭」",
+              "hints": ["问的是「用哪套法律的规则」，不是「哪个法院」", "实体法选择 → governing law"]
+            },
+            {
+              "prompt": "2. A、B两公司在合同中约定，争议先友好协商，不成则提交一名中立第三方居中促和（但不作裁决）。这名第三方称为：",
+              "options": [
+                "<span class=\"term\" data-def=\"仲裁员\">arbitrator</span>（仲裁员）",
+                "<span class=\"term\" data-def=\"调解员\">mediator</span>（调解员）",
+                "judge（法官）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"调解员\">mediator</span>（调解员）",
+              "explanation": "mediator = 调解员，居中促和但不作裁决；arbitrator 是仲裁员（要作出 arbitral award），judge 是法官（走诉讼）",
+              "hints": ["关键词「促和但不作裁决」", "不作裁决 = 调解，不是仲裁"]
+            },
+            {
+              "prompt": "3. 仲裁条款写「The award shall be final and binding upon the parties」，这里的 the award 指的是：",
+              "options": [
+                "<span class=\"term\" data-def=\"和解\">settlement</span>（和解协议）",
+                "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>（仲裁裁决）",
+                "judgment（法院判决）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>（仲裁裁决）",
+              "explanation": "在仲裁条款语境中 the award = the arbitral award（仲裁裁决），final and binding 是其标准表述；judgment 是法院判决（诉讼），settlement 是和解",
+              "hints": ["这是仲裁条款，所以 award 是仲裁的产物", "final and binding 是仲裁裁决的固定搭配"]
+            },
+            {
+              "prompt": "4. 「The parties irrevocably ____ of the courts of Singapore」要表达「双方不可撤销地服从新加坡法院的管辖」，空格应填：",
+              "options": [
+                "submit to the jurisdiction",
+                "govern the law",
+                "refer to arbitration"
+              ],
+              "answer": "submit to the jurisdiction",
+              "explanation": "submit to the jurisdiction of = 服从……的管辖，是约定法院管辖的固定表达；govern the law 搭配错误，refer to arbitration 是「提交仲裁」（与法院管辖矛盾）",
+              "hints": ["「服从……管辖」的固定动词短语", "submit to the jurisdiction of + 法院"]
+            },
+            {
+              "prompt": "5. 三种争议解决方式中，哪一种由国家司法机关公开审理、最具国家强制力？",
+              "options": [
+                "<span class=\"term\" data-def=\"调解\">mediation</span>（调解）",
+                "<span class=\"term\" data-def=\"仲裁\">arbitration</span>（仲裁）",
+                "<span class=\"term\" data-def=\"诉讼\">litigation</span>（诉讼）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"诉讼\">litigation</span>（诉讼）",
+              "explanation": "litigation = 诉讼，由法院公开审判，最具国家强制力；arbitration 是私密的仲裁程序，mediation 是无约束力的调解",
+              "hints": ["关键词「国家司法机关」「公开」", "走法院 = 诉讼"]
+            },
+            {
+              "prompt": "6. 仲裁条款写「The venue of arbitration shall be Geneva」，这里 venue 指的是：",
+              "options": [
+                "适用的法律（用日内瓦的法律）",
+                "仲裁地点（在日内瓦开庭仲裁）",
+                "仲裁机构（日内瓦仲裁院）"
+              ],
+              "answer": "仲裁地点（在日内瓦开庭仲裁）",
+              "explanation": "venue = 审判地/仲裁地点，指程序进行的具体地点；它既不是 governing law（适用法律），也不是仲裁机构本身",
+              "hints": ["venue 是「地点」问题，不是「法律」或「机构」问题", "venue of arbitration = 仲裁地点"]
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习B：术语填空",
+          "instruction": "根据语境填入最合适的法律英语术语。可参考提示。",
+          "questions": [
+            {
+              "prompt": "Any dispute arising out of or in connection with this Agreement shall be finally settled by ____ .",
+              "answer": "arbitration",
+              "accept": ["arbitration", "binding arbitration"],
+              "explanation": "settled by arbitration = 通过仲裁解决，是争议解决条款的标准表述。arbitration = 仲裁",
+              "hints": ["由仲裁员作出有约束力裁决的程序", "首字母 a，源自拉丁语 arbiter（公断人）"]
+            },
+            {
+              "prompt": "This Agreement shall be governed by and construed in accordance with the ____ of the State of New York.",
+              "answer": "laws",
+              "accept": ["laws", "law"],
+              "explanation": "governed by ... the laws of = 受……法律管辖，是适用法律（governing law）条款的标准句式",
+              "hints": ["governed by the ____ of New York", "这里指「法律」"]
+            },
+            {
+              "prompt": "The arbitral award shall be final and ____ upon both parties.",
+              "answer": "binding",
+              "accept": ["binding"],
+              "explanation": "final and binding = 终局的且有约束力的，是仲裁裁决效力的固定搭配。binding = 有约束力的",
+              "hints": ["final and ____，表示「有约束力的」", "与 bind（约束）同源"]
+            },
+            {
+              "prompt": "The parties shall first attempt to reach an ____ settlement through friendly negotiation before resorting to arbitration.",
+              "answer": "amicable",
+              "accept": ["amicable"],
+              "explanation": "amicable settlement = 友好和解，是多层次争议解决机制的第一层（友好协商）",
+              "hints": ["「友好的」和解，through friendly negotiation", "首字母 a，与 amity（友好）同源"]
+            },
+            {
+              "prompt": "Each party irrevocably submits to the exclusive ____ of the courts of Hong Kong.",
+              "answer": "jurisdiction",
+              "accept": ["jurisdiction"],
+              "explanation": "submit to the jurisdiction of = 服从……管辖；exclusive jurisdiction = 专属管辖。jurisdiction = 管辖权",
+              "hints": ["submit to the exclusive ____ of the courts", "= juris（法律）+ diction（宣告），即管辖权"]
+            },
+            {
+              "prompt": "If the parties fail to resolve the dispute through negotiation, they shall refer the dispute to ____ before commencing arbitration.",
+              "answer": "mediation",
+              "accept": ["mediation"],
+              "explanation": "refer the dispute to mediation = 将争议提交调解，是仲裁之前的中间层级。mediation = 调解",
+              "hints": ["第三方居中促和、但不作裁决的程序", "源自 medius（中间）"]
+            },
+            {
+              "prompt": "The ____ of arbitration shall be Singapore, and the proceedings shall be conducted in English.",
+              "answer": "venue",
+              "accept": ["venue", "seat"],
+              "explanation": "venue of arbitration = 仲裁地点（开庭进行的具体地点）。venue = 审判地/仲裁地",
+              "hints": ["指仲裁程序进行的「具体地点」", "首字母 v，也可用 seat（仲裁地）"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：词汇辨析",
+          "instruction": "选择正确的中文翻译或辨析。",
+          "questions": [
+            {
+              "prompt": "1. 「governing law」 和 「jurisdiction」 的区别是：",
+              "options": [
+                "二者意思相同，都指「管辖权」",
+                "governing law 是「适用法律」（用哪套法律的规则判），jurisdiction 是「管辖权」（哪个法院有权审）",
+                "governing law 是「政府法律」，jurisdiction 是「司法部门」"
+              ],
+              "answer": "governing law 是「适用法律」（用哪套法律的规则判），jurisdiction 是「管辖权」（哪个法院有权审）",
+              "explanation": "governing law = 适用法律（实体法选择），jurisdiction = 管辖权（哪个法院/机构有权审）。二者可以不一致，如适用英国法但由新加坡仲裁庭审理",
+              "hints": ["一个回答「用哪套法律」，一个回答「哪个法院管」"]
+            },
+            {
+              "prompt": "2. 「the arbitral award shall be final and binding」 的正确翻译是：",
+              "options": [
+                "仲裁奖励应是最终的且有约束力的",
+                "仲裁裁决为终局裁决，对（双方）具有约束力",
+                "仲裁结果应当公平合理"
+              ],
+              "answer": "仲裁裁决为终局裁决，对（双方）具有约束力",
+              "explanation": "arbitral award = 仲裁裁决（不是「仲裁奖励」，award 在法律语境是「裁决」）；final and binding = 终局的且有约束力的",
+              "hints": ["award 在仲裁语境是「裁决」不是「奖励」"]
+            },
+            {
+              "prompt": "3. 关于 mediation（调解）与 arbitration（仲裁）的区别，正确的是：",
+              "options": [
+                "调解员和仲裁员都能作出有约束力的裁决",
+                "调解（mediation）由调解员居中促和，不作裁决；仲裁（arbitration）由仲裁员作出有约束力的裁决",
+                "调解比仲裁更具强制执行力"
+              ],
+              "answer": "调解（mediation）由调解员居中促和，不作裁决；仲裁（arbitration）由仲裁员作出有约束力的裁决",
+              "explanation": "mediation 的 mediator 只促和、不裁判，结果无强制约束力（除非另签和解协议）；arbitration 的 arbitrator 作出 final and binding 的 arbitral award",
+              "hints": ["调解 = 劝和，仲裁 = 裁判"]
+            },
+            {
+              "prompt": "4. 「arising out of or in connection with this Agreement」 的最佳翻译是：",
+              "options": [
+                "在本协议之上或之中出现的",
+                "因本协议产生或与本协议有关的",
+                "由本协议引起且必须连接的"
+              ],
+              "answer": "因本协议产生或与本协议有关的",
+              "explanation": "arising out of = 因……产生；in connection with = 与……有关。二者并列以最大化覆盖争议范围，是仲裁条款的固定表达",
+              "hints": ["arising out of = 因……产生；in connection with = 与……有关"]
+            },
+            {
+              "prompt": "5. 「venue」 在仲裁条款 「the venue of arbitration shall be Paris」 中应译为：",
+              "options": [
+                "适用法律（巴黎法律）",
+                "仲裁地点（在巴黎仲裁）",
+                "管辖权（巴黎法院管辖）"
+              ],
+              "answer": "仲裁地点（在巴黎仲裁）",
+              "explanation": "venue = 审判地/仲裁地点，指程序进行的具体地点；不是 governing law（适用法律）也不是 jurisdiction（管辖权）",
+              "hints": ["venue 永远是「地点」问题"]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习一：英译中",
+          "instruction": "将以下仲裁条款翻译为中文，完成后点击「提交 AI 批改」获取详细批改。",
+          "questions": [
+            {
+              "source": "Any dispute arising out of or in connection with this Agreement, including any question regarding its existence or validity, shall be referred to and finally resolved by arbitration, and the arbitral award shall be final and binding upon the parties.",
+              "reference": "因本协议产生或与本协议有关的任何争议，包括有关本协议存在或效力的任何问题，均应提交仲裁并最终解决，且仲裁裁决为终局裁决，对双方均具有约束力。",
+              "rubric": [
+                {
+                  "en": "arising out of or in connection with",
+                  "ideal": "因……产生或与……有关的",
+                  "accept": ["因……引起或与……相关的"],
+                  "wrong": ["在……之上或之中"],
+                  "note": "arising out of = 因……产生；in connection with = 与……有关，须分别译出，是仲裁条款覆盖范围的固定表达"
+                },
+                {
+                  "en": "including any question regarding its existence or validity",
+                  "ideal": "包括有关本协议存在或效力的任何问题",
+                  "accept": ["包括关于其存在或有效性的任何问题"],
+                  "wrong": ["包括存在问题"],
+                  "note": "validity = 效力/有效性，不可漏译；its 指代本协议"
+                },
+                {
+                  "en": "referred to and finally resolved by arbitration",
+                  "ideal": "提交仲裁并最终解决",
+                  "accept": ["提交并通过仲裁最终解决"],
+                  "wrong": ["参考仲裁"],
+                  "note": "refer to arbitration = 提交仲裁，不是「参考」；finally resolved = 最终解决"
+                },
+                {
+                  "en": "the arbitral award shall be final and binding",
+                  "ideal": "仲裁裁决为终局裁决，具有约束力",
+                  "accept": ["仲裁裁决是最终的且有约束力的"],
+                  "wrong": ["仲裁奖励是最后的"],
+                  "note": "arbitral award = 仲裁裁决（不是「奖励」）；final and binding = 终局且有约束力"
+                },
+                {
+                  "en": "upon the parties",
+                  "ideal": "对双方（当事人）",
+                  "accept": ["对各方"],
+                  "wrong": ["在派对上"],
+                  "note": "parties 在合同中指「（合同）当事人/双方」，不是「派对」"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习二：中译英",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击「提交 AI 批改」获取详细批改。",
+          "questions": [
+            {
+              "source": "双方应首先通过友好协商解决任何争议；协商不成的，应将争议提交调解；若仍未达成和解，则该争议应通过有约束力的仲裁最终解决。本协议受英国法律管辖。",
+              "reference": "The parties shall first attempt to resolve any dispute through amicable negotiation; failing which, the dispute shall be submitted to mediation; and if no settlement is reached, the dispute shall be finally settled by binding arbitration. This Agreement shall be governed by the laws of England.",
+              "rubric": [
+                {
+                  "en": "resolve any dispute through amicable negotiation",
+                  "ideal": "通过友好协商解决任何争议",
+                  "accept": ["settle any dispute through friendly negotiation"],
+                  "wrong": ["solve the argument by talking"],
+                  "note": "dispute = 争议（不用 argument）；amicable/friendly negotiation = 友好协商"
+                },
+                {
+                  "en": "submitted to mediation",
+                  "ideal": "提交调解",
+                  "accept": ["referred to mediation"],
+                  "wrong": ["sent to arbitration"],
+                  "note": "mediation = 调解（不是 arbitration 仲裁）；submit to / refer to mediation = 提交调解"
+                },
+                {
+                  "en": "finally settled by binding arbitration",
+                  "ideal": "通过有约束力的仲裁最终解决",
+                  "accept": ["finally resolved by binding arbitration"],
+                  "wrong": ["solved by arbitration finally"],
+                  "note": "binding arbitration = 有约束力的仲裁；finally settled by = 通过……最终解决"
+                },
+                {
+                  "en": "governed by the laws of England",
+                  "ideal": "受英国法律管辖",
+                  "accept": ["governed by English law"],
+                  "wrong": ["controlled by England's rules", "under the jurisdiction of England"],
+                  "note": "「适用法律」用 governed by the laws of，不要误用 jurisdiction（那是管辖权）"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "常见错误预防",
+      "blocks": [
+        {
+          "type": "error-warn",
+          "html": "<strong>常见错误预防：</strong><ul><li><strong><span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> ≠ 仲裁奖励</strong>：award 在仲裁语境是「裁决」，不是「奖励」。arbitral award = 仲裁裁决。</li><li><strong><span class=\"term\" data-def=\"适用法律\">governing law</span> ≠ <span class=\"term\" data-def=\"管辖权\">jurisdiction</span></strong>：governing law 是「用哪套法律判」（适用法律），jurisdiction 是「哪个法院有权审」（管辖权）。二者可以不一致，翻译时绝不能混淆。</li><li><strong><span class=\"term\" data-def=\"调解\">mediation</span> ≠ <span class=\"term\" data-def=\"仲裁\">arbitration</span></strong>：mediation（调解）的 mediator 只促和、不裁决，结果无强制约束力；arbitration（仲裁）的 arbitrator 作出 final and binding 的裁决。两者效力天差地别。</li><li><strong><span class=\"term\" data-def=\"审判地\">venue</span> 永远是「地点」</strong>：venue of arbitration = 仲裁地点，不要译成「管辖权」或「适用法律」。</li><li><strong>「parties」 是「当事人/双方」</strong>：合同中的 the parties = 合同双方/当事人，不是「派对」。</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "7. 今日小结",
+      "html": "<h3>第4周 第6天 — 争议解决核心要点</h3><table><thead><tr><th>知识点</th><th>核心内容</th></tr></thead><tbody><tr><td>多层次争议解决</td><td><span class=\"term\" data-def=\"友好和解\">amicable settlement</span>（友好协商）→ <span class=\"term\" data-def=\"调解\">mediation</span>（调解）→ <span class=\"term\" data-def=\"仲裁\">arbitration</span>（仲裁）或 <span class=\"term\" data-def=\"诉讼\">litigation</span>（诉讼），由温和到强硬逐级升级</td></tr><tr><td>三种解决方式区分</td><td><span class=\"term\" data-def=\"调解\">mediation</span>（劝，无约束力）vs. <span class=\"term\" data-def=\"仲裁\">arbitration</span>（裁，<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> final and binding）vs. <span class=\"term\" data-def=\"诉讼\">litigation</span>（判，走法院）</td></tr><tr><td>三个「管辖类」术语</td><td><span class=\"term\" data-def=\"适用法律\">governing law</span>（用哪套法律判）vs. <span class=\"term\" data-def=\"管辖权\">jurisdiction</span>（哪个法院有权审）vs. <span class=\"term\" data-def=\"审判地\">venue</span>/<span class=\"term\" data-def=\"法院地\">forum</span>（在哪开庭）</td></tr><tr><td>仲裁条款固定句式</td><td>any dispute <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> this Agreement shall be settled by <span class=\"term\" data-def=\"仲裁\">arbitration</span>；the award shall be final and binding</td></tr><tr><td>服从管辖</td><td><span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span> of the courts of... = 服从……法院管辖；be governed by the laws of... = 受……法律管辖</td></tr></tbody></table><p><strong>下节预告（第4周 第7天 — 本周复习）：</strong>第4周收官复习日，集中巩固本周「违约与救济」主题——<span class=\"term\" data-def=\"违约\">breach</span>（违约类型）、<span class=\"term\" data-def=\"救济\">remedy</span>（救济方式）、<span class=\"term\" data-def=\"损害赔偿金\">damages</span>（损害赔偿）、<span class=\"term\" data-def=\"不可抗力\">force majeure</span>（免责与不可抗力）与今天的 <span class=\"term\" data-def=\"争议解决\">dispute resolution</span>（争议解决），通过综合练习串联本周全部核心术语，不引入新知识点。</p>"
+    }
+  ]
+}

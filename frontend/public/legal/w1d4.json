@@ -449,21 +449,12 @@
             {
               "prompt": "1. 是指；系指（定义条款引导词）",
               "name": "m1",
-              "answer": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
+              "answer": "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>",
               "explanation": "<span class=\"term\" data-def=\"系指\">shall mean</span> = 是指/系指，定义条款的标准引导词",
               "options": [
-                {
-                  "value": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
-                  "html": "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"规定\">set forth</span>",
-                  "html": "<span class=\"term\" data-def=\"规定/载明\">set forth</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>",
-                  "html": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>"
-                }
+                "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>",
+                "<span class=\"term\" data-def=\"规定/载明\">set forth</span>",
+                "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>"
               ]
             },
             {
@@ -472,18 +463,9 @@
               "answer": "<span class=\"term\" data-def=\"关联方\">affiliate</span>",
               "explanation": "<span class=\"term\" data-def=\"关联方\">affiliate</span> = 关联方/关联公司，指存在控制或共同控制关系的实体",
               "options": [
-                {
-                  "value": "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>",
-                  "html": "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"关联方\">affiliate</span>",
-                  "html": "<span class=\"term\" data-def=\"关联方\">affiliate</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"生效日期\">effective date</span>",
-                  "html": "<span class=\"term\" data-def=\"生效日期\">effective date</span>"
-                }
+                "<span class=\"term\" data-def=\"人（含自然人和法人）\">person</span>",
+                "<span class=\"term\" data-def=\"关联方\">affiliate</span>",
+                "<span class=\"term\" data-def=\"生效日期\">effective date</span>"
               ]
             },
             {
@@ -492,18 +474,9 @@
               "answer": "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
               "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement = 本协议的",
               "options": [
-                {
-                  "value": "<span class=\"term\" data-def=\"其中的\">thereof</span>",
-                  "html": "<span class=\"term\" data-def=\"其中的\">thereof</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
-                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>",
-                  "html": "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>"
-                }
+                "<span class=\"term\" data-def=\"其中的\">thereof</span>",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+                "<span class=\"term\" data-def=\"如本协议所用\">as used herein</span>"
               ]
             },
             {
@@ -512,38 +485,20 @@
               "answer": "<span class=\"term\" data-def=\"重大的\">material</span>",
               "explanation": "<span class=\"term\" data-def=\"重大的\">material</span> 在合同中 = 重大的/实质性的，非日常的‘材料/物质’",
               "options": [
-                {
-                  "value": "<span class=\"term\" data-def=\"重大的\">material</span>",
-                  "html": "<span class=\"term\" data-def=\"重大的\">material</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"工作日\">business day</span>",
-                  "html": "<span class=\"term\" data-def=\"工作日/营业日\">business day</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
-                  "html": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>"
-                }
+                "<span class=\"term\" data-def=\"重大的\">material</span>",
+                "<span class=\"term\" data-def=\"工作日/营业日\">business day</span>",
+                "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>"
               ]
             },
             {
               "prompt": "5. 载明；规定；列明",
               "name": "m5",
-              "answer": "<span class=\"term\" data-def=\"规定\">set forth</span>",
+              "answer": "<span class=\"term\" data-def=\"规定/载明\">set forth</span>",
               "explanation": "<span class=\"term\" data-def=\"规定\">set forth</span> = 载明/规定/列明，法律文书标准用语",
               "options": [
-                {
-                  "value": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>",
-                  "html": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span>",
-                  "html": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span>"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"规定\">set forth</span>",
-                  "html": "<span class=\"term\" data-def=\"规定/载明\">set forth</span>"
-                }
+                "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span>",
+                "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span>",
+                "<span class=\"term\" data-def=\"规定/载明\">set forth</span>"
               ]
             }
           ]
@@ -565,22 +520,10 @@
               "answer": "重大的；实质性的",
               "explanation": "<span class=\"term\" data-def=\"重大的\">material</span> 在合同法律语境中表示‘重大的、实质性的’，<span class=\"term\" data-def=\"重大的\">material</span> breach = 重大违约，<span class=\"term\" data-def=\"重大的\">material</span> adverse effect = 重大不利影响。不要与日常含义‘材料/物质’混淆。",
               "options": [
-                {
-                  "value": "材料的；物质的",
-                  "html": "材料的；物质的"
-                },
-                {
-                  "value": "重大的；实质性的",
-                  "html": "重大的；实质性的"
-                },
-                {
-                  "value": "有形的；可触摸的",
-                  "html": "有形的；可触摸的"
-                },
-                {
-                  "value": "必要的；必需的",
-                  "html": "必要的；必需的"
-                }
+                "材料的；物质的",
+                "重大的；实质性的",
+                "有形的；可触摸的",
+                "必要的；必需的"
               ]
             },
             {
@@ -589,22 +532,10 @@
               "answer": "人士（含自然人和法人实体）",
               "explanation": "<span class=\"term\" data-def=\"人（含自然人和法人）\">Person</span> 在合同定义条款中通常被扩展定义为包括自然人、公司、合伙企业、信托等一切法律主体，远超日常含义的‘个人’。",
               "options": [
-                {
-                  "value": "个人；自然人",
-                  "html": "个人；自然人"
-                },
-                {
-                  "value": "人士（含自然人和法人实体）",
-                  "html": "人士（含自然人和法人实体）"
-                },
-                {
-                  "value": "法人代表",
-                  "html": "法人代表"
-                },
-                {
-                  "value": "签约人",
-                  "html": "签约人"
-                }
+                "个人；自然人",
+                "人士（含自然人和法人实体）",
+                "法人代表",
+                "签约人"
               ]
             },
             {
@@ -613,22 +544,10 @@
               "answer": "关联方；关联公司",
               "explanation": "<span class=\"term\" data-def=\"关联方\">affiliate</span> 指与某一主体存在控制或共同控制关系的其他实体。在合同中通常定义为直接或间接控制、受控制或受共同控制的人士。",
               "options": [
-                {
-                  "value": "附属机构",
-                  "html": "附属机构"
-                },
-                {
-                  "value": "关联方；关联公司",
-                  "html": "关联方；关联公司"
-                },
-                {
-                  "value": "分支机构",
-                  "html": "分支机构"
-                },
-                {
-                  "value": "合伙人",
-                  "html": "合伙人"
-                }
+                "附属机构",
+                "关联方；关联公司",
+                "分支机构",
+                "合伙人"
               ]
             },
             {
@@ -637,22 +556,10 @@
               "answer": "本协议的（= of this Agreement）",
               "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = here + of = of this Agreement。Section 3 <span class=\"term\" data-def=\"本协议的\">hereof</span> = 本协议第3条。here- 家族词是法律英语的标志性特征。",
               "options": [
-                {
-                  "value": "在此之前",
-                  "html": "在此之前"
-                },
-                {
-                  "value": "在此之后",
-                  "html": "在此之后"
-                },
-                {
-                  "value": "本协议的（= of this Agreement）",
-                  "html": "本协议的（= of this Agreement）"
-                },
-                {
-                  "value": "附件的（= of the Schedule）",
-                  "html": "附件的（= of the Schedule）"
-                }
+                "在此之前",
+                "在此之后",
+                "本协议的（= of this Agreement）",
+                "附件的（= of the Schedule）"
               ]
             },
             {
@@ -661,22 +568,10 @@
               "answer": "载明；规定；列明",
               "explanation": "<span class=\"term\" data-def=\"规定\">set forth</span> 是法律英语中表示‘载明/规定/列出’的标准搭配。as <span class=\"term\" data-def=\"规定\">set forth</span> in = 如……所载明的。",
               "options": [
-                {
-                  "value": "出发；启程",
-                  "html": "出发；启程"
-                },
-                {
-                  "value": "建立；设立",
-                  "html": "建立；设立"
-                },
-                {
-                  "value": "载明；规定；列明",
-                  "html": "载明；规定；列明"
-                },
-                {
-                  "value": "搁置；延后",
-                  "html": "搁置；延后"
-                }
+                "出发；启程",
+                "建立；设立",
+                "载明；规定；列明",
+                "搁置；延后"
               ]
             }
           ]
@@ -689,25 +584,13 @@
             {
               "prompt": "6. “<span class=\"term\" data-def=\"保密信息\">Confidential Information</span>” ______ any non-public information disclosed by either <span class=\"term\" data-def=\"当事人\">party</span>.",
               "name": "b1",
-              "answer": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
+              "answer": "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>",
               "explanation": "<span class=\"term\" data-def=\"系指\">shall mean</span> 是合同定义条款中引出定义的标准搭配。‘X’ <span class=\"term\" data-def=\"系指\">shall mean</span>... = ‘X’是指……",
               "options": [
-                {
-                  "value": "is <span class=\"term\" data-def=\"已定义的\">defined</span> as",
-                  "html": "is <span class=\"term\" data-def=\"已定义的\">defined</span> as"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"系指\">shall mean</span>",
-                  "html": "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>"
-                },
-                {
-                  "value": "refers to",
-                  "html": "refers to"
-                },
-                {
-                  "value": "is called",
-                  "html": "is called"
-                }
+                "is <span class=\"term\" data-def=\"已定义的\">defined</span> as",
+                "<span class=\"term\" data-def=\"系指/应当指\">shall mean</span>",
+                "refers to",
+                "is called"
               ]
             },
             {
@@ -716,22 +599,10 @@
               "answer": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
               "explanation": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>（包括但不限于）是合同中表示列举不穷尽的标准搭配，确保所列事项仅为示例而非全部。与 including but not limited to 同义。",
               "options": [
-                {
-                  "value": "such as",
-                  "html": "such as"
-                },
-                {
-                  "value": "for example",
-                  "html": "for example"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
-                  "html": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>"
-                },
-                {
-                  "value": "consisting of",
-                  "html": "consisting of"
-                }
+                "such as",
+                "for example",
+                "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span>",
+                "consisting of"
               ]
             },
             {
@@ -740,22 +611,10 @@
               "answer": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in",
               "explanation": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in [Section X] 是合同中交叉引用定义的标准表达。<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span> = 赋予（含义）。",
               "options": [
-                {
-                  "value": "is explained in",
-                  "html": "is explained in"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in",
-                  "html": "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in"
-                },
-                {
-                  "value": "is described at",
-                  "html": "is described at"
-                },
-                {
-                  "value": "can be found in",
-                  "html": "can be found in"
-                }
+                "is explained in",
+                "<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it in",
+                "is described at",
+                "can be found in"
               ]
             },
             {
@@ -764,22 +623,10 @@
               "answer": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>",
               "explanation": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>（如本协议所使用的）是定义条款开头的标准引导语，限定术语适用范围为本协议。In this document 是日常表达，不符合法律文书用语规范；For the purpose of 通常用于说明目的而非引出定义；With reference to 表示‘关于/参照’，不是定义条款的惯用引导语。",
               "options": [
-                {
-                  "value": "In this document",
-                  "html": "In this document"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>",
-                  "html": "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>"
-                },
-                {
-                  "value": "For the purpose of",
-                  "html": "For the purpose of"
-                },
-                {
-                  "value": "With reference to",
-                  "html": "With reference to"
-                }
+                "In this document",
+                "<span class=\"term\" data-def=\"如本协议所用\">As used herein</span>",
+                "For the purpose of",
+                "With reference to"
               ]
             },
             {
@@ -788,22 +635,10 @@
               "answer": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>",
               "explanation": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>（除非上下文另有要求）是定义条款中常见的灵活性限定语，给定义留出解释空间。If not stated differently 是非正式表达，法律文书中不使用；Except when noted 表示‘除非另有注明’，用于脚注而非定义条款；<span class=\"term\" data-def=\"但是\">Provided that</span> 表示‘但是/前提是’，用于附加条件而非灵活性限定。",
               "options": [
-                {
-                  "value": "If not stated differently",
-                  "html": "If not stated differently"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>",
-                  "html": "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>"
-                },
-                {
-                  "value": "Except when noted",
-                  "html": "Except when noted"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"但是\">Provided that</span>",
-                  "html": "<span class=\"term\" data-def=\"但是/前提是\">Provided that</span>"
-                }
+                "If not stated differently",
+                "<span class=\"term\" data-def=\"除非上下文另有要求\">Unless the context otherwise requires</span>",
+                "Except when noted",
+                "<span class=\"term\" data-def=\"但是/前提是\">Provided that</span>"
               ]
             }
           ]
@@ -819,22 +654,10 @@
               "answer": "列举仅为示例，不排除未列出的其他事项",
               "explanation": "<span class=\"term\" data-def=\"包括但不限于\">including without limitation</span> / including but not limited to 的功能是声明所列事项仅为示例性列举，避免被解读为穷尽性列举（即不排除其他未列出的事项）。",
               "options": [
-                {
-                  "value": "限制列举范围，仅限所列事项",
-                  "html": "限制列举范围，仅限所列事项"
-                },
-                {
-                  "value": "列举仅为示例，不排除未列出的其他事项",
-                  "html": "列举仅为示例，不排除未列出的其他事项"
-                },
-                {
-                  "value": "强调所列事项的重要性",
-                  "html": "强调所列事项的重要性"
-                },
-                {
-                  "value": "表示所列事项需获得批准",
-                  "html": "表示所列事项需获得批准"
-                }
+                "限制列举范围，仅限所列事项",
+                "列举仅为示例，不排除未列出的其他事项",
+                "强调所列事项的重要性",
+                "表示所列事项需获得批准"
               ]
             },
             {
@@ -843,22 +666,10 @@
               "answer": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）",
               "explanation": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 中的 here 指代 this Agreement（本协议），<span class=\"term\" data-def=\"其中的\">thereof</span> 中的 there 指代前文提到的某个事物。两者的区别在于指代对象不同。",
               "options": [
-                {
-                  "value": "两者含义相同，可互换使用",
-                  "html": "两者含义相同，可互换使用"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）",
-                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 用于正文，<span class=\"term\" data-def=\"其中的\">thereof</span> 用于附件",
-                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 用于正文，<span class=\"term\" data-def=\"其中的\">thereof</span> 用于附件"
-                },
-                {
-                  "value": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 表示过去，<span class=\"term\" data-def=\"其中的\">thereof</span> 表示将来",
-                  "html": "<span class=\"term\" data-def=\"本协议的\">hereof</span> 表示过去，<span class=\"term\" data-def=\"其中的\">thereof</span> 表示将来"
-                }
+                "两者含义相同，可互换使用",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span> = of this Agreement（本协议的）; <span class=\"term\" data-def=\"其中的\">thereof</span> = of that / of it（其……的）",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span> 用于正文，<span class=\"term\" data-def=\"其中的\">thereof</span> 用于附件",
+                "<span class=\"term\" data-def=\"本协议的\">hereof</span> 表示过去，<span class=\"term\" data-def=\"其中的\">thereof</span> 表示将来"
               ]
             },
             {
@@ -867,46 +678,22 @@
               "answer": "确保合同当事人理解同一术语的含义完全一致，避免歧义和争议",
               "explanation": "定义条款是合同的‘词典’，确保双方对核心术语有统一理解。一旦产生争议，法院会首先依据合同的定义条款来解释术语含义。",
               "options": [
-                {
-                  "value": "仅为了使合同看起来更专业",
-                  "html": "仅为了使合同看起来更专业"
-                },
-                {
-                  "value": "确保合同当事人理解同一术语的含义完全一致，避免歧义和争议",
-                  "html": "确保合同当事人理解同一术语的含义完全一致，避免歧义和争议"
-                },
-                {
-                  "value": "满足法律法规的强制性要求",
-                  "html": "满足法律法规的强制性要求"
-                },
-                {
-                  "value": "方便翻译人员理解合同内容",
-                  "html": "方便翻译人员理解合同内容"
-                }
+                "仅为了使合同看起来更专业",
+                "确保合同当事人理解同一术语的含义完全一致，避免歧义和争议",
+                "满足法律法规的强制性要求",
+                "方便翻译人员理解合同内容"
               ]
             },
             {
               "prompt": "14. <span class=\"term\" data-def=\"重大的\">material</span> breach 应如何翻译？",
               "name": "c4",
-              "answer": "重大违约（非‘物质违约’或‘实质违约’）",
+              "answer": "重大违约（非“物质违约”或“实质违约”）",
               "explanation": "<span class=\"term\" data-def=\"重大的\">material</span> breach 是合同法中的核心概念，指一方当事人对合同核心义务的严重违反，其严重程度足以使另一方有权解除合同或要求损害赔偿。<span class=\"term\" data-def=\"重大的\">material</span> = 重大的。",
               "options": [
-                {
-                  "value": "物质违约",
-                  "html": "物质违约"
-                },
-                {
-                  "value": "重大违约（非‘物质违约’或‘实质违约’）",
-                  "html": "重大违约（非“物质违约”或“实质违约”）"
-                },
-                {
-                  "value": "实质违约",
-                  "html": "实质违约"
-                },
-                {
-                  "value": "根本违约",
-                  "html": "根本违约"
-                }
+                "物质违约",
+                "重大违约（非“物质违约”或“实质违约”）",
+                "实质违约",
+                "根本违约"
               ]
             },
             {
@@ -915,22 +702,10 @@
               "answer": "赋予（含义）",
               "explanation": "<span class=\"term\" data-def=\"赋予（含义）\">ascribe</span> 在法律语境中常与 meaning 搭配，表示‘赋予含义’。<span class=\"term\" data-def=\"具有…的含义\">shall have the meaning</span> ascribed to it = 具有赋予其的含义。",
               "options": [
-                {
-                  "value": "归因于",
-                  "html": "归因于"
-                },
-                {
-                  "value": "赋予（含义）",
-                  "html": "赋予（含义）"
-                },
-                {
-                  "value": "描述",
-                  "html": "描述"
-                },
-                {
-                  "value": "限定",
-                  "html": "限定"
-                }
+                "归因于",
+                "赋予（含义）",
+                "描述",
+                "限定"
               ]
             }
           ]

@@ -109,10 +109,20 @@ export const legalEnglishLessons: LessonMeta[] = [
   { week: 3, day: 3, id: 'w3d3', title: '支付条款', topic: 'payment terms, invoice, net 30/60, installment, advance payment, retention' },
   { week: 3, day: 4, id: 'w3d4', title: '利息与违约金', topic: 'interest, default interest, liquidated damages, per annum, accrue, grace period' },
   { week: 3, day: 5, id: 'w3d5', title: '税费与扣款', topic: 'tax, withholding tax, gross-up, VAT, duty, set-off, deduction, remit, levy' },
+  { week: 3, day: 6, id: 'w3d6', title: '货币与汇率', topic: 'currency, exchange rate, denomination, conversion, foreign exchange risk, hedging, legal tender' },
+  { week: 3, day: 7, id: 'w3d7', title: '复习日', topic: '支付与对价条款综合练习', review: true },
+
+  // 第4周：违约与救济
+  { week: 4, day: 1, id: 'w4d1', title: '本周词汇预载', topic: '添加本周术语到背单词App', vocab: true },
+  { week: 4, day: 2, id: 'w4d2', title: '违约类型', topic: 'breach, material/fundamental/anticipatory breach, repudiation, cure period' },
+  { week: 4, day: 3, id: 'w4d3', title: '救济方式', topic: 'remedy, damages, specific performance, injunction, rescission, equitable remedy' },
+  { week: 4, day: 4, id: 'w4d4', title: '损害赔偿', topic: 'compensatory/punitive/nominal damages, foreseeability, mitigation, causation' },
+  { week: 4, day: 5, id: 'w4d5', title: '免责与不可抗力', topic: 'force majeure, act of God, frustration, impossibility, discharge' },
+  { week: 4, day: 6, id: 'w4d6', title: '争议解决', topic: 'dispute resolution, arbitration, mediation, jurisdiction, governing law, venue' },
+  { week: 4, day: 7, id: 'w4d7', title: '复习日', topic: '违约与救济综合练习', review: true },
 ]
 
 export const legalEnglishFutureWeeks: FutureWeek[] = [
-  { week: 4, title: '违约与救济', topic: 'Breach & Remedies' },
   { week: 5, title: '知识产权条款', topic: 'Intellectual Property' },
   { week: 6, title: '担保与赔偿条款', topic: 'Warranties & Indemnification' },
   { week: 7, title: '终止与退出条款', topic: 'Termination & Exit' },
@@ -127,6 +137,7 @@ export const legalEnglishWeekTitles: Record<number, string> = {
   1: '合同基础与结构（Contract Fundamentals）',
   2: '权利与义务条款（Rights & Obligations）',
   3: '支付与对价条款（Payment & Consideration）',
+  4: '违约与救济（Breach & Remedies）',
 }
 
 // ── 按课程 ID 获取数据 ──

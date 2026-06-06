@@ -125,10 +125,10 @@
           "title": "练习F：终极挑战（4题）",
           "instruction": "每道题综合考查性别判断 + 复数规则 + 特殊情况。这是本周最后的挑战！",
           "questions": [
-            { "prompt": "<span class=\"uk-word\" data-def=\"膝盖\">коліно</span>（膝盖）是什么性别？复数是 <span class=\"uk-word\">коліна</span>，用的是哪个规则？", "options": ["阳性（辅音结尾 + и）", "阴性（-а\u2192-и）", "中性（-о\u2192-а）"], "answer": "中性", "explanation": "коліно 以 -о 结尾 \u2192 中性。复数 коліна（-о\u2192-а）" },
-            { "prompt": "<span class=\"uk-word\" data-def=\"小猫\">кошеня</span>（小猫）以 -я 结尾。它的复数应该用哪个规则？", "options": ["阴性规则：-я\u2192-і \u2192 кошені", "幼崽规则：-я\u2192-ята \u2192 кошенята", "中性不变：кошеня\u2192кошеня"], "answer": "不规则 -ята", "explanation": "кошеня 是幼崽名词（中性），复数用特殊的 -ята 规则 \u2192 кошенята，不是阴性 -я\u2192-і" },
-            { "prompt": "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（大衣）的复数是什么？", "options": ["<span class=\"uk-word\">пальта</span>（按 -о\u2192-а）", "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（不变化外来词）", "<span class=\"uk-word\">пальті</span>"], "answer": "пальто", "explanation": "пальто 是不变化的外来词（中性），单复数同形 \u2192 пальто" },
-            { "prompt": "<span class=\"uk-word\" data-def=\"名字\">ім'я</span>（名字）以 -я 结尾，是中性特殊词。它的复数是？", "options": ["<span class=\"uk-word\">ім'ї</span>（按 -я→-і）", "<span class=\"uk-word\">ім'ята</span>（按幼崽规则）", "<span class=\"uk-word\">імена</span>（-'я→-ена 特殊）"], "answer": "імена", "explanation": "ім'я 是 -м'я 类中性特殊词，复数去掉 -'я 加 -ена → імена" }
+            { "prompt": "<span class=\"uk-word\" data-def=\"膝盖\">коліно</span>（膝盖）是什么性别？复数是 <span class=\"uk-word\">коліна</span>，用的是哪个规则？", "options": ["阳性（辅音结尾 + и）", "阴性（-а\u2192-и）", "中性（-о\u2192-а）"], "answer": "中性（-о\u2192-а）", "explanation": "коліно 以 -о 结尾 \u2192 中性。复数 коліна（-о\u2192-а）" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"小猫\">кошеня</span>（小猫）以 -я 结尾。它的复数应该用哪个规则？", "options": ["阴性规则：-я\u2192-і \u2192 кошені", "幼崽规则：-я\u2192-ята \u2192 кошенята", "中性不变：кошеня\u2192кошеня"], "answer": "幼崽规则：-я\u2192-ята \u2192 кошенята", "explanation": "кошеня 是幼崽名词（中性），复数用特殊的 -ята 规则 \u2192 кошенята，不是阴性 -я\u2192-і" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（大衣）的复数是什么？", "options": ["<span class=\"uk-word\">пальта</span>（按 -о\u2192-а）", "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（不变化外来词）", "<span class=\"uk-word\">пальті</span>"], "answer": "<span class=\"uk-word\" data-def=\"大衣\">пальто</span>（不变化外来词）", "explanation": "пальто 是不变化的外来词（中性），单复数同形 \u2192 пальто" },
+            { "prompt": "<span class=\"uk-word\" data-def=\"名字\">ім'я</span>（名字）以 -я 结尾，是中性特殊词。它的复数是？", "options": ["<span class=\"uk-word\">ім'ї</span>（按 -я→-і）", "<span class=\"uk-word\">ім'ята</span>（按幼崽规则）", "<span class=\"uk-word\">імена</span>（-'я→-ена 特殊）"], "answer": "<span class=\"uk-word\">імена</span>（-'я→-ена 特殊）", "explanation": "ім'я 是 -м'я 类中性特殊词，复数去掉 -'я 加 -ена → імена" }
           ]
         }
       ]

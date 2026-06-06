@@ -546,7 +546,7 @@
                 "<span class=\"term\" data-def=\"解除条件\">condition subsequent</span>：条件满足后，义务才生效",
                 "两者含义相同，只是时态不同"
               ],
-              "answer": "事件发生后，已有的权利或义务终止",
+              "answer": "<span class=\"term\" data-def=\"解除条件\">condition subsequent</span>：事件发生后，已有的权利或义务终止",
               "explanation": "<span class=\"term\" data-def=\"解除条件\">condition subsequent</span> = 解除条件，指某事件发生后，已经存在的权利/义务随之消灭"
             }
           ]

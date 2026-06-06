@@ -352,7 +352,7 @@
                 "C. 附件构成本协议不可分割的组成部分",
                 "D. 附件的效力高于合同正文"
               ],
-              "answer": "C",
+              "answer": "C. 附件构成本协议不可分割的组成部分",
               "explanation": "‘integral part’ 表示附件与正文具有同等法律地位，不可单独分割。"
             },
             {
@@ -363,7 +363,7 @@
                 "C. 一方书面通知即可",
                 "D. 仲裁庭批准"
               ],
-              "answer": "B",
+              "answer": "B. 书面形式且经全体当事人签署",
               "explanation": "该句明确修订必须满足两个条件：书面形式 + 双方签署，缺一不可。"
             },
             {
@@ -374,7 +374,7 @@
                 "C. 附件效力低于正文",
                 "D. 附件可随时单方面修改"
               ],
-              "answer": "A",
+              "answer": "A. 附件与正文具有同等法律效力",
               "explanation": "‘with the same force and effect as if <span class=\"term\" data-def=\"规定\">set forth</span> in full in the body <span class=\"term\" data-def=\"本协议的\">hereof</span>’ 明确附件效力等同正文。"
             },
             {
@@ -385,7 +385,7 @@
                 "C. 定义合同中使用的专有术语",
                 "D. 规定适用于各类合同的标准化通用条款"
               ],
-              "answer": "D",
+              "answer": "D. 规定适用于各类合同的标准化通用条款",
               "explanation": "<span class=\"term\" data-def=\"样板条款\">boilerplate</span> 特指合同末尾的标准化通用条款，如管辖法律、通知、可分割性等。"
             },
             {
@@ -396,7 +396,7 @@
                 "C. <span class=\"term\" data-def=\"鉴于条款\">Recitals</span> → <span class=\"term\" data-def=\"合同标题\">Title</span> → <span class=\"term\" data-def=\"定义条款\">Definitions</span> → <span class=\"term\" data-def=\"样板条款\">Boilerplate</span> → <span class=\"term\" data-def=\"附表\">Schedules</span>",
                 "D. <span class=\"term\" data-def=\"前言\">Preamble</span> → <span class=\"term\" data-def=\"合同标题\">Title</span> → <span class=\"term\" data-def=\"实质条款\">Operative Provisions</span> → <span class=\"term\" data-def=\"鉴于条款\">Recitals</span> → <span class=\"term\" data-def=\"定义条款\">Definitions</span>"
               ],
-              "answer": "B",
+              "answer": "B. <span class=\"term\" data-def=\"合同标题\">Title</span> → <span class=\"term\" data-def=\"前言\">Preamble</span> → <span class=\"term\" data-def=\"鉴于条款\">Recitals</span> → <span class=\"term\" data-def=\"定义条款\">Definitions</span> → <span class=\"term\" data-def=\"实质条款\">Operative Provisions</span> → <span class=\"term\" data-def=\"样板条款\">Boilerplate</span> → <span class=\"term\" data-def=\"附表\">Schedules</span>",
               "explanation": "合同标准结构依次为：标题 → 序文 → 鉴于条款 → 定义 → 实质性条款 → 通用条款 → 附件。"
             }
           ]

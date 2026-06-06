@@ -1,0 +1,121 @@
+{
+  "title": "第4周 第1天 — 本周词汇预载",
+  "objective": "本周主题：违约与救济（Breach & Remedies）。本页列出第4周课程中将要用到的新增术语（第1-3周词汇继续使用）。请点击下方按钮一键添加到背单词 App，然后再开始学习课程。",
+  "sections": [
+    {
+      "type": "vocab-preload",
+      "groups": [
+        {
+          "heading": "Day 2 — 违约类型",
+          "words": [
+            { "word": "breach", "def": "n./v. 违约；违反（合同）" },
+            { "word": "breach of contract", "def": "n. 违约；违反合同" },
+            { "word": "material breach", "def": "n. 重大违约；实质性违约" },
+            { "word": "fundamental breach", "def": "n. 根本违约" },
+            { "word": "anticipatory breach", "def": "n. 预期违约；先期违约" },
+            { "word": "minor breach", "def": "n. 轻微违约；非实质性违约" },
+            { "word": "repudiation", "def": "n. 拒绝履行；毁约" },
+            { "word": "repudiate", "def": "v. 拒绝履行；否认（合同义务）" },
+            { "word": "non-performance", "def": "n. 不履行；未履约" },
+            { "word": "non-compliance", "def": "n. 不遵守；违反" },
+            { "word": "defaulting party", "def": "n. 违约方" },
+            { "word": "non-defaulting party", "def": "n. 守约方；非违约方" },
+            { "word": "event of default", "def": "n. 违约事件" },
+            { "word": "cure", "def": "v./n. 补救；纠正（违约）" },
+            { "word": "cure period", "def": "n. 补救期；纠正期限" },
+            { "word": "remedy the breach", "def": "v. 补救违约；纠正违约行为" },
+            { "word": "deemed", "def": "v. 被视为；视同" }
+          ]
+        },
+        {
+          "heading": "Day 3 — 救济方式",
+          "words": [
+            { "word": "remedy", "def": "n. 救济；补救措施" },
+            { "word": "remedies", "def": "n. 救济措施（复数）" },
+            { "word": "damages", "def": "n. 损害赔偿金；赔偿金" },
+            { "word": "specific performance", "def": "n. 实际履行；强制履行" },
+            { "word": "injunction", "def": "n. 禁令；强制令" },
+            { "word": "indemnification", "def": "n. 赔偿；补偿（保障）" },
+            { "word": "rescission", "def": "n. 撤销（合同）；解除" },
+            { "word": "rescind", "def": "v. 撤销；解除（合同）" },
+            { "word": "restitution", "def": "n. 返还；恢复原状" },
+            { "word": "equitable remedy", "def": "n. 衡平法救济" },
+            { "word": "legal remedy", "def": "n. 普通法救济；法律救济" },
+            { "word": "cumulative remedies", "def": "n. 累积救济（可同时行使的救济）" },
+            { "word": "remedies at law", "def": "phr. 法律上的救济" },
+            { "word": "seek a remedy", "def": "v. 寻求救济" },
+            { "word": "self-help remedy", "def": "n. 自助救济" },
+            { "word": "termination right", "def": "n. 终止权" }
+          ]
+        },
+        {
+          "heading": "Day 4 — 损害赔偿",
+          "words": [
+            { "word": "compensatory damages", "def": "n. 补偿性损害赔偿" },
+            { "word": "actual damages", "def": "n. 实际损害赔偿" },
+            { "word": "punitive damages", "def": "n. 惩罚性损害赔偿" },
+            { "word": "exemplary damages", "def": "n. 惩戒性损害赔偿；儆戒性赔偿" },
+            { "word": "nominal damages", "def": "n. 名义损害赔偿；象征性赔偿" },
+            { "word": "special damages", "def": "n. 特别损害赔偿" },
+            { "word": "general damages", "def": "n. 一般损害赔偿" },
+            { "word": "loss of profits", "def": "n. 利润损失；可得利益损失" },
+            { "word": "foreseeable", "def": "adj. 可预见的" },
+            { "word": "foreseeability", "def": "n. 可预见性" },
+            { "word": "mitigation", "def": "n. 减损；损失减轻" },
+            { "word": "mitigate", "def": "v. 减轻（损失）；缓解" },
+            { "word": "duty to mitigate", "def": "n. 减损义务" },
+            { "word": "remoteness", "def": "n. （损害的）间接性；遥远性" },
+            { "word": "causation", "def": "n. 因果关系" },
+            { "word": "quantum", "def": "n. 赔偿数额；金额" }
+          ]
+        },
+        {
+          "heading": "Day 5 — 免责与不可抗力",
+          "words": [
+            { "word": "force majeure", "def": "n. 不可抗力" },
+            { "word": "act of God", "def": "n. 天灾；不可抗拒的自然力" },
+            { "word": "frustration", "def": "n. 合同受挫；履行不能（致合同落空）" },
+            { "word": "frustration of purpose", "def": "n. 合同目的落空" },
+            { "word": "impossibility", "def": "n. 履行不能；不可能" },
+            { "word": "impracticability", "def": "n. 履行不现实；商业上不可行" },
+            { "word": "excuse", "def": "n./v. 免责（事由）；免除（义务）" },
+            { "word": "supervening event", "def": "n. 嗣后事件；事后发生的事件" },
+            { "word": "beyond the reasonable control", "def": "phr. 超出合理控制范围（之外）" },
+            { "word": "unforeseen", "def": "adj. 未预见的；意外的" },
+            { "word": "exempt", "def": "v./adj. 免除；豁免（的）" },
+            { "word": "relief from liability", "def": "n. 责任免除；免责" },
+            { "word": "suspension of obligations", "def": "n. 义务中止" },
+            { "word": "discharge", "def": "n./v. 解除；免除（合同义务）" },
+            { "word": "supervening illegality", "def": "n. 嗣后违法；事后不合法" }
+          ]
+        },
+        {
+          "heading": "Day 6 — 争议解决",
+          "words": [
+            { "word": "dispute resolution", "def": "n. 争议解决" },
+            { "word": "dispute", "def": "n./v. 争议；争端；争辩" },
+            { "word": "arbitration", "def": "n. 仲裁" },
+            { "word": "arbitrator", "def": "n. 仲裁员" },
+            { "word": "arbitral award", "def": "n. 仲裁裁决" },
+            { "word": "mediation", "def": "n. 调解；调停" },
+            { "word": "mediator", "def": "n. 调解员；调停人" },
+            { "word": "litigation", "def": "n. 诉讼" },
+            { "word": "jurisdiction", "def": "n. 管辖权；司法管辖区" },
+            { "word": "governing law", "def": "n. 适用法律；管辖法律" },
+            { "word": "venue", "def": "n. 审判地；管辖地点" },
+            { "word": "forum", "def": "n. 法院地；审理场所" },
+            { "word": "amicable settlement", "def": "n. 友好和解" },
+            { "word": "settlement", "def": "n. 和解；解决；结算" },
+            { "word": "arising out of or in connection with", "def": "phr. 因……产生或与……有关的" },
+            { "word": "submit to the jurisdiction", "def": "v. 服从……管辖" },
+            { "word": "binding arbitration", "def": "n. 有约束力的仲裁" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "html": "<p><strong>本周新增约 81 个术语和搭配。</strong>添加完毕后即可进入第2天的课程，学习违约的类型（material / fundamental / anticipatory breach）。</p><p>本周课程中会同时使用第1-4周的词汇。点击任意术语可以听发音。</p>"
+    }
+  ]
+}

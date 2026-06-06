@@ -213,31 +213,31 @@
             {
               "prompt": "<span class=\"uk-word\" data-def=\"村庄\">село</span>（村庄）→ сел___",
               "options": ["-а（села）", "-я（селя）"],
-              "answer": "-а",
+              "answer": "-а（села）",
               "explanation": "село 以 -о 结尾 → 复数加 -а → села"
             },
             {
               "prompt": "<span class=\"uk-word\" data-def=\"田野\">поле</span>（田野）→ пол___",
               "options": ["-а（пола）", "-я（поля）"],
-              "answer": "-я",
+              "answer": "-я（поля）",
               "explanation": "поле 以 -е 结尾 → 复数加 -я → поля"
             },
             {
               "prompt": "<span class=\"uk-word\" data-def=\"湖\">озеро</span>（湖）→ озер___",
               "options": ["-а（озера）", "-я（озеря）"],
-              "answer": "-а",
+              "answer": "-а（озера）",
               "explanation": "озеро 以 -о 结尾 → 复数加 -а → озера"
             },
             {
               "prompt": "<span class=\"uk-word\" data-def=\"太阳\">сонце</span>（太阳）→ сонц___",
               "options": ["-а（сонца）", "-я（сонця）"],
-              "answer": "-я",
+              "answer": "-я（сонця）",
               "explanation": "сонце 以 -е 结尾 → 复数加 -я → сонця"
             },
             {
               "prompt": "<span class=\"uk-word\" data-def=\"镜子\">дзеркало</span>（镜子）→ дзеркал___",
               "options": ["-а（дзеркала）", "-я（дзеркаля）"],
-              "answer": "-а",
+              "answer": "-а（дзеркала）",
               "explanation": "дзеркало 以 -о 结尾 → 复数加 -а → дзеркала"
             }
           ]

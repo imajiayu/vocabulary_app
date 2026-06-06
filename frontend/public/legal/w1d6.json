@@ -391,72 +391,83 @@
         },
         {
           "type": "details",
-          "items": [
-            {
-              "summary": "<span class=\"term\" data-def=\"生效日期\">effective date</span>",
-              "content": "生效日期"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"期限\">term</span>（合同语境）",
-              "content": "期限；有效期（注意不是“术语”）"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"开始/生效\">commencement</span>",
-              "content": "开始；起始"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"届满/到期\">expiration</span>",
-              "content": "届满；到期（自然到期）"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"续期/续签\">renewal</span>",
-              "content": "续期；续展"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"终止/解除\">termination</span>",
-              "content": "终止；解除（主动终止）"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"初始期限\">initial term</span>",
-              "content": "初始期限"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"永久的\">perpetual</span>",
-              "content": "永久的；永续的"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>",
-              "content": "存续期间；持续时间"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"延期/延长\">extension</span>",
-              "content": "延期；展期"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"存续条款\">survival</span>",
-              "content": "存续；继续有效（合同终止后某些条款继续有效）"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"因故终止\">terminate for cause</span>",
-              "content": "因故终止；因违约终止"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span>",
-              "content": "任意终止；无因终止（非“为了方便终止”）"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span>",
-              "content": "尽管；不论"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"彼时现行的\">then-current</span>",
-              "content": "当时有效的；届时的"
-            },
-            {
-              "summary": "<span class=\"term\" data-def=\"自…起/截至\">as of</span>",
-              "content": "自……起（指定生效起始日期）"
-            }
-          ]
+          "summary": "<span class=\"term\" data-def=\"生效日期\">effective date</span>",
+          "html": "生效日期"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"期限\">term</span>（合同语境）",
+          "html": "期限；有效期（注意不是“术语”）"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"开始/生效\">commencement</span>",
+          "html": "开始；起始"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"届满/到期\">expiration</span>",
+          "html": "届满；到期（自然到期）"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"续期/续签\">renewal</span>",
+          "html": "续期；续展"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"终止/解除\">termination</span>",
+          "html": "终止；解除（主动终止）"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"初始期限\">initial term</span>",
+          "html": "初始期限"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"永久的\">perpetual</span>",
+          "html": "永久的；永续的"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"期限；持续时间\">duration</span>",
+          "html": "存续期间；持续时间"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"延期/延长\">extension</span>",
+          "html": "延期；展期"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"存续条款\">survival</span>",
+          "html": "存续；继续有效（合同终止后某些条款继续有效）"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"因故终止\">terminate for cause</span>",
+          "html": "因故终止；因违约终止"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"无因终止\">terminate for convenience</span>",
+          "html": "任意终止；无因终止（非“为了方便终止”）"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"尽管/不受…影响\">notwithstanding</span>",
+          "html": "尽管；不论"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"彼时现行的\">then-current</span>",
+          "html": "当时有效的；届时的"
+        },
+        {
+          "type": "details",
+          "summary": "<span class=\"term\" data-def=\"自…起/截至\">as of</span>",
+          "html": "自……起（指定生效起始日期）"
         }
       ],
       "groups": [

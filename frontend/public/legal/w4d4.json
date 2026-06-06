@@ -1,0 +1,765 @@
+{
+  "title": "第4周 第4天 — 损害赔偿（<span class=\"term\" data-def=\"损害赔偿金；赔偿金\">Damages</span>）",
+  "objective": "掌握损害赔偿的分类与限制：补偿性赔偿（<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span>）vs. 惩罚性赔偿（<span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span>）vs. 名义赔偿（<span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span>）；一般损害与特别损害（<span class=\"term\" data-def=\"一般损害赔偿\">general damages</span> vs. <span class=\"term\" data-def=\"特别损害赔偿\">special damages</span>）的区分；可预见性规则（<span class=\"term\" data-def=\"可预见性\">foreseeability</span>）、减损义务（<span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>）、因果关系（<span class=\"term\" data-def=\"因果关系\">causation</span>）与间接性（<span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span>）这三大限制规则，能够准确理解和翻译损害赔偿条款。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "引言",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "<strong>上节回顾：</strong>上节课学习了违约的救济方式——<span class=\"term\" data-def=\"救济；补救措施\">remedy</span>（救济）、<span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>（损害赔偿金）、<span class=\"term\" data-def=\"实际履行；强制履行\">specific performance</span>（实际履行）、<span class=\"term\" data-def=\"禁令；强制令\">injunction</span>（禁令）、<span class=\"term\" data-def=\"撤销（合同）；解除\">rescission</span>（撤销合同）、<span class=\"term\" data-def=\"返还；恢复原状\">restitution</span>（返还）、<span class=\"term\" data-def=\"衡平法救济\">equitable remedy</span>（衡平法救济）vs. <span class=\"term\" data-def=\"普通法救济；法律救济\">legal remedy</span>（普通法救济）等。其中，<span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span> 是最常见的违约救济方式。今天我们深入学习损害赔偿的<strong>分类</strong>与<strong>限制规则</strong>。"
+        },
+        {
+          "type": "note",
+          "html": "<strong>核心提示：</strong>法律英语里 <span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>（复数）= 损害赔偿“金”，是钱；而 <span class=\"term\" data-def=\"损害；损失\">damage</span>（不可数单数）= 损害、损坏，是受到的“伤害”本身。二者不可混淆——本课讨论的 <span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span> 全部指赔偿金。"
+        }
+      ]
+    },
+    {
+      "type": "vocab-table",
+      "heading": "1. 核心词汇",
+      "intro": "本课围绕“损害赔偿”展开，以下 16 个术语是理解和翻译赔偿条款的核心。重点掌握三类赔偿（补偿性 / 惩罚性 / 名义）和三大限制（可预见性 / 减损 / 因果与间接性）。",
+      "columns": ["英文", "音标", "中文", "常见搭配"],
+      "firstColWord": true,
+      "rows": [
+        [
+          "compensatory damages",
+          "/kəmˈpensətɔːri ˈdæmɪdʒɪz/",
+          "n. 补偿性损害赔偿",
+          "award compensatory damages; entitled to compensatory damages; recover compensatory damages"
+        ],
+        [
+          "actual damages",
+          "/ˈæktʃuəl ˈdæmɪdʒɪz/",
+          "n. 实际损害赔偿",
+          "actual damages suffered; prove actual damages; actual damages incurred"
+        ],
+        [
+          "punitive damages",
+          "/ˈpjuːnətɪv ˈdæmɪdʒɪz/",
+          "n. 惩罚性损害赔偿",
+          "award punitive damages; claim for punitive damages; not liable for punitive damages"
+        ],
+        [
+          "exemplary damages",
+          "/ɪɡˈzempləri ˈdæmɪdʒɪz/",
+          "n. 惩戒性损害赔偿；儆戒性赔偿",
+          "exemplary damages may be awarded; exclude exemplary damages; punitive or exemplary damages"
+        ],
+        [
+          "nominal damages",
+          "/ˈnɒmɪnəl ˈdæmɪdʒɪz/",
+          "n. 名义损害赔偿；象征性赔偿",
+          "award nominal damages; entitled only to nominal damages; nominal damages of one dollar"
+        ],
+        [
+          "special damages",
+          "/ˈspeʃəl ˈdæmɪdʒɪz/",
+          "n. 特别损害赔偿",
+          "claim special damages; special damages must be pleaded; recover special damages"
+        ],
+        [
+          "general damages",
+          "/ˈdʒenərəl ˈdæmɪdʒɪz/",
+          "n. 一般损害赔偿",
+          "award general damages; general damages presumed; general and special damages"
+        ],
+        [
+          "loss of profits",
+          "/lɒs əv ˈprɒfɪts/",
+          "n. 利润损失；可得利益损失",
+          "claim for loss of profits; exclude loss of profits; loss of profits arising from the breach"
+        ],
+        [
+          "foreseeable",
+          "/fɔːˈsiːəbl/",
+          "adj. 可预见的",
+          "reasonably foreseeable; foreseeable loss; foreseeable at the time of contracting"
+        ],
+        [
+          "foreseeability",
+          "/fɔːˌsiːəˈbɪləti/",
+          "n. 可预见性",
+          "the test of foreseeability; within the foreseeability of the parties; foreseeability of loss"
+        ],
+        [
+          "mitigation",
+          "/ˌmɪtɪˈɡeɪʃən/",
+          "n. 减损；损失减轻",
+          "mitigation of loss; failure of mitigation; in mitigation of damages"
+        ],
+        [
+          "mitigate",
+          "/ˈmɪtɪɡeɪt/",
+          "v. 减轻（损失）；缓解",
+          "mitigate the loss; take reasonable steps to mitigate; fail to mitigate"
+        ],
+        [
+          "duty to mitigate",
+          "/ˈdjuːti tə ˈmɪtɪɡeɪt/",
+          "n. 减损义务",
+          "the duty to mitigate; breach the duty to mitigate; discharge the duty to mitigate"
+        ],
+        [
+          "remoteness",
+          "/rɪˈməʊtnəs/",
+          "n. （损害的）间接性；遥远性",
+          "remoteness of damage; too remote to be recoverable; the test of remoteness"
+        ],
+        [
+          "causation",
+          "/kɔːˈzeɪʃən/",
+          "n. 因果关系",
+          "establish causation; causation between breach and loss; the chain of causation"
+        ],
+        [
+          "quantum",
+          "/ˈkwɒntəm/",
+          "n. 赔偿数额；金额",
+          "the quantum of damages; assess the quantum; quantum of loss"
+        ]
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "词源与记忆",
+      "blocks": [
+        {
+          "type": "tip",
+          "html": "<strong>词源记忆：</strong><ul><li><span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory</span> 来自 <em>compensate</em>（补偿）——<strong>补</strong>偿性赔偿目的在于“填平”损失，让守约方回到合同正常履行时的状态。</li><li><span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive</span> 来自拉丁语 <em>punire</em>（惩罚，同 <em>punish</em>）；<span class=\"term\" data-def=\"惩戒性损害赔偿\">exemplary</span> 来自 <em>example</em>（榜样、儆戒）——二者都意在<strong>惩罚</strong>并<strong>儆戒</strong>，不是为了补偿。</li><li><span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal</span> 来自拉丁语 <em>nomen</em>（名字，同 <em>name</em>）——“<strong>名义上</strong>”的赔偿，象征性的一点钱（如 1 美元），用于确认权利被侵犯但无实际损失。</li><li><span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span> 来自 <em>remote</em>（遥远的）——损害离违约行为太“<strong>远</strong>”，因果链条过长，法律上不予赔偿。</li><li><span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span> 是拉丁语“多少、数量”（同 <em>quantity</em>）——法律里专指赔偿的“<strong>数额</strong>”问题（与 <em>liability</em> 责任“是否成立”相对）。</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 固定搭配",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "以下 8 个固定搭配在损害赔偿条款（尤其是责任限制条款）中高频出现，请结合双语例句记忆。"
+        },
+        {
+          "type": "table",
+          "headers": ["固定搭配", "中文", "例句"],
+          "firstColWord": false,
+          "rows": [
+            [
+              "award <span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span>",
+              "判给补偿性损害赔偿",
+              {
+                "en": "<span class=\"en-text\">The court may award compensatory damages to the non-defaulting party for the loss actually suffered.</span>",
+                "zh": "法院可就守约方实际遭受的损失判给其补偿性损害赔偿。"
+              }
+            ],
+            [
+              "in no event shall ... be liable for <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span>",
+              "在任何情况下……均不承担惩罚性损害赔偿责任",
+              {
+                "en": "<span class=\"en-text\">In no event shall either party be liable for any punitive or exemplary damages.</span>",
+                "zh": "在任何情况下，任何一方均不承担任何惩罚性或惩戒性损害赔偿责任。"
+              }
+            ],
+            [
+              "duty to <span class=\"term\" data-def=\"减轻（损失）；缓解\">mitigate</span> its loss",
+              "减轻其损失的义务",
+              {
+                "en": "<span class=\"en-text\">The injured party shall take reasonable steps to mitigate its loss.</span>",
+                "zh": "受损方应采取合理措施减轻其损失。"
+              }
+            ],
+            [
+              "<span class=\"term\" data-def=\"可预见的\">foreseeable</span> at the time of contracting",
+              "在订约时可以预见的",
+              {
+                "en": "<span class=\"en-text\">Damages are recoverable only if the loss was foreseeable at the time of contracting.</span>",
+                "zh": "只有在订约时该损失可以预见的情况下，损害赔偿方可获得赔付。"
+              }
+            ],
+            [
+              "<span class=\"term\" data-def=\"利润损失；可得利益损失\">loss of profits</span> arising from the breach",
+              "因违约产生的利润损失",
+              {
+                "en": "<span class=\"en-text\">The Supplier shall not be liable for any loss of profits arising from the breach.</span>",
+                "zh": "供应商对因违约产生的任何利润损失概不承担责任。"
+              }
+            ],
+            [
+              "too remote to be recoverable",
+              "过于间接而不可获赔",
+              {
+                "en": "<span class=\"en-text\">Losses that are too remote to be recoverable shall be excluded.</span>",
+                "zh": "过于间接而不可获赔的损失应予排除。"
+              }
+            ],
+            [
+              "the <span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span> of damages",
+              "损害赔偿的数额",
+              {
+                "en": "<span class=\"en-text\">The quantum of damages shall be assessed by reference to the loss actually incurred.</span>",
+                "zh": "损害赔偿的数额应参照实际发生的损失予以核定。"
+              }
+            ],
+            [
+              "establish <span class=\"term\" data-def=\"因果关系\">causation</span> between the breach and the loss",
+              "证明违约与损失之间的因果关系",
+              {
+                "en": "<span class=\"en-text\">The claimant must establish causation between the breach and the loss claimed.</span>",
+                "zh": "索赔方必须证明违约行为与所主张的损失之间存在因果关系。"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. 重点辨析",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "3a. <span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory</span> vs. <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive</span> vs. <span class=\"term\" data-def=\"名义损害赔偿\">nominal</span> damages"
+        },
+        {
+          "type": "table",
+          "headers": ["术语", "中文", "目的", "金额", "典型场景"],
+          "firstColWord": false,
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span>",
+              "补偿性赔偿",
+              "填平损失，使守约方回到合同正常履行的状态",
+              "等于实际损失（actual loss）",
+              "绝大多数违约案件——这是合同法的默认救济"
+            ],
+            [
+              "<span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span> / <span class=\"term\" data-def=\"惩戒性损害赔偿\">exemplary damages</span>",
+              "惩罚性 / 惩戒性赔偿",
+              "惩罚加害方、儆戒社会，超出实际损失",
+              "可远高于实际损失",
+              "违约案件中极少判给（多见于侵权、恶意行为）；合同常明文排除"
+            ],
+            [
+              "<span class=\"term\" data-def=\"名义损害赔偿\">nominal damages</span>",
+              "名义 / 象征性赔偿",
+              "确认权利被侵犯，但无实际损失可证",
+              "象征性的极小金额（如 1 美元）",
+              "违约成立但守约方未能证明实际损失"
+            ]
+          ]
+        },
+        {
+          "type": "note",
+          "html": "<strong>关键区分：</strong><span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span> 和 <span class=\"term\" data-def=\"惩戒性损害赔偿\">exemplary damages</span> 是<strong>同义词</strong>（美式英语多用 punitive，英式英语多用 exemplary），合同里常并列写作 “punitive or exemplary damages” 以求周延。<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span> 与 <span class=\"term\" data-def=\"实际损害赔偿\">actual damages</span> 含义相近，都指对实际损失的补偿。"
+        },
+        {
+          "type": "h3",
+          "text": "3b. <span class=\"term\" data-def=\"一般损害赔偿\">general / direct damages</span> vs. <span class=\"term\" data-def=\"特别损害赔偿\">special / consequential damages</span>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<ul><li><span class=\"term\" data-def=\"一般损害赔偿\">general damages</span>（一般损害 / 直接损害）：违约“自然、直接”产生的损失，是任何人都能预见的“通常后果”。法律上<strong>推定</strong>（presumed）可预见，无需特别证明，对应 <span class=\"term\" data-def=\"直接损害赔偿\">direct damages</span>。例：货物未交付，买方需另行高价购货的差价。</li><li><span class=\"term\" data-def=\"特别损害赔偿\">special damages</span>（特别损害）：因守约方<strong>特殊情况</strong>而产生的损失，须在订约时已被对方知悉（即特别可预见）才可获赔，且必须<strong>具体主张并证明</strong>（must be pleaded and proved）。常与 <span class=\"term\" data-def=\"间接损害赔偿；后果性损害赔偿\">consequential damages</span>（间接/后果性损害，第3周已学）重叠，如因迟延交货导致的特定客户合同泡汤的利润损失。</li></ul><p><strong>合同实务：</strong>责任限制条款常排除 special / <span class=\"term\" data-def=\"间接损害赔偿；后果性损害赔偿\">consequential damages</span> 和 <span class=\"term\" data-def=\"利润损失；可得利益损失\">loss of profits</span>，而保留 <span class=\"term\" data-def=\"直接损害赔偿\">direct damages</span>，典型表述：“<em>Neither party shall be liable for any indirect, special or consequential damages, including loss of profits.</em>”</p>"
+        },
+        {
+          "type": "h3",
+          "text": "3c. <span class=\"term\" data-def=\"减轻（损失）；缓解\">mitigate</span> vs. <span class=\"term\" data-def=\"减损；损失减轻\">mitigation</span>"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<ul><li><span class=\"term\" data-def=\"减轻（损失）；缓解\">mitigate</span>（<strong>动词</strong>）：减轻、缓解（损失）。固定搭配 <em>mitigate the loss</em>（减轻损失）、<em>take reasonable steps to mitigate</em>（采取合理措施减轻）、<em>fail to mitigate</em>（未尽减损）。</li><li><span class=\"term\" data-def=\"减损；损失减轻\">mitigation</span>（<strong>名词</strong>）：减损（行为/原则）。固定搭配 <em>mitigation of loss</em>（损失的减轻）、<em>the duty of mitigation</em> / <span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>（减损义务）、<em>in mitigation of damages</em>（用以减少赔偿金）。</li></ul><p><strong>减损规则：</strong>守约方负有 <span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>（减损义务）——必须采取合理措施减少损失。若怠于减损，本可避免的那部分损失<strong>不能</strong>获赔。注意这并非真正的“义务”（违反了不会被起诉），而是限制赔偿范围的规则。</p>"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "4. 损害赔偿的三大限制规则",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "守约方并非任何损失都能获赔。即便违约成立，赔偿范围还要受以下三大规则限制——这是损害赔偿条款的核心逻辑。"
+        },
+        {
+          "type": "grammar-box",
+          "html": "<p><strong>① 因果关系（<span class=\"term\" data-def=\"因果关系\">causation</span>）：</strong>损失必须由违约“引起”。索赔方须 <em>establish causation between the breach and the loss</em>（证明违约与损失之间的因果关系）。如果损失另有原因（如第三方介入打断了 <em>chain of causation</em> 因果链），则不可获赔。</p><p><strong>② 间接性 / 可预见性（<span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span> / <span class=\"term\" data-def=\"可预见性\">foreseeability</span>）：</strong>损失不能“太遥远”。源自英国经典判例的思路：只有在订约时<strong>合理可预见</strong>（<span class=\"term\" data-def=\"可预见的\">reasonably foreseeable</span>）的损失才可获赔。分两类——(a) 任何违约“通常会”产生的损失（=一般损害，推定可预见）；(b) 因守约方特殊情况产生、但订约时<strong>已告知对方</strong>的损失（=特别损害）。订约时无从预见、又未被告知的损失即 <em>too remote to be recoverable</em>（过于间接而不可获赔）。</p><p><strong>③ 减损义务（<span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>）：</strong>守约方须采取合理措施减少损失。本可通过合理减损避免的损失部分，不予赔偿。</p>"
+        },
+        {
+          "type": "tip",
+          "html": "<strong>记忆口诀：</strong>能不能赔，看三关——<strong>因果</strong>（是不是违约造成的）→ <strong>预见</strong>（订约时想得到吗）→ <strong>减损</strong>（你自己尽力减少了吗）。三关都过，才谈 <span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span>（赔多少）。"
+        }
+      ]
+    },
+    {
+      "type": "sentence-analysis",
+      "heading": "5. 长难句解析",
+      "items": [
+        {
+          "title": "例句 1：责任限制条款（排除惩罚性与间接损害）",
+          "sentence": "In no event shall either party be liable to the other for any indirect, special, punitive or exemplary damages, including without limitation any loss of profits, arising out of or in connection with this Agreement, even if such party has been advised of the possibility of such damages.",
+          "structure": [
+            "<em>In no event shall either party be liable</em> — 倒装强调结构：在任何情况下任何一方均不承担责任（in no event 置于句首引起助动词 shall 提前的倒装）",
+            "<em>for any indirect, special, <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive</span> or <span class=\"term\" data-def=\"惩戒性损害赔偿\">exemplary damages</span></em> — 排除的赔偿类型：任何间接、特别、惩罚性或惩戒性损害赔偿",
+            "<em>including without limitation any <span class=\"term\" data-def=\"利润损失；可得利益损失\">loss of profits</span></em> — 举例但不限于：包括但不限于任何利润损失（without limitation = 不受限制地，即“但不限于”）",
+            "<em>arising out of or in connection with this Agreement</em> — 后置定语修饰 damages：因本协议产生或与本协议有关的",
+            "<em>even if such party has been advised of the possibility of such damages</em> — 让步状语：即使该方已被告知发生此类损害的可能性（堵住“你早该预见”的抗辩）"
+          ],
+          "translation": "在任何情况下，任何一方均不就因本协议产生或与本协议有关的任何间接、特别、惩罚性或惩戒性损害赔偿（包括但不限于任何利润损失）向另一方承担责任，即使该方已被告知发生此类损害的可能性。"
+        },
+        {
+          "title": "例句 2：可预见性与因果关系限制",
+          "sentence": "The defaulting party shall be liable only for such losses as were reasonably foreseeable at the time of contracting and were directly caused by its breach, and shall not be liable for any losses that are too remote.",
+          "structure": [
+            "<em>The defaulting party shall be liable only for such losses</em> — 主句：违约方仅就该等损失承担责任（only 限定赔偿范围）",
+            "<em>as were reasonably <span class=\"term\" data-def=\"可预见的\">foreseeable</span> at the time of contracting</em> — 定语从句（as 引导，呼应 such）：在订约时合理可预见的",
+            "<em>and were directly caused by its breach</em> — 与前一从句并列：且由其违约直接引起（<span class=\"term\" data-def=\"因果关系\">causation</span> 要件）",
+            "<em>shall not be liable for any losses that are too <span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remote</span></em> — 并列谓语：且不就任何过于间接的损失承担责任（<span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span> 规则）"
+          ],
+          "translation": "违约方仅就在订约时合理可预见且由其违约直接引起的损失承担责任，对任何过于间接的损失概不承担责任。"
+        },
+        {
+          "title": "例句 3：减损义务条款",
+          "sentence": "The non-defaulting party shall take all reasonable steps to mitigate its loss arising from the breach, and no damages shall be recoverable in respect of any loss that could have been avoided by reasonable mitigation.",
+          "structure": [
+            "<em>The non-defaulting party shall take all reasonable steps to <span class=\"term\" data-def=\"减轻（损失）；缓解\">mitigate</span> its loss</em> — 主句：守约方应采取一切合理措施减轻其损失（duty to mitigate 的合同化表述）",
+            "<em>arising from the breach</em> — 后置定语：因违约产生的（修饰 loss）",
+            "<em>and no damages shall be recoverable</em> — 并列分句：任何损害赔偿均不可获赔",
+            "<em>in respect of any loss that could have been avoided by reasonable <span class=\"term\" data-def=\"减损；损失减轻\">mitigation</span></em> — 范围状语 + 定语从句：就本可通过合理减损避免的任何损失而言（could have been avoided = 虚拟语气，本可避免）"
+          ],
+          "translation": "守约方应采取一切合理措施减轻因违约产生的损失；对于本可通过合理减损避免的任何损失，不得获得任何损害赔偿。"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "6. 单词记忆",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "6a. 闪卡自测"
+        },
+        {
+          "type": "p",
+          "html": "看到英文术语，想一想中文意思，然后点击展开答案："
+        },
+        {
+          "type": "grammar-box",
+          "html": "<div class=\"flashcard-grid\"><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span></summary><div class=\"answer-content\">补偿性损害赔偿<br><em>填平实际损失，合同法默认救济</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span></summary><div class=\"answer-content\">惩罚性损害赔偿<br><em>= exemplary damages，违约中极少判给，合同常排除</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span></summary><div class=\"answer-content\">名义/象征性赔偿<br><em>违约成立但无实际损失，象征性赔一点（如1美元）</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"一般损害赔偿\">general damages</span> vs. <span class=\"term\" data-def=\"特别损害赔偿\">special damages</span></summary><div class=\"answer-content\">一般损害（直接、推定可预见）vs. 特别损害（特殊情况、须主张并证明）</div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"可预见性\">foreseeability</span></summary><div class=\"answer-content\">可预见性<br><em>订约时是否 reasonably foreseeable</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"减损义务\">duty to mitigate</span></summary><div class=\"answer-content\">减损义务<br><em>守约方须采取合理措施减少损失，否则该部分不获赔</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span></summary><div class=\"answer-content\">（损害的）间接性/遥远性<br><em>too remote to be recoverable = 过于间接而不可获赔</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"因果关系\">causation</span></summary><div class=\"answer-content\">因果关系<br><em>establish causation between breach and loss</em></div></details></div><div class=\"flashcard\"><details><summary><span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span></summary><div class=\"answer-content\">赔偿数额/金额<br><em>the quantum of damages = 损害赔偿的数额</em></div></details></div></div>"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "6b. 配对选择：看中文选英文",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "6b. 配对选择：看中文选英文",
+          "questions": [
+            {
+              "prompt": "1. 补偿性损害赔偿（填平实际损失）",
+              "options": [
+                "compensatory damages",
+                "punitive damages",
+                "nominal damages"
+              ],
+              "answer": "compensatory damages",
+              "explanation": "compensatory damages = 补偿性损害赔偿，目的在于填平实际损失；punitive damages 是惩罚性的（超出实际损失），nominal damages 是象征性的（无实际损失）。"
+            },
+            {
+              "prompt": "2. 名义（象征性）损害赔偿",
+              "options": [
+                "actual damages",
+                "nominal damages",
+                "general damages"
+              ],
+              "answer": "nominal damages",
+              "explanation": "nominal damages = 名义/象征性赔偿，用于违约成立但无实际损失的情形；actual/general damages 都对应真实存在的损失。"
+            },
+            {
+              "prompt": "3. 减损义务",
+              "options": [
+                "duty to mitigate",
+                "duty of care",
+                "duty to perform"
+              ],
+              "answer": "duty to mitigate",
+              "explanation": "duty to mitigate = 减损义务，守约方须采取合理措施减少损失；其余两项不是本课的赔偿限制概念。"
+            },
+            {
+              "prompt": "4. （损害的）间接性 / 遥远性",
+              "options": [
+                "causation",
+                "remoteness",
+                "foreseeability"
+              ],
+              "answer": "remoteness",
+              "explanation": "remoteness = 损害的间接性/遥远性，损失离违约太远则 too remote to be recoverable；causation 是因果关系，foreseeability 是可预见性（虽与 remoteness 关联紧密，但概念不同）。"
+            },
+            {
+              "prompt": "5. 利润损失（可得利益损失）",
+              "options": [
+                "loss of profits",
+                "actual damages",
+                "quantum"
+              ],
+              "answer": "loss of profits",
+              "explanation": "loss of profits = 利润损失/可得利益损失，责任限制条款常将其排除；quantum 指赔偿“数额”，actual damages 指实际损害赔偿。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "7. 练习题",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语理解选择",
+          "instruction": "根据语境选择最准确的术语。",
+          "questions": [
+            {
+              "prompt": "1. 守约方证明了违约，但无法证明任何实际损失，法院通常判给：",
+              "options": [
+                "compensatory damages（补偿性赔偿）",
+                "nominal damages（名义赔偿）",
+                "punitive damages（惩罚性赔偿）"
+              ],
+              "answer": "nominal damages（名义赔偿）",
+              "explanation": "无实际损失但违约成立时，判给 nominal damages（象征性赔偿，如1美元），以确认权利被侵犯；compensatory damages 需有实际损失，punitive damages 在违约中几乎不判。"
+            },
+            {
+              "prompt": "2. 合同写道“liable for actual damages only”，意思是只赔偿：",
+              "options": [
+                "实际遭受的损失",
+                "惩罚性赔偿",
+                "可预见但未发生的损失"
+              ],
+              "answer": "实际遭受的损失",
+              "explanation": "actual damages = 实际损害赔偿，即实际遭受的损失，与 compensatory damages 含义相近；不包括惩罚性赔偿，也不赔“未发生”的损失。"
+            },
+            {
+              "prompt": "3. “punitive or exemplary damages” 这一并列写法说明这两个词：",
+              "options": [
+                "是同义词（惩罚性 = 惩戒性）",
+                "是相反概念",
+                "一个指直接损害，一个指间接损害"
+              ],
+              "answer": "是同义词（惩罚性 = 惩戒性）",
+              "explanation": "punitive（美式）与 exemplary（英式）是同义词，都指惩罚性/惩戒性赔偿，合同并列写以求周延；它们与“直接/间接损害”的分类无关。"
+            },
+            {
+              "prompt": "4. 守约方明明可以低价补货却故意放任损失扩大，扩大的部分不能获赔，依据的规则是：",
+              "options": [
+                "the duty to mitigate（减损义务）",
+                "causation（因果关系）",
+                "the quantum of damages（赔偿数额）"
+              ],
+              "answer": "the duty to mitigate（减损义务）",
+              "explanation": "duty to mitigate = 减损义务，本可通过合理减损避免的损失不获赔；causation 是因果关系要件，quantum 只是“赔多少”的核定问题。"
+            },
+            {
+              "prompt": "5. 损失在订约时根本无从预见、又未被告知，法律上称这类损失：",
+              "options": [
+                "foreseeable（可预见的）",
+                "too remote（过于间接的）",
+                "nominal（名义的）"
+              ],
+              "answer": "too remote（过于间接的）",
+              "explanation": "订约时不可预见的损失 too remote to be recoverable（过于间接而不可获赔），属 remoteness 规则；foreseeable 恰恰相反，nominal 指赔偿金额的象征性。"
+            },
+            {
+              "prompt": "6. 责任“是否成立”是 liability 问题，赔偿“数额”大小则用哪个词？",
+              "options": [
+                "causation",
+                "quantum",
+                "mitigation"
+              ],
+              "answer": "quantum",
+              "explanation": "quantum = 赔偿数额（the quantum of damages = 损害赔偿的数额），与 liability（责任是否成立）相对；causation 是因果关系，mitigation 是减损。"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习B：术语填空",
+          "instruction": "根据语境填入最合适的法律英语术语（英文）。",
+          "questions": [
+            {
+              "prompt": "In no event shall either party be liable for any punitive or ____ damages.",
+              "answer": "exemplary",
+              "accept": ["exemplary"],
+              "explanation": "punitive or exemplary damages = 惩罚性或惩戒性损害赔偿，是责任限制条款排除惩罚性赔偿的标准并列表述。exemplary 与 punitive 同义。",
+              "hints": ["与 punitive 同义的英式说法", "来自 example（榜样、儆戒）"]
+            },
+            {
+              "prompt": "The injured party shall take reasonable steps to ____ its loss arising from the breach.",
+              "answer": "mitigate",
+              "accept": ["mitigate"],
+              "explanation": "mitigate the loss = 减轻损失（动词）；take reasonable steps to mitigate 是减损义务的标准表述。此处需动词原形，不能用名词 mitigation。",
+              "hints": ["表示「减轻损失」的动词", "对应的名词是 mitigation"]
+            },
+            {
+              "prompt": "Damages are recoverable only if the loss was reasonably ____ at the time of contracting.",
+              "answer": "foreseeable",
+              "accept": ["foreseeable"],
+              "explanation": "reasonably foreseeable at the time of contracting = 在订约时合理可预见的，是可预见性规则的核心表述。此处需形容词 foreseeable，名词形式为 foreseeability。",
+              "hints": ["形容词「可预见的」", "fore-（预先）+ see（看见）+ -able"]
+            },
+            {
+              "prompt": "The claimant must establish ____ between the breach and the loss claimed.",
+              "answer": "causation",
+              "accept": ["causation"],
+              "explanation": "establish causation between the breach and the loss = 证明违约与损失之间的因果关系。causation 是损害赔偿的因果关系要件。",
+              "hints": ["名词「因果关系」", "来自 cause（原因）"]
+            },
+            {
+              "prompt": "Losses that are too ____ to be recoverable shall be excluded from the calculation of damages.",
+              "answer": "remote",
+              "accept": ["remote"],
+              "explanation": "too remote to be recoverable = 过于间接而不可获赔，对应 remoteness（间接性/遥远性）规则。此处需形容词 remote，名词为 remoteness。",
+              "hints": ["形容词「遥远的、间接的」", "名词形式是 remoteness"]
+            },
+            {
+              "prompt": "The Supplier shall not be liable for any loss of ____ arising from the delay.",
+              "answer": "profits",
+              "accept": ["profits", "profit"],
+              "explanation": "loss of profits = 利润损失/可得利益损失，是责任限制条款常排除的间接损失之一。",
+              "hints": ["loss of ___ = 利润损失", "公司经营赚到的钱（复数形式更常见）"]
+            },
+            {
+              "prompt": "The court will assess the ____ of damages by reference to the loss actually incurred.",
+              "answer": "quantum",
+              "accept": ["quantum"],
+              "explanation": "the quantum of damages = 损害赔偿的数额；assess the quantum = 核定赔偿数额。quantum 是拉丁语「数量」，法律专指赔偿数额。",
+              "hints": ["拉丁语词，表示赔偿「数额/金额」", "与 quantity 同源"]
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：辨析——损害赔偿的分类",
+          "instruction": "选择正确的辨析说明。",
+          "questions": [
+            {
+              "prompt": "1. 关于 compensatory damages 与 punitive damages 的区别，下列正确的是：",
+              "options": [
+                "compensatory 填平实际损失；punitive 旨在惩罚，可超出实际损失",
+                "compensatory 旨在惩罚；punitive 填平实际损失",
+                "二者含义相同，可以互换"
+              ],
+              "answer": "compensatory 填平实际损失；punitive 旨在惩罚，可超出实际损失",
+              "explanation": "compensatory damages（补偿性）目的是填平实际损失；punitive damages（惩罚性）目的是惩罚加害方、儆戒社会，可远高于实际损失。二者目的相反，不可互换。"
+            },
+            {
+              "prompt": "2. 关于 general damages 与 special damages，下列正确的是：",
+              "options": [
+                "general 是违约通常会产生、推定可预见的损失；special 须具体主张并证明",
+                "general 须具体主张并证明；special 是推定可预见的损失",
+                "二者都属于惩罚性赔偿"
+              ],
+              "answer": "general 是违约通常会产生、推定可预见的损失；special 须具体主张并证明",
+              "explanation": "general damages（一般/直接损害）是任何违约通常会产生、法律推定可预见的损失；special damages（特别损害）因守约方特殊情况产生，须 pleaded and proved（具体主张并证明）。二者都是补偿性的，与惩罚性赔偿无关。"
+            },
+            {
+              "prompt": "3. mitigate 和 mitigation 的关系是：",
+              "options": [
+                "mitigate 是动词（减轻），mitigation 是名词（减损）",
+                "mitigate 是名词，mitigation 是动词",
+                "二者都是形容词"
+              ],
+              "answer": "mitigate 是动词（减轻），mitigation 是名词（减损）",
+              "explanation": "mitigate = 动词「减轻（损失）」，如 mitigate the loss；mitigation = 名词「减损」，如 the duty of mitigation / in mitigation of damages。注意 duty to mitigate 中 mitigate 是动词原形。"
+            },
+            {
+              "prompt": "4. consequential damages（间接/后果性损害，第3周已学）与 direct damages（直接损害）的区别是：",
+              "options": [
+                "consequential 是违约间接、衍生的后果性损失；direct 是直接、自然产生的损失",
+                "consequential 是直接损失；direct 是间接损失",
+                "二者都指惩罚性赔偿"
+              ],
+              "answer": "consequential 是违约间接、衍生的后果性损失；direct 是直接、自然产生的损失",
+              "explanation": "direct damages（直接损害，≈ general damages）是违约直接、自然产生的损失；consequential damages（间接/后果性损害，≈ special damages 的常见类型）是衍生的下游损失，如利润损失。责任限制条款常排除 consequential damages 而保留 direct damages。"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习D：找出不同类",
+          "instruction": "下列选项中，有一个与其他不属于同一类别，请找出来。",
+          "questions": [
+            {
+              "prompt": "1. 找出不属于「损害赔偿类型」的一项：",
+              "options": [
+                "compensatory damages（补偿性赔偿）",
+                "punitive damages（惩罚性赔偿）",
+                "nominal damages（名义赔偿）",
+                "mitigation（减损）"
+              ],
+              "answer": "mitigation（减损）",
+              "explanation": "compensatory / punitive / nominal damages 都是损害赔偿的类型；mitigation（减损）是限制赔偿范围的规则/原则，不是一种赔偿类型。"
+            },
+            {
+              "prompt": "2. 找出不属于「赔偿限制规则」的一项：",
+              "options": [
+                "causation（因果关系）",
+                "remoteness（间接性）",
+                "duty to mitigate（减损义务）",
+                "quantum（赔偿数额）"
+              ],
+              "answer": "quantum（赔偿数额）",
+              "explanation": "causation、remoteness、duty to mitigate 都是限制赔偿「范围」的规则；quantum 只是赔偿数额的核定问题（赔多少），不是限制规则。"
+            },
+            {
+              "prompt": "3. 找出与「punitive damages」含义最不同的一项：",
+              "options": [
+                "exemplary damages（惩戒性赔偿）",
+                "compensatory damages（补偿性赔偿）",
+                "punitive or exemplary damages（惩罚性或惩戒性赔偿）"
+              ],
+              "answer": "compensatory damages（补偿性赔偿）",
+              "explanation": "exemplary damages 与 punitive damages 是同义词；compensatory damages（补偿性，填平损失）与惩罚性赔偿目的相反，含义最不同。"
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习一：英译中",
+          "instruction": "将以下条款翻译为中文，完成后点击「提交 AI 批改」获取详细批改。",
+          "questions": [
+            {
+              "source": "In no event shall either party be liable to the other for any indirect, special, punitive or exemplary damages, including without limitation any loss of profits, arising out of or in connection with this Agreement.",
+              "reference": "在任何情况下，任何一方均不就因本协议产生或与本协议有关的任何间接、特别、惩罚性或惩戒性损害赔偿（包括但不限于任何利润损失）向另一方承担责任。",
+              "rubric": [
+                {
+                  "en": "In no event shall either party be liable",
+                  "ideal": "在任何情况下任何一方均不承担责任",
+                  "accept": ["在任何情形下双方均不承担责任"],
+                  "wrong": ["在某些情况下不承担责任"],
+                  "note": "in no event = 在任何情况下都不（强调倒装），不是「在某些情况下」"
+                },
+                {
+                  "en": "punitive or exemplary damages",
+                  "ideal": "惩罚性或惩戒性损害赔偿",
+                  "accept": ["惩罚性或儆戒性赔偿"],
+                  "wrong": ["示范性损害赔偿", "举例损害赔偿"],
+                  "note": "exemplary damages 在法律中是「惩戒性赔偿」（= punitive），不可按字面译为「示范性/举例」"
+                },
+                {
+                  "en": "including without limitation",
+                  "ideal": "包括但不限于",
+                  "accept": ["包括（但不限于）"],
+                  "wrong": ["包括无限制", "包括没有限制地"],
+                  "note": "including without limitation 是固定搭配，固定译「包括但不限于」"
+                },
+                {
+                  "en": "loss of profits",
+                  "ideal": "利润损失",
+                  "accept": ["可得利益损失", "利润上的损失"],
+                  "wrong": ["失去利润", "损失利益"],
+                  "note": "loss of profits = 利润损失/可得利益损失，是法律术语，宜用规范译法"
+                },
+                {
+                  "en": "arising out of or in connection with",
+                  "ideal": "因……产生或与……有关的",
+                  "accept": ["因……引起或与……相关的"],
+                  "wrong": ["来自或连接于"],
+                  "note": "arising out of or in connection with 是合同固定搭配，须完整译出「产生」与「有关」两层"
+                }
+              ]
+            },
+            {
+              "source": "The non-defaulting party shall take all reasonable steps to mitigate its loss, and no damages shall be recoverable in respect of any loss that could have been avoided by reasonable mitigation.",
+              "reference": "守约方应采取一切合理措施减轻其损失；对于本可通过合理减损避免的任何损失，不得获得任何损害赔偿。",
+              "rubric": [
+                {
+                  "en": "non-defaulting party",
+                  "ideal": "守约方",
+                  "accept": ["非违约方"],
+                  "wrong": ["违约方"],
+                  "note": "non-defaulting party = 守约方/非违约方，注意 non- 前缀，切勿译反"
+                },
+                {
+                  "en": "take all reasonable steps to mitigate its loss",
+                  "ideal": "采取一切合理措施减轻其损失",
+                  "accept": ["采取所有合理步骤减少损失"],
+                  "wrong": ["尽量减少损失"],
+                  "note": "reasonable steps to mitigate 是减损义务的标准表述，应译出「合理措施」"
+                },
+                {
+                  "en": "no damages shall be recoverable",
+                  "ideal": "不得获得任何损害赔偿",
+                  "accept": ["任何损害赔偿均不可获赔"],
+                  "wrong": ["没有损害"],
+                  "note": "damages = 损害赔偿金（不是「损害」）；recoverable = 可获赔的"
+                },
+                {
+                  "en": "could have been avoided by reasonable mitigation",
+                  "ideal": "本可通过合理减损避免的",
+                  "accept": ["原本可以通过合理减损避免的"],
+                  "wrong": ["可以避免减损"],
+                  "note": "could have been avoided 是虚拟语气「本可避免」；by reasonable mitigation = 通过合理减损"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "翻译练习二：中译英",
+          "instruction": "将以下中文条款翻译为英文合同用语，完成后点击「提交 AI 批改」获取详细批改。",
+          "questions": [
+            {
+              "source": "违约方仅就在订约时合理可预见且由其违约直接引起的损失承担补偿性损害赔偿责任。",
+              "reference": "The defaulting party shall be liable for compensatory damages only in respect of such losses as were reasonably foreseeable at the time of contracting and were directly caused by its breach.",
+              "rubric": [
+                {
+                  "en": "defaulting party",
+                  "ideal": "violating/defaulting party",
+                  "accept": ["the party in breach", "breaching party"],
+                  "wrong": ["loser party"],
+                  "note": "违约方 = defaulting party / breaching party，前文已学的标准术语"
+                },
+                {
+                  "en": "compensatory damages",
+                  "ideal": "compensatory damages",
+                  "accept": ["actual damages"],
+                  "wrong": ["punitive damages", "compensation fee"],
+                  "note": "补偿性损害赔偿 = compensatory damages，注意不要写成惩罚性 punitive"
+                },
+                {
+                  "en": "reasonably foreseeable at the time of contracting",
+                  "ideal": "reasonably foreseeable at the time of contracting",
+                  "accept": ["foreseeable when the contract was made"],
+                  "wrong": ["can be seen", "predictable"],
+                  "note": "合理可预见 = reasonably foreseeable；订约时 = at the time of contracting"
+                },
+                {
+                  "en": "directly caused by its breach",
+                  "ideal": "directly caused by its breach",
+                  "accept": ["resulting directly from its breach"],
+                  "wrong": ["because of breach"],
+                  "note": "由违约直接引起 = directly caused by its breach，体现 causation 要件"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "常见错误预防",
+      "blocks": [
+        {
+          "type": "error-warn",
+          "html": "<strong>常见错误预防：</strong><ul><li><strong><span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span> ≠ 损害</strong>：damages（复数）= 损害赔偿「金」（钱）；damage（单数不可数）= 损害、损坏（伤害本身）。「claim damages」是「索赔赔偿金」，不是「主张损害」。</li><li><strong><span class=\"term\" data-def=\"惩戒性损害赔偿\">exemplary damages</span> ≠ 示范性赔偿</strong>：exemplary 在此是「惩戒性」（= punitive），不可按 example 字面译成「示范/举例损害赔偿」。</li><li><strong><span class=\"term\" data-def=\"名义损害赔偿\">nominal damages</span> ≠ 名义上的损害</strong>：指「象征性赔偿金」（如1美元），强调金额极小且象征性，不是「名义上的损失」。</li><li><strong>special damages 与 consequential damages 易混</strong>：在合同实务中二者常重叠，都指因特殊情况产生、需特别可预见的衍生损失；但翻译时 special damages = 特别损害赔偿，consequential damages = 间接/后果性损害赔偿，宜按术语区分。</li><li><strong>mitigate（动词）vs. mitigation（名词）</strong>：duty to <span class=\"term\" data-def=\"减轻（损失）；缓解\">mitigate</span> 用动词原形；the duty of <span class=\"term\" data-def=\"减损；损失减轻\">mitigation</span> 用名词，切勿混用。</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "8. 今日小结",
+      "html": "<h3>第4周 第4天 — 损害赔偿核心要点</h3><table><thead><tr><th>知识点</th><th>核心内容</th></tr></thead><tbody><tr><td>赔偿三分类</td><td><span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span>（补偿性，填平损失，默认救济）vs. <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive</span> / <span class=\"term\" data-def=\"惩戒性损害赔偿\">exemplary damages</span>（惩罚性，违约中罕见、常被排除）vs. <span class=\"term\" data-def=\"名义损害赔偿\">nominal damages</span>（名义/象征性，无实际损失时）</td></tr><tr><td>一般 vs. 特别损害</td><td><span class=\"term\" data-def=\"一般损害赔偿\">general damages</span>（直接、推定可预见）vs. <span class=\"term\" data-def=\"特别损害赔偿\">special damages</span>（特殊情况、须主张并证明，常与 <span class=\"term\" data-def=\"间接损害赔偿；后果性损害赔偿\">consequential damages</span> 重叠）</td></tr><tr><td>限制规则①因果</td><td><span class=\"term\" data-def=\"因果关系\">causation</span> = 损失须由违约引起，establish causation between the breach and the loss</td></tr><tr><td>限制规则②可预见</td><td><span class=\"term\" data-def=\"可预见性\">foreseeability</span> / <span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span> = 只赔订约时 reasonably <span class=\"term\" data-def=\"可预见的\">foreseeable</span> 的损失，too remote 者不获赔</td></tr><tr><td>限制规则③减损</td><td><span class=\"term\" data-def=\"减损义务\">duty to mitigate</span> = 守约方须采取合理措施减损，本可避免的损失不获赔（<span class=\"term\" data-def=\"减轻（损失）；缓解\">mitigate</span> 动词 / <span class=\"term\" data-def=\"减损；损失减轻\">mitigation</span> 名词）</td></tr><tr><td>赔偿数额</td><td><span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span> = 赔多少（与 liability 责任是否成立相对）；<span class=\"term\" data-def=\"利润损失；可得利益损失\">loss of profits</span> 常被责任限制条款排除</td></tr></tbody></table><p><strong>明日预告（第4周 第5天）：</strong>免责与不可抗力——<span class=\"term\" data-def=\"不可抗力\">force majeure</span>（不可抗力）、<span class=\"term\" data-def=\"天灾；不可抗拒的自然力\">act of God</span>（天灾）、<span class=\"term\" data-def=\"合同受挫；履行不能\">frustration</span>（合同受挫）、<span class=\"term\" data-def=\"履行不能；不可能\">impossibility</span>（履行不能）、<span class=\"term\" data-def=\"超出合理控制范围（之外）\">beyond the reasonable control</span>（超出合理控制范围）、<span class=\"term\" data-def=\"责任免除；免责\">relief from liability</span>（免责）等核心术语。</p>"
+    }
+  ]
+}

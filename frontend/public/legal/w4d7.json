@@ -1,0 +1,596 @@
+{
+  "title": "第4周 第7天 — 复习日：违约与救济综合练习（Week 4 Review）",
+  "objective": "综合巩固第4周全部内容（违约类型、救济方式、损害赔偿、免责与不可抗力、争议解决），重点攻克第1周仍“待复习”的遗留错题、本周高频易错点（material vs fundamental breach、compensatory vs punitive damages、force majeure vs frustration、arbitration vs litigation、governing law vs jurisdiction）以及 here-/there- 家族词，不引入新知识点。",
+  "sections": [
+    {
+      "type": "grammar",
+      "heading": "1. 本周知识地图回顾",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "本周围绕“违约与救济（Breach &amp; Remedies）”这条主线，系统学习了商务合同中违约发生后的全套法律应对。一句话串起来：一方 <span class=\"term\" data-def=\"违约；违反（合同）\">breach</span>（违约）后成为 <span class=\"term\" data-def=\"违约方\">defaulting party</span>（违约方），守约方可寻求 <span class=\"term\" data-def=\"救济；补救措施\">remedy</span>（救济）——典型即请求 <span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>（损害赔偿）；但若履约障碍源自 <span class=\"term\" data-def=\"不可抗力\">force majeure</span>（不可抗力）等外部事件，违约方可获 <span class=\"term\" data-def=\"责任免除；免责\">relief from liability</span>（免责）；最终一切争议都要通过 <span class=\"term\" data-def=\"争议解决\">dispute resolution</span>（争议解决）机制——<span class=\"term\" data-def=\"调解\">mediation</span>（调解）、<span class=\"term\" data-def=\"仲裁\">arbitration</span>（仲裁）或 <span class=\"term\" data-def=\"诉讼\">litigation</span>（诉讼）去主张。"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "天",
+            "主题",
+            "核心术语（精选）"
+          ],
+          "rows": [
+            [
+              "第2天",
+              "违约类型",
+              "<span class=\"term\" data-def=\"违约；违反（合同）\">breach</span>, <span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span>, <span class=\"term\" data-def=\"根本违约\">fundamental breach</span>, <span class=\"term\" data-def=\"预期违约；先期违约\">anticipatory breach</span>, <span class=\"term\" data-def=\"轻微违约；非实质性违约\">minor breach</span>, <span class=\"term\" data-def=\"拒绝履行；毁约\">repudiation</span>, <span class=\"term\" data-def=\"不履行；未履约\">non-performance</span>, <span class=\"term\" data-def=\"违约方\">defaulting party</span>, <span class=\"term\" data-def=\"守约方；非违约方\">non-defaulting party</span>, <span class=\"term\" data-def=\"违约事件\">event of default</span>, <span class=\"term\" data-def=\"补救期；纠正期限\">cure period</span>, <span class=\"term\" data-def=\"被视为；视同\">deemed</span>"
+            ],
+            [
+              "第3天",
+              "救济方式",
+              "<span class=\"term\" data-def=\"救济；补救措施\">remedy</span>, <span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>, <span class=\"term\" data-def=\"实际履行；强制履行\">specific performance</span>, <span class=\"term\" data-def=\"禁令；强制令\">injunction</span>, <span class=\"term\" data-def=\"赔偿；补偿（保障）\">indemnification</span>, <span class=\"term\" data-def=\"撤销（合同）；解除\">rescission</span>, <span class=\"term\" data-def=\"返还；恢复原状\">restitution</span>, <span class=\"term\" data-def=\"衡平法救济\">equitable remedy</span>, <span class=\"term\" data-def=\"普通法救济；法律救济\">legal remedy</span>, <span class=\"term\" data-def=\"累积救济（可同时行使的救济）\">cumulative remedies</span>, <span class=\"term\" data-def=\"自助救济\">self-help remedy</span>, <span class=\"term\" data-def=\"终止权\">termination right</span>"
+            ],
+            [
+              "第4天",
+              "损害赔偿",
+              "<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span>, <span class=\"term\" data-def=\"实际损害赔偿\">actual damages</span>, <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span>, <span class=\"term\" data-def=\"惩戒性损害赔偿；儆戒性赔偿\">exemplary damages</span>, <span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span>, <span class=\"term\" data-def=\"特别损害赔偿\">special damages</span>, <span class=\"term\" data-def=\"一般损害赔偿\">general damages</span>, <span class=\"term\" data-def=\"利润损失；可得利益损失\">loss of profits</span>, <span class=\"term\" data-def=\"可预见性\">foreseeability</span>, <span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>, <span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span>, <span class=\"term\" data-def=\"因果关系\">causation</span>, <span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span>"
+            ],
+            [
+              "第5天",
+              "免责与不可抗力",
+              "<span class=\"term\" data-def=\"不可抗力\">force majeure</span>, <span class=\"term\" data-def=\"天灾；不可抗拒的自然力\">act of God</span>, <span class=\"term\" data-def=\"合同受挫；履行不能（致合同落空）\">frustration</span>, <span class=\"term\" data-def=\"履行不能；不可能\">impossibility</span>, <span class=\"term\" data-def=\"履行不现实；商业上不可行\">impracticability</span>, <span class=\"term\" data-def=\"免责（事由）；免除（义务）\">excuse</span>, <span class=\"term\" data-def=\"嗣后事件；事后发生的事件\">supervening event</span>, <span class=\"term\" data-def=\"超出合理控制范围（之外）\">beyond the reasonable control</span>, <span class=\"term\" data-def=\"责任免除；免责\">relief from liability</span>, <span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>, <span class=\"term\" data-def=\"解除；免除（合同义务）\">discharge</span>"
+            ],
+            [
+              "第6天",
+              "争议解决",
+              "<span class=\"term\" data-def=\"争议解决\">dispute resolution</span>, <span class=\"term\" data-def=\"争议\">dispute</span>, <span class=\"term\" data-def=\"仲裁\">arbitration</span>, <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>, <span class=\"term\" data-def=\"调解\">mediation</span>, <span class=\"term\" data-def=\"诉讼\">litigation</span>, <span class=\"term\" data-def=\"管辖权；司法管辖区\">jurisdiction</span>, <span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span>, <span class=\"term\" data-def=\"审判地；管辖地点\">venue</span>, <span class=\"term\" data-def=\"友好和解\">amicable settlement</span>, <span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span>, <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "2. 错题专项攻克",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "以下集中复习第1周仍标记为“待复习”的遗留错题，以及本周违约与救济条款中中文母语者最易踩坑的五组高频易错点。"
+        },
+        {
+          "type": "h3",
+          "text": "第1周遗留错题"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>遗留错题 1：<span class=\"term\" data-def=\"实质条款；正文条款\">operative provisions</span></strong><br><ul><li>❌ 错误翻译：“执行条款”</li><li>✅ 正确翻译：<strong>实质条款 / 正文条款</strong></li><li>记忆要点：<span class=\"term\" data-def=\"实质的；起作用的\">operative</span> = 实质性的、起作用的。本周学的违约救济条款（违约认定、救济方式、损害赔偿、争议解决）都属于规定双方核心权利义务的 <span class=\"term\" data-def=\"实质条款；正文条款\">operative provisions</span>，与样板条款（boilerplate）相对。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>遗留错题 2：<span class=\"term\" data-def=\"完全有效\">in full force and effect</span></strong><br><ul><li>❌ 错误翻译：漏译或简化为“有效”</li><li>✅ 正确翻译：<strong>完全有效</strong>（法律固定搭配，必须完整翻译）</li><li>记忆要点：force = 法律效力，effect = 法律效果，full 不可省略。本周高频：违约方在 <span class=\"term\" data-def=\"补救期；纠正期限\">cure period</span> 内补救后，合同 remains <span class=\"term\" data-def=\"完全有效\">in full force and effect</span> = 合同仍然完全有效。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>遗留错题 3：<span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span></strong><br><ul><li>❌ 错误翻译：“被认为是”</li><li>✅ 正确翻译：<strong>被裁定为 / 被判定为</strong></li><li>记忆要点：<span class=\"term\" data-def=\"认定；裁定；持有\">hold</span> 在法律语境中 = 裁定、判定。本周高频考点：若违约严重到被法院 <span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span> a <span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span>（被裁定为重大违约），守约方即可行使 <span class=\"term\" data-def=\"终止权\">termination right</span>（终止权）。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>遗留错题 4：<span class=\"term\" data-def=\"不可执行的；无法强制执行的\">unenforceable</span></strong><br><ul><li>❌ 错误翻译：“没有强制执行力的”（啰嗦）</li><li>✅ 正确翻译：<strong>不可执行的 / 无法强制执行的</strong>（更简洁）</li><li>记忆要点：un- + <span class=\"term\" data-def=\"可执行的；可强制执行的\">enforceable</span>。本周考点：合同常约定排除 <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span>，因其在英美合同法下通常 <span class=\"term\" data-def=\"不可执行的；无法强制执行的\">unenforceable</span>（不可执行）。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>遗留错题 5：<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>（here- 家族词不可省略）</strong><br><ul><li>❌ 错误翻译：只译为“附件”</li><li>✅ 正确翻译：<strong>附于本协议的</strong></li><li>记忆要点：<span class=\"term\" data-def=\"附于本协议；本协议附\">hereto</span> = to this Agreement。本周高频：the dispute resolution procedure <span class=\"term\" data-def=\"附于本协议的\">attached hereto</span> = 附于本协议的争议解决程序；不能省略 <span class=\"term\" data-def=\"附于本协议；本协议附\">hereto</span> 简化为“附件”。</li></ul>"
+        },
+        {
+          "type": "h3",
+          "text": "第4周违约救济五大易错点"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易错点 1：<span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span> vs. <span class=\"term\" data-def=\"根本违约\">fundamental breach</span></strong><br><ul><li>❌ 常见错误：把 <span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span> 译为“物质违约”，或与 <span class=\"term\" data-def=\"根本违约\">fundamental breach</span> 混为一谈</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span> = 重大/实质性违约（material = 实质性的，不是“物质的”）——使守约方丧失主要利益，可索赔且通常可解约，是合同最常见的终止触发条件。</li><li><span class=\"term\" data-def=\"根本违约\">fundamental breach</span> = 根本违约——程度更深，直指合同根基（going to the root of the contract），可立即解约。</li></ul></li><li>记忆口诀：minor（小，只能赔）&lt; material（实质，能赔能解约）&lt; fundamental（根本，立即解约）。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易错点 2：<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span> vs. <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span></strong><br><ul><li>❌ 常见错误：把 <span class=\"term\" data-def=\"惩戒性损害赔偿；儆戒性赔偿\">exemplary damages</span> 按字面译为“示范性赔偿”；混淆补偿与惩罚的目的</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span> = 补偿性赔偿，目的是“填平”实际损失（≈ <span class=\"term\" data-def=\"实际损害赔偿\">actual damages</span>），是合同法默认救济。</li><li><span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span> = 惩罚性赔偿（= <span class=\"term\" data-def=\"惩戒性损害赔偿；儆戒性赔偿\">exemplary damages</span>），目的是惩罚加害方、可远超实际损失，违约中罕见，合同常明文排除。</li></ul></li><li>记忆要点：<span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span>（名义/象征性赔偿，如1美元）则用于违约成立但无实际损失可证之时。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易错点 3：<span class=\"term\" data-def=\"不可抗力\">force majeure</span> vs. <span class=\"term\" data-def=\"合同受挫；履行不能（致合同落空）\">frustration</span></strong><br><ul><li>❌ 常见错误：把 <span class=\"term\" data-def=\"不可抗力\">force majeure</span> 逐字译为“重大力量”；混淆二者的来源与效果</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"不可抗力\">force majeure</span> = 不可抗力——<strong>合同明文约定</strong>的免责条款，没写就不能援引，通常先 <span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>（义务中止），长期持续才升级为终止。</li><li><span class=\"term\" data-def=\"合同受挫；履行不能（致合同落空）\">frustration</span> = 合同落空——<strong>普通法原则</strong>，即使合同没写，发生使履行根本不同的 <span class=\"term\" data-def=\"嗣后事件；事后发生的事件\">supervening event</span>（嗣后事件）时合同自动解除。</li></ul></li><li>记忆要点：<span class=\"term\" data-def=\"履行不能；不可能\">impossibility</span>（客观做不到）门槛最高，<span class=\"term\" data-def=\"履行不现实；商业上不可行\">impracticability</span>（仍可能但极度繁重）门槛较低，单纯“变贵了”一般两者都不构成。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易错点 4：<span class=\"term\" data-def=\"仲裁\">arbitration</span> vs. <span class=\"term\" data-def=\"诉讼\">litigation</span> vs. <span class=\"term\" data-def=\"调解\">mediation</span></strong><br><ul><li>❌ 常见错误：把 <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> 译为“仲裁奖励”（award ≠ 奖励）；把调解当作有约束力的程序</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"调解\">mediation</span>（劝）：<span class=\"term\" data-def=\"调解员\">mediator</span> 居中促和、不作裁决，无强制约束力。</li><li><span class=\"term\" data-def=\"仲裁\">arbitration</span>（裁）：<span class=\"term\" data-def=\"仲裁员\">arbitrator</span> 作出 <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>，final and binding（终局且有约束力），走私人程序。</li><li><span class=\"term\" data-def=\"诉讼\">litigation</span>（判）：法院公开审判，最具国家强制力。</li></ul></li><li>记忆要点：多层次条款顺序：<span class=\"term\" data-def=\"友好和解\">amicable settlement</span> → <span class=\"term\" data-def=\"调解\">mediation</span> → <span class=\"term\" data-def=\"仲裁\">arbitration</span> 或 <span class=\"term\" data-def=\"诉讼\">litigation</span>（后二者通常二选一）。</li></ul>"
+        },
+        {
+          "type": "error-warn",
+          "html": "<strong>易错点 5：<span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span> vs. <span class=\"term\" data-def=\"管辖权；司法管辖区\">jurisdiction</span> vs. <span class=\"term\" data-def=\"审判地；管辖地点\">venue</span></strong><br><ul><li>❌ 常见错误：把 <span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span> 译为“管辖权”，三者混为一谈</li><li>✅ 正确区分：<ul><li><span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span> = 适用法律——“用哪套法律的实体规则判”（如 governed by the laws of England）。</li><li><span class=\"term\" data-def=\"管辖权；司法管辖区\">jurisdiction</span> = 管辖权——“哪个法院/机构有权审”（如 <span class=\"term\" data-def=\"服从……管辖\">submit to the jurisdiction</span> of the courts of Singapore）。</li><li><span class=\"term\" data-def=\"审判地；管辖地点\">venue</span> / <span class=\"term\" data-def=\"法院地\">forum</span> = 审判地/仲裁地——“在哪个具体地点开庭/仲裁”。</li></ul></li><li>记忆要点：三者完全可以不一致——例如约定适用<strong>英国法</strong>，由<strong>新加坡</strong>仲裁庭审理。翻译时绝不能把 governing law 译成“管辖权”。</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "grammar",
+      "heading": "3. here- / there- 家族词专项",
+      "blocks": [
+        {
+          "type": "p",
+          "html": "here- 家族词是法律英语的标志性表达，也是中文母语者的长期薄弱点（here- 词常被整段漏译）。here = “this Agreement”（本协议），与不同介词组合形成不同含义。下表配本周违约救济条款中的真实用法："
+        },
+        {
+          "type": "table",
+          "headers": [
+            "here- 词",
+            "等价于",
+            "中文",
+            "本周例句片段"
+          ],
+          "rows": [
+            [
+              "<span class=\"term\" data-def=\"本协议中\">herein</span>",
+              "in this Agreement",
+              "在本协议中",
+              "the remedies set out <span class=\"term\" data-def=\"本协议中\">herein</span> = 本协议所载的各项救济"
+            ],
+            [
+              "<span class=\"term\" data-def=\"本协议的\">hereof</span>",
+              "of this Agreement",
+              "本协议的",
+              "the existence, validity or termination <span class=\"term\" data-def=\"本协议的\">hereof</span> = 本协议的存在、效力或终止"
+            ],
+            [
+              "<span class=\"term\" data-def=\"附于本协议；本协议附\">hereto</span>",
+              "to this Agreement",
+              "于本协议；本协议的",
+              "the dispute resolution schedule attached <span class=\"term\" data-def=\"附于本协议；本协议附\">hereto</span> = 附于本协议的争议解决附表"
+            ],
+            [
+              "<span class=\"term\" data-def=\"依本协议；在本协议项下\">hereunder</span>",
+              "under this Agreement",
+              "在本协议项下",
+              "the non-defaulting party may exercise all remedies available <span class=\"term\" data-def=\"依本协议；在本协议项下\">hereunder</span> = 守约方可行使本协议项下的一切救济"
+            ],
+            [
+              "<span class=\"term\" data-def=\"兹；特此\">hereby</span>",
+              "by this Agreement / by this means",
+              "特此；以此",
+              "the parties <span class=\"term\" data-def=\"兹；特此\">hereby</span> submit to the jurisdiction of the courts of New York = 各方特此服从纽约法院的管辖"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "html": "<strong>核心记忆法：</strong>here = this Agreement，后接的介词决定含义。同理 there- 家族词中 there = that（该…，指代前文提到的某物）：<span class=\"term\" data-def=\"其中；在其中\">therein</span>（在其中）、<span class=\"term\" data-def=\"其中的；该…的\">thereof</span>（其中的）、<span class=\"term\" data-def=\"在其项下；据此\">thereunder</span>（在其项下）。本周违约例句出现过 “fails to cure such breach within thirty (30) days after receipt of written notice <span class=\"term\" data-def=\"关于该事项的；其\">thereof</span>”（关于该违约的书面通知），<span class=\"term\" data-def=\"关于该事项的；其\">thereof</span> 指代前面的 such breach，不可漏译。"
+        },
+        {
+          "type": "p",
+          "html": "以下用本周所学的违约与救济内容构造含 here-/there- 词的例句，巩固理解："
+        },
+        {
+          "type": "p",
+          "html": "1. <span class=\"en-text\">Upon the occurrence of an event of default, the non-defaulting party may exercise any and all remedies available hereunder or at law.</span><br>— 一旦发生违约事件，守约方可行使本协议项下或法律所提供的任何及全部救济。（<span class=\"term\" data-def=\"依本协议；在本协议项下\">hereunder</span> = 在本协议项下）"
+        },
+        {
+          "type": "p",
+          "html": "2. <span class=\"en-text\">The parties hereby agree that any dispute arising out of or in connection herewith shall be finally settled by binding arbitration.</span><br>— 各方特此约定，因本协议产生或与本协议有关的任何争议，均应通过有约束力的仲裁最终解决。（<span class=\"term\" data-def=\"兹；特此\">hereby</span> = 特此；<span class=\"term\" data-def=\"与本协议有关；与此\">herewith</span> = 与本协议）"
+        },
+        {
+          "type": "p",
+          "html": "3. <span class=\"en-text\">If a force majeure event continues for more than ninety (90) days, either party may terminate this Agreement, and the parties shall be discharged from their future obligations thereunder.</span><br>— 若不可抗力事件持续超过九十（90）天，任何一方均可终止本协议，且各方应解除该协议项下的将来义务。（<span class=\"term\" data-def=\"在其项下；据此\">thereunder</span> = 在该协议项下，指代前面的 this Agreement）"
+        }
+      ]
+    },
+    {
+      "type": "exercises",
+      "heading": "4. 综合练习",
+      "groups": [
+        {
+          "style": "quiz",
+          "title": "练习A：术语选择（8道，覆盖本周5天内容）",
+          "instruction": "根据中文释义或语境，选择最准确的英文术语或翻译。",
+          "questions": [
+            {
+              "prompt": "1. 程度最严重、直指合同根基（going to the root of the contract）、守约方可立即解约的违约是：",
+              "options": [
+                "<span class=\"term\" data-def=\"轻微违约；非实质性违约\">minor breach</span>（轻微违约）",
+                "<span class=\"term\" data-def=\"根本违约\">fundamental breach</span>（根本违约）",
+                "<span class=\"term\" data-def=\"预期违约；先期违约\">anticipatory breach</span>（预期违约）",
+                "<span class=\"term\" data-def=\"不履行；未履约\">non-performance</span>（不履行）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"根本违约\">fundamental breach</span>（根本违约）",
+              "explanation": "fundamental breach = 根本违约，触及合同根本，最严重，可立即解约；minor breach 只能索赔不能解约；anticipatory breach 按“时间维度”（履行期前）划分而非严重程度；non-performance 是客观未履行的事实状态。（第2天）"
+            },
+            {
+              "prompt": "2. 标的物独一无二（如名画、不动产），金钱无法替代，守约方最适合请求的救济是：",
+              "options": [
+                "<span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>（损害赔偿）",
+                "<span class=\"term\" data-def=\"实际履行；强制履行\">specific performance</span>（实际履行）",
+                "<span class=\"term\" data-def=\"返还；恢复原状\">restitution</span>（返还）",
+                "<span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span>（名义赔偿）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"实际履行；强制履行\">specific performance</span>（实际履行）",
+              "explanation": "标的独一无二、金钱无法替代时，应请求 specific performance（实际履行），强制违约方真正交付；damages 只是金钱补偿，无法获得标的本身；restitution 是返还已收利益；nominal damages 是无实际损失时的象征性赔偿。（第3天）"
+            },
+            {
+              "prompt": "3. 守约方证明了违约，但无法证明任何实际损失，法院通常判给：",
+              "options": [
+                "<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory damages</span>（补偿性赔偿）",
+                "<span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive damages</span>（惩罚性赔偿）",
+                "<span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span>（名义赔偿）",
+                "<span class=\"term\" data-def=\"利润损失；可得利益损失\">loss of profits</span>（利润损失）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal damages</span>（名义赔偿）",
+              "explanation": "违约成立但无实际损失可证时判给 nominal damages（象征性赔偿，如1美元），以确认权利被侵犯；compensatory damages 须有实际损失；punitive damages 在违约中几乎不判；loss of profits 是一种具体损失类型。（第4天）"
+            },
+            {
+              "prompt": "4. <span class=\"term\" data-def=\"惩戒性损害赔偿；儆戒性赔偿\">exemplary damages</span> 的正确翻译是：",
+              "options": [
+                "示范性赔偿；举例赔偿",
+                "惩戒性 / 惩罚性损害赔偿（= punitive damages）",
+                "补偿性损害赔偿",
+                "名义赔偿"
+              ],
+              "answer": "惩戒性 / 惩罚性损害赔偿（= punitive damages）",
+              "explanation": "exemplary damages = 惩戒性赔偿，与 punitive damages 同义（英式多用 exemplary，美式多用 punitive），不可按 example 字面译为“示范性/举例”；它与补偿性、名义赔偿目的完全不同。（第4天）"
+            },
+            {
+              "prompt": "5. 履行仍然可能，但因原材料成本暴涨数十倍而变得极度繁重、商业上不可行。最贴切的术语是：",
+              "options": [
+                "<span class=\"term\" data-def=\"履行不能；不可能\">impossibility</span>（履行不能）",
+                "<span class=\"term\" data-def=\"履行不现实；商业上不可行\">impracticability</span>（履行不现实）",
+                "<span class=\"term\" data-def=\"嗣后违法；事后不合法\">supervening illegality</span>（嗣后违法）",
+                "<span class=\"term\" data-def=\"天灾；不可抗拒的自然力\">act of God</span>（天灾）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"履行不现实；商业上不可行\">impracticability</span>（履行不现实）",
+              "explanation": "履行“仍可能但极度繁重、商业上不可行”正是 impracticability；impossibility 要求客观上做不到（此处仍可能）；supervening illegality 指履行变成违法（此处只是变贵）；act of God 是天灾。（第5天）"
+            },
+            {
+              "prompt": "6. 不可抗力事件持续期间，受影响义务暂停履行、事件结束后恢复。这种后果是：",
+              "options": [
+                "<span class=\"term\" data-def=\"解除；免除（合同义务）\">discharge</span>（永久解除义务）",
+                "<span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>（义务中止）",
+                "<span class=\"term\" data-def=\"撤销（合同）；解除\">rescission</span>（撤销合同）",
+                "<span class=\"term\" data-def=\"终止权\">termination right</span>（终止权）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>（义务中止）",
+              "explanation": "“暂停、事件结束恢复”是 suspension of obligations（义务中止，临时性）；discharge 是义务永久消灭；rescission 是撤销合同（溯及既往、恢复原状）；termination right 是终止权。（第5天）"
+            },
+            {
+              "prompt": "7. 由仲裁员作出、final and binding（终局且有约束力）的决定，正确的术语是：",
+              "options": [
+                "<span class=\"term\" data-def=\"和解\">settlement</span>（和解协议）",
+                "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>（仲裁裁决）",
+                "judgment（法院判决）",
+                "<span class=\"term\" data-def=\"调解\">mediation</span>（调解）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span>（仲裁裁决）",
+              "explanation": "arbitral award = 仲裁裁决（award 在仲裁语境是“裁决”不是“奖励”），final and binding 是其标准表述；judgment 是法院判决（诉讼）；settlement 是和解；mediation 是调解程序。（第6天）"
+            },
+            {
+              "prompt": "8. 合同写「This Agreement is governed by the laws of England」，这里 governed by 对应的术语是：",
+              "options": [
+                "<span class=\"term\" data-def=\"管辖权；司法管辖区\">jurisdiction</span>（管辖权）",
+                "<span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span>（适用法律）",
+                "<span class=\"term\" data-def=\"审判地；管辖地点\">venue</span>（审判地）",
+                "<span class=\"term\" data-def=\"法院地\">forum</span>（法院地）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span>（适用法律）",
+              "explanation": "governed by the laws of = 受……法律管辖，对应 governing law（适用法律，实体法选择）；jurisdiction 是“哪个法院有权审”，venue/forum 是“在哪开庭”。（第6天）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习B：合同语境选词（5道）",
+          "instruction": "根据合同语境选择最合适的术语填空。",
+          "questions": [
+            {
+              "prompt": "1. If the defaulting party fails to ______ such breach within thirty (30) days after receipt of written notice, the non-defaulting party may terminate this Agreement.",
+              "options": [
+                "<span class=\"term\" data-def=\"补救；纠正（违约）\">cure</span>",
+                "<span class=\"term\" data-def=\"拒绝履行；否认（合同义务）\">repudiate</span>",
+                "<span class=\"term\" data-def=\"被视为；视同\">deem</span>",
+                "<span class=\"term\" data-def=\"撤销；解除（合同）\">rescind</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"补救；纠正（违约）\">cure</span>",
+              "explanation": "cure the breach = 补救/纠正违约，与 cure period（补救期）配套；repudiate 是“拒绝履行”，deem 是“视为”，rescind 是“撤销合同”，均不符合“在期限内纠正违约”的语境。（第2天）"
+            },
+            {
+              "prompt": "2. The rights and remedies provided in this Agreement are ______ and not exclusive of any remedies available at law or in equity.",
+              "options": [
+                "<span class=\"term\" data-def=\"累积的；可同时行使的\">cumulative</span>",
+                "exclusive",
+                "<span class=\"term\" data-def=\"衡平法的\">equitable</span>",
+                "<span class=\"term\" data-def=\"补偿性的\">compensatory</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"累积的；可同时行使的\">cumulative</span>",
+              "explanation": "cumulative and not exclusive = 累积性而非排他性，各项救济可同时行使、互不排斥；exclusive 恰好相反（排他/唯一）；equitable 指衡平法的；compensatory 指补偿性的，均不符合语境。（第3天）"
+            },
+            {
+              "prompt": "3. In no event shall either party be liable for any indirect, special, punitive or ______ damages, including without limitation any loss of profits.",
+              "options": [
+                "<span class=\"term\" data-def=\"补偿性的\">compensatory</span>",
+                "<span class=\"term\" data-def=\"实际的\">actual</span>",
+                "<span class=\"term\" data-def=\"惩戒性的；儆戒性的\">exemplary</span>",
+                "<span class=\"term\" data-def=\"一般的\">general</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"惩戒性的；儆戒性的\">exemplary</span>",
+              "explanation": "punitive or exemplary damages = 惩罚性或惩戒性损害赔偿，是责任限制条款排除惩罚性赔偿的标准并列表述（exemplary = punitive）；compensatory/actual/general damages 都是补偿性赔偿，不在被排除之列。（第4天）"
+            },
+            {
+              "prompt": "4. The affected party shall be ______ from liability for any failure to perform caused by a force majeure event beyond its reasonable control.",
+              "options": [
+                "<span class=\"term\" data-def=\"补救；纠正（违约）\">cured</span>",
+                "<span class=\"term\" data-def=\"免除；豁免（的）\">exempt</span>",
+                "<span class=\"term\" data-def=\"累积的\">cumulative</span>",
+                "<span class=\"term\" data-def=\"被视为；视同\">deemed</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"免除；豁免（的）\">exempt</span>",
+              "explanation": "exempt from liability = 免除责任，是不可抗力免责后果的固定搭配；cured 是“已补救”，cumulative 是“累积的”，deemed 是“被视为”，均不符合“免除责任”的语境。（第5天）"
+            },
+            {
+              "prompt": "5. Any dispute arising out of or in connection with this Agreement shall be finally settled by binding ______, and the award shall be final and binding upon the parties.",
+              "options": [
+                "<span class=\"term\" data-def=\"调解\">mediation</span>",
+                "<span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+                "<span class=\"term\" data-def=\"友好和解\">amicable settlement</span>",
+                "<span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span>"
+              ],
+              "answer": "<span class=\"term\" data-def=\"仲裁\">arbitration</span>",
+              "explanation": "binding arbitration + the award shall be final and binding 共同指向 arbitration（仲裁），由仲裁庭作出有约束力的 arbitral award；mediation（调解）无强制约束力，amicable settlement 是友好和解，governing law 是适用法律。（第6天）"
+            }
+          ]
+        },
+        {
+          "style": "quiz",
+          "title": "练习C：辨析与情境判断（5道）",
+          "instruction": "根据情境选择最准确的术语或辨析说明。",
+          "questions": [
+            {
+              "prompt": "1. 卖方在交货日<strong>之前</strong>就明确发函称“我们不会供货了”，这种履行期前的毁约属于：",
+              "options": [
+                "<span class=\"term\" data-def=\"轻微违约；非实质性违约\">minor breach</span>（轻微违约）",
+                "<span class=\"term\" data-def=\"预期违约；先期违约\">anticipatory breach</span>（预期违约）",
+                "<span class=\"term\" data-def=\"不遵守；违反\">non-compliance</span>（不遵守）",
+                "<span class=\"term\" data-def=\"补救；纠正（违约）\">cure</span>（补救）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"预期违约；先期违约\">anticipatory breach</span>（预期违约）",
+              "explanation": "anticipatory breach = 预期违约，特指履行期到来之前一方提前拒绝履行（repudiation）；minor breach 不涉及时间维度；non-compliance 是“不遵守某项规定”；cure 是补救（与违约相反）。（第2天）"
+            },
+            {
+              "prompt": "2. 关于 <span class=\"term\" data-def=\"撤销（合同）；解除\">rescission</span>（撤销）与 <span class=\"term\" data-def=\"终止；解除\">termination</span>（终止）的区别，正确的是：",
+              "options": [
+                "两者效果相同，可互换使用",
+                "rescission 溯及既往使合同自始无效（须返还利益）；termination 仅向将来失效，保留既得权利",
+                "termination 须经法院裁令；rescission 可随意行使",
+                "rescission 只赔钱，termination 必须实际履行"
+              ],
+              "answer": "rescission 溯及既往使合同自始无效（须返还利益）；termination 仅向将来失效，保留既得权利",
+              "explanation": "rescission（撤销）效力溯及既往、合同自始无效、须 restitution 返还利益；termination（终止）仅向将来失效、已履行部分有效、保留既得权利。中文都可能译“解除”，须看法律效果区分。（第3天）"
+            },
+            {
+              "prompt": "3. 守约方明明可以低价补货却故意放任损失扩大，扩大的部分不能获赔，依据的规则是：",
+              "options": [
+                "<span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>（减损义务）",
+                "<span class=\"term\" data-def=\"因果关系\">causation</span>（因果关系）",
+                "<span class=\"term\" data-def=\"赔偿数额；金额\">quantum</span>（赔偿数额）",
+                "<span class=\"term\" data-def=\"可预见性\">foreseeability</span>（可预见性）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"减损义务\">duty to mitigate</span>（减损义务）",
+              "explanation": "duty to mitigate = 减损义务，本可通过合理减损避免的损失不获赔；causation 是因果关系要件，quantum 只是“赔多少”的核定问题，foreseeability 是可预见性规则（解决“是否太遥远”）。（第4天）"
+            },
+            {
+              "prompt": "4. 合同没有写不可抗力条款，但因战争爆发使履行成为客观不可能。卖方可主张的普通法救济最贴切的是：",
+              "options": [
+                "<span class=\"term\" data-def=\"不可抗力\">force majeure</span>（需合同约定）",
+                "<span class=\"term\" data-def=\"合同受挫；履行不能（致合同落空）\">frustration</span>（普通法原则）",
+                "<span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>（义务中止）",
+                "<span class=\"term\" data-def=\"友好和解\">amicable settlement</span>（友好和解）"
+              ],
+              "answer": "<span class=\"term\" data-def=\"合同受挫；履行不能（致合同落空）\">frustration</span>（普通法原则）",
+              "explanation": "合同未约定 force majeure 条款，故不能援引 force majeure（约定免责）；frustration 是普通法原则，无需明文约定即可适用；suspension of obligations 只是后果之一；amicable settlement 是争议解决方式，均非可单独主张的免责基础。（第5天）"
+            },
+            {
+              "prompt": "5. 合同约定适用<strong>英国法</strong>，但由位于<strong>新加坡</strong>的仲裁庭审理。这种安排说明：",
+              "options": [
+                "适用法律（governing law）与审理地/管辖（jurisdiction/venue）必须一致",
+                "适用法律与管辖/审判地完全可以不一致——前者是“用哪套法律判”，后者是“由谁/在哪审”",
+                "这是无效的矛盾约定",
+                "英国法与新加坡指的是同一概念"
+              ],
+              "answer": "适用法律与管辖/审判地完全可以不一致——前者是“用哪套法律判”，后者是“由谁/在哪审”",
+              "explanation": "governing law（适用法律）解决“用哪套法律的实体规则判”，jurisdiction/venue（管辖权/审判地）解决“由哪个机构、在哪个地点审”，二者完全可以分离，如适用英国法、由新加坡仲裁庭审理。（第6天）"
+            }
+          ]
+        },
+        {
+          "style": "fill-blank",
+          "title": "练习D：术语填空（7道，主动回忆）",
+          "instruction": "根据语境和中文提示，填入最合适的法律英语术语（填英文）。",
+          "questions": [
+            {
+              "prompt": "重大违约：Any failure to maintain confidentiality shall constitute a ______ breach of this Agreement.（任何泄密都构成「重大」违约，使守约方可解约）",
+              "answer": "material",
+              "accept": ["material"],
+              "explanation": "material breach = 重大违约，material = 实质性的（不是“物质的”），使守约方有权解约。（第2天）",
+              "hints": ["意为「实质性的、重要的」", "比 minor 严重，可解约的那一级违约"]
+            },
+            {
+              "prompt": "守约方：Upon an event of default, the non-______ party may exercise all remedies available hereunder.（守约方/非违约方可行使一切救济）",
+              "answer": "defaulting",
+              "accept": ["defaulting"],
+              "explanation": "non-defaulting party = 守约方/非违约方，注意 non- 前缀，漏掉会误译成违约方。（第2天）",
+              "hints": ["non-____ party = 守约方", "与 defaulting party（违约方）相对，源自 default"]
+            },
+            {
+              "prompt": "实际履行：Where damages are inadequate, the Court may order ______ performance of the contract.（金钱不足时，法院可裁令「实际履行」）",
+              "answer": "specific",
+              "accept": ["specific"],
+              "explanation": "specific performance = 实际履行/强制履行，是金钱救济不足时的衡平法救济。（第3天）",
+              "hints": ["____ performance = 实际履行", "首字母 s，意为「特定的/具体的」"]
+            },
+            {
+              "prompt": "减损：The injured party shall take all reasonable steps to ______ its loss arising from the breach.（受损方应采取合理措施「减轻」损失）",
+              "answer": "mitigate",
+              "accept": ["mitigate"],
+              "explanation": "mitigate the loss = 减轻损失（动词）；take reasonable steps to mitigate 是减损义务的标准表述。此处需动词原形，对应名词 mitigation。（第4天）",
+              "hints": ["表示「减轻损失」的动词", "对应名词是 mitigation，搭配 duty to ____"]
+            },
+            {
+              "prompt": "可预见：Damages are recoverable only if the loss was reasonably ______ at the time of contracting.（只有订约时合理「可预见」的损失才可获赔）",
+              "answer": "foreseeable",
+              "accept": ["foreseeable"],
+              "explanation": "reasonably foreseeable at the time of contracting = 在订约时合理可预见的，是可预见性规则的核心表述。此处需形容词，名词为 foreseeability。（第4天）",
+              "hints": ["形容词「可预见的」", "fore-（预先）+ see（看见）+ -able"]
+            },
+            {
+              "prompt": "免责：The affected party shall be ______ from liability for any failure to perform caused by force majeure.（受影响方对因不可抗力导致的不能履行「免除」责任）",
+              "answer": "exempt",
+              "accept": ["exempt", "exempted"],
+              "explanation": "exempt from liability = 免除责任，是不可抗力免责的固定搭配；exempt 免的是“责任”，与 discharge（免“义务”）相区分。（第5天）",
+              "hints": ["____ from liability = 免除责任", "与 relief from liability 同义，意为「免除、豁免」"]
+            },
+            {
+              "prompt": "服从管辖：Each party irrevocably ______ to the exclusive jurisdiction of the courts of Hong Kong.（双方不可撤销地「服从」香港法院的专属管辖）",
+              "answer": "submits",
+              "accept": ["submits", "submit"],
+              "explanation": "submit to the jurisdiction of = 服从……管辖，是约定法院管辖的固定动词短语；exclusive jurisdiction = 专属管辖。（第6天）",
+              "hints": ["____ to the jurisdiction of = 服从……管辖", "意为「服从、提交」，主语为单数时加 s"]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习E：英译中（2道）",
+          "instruction": "以下条款综合本周多天内容，翻译为中文后点击「提交 AI 批改」获取详细批改。注意 here- 家族词不可漏译。",
+          "questions": [
+            {
+              "source": "If either party commits a material breach of this Agreement and fails to cure such breach within thirty (30) days after receipt of written notice thereof, the non-defaulting party may terminate this Agreement and shall be entitled to all remedies available hereunder or at law, including damages, specific performance and injunctive relief; provided that the rights and remedies of the parties shall be cumulative and not exclusive.",
+              "reference": "若任一方对本协议构成重大违约，且未能在收到相关书面通知后三十（30）天内补救该违约，守约方可终止本协议，并有权获得本协议项下或法律所提供的一切救济，包括损害赔偿、实际履行和禁令救济；但各方的权利和救济应为累积性的，而非排他性的。",
+              "rubric": [
+                {
+                  "en": "commits a <span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span>",
+                  "ideal": "构成重大违约",
+                  "accept": ["实施重大违约", "犯有重大违约"],
+                  "wrong": ["物质违约", "轻微违约"],
+                  "note": "material breach = 重大违约/实质性违约（material = 实质性的，不是“物质的”），不能弱化为轻微违约（第2天）"
+                },
+                {
+                  "en": "fails to <span class=\"term\" data-def=\"补救；纠正（违约）\">cure</span> such breach within thirty (30) days after receipt of written notice <span class=\"term\" data-def=\"关于该事项的；其\">thereof</span>",
+                  "ideal": "未能在收到相关书面通知后三十（30）天内补救该违约",
+                  "accept": ["未在收到该书面通知后30日内纠正该违约"],
+                  "wrong": ["未能治愈违约", "三十天前补救"],
+                  "note": "cure 在违约语境是“补救/纠正”不是“治愈”；thereof = 关于该违约的，指代 such breach，不可漏译（第2天 + there-家族词）"
+                },
+                {
+                  "en": "the <span class=\"term\" data-def=\"守约方；非违约方\">non-defaulting party</span> may terminate this Agreement",
+                  "ideal": "守约方可终止本协议",
+                  "accept": ["非违约方可终止本协议"],
+                  "wrong": ["违约方可终止本协议", "守约方中止本协议"],
+                  "note": "non-defaulting party = 守约方，注意 non- 前缀不可漏；terminate = 终止（不是中止 suspend）（第2天）"
+                },
+                {
+                  "en": "all remedies available <span class=\"term\" data-def=\"依本协议；在本协议项下\">hereunder</span> or at law, including <span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>, <span class=\"term\" data-def=\"实际履行；强制履行\">specific performance</span> and injunctive relief",
+                  "ideal": "本协议项下或法律所提供的一切救济，包括损害赔偿、实际履行和禁令救济",
+                  "accept": ["本协议项下或普通法上的全部救济，含损害赔偿、实际履行和禁令"],
+                  "wrong": ["合同里的所有补救", "具体表现和禁令"],
+                  "note": "hereunder = 在本协议项下；specific performance = 实际履行（不是“具体表现”）；injunctive relief = 禁令救济（第3天 + here-家族词）"
+                },
+                {
+                  "en": "the rights and remedies of the parties shall be <span class=\"term\" data-def=\"累积的；可同时行使的\">cumulative</span> and not exclusive",
+                  "ideal": "各方的权利和救济应为累积性的，而非排他性的",
+                  "accept": ["双方的权利和救济是累积且非排他的"],
+                  "wrong": ["权利和救济是累积且排他的", "唯一的救济"],
+                  "note": "cumulative = 累积（可叠加），not exclusive = 非排他（不排斥其他救济），两层意思都要译出（第3天）"
+                }
+              ]
+            },
+            {
+              "source": "Neither party shall be liable for any failure or delay in performance to the extent caused by a force majeure event beyond its reasonable control; the performance of the affected obligations shall be suspended for so long as the event continues, and if the event continues for more than ninety (90) days, either party may terminate this Agreement, whereupon both parties shall be discharged from their future obligations hereunder.",
+              "reference": "在因超出其合理控制范围的不可抗力事件所致的范围内，任何一方均不就履行的任何不能或迟延承担责任；受影响义务的履行应在该事件持续期间中止，且若该事件持续超过九十（90）天，任何一方均可终止本协议，届时双方均应解除其在本协议项下的将来义务。",
+              "rubric": [
+                {
+                  "en": "to the extent caused by a <span class=\"term\" data-def=\"不可抗力\">force majeure</span> event <span class=\"term\" data-def=\"超出合理控制范围（之外）\">beyond its reasonable control</span>",
+                  "ideal": "在因超出其合理控制范围的不可抗力事件所致的范围内",
+                  "accept": ["在不可抗力事件（超出其合理控制）所导致的范围内"],
+                  "wrong": ["重大力量事件", "在合理控制下"],
+                  "note": "force majeure = 不可抗力（固定术语，不可逐字译）；beyond the reasonable control = 超出合理控制范围（control 不可漏）（第5天）"
+                },
+                {
+                  "en": "any failure or delay in performance",
+                  "ideal": "履行的任何不能或迟延",
+                  "accept": ["任何不能履行或迟延履行"],
+                  "wrong": ["任何失败或延误的表演"],
+                  "note": "performance 在此是“履行”（合同义务），不是“表演”；failure = 不能/未能履行"
+                },
+                {
+                  "en": "the performance of the affected obligations shall be <span class=\"term\" data-def=\"义务中止\">suspended</span> for so long as the event continues",
+                  "ideal": "受影响义务的履行应在该事件持续期间中止",
+                  "accept": ["受影响义务在事件持续期间暂停履行"],
+                  "wrong": ["永久中止", "予以解除"],
+                  "note": "suspended = 中止（临时，事件结束恢复），不是 discharge（永久解除）；for so long as = 在……持续期间（第5天）"
+                },
+                {
+                  "en": "either party may terminate this Agreement, whereupon both parties shall be <span class=\"term\" data-def=\"解除；免除（合同义务）\">discharged</span> from their future obligations <span class=\"term\" data-def=\"依本协议；在本协议项下\">hereunder</span>",
+                  "ideal": "任何一方均可终止本协议，届时双方均应解除其在本协议项下的将来义务",
+                  "accept": ["任何一方可终止本协议，此后双方均免除本协议项下的将来义务"],
+                  "wrong": ["双方免除其责任", "终止其权利"],
+                  "note": "discharge 免的是“义务”本身，须译出 future（将来）；hereunder = 在本协议项下（第5天 + here-家族词）"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "style": "translation",
+          "title": "练习F：中译英（1道）",
+          "instruction": "将以下中文条款翻译为英文合同用语。注意综合运用本周违约、救济、不可抗力、争议解决术语和 here- 家族词。",
+          "questions": [
+            {
+              "source": "因本协议产生或与本协议有关的任何争议，各方应首先通过友好协商解决；协商不成的，应将争议提交调解；若仍未达成和解，则该争议应通过有约束力的仲裁最终解决，仲裁裁决为终局裁决，对双方均具有约束力。本协议受英国法律管辖，且各方特此不可撤销地服从新加坡法院的专属管辖。",
+              "reference": "Any <span class=\"term\" data-def=\"争议\">dispute</span> <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> this Agreement shall first be resolved by the parties through <span class=\"term\" data-def=\"友好和解\">amicable</span> negotiation; failing which, the dispute shall be submitted to <span class=\"term\" data-def=\"调解\">mediation</span>; and if no <span class=\"term\" data-def=\"和解\">settlement</span> is reached, the dispute shall be finally settled by <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>, and the <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> shall be final and binding upon both parties. This Agreement shall be governed by the laws of England, and each party <span class=\"term\" data-def=\"兹；特此\">hereby</span> irrevocably <span class=\"term\" data-def=\"服从……管辖\">submits to the exclusive jurisdiction</span> of the courts of Singapore.",
+              "rubric": [
+                {
+                  "en": "因本协议产生或与本协议有关的任何争议",
+                  "ideal": "Any <span class=\"term\" data-def=\"争议\">dispute</span> <span class=\"term\" data-def=\"因……产生或与……有关的\">arising out of or in connection with</span> this Agreement",
+                  "accept": ["Any dispute arising from or relating to this Agreement"],
+                  "wrong": ["Any argument on this Agreement"],
+                  "note": "dispute = 争议（不用 argument）；arising out of or in connection with = 因……产生或与……有关的，仲裁条款固定表达（第6天）"
+                },
+                {
+                  "en": "首先通过友好协商解决；协商不成的，应将争议提交调解",
+                  "ideal": "first be resolved through <span class=\"term\" data-def=\"友好和解\">amicable</span> negotiation; failing which, the dispute shall be submitted to <span class=\"term\" data-def=\"调解\">mediation</span>",
+                  "accept": ["first settled by friendly negotiation; if that fails, referred to mediation"],
+                  "wrong": ["solved by talking first, then sent to arbitration"],
+                  "note": "amicable/friendly negotiation = 友好协商；mediation = 调解（不是 arbitration）；failing which = 若不成功（第6天）"
+                },
+                {
+                  "en": "通过有约束力的仲裁最终解决，仲裁裁决为终局裁决，对双方均具有约束力",
+                  "ideal": "finally settled by <span class=\"term\" data-def=\"有约束力的仲裁\">binding arbitration</span>, and the <span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> shall be final and binding upon both parties",
+                  "accept": ["finally resolved by binding arbitration; the arbitral award shall be final and binding on the parties"],
+                  "wrong": ["solved by arbitration; the arbitration reward is final"],
+                  "note": "binding arbitration = 有约束力的仲裁；arbitral award = 仲裁裁决（不是 reward/奖励）；final and binding = 终局且有约束力（第6天）"
+                },
+                {
+                  "en": "本协议受英国法律管辖",
+                  "ideal": "This Agreement shall be governed by the laws of England",
+                  "accept": ["This Agreement shall be governed by English law"],
+                  "wrong": ["This Agreement is under the jurisdiction of England", "controlled by England's rules"],
+                  "note": "「适用法律」用 governed by the laws of，不要误用 jurisdiction（那是管辖权）（第6天）"
+                },
+                {
+                  "en": "各方特此不可撤销地服从新加坡法院的专属管辖",
+                  "ideal": "each party <span class=\"term\" data-def=\"兹；特此\">hereby</span> irrevocably <span class=\"term\" data-def=\"服从……管辖\">submits to the exclusive jurisdiction</span> of the courts of Singapore",
+                  "accept": ["each party hereby irrevocably submits to the exclusive jurisdiction of the Singapore courts"],
+                  "wrong": ["everyone obeys Singapore courts", "submits to the governing law of Singapore"],
+                  "note": "hereby = 特此；submit to the (exclusive) jurisdiction of = 服从……（专属）管辖；irrevocably = 不可撤销地（第6天 + here-家族词）"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "heading": "5. 今日小结",
+      "html": "<h3>第4周学习成果</h3>\n<ul><li><strong>核心能力：</strong>掌握了商务合同中违约与救济相关条款的核心表达方式</li><li><strong>覆盖内容：</strong>违约类型（types of breach）→ 救济方式（remedies）→ 损害赔偿（damages）→ 免责与不可抗力（force majeure &amp; excuse）→ 争议解决（dispute resolution）</li><li><strong>里程碑：</strong>能够阅读和翻译合同中的违约条款、救济条款、责任限制条款、不可抗力条款和仲裁/管辖条款</li></ul>\n<h3>第4周关键要点回顾</h3>\n<ol><li>违约按严重程度：<span class=\"term\" data-def=\"轻微违约；非实质性违约\">minor breach</span>（只能赔）&lt; <span class=\"term\" data-def=\"重大违约；实质性违约\">material breach</span>（能赔能解约）&lt; <span class=\"term\" data-def=\"根本违约\">fundamental breach</span>（立即解约）；<span class=\"term\" data-def=\"违约方\">defaulting party</span> 在 <span class=\"term\" data-def=\"补救期；纠正期限\">cure period</span> 内未补救则触发救济</li><li>三大救济支柱：<span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>（赔钱）/ <span class=\"term\" data-def=\"实际履行；强制履行\">specific performance</span>（强制做）/ <span class=\"term\" data-def=\"禁令；强制令\">injunction</span>（禁止做）；救济为 <span class=\"term\" data-def=\"累积救济（可同时行使的救济）\">cumulative remedies</span>（累积可同时行使）；<span class=\"term\" data-def=\"撤销（合同）；解除\">rescission</span>（溯及既往）vs <span class=\"term\" data-def=\"终止；解除\">termination</span>（向后失效）</li><li>损害赔偿三分类：<span class=\"term\" data-def=\"补偿性损害赔偿\">compensatory</span>（填平）/ <span class=\"term\" data-def=\"惩罚性损害赔偿\">punitive</span> = <span class=\"term\" data-def=\"惩戒性损害赔偿；儆戒性赔偿\">exemplary</span>（惩罚，常被排除）/ <span class=\"term\" data-def=\"名义损害赔偿；象征性赔偿\">nominal</span>（象征性）；三大限制：<span class=\"term\" data-def=\"因果关系\">causation</span> → <span class=\"term\" data-def=\"可预见性\">foreseeability</span>/<span class=\"term\" data-def=\"（损害的）间接性；遥远性\">remoteness</span> → <span class=\"term\" data-def=\"减损义务\">duty to mitigate</span></li><li>三种免责机制：<span class=\"term\" data-def=\"不可抗力\">force majeure</span>（合同约定）/ <span class=\"term\" data-def=\"合同受挫；履行不能（致合同落空）\">frustration</span>（普通法原则）/ <span class=\"term\" data-def=\"履行不能；不可能\">impossibility</span>（客观做不到）；后果分层：<span class=\"term\" data-def=\"义务中止\">suspension of obligations</span>（短期中止）→ <span class=\"term\" data-def=\"解除；免除（合同义务）\">discharge</span>/终止（长期）；<span class=\"term\" data-def=\"免责（事由）；免除（义务）\">excuse</span> 免“责任”、discharge 免“义务”</li><li>争议解决：多层次机制 <span class=\"term\" data-def=\"友好和解\">amicable settlement</span> → <span class=\"term\" data-def=\"调解\">mediation</span>（劝）→ <span class=\"term\" data-def=\"仲裁\">arbitration</span>（裁，<span class=\"term\" data-def=\"仲裁裁决\">arbitral award</span> final and binding）或 <span class=\"term\" data-def=\"诉讼\">litigation</span>（判）；三个管辖类术语：<span class=\"term\" data-def=\"适用法律；管辖法律\">governing law</span>（用哪套法律）vs <span class=\"term\" data-def=\"管辖权；司法管辖区\">jurisdiction</span>（哪个法院有权）vs <span class=\"term\" data-def=\"审判地；管辖地点\">venue</span>（在哪开庭）</li></ol>\n<h3>第1周遗留错题复习情况</h3>\n<p>本课已对以下5个第1周遗留错题进行复习并融入练习：<span class=\"term\" data-def=\"实质条款；正文条款\">operative provisions</span>、<span class=\"term\" data-def=\"完全有效\">in full force and effect</span>、<span class=\"term\" data-def=\"被裁定为；被判定为\">held to be</span>、<span class=\"term\" data-def=\"不可执行的；无法强制执行的\">unenforceable</span>、<span class=\"term\" data-def=\"附于本协议的\">attached hereto</span>。同时专项复习了 here-/there- 家族词（herein/hereof/hereto/hereunder/hereby/herewith/thereof/thereunder），请在后续学习中持续关注 here- 家族词不可漏译这一要点。</p>\n<h3>下周预告：第5周 — 知识产权条款（Intellectual Property）</h3>\n<p>下周将从“违约后果”转向“合同的核心资产”，学习知识产权相关的核心术语：</p>\n<ul><li>知识产权类型：intellectual property（知识产权）、copyright（著作权）、patent（专利）、trademark（商标）、trade secret（商业秘密）</li><li>权利归属与许可：ownership（所有权）、assignment（转让）、license（许可）、royalty（许可使用费）</li><li>背景与衍生：background IP（背景知识产权）、foreground IP（前景知识产权）、work made for hire（职务作品）</li><li>本周学的 <span class=\"term\" data-def=\"禁令；强制令\">injunction</span>（禁令）和 <span class=\"term\" data-def=\"损害赔偿金；赔偿金\">damages</span>（损害赔偿）将作为知识产权侵权救济的一部分继续深化</li></ul>"
+    }
+  ]
+}
