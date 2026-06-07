@@ -29,4 +29,6 @@ export interface CourseConfig {
   sendDefinition: boolean
   /** TTS source（用于服务器缓存路径） */
   ttsSource: string
+  /** AI 释义兜底的例句领域（如 'legal' → 生成法律/合同语境例句）；不设则用通用例句 */
+  vocabExampleDomain?: string
 }

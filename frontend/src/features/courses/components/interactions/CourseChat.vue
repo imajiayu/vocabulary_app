@@ -310,6 +310,7 @@ async function addSelection() {
   await wordEditorStore.openForCourse(text, def, {
     source: courseSource.value,
     lang: config.lang,
+    exampleDomain: config.vocabExampleDomain,
   })
 }
 

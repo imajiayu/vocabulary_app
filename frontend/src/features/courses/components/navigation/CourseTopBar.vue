@@ -105,6 +105,7 @@ function handleAddWord() {
   wordEditorStore.openForCreate({
     source: selectedSource.value,
     lang: props.config.lang,
+    exampleDomain: props.config.vocabExampleDomain,
   })
 }
 

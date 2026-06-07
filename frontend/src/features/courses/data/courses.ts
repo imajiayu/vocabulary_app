@@ -33,6 +33,7 @@ export const courses: Record<string, CourseConfig> = {
     chatName: '法律英语助手',
     chatSystemPrompt: COURSE_CHAT_PROMPT_LEGAL,
     sendDefinition: true,
-    ttsSource: 'IELTS'
+    ttsSource: 'IELTS',
+    vocabExampleDomain: 'legal'
   }
 }

@@ -4,7 +4,7 @@
 
 import { supabase } from '@/shared/config/supabase'
 import { getCurrentUserId } from '@/shared/composables/useAuth'
-import { applyBoldToDefinition } from '@/shared/utils/definition'
+import { applyBoldToDefinition, isDefinitionEmpty } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { selectDueWordIds, orderDueByUrgency } from '@/shared/core/dueSelection'
 import { addDays } from '@/shared/utils/date'
@@ -219,6 +219,32 @@ export class WordsApi {
   }
 
   /**
+   * 统一释义解析：词典命中且有实质释义则用之；否则（请求失败 / 返回占位 "暂无释义" / 实质为空）回退到 AI
+   * AI 兜底不再限定语种——英文长短语、生僻词在词典里查不到时同样走 AI
+   */
+  private static async resolveRawDefinition(
+    word: string,
+    lang: SourceLang,
+    data: { success?: boolean; definition?: DefinitionObject; error?: string } | null,
+    fnError: { message?: string } | null,
+    exampleDomain?: string
+  ): Promise<DefinitionObject> {
+    const fetched = !fnError && data?.success ? (data.definition as DefinitionObject) : null
+
+    // 指定了例句领域（如法律课程）时，词典例句往往不对路（如合同词被配圣经例句），
+    // 直接走 AI 生成领域例句；其余情况词典有实质释义就直接用
+    if (!exampleDomain && fetched && !isDefinitionEmpty(fetched)) return fetched
+
+    try {
+      return await fetchDefinitionFromAI(word, lang, exampleDomain)
+    } catch {
+      // AI 也失败：词典若给了占位释义则退而用之，否则抛出原始错误
+      if (fetched) return fetched
+      throw new Error(data?.error || fnError?.message || '获取释义失败')
+    }
+  }
+
+  /**
    * 获取单词释义（Edge Function + Supabase 直连）
    * 1. 查询单词文本 2. Edge Function 爬取释义 3. 加粗例句 4. 写入 DB 5. 返回完整 Word
    */
@@ -252,28 +278,11 @@ export class WordsApi {
       resolvedLang = customSources?.[source] || 'en'
     }
 
-    // 2. 调用 Edge Function 爬取释义，失败时对非英语单词回退到 AI
-    let rawDefinition: DefinitionObject
-
+    // 2. 调用 Edge Function 爬取释义，查不到/返回占位时回退到 AI
     const { data, error: fnError } = await supabase.functions.invoke('fetch-definition', {
       body: { word: wordText, lang: resolvedLang },
     })
-
-    if (fnError || !data?.success) {
-      // 非英语单词：尝试 AI 回退
-      if (resolvedLang !== 'en') {
-        try {
-          rawDefinition = await fetchDefinitionFromAI(wordText, resolvedLang)
-        } catch {
-          // AI 也失败，抛出原始 Wiktionary 错误
-          throw new Error(data?.error || fnError?.message || '获取释义失败')
-        }
-      } else {
-        throw new Error(data?.error || fnError?.message || '获取释义失败')
-      }
-    } else {
-      rawDefinition = data.definition as DefinitionObject
-    }
+    const rawDefinition = await this.resolveRawDefinition(wordText, resolvedLang, data, fnError)
 
     // 3. 加粗例句
     const definition = applyBoldToDefinition(rawDefinition, wordText)
@@ -307,29 +316,16 @@ export class WordsApi {
    */
   static async fetchDefinitionByTextDirect(
     wordText: string,
-    lang: SourceLang
+    lang: SourceLang,
+    exampleDomain?: string
   ): Promise<DefinitionObject> {
     const cleaned = wordText.trim()
     if (!cleaned) throw new Error('单词不能为空')
 
-    let rawDefinition: DefinitionObject
     const { data, error: fnError } = await supabase.functions.invoke('fetch-definition', {
       body: { word: cleaned, lang },
     })
-
-    if (fnError || !data?.success) {
-      if (lang !== 'en') {
-        try {
-          rawDefinition = await fetchDefinitionFromAI(cleaned, lang)
-        } catch {
-          throw new Error(data?.error || fnError?.message || '获取释义失败')
-        }
-      } else {
-        throw new Error(data?.error || fnError?.message || '获取释义失败')
-      }
-    } else {
-      rawDefinition = data.definition as DefinitionObject
-    }
+    const rawDefinition = await this.resolveRawDefinition(cleaned, lang, data, fnError, exampleDomain)
 
     return applyBoldToDefinition(sanitizeFetchedDefinition(rawDefinition), cleaned)
   }

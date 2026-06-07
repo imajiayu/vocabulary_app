@@ -10,6 +10,7 @@ from typing import Optional
 
 import jwt
 from jwt import PyJWKClient
+from jwt.exceptions import PyJWKClientError
 from flask import request, g
 
 logger = logging.getLogger(__name__)
@@ -73,6 +74,10 @@ def _extract_user_id() -> Optional[str]:
             return payload.get("sub")
         except jwt.InvalidTokenError as e:
             logger.debug(f"JWKS decode failed, trying HS256: {e}")
+        except PyJWKClientError as e:
+            # HS256 token 无 kid / JWKS 无匹配 key / JWKS 拉取失败：
+            # 不能让异常穿透成 Flask 500，必须回退到 HS256
+            logger.debug(f"JWKS signing key lookup failed, trying HS256: {e}")
 
     # 回退到 HS256 (Legacy)
     if SUPABASE_JWT_SECRET:

@@ -122,6 +122,7 @@ async function handleWordClick(e: MouseEvent) {
   wordEditorStore.openForCourse(text, def, {
     source: selectedSource.value,
     lang: config.value.lang,
+    exampleDomain: config.value.vocabExampleDomain,
   })
 }
 

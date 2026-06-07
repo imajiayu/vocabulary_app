@@ -4,7 +4,7 @@ import { ref, shallowRef, computed, watch } from 'vue'
 import { api } from '@/shared/api'
 import type { Word, RelatedWord, SourceLang } from '@/shared/types'
 import { logger } from '@/shared/utils/logger'
-import { applyBoldToDefinition, stripBoldFromDefinition } from '@/shared/utils/definition'
+import { applyBoldToDefinition, stripBoldFromDefinition, mergeDefinitionFillingGaps, isDefinitionEmpty } from '@/shared/utils/definition'
 import { findOptimalDay } from '@/shared/core/loadBalancer'
 import { addDays } from '@/shared/utils/date'
 import { useSettings } from '@/shared/composables/useSettings'
@@ -19,6 +19,8 @@ export type DuplicateCheckerFn = (word: string, excludeId: number) => Promise<bo
 export interface WordCreateContext {
   source: string
   lang: SourceLang
+  /** AI 释义兜底的例句领域（如课程为法律英语时传 'legal'）；不传则用通用例句 */
+  exampleDomain?: string
 }
 
 /** 构造空白 Word 占位（id=-1，尚未写入 DB）— 供新建 / 课程点词未命中时使用 */
@@ -61,6 +63,9 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
   // ── 创建模式（课程页未命中 / 用户主动添加 → 进入编辑态空白页） ──
   const isCreating = ref(false)
   const createContext = ref<WordCreateContext | null>(null)
+  // 记录"当前释义对应的单词"：同词时获取释义做非破坏性合并（保护课程预填），
+  // 单词变化后再获取则整体替换，避免旧单词释义被一直保留
+  const definitionWord = ref<string | null>(null)
 
   // ── 重复检测 ──
   const duplicateCheckState = ref<DuplicateCheckState>('idle')
@@ -174,6 +179,8 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
     relatedWords.value = []
     isLoadingRelated.value = false
     duplicateCheckState.value = 'idle'
+    // 课程预填释义归属当前单词；无预填则置空（首次获取按整体替换处理）
+    definitionWord.value = initialDef ? initialWord.trim() : null
   }
 
   /**
@@ -453,15 +460,22 @@ export const useWordEditorStore = defineStore('wordEditor', () => {
 
     isFetchingDefinition.value = true
     try {
-      const definition = await api.words.fetchDefinitionByTextDirect(
+      const fetched = await api.words.fetchDefinitionByTextDirect(
         wordText,
-        createContext.value.lang
+        createContext.value.lang,
+        createContext.value.exampleDomain
       )
+      // 仅当已有释义归属当前单词时做非破坏性合并（保护课程预填，仅补齐音标/例句）；
+      // 单词已变化（或属于上次抓取的旧词）则整体替换，避免旧释义被一直保留
+      const existing = currentWord.value.definition ?? {}
+      const sameWord = definitionWord.value === wordText && !isDefinitionEmpty(existing)
+      const next = sameWord ? mergeDefinitionFillingGaps(existing, fetched) : fetched
       // 编辑表单展示纯文本，由 saveCreate 时再 strip → re-bold
       currentWord.value = {
         ...currentWord.value,
-        definition: stripBoldFromDefinition(definition),
+        definition: stripBoldFromDefinition(next),
       }
+      definitionWord.value = wordText
       return true
     } catch (error) {
       log.error('创建态获取释义失败:', error)

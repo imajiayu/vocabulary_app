@@ -11,8 +11,14 @@ const LANG_LABEL: Record<SourceLang, string> = {
   uk: 'Ukrainian (Слов\'янська; Cyrillic script; NOT English, NOT Russian)',
 }
 
-export function buildDefinitionPrompt(lang: SourceLang): string {
+/** 例句领域 → 给 LLM 的额外约束（仅影响例句语境，不影响释义） */
+const EXAMPLE_DOMAIN_RULE: Record<string, string> = {
+  legal: 'each example sentence MUST be set in a legal / contract / litigation context (e.g. contracts, court, statutes, compliance)',
+}
+
+export function buildDefinitionPrompt(lang: SourceLang, exampleDomain?: string): string {
   const label = LANG_LABEL[lang]
+  const domainRule = exampleDomain ? EXAMPLE_DOMAIN_RULE[exampleDomain] : undefined
   return `You are a dictionary assistant. The user will send a word or multi-word phrase in ${label}. Return its definition in JSON matching this TypeScript interface:
 
 {
@@ -23,8 +29,8 @@ export function buildDefinitionPrompt(lang: SourceLang): string {
 
 Rules:
 - The input is guaranteed to be ${label}. Do not guess the language.
-- "definitions": 1-3 concise English definitions, each prefixed with part of speech (e.g. "n. jury", "v. to wage war", "phr. used to indicate...")
-- "examples.en": example sentence in ${label} that MUST contain the EXACT input word/phrase verbatim (do not split, paraphrase, or partially use it)
+- "definitions": 1-3 concise definitions written in Simplified Chinese (简体中文), each prefixed with an English part-of-speech tag (e.g. "n. 陪审团", "v. 发动战争", "phr. 用于表示……")
+- "examples.en": example sentence in ${label} that MUST contain the EXACT input word/phrase verbatim (do not split, paraphrase, or partially use it)${domainRule ? `; ${domainRule}` : ''}
 - "examples.zh": Chinese translation of that example sentence
 - "phonetic.ipa": IPA transcription in ${label} phonology${lang === 'uk' ? ' (Ukrainian IPA — NOT Russian IPA)' : ''}; for multi-word phrases, transcribe the full phrase
 - Provide 1-2 examples

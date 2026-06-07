@@ -150,6 +150,7 @@ async function addOne(w: VocabWord) {
   await wordEditorStore.openForCourse(w.word, w.def, {
     source: selectedSource.value,
     lang: config.lang,
+    exampleDomain: config.vocabExampleDomain,
   })
 }
 
