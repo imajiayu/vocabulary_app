@@ -115,7 +115,10 @@ export function useReviewResult() {
       ctx.userSettings, reviewLoadsCache.value
     )
 
-    incrementLoadsCache(reviewLoadsCache.value, calcResult.scheduledDay - 1)
+    // 毕业（不再复习）时不纳入未来负荷：单词已从队列移除，不会在 scheduledDay 再次出现
+    if (!calcResult.persistData.should_stop_review) {
+      incrementLoadsCache(reviewLoadsCache.value, calcResult.scheduledDay - 1)
+    }
     notification.value = { show: true, data: calcResult.notification }
 
     // 会话统计：正确/错误 + EF 变化（满分锁顶时 delta=0 自然计入平均）
@@ -166,7 +169,10 @@ export function useReviewResult() {
       ctx.userSettings, spellLoadsCache.value
     )
 
-    incrementLoadsCache(spellLoadsCache.value, calcResult.interval - 1)
+    // 毕业（不再拼写）时不纳入未来负荷：单词已从拼写队列移除
+    if (!calcResult.persistData.should_stop_spell) {
+      incrementLoadsCache(spellLoadsCache.value, calcResult.interval - 1)
+    }
     notification.value = { show: true, data: calcResult.notification }
 
     // 强度变化 <= 0 且非"满分锁顶"→ 侧边栏标记为弱表现（红色）

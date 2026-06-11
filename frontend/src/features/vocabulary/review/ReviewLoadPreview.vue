@@ -34,8 +34,7 @@
             v-if="highlightIndex === i && capsuleWord"
             :key="capsuleKey"
             class="word-capsule"
-            :class="{ 'is-mastered': capsuleMastered }"
-          >{{ capsuleMastered ? `${capsuleWord} 已掌握` : capsuleWord }}</span>
+          >{{ capsuleWord }}</span>
         </Transition>
       </div>
     </div>
@@ -125,7 +124,6 @@ const scrollEl = ref<HTMLElement | null>(null)
 const highlightIndex = ref<number | null>(null)
 const capsuleWord = ref('')
 const capsuleKey = ref(0)
-const capsuleMastered = ref(false)
 let highlightTimer: ReturnType<typeof setTimeout> | null = null
 
 const ROW_HEIGHT = 28
@@ -146,6 +144,9 @@ watch(
   (data) => {
     if (!data) return
 
+    // 单词已毕业（不再复习/拼写）：已从队列移除、不会再产生未来负荷，面板无需任何动作
+    if (data.mastered) return
+
     // Calculate target day index from next_review_date
     // 不能用 breakdown.interval，因为负荷均衡后 scheduledDay 可能与 interval 不同
     const todayStr = getUtcToday()
@@ -158,15 +159,9 @@ watch(
     const cacheLen = loadsCache.value?.length ?? 0
     if (dayIndex < 0 || dayIndex >= cacheLen) return
 
-    // Detect auto-stop (mastered): ease_factor >= 3.0 && repetition >= 6
-    const mastered = data.param_type === 'ease_factor'
-      && data.new_param_value >= 3.0
-      && data.breakdown.repetition >= 6
-
     if (highlightTimer) clearTimeout(highlightTimer)
 
     capsuleWord.value = data.word
-    capsuleMastered.value = mastered
     highlightIndex.value = dayIndex
     capsuleKey.value++
 
@@ -367,12 +362,6 @@ watch(
   background: rgba(93, 122, 93, 0.55);
   color: var(--primitive-olive-100);
   box-shadow: 0 0 8px rgba(93, 122, 93, 0.3);
-}
-
-.word-capsule.is-mastered {
-  background: rgba(184, 134, 11, 0.6);
-  color: var(--primitive-gold-100);
-  box-shadow: 0 0 12px rgba(184, 134, 11, 0.4);
 }
 
 /* Capsule animation */

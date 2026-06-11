@@ -296,8 +296,10 @@ export class StatsApi {
     // spell_strength_dict
     const spell_strength_dict = spellData.map(row => {
       const repetition = toInt(row.repetition)
-      const available = repetition >= 3
       const strength = toNumber(row.spell_strength)
+      // 可拼写 = repetition >= 3 或 已拼过（spell_strength 非空）
+      // 与真实拼写队列取词逻辑一致（words.ts: repetition.gte.3,spell_strength.not.is.null）
+      const available = repetition >= 3 || strength !== null
       return {
         word: row.word,
         strength: strength !== null ? roundTo(strength, 2) : null,
@@ -308,8 +310,9 @@ export class StatsApi {
     // 生成热力图单元格（在前端计算颜色，使用原始值）
     const spell_heatmap_cells = spellData.map(row => {
       const repetition = toInt(row.repetition)
-      const available = repetition >= 3
       const spellStrength = toNumber(row.spell_strength)
+      // 可拼写 = repetition >= 3 或 已拼过（spell_strength 非空），与真实拼写队列一致
+      const available = repetition >= 3 || spellStrength !== null
       return generateSpellHeatmapCell({
         word: row.word,
         spell_strength: spellStrength,
