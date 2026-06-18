@@ -679,11 +679,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onBeforeUnmount } from 'vue'
 import { useBreakpoint } from '@/shared/composables/useBreakpoint'
 import type { Word, ReviewBreakdown, SpellingBreakdown } from '@/shared/types'
 import type { ReviewNotificationData } from '@/shared/api/words'
 import { useTimerPause } from '@/shared/composables/useTimerPause'
+import { suspendShortcuts, resumeShortcuts } from '@/shared/composables/useKeyboardManager'
 import { useChatMessages } from '@/shared/composables/useChatMessages'
 import AppIcon, { type IconName } from '@/shared/components/controls/Icons.vue'
 import { useReviewStore } from '@/features/vocabulary/stores/review'
@@ -815,14 +816,24 @@ const toggleAI = () => {
   isAIExpanded.value = !isAIExpanded.value
 
   if (isAIExpanded.value) {
+    suspendShortcuts()  // 浮窗打开期间屏蔽复习/拼写快捷键，避免穿透
     requestPause()
     nextTick(() => {
       setTimeout(() => inputRef.value?.focus(), 300)
     })
   } else {
+    resumeShortcuts()
     releasePause()
   }
 }
+
+// 兜底：若浮窗仍打开时组件被卸载（复习完成 / 路由离开），释放挂起与暂停，避免泄漏
+onBeforeUnmount(() => {
+  if (isAIExpanded.value) {
+    resumeShortcuts()
+    releasePause()
+  }
+})
 
 const handleSuggestionClick = (text: string) => {
   baseSuggestionClick(text)

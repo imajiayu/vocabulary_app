@@ -22,6 +22,7 @@ interface KeyboardManagerState {
   pressedKeys: Set<string>
   isHandling: boolean
   lastContextChangeTime: number
+  suspendCount: number  // >0 时全局屏蔽快捷键（用于浮层打开期间，引用计数）
 }
 
 const CONTEXT_SWITCH_GUARD_MS = 100  // 上下文切换后的按键保护期
@@ -36,13 +37,19 @@ const globalState: KeyboardManagerState = {
   handlers: new Map(),
   pressedKeys: new Set(),
   isHandling: false,
-  lastContextChangeTime: 0
+  lastContextChangeTime: 0,
+  suspendCount: 0
 }
 
 // 全局键盘事件处理器（只注册一次）
 let globalListenerRegistered = false
 
 const handleGlobalKeydown = async (event: KeyboardEvent) => {
+  // -1. 全局挂起期间（如 AI 浮窗打开）不拦截任何快捷键，避免穿透到背后卡片
+  if (globalState.suspendCount > 0) {
+    return
+  }
+
   // 0. 输入元素内不拦截快捷键（允许正常输入/光标移动）
   const target = event.target as HTMLElement
   if (
@@ -171,4 +178,22 @@ export function useKeyboardManager() {
     currentContext: () => globalState.currentContext,
     isHandling: () => globalState.isHandling
   }
+}
+
+/**
+ * 全局挂起快捷键（引用计数）
+ * 打开覆盖层（AI 浮窗、modal 等）时调用，屏蔽复习/拼写快捷键，
+ * 避免按键穿透到背后的卡片。可嵌套，须与 resumeShortcuts 配对调用。
+ *
+ * 独立于 useKeyboardManager()，不触发组件生命周期副作用，可被任意组件直接 import。
+ */
+export function suspendShortcuts() {
+  globalState.suspendCount++
+}
+
+/**
+ * 释放一次快捷键挂起请求，计数归零时恢复快捷键响应
+ */
+export function resumeShortcuts() {
+  globalState.suspendCount = Math.max(0, globalState.suspendCount - 1)
 }

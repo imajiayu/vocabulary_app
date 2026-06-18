@@ -94,11 +94,21 @@ export function useChatMessages(
     }
   })
 
-  // Clear messages when switching words
+  // Per-word chat history for the current review session (in-memory only).
+  // 错题模式下同一单词会反复回到队首，切词时不能直接清空，否则再次复习到该词
+  // 时之前的对话就丢了。这里按 word.id 暂存/恢复，使同一会话内每个单词的聊天保留。
+  const sessionHistory = new Map<number, Message[]>()
+
   watch(currentWord, (newWord, oldWord) => {
-    if (newWord && oldWord && newWord.id !== oldWord.id) {
-      messages.value = []
+    if (newWord?.id === oldWord?.id) return
+
+    // 暂存离开的单词的对话
+    if (oldWord) {
+      sessionHistory.set(oldWord.id, messages.value)
     }
+
+    // 恢复进入的单词的对话（没有则从空开始）
+    messages.value = newWord ? sessionHistory.get(newWord.id) ?? [] : []
   })
 
   return {
