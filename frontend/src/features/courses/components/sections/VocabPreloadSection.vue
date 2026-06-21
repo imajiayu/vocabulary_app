@@ -338,10 +338,6 @@ watch(selectedSource, () => {
   margin: 12px 0 24px;
 }
 
-[data-course="legal-english"] .course-vocab-grid {
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-}
-
 .course-vocab-row {
   display: flex;
   align-items: center;
@@ -429,6 +425,5 @@ watch(selectedSource, () => {
 
   .course-add-all-btn { width: 100%; justify-content: center; }
   .course-vocab-grid { grid-template-columns: 1fr; }
-  [data-course="legal-english"] .course-vocab-grid { grid-template-columns: 1fr; }
 }
 </style>

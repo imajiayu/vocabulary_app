@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-把 frontend/public/{legal,uk}/*.json 里的非规范写法统一迁移到规范 schema。
+把 frontend/public/uk/*.json 里的非规范写法统一迁移到规范 schema。
 
 规范 schema 见 frontend/src/features/courses/types/lesson.ts。
 
@@ -17,7 +17,6 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 COURSE_DIRS = [
-    ROOT / 'frontend' / 'public' / 'legal',
     ROOT / 'frontend' / 'public' / 'uk',
 ]
 

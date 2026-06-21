@@ -19,7 +19,7 @@ export type DuplicateCheckerFn = (word: string, excludeId: number) => Promise<bo
 export interface WordCreateContext {
   source: string
   lang: SourceLang
-  /** AI 释义兜底的例句领域（如课程为法律英语时传 'legal'）；不传则用通用例句 */
+  /** AI 释义兜底的例句领域（领域 key）；不传则用通用例句 */
   exampleDomain?: string
 }
 

@@ -1,7 +1,7 @@
 /**
  * JSON 课时数据结构的 TypeScript 类型定义 —— 单一规范 schema。
  *
- * 所有 public/{legal,uk}/*.json 课时必须符合此 schema；不允许多版本并存。
+ * 所有 public/uk/*.json 课时必须符合此 schema；不允许多版本并存。
  * 生成/手改课时时请对照本文件。
  */
 

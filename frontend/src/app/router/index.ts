@@ -95,7 +95,7 @@ const routes = [
   },
   // ── 课程路由 ──
   // 所有主 tab（含课程 index）共享 URL `/`，通过 activeTab + localStorage 区分；
-  // 仅课时页有独立 URL。/uk/ 与 /legal/ 作为兼容性 redirect，顺带记录目标 tab。
+  // 仅课时页有独立 URL。/uk/ 作为兼容性 redirect，顺带记录目标 tab。
   {
     path: '/uk',
     redirect: () => {
@@ -119,30 +119,6 @@ const routes = [
       lessonId: route.params.lessonId
     }),
     meta: { title: '乌克兰语课程', depth: 2 }
-  },
-  {
-    path: '/legal',
-    redirect: () => {
-      localStorage.setItem('activeTab', 'course-legal')
-      return '/'
-    }
-  },
-  {
-    path: '/legal/',
-    redirect: () => {
-      localStorage.setItem('activeTab', 'course-legal')
-      return '/'
-    }
-  },
-  {
-    path: '/legal/:lessonId',
-    name: 'course-legal-lesson',
-    component: CourseLessonPage,
-    props: (route: RouteLocationNormalized) => ({
-      courseId: 'legal-english',
-      lessonId: route.params.lessonId
-    }),
-    meta: { title: '法律英语课程', depth: 2 }
   },
   {
     path: '/:pathMatch(.*)*',

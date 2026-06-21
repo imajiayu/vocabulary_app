@@ -8,7 +8,7 @@
  */
 
 import type { SourceLang } from '@/shared/types'
-import { ukrainianLessons, legalEnglishLessons } from '../data/lessons'
+import { ukrainianLessons } from '../data/lessons'
 
 interface CourseSource {
   basePath: string
@@ -17,7 +17,6 @@ interface CourseSource {
 
 const COURSE_BY_LANG: Partial<Record<SourceLang, CourseSource>> = {
   uk: { basePath: '/uk', lessonIds: ukrainianLessons.map(l => l.id) },
-  en: { basePath: '/legal', lessonIds: legalEnglishLessons.map(l => l.id) },
 }
 
 const cache: Partial<Record<SourceLang, Map<string, string>>> = {}

@@ -114,8 +114,7 @@ const lessonTitle = computed(() => lessonTitleRef?.value || '')
 
 // 返回"课程目录"tab：写入 localStorage，HomePage 挂载时会读取并显示对应课程 index
 function returnToCourseIndex() {
-  const tabId = props.config.id === 'legal-english' ? 'course-legal' : 'course-uk'
-  localStorage.setItem('activeTab', tabId)
+  localStorage.setItem('activeTab', 'course-uk')
   router.push('/')
 }
 
@@ -142,13 +141,11 @@ const nextLesson = computed(() =>
 // 品牌
 const brandTitle = computed(() => {
   if (props.config.id === 'ukrainian') return 'Ukrainian'
-  if (props.config.id === 'legal-english') return 'Legal English'
   return props.config.name
 })
 
 const brandSubtitle = computed(() => {
   if (props.config.id === 'ukrainian') return '乌克兰语 · Мова'
-  if (props.config.id === 'legal-english') return '法律英语 · Contracts'
   return ''
 })
 
@@ -163,19 +160,7 @@ const BadgeUK: Component = () =>
     })
   ])
 
-const BadgeLegal: Component = () =>
-  h('svg', { viewBox: '0 0 20 20', fill: 'none', 'aria-hidden': 'true' }, [
-    h('path', {
-      d: 'M10 3v14M4 7h12M6 7v8M14 7v8M3 17h14',
-      stroke: 'currentColor',
-      'stroke-width': '1.5',
-      'stroke-linecap': 'round'
-    })
-  ])
-
-const badgeIcon = computed(() =>
-  props.config.id === 'legal-english' ? BadgeLegal : BadgeUK
-)
+const badgeIcon = computed(() => BadgeUK)
 
 // 滚动状态
 const scrolled = ref(false)

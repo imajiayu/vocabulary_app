@@ -6,8 +6,8 @@
  * - writing.ts            — IELTS 写作反馈（段落/大纲/评分/Q&A 共 8 个模板）
  * - definition.ts         — 单词释义回退（Wiktionary 查不到时）
  * - vocabulary-assistance.ts — 词汇学习助手（英/乌）
- * - translation.ts        — 法律英语翻译批改
- * - course-chat.ts        — 课程聊天助手（乌语/法律英语）
+ * - translation.ts        — 课程翻译练习批改
+ * - course-chat.ts        — 课程聊天助手（乌语）
  * - ai-review.ts          — AI 复习（中译英出题）
  *
  * 调用规范：

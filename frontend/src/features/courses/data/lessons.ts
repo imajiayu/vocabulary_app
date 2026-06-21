@@ -82,72 +82,12 @@ export const ukrainianWeekTitles: Record<number, string> = {
   4: '性 / 数 / 主格 / 宾格 综合巩固',
 }
 
-// ── 法律英语课程 ──
-
-export const legalEnglishLessons: LessonMeta[] = [
-  // 第1周：合同基础与结构
-  { week: 1, day: 1, id: 'w1d1', title: '本周词汇预载', topic: '添加本周术语到背单词App', vocab: true },
-  { week: 1, day: 2, id: 'w1d2', title: '合同总体结构', topic: 'title, preamble, recitals, definitions, operative provisions' },
-  { week: 1, day: 3, id: 'w1d3', title: '合同当事人', topic: 'party, hereinafter, whereas, witnesseth' },
-  { week: 1, day: 4, id: 'w1d4', title: '定义条款', topic: 'shall mean, material, affiliate, hereof/thereof' },
-  { week: 1, day: 5, id: 'w1d5', title: '合同标的与履行', topic: 'deliverables, due diligence, scope of work' },
-  { week: 1, day: 6, id: 'w1d6', title: '合同生效与期限', topic: 'commencement, expiration, renewal, termination' },
-  { week: 1, day: 7, id: 'w1d7', title: '复习日', topic: '合同基础与结构综合练习', review: true },
-
-  // 第2周：权利与义务条款
-  { week: 2, day: 1, id: 'w2d1', title: '本周词汇预载', topic: '添加本周术语到背单词App', vocab: true },
-  { week: 2, day: 2, id: 'w2d2', title: '情态动词的法律含义', topic: 'obligation, duty, right, discretion, binding' },
-  { week: 2, day: 3, id: 'w2d3', title: '保证与陈述', topic: 'warrant, represent, covenant, undertake' },
-  { week: 2, day: 4, id: 'w2d4', title: '条件与前提', topic: 'condition precedent, subject to, provided that' },
-  { week: 2, day: 5, id: 'w2d5', title: '豁免与责任限制', topic: 'limitation of liability, disclaimer, indemnify' },
-  { week: 2, day: 6, id: 'w2d6', title: '保密条款', topic: 'confidential information, trade secret, injunctive relief' },
-  { week: 2, day: 7, id: 'w2d7', title: '复习日', topic: '权利与义务条款综合练习', review: true },
-
-  // 第3周：支付与对价条款
-  { week: 3, day: 1, id: 'w3d1', title: '本周词汇预载', topic: '添加本周术语到背单词App', vocab: true },
-  { week: 3, day: 2, id: 'w3d2', title: '对价基础', topic: 'consideration, mutual/adequate/nominal consideration, quid pro quo' },
-  { week: 3, day: 3, id: 'w3d3', title: '支付条款', topic: 'payment terms, invoice, net 30/60, installment, advance payment, retention' },
-  { week: 3, day: 4, id: 'w3d4', title: '利息与违约金', topic: 'interest, default interest, liquidated damages, per annum, accrue, grace period' },
-  { week: 3, day: 5, id: 'w3d5', title: '税费与扣款', topic: 'tax, withholding tax, gross-up, VAT, duty, set-off, deduction, remit, levy' },
-  { week: 3, day: 6, id: 'w3d6', title: '货币与汇率', topic: 'currency, exchange rate, denomination, conversion, foreign exchange risk, hedging, legal tender' },
-  { week: 3, day: 7, id: 'w3d7', title: '复习日', topic: '支付与对价条款综合练习', review: true },
-
-  // 第4周：违约与救济
-  { week: 4, day: 1, id: 'w4d1', title: '本周词汇预载', topic: '添加本周术语到背单词App', vocab: true },
-  { week: 4, day: 2, id: 'w4d2', title: '违约类型', topic: 'breach, material/fundamental/anticipatory breach, repudiation, cure period' },
-  { week: 4, day: 3, id: 'w4d3', title: '救济方式', topic: 'remedy, damages, specific performance, injunction, rescission, equitable remedy' },
-  { week: 4, day: 4, id: 'w4d4', title: '损害赔偿', topic: 'compensatory/punitive/nominal damages, foreseeability, mitigation, causation' },
-  { week: 4, day: 5, id: 'w4d5', title: '免责与不可抗力', topic: 'force majeure, act of God, frustration, impossibility, discharge' },
-  { week: 4, day: 6, id: 'w4d6', title: '争议解决', topic: 'dispute resolution, arbitration, mediation, jurisdiction, governing law, venue' },
-  { week: 4, day: 7, id: 'w4d7', title: '复习日', topic: '违约与救济综合练习', review: true },
-]
-
-export const legalEnglishFutureWeeks: FutureWeek[] = [
-  { week: 5, title: '知识产权条款', topic: 'Intellectual Property' },
-  { week: 6, title: '担保与赔偿条款', topic: 'Warranties & Indemnification' },
-  { week: 7, title: '终止与退出条款', topic: 'Termination & Exit' },
-  { week: 8, title: '合规与监管条款', topic: 'Compliance & Regulatory' },
-  { week: 9, title: '公司治理条款', topic: 'Corporate Governance' },
-  { week: 10, title: '国际贸易合同', topic: 'International Trade' },
-  { week: 11, title: '合同起草技巧', topic: 'Drafting Skills' },
-  { week: 12, title: '综合复习与实战', topic: 'Comprehensive Review' },
-]
-
-export const legalEnglishWeekTitles: Record<number, string> = {
-  1: '合同基础与结构（Contract Fundamentals）',
-  2: '权利与义务条款（Rights & Obligations）',
-  3: '支付与对价条款（Payment & Consideration）',
-  4: '违约与救济（Breach & Remedies）',
-}
-
 // ── 按课程 ID 获取数据 ──
 
 export function getLessonsByCourse(courseId: string) {
   switch (courseId) {
     case 'ukrainian':
       return { lessons: ukrainianLessons, futureWeeks: ukrainianFutureWeeks, weekTitles: ukrainianWeekTitles }
-    case 'legal-english':
-      return { lessons: legalEnglishLessons, futureWeeks: legalEnglishFutureWeeks, weekTitles: legalEnglishWeekTitles }
     default:
       return { lessons: [], futureWeeks: [], weekTitles: {} }
   }

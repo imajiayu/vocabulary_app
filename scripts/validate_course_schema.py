@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-严格校验 frontend/public/{legal,uk}/*.json 是否符合规范 schema。
+严格校验 frontend/public/uk/*.json 是否符合规范 schema。
 
 规范 schema 的权威定义：frontend/src/features/courses/types/lesson.ts
 渲染/判题实现：frontend/src/features/courses/components/（LessonRenderer + sections/blocks/exercises）
-正文指南：docs/course-legal-english.md / docs/course-ukrainian.md
+正文指南：docs/course-ukrainian.md
 
 本校验分两层：
   1) 结构层 —— section/block/exercise 的类型枚举、容器键、历史别名/禁用字段
@@ -28,7 +28,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 COURSE_DIRS = [
-    ROOT / 'frontend' / 'public' / 'legal',
     ROOT / 'frontend' / 'public' / 'uk',
 ]
 

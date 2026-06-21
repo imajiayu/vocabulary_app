@@ -8,7 +8,7 @@
       'is-speaking': activeTab === 'speaking',
       'is-writing': activeTab === 'writing',
       'is-settings': activeTab === 'settings',
-      'is-course': activeTab === 'course-uk' || activeTab === 'course-legal'
+      'is-course': activeTab === 'course-uk'
     }"
   >
     <!-- 桌面端主导航栏 -->
@@ -50,14 +50,6 @@
             <AppIcon name="globe" class="nav-icon-svg" />
             <span class="nav-label">UK</span>
             <span v-if="activeTab === 'course-uk'" class="nav-indicator"></span>
-          </button>
-          <button
-            :class="['mobile-nav-item', { active: activeTab === 'course-legal' }]"
-            @click="handleTabChange('course-legal')"
-          >
-            <AppIcon name="legal" class="nav-icon-svg" />
-            <span class="nav-label">法律</span>
-            <span v-if="activeTab === 'course-legal'" class="nav-indicator"></span>
           </button>
 
           <!-- 设置（始终放在最后，与桌面端一致） -->
@@ -123,13 +115,6 @@
           embedded
           class="course-index-embedded"
         />
-        <CourseIndexPage
-          v-else-if="activeTab === 'course-legal'"
-          key="course-legal"
-          course-id="legal-english"
-          embedded
-          class="course-index-embedded"
-        />
         <SettingsPage
           v-else-if="activeTab === 'settings'"
           key="settings"
@@ -165,14 +150,15 @@ import { useCourseConfig } from '@/features/courses/composables/useCourseConfig'
 
 const toast = useToast()
 const { config: ukConfig } = useCourseConfig('ukrainian')
-const { config: legalConfig } = useCourseConfig('legal-english')
 
 // 所有主 tab 共享 URL `/`，通过 localStorage 持久化当前 tab。
-// 课时页有独立 URL（/uk/:lessonId、/legal/:lessonId），返回 `/` 时由 CourseTopBar
+// 课时页有独立 URL（/uk/:lessonId），返回 `/` 时由 CourseTopBar
 // 在跳转前写入 activeTab，HomePage 挂载时读取即可恢复到正确的课程 tab。
+const VALID_TABS = ['words', 'speaking', 'writing', 'course-uk', 'settings']
 function resolveInitialTab(): string {
   const stored = localStorage.getItem('activeTab')
-  if (stored) return stored
+  // 仅恢复已知 tab；历史遗留值（如已下线的 'course-legal'）回退到单词，避免渲染空白
+  if (stored && VALID_TABS.includes(stored)) return stored
   return 'words'
 }
 const activeTab = ref(resolveInitialTab())
@@ -252,9 +238,8 @@ const handleTabChange = async (tabId: string) => {
   }
 
   // 课程入口准入：用户必须有匹配语言的 source 才能进入
-  if (tabId === 'course-uk' || tabId === 'course-legal') {
-    const cfg = tabId === 'course-uk' ? ukConfig.value : legalConfig.value
-    const access = await checkCourseAccess(cfg)
+  if (tabId === 'course-uk') {
+    const access = await checkCourseAccess(ukConfig.value)
     if (!access.allowed) {
       toast.warning(access.reason || '无法进入该课程')
       return
@@ -374,9 +359,8 @@ onMounted(async () => {
   }
 
   // 如果初始 tab 是课程，但用户没有匹配语言的 source，回退到单词
-  if (activeTab.value === 'course-uk' || activeTab.value === 'course-legal') {
-    const cfg = activeTab.value === 'course-uk' ? ukConfig.value : legalConfig.value
-    const access = await checkCourseAccess(cfg)
+  if (activeTab.value === 'course-uk') {
+    const access = await checkCourseAccess(ukConfig.value)
     if (!access.allowed) {
       toast.warning(access.reason || '无法进入该课程')
       activeTab.value = 'words'

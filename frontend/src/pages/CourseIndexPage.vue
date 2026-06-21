@@ -350,17 +350,9 @@ function toRoman(n: number): string {
 }
 
 // ── 文案 ──
-const heroKicker = computed(() =>
-  config.value.id === 'ukrainian'
-    ? 'Ukrainian · Study Journal'
-    : 'Legal English · Study Journal'
-)
+const heroKicker = computed(() => 'Ukrainian · Study Journal')
 
-const heroSubtitle = computed(() =>
-  config.value.id === 'ukrainian'
-    ? '从名词性别到七格变位，系统学习乌克兰语核心语法'
-    : '从合同基础到违约救济，精研法律英语术语与起草'
-)
+const heroSubtitle = computed(() => '从名词性别到七格变位，系统学习乌克兰语核心语法')
 
 onMounted(async () => {
   await fetchProgress()

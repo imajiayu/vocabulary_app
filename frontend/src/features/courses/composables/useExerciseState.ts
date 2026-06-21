@@ -86,7 +86,7 @@ function mergeRemoteInto(state: ExerciseState, remote: ExerciseState) {
 }
 
 export interface UseExerciseStateOptions {
-  /** 课程 ID，如 "legal-english"、"ukrainian" */
+  /** 课程 ID，如 "ukrainian" */
   courseId: string
   /** 课时 ID，如 "w1d2" */
   lessonId: string

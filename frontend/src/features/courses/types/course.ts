@@ -13,7 +13,7 @@ export interface CourseConfig {
   lang: SourceLang
   /** AI TTS 语言代码（BCP-47，如 'uk-UA', 'en-US'） */
   ttsLang: string
-  /** 课程 URL 前缀（如 '/uk', '/legal'） */
+  /** 课程 URL 前缀（如 '/uk'） */
   basePath: string
   /** CSS data-course 属性值 */
   theme: string
@@ -29,6 +29,6 @@ export interface CourseConfig {
   sendDefinition: boolean
   /** TTS source（用于服务器缓存路径） */
   ttsSource: string
-  /** AI 释义兜底的例句领域（如 'legal' → 生成法律/合同语境例句）；不设则用通用例句 */
+  /** AI 释义兜底的例句领域（领域 key，映射到 definition.ts 的额外约束）；不设则用通用例句 */
   vocabExampleDomain?: string
 }

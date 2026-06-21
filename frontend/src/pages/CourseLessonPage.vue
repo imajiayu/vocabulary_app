@@ -146,8 +146,7 @@ onBeforeUnmount(() => {
 
 // 错误态的"返回目录"：写入 activeTab 后跳 `/`，HomePage 恢复为对应课程 tab
 function returnToCourseIndex() {
-  const tabId = props.courseId === 'legal-english' ? 'course-legal' : 'course-uk'
-  localStorage.setItem('activeTab', tabId)
+  localStorage.setItem('activeTab', 'course-uk')
   router.push('/')
 }
 

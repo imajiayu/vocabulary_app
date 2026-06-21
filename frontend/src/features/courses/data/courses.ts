@@ -4,7 +4,7 @@
  */
 
 import type { CourseConfig } from '../types/course'
-import { COURSE_CHAT_PROMPT_UK, COURSE_CHAT_PROMPT_LEGAL } from '@/shared/prompts/course-chat'
+import { COURSE_CHAT_PROMPT_UK } from '@/shared/prompts/course-chat'
 
 export const courses: Record<string, CourseConfig> = {
   ukrainian: {
@@ -20,20 +20,5 @@ export const courses: Record<string, CourseConfig> = {
     chatSystemPrompt: COURSE_CHAT_PROMPT_UK,
     sendDefinition: false,
     ttsSource: 'UKA'
-  },
-  'legal-english': {
-    id: 'legal-english',
-    name: '法律英语课程',
-    lang: 'en',
-    ttsLang: 'en-US',
-    basePath: '/legal',
-    theme: 'legal-english',
-    wordClass: 'term',
-    textClass: 'en-text',
-    chatName: '法律英语助手',
-    chatSystemPrompt: COURSE_CHAT_PROMPT_LEGAL,
-    sendDefinition: true,
-    ttsSource: 'IELTS',
-    vocabExampleDomain: 'legal'
   }
 }

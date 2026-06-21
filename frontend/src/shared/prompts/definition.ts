@@ -12,9 +12,7 @@ const LANG_LABEL: Record<SourceLang, string> = {
 }
 
 /** 例句领域 → 给 LLM 的额外约束（仅影响例句语境，不影响释义） */
-const EXAMPLE_DOMAIN_RULE: Record<string, string> = {
-  legal: 'each example sentence MUST be set in a legal / contract / litigation context (e.g. contracts, court, statutes, compliance)',
-}
+const EXAMPLE_DOMAIN_RULE: Record<string, string> = {}
 
 export function buildDefinitionPrompt(lang: SourceLang, exampleDomain?: string): string {
   const label = LANG_LABEL[lang]
