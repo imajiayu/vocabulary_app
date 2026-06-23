@@ -16,9 +16,10 @@ import { WritingApi } from '@/shared/api/writing'
 import {
   getParagraphFeedback,
   getFinalScores,
-  askOutlineQuestion,
+  streamOutlineQuestion,
   editOutlineText
 } from '@/shared/services/writing-ai'
+import type { ChatMessage as AiChatMessage } from '@/shared/services/ai'
 import { logger } from '@/shared/utils/logger'
 
 const writingLogger = logger.create('Writing')
@@ -459,25 +460,27 @@ export function useWritingData() {
   async function submitDraft(content: string) {
     if (!currentSession.value || !selectedPrompt.value) return null
 
+    const prompt = selectedPrompt.value
+    const outline = currentSession.value.outline
     const wordCount = WritingApi.countWords(content)
 
-    // 先保存初稿内容
+    // 先存初稿内容，但不改 status——AI 失败时不会残留"feedback 状态但 feedback 为空"的卡死态
     await updateSession({
       draft_content: content,
-      word_count: wordCount,
-      status: 'feedback'
+      word_count: wordCount
     })
-    pageState.value = 'feedback'
 
-    // 调用 AI 获取逐段反馈
+    // 调用 AI 获取逐段反馈（带大纲，保持论点方向）
     const feedback = await getParagraphFeedback(
-      selectedPrompt.value.prompt_text,
+      prompt.prompt_text,
       content,
-      selectedPrompt.value.task_type
+      prompt.task_type,
+      outline
     )
 
-    // 保存反馈
-    await updateSession({ feedback })
+    // AI 成功后才落 feedback + status，并切到反馈页
+    await updateSession({ feedback, status: 'feedback' })
+    pageState.value = 'feedback'
 
     return feedback
   }
@@ -516,20 +519,27 @@ export function useWritingData() {
   }
 
   /**
-   * 大纲问答（不修改大纲）
+   * 大纲问答（流式 + 多轮记忆，不修改大纲）
    */
-  async function handleOutlineAsk(question: string, selectedText?: string): Promise<string> {
+  function handleOutlineAsk(
+    question: string,
+    history: AiChatMessage[] = [],
+    selectedText?: string,
+    signal?: AbortSignal
+  ): AsyncGenerator<string> {
     if (!currentSession.value || !selectedPrompt.value) {
       throw new Error('No active session')
     }
 
     const outline = currentSession.value.outline || ''
 
-    return askOutlineQuestion(
+    return streamOutlineQuestion(
       selectedPrompt.value.prompt_text,
       outline,
       question,
-      selectedText
+      history,
+      selectedText,
+      signal
     )
   }
 

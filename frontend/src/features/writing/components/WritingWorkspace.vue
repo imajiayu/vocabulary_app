@@ -192,9 +192,11 @@ import { ref, computed, watch, onMounted } from 'vue'
 import type { WritingPrompt } from '@/shared/types/writing'
 import { useWritingContext, useWritingTimer } from '../composables'
 import { TASK_TIME_LIMITS } from '@/shared/types/writing'
-import { editWritingText, askWritingQuestion } from '@/shared/services/writing-ai'
+import type { ChatMessage as AiChatMessage } from '@/shared/services/ai'
+import { editWritingText, streamWritingQuestion } from '@/shared/services/writing-ai'
 import { formatMarkdown } from '@/shared/utils/markdown'
 import { logger } from '@/shared/utils/logger'
+import { useToast } from '@/shared/composables/useToast'
 import PromptBar from './PromptBar.vue'
 import TimerDisplay from './TimerDisplay.vue'
 import EssayEditor, { type TextSelection } from './EssayEditor.vue'
@@ -209,6 +211,7 @@ const props = defineProps<{
 }>()
 
 const context = useWritingContext()
+const toast = useToast()
 
 // Timer
 const timer = useWritingTimer({
@@ -315,8 +318,13 @@ async function handleSaveOutline(outline: string) {
   timer.start()
 }
 
-async function handleOutlineAskWrapper(question: string, selectedText?: string) {
-  return await context.handleOutlineAsk(question, selectedText)
+function handleOutlineAskWrapper(
+  question: string,
+  history: AiChatMessage[],
+  selectedText?: string,
+  signal?: AbortSignal
+) {
+  return context.handleOutlineAsk(question, history, selectedText, signal)
 }
 
 async function handleOutlineEditWrapper(selectedText: string, instruction: string) {
@@ -334,8 +342,8 @@ async function handleSubmitDraft() {
     await context.submitDraft(essayContent.value)
   } catch (error) {
     logger.error('Submit draft failed:', error)
-    alert('提交失败，请重试')
-    context.setPageState('writing')
+    // submitDraft 失败时不会改动 DB status（仍为 writing），无需回滚页面状态
+    toast.error('提交失败：' + ((error as Error)?.message ?? '请重试'))
     timer.resume()
   } finally {
     isSubmitting.value = false
@@ -367,8 +375,8 @@ async function handleSubmitFinal() {
     activeTab.value = 'scores'
   } catch (error) {
     logger.error('Submit final failed:', error)
-    alert('提交失败，请重试')
-    context.setPageState('revision')
+    // submitFinal 失败时 status 仍为 revision（评分成功后才置 completed），保持修改态即可
+    toast.error('提交失败：' + ((error as Error)?.message ?? '请重试'))
     timer.resume()
   } finally {
     isSubmitting.value = false
@@ -385,20 +393,53 @@ function handleTextSelected(selection: TextSelection) {
   chatRef.value?.setSelectedText(selection.text)
 }
 
+/**
+ * 把替换限定在目标段落块内，避免全局 indexOf 命中其它段落里重复出现的同句。
+ * textarea 来源的 paragraphIndex 是按 \n\n 原始切分计数；original 来源是"非空段"序号。
+ */
+function replaceInTargetParagraph(
+  full: string,
+  oldText: string,
+  newText: string,
+  paragraphIndex: number,
+  source: 'original' | 'textarea'
+): string {
+  const blocks = full.split('\n\n')
+  const candidates = blocks.map((_, i) => i).filter((i) => blocks[i].includes(oldText))
+  if (candidates.length === 0) return full
+
+  let target: number
+  if (candidates.length === 1) {
+    target = candidates[0]
+  } else {
+    let mapped: number
+    if (source === 'textarea') {
+      mapped = paragraphIndex
+    } else {
+      const nonEmpty = blocks.map((_, i) => i).filter((i) => blocks[i].trim().length > 0)
+      mapped = nonEmpty[paragraphIndex] ?? paragraphIndex
+    }
+    target = candidates.includes(mapped) ? mapped : candidates[0]
+  }
+
+  const block = blocks[target]
+  const idx = block.indexOf(oldText)
+  blocks[target] = block.slice(0, idx) + newText + block.slice(idx + oldText.length)
+  return blocks.join('\n\n')
+}
+
 function handleReplace(newText: string) {
   const ctx = selectionContext.value
   if (!ctx) return
 
   if (ctx.source === 'original' || ctx.source === 'textarea') {
-    // Replace in essayContent
-    const oldText = ctx.text
-    const idx = essayContent.value.indexOf(oldText)
-    if (idx !== -1) {
-      essayContent.value =
-        essayContent.value.substring(0, idx) +
-        newText +
-        essayContent.value.substring(idx + oldText.length)
-    }
+    essayContent.value = replaceInTargetParagraph(
+      essayContent.value,
+      ctx.text,
+      newText,
+      ctx.paragraphIndex,
+      ctx.source
+    )
   } else if (ctx.source === 'improved') {
     // Replace in feedback[paragraphIndex].improved
     const feedback = currentSession.value?.feedback
@@ -424,13 +465,13 @@ async function handleEditText(selectedText: string, instruction: string) {
   return await editWritingText(selectedText, instruction, latestEssay.value)
 }
 
-async function handleAskQuestion(question: string, selectedText?: string) {
-  try {
-    return await askWritingQuestion(question, latestEssay.value, selectedText)
-  } catch (error) {
-    logger.error('Ask question failed:', error)
-    throw error
-  }
+function handleAskQuestion(
+  question: string,
+  history: AiChatMessage[],
+  selectedText?: string,
+  signal?: AbortSignal
+) {
+  return streamWritingQuestion(question, latestEssay.value, history, selectedText, signal)
 }
 
 // Initialize from existing session
@@ -439,7 +480,11 @@ onMounted(() => {
 })
 
 // Watch for session changes
-watch(() => context.currentSession.value, (newSession) => {
+watch(() => context.currentSession.value, (newSession, oldSession) => {
+  // 切到不同会话（不同作文）时清空聊天记忆，避免串场
+  if (newSession?.id !== oldSession?.id) {
+    chatRef.value?.clearMessages()
+  }
   if (newSession) {
     restoreFromSession()
   }

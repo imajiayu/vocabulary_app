@@ -9,20 +9,26 @@
  * - final scoring 的 overall 由前端按 IELTS 规则计算，不让 LLM 算
  */
 
-import { callAI } from './ai'
+import { callAI, streamAI, type ChatMessage } from './ai'
 import type { ParagraphFeedback, WritingScores } from '@/shared/types/writing'
 import { logger } from '@/shared/utils/logger'
 import { parseJsonResponse } from '@/shared/utils/json'
+import { countWords } from '@/shared/utils/text'
 import {
   PARAGRAPH_IMPROVEMENT_PROMPT,
   OPTIMIZE_OUTLINE_PROMPT,
   REOPTIMIZE_PARAGRAPH_PROMPT,
   FINAL_SCORING_PROMPT,
+  TASK1_RUBRIC,
+  TASK2_RUBRIC,
   EDIT_TEXT_PROMPT,
   OUTLINE_QA_PROMPT,
   EDIT_OUTLINE_TEXT_PROMPT,
   POST_FINAL_QA_PROMPT,
 } from '@/shared/prompts/writing'
+
+/** 任务建议字数下限（IELTS 官方：Task 1 ≥150、Task 2 ≥250） */
+const TASK_MIN_WORDS = { 1: 150, 2: 250 } as const
 
 const log = logger.create('writing-ai')
 
@@ -78,7 +84,8 @@ function computeOverall(scores: Omit<WritingScores, 'overall'>): number {
 export async function getParagraphFeedback(
   promptText: string,
   essay: string,
-  taskType: 1 | 2
+  taskType: 1 | 2,
+  outline?: string | null
 ): Promise<ParagraphFeedback[]> {
   const paragraphs = splitParagraphs(essay)
   const numberedEssay = formatEssayForPrompt(paragraphs)
@@ -86,6 +93,7 @@ export async function getParagraphFeedback(
   const systemPrompt = PARAGRAPH_IMPROVEMENT_PROMPT
     .replace('{taskType}', String(taskType))
     .replace('{prompt}', promptText)
+    .replace('{outline}', outline?.trim() || '（学生未提供大纲）')
     .replace('{essay}', numberedEssay)
 
   const response = await callAI(systemPrompt, '请逐段分析并返回 JSON 格式的改进建议。', [], {
@@ -121,9 +129,21 @@ export async function getParagraphFeedback(
     log.warn(`LLM 返回段落数 ${arr.length} 与原文 ${paragraphs.length} 不一致`)
   }
 
+  // 优先按 LLM 回显的 index（1 基）对齐，根治 notes 张冠李戴；
+  // index 缺失/非法时退化为位置对齐。
+  const byIndex = new Map<number, Record<string, unknown>>()
+  for (const item of arr) {
+    if (item && typeof item === 'object') {
+      const idx = (item as Record<string, unknown>).index
+      if (typeof idx === 'number' && Number.isInteger(idx)) {
+        byIndex.set(idx, item as Record<string, unknown>)
+      }
+    }
+  }
+
   // 严格按原文段落数对齐：多出截断，缺失用"无需修改"补齐
   const result: ParagraphFeedback[] = paragraphs.map((original, i) => {
-    const raw = arr[i] as Record<string, unknown> | undefined
+    const raw = byIndex.get(i + 1) ?? (arr[i] as Record<string, unknown> | undefined)
     const improved = typeof raw?.improved === 'string' ? raw.improved : original
     const notes = typeof raw?.notes === 'string' ? raw.notes : '该段表达良好，无需修改'
     return {
@@ -201,9 +221,16 @@ export async function getFinalScores(
   finalEssay: string,
   taskType: 1 | 2
 ): Promise<{ scores: WritingScores; summary: string }> {
+  const wordCount = countWords(finalEssay)
+  const minWords = TASK_MIN_WORDS[taskType]
+  const rubric = taskType === 1 ? TASK1_RUBRIC : TASK2_RUBRIC
+
   const systemPrompt = FINAL_SCORING_PROMPT
-    .replace('{taskType}', String(taskType))
+    .replace(/\{taskType\}/g, String(taskType))
     .replace('{prompt}', promptText)
+    .replace('{wordCount}', String(wordCount))
+    .replace(/\{minWords\}/g, String(minWords))
+    .replace('{rubric}', rubric)
     .replace('{finalEssay}', finalEssay)
 
   const response = await callAI(systemPrompt, '请评分并返回 JSON 格式的结果。', [], {
@@ -239,21 +266,33 @@ export async function getFinalScores(
   }
 }
 
+/** 把"选中文本 + 问题"拼成一轮 user message，让模型在多轮里知道引用对象 */
+function buildQaUserTurn(question: string, selectedText?: string): string {
+  if (selectedText && selectedText.trim()) {
+    return `针对选中的内容「${selectedText.trim()}」：\n${question}`
+  }
+  return question
+}
+
 /**
- * 终稿后问答
+ * 终稿后问答（流式 + 多轮记忆）
  */
-export async function askWritingQuestion(
+export async function* streamWritingQuestion(
   question: string,
   essayContext: string,
-  selectedText?: string
-): Promise<string> {
-  const systemPrompt = POST_FINAL_QA_PROMPT
-    .replace('{essayContext}', essayContext)
-    .replace('{selectedText}', selectedText || '（无选中文本）')
-    .replace('{question}', question)
+  history: ChatMessage[] = [],
+  selectedText?: string,
+  signal?: AbortSignal
+): AsyncGenerator<string> {
+  const systemPrompt = POST_FINAL_QA_PROMPT.replace('{essayContext}', essayContext)
 
-  const response = await callAI(systemPrompt, question, [], { caller: 'writing_final_qa' })
-  return response.trim()
+  const messages: ChatMessage[] = [
+    { role: 'system', content: systemPrompt },
+    ...history,
+    { role: 'user', content: buildQaUserTurn(question, selectedText) },
+  ]
+
+  yield* streamAI(messages, { caller: 'writing_final_qa', temperature: 0.6, signal })
 }
 
 /**
@@ -277,22 +316,27 @@ export async function editWritingText(
 }
 
 /**
- * 大纲问答
+ * 大纲问答（流式 + 多轮记忆）
  */
-export async function askOutlineQuestion(
+export async function* streamOutlineQuestion(
   promptText: string,
   outline: string,
   question: string,
-  selectedText?: string
-): Promise<string> {
+  history: ChatMessage[] = [],
+  selectedText?: string,
+  signal?: AbortSignal
+): AsyncGenerator<string> {
   const systemPrompt = OUTLINE_QA_PROMPT
     .replace('{prompt}', promptText)
     .replace('{outline}', outline)
-    .replace('{selectedText}', selectedText || '（无选中文本）')
-    .replace('{question}', question)
 
-  const response = await callAI(systemPrompt, question, [], { caller: 'writing_outline_qa' })
-  return response.trim()
+  const messages: ChatMessage[] = [
+    { role: 'system', content: systemPrompt },
+    ...history,
+    { role: 'user', content: buildQaUserTurn(question, selectedText) },
+  ]
+
+  yield* streamAI(messages, { caller: 'writing_outline_qa', temperature: 0.6, signal })
 }
 
 /**

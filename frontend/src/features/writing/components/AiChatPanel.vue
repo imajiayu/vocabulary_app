@@ -98,8 +98,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onUnmounted } from 'vue'
 import type { ChatMessage } from '@/shared/types/writing'
+import type { ChatMessage as AiChatMessage } from '@/shared/services/ai'
 import { formatMarkdown } from '@/shared/utils/markdown'
 
 export type ChatMode = 'ask' | 'edit'
@@ -111,7 +112,13 @@ const props = withDefaults(defineProps<{
   placeholder?: string
   emptyHint?: string
   supportEdit?: boolean
-  askHandler?: (question: string, selectedText?: string) => Promise<string>
+  /** 流式问答：返回逐字增量；history 为最近若干轮，signal 用于中断 */
+  askHandler?: (
+    question: string,
+    history: AiChatMessage[],
+    selectedText?: string,
+    signal?: AbortSignal
+  ) => AsyncGenerator<string>
   editHandler?: (selectedText: string, instruction: string) => Promise<EditResult>
 }>(), {
   title: '向 AI 提问',
@@ -133,6 +140,20 @@ const isSelectionExpanded = ref(false)
 const messagesRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
+/** 流式问答的中断控制器；最近 10 轮（20 条）作为对话记忆 */
+let abortController: AbortController | null = null
+const HISTORY_LIMIT = 20
+
+/** 把面板消息（不含当前刚发出的这条）映射为发给模型的历史；选中文本折进 user content */
+function buildHistory(): AiChatMessage[] {
+  return messages.value.slice(-HISTORY_LIMIT).map((m) => ({
+    role: m.role,
+    content: m.role === 'user' && m.selectedText
+      ? `针对选中的内容「${m.selectedText}」：\n${m.content}`
+      : m.content,
+  }))
+}
+
 const canSend = computed(() => {
   return inputText.value.trim().length > 0 && !isLoading.value
 })
@@ -146,73 +167,124 @@ async function sendMessage() {
 
   const question = inputText.value.trim()
   const selected = selectedText.value || undefined
+  const isEditMode = mode.value === 'edit' && !!selected
+
+  // 在 push 当前这条之前，先取历史（避免把当前问题重复进 history）
+  const history = buildHistory()
 
   // Add user message
-  const userMessage: ChatMessage = {
+  messages.value.push({
     id: `user-${Date.now()}`,
     role: 'user',
     content: question,
     selectedText: selected,
     timestamp: new Date().toISOString()
-  }
-  messages.value.push(userMessage)
+  })
 
   // Clear input
   inputText.value = ''
   selectedText.value = ''
 
-  // Scroll to bottom
   await nextTick()
   scrollToBottom()
 
-  // Get AI response
-  const isEditMode = mode.value === 'edit' && selected
+  if (isEditMode) {
+    await runEdit(selected!, question)
+  } else {
+    await runAsk(question, history, selected)
+  }
+}
+
+/** 编辑（"改"）— 一次性，非流式 */
+async function runEdit(selected: string, instruction: string) {
+  if (!props.editHandler) return
   isLoading.value = true
   await nextTick()
   scrollToBottom()
   try {
+    const result = await props.editHandler(selected, instruction)
     let chatContent: string
-    let replaceText: string | null = null
-
-    if (isEditMode && props.editHandler) {
-      const result = await props.editHandler(selected!, question)
-      if (typeof result === 'object' && result !== null && 'reply' in result) {
-        chatContent = result.reply
-        replaceText = result.modified
-      } else {
-        chatContent = `已替换选中文本。\n\n**修改后：**\n${result}`
-        replaceText = result as string
-      }
+    let replaceText: string
+    if (typeof result === 'object' && result !== null && 'reply' in result) {
+      chatContent = result.reply
+      replaceText = result.modified
     } else {
-      if (!props.askHandler) throw new Error('No askHandler provided')
-      chatContent = await props.askHandler(question, selected)
+      chatContent = `已替换选中文本。\n\n**修改后：**\n${result}`
+      replaceText = result as string
     }
-
-    const assistantMessage: ChatMessage = {
+    messages.value.push({
       id: `assistant-${Date.now()}`,
       role: 'assistant',
       content: chatContent,
       timestamp: new Date().toISOString()
-    }
-    messages.value.push(assistantMessage)
-
-    // In edit mode, emit replace event
-    if (isEditMode && replaceText !== null) {
-      emit('replace', replaceText)
-    }
+    })
+    emit('replace', replaceText)
   } catch (error) {
-    const errorMessage: ChatMessage = {
-      id: `assistant-${Date.now()}`,
-      role: 'assistant',
-      content: '抱歉，获取回答失败，请重试。',
-      timestamp: new Date().toISOString()
-    }
-    messages.value.push(errorMessage)
+    pushError(error)
   } finally {
     isLoading.value = false
     await nextTick()
     scrollToBottom()
   }
+}
+
+/** 问答（"问"）— 流式 + 多轮记忆 */
+async function runAsk(question: string, history: AiChatMessage[], selected?: string) {
+  if (!props.askHandler) return
+
+  // 中断上一条仍在进行的流
+  abortController?.abort()
+  abortController = new AbortController()
+  const signal = abortController.signal
+
+  isLoading.value = true
+  await nextTick()
+  scrollToBottom()
+
+  let assistantMessage: ChatMessage | null = null
+  let acc = ''
+  try {
+    for await (const chunk of props.askHandler(question, history, selected, signal)) {
+      acc += chunk
+      if (!assistantMessage) {
+        // 首个增量到达：撤掉 loading 三点，落一条会逐字填充的 assistant 气泡
+        messages.value.push({
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          content: acc,
+          timestamp: new Date().toISOString()
+        })
+        // 持有 ref 数组里的响应式代理引用，后续逐字写入才能触发重渲染
+        // （直接改 push 进去的原始对象会绕过 Vue Proxy，气泡会冻结在首个 chunk）
+        assistantMessage = messages.value[messages.value.length - 1]
+        isLoading.value = false
+      } else {
+        assistantMessage.content = acc
+      }
+      await nextTick()
+      scrollToBottom()
+    }
+  } catch (error) {
+    if ((error as Error)?.name === 'AbortError') return  // 主动中断：保留已有部分
+    if (assistantMessage) {
+      assistantMessage.content = acc || `获取回答失败：${(error as Error)?.message ?? '未知错误'}`
+    } else {
+      pushError(error)
+    }
+  } finally {
+    isLoading.value = false
+    await nextTick()
+    scrollToBottom()
+  }
+}
+
+function pushError(error: unknown) {
+  messages.value.push({
+    id: `assistant-${Date.now()}`,
+    role: 'assistant',
+    content: `获取回答失败：${(error as Error)?.message ?? '未知错误'}`,
+    timestamp: new Date().toISOString()
+  })
 }
 
 function clearSelection() {
@@ -226,6 +298,10 @@ function scrollToBottom() {
   }
 }
 
+onUnmounted(() => {
+  abortController?.abort()
+})
+
 // Expose methods to parent
 defineExpose({
   setSelectedText: (text: string) => {
@@ -237,7 +313,10 @@ defineExpose({
     mode.value = m
   },
   clearMessages: () => {
+    abortController?.abort()
+    abortController = null
     messages.value = []
+    isLoading.value = false
   }
 })
 </script>

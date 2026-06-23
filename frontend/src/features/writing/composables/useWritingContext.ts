@@ -12,6 +12,7 @@ import type {
   CreatePromptPayload,
   UpdateSessionPayload,
 } from '@/shared/types/writing'
+import type { ChatMessage as AiChatMessage } from '@/shared/services/ai'
 import { useWritingData } from './useWritingData'
 
 /**
@@ -59,7 +60,12 @@ export interface WritingContext {
   saveOutline: (text: string) => Promise<WritingSession | null>
   submitDraft: (content: string) => Promise<ParagraphFeedback[] | null>
   submitFinal: (content: string, timeSpent?: number) => Promise<{ scores: import('@/shared/types/writing').WritingScores; summary: string } | null>
-  handleOutlineAsk: (question: string, selectedText?: string) => Promise<string>
+  handleOutlineAsk: (
+    question: string,
+    history: AiChatMessage[],
+    selectedText?: string,
+    signal?: AbortSignal
+  ) => AsyncGenerator<string>
   handleOutlineEdit: (selectedText: string, instruction: string) => Promise<{ reply: string; modified: string }>
 
   // 状态管理

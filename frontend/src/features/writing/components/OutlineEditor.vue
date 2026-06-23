@@ -76,13 +76,19 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
 import type { WritingPrompt } from '@/shared/types/writing'
+import type { ChatMessage as AiChatMessage } from '@/shared/services/ai'
 import { formatMarkdown } from '@/shared/utils/markdown'
 import PromptBar from './PromptBar.vue'
 import AiChatPanel from './AiChatPanel.vue'
 
 const props = defineProps<{
   initialOutline?: string
-  askHandler?: (message: string, selectedText?: string) => Promise<string>
+  askHandler?: (
+    message: string,
+    history: AiChatMessage[],
+    selectedText?: string,
+    signal?: AbortSignal
+  ) => AsyncGenerator<string>
   editHandler?: (selectedText: string, instruction: string) => Promise<{ reply: string; modified: string }>
   prompt?: WritingPrompt
 }>()
@@ -168,9 +174,14 @@ function clearSelection() {
 
 // ── Chat handlers ──
 
-async function handleAsk(question: string, chatSelectedText?: string) {
+function handleAsk(
+  question: string,
+  history: AiChatMessage[],
+  chatSelectedText?: string,
+  signal?: AbortSignal
+) {
   if (!props.askHandler) throw new Error('No askHandler provided')
-  return await props.askHandler(question, chatSelectedText)
+  return props.askHandler(question, history, chatSelectedText, signal)
 }
 
 async function handleEdit(editSelectedText: string, instruction: string) {
