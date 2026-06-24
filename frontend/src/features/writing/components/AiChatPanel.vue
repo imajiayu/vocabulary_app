@@ -307,7 +307,8 @@ defineExpose({
   setSelectedText: (text: string) => {
     selectedText.value = text
     isSelectionExpanded.value = false
-    inputRef.value?.focus()
+    // 不主动 focus 输入框：focus 会让正文 textarea/DOM 的选区高亮被浏览器清除，
+    // 表现为用户刚勾选的文本"取消勾选"。选中内容已在下方预览区展示，无需抢焦点。
   },
   setMode: (m: ChatMode) => {
     mode.value = m
@@ -484,10 +485,10 @@ defineExpose({
 .empty-state p {
   margin: 0;
   font-family: var(--font-ui);
-  font-size: 12px;
-  color: rgba(250, 247, 242, 0.25);
+  font-size: 13px;
+  color: rgba(250, 247, 242, 0.42);
   max-width: 200px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* ── Input ── */

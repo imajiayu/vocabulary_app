@@ -147,16 +147,16 @@
               <template #feedback>
                 <div class="feedback-tab">
                   <template v-for="(para, index) in draftParagraphs" :key="index">
-                    <p class="para-feedback-original fb-original">{{ para }}</p>
+                    <AnnotatedOriginal
+                      class="para-feedback-original fb-original"
+                      :text="para"
+                      :issues="currentSession?.feedback?.[index]?.issues"
+                    />
                     <div
                       v-if="currentSession?.feedback?.[index]"
                       class="para-feedback-improved fb-improved markdown-content"
                       v-html="formatMarkdown(currentSession.feedback[index].improved)"
                     ></div>
-                    <p
-                      v-if="currentSession?.feedback?.[index]"
-                      class="para-feedback-notes fb-notes"
-                    >{{ currentSession.feedback[index].notes }}</p>
                   </template>
                 </div>
               </template>
@@ -200,6 +200,7 @@ import { useToast } from '@/shared/composables/useToast'
 import PromptBar from './PromptBar.vue'
 import TimerDisplay from './TimerDisplay.vue'
 import EssayEditor, { type TextSelection } from './EssayEditor.vue'
+import AnnotatedOriginal from './AnnotatedOriginal.vue'
 import OutlineEditor from './OutlineEditor.vue'
 import RightPanelTabs, { type TabItem } from './RightPanelTabs.vue'
 import PromptNotes from './PromptNotes.vue'
@@ -213,12 +214,9 @@ const props = defineProps<{
 const context = useWritingContext()
 const toast = useToast()
 
-// Timer
+// Timer（正向秒表，超过题型时间限制变红）
 const timer = useWritingTimer({
-  timeLimit: TASK_TIME_LIMITS[props.prompt.task_type],
-  onTimeUp: () => {
-    // Optionally auto-submit or show warning
-  }
+  timeLimit: TASK_TIME_LIMITS[props.prompt.task_type]
 })
 
 // Local state
@@ -258,7 +256,7 @@ const hasInProgressSession = computed(() => {
 })
 
 const isTimerActive = computed(() => {
-  return pageState.value === 'writing' || isRevising.value
+  return pageState.value === 'writing'
 })
 
 const showWorkspace = computed(() => {
@@ -315,7 +313,6 @@ function handleWordCount(count: number) {
 
 async function handleSaveOutline(outline: string) {
   await context.saveOutline(outline)
-  timer.start()
 }
 
 function handleOutlineAskWrapper(
@@ -356,7 +353,6 @@ function startRevision() {
   context.setPageState('revision')
   context.updateSession({ status: 'revision' })
   activeTab.value = 'feedback'
-  timer.resume()
 }
 
 async function handleSubmitFinal() {
@@ -364,7 +360,6 @@ async function handleSubmitFinal() {
 
   isSubmitting.value = true
   isFeedbackLoading.value = true
-  timer.pause()
 
   try {
     const result = await context.submitFinal(essayContent.value, timer.getElapsedSeconds())
@@ -377,7 +372,6 @@ async function handleSubmitFinal() {
     logger.error('Submit final failed:', error)
     // submitFinal 失败时 status 仍为 revision（评分成功后才置 completed），保持修改态即可
     toast.error('提交失败：' + ((error as Error)?.message ?? '请重试'))
-    timer.resume()
   } finally {
     isSubmitting.value = false
     isFeedbackLoading.value = false
@@ -473,6 +467,13 @@ function handleAskQuestion(
 ) {
   return streamWritingQuestion(question, latestEssay.value, history, selectedText, signal)
 }
+
+// 进入"写初稿"阶段时启动计时器（含从已有会话恢复的情况，修复计时器不走动的问题）
+watch(isTimerActive, (active) => {
+  if (active && !timer.isRunning.value) {
+    timer.start()
+  }
+}, { immediate: true })
 
 // Initialize from existing session
 onMounted(() => {
@@ -950,10 +951,13 @@ function restoreFromSession() {
 }
 
 /* feedback styles: inherits from markdown-content.css (.para-feedback-*) */
-.fb-original,
-.fb-improved,
-.fb-notes {
-  font-size: 13px;
+/* 反馈阅读层级：改进版（标准答案）最突出 > 原文（含错误标注） */
+.fb-original {
+  font-size: 14.5px;
+}
+
+.fb-improved {
+  font-size: 15px;
 }
 
 /* ═══════════ Tablet (768px - 1024px) ═══════════ */

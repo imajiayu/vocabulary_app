@@ -48,8 +48,8 @@ describe('getParagraphFeedback — 段落对齐', () => {
   it('优先按 LLM 回显的 index 对齐（即使数组乱序）', async () => {
     callAIMock.mockResolvedValue(
       JSON.stringify([
-        { index: 2, improved: 'B+', notes: 'nb', changed: true },
-        { index: 1, improved: 'A+', notes: 'na', changed: true },
+        { index: 2, improved: 'B+', issues: [{ quote: 'Para B', message: 'mb' }], changed: true },
+        { index: 1, improved: 'A+', issues: [{ quote: 'Para A', message: 'ma' }], changed: true },
       ])
     )
 
@@ -57,9 +57,9 @@ describe('getParagraphFeedback — 段落对齐', () => {
 
     expect(result).toHaveLength(2)
     expect(result[0].improved).toBe('A+') // index 1 → 第 0 段
-    expect(result[0].notes).toBe('na')
+    expect(result[0].issues).toEqual([{ quote: 'Para A', message: 'ma' }])
     expect(result[1].improved).toBe('B+') // index 2 → 第 1 段
-    expect(result[1].notes).toBe('nb')
+    expect(result[1].issues).toEqual([{ quote: 'Para B', message: 'mb' }])
   })
 
   it('index 缺失时退化为位置对齐', async () => {
@@ -98,8 +98,38 @@ describe('getParagraphFeedback — 段落对齐', () => {
 
     expect(result).toHaveLength(2)
     expect(result[1].improved).toBe('B para.') // 原文兜底
-    expect(result[1].notes).toBe('该段表达良好，无需修改')
+    expect(result[1].issues).toEqual([]) // 缺失段无标注
     expect(result[1].changed).toBe(false)
+  })
+
+  it('清洗 issues：丢弃缺 quote/message 或非字符串的非法项', async () => {
+    callAIMock.mockResolvedValue(
+      JSON.stringify([
+        {
+          index: 1,
+          improved: 'A+',
+          issues: [
+            { quote: 'good', message: '用词不当' }, // 合法
+            { quote: '', message: '空 quote' }, // 丢弃
+            { quote: 'x' }, // 缺 message，丢弃
+            { message: '缺 quote' }, // 缺 quote，丢弃
+            'not an object', // 丢弃
+          ],
+          changed: true,
+        },
+      ])
+    )
+
+    const result = await getParagraphFeedback('题目', 'A good text.', 2)
+    expect(result[0].issues).toEqual([{ quote: 'good', message: '用词不当' }])
+  })
+
+  it('issues 缺失/非数组时降级为空数组', async () => {
+    callAIMock.mockResolvedValue(
+      JSON.stringify([{ index: 1, improved: 'A+', changed: true }])
+    )
+    const result = await getParagraphFeedback('题目', 'A.', 2)
+    expect(result[0].issues).toEqual([])
   })
 
   it('LLM 未填 changed 时按原/改字符串对比兜底推断', async () => {

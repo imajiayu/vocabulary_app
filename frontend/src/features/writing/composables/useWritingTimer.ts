@@ -1,19 +1,18 @@
 /**
- * 写作计时器
+ * 写作计时器（正向秒表）
+ *
+ * 从 00:00 开始累加，持续增长；超过 timeLimit 视为超时（仅用于 UI 变红）。
+ * 不做倒计时、警告或自动提交，除显示已用时间 + 超时提示外没有其他用处。
  */
 import { ref, computed, onUnmounted } from 'vue'
 
 export interface UseWritingTimerOptions {
-  /** 时间限制（秒） */
+  /** 时间限制（秒），仅用于判断是否超时（变红） */
   timeLimit: number
-  /** 时间到时的回调 */
-  onTimeUp?: () => void
-  /** 警告时间（秒），默认 5 分钟 */
-  warningTime?: number
 }
 
 export function useWritingTimer(options: UseWritingTimerOptions) {
-  const { timeLimit, onTimeUp, warningTime = 5 * 60 } = options
+  const { timeLimit } = options
 
   // 状态
   const elapsedSeconds = ref(0)
@@ -28,49 +27,14 @@ export function useWritingTimer(options: UseWritingTimerOptions) {
   // ============================================================================
 
   /**
-   * 剩余时间（秒）
-   */
-  const remainingSeconds = computed(() => {
-    return Math.max(0, timeLimit - elapsedSeconds.value)
-  })
-
-  /**
-   * 是否超时
+   * 是否已超过时间限制（用于变红）
    */
   const isOvertime = computed(() => {
     return elapsedSeconds.value >= timeLimit
   })
 
   /**
-   * 是否处于警告时间
-   */
-  const isWarning = computed(() => {
-    return !isOvertime.value && remainingSeconds.value <= warningTime
-  })
-
-  /**
-   * 进度百分比（0-100）
-   */
-  const progressPercent = computed(() => {
-    return Math.min(100, (elapsedSeconds.value / timeLimit) * 100)
-  })
-
-  /**
-   * 格式化的剩余时间
-   */
-  const formattedTime = computed(() => {
-    const seconds = isOvertime.value
-      ? elapsedSeconds.value - timeLimit  // 超时后显示超时时长
-      : remainingSeconds.value
-
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    const prefix = isOvertime.value ? '+' : ''
-    return `${prefix}${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-  })
-
-  /**
-   * 格式化的已用时间
+   * 格式化的已用时间 mm:ss（正向）
    */
   const formattedElapsed = computed(() => {
     const mins = Math.floor(elapsedSeconds.value / 60)
@@ -93,11 +57,6 @@ export function useWritingTimer(options: UseWritingTimerOptions) {
 
     intervalId = setInterval(() => {
       elapsedSeconds.value++
-
-      // 刚好到达时间限制时触发回调
-      if (elapsedSeconds.value === timeLimit && onTimeUp) {
-        onTimeUp()
-      }
     }, 1000)
   }
 
@@ -123,10 +82,6 @@ export function useWritingTimer(options: UseWritingTimerOptions) {
     isPaused.value = false
     intervalId = setInterval(() => {
       elapsedSeconds.value++
-
-      if (elapsedSeconds.value === timeLimit && onTimeUp) {
-        onTimeUp()
-      }
     }, 1000)
   }
 
@@ -169,11 +124,7 @@ export function useWritingTimer(options: UseWritingTimerOptions) {
     isPaused,
 
     // 计算属性
-    remainingSeconds,
     isOvertime,
-    isWarning,
-    progressPercent,
-    formattedTime,
     formattedElapsed,
 
     // 操作

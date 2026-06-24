@@ -1,18 +1,13 @@
 <template>
   <div
     class="timer-display"
-    :class="{
-      'is-warning': timer.isWarning.value,
-      'is-overtime': timer.isOvertime.value,
-      'is-paused': timer.isPaused.value
-    }"
+    :class="{ 'is-overtime': timer.isOvertime.value }"
   >
     <svg class="timer-icon" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
       <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
-    <span class="timer-value">{{ timer.formattedTime.value }}</span>
-    <span v-if="timer.isPaused.value" class="timer-status">已暂停</span>
+    <span class="timer-value">{{ timer.formattedElapsed.value }}</span>
   </div>
 </template>
 
@@ -53,30 +48,7 @@ defineProps<{
   transition: color 0.3s ease;
 }
 
-.timer-status {
-  font-family: var(--font-ui);
-  font-size: 10px;
-  color: rgba(250, 247, 242, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-/* Warning state (< 5 min) */
-.timer-display.is-warning {
-  background: rgba(221, 165, 32, 0.08);
-  border-color: rgba(221, 165, 32, 0.25);
-}
-
-.timer-display.is-warning .timer-icon {
-  color: var(--primitive-gold-400);
-  animation: pulse 1.2s ease-in-out infinite;
-}
-
-.timer-display.is-warning .timer-value {
-  color: var(--primitive-gold-300);
-}
-
-/* Overtime state */
+/* Overtime state（超过题型时间限制后变红） */
 .timer-display.is-overtime {
   background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.25);
@@ -88,15 +60,5 @@ defineProps<{
 
 .timer-display.is-overtime .timer-value {
   color: #f87171;
-}
-
-/* Paused state */
-.timer-display.is-paused {
-  opacity: 0.6;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
 }
 </style>

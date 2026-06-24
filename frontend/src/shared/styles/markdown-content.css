@@ -105,8 +105,8 @@
 .para-feedback-original {
   margin: 0 0 6px;
   font-family: var(--font-serif);
-  line-height: 1.85;
-  color: rgba(250, 247, 242, 0.45);
+  line-height: 1.9;
+  color: rgba(250, 247, 242, 0.6);
 }
 
 .para-feedback-improved {
@@ -115,26 +115,12 @@
   border-left: 2px solid;
   border-image: linear-gradient(to bottom, #34d399, #22c55e) 1;
   font-family: var(--font-serif);
-  line-height: 1.85;
-  color: rgba(250, 247, 242, 0.8);
-  background: rgba(34, 197, 94, 0.03);
+  line-height: 1.9;
+  color: rgba(250, 247, 242, 0.94);
+  background: rgba(34, 197, 94, 0.06);
   border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
 }
 
 .para-feedback-improved p {
   margin: 0;
-}
-
-.para-feedback-notes {
-  margin: 0 0 24px;
-  padding-left: 14px;
-  font-family: var(--font-ui);
-  font-size: 11px;
-  line-height: 1.6;
-  color: rgba(56, 189, 248, 0.5);
-  font-style: italic;
-}
-
-.para-feedback-notes:last-child {
-  margin-bottom: 0;
 }

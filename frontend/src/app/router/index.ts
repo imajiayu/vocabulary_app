@@ -44,7 +44,7 @@ const routes = [
     path: '/',
     name: 'index',
     component: HomePage,
-    meta: { title: '词汇学习', depth: 0 }
+    meta: { title: '雅思备考', depth: 0 }
   },
   {
     path: '/stats',
@@ -154,7 +154,7 @@ router.beforeEach(async (to, _from, next) => {
       next({ name: 'index' })
     }
   } else {
-    document.title = (to.meta.title as string) || '词汇学习'
+    document.title = (to.meta.title as string) || '雅思备考'
     next()
   }
 })

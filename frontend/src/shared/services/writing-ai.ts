@@ -10,7 +10,7 @@
  */
 
 import { callAI, streamAI, type ChatMessage } from './ai'
-import type { ParagraphFeedback, WritingScores } from '@/shared/types/writing'
+import type { ParagraphFeedback, ParagraphIssue, WritingScores } from '@/shared/types/writing'
 import { logger } from '@/shared/utils/logger'
 import { parseJsonResponse } from '@/shared/utils/json'
 import { countWords } from '@/shared/utils/text'
@@ -50,6 +50,21 @@ function normalize(text: string): string {
 function inferChanged(original: string, improved: string, llmValue: unknown): boolean {
   if (typeof llmValue === 'boolean') return llmValue
   return normalize(original) !== normalize(improved)
+}
+
+/** 从 LLM 原始返回里提取并清洗 issues：只保留 quote/message 均为非空字符串的项 */
+function normalizeIssues(rawIssues: unknown): ParagraphIssue[] {
+  if (!Array.isArray(rawIssues)) return []
+  const issues: ParagraphIssue[] = []
+  for (const item of rawIssues) {
+    if (!item || typeof item !== 'object') continue
+    const quote = (item as Record<string, unknown>).quote
+    const message = (item as Record<string, unknown>).message
+    if (typeof quote === 'string' && quote.trim() && typeof message === 'string' && message.trim()) {
+      issues.push({ quote, message })
+    }
+  }
+  return issues
 }
 
 /**
@@ -145,10 +160,9 @@ export async function getParagraphFeedback(
   const result: ParagraphFeedback[] = paragraphs.map((original, i) => {
     const raw = byIndex.get(i + 1) ?? (arr[i] as Record<string, unknown> | undefined)
     const improved = typeof raw?.improved === 'string' ? raw.improved : original
-    const notes = typeof raw?.notes === 'string' ? raw.notes : '该段表达良好，无需修改'
     return {
       improved,
-      notes,
+      issues: normalizeIssues(raw?.issues),
       changed: inferChanged(original, improved, raw?.changed),
     }
   })

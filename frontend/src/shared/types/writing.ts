@@ -58,11 +58,23 @@ export type WritingSessionStatus = 'outline' | 'writing' | 'feedback' | 'revisio
 // ============================================================================
 
 /**
+ * 原文错误标注 — quote 是原文中逐字出现的子串，前端据此在原文里定位高亮
+ */
+export interface ParagraphIssue {
+  quote: string    // 原文中有问题的片段（必须是原文精确子串）
+  message: string  // 一句话说明：错误类别 + 怎么改
+}
+
+/**
  * 逐段反馈 — 每段对应 draft_content 按 \n\n 分割后的段落
  */
 export interface ParagraphFeedback {
   improved: string  // 改进后的段落文本
-  notes: string     // 改进说明
+  issues?: ParagraphIssue[]  // 原文错误标注（悬停/点击看说明）
+  /**
+   * @deprecated 旧版段末简评，UI 不再渲染，仅保留以兼容老 session 数据。
+   */
+  notes?: string
   /**
    * AI 是否实际做了改动。
    * 新数据由 LLM 提供；老数据可能缺失，UI 读取时兜底：字段缺失则按字符串相等比较原文推断。

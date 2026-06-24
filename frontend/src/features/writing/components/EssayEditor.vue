@@ -17,14 +17,17 @@
     <div v-else class="editor-container feedback-mode">
       <div class="feedback-scroll" @mouseup="handleFeedbackSelection">
         <template v-for="(para, index) in paragraphs" :key="index">
-          <!-- 原文段落 -->
-          <p class="para-feedback-original para-original" :data-para-index="index" data-para-source="original">{{ para }}</p>
+          <!-- 原文段落（含错误标注） -->
+          <AnnotatedOriginal
+            class="para-feedback-original para-original"
+            :data-para-index="index"
+            data-para-source="original"
+            :text="para"
+            :issues="feedback?.[index]?.issues"
+          />
 
           <!-- AI 改进版（绿色左边框 + 高亮） -->
           <div v-if="feedback![index]" class="para-feedback-improved para-improved" :data-para-index="index" data-para-source="improved" v-html="renderImproved(index)"></div>
-
-          <!-- AI 简评 -->
-          <p v-if="feedback![index]" class="para-feedback-notes para-notes">{{ feedback![index].notes }}</p>
         </template>
       </div>
     </div>
@@ -36,6 +39,7 @@ import { ref, computed, watch, nextTick } from 'vue'
 import type { ParagraphFeedback } from '@/shared/types/writing'
 import { formatMarkdown } from '@/shared/utils/markdown'
 import { countWords } from '@/shared/utils/text'
+import AnnotatedOriginal from './AnnotatedOriginal.vue'
 
 const props = withDefaults(defineProps<{
   modelValue: string
@@ -207,23 +211,12 @@ defineExpose({
   line-height: 1.9;
 }
 
-.para-original {
-  color: rgba(250, 247, 242, 0.55);
-}
-
 .para-improved {
   padding: 8px 0 8px 16px;
-  color: rgba(250, 247, 242, 0.9);
+  margin-bottom: 28px;
 }
 
-.para-notes {
-  font-size: 12px;
-  margin-bottom: 32px;
-  padding-left: 18px;
-  color: rgba(56, 189, 248, 0.6);
-}
-
-.para-notes:last-child {
+.para-improved:last-child {
   margin-bottom: 0;
 }
 
