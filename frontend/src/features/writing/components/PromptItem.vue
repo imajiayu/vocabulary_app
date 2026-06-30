@@ -63,6 +63,14 @@
           </div>
         </div>
 
+        <!-- Edit Button -->
+        <button class="action-btn edit-btn" @click="showEditModal = true" title="编辑题目">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
         <!-- Delete Button -->
         <button class="action-btn delete-btn" @click="handleDelete" title="删除">
           <svg viewBox="0 0 24 24" fill="none">
@@ -72,6 +80,15 @@
         </button>
       </div>
     </div>
+
+    <!-- Edit Prompt Text Modal -->
+    <PromptTextEditor
+      v-if="showEditModal"
+      :prompt="prompt"
+      :submitting="editSubmitting"
+      @save="handleEditSave"
+      @cancel="showEditModal = false"
+    />
 
     <!-- Sessions List (expanded for prompts with sessions) -->
     <Transition name="sessions-expand">
@@ -105,6 +122,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { WritingPrompt } from '@/shared/types/writing'
 import { SESSION_STATUS_LABELS } from '@/shared/types/writing'
 import { useWritingContext } from '../composables'
+import PromptTextEditor from './PromptTextEditor.vue'
 
 const props = defineProps<{
   prompt: WritingPrompt
@@ -114,6 +132,8 @@ const context = useWritingContext()
 
 // Local state
 const showMoveMenu = ref(false)
+const showEditModal = ref(false)
+const editSubmitting = ref(false)
 const isExpanded = ref(false)
 
 // Computed
@@ -162,6 +182,18 @@ function handleToggleSession(sessionId: number) {
 
 function handleDelete() {
   context.deletePrompt(props.prompt.id)
+}
+
+async function handleEditSave(text: string) {
+  editSubmitting.value = true
+  try {
+    await context.updatePrompt(props.prompt.id, { prompt_text: text })
+    showEditModal.value = false
+  } catch {
+    alert('更新题目失败')
+  } finally {
+    editSubmitting.value = false
+  }
 }
 
 function toggleMoveMenu() {
@@ -330,6 +362,11 @@ onUnmounted(() => {
 .action-btn:hover {
   background: rgba(250, 247, 242, 0.15);
   color: var(--primitive-paper-200);
+}
+
+.edit-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--primitive-azure-400);
 }
 
 .delete-btn:hover {
